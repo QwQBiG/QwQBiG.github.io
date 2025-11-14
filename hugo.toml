@@ -54,4 +54,4 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 
      [params.author]
         name = "QwQBiG"
-        imageUrl = "/avatar.png"
+        imageUrl = "QwQBiG.github.io/static/avatar.png"
