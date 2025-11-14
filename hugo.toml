@@ -68,3 +68,12 @@ theme = "github.com/adityatelange/hugo-PaperMod"
         # 可选项: 你可以限制只在某些分区/类型的内容里搜索
         # ex: content/posts, content/docs 等
         # contentTypes = ["page", "post"]
+
+    [params.Toc]
+        enable = true
+        # true: 目录会保持在屏幕上
+        # false: 目录会随页面滚动
+        keepStatic = false
+        # true: 自动在右侧为目录留出空间
+        # false: 目录会嵌入文章内容流中
+        autoEnable = true
