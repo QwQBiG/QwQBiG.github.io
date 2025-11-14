@@ -16,6 +16,22 @@
       <description>&lt;p&gt;hello yunwei！&lt;/p&gt;</description>
     </item>
     <item>
+      <title>我 是 谁（并非宝可梦）</title>
+      <link>https://QwQBiG.github.io/about/</link>
+      <pubDate>Fri, 14 Nov 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/about/</guid>
+      <description>&lt;p&gt;你好，我是 QwQBiG。&lt;/p&gt;
+&lt;p&gt;一名正在计算机科学道路上探索的大一新生。&lt;/p&gt;
+&lt;p&gt;我创建这个博客，是为了记录我在学习编程、探索技术世界过程中的思考、笔记和项目实践。我相信，分享是最好的学习方式（有诗也发（或许吧））。&lt;/p&gt;
+&lt;h3 id=&#34;我的兴趣&#34;&gt;我的兴趣&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;C++ 与算法&lt;/li&gt;
+&lt;li&gt;Web 开发&lt;/li&gt;
+&lt;li&gt;Linux 系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;你可以在 &lt;a href=&#34;https://github.com/QwQBiG&#34;&gt;GitHub&lt;/a&gt; 上找到我。欢迎通过任何方式与我交流！&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>C&#43;&#43; STL</title>
       <link>https://QwQBiG.github.io/posts/learning-cpp/</link>
       <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
