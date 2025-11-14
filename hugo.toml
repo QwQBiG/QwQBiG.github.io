@@ -54,4 +54,3 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 
      [params.author]
         name = "QwQBiG"
-        imageUrl = "/static/avatar.png"
