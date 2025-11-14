@@ -22,6 +22,11 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     name = "关于"
     url = "/about/"
     weight = 30
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/" # 指向搜索页面
+    weight = 40
 
 # 这是最关键的参数配置部分
 [params]
@@ -54,3 +59,9 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 
      [params.author]
         name = "QwQBiG"
+
+    [params.search]
+        enabled = true
+        # 可选项: 你可以限制只在某些分区/类型的内容里搜索
+        # ex: content/posts, content/docs 等
+        # contentTypes = ["page", "post"]
