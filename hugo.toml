@@ -11,12 +11,17 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     identifier = "archives"
     name = "归档"
     url = "/archives/"
-    weight = 10
+    weight = 10 # 权重决定了菜单的顺序，数字越大越靠后。
   [[menu.main]]
     identifier = "tags"
     name = "标签"
     url = "/tags/"
     weight = 20
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 30
 
 # 这是最关键的参数配置部分
 [params]
@@ -38,3 +43,15 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 
     [params.comments]
         enabled = true
+
+    [[params.socialIcons]]
+        name = "github"
+        url = "https://github.com/QwQBiG"
+
+    [[params.socialIcons]]
+        name = "bilibili"
+        url = "https://space.bilibili.com/3546921071282890"
+
+     [params.author]
+        name = "QwQBiG"
+        imageUrl = "/avatar.png"
