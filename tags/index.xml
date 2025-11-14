@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on QwQBiG&#39;s Blog</title>
+    <link>https://QwQBiG.github.io/tags/</link>
+    <description>Recent content in Tags on QwQBiG&#39;s Blog</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 14 Nov 2025 15:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>运维</title>
+      <link>https://QwQBiG.github.io/tags/%E8%BF%90%E7%BB%B4/</link>
+      <pubDate>Fri, 14 Nov 2025 15:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E8%BF%90%E7%BB%B4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://QwQBiG.github.io/tags/c&#43;&#43;/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cpp</title>
+      <link>https://QwQBiG.github.io/tags/cpp/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/cpp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>C艹</title>
+      <link>https://QwQBiG.github.io/tags/c%E8%89%B9/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/c%E8%89%B9/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>STL</title>
+      <link>https://QwQBiG.github.io/tags/stl/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/stl/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>算法</title>
+      <link>https://QwQBiG.github.io/tags/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>编程语言</title>
+      <link>https://QwQBiG.github.io/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GitHub Pages</title>
+      <link>https://QwQBiG.github.io/tags/github-pages/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/github-pages/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hugo</title>
+      <link>https://QwQBiG.github.io/tags/hugo/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>https://QwQBiG.github.io/tags/windows/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>建站</title>
+      <link>https://QwQBiG.github.io/tags/%E5%BB%BA%E7%AB%99/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E5%BB%BA%E7%AB%99/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>新手教程</title>
+      <link>https://QwQBiG.github.io/tags/%E6%96%B0%E6%89%8B%E6%95%99%E7%A8%8B/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E6%96%B0%E6%89%8B%E6%95%99%E7%A8%8B/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>避坑指南</title>
+      <link>https://QwQBiG.github.io/tags/%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
