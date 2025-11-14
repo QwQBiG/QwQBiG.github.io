@@ -365,13 +365,13 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 
 ---
 
-## **第六章：Giscus - 赋予博客“对话”的能力**
+## 第六章：Giscus - 赋予博客“对话”的能力
 
 静态博客自身无法处理评论，但我们可以嵌入一个基于 GitHub 的、免费且无广告的评论系统：**Giscus**。
 
 它的原理绝妙：将你 GitHub 仓库的 **Discussions** (讨论区) 功能，变成你博客文章的评论区。
 
-### **集成 Giscus 的正确步骤**
+### 集成 Giscus 的正确步骤
 
 **第一步：核心准备 - 找到对的“家”**
 
