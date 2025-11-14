@@ -5,6 +5,9 @@ languageCode = "zh-cn" # 建议修改为中文，对主题更友好
 title = "QwQBiG's Blog" # 这是你的网站总标题
 theme = "github.com/adityatelange/hugo-PaperMod"
 
+[outputs]
+  home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
+
 # 主菜单配置
 [menu]
   [[menu.main]]
