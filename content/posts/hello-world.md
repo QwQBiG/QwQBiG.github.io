@@ -4,6 +4,7 @@ date: 2025-11-13T21:00:00+08:00
 tags: ["建站", "Hugo", "GitHub Pages", "Windows", "避坑指南", "新手教程"]
 categories: ["技术实践"]
 toc: true  # 目录
+# math: true  # 开启数学公式渲染
 ---
 
 你好，世界！
