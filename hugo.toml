@@ -1,0 +1,40 @@
+# hugo.toml (推荐的完整配置)
+
+baseURL = "https://QwQBiG.github.io/"
+languageCode = "zh-cn" # 建议修改为中文，对主题更友好
+title = "QwQBiG's Blog" # 这是你的网站总标题
+theme = "github.com/adityatelange/hugo-PaperMod"
+
+# 主菜单配置
+[menu]
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 10
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 20
+
+# 这是最关键的参数配置部分
+[params]
+    ShowCodeCopyButtons = true
+
+    # 1. 关闭特殊的“个人资料”主页模式
+    # 这会让你的主页变成一个标准的文章列表
+    [params.profileMode]
+        enabled = false
+
+    # 2. 在主页文章列表上方显示一个欢迎语
+    # 这会解决主标题不显示的问题，并让主页更好看
+    [params.homeInfoParams]
+        Title = "你好，世界!"
+        Content = "114514，1919810。"
+
+    # 3. 告诉主题，主页的文章列表主要来源于 "posts" 文件夹
+    mainSections = ["posts"]
+
+    [params.comments]
+        enabled = true

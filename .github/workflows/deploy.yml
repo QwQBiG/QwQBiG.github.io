@@ -1,0 +1,41 @@
+# .github/workflows/deploy.yml (单仓库版本)
+
+name: Deploy Hugo Site to Pages
+
+on:
+  # 当 main 分支有 push 时触发
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 第一步：机器人先“检出”你的源代码 (main 分支)
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true  # 获取主题等子模块
+
+      # 第二步：机器人安装 Hugo 环境
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      # 第三步：机器人运行 hugo 命令，构建网站到 public 目录
+      - name: Build
+        run: hugo
+
+      # 第四步：机器人将 public 目录的内容，部署到 gh-pages 分支
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # 这个令牌是 GitHub 自动提供的，无需设置
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 我们要部署的分支是 gh-pages
+          publish_branch: gh-pages
+          # 部署的源文件夹是 public
+          publish_dir: ./public
