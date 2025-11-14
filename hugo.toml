@@ -42,6 +42,8 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 [params]
     ShowCodeCopyButtons = true
 
+    ShowReadingTime = true
+
     # 1. 关闭特殊的“个人资料”主页模式
     # 这会让你的主页变成一个标准的文章列表
     [params.profileMode]
