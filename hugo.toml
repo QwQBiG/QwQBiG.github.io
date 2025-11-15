@@ -79,9 +79,3 @@ theme = "github.com/adityatelange/hugo-PaperMod"
         # true: 自动在右侧为目录留出空间
         # false: 目录会嵌入文章内容流中
         autoEnable = true
-
-    [params.assets]
-      # 开启 KaTeX 数学公式支持
-      disableHLJS = true # KaTeX 和 Hugo 内置的代码高亮有冲突，建议禁用
-      [params.assets.math]
-        enable = true
