@@ -5,6 +5,13 @@ languageCode = "zh-cn" # 建议修改为中文，对主题更友好
 title = "QwQBiG's Blog" # 这是你的网站总标题
 theme = "github.com/adityatelange/hugo-PaperMod"
 
+[markup]
+  [markup.highlight]
+    # true: 在代码块中显示行号
+    lineNos = true
+    # noClasses = false # 保持默认即可
+    # style = "monokai" # 可以选择代码高亮主题，如 dracula, github, monokai 等
+
 [outputs]
   home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
 
