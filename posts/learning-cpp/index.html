@@ -8,97 +8,6 @@
 <title>C&#43;&#43; STL | QwQBiG&#39;s Blog</title>
 <meta name="keywords" content="C&#43;&#43;, STL, cpp, 编程语言, C艹, 算法">
 <meta name="description" content="我只是测试能不能写第二篇，随便找了一段哈。
-
-
- 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-
-
 #include &lt;bits/stdc&#43;&#43;.h&gt;
 #define endl &#34;\n&#34;
 #define int long long
@@ -186,8 +95,6 @@ signed main()
 
     return 0;
 }
-
-
 ">
 <meta name="author" content="map[name:QwQBiG]">
 <link rel="canonical" href="https://QwQBiG.github.io/posts/learning-cpp/">
@@ -255,7 +162,7 @@ signed main()
   <meta property="og:site_name" content="QwQBiG&#39;s Blog">
   <meta property="og:title" content="C&#43;&#43; STL">
   <meta property="og:description" content="我只是测试能不能写第二篇，随便找了一段哈。
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 #include &lt;bits/stdc&#43;&#43;.h&gt; #define endl &#34;\n&#34; #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout &lt;&lt; s &lt;&lt; endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count&#43;&#43;; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(&#34;hello world&#34;); // 对象和小括号结合就会触发这个类的调用 Print()(&#34;fuck world!&#34;); // 这是一个匿名对象 // 实例 vector&lt;int&gt; numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout &lt;&lt; &#34;找到了第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数: &#34; &lt;&lt; *it &lt;&lt; endl; // 应该输出 8 } else { cout &lt;&lt; &#34;未找到第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数&#34; &lt;&lt; endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [&amp;] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [&amp;](int num) { if (num % 2 == 0) { current_count&#43;&#43;; } return current_count == n; }); if (it1 != numbers.end()) { cout &lt;&lt; &#34;使用 Lambda 找到了第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数: &#34; &lt;&lt; *it1 &lt;&lt; endl; } else { cout &lt;&lt; &#34;未找到第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数&#34; &lt;&lt; endl; } return 0; } ">
+#include &lt;bits/stdc&#43;&#43;.h&gt; #define endl &#34;\n&#34; #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout &lt;&lt; s &lt;&lt; endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count&#43;&#43;; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(&#34;hello world&#34;); // 对象和小括号结合就会触发这个类的调用 Print()(&#34;fuck world!&#34;); // 这是一个匿名对象 // 实例 vector&lt;int&gt; numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout &lt;&lt; &#34;找到了第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数: &#34; &lt;&lt; *it &lt;&lt; endl; // 应该输出 8 } else { cout &lt;&lt; &#34;未找到第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数&#34; &lt;&lt; endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [&amp;] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [&amp;](int num) { if (num % 2 == 0) { current_count&#43;&#43;; } return current_count == n; }); if (it1 != numbers.end()) { cout &lt;&lt; &#34;使用 Lambda 找到了第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数: &#34; &lt;&lt; *it1 &lt;&lt; endl; } else { cout &lt;&lt; &#34;未找到第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数&#34; &lt;&lt; endl; } return 0; } ">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -270,97 +177,6 @@ signed main()
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C&#43;&#43; STL">
 <meta name="twitter:description" content="我只是测试能不能写第二篇，随便找了一段哈。
-
-
- 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-
-
 #include &lt;bits/stdc&#43;&#43;.h&gt;
 #define endl &#34;\n&#34;
 #define int long long
@@ -448,8 +264,6 @@ signed main()
 
     return 0;
 }
-
-
 ">
 
 
@@ -479,12 +293,12 @@ signed main()
   "@type": "BlogPosting",
   "headline": "C++ STL",
   "name": "C\u002b\u002b STL",
-  "description": "我只是测试能不能写第二篇，随便找了一段哈。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 #include \u0026lt;bits/stdc++.h\u0026gt; #define endl \u0026#34;\\n\u0026#34; #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout \u0026lt;\u0026lt; s \u0026lt;\u0026lt; endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count++; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(\u0026#34;hello world\u0026#34;); // 对象和小括号结合就会触发这个类的调用 Print()(\u0026#34;fuck world!\u0026#34;); // 这是一个匿名对象 // 实例 vector\u0026lt;int\u0026gt; numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout \u0026lt;\u0026lt; \u0026#34;找到了第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数: \u0026#34; \u0026lt;\u0026lt; *it \u0026lt;\u0026lt; endl; // 应该输出 8 } else { cout \u0026lt;\u0026lt; \u0026#34;未找到第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数\u0026#34; \u0026lt;\u0026lt; endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [\u0026amp;] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [\u0026amp;](int num) { if (num % 2 == 0) { current_count++; } return current_count == n; }); if (it1 != numbers.end()) { cout \u0026lt;\u0026lt; \u0026#34;使用 Lambda 找到了第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数: \u0026#34; \u0026lt;\u0026lt; *it1 \u0026lt;\u0026lt; endl; } else { cout \u0026lt;\u0026lt; \u0026#34;未找到第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数\u0026#34; \u0026lt;\u0026lt; endl; } return 0; } ",
+  "description": "我只是测试能不能写第二篇，随便找了一段哈。\n#include \u0026lt;bits/stdc++.h\u0026gt; #define endl \u0026#34;\\n\u0026#34; #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout \u0026lt;\u0026lt; s \u0026lt;\u0026lt; endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count++; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(\u0026#34;hello world\u0026#34;); // 对象和小括号结合就会触发这个类的调用 Print()(\u0026#34;fuck world!\u0026#34;); // 这是一个匿名对象 // 实例 vector\u0026lt;int\u0026gt; numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout \u0026lt;\u0026lt; \u0026#34;找到了第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数: \u0026#34; \u0026lt;\u0026lt; *it \u0026lt;\u0026lt; endl; // 应该输出 8 } else { cout \u0026lt;\u0026lt; \u0026#34;未找到第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数\u0026#34; \u0026lt;\u0026lt; endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [\u0026amp;] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [\u0026amp;](int num) { if (num % 2 == 0) { current_count++; } return current_count == n; }); if (it1 != numbers.end()) { cout \u0026lt;\u0026lt; \u0026#34;使用 Lambda 找到了第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数: \u0026#34; \u0026lt;\u0026lt; *it1 \u0026lt;\u0026lt; endl; } else { cout \u0026lt;\u0026lt; \u0026#34;未找到第 \u0026#34; \u0026lt;\u0026lt; n \u0026lt;\u0026lt; \u0026#34; 个偶数\u0026#34; \u0026lt;\u0026lt; endl; } return 0; } ",
   "keywords": [
     "C++", "STL", "cpp", "编程语言", "C艹", "算法"
   ],
-  "articleBody": "我只是测试能不能写第二篇，随便找了一段哈。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 #include #define endl \"\\n\" #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout \u003c\u003c s \u003c\u003c endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count++; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(\"hello world\"); // 对象和小括号结合就会触发这个类的调用 Print()(\"fuck world!\"); // 这是一个匿名对象 // 实例 vector\u003cint\u003e numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout \u003c\u003c \"找到了第 \" \u003c\u003c n \u003c\u003c \" 个偶数: \" \u003c\u003c *it \u003c\u003c endl; // 应该输出 8 } else { cout \u003c\u003c \"未找到第 \" \u003c\u003c n \u003c\u003c \" 个偶数\" \u003c\u003c endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [\u0026] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [\u0026](int num) { if (num % 2 == 0) { current_count++; } return current_count == n; }); if (it1 != numbers.end()) { cout \u003c\u003c \"使用 Lambda 找到了第 \" \u003c\u003c n \u003c\u003c \" 个偶数: \" \u003c\u003c *it1 \u003c\u003c endl; } else { cout \u003c\u003c \"未找到第 \" \u003c\u003c n \u003c\u003c \" 个偶数\" \u003c\u003c endl; } return 0; } ",
-  "wordCount" : "346",
+  "articleBody": "我只是测试能不能写第二篇，随便找了一段哈。\n#include #define endl \"\\n\" #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout \u003c\u003c s \u003c\u003c endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count++; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(\"hello world\"); // 对象和小括号结合就会触发这个类的调用 Print()(\"fuck world!\"); // 这是一个匿名对象 // 实例 vector\u003cint\u003e numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout \u003c\u003c \"找到了第 \" \u003c\u003c n \u003c\u003c \" 个偶数: \" \u003c\u003c *it \u003c\u003c endl; // 应该输出 8 } else { cout \u003c\u003c \"未找到第 \" \u003c\u003c n \u003c\u003c \" 个偶数\" \u003c\u003c endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [\u0026] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [\u0026](int num) { if (num % 2 == 0) { current_count++; } return current_count == n; }); if (it1 != numbers.end()) { cout \u003c\u003c \"使用 Lambda 找到了第 \" \u003c\u003c n \u003c\u003c \" 个偶数: \" \u003c\u003c *it1 \u003c\u003c endl; } else { cout \u003c\u003c \"未找到第 \" \u003c\u003c n \u003c\u003c \" 个偶数\" \u003c\u003c endl; } return 0; } ",
+  "wordCount" : "259",
   "inLanguage": "en",
   "datePublished": "2025-11-14T10:00:00+08:00",
   "dateModified": "2025-11-14T10:00:00+08:00",
@@ -572,98 +386,7 @@ signed main()
 </div>
   </header> 
   <div class="post-content"><p>我只是测试能不能写第二篇，随便找了一段哈。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;bits/stdc++.h&gt;</span><span style="color:#75715e">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;bits/stdc++.h&gt;</span><span style="color:#75715e">
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define endl &#34;\n&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define int long long
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
@@ -750,9 +473,7 @@ signed main()
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></td></tr></table>
-</div>
-</div>
+</span></span></code></pre></div>
 
   </div>
 
