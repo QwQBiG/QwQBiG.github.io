@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>新手教程 on QwQBiG&#39;s Blog</title>
     <link>https://QwQBiG.github.io/tags/%E6%96%B0%E6%89%8B%E6%95%99%E7%A8%8B/</link>
     <description>Recent content in 新手教程 on QwQBiG&#39;s Blog</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 13 Nov 2025 21:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/%E6%96%B0%E6%89%8B%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,14 @@
       <link>https://QwQBiG.github.io/posts/hello-world/</link>
       <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/posts/hello-world/</guid>
-      <description>&lt;p&gt;你好，世界！&lt;/p&gt;&#xA;&lt;p&gt;多年之后，看到这些文字，如今的你，是否还会想起，多年前看b站视频打印“hello world!”的那个遥远的下午&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;如果你能看到这篇文章，那说明我成功了。作为一只冲浪老资历，我一直梦想拥有一个属于自己的、可以记录学习笔记、分享心得的个人博客（东方homo馆）。这便是我的“Hello World”——一个通往更广阔数字世界的起点。（兴许是“读瘾”犯了，要写点东西自己咂摸）&lt;/p&gt;&#xA;&lt;p&gt;溯洄从之，道阻且长。如同伊人，此间追寻的过程远比我想象的要曲折，但也比我想象的要收获更多。我遇到了各种各样的问题：从 Docker 的内网穿透失败（其实成功了（但是https）），到 Windows 开发环境的重重陷阱，再到网络连接的神秘莫测，最后到项目结构的频频阻折&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;所幸“时来天地皆同力”，假借实验室老老资历学长给的焚诀（代理，ai，服务器的一块ubuntu&amp;hellip;）得以为今后的所有故事作一个序。&lt;/p&gt;&#xA;&lt;p&gt;而我的感觉是：尽管ai飞速发展，博客、论坛、群聊比比皆是，我自己搜寻资料时，找相应操作时，或者找一些有的没有的奇怪资源时，还是有些力不从心（主要是豆沙包和臭鲸鱼现在确实一般般（25.11））；加上我喜欢鼓捣些长久的、有趣的、有意味（意味深）的东西，顾影自怜，自我怀念，比如写诗著文，都是些艺术形式，于是便有了这个界面的出现。&lt;/p&gt;&#xA;&lt;p&gt;谁不想要一个自己的文章网站呢~&lt;/p&gt;&#xA;&lt;p&gt;现在，我想把这条被我“踩”出来的、不怕ta“爱而不见”的路，分享给你。&lt;/p&gt;</description>
+      <description>&lt;p&gt;你好，世界！&lt;/p&gt;
+&lt;p&gt;多年之后，看到这些文字，如今的你，是否还会想起，多年前看b站视频打印“hello world!”的那个遥远的下午&amp;hellip;&lt;/p&gt;
+&lt;p&gt;如果你能看到这篇文章，那说明我成功了。作为一只冲浪老资历，我一直梦想拥有一个属于自己的、可以记录学习笔记、分享心得的个人博客（东方homo馆）。这便是我的“Hello World”——一个通往更广阔数字世界的起点。（兴许是“读瘾”犯了，要写点东西自己咂摸）&lt;/p&gt;
+&lt;p&gt;溯洄从之，道阻且长。如同伊人，此间追寻的过程远比我想象的要曲折，但也比我想象的要收获更多。我遇到了各种各样的问题：从 Docker 的内网穿透失败（其实成功了（但是https）），到 Windows 开发环境的重重陷阱，再到网络连接的神秘莫测，最后到项目结构的频频阻折&amp;hellip;&lt;/p&gt;
+&lt;p&gt;所幸“时来天地皆同力”，假借实验室老老资历学长给的焚诀（代理，ai，服务器的一块ubuntu&amp;hellip;）得以为今后的所有故事作一个序。&lt;/p&gt;
+&lt;p&gt;而我的感觉是：尽管ai飞速发展，博客、论坛、群聊比比皆是，我自己搜寻资料时，找相应操作时，或者找一些有的没有的奇怪资源时，还是有些力不从心（主要是豆沙包和臭鲸鱼现在确实一般般（25.11））；加上我喜欢鼓捣些长久的、有趣的、有意味（意味深）的东西，顾影自怜，自我怀念，比如写诗著文，都是些艺术形式，于是便有了这个界面的出现。&lt;/p&gt;
+&lt;p&gt;谁不想要一个自己的文章网站呢~&lt;/p&gt;
+&lt;p&gt;现在，我想把这条被我“踩”出来的、不怕ta“爱而不见”的路，分享给你。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
