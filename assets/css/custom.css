@@ -1,0 +1,12 @@
+/* 1. 从 Google Fonts 导入 JetBrains Mono 字体 */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* 2. 将整个网站的基础字体设置为 JetBrains Mono */
+body {
+    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+}
+
+/* 3. 确保代码块也使用这个字体 */
+code, pre {
+    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+}
