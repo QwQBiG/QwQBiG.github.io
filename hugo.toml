@@ -1,72 +1,26 @@
-# hugo.toml (推荐的完整配置)
+# hugo.toml ( Hugo Coder 主题适配版)
 
 baseURL = "https://QwQBiG.github.io/"
-languageCode = "zh-cn" # 建议修改为中文，对主题更友好
-title = "QwQBiG's Blog" # 这是你的网站总标题
+languageCode = "zh-cn"
+title = "QwQBiG's Blog"
 theme = "github.com/luizdepra/hugo-coder"
 
-paginate = 10 # 每页文章数量
+# 分页
+[pagination]
+  pagerSize = 10
 
-[markup]
-  [markup.highlight]
-    # true: 在代码块中显示行号
-    lineNos = true
-    # noClasses = false # 保持默认即可
-    # style = "monokai" # 可以选择代码高亮主题，如 dracula, github, monokai 等
-
-[outputs]
-  home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
-
-# 主菜单配置
-[menu]
-  [[menu.main]]
-    identifier = "archives"
-    name = "归档"
-    url = "/archives/"
-    weight = 10 # 权重决定了菜单的顺序，数字越大越靠后。
-  [[menu.main]]
-    identifier = "tags"
-    name = "标签"
-    url = "/tags/"
-    weight = 20
-  [[menu.main]]
-    identifier = "about"
-    name = "关于"
-    url = "/about/"
-    weight = 30
-  [[menu.main]]
-    identifier = "search"
-    name = "搜索"
-    url = "/search/" # 指向搜索页面
-    weight = 40
-
-# 这是最关键的参数配置部分
 [params]
-    ShowCodeCopyButtons = true
+    author = "QwQBiG"
+    info = "114514，1919810。"
+    # 你可以在 static/images/ 目录下放一张头像图片，然后在这里写 "images/avatar.jpg"
+    # avatarURL = "" 
+    # 将主页设置为文章列表模式，而不是个人简介模式
+    home = "posts"
 
-    ShowReadingTime = true
-
-    # 1. 关闭特殊的“个人资料”主页模式
-    # 这会让你的主页变成一个标准的文章列表
-    [params.profileMode]
-        enabled = false
-
-    # 2. 在主页文章列表上方显示一个欢迎语
-    # 这会解决主标题不显示的问题，并让主页更好看
-    [params.homeInfoParams]
-        Title = "你好，世界!"
-        Content = "114514，1919810。"
-
-    # 3. 告诉主题，主页的文章列表主要来源于 "posts" 文件夹
-    mainSections = ["posts"]
-
-    [params.comments]
-        enabled = true
-
-    # 社交链接
+    # 菜单和社交链接
     [[params.social]]
         name = "Github"
-        icon = "fa-brands fa-github" # 使用 Font Awesome 图标
+        icon = "fa-brands fa-github"
         weight = 1
         url = "https://github.com/QwQBiG"
     [[params.social]]
@@ -74,23 +28,28 @@ paginate = 10 # 每页文章数量
         icon = "fa-brands fa-bilibili"
         weight = 2
         url = "https://space.bilibili.com/3546921071282890"
-
-    [params.author]
-        name = "QwQBiG"
-
-    [params.search]
-        enabled = true
-        # 可选项: 你可以限制只在某些分区/类型的内容里搜索
-        # ex: content/posts, content/docs 等
-        # contentTypes = ["page", "post"]
-
+        
+    # 文章和代码相关配置
+    [params.code]
+      copy = true # 开启代码块的“复制”按钮
+      
     [params.toc]
-      # 文章目录 (Coder 默认开启，这是更详细的配置)
-        # true: 在文章页面自动显示目录
-        auto = true
+      auto = true # 自动为包含标题的文章开启目录
+    
+    # 加载自定义 CSS 文件，用于更换字体
+    customCSS = ["css/custom.css"]
 
-    [params.assets]
-      # 开启 KaTeX 数学公式支持
-      disableHLJS = true # KaTeX 和 Hugo 内置的代码高亮有冲突，建议禁用
-      [params.assets.math]
-        enable = true
+# 主菜单配置
+[menu]
+  [[menu.main]]
+    name = "博客" # Coder 主题一般用“博客”或“文章”来代替“归档”
+    weight = 1
+    url = "/posts/"
+  [[menu.main]]
+    name = "标签"
+    weight = 2
+    url = "/tags/"
+  [[menu.main]]
+    name = "关于"
+    weight = 3
+    url = "/about/"
