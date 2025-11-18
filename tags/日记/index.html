@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Posts | QwQBiG&#39;s Blog</title>
+<title>日记 | QwQBiG&#39;s Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Posts - QwQBiG&#39;s Blog">
+<meta name="description" content="">
 <meta name="author" content="map[name:QwQBiG]">
-<link rel="canonical" href="https://QwQBiG.github.io/posts/">
+<link rel="canonical" href="https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://QwQBiG.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://QwQBiG.github.io/favicon-16x16.png">
@@ -18,8 +18,8 @@
 <link rel="mask-icon" href="https://QwQBiG.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://QwQBiG.github.io/posts/index.xml" title="rss">
-<link rel="alternate" hreflang="en" href="https://QwQBiG.github.io/posts/">
+<link rel="alternate" type="application/rss+xml" href="https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/">
 <noscript>
     <style>
         #theme-toggle,
@@ -71,30 +71,15 @@
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><meta property="og:url" content="https://QwQBiG.github.io/posts/">
+</script><meta property="og:url" content="https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/">
   <meta property="og:site_name" content="QwQBiG&#39;s Blog">
-  <meta property="og:title" content="Posts">
+  <meta property="og:title" content="日记">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Posts">
+<meta name="twitter:title" content="日记">
 <meta name="twitter:description" content="">
 
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://QwQBiG.github.io/posts/"
-    }
-  ]
-}
-</script>
 </head>
 <body class="list" id="top">
     <header class="header">
@@ -151,11 +136,11 @@
 <main class="main"> 
 <header class="page-header">
   <h1>
-    Posts
+    日记
   </h1>
 </header>
 
-<article class="post-entry"> 
+<article class="post-entry tag-entry"> 
   <header class="entry-header">
     <h2 class="entry-hint-parent">我の组会
     </h2>
@@ -186,39 +171,6 @@ https://qwqbig.github.io/
   </div>
   <footer class="entry-footer"><span title='2025-11-14 15:00:00 +0800 +0800'>November 14, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
   <a class="entry-link" aria-label="post link to 我の组会" href="https://QwQBiG.github.io/posts/yunwei/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">C&#43;&#43; STL
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>我只是测试能不能写第二篇，随便找了一段哈。
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 #include &lt;bits/stdc&#43;&#43;.h&gt; #define endl &#34;\n&#34; #define int long long using namespace std; // 函数对象（仿函数） class Print { public: void operator()(string s) // 或者(char *s) { cout &lt;&lt; s &lt;&lt; endl; } }; // 定义一个函数对象作为谓词 class FindNthEven { public: // 构造函数，传入要找的是第几个 FindNthEven(int n) : target_n(n), current_count(0) {} // 重载 () 操作符，这是谓词的核心 // find_if 会对每个元素调用这个函数 bool operator()(int num) { if (num % 2 == 0) { current_count&#43;&#43;; // 计数器加一 } return current_count == target_n; // 如果计数器达到了目标，返回 true } private: int target_n; // 目标：第 n 个 int current_count; // 状态：当前已经找到了几个 }; signed main() { ios::sync_with_stdio(0); cin.tie(0); // 函数对象 Print ob; ob(&#34;hello world&#34;); // 对象和小括号结合就会触发这个类的调用 Print()(&#34;fuck world!&#34;); // 这是一个匿名对象 // 实例 vector&lt;int&gt; numbers = {1, 3, 2, 5, 4, 8, 10, 7}; // 偶数: 2, 4, 8, 10 // 我们想找第 3 个偶数 int n = 3; // 创建一个函数对象实例 // 这个对象find_third_even是有状态的，它知道自己要找第3个，并且内部有个计数器 auto it = find_if(numbers.begin(), numbers.end(), FindNthEven(n)); if (it != numbers.end()) { cout &lt;&lt; &#34;找到了第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数: &#34; &lt;&lt; *it &lt;&lt; endl; // 应该输出 8 } else { cout &lt;&lt; &#34;未找到第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数&#34; &lt;&lt; endl; } // 使用 Lambda 表达式作为谓词（竞赛主力） // [&amp;] 表示以引用的方式捕获所有外部变量 (这里是 current_count 和 n) n = 3; int current_count = 0; auto it1 = find_if(numbers.begin(), numbers.end(), [&amp;](int num) { if (num % 2 == 0) { current_count&#43;&#43;; } return current_count == n; }); if (it1 != numbers.end()) { cout &lt;&lt; &#34;使用 Lambda 找到了第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数: &#34; &lt;&lt; *it1 &lt;&lt; endl; } else { cout &lt;&lt; &#34;未找到第 &#34; &lt;&lt; n &lt;&lt; &#34; 个偶数&#34; &lt;&lt; endl; } return 0; } </p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-14 10:00:00 +0800 +0800'>November 14, 2025</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to C&#43;&#43; STL" href="https://QwQBiG.github.io/posts/learning-cpp/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">史诗级“Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>你好，世界！
-多年之后，看到这些文字，如今的你，是否还会想起，多年前看b站视频打印“hello world!”的那个遥远的下午…
-如果你能看到这篇文章，那说明我成功了。作为一只冲浪老资历，我一直梦想拥有一个属于自己的、可以记录学习笔记、分享心得的个人博客（东方homo馆）。这便是我的“Hello World”——一个通往更广阔数字世界的起点。（兴许是“读瘾”犯了，要写点东西自己咂摸）
-溯洄从之，道阻且长。如同伊人，此间追寻的过程远比我想象的要曲折，但也比我想象的要收获更多。我遇到了各种各样的问题：从 Docker 的内网穿透失败（其实成功了（但是https）），到 Windows 开发环境的重重陷阱，再到网络连接的神秘莫测，最后到项目结构的频频阻折…
-所幸“时来天地皆同力”，假借实验室老老资历学长给的焚诀（代理，ai，服务器的一块ubuntu…）得以为今后的所有故事作一个序。
-而我的感觉是：尽管ai飞速发展，博客、论坛、群聊比比皆是，我自己搜寻资料时，找相应操作时，或者找一些有的没有的奇怪资源时，还是有些力不从心（主要是豆沙包和臭鲸鱼现在确实一般般（25.11））；加上我喜欢鼓捣些长久的、有趣的、有意味（意味深）的东西，顾影自怜，自我怀念，比如写诗著文，都是些艺术形式，于是便有了这个界面的出现。
-谁不想要一个自己的文章网站呢~
-现在，我想把这条被我“踩”出来的、不怕ta“爱而不见”的路，分享给你。
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-13 21:00:00 +0800 +0800'>November 13, 2025</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to 史诗级“Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）" href="https://QwQBiG.github.io/posts/hello-world/"></a>
 </article>
     </main>
     
