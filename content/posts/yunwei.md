@@ -52,3 +52,5 @@ https://qwqbig.github.io/
 ## 组会报告 2
 
 ### 草稿施工：
+
+安装核心工具 kubectl，下载 Google Cloud 公共签名密钥，安装并启动你的本地K8s集群Minikube（Minikube能在你的 Ubuntu 虚拟机里再创建一个小型的、单节点的 Kubernetes 集群。），使用 Docker 作为 Minikube 的驱动
