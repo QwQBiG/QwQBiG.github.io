@@ -53,8 +53,17 @@ https://qwqbig.github.io/
 
 ### 草稿施工：
 
-安装核心工具 kubectl，下载 Google Cloud 公共签名密钥，安装本地K8s集群Minikube（Minikube能在你的 Ubuntu 虚拟机里再创建一个小型的、单节点的 Kubernetes 集群。），使用 Docker 作为 Minikube 的驱动，专业开发者中非常流行的一种方式，它叫 Kind (Kubernetes in Docker)，把 Kubernetes 的节点（包括控制节点 Master 和工作节点 Node）不放在虚拟机里，而是直接运行在 Docker 容器里。这让启动和删除集群变得飞快，而且非常轻量。因为上一步的Minikube失败了哈哈，再次因为众所周知的原因，Kind我也下不了，最后是 export GOPROXY=https://goproxy.cn,direct 让Go语言用国内通道下载的Kind。
+安装核心工具 kubectl，下载 Google Cloud 公共签名密钥（什么用？），安装本地K8s集群Minikube（Minikube能在你的 Ubuntu 虚拟机里再创建一个小型的、单节点的 Kubernetes 集群。），使用 Docker 作为 Minikube 的驱动，专业开发者中非常流行的一种方式，它叫 Kind (Kubernetes in Docker)，把 Kubernetes 的节点（包括控制节点 Master 和工作节点 Node）不放在虚拟机里，而是直接运行在 Docker 容器里。这让启动和删除集群变得飞快，而且非常轻量。因为上一步的Minikube失败了哈哈，再次因为众所周知的原因，Kind我也下不了，最后是 export GOPROXY=https://goproxy.cn,direct 让Go语言用国内通道下载的Kind。
 
-创建文件kind-config.yaml，配置好之后。运行 kind create cluster --config=kind-config.yaml，这个过程 Kind 会在后台运行 Docker，拉取镜像，并把 K8s 组件在容器里启动起来。
+创建文件kind-config.yaml，配置好之后。运行 kind create cluster --config=kind-config.yaml，这个过程 Kind 会在后台运行 Docker，拉取镜像，并把 K8s 组件在容器里启动起来。（注意TCP端口，时不时的有占用）
 
 kubectl cluster-info 查看集群信息，kubectl get nodes 查看节点信息
+
+kubectl 语法（心中默念），在脑海里建立一个模型，几乎所有的 kubectl 命令都遵循这个格式：
+kubectl [动作] [资源类型] [资源名字] [参数]
+
+我们来命令 K8s 帮我们运行一个 Nginx 网页服务器。查看 Deployment 控制器 kubectl get deployments。Deployment 只是个“经理”，它会创建一个或多个 Pod（“员工”）来实际运行 Nginx，kubectl get pods，来看看真正工作的Pod。 kubectl get pods -o wide 来详细查看。
+
+排错与详情：kubectl describe pod 我们的Pod名字
+
+
