@@ -175,24 +175,24 @@ spec:
 
 ### 2. 状态检查“三板斧”
 
-1.  **`kubectl get` (听诊器)**: 快速查看资源列表和状态。
+1.  **`kubectl get` **: 快速查看资源列表和状态。
     -   `kubectl get pods`: 查看当前命名空间的 Pod。
     -   `kubectl get pods -n <命名空间>`: 查看指定命名空间的 Pod。
     -   `kubectl get pods -A`: 查看所有命名空间的 Pod。
     -   `kubectl get pods -o wide`: 查看更多信息（IP, 所在节点）。
 
-2.  **`kubectl describe` (X光机)**: 查看资源的详细信息和事件日志。
+2.  **`kubectl describe` **: 查看资源的详细信息和事件日志。
     -   `kubectl describe pod <pod名>`
     > **排错关键**：永远第一时间查看最下方的 `Events` 部分，它记录了 Pod 创建过程中的所有成功和失败信息。
 
-3.  **`kubectl logs` (录音笔)**: 查看容器内部的标准输出日志。
+3.  **`kubectl logs` : 查看容器内部的标准输出日志。
     -   `kubectl logs <pod名>`
     -   `kubectl logs <pod名> -c <容器名>`: 查看多容器 Pod 中特定容器的日志。
     -   `kubectl logs <pod名> --previous`: 查看上一次崩溃退出的容器的日志。
 
 ### 3. 交互命令
 
--   **`kubectl exec` (传送门)**: 进入一个正在运行的容器内部。
+-   **`kubectl exec` **: 进入一个正在运行的容器内部。
     ```bash
     kubectl exec -it <pod名> -c <容器名> -- /bin/bash
     ```

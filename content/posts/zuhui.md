@@ -55,17 +55,17 @@ Kubernetes 之 Pod
 
 Day 1-2: 启程，与“网络结界”的初次交锋
 
-我的 K8s 之旅始于一个清晰的目标：在本地搭建一个学习环境。教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，现实很快给了我沉重一击。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。
+为了在本地搭建一个学习环境，看教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，每次鼓捣东西都没有一次成功的。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。
 
-在屡次失败后，我果断转换了思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念非常吸引我：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都飞快。然而，“网络结界”再次出现，Kind 的二进制文件同样无法直接下载。
+在屡次失败后，我转换思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都很快。然而，“网络问题”再次出现，Kind 的二进制文件同样无法直接下载。
 
-这几乎是学习路上的第一个劝退点，但我没有放弃。最终的破局点是 Go 语言。通过为 Go 设置国内代理通道 export GOPROXY=https://goproxy.cn,direct，我终于成功地在本地编译并安装了 Kind。
+天天搞心态，都有点免疫了。最终的破局点是 Go 语言。通过为 Go 设置国内代理通道 export GOPROXY=https://goproxy.cn,direct，我终于成功地在本地编译并安装了 Kind。
 
-环境搭建的最后一步是创建集群。我编写了 kind-config.yaml 配置文件，提前将 K8s 核心组件的镜像仓库指向国内源，并巧妙地修改了端口映射，避免了与虚拟机上其他服务的端口冲突。当我在终端敲下 kind create cluster --config=kind-config.yaml 并看到集群成功启动时，我知道，真正的学习开始了。
+环境搭建的最后一步是创建集群。编写 kind-config.yaml 配置文件，提前将 K8s 核心组件的镜像仓库指向国内源，并修改端口映射，避免与虚拟机上其他服务的端口冲突。敲下 kind create cluster --config=kind-config.yaml 看到集群成功启动时，才开始了真正的学习。
 
-kubectl cluster-info 和 kubectl get nodes 给了我正向反馈，我终于有了自己的 K8s “沙盒”。我牢记 kubectl 的通用语法 kubectl [动作] [资源类型] [资源名字] [参数]，并尝试下达了第一个指令：kubectl create deployment my-nginx --image=nginx。我理解到，Deployment 就像一个“项目经理”，而它负责创建和管理的 Pod 才是真正干活的“员工”。
+kubectl cluster-info 和 kubectl get nodes 来查看信息。体会到 kubectl 的通用语法 kubectl [动作] [资源类型] [资源名字] [参数]，并下达指令：kubectl create deployment my-nginx--image=nginx。我理解到，Deployment 就像一个“项目经理”，而它负责创建和管理的 Pod 才是真正干活的“员工”。
 
-然而，ImagePullBackOff 的红色错误再次出现。经过 kubectl describe pod 的“X光”检查，和对 Events 日志的分析，我意识到问题依然是网络。Pod 内部无法访问官方的 Nginx 镜像源。经过无数次的尝试，我发现 m.daocloud.io 这个国内镜像源是可用的。最终，kubectl create deployment my-nginx --image=m.daocloud.io/docker.io/bitnami/nginx 这条命令，让我第一次看到了 Pod 状态栏里那抹令人心安的绿色——Running。
+然而，ImagePullBackOff 的错误再次出现。经过 kubectl describe pod 的检查，和对 Events 日志的分析，呃呃，问题依然是网络。Pod 内部无法访问官方的 Nginx 镜像源。经过无数次的尝试，我发现 m.daocloud.io 这个国内镜像源是可用的。最终，kubectl create deployment my-nginx --image=m.daocloud.io/docker.io/bitnami/nginx 这条命令，让我第一次看到了 Pod 状态栏里那抹令人心安的绿色——Running。
 
 带着成功的喜悦，我用 kubectl exec 钻进了容器内部，用 ps aux 确认了 Nginx 进程的存在；用 kubectl logs 查看了它的日志。最后，通过删除 Deployment kubectl delete deployment my-nginx，我体会到了 K8s 强大的生命周期管理能力——“老板”下班，“员工”也随之解散。
 
