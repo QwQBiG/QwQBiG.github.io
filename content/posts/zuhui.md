@@ -51,66 +51,46 @@ https://qwqbig.github.io/
 
 ## 组会报告 2
 
-### 草稿施工：
+Kubernetes 之 Pod
 
-安装核心工具 kubectl，下载 Google Cloud 公共签名密钥（什么用？），安装本地K8s集群Minikube（Minikube能在你的 Ubuntu 虚拟机里再创建一个小型的、单节点的 Kubernetes 集群。），使用 Docker 作为 Minikube 的驱动，专业开发者中非常流行的一种方式，它叫 Kind (Kubernetes in Docker)，把 Kubernetes 的节点（包括控制节点 Master 和工作节点 Node）不放在虚拟机里，而是直接运行在 Docker 容器里。这让启动和删除集群变得飞快，而且非常轻量。因为上一步的Minikube失败了哈哈，再次因为众所周知的原因，Kind我也下不了，最后是 export GOPROXY=https://goproxy.cn,direct 让Go语言用国内通道下载的Kind。
+Day 1-2: 启程，与“网络结界”的初次交锋
 
-创建文件kind-config.yaml，配置好之后。运行 kind create cluster --config=kind-config.yaml，这个过程 Kind 会在后台运行 Docker，拉取镜像，并把 K8s 组件在容器里启动起来。（注意TCP端口，时不时的有占用）
+我的 K8s 之旅始于一个清晰的目标：在本地搭建一个学习环境。教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，现实很快给了我沉重一击。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。
 
-kubectl cluster-info 查看集群信息，kubectl get nodes 查看节点信息 kubectl --help 或者 kubectl get --help 来查看提示
+在屡次失败后，我果断转换了思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念非常吸引我：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都飞快。然而，“网络结界”再次出现，Kind 的二进制文件同样无法直接下载。
 
-kubectl 语法（心中默念），在脑海里建立一个模型，几乎所有的 kubectl 命令都遵循这个格式：
-kubectl [动作] [资源类型] [资源名字] [参数]
+这几乎是学习路上的第一个劝退点，但我没有放弃。最终的破局点是 Go 语言。通过为 Go 设置国内代理通道 export GOPROXY=https://goproxy.cn,direct，我终于成功地在本地编译并安装了 Kind。
 
-我们来命令 K8s 帮我们运行一个 Nginx 网页服务器。查看 Deployment 控制器 kubectl get deployments。Deployment 只是个“经理”，它会创建一个或多个 Pod（“员工”）来实际运行 Nginx，kubectl get pods，来看看真正工作的Pod。 kubectl get pods -o wide 来详细查看。
+环境搭建的最后一步是创建集群。我编写了 kind-config.yaml 配置文件，提前将 K8s 核心组件的镜像仓库指向国内源，并巧妙地修改了端口映射，避免了与虚拟机上其他服务的端口冲突。当我在终端敲下 kind create cluster --config=kind-config.yaml 并看到集群成功启动时，我知道，真正的学习开始了。
 
-排错与详情：kubectl describe pod 我们的Pod名字 ，拉到最下面的 Events 部分查看。经过多次尝试，kubectl create deployment my-nginx --image=m.daocloud.io/docker.io/bitnami/nginx 这一条是可以成功的（真的很多次）。
+kubectl cluster-info 和 kubectl get nodes 给了我正向反馈，我终于有了自己的 K8s “沙盒”。我牢记 kubectl 的通用语法 kubectl [动作] [资源类型] [资源名字] [参数]，并尝试下达了第一个指令：kubectl create deployment my-nginx --image=nginx。我理解到，Deployment 就像一个“项目经理”，而它负责创建和管理的 Pod 才是真正干活的“员工”。
 
-kubectl exec -it 我们的Pod名字 -- /bin/bash ，进入我们的容器内部，运行ps aux查看工作进程。# Nginx 默认的网页根目录 ls /usr/share/nginx/html# 查看默认欢迎页的内容cat /usr/share/nginx/html/index.html
+然而，ImagePullBackOff 的红色错误再次出现。经过 kubectl describe pod 的“X光”检查，和对 Events 日志的分析，我意识到问题依然是网络。Pod 内部无法访问官方的 Nginx 镜像源。经过无数次的尝试，我发现 m.daocloud.io 这个国内镜像源是可用的。最终，kubectl create deployment my-nginx --image=m.daocloud.io/docker.io/bitnami/nginx 这条命令，让我第一次看到了 Pod 状态栏里那抹令人心安的绿色——Running。
 
-kubectl logs 我们的Pod名字 ，来查看日志。我们已经完成了对这个 Pod 的所有探索。现在，作为一名优秀的 K8s 管理员，我们要把实验环境清理干净。我们不直接删除 Pod，而是删除它的“老板”——Deployment。kubectl delete deployment my-nginx
+带着成功的喜悦，我用 kubectl exec 钻进了容器内部，用 ps aux 确认了 Nginx 进程的存在；用 kubectl logs 查看了它的日志。最后，通过删除 Deployment kubectl delete deployment my-nginx，我体会到了 K8s 强大的生命周期管理能力——“老板”下班，“员工”也随之解散。
 
-原来的像是kubectl create deployment... 的一些操作，就像是命令。而YAML 文件是张“订单纸条”，让我们从命令转变为声明，而 kubectl apply 就是你“递交订单”的动作。好处有：YAML 文件可以像代码一样，存放在 Git 等版本控制系统中。同一份 YAML 文件，无论执行 apply 多少次，最终的结果都是一样的，这让自动化部署变得极其可靠。团队成员可以通过审查 YAML 文件（而不是一长串命令）来理解和修改系统配置。
+Day 3-4: 思想飞跃，从“命令”到“契约”
 
-nano first-pod.yaml ，在里面编辑内容后，使用kubectl apply -f first-pod.yaml 运行，（还是一样的，配置文件因为网络问题要特殊设置）。清理实验环境也变得非常简单，kubectl delete -f first-pod.yaml 
+我意识到，像 kubectl create 这样的命令式操作虽然直观，但难以追踪和复用。是时候拥抱 YAML 声明式配置了。我理解到，YAML 文件就像一份“订单契约”，我只在其中声明我想要的最终状态，而 kubectl apply -f 的动作就是把这份“契约”交给 K8s，由它自己去实现。这种方式的好处是显而易见的：版本控制、幂等性、易于协作。
 
-边车Sidecar模式。构建一个 Pod：主容器 (nginx): 负责对外提供 Web 服务。边车容器 (busybox): 每隔 5 秒钟，就将当前的时间写入到一个日志文件中。共享存储: Nginx 将直接把这个由 busybox 生成的日志文件作为自己的网页内容展示出来。又因为网络问题，Pod自己拉取不行，只好本地加载。
+我编写了第一个 Pod 的 YAML 文件，并成功部署。接着，我挑战了更高级的 Sidecar (边车)模式。我设计了一个 Pod，其中主容器是 Nginx，边车容器是 Busybox，后者持续向一个共享文件写入时间戳，前者则将这个文件作为网页内容展示。这是对 Pod——这个 K8s 原子单元——最深刻的诠释：它不是单个容器的简单包装，而是一个共享网络和存储的、紧密协作的作战单元。
 
-理解了 ImagePullBackOff 和 CrashLoopBackOff 这两大错误的本质区别。建立了清晰的调试流程：遇到 ImagePullBackOff -> 首先想到 kubectl describe pod -> 去看 Events 日志。遇到 CrashLoopBackOff -> 首先想到 kubectl logs (和 kubectl logs --previous) -> 去看容器自己输出了什么错误信息
+当然，网络问题再次出现。这次，我采用了“釜底抽薪”的办法：在主机上手动拉取镜像，打上标签，再通过 kind load docker-image 命令将镜像“硬塞”进 Kind 集群的本地存储中。虽然过程曲折，但它让我彻底掌握了在复杂网络环境下的镜像处理策略。
 
-命名空间 (Namespace) Namespace 就是 Kubernetes 里的“文件夹”为什么需要 Namespace？避免命名冲突： 在不同的 Namespace 里，你可以创建同名的资源。比如，dev 命名空间里可以有一个叫 my-app 的 Deployment，prod 命名空间里也可以有一个，它们互不影响。资源隔离与配额： 你可以为每个 Namespace 设置资源配额（比如 CPU、内存的上限），防止某个项目（比如测试环境）耗尽整个集群的资源。权限控制： 你可以设置权限，让 A 团队只能访问 team-a 的 Namespace，B 团队只能访问 team-b 的 Namespace。kubectl get namespaces# 或者简写kubectl get ns ，看到：default: 如果你不指定，你创建的所有资源都会被放在这里。我们前几天的操作都是在这个 Namespace 里。kube-system: K8s 系统组件（比如 etcd, scheduler 等）自己住的地方，永远不要动这里的东西。kube-public, kube-node-lease: 其他一些系统用的 Namespace。
+Day 5-7: 巩固与升华，成为“城市规划师”
 
-我们来创建一个专门用于开发的 Namespace，叫做 dev。kubectl create namespace dev 。要在 dev 这个“文件夹”里创建一个 Pod。这需要使用 -n (或者 --namespace) 参数。创建并配置文件nano pod-in-dev.yaml 。然后部署它 kubectl apply -f pod-in-dev.yaml -n dev 。
+掌握了基础操作，我开始学习如何排错和组织资源。我主动模拟了 ImagePullBackOff 和 CrashLoopBackOff 这两种最常见的 Pod 故障。我建立了清晰的调试流程：遇到前者，第一时间想到 kubectl describe 看 Events；遇到后者，则首先用 kubectl logs 查看容器自身的报错。
 
-如果说 Namespace 是“文件夹”，那么 Labels (标签) 就是贴在文件上的“彩色便签”。一个资源可以贴任意多个标签。标签 是一个键值对 (key/value pair)，例如 app: my-backend, env: production, version: v1.2。选择器 (Selector) 就是“筛选条件”，可以告诉 kubectl：“把所有贴着 env: production 标签的 Pod 都给我找出来！”
+接着，我学习了 Namespace (命名空间) 和 Labels (标签)。我理解到，Namespace 就像操作系统的**“文件夹”，它为资源提供了逻辑隔离**，避免了命名冲突，也为权限和资源配额管理打下了基础。我学会了创建 dev 命名空间，并使用 -n 参数在其中部署资源。
 
-可以创建文件，写上标签，找标签。
+而 Labels 则更像是贴在文件上的**“彩色便签”，它与 Selector (选择器) 相结合，提供了极其灵活的资源分组和筛选**能力。我理解到，标签是 K8s 中连接不同资源的“胶水”，是实现服务发现和负载均衡等高级功能的基石。
 
-小总结：学到的所有知识和技能（环境搭建、kubectl、YAML、多容器、调试、命名空间、标签），完成一个完整的部署、验证和清理流程。
-
-综合挑战任务：部署一个 Redis 缓存服务 Pod
-背景： 你的团队需要一个 Redis 缓存服务用于新的项目 review-project。你需要在一个专用的环境中部署这个服务，确保它符合规范，并验证其功能。
-任务要求清单：
-启动环境： 确保你的 Kind 集群正在运行。
-创建环境： 创建一个名为 week2-review 的新命名空间。
-编写蓝图 (YAML)：
-创建一个名为 redis-deployment.yaml 的文件。
-在该文件中定义一个 Pod 资源。
-这个 Pod 必须部署在 week2-review 命名空间内。
-Pod 的名字应为 redis-cache。
-为该 Pod 添加标签 project: review 和 component: cache。
-Pod 内应包含一个名为 redis-container 的容器。
-该容器使用的镜像是 redis:7.0。
-部署应用： 使用你编写的 YAML 文件成功部署该 Pod。
-验证部署：
-确认 Pod 在 week2-review 命名空间中，并且状态为 Running，READY 状态为 1/1。
-确认 Pod 已经正确地打上了 project: review 和 component: cache 这两个标签。
-使用标签选择器，能够精准地筛选出这个 Pod。
-功能验证：
-进入 (exec) 该 Pod 的 redis-container 容器内部。
-在容器内部，使用 Redis 客户端命令行工具 (redis-cli) 进行一次简单的缓存操作（例如，SET mykey "hello" 然后 GET mykey）。
-查看 Pod 的日志，确认 Redis 服务正常启动。
-清理环境：
-删除 redis-cache 这个 Pod。
-删除 week2-review 这个命名空间。
-最后，关闭你的 Kind 集群。
+学习的最后一天，是一场综合挑战。我接到了一个明确的任务：部署一个 Redis 缓存服务 Pod。
+环境准备：我检查并确保了 Kind 集群的运行。
+隔离环境：kubectl create namespace week2-review，为项目创建了专属空间。
+绘制蓝图：我编写了 redis-deployment.yaml，在 metadata 中精确地定义了 namespace: week2-review 和 labels: {project: review, component: cache}。
+处理镜像：鉴于之前的经验，我直接采用了本地加载的方式，确保了 redis:7.0 镜像在 Kind 节点中可用。
+部署与验证：kubectl apply 之后，我使用 kubectl get pods -n week2-review --show-labels 验证了 Pod 的状态和标签，并用 -l project=review 选择器精准地找到了它。
+功能测试：我用 kubectl exec 进入容器，启动 redis-cli，成功执行了 SET 和 GET 操作，验证了服务的可用性。
+清理收尾：最后，我依次删除了 Pod 和命名空间，并用 kind delete cluster 关闭了集群，为本周的学习画上了完美的句号。
+这一周，我不仅掌握了 K8s 的环境搭建、kubectl 核心命令、YAML 编写、多容器 Pod 设计、核心调试技巧以及 Namespace 和 Labels 的使用，更重要的是，我在与真实世界的网络问题不断斗争的过程中，锻炼了解决问题的耐心和智慧。我已不再是那个只会 docker run 的新手，而是真正踏入了云原生世界的大门。
