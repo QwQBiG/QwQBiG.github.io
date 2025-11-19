@@ -9,11 +9,46 @@
     <lastBuildDate>Tue, 18 Nov 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>我の组会</title>
+      <title>运维</title>
       <link>https://QwQBiG.github.io/posts/yunwei/</link>
       <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/posts/yunwei/</guid>
-      <description></description>
+      <description>&lt;h1 id=&#34;kubernetes-第一周精细化学习笔记&#34;&gt;Kubernetes 第一周精细化学习笔记&lt;/h1&gt;
+&lt;h2 id=&#34;核心思想篇两大基石&#34;&gt;核心思想篇：两大基石&lt;/h2&gt;
+&lt;h3 id=&#34;1-为何选择-kubernetes&#34;&gt;1. 为何选择 Kubernetes？&lt;/h3&gt;
+&lt;p&gt;单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;故障恢复&lt;/strong&gt;：一个容器挂了怎么办？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务发现&lt;/strong&gt;：容器 B 如何找到容器 A 的 IP 地址？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;负载均衡&lt;/strong&gt;：如何将流量平均分配给多个相同的容器？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩缩容&lt;/strong&gt;：如何根据负载自动增加或减少容器数量？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Kubernetes (K8s) 就是一个&lt;strong&gt;容器编排平台&lt;/strong&gt;，它以标准化的方式完美地解决了以上所有问题。&lt;/p&gt;
+&lt;h3 id=&#34;2-命令式-vs-声明式-核心思想转变&#34;&gt;2. 命令式 vs. 声明式 (核心思想转变)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;命令式 (Imperative)&lt;/strong&gt;：你一步步告诉 K8s &lt;strong&gt;“做什么”&lt;/strong&gt; (&lt;code&gt;kubectl create&lt;/code&gt;, &lt;code&gt;kubectl scale&lt;/code&gt;)。这就像手动驾驶，直观但难以追踪和重复。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;声明式 (Declarative)&lt;/strong&gt;：你向 K8s 提交一个 YAML 文件，告诉它你**“想要什么状态”**。这就像设定导航目的地，K8s 会自己想办法开车到达，并且如果偏离了航线（比如有 Pod 挂了），它会自动修正。&lt;strong&gt;这是 K8s 的精髓，也是现代化的管理方式。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;环境搭建篇kind-kubernetes-in-docker&#34;&gt;环境搭建篇：Kind (Kubernetes in Docker)&lt;/h2&gt;
+&lt;p&gt;在复杂的网络环境下，使用 Kind 搭建本地集群是最可靠、轻量且快速的方式。&lt;/p&gt;
+&lt;h3 id=&#34;1-安装核心工具&#34;&gt;1. 安装核心工具&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安装 &lt;code&gt;kubectl&lt;/code&gt; (K8s 命令行客户端)&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# (根据官方文档，使用 apt 或其他包管理器安装)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt-get install -y kubectl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安装 Go 语言环境 (用于安装 Kind)&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>我の组会</title>
@@ -43,8 +78,10 @@
 &lt;p&gt;写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh&lt;/p&gt;
 &lt;p&gt;欧克，完事了，bye~&lt;/p&gt;
 &lt;h2 id=&#34;组会报告-2&#34;&gt;组会报告 2&lt;/h2&gt;
-&lt;h3 id=&#34;草稿施工&#34;&gt;草稿施工：&lt;/h3&gt;
-&lt;p&gt;安装核心工具 kubectl，下载 Google Cloud 公共签名密钥（什么用？），安装本地K8s集群Minikube（Minikube能在你的 Ubuntu 虚拟机里再创建一个小型的、单节点的 Kubernetes 集群。），使用 Docker 作为 Minikube 的驱动，专业开发者中非常流行的一种方式，它叫 Kind (Kubernetes in Docker)，把 Kubernetes 的节点（包括控制节点 Master 和工作节点 Node）不放在虚拟机里，而是直接运行在 Docker 容器里。这让启动和删除集群变得飞快，而且非常轻量。因为上一步的Minikube失败了哈哈，再次因为众所周知的原因，Kind我也下不了，最后是 export GOPROXY=https://goproxy.cn,direct 让Go语言用国内通道下载的Kind。&lt;/p&gt;</description>
+&lt;p&gt;Kubernetes 之 Pod&lt;/p&gt;
+&lt;p&gt;Day 1-2: 启程，与“网络结界”的初次交锋&lt;/p&gt;
+&lt;p&gt;我的 K8s 之旅始于一个清晰的目标：在本地搭建一个学习环境。教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，现实很快给了我沉重一击。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。&lt;/p&gt;
+&lt;p&gt;在屡次失败后，我果断转换了思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念非常吸引我：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都飞快。然而，“网络结界”再次出现，Kind 的二进制文件同样无法直接下载。&lt;/p&gt;</description>
     </item>
     <item>
       <title>C&#43;&#43; STL</title>

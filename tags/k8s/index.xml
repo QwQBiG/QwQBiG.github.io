@@ -9,11 +9,46 @@
     <lastBuildDate>Tue, 18 Nov 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>我の组会</title>
+      <title>运维</title>
       <link>https://QwQBiG.github.io/posts/yunwei/</link>
       <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/posts/yunwei/</guid>
-      <description></description>
+      <description>&lt;h1 id=&#34;kubernetes-第一周精细化学习笔记&#34;&gt;Kubernetes 第一周精细化学习笔记&lt;/h1&gt;
+&lt;h2 id=&#34;核心思想篇两大基石&#34;&gt;核心思想篇：两大基石&lt;/h2&gt;
+&lt;h3 id=&#34;1-为何选择-kubernetes&#34;&gt;1. 为何选择 Kubernetes？&lt;/h3&gt;
+&lt;p&gt;单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;故障恢复&lt;/strong&gt;：一个容器挂了怎么办？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务发现&lt;/strong&gt;：容器 B 如何找到容器 A 的 IP 地址？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;负载均衡&lt;/strong&gt;：如何将流量平均分配给多个相同的容器？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩缩容&lt;/strong&gt;：如何根据负载自动增加或减少容器数量？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Kubernetes (K8s) 就是一个&lt;strong&gt;容器编排平台&lt;/strong&gt;，它以标准化的方式完美地解决了以上所有问题。&lt;/p&gt;
+&lt;h3 id=&#34;2-命令式-vs-声明式-核心思想转变&#34;&gt;2. 命令式 vs. 声明式 (核心思想转变)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;命令式 (Imperative)&lt;/strong&gt;：你一步步告诉 K8s &lt;strong&gt;“做什么”&lt;/strong&gt; (&lt;code&gt;kubectl create&lt;/code&gt;, &lt;code&gt;kubectl scale&lt;/code&gt;)。这就像手动驾驶，直观但难以追踪和重复。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;声明式 (Declarative)&lt;/strong&gt;：你向 K8s 提交一个 YAML 文件，告诉它你**“想要什么状态”**。这就像设定导航目的地，K8s 会自己想办法开车到达，并且如果偏离了航线（比如有 Pod 挂了），它会自动修正。&lt;strong&gt;这是 K8s 的精髓，也是现代化的管理方式。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;环境搭建篇kind-kubernetes-in-docker&#34;&gt;环境搭建篇：Kind (Kubernetes in Docker)&lt;/h2&gt;
+&lt;p&gt;在复杂的网络环境下，使用 Kind 搭建本地集群是最可靠、轻量且快速的方式。&lt;/p&gt;
+&lt;h3 id=&#34;1-安装核心工具&#34;&gt;1. 安装核心工具&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安装 &lt;code&gt;kubectl&lt;/code&gt; (K8s 命令行客户端)&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# (根据官方文档，使用 apt 或其他包管理器安装)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt-get install -y kubectl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安装 Go 语言环境 (用于安装 Kind)&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
