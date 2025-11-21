@@ -1,0 +1,39 @@
+<style>
+    /* 我们把专属样式直接写在这个模板里，确保它100%被加载 */
+    .series-overview-card-wrapper {
+        background: #f5f8ff; 
+        border-left: 5px solid #4a86e8;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px; /* 和其他文章卡片保持一点距离 */
+        transition: all 0.3s ease;
+    }
+
+    .series-overview-card-wrapper:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .series-overview-card-wrapper .entry-title a::before {
+        content: "🗂️ 合集 · ";
+        color: #4a86e8;
+        font-weight: bold;
+    }
+</style>
+
+<article class="post-entry series-overview-card-wrapper">
+    <header class="entry-header">
+        <h2 class="entry-hint-parent entry-title">
+            <a href="{{ .Permalink }}">{{ .Title }}</a>
+        </h2>
+    </header>
+    <div class="entry-content">
+        <!-- 显示文章的摘要或描述 -->
+        <p>{{ .Summary | plainify | safeHTML }}</p>
+    </div>
+    <footer class="entry-footer">
+        <span title='{{ .Date.Format "2006-01-02 15:04:05 -0700 -0700" }}'>{{ .Date.Format "January 2, 2006" }}</span>&nbsp;·&nbsp;{{ .ReadingTime }} min
+    </footer>
+    <a class="entry-link" aria-label="post link to {{ .Title }}" href="{{ .Permalink }}"></a>
+</article>

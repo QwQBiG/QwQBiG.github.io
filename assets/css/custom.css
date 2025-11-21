@@ -14,29 +14,3 @@ code, pre {
     font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
 }
 
-/*———————————————————————————————————————————————
-            “合集”文章专属样式
-———————————————————————————————————————————————*/
-
-/* 选中我们注入了专属 CSS 类的文章卡片 */
-.post-entry.series-overview-card {
-    background: #f5f8ff; 
-    border-left: 5px solid #4a86e8;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    padding: 20px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-/* 鼠标悬浮效果 */
-.post-entry.series-overview-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* 在标题前添加“合集”图标 */
-.post-entry.series-overview-card .post-title::before {
-    content: "🗂️ 合集 · ";
-    color: #4a86e8;
-    font-weight: bold;
-}
