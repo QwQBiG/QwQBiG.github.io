@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>置顶合集 on QwQBiG&#39;s Blog</title>
+    <link>https://QwQBiG.github.io/tags/%E7%BD%AE%E9%A1%B6%E5%90%88%E9%9B%86/</link>
+    <description>Recent content in 置顶合集 on QwQBiG&#39;s Blog</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 14 Nov 2025 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/%E7%BD%AE%E9%A1%B6%E5%90%88%E9%9B%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43; STL</title>
+      <link>https://QwQBiG.github.io/posts/learning-cpp/</link>
+      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/posts/learning-cpp/</guid>
+      <description>&lt;h2 id=&#34;系列文章列表&#34;&gt;系列文章列表&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;./hugo-guide-part-1.md&#34;&gt;Hugo建站指南(一)：环境搭建&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：工欲善其事，必先利其器。本篇将介绍如何在 Windows 环境下使用 Scoop 快速搭建一个稳定、干净的开发环境。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;./hugo-guide-part-2.md&#34;&gt;Hugo建站指南(二)：主题配置&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：选择并配置一个好的主题是成功的一半。本篇将详细介绍 PaperMod 主题的各种实用配置。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第三篇：&lt;a href=&#34;./hugo-guide-part-3.md&#34;&gt;Hugo建站指南(三)：自动化部署&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：告别繁琐的手动部署，拥抱 GitHub Actions。本篇将教你如何实现 &lt;code&gt;git push&lt;/code&gt; 自动更新网站。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>
