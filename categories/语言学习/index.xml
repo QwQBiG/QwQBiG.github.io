@@ -30,7 +30,7 @@
       <description>&lt;h2 id=&#34;系列文章列表&#34;&gt;系列文章列表&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;./hugo-guide-part-1.md&#34;&gt;Hugo建站指南(一)：环境搭建&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;.%5CSTLalgorithm.md&#34;&gt;Hugo建站指南(一)：环境搭建&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;简介：工欲善其事，必先利其器。本篇将介绍如何在 Windows 环境下使用 Scoop 快速搭建一个稳定、干净的开发环境。&lt;/p&gt;
 &lt;/blockquote&gt;
