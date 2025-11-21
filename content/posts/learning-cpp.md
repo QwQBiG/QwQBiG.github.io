@@ -4,6 +4,14 @@ date: 2025-11-14T10:00:00+08:00
 tags: ["置顶合集","C++", "STL","cpp", "编程语言", "C艹", "算法"]
 categories: ["语言学习"]
 weight: -1
+
+# 利用 cascade 功能，为这篇文章注入一个自定义的 CSS 类
+cascade:
+  - _target:
+      kind: "page"
+  - params:
+      # 我们给它一个独一无二的 CSS 类名，叫 "series-overview-card"
+      css_class: "series-overview-card"
 ---
 
 ## 系列文章列表
