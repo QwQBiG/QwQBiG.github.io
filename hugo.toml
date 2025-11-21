@@ -1,26 +1,21 @@
 # ===================================================================
-#  最终修正版 hugo.toml - 为 Blowfish 主题适配
-#  修正了致命的 theme 声明错误
+#  最终修正版 hugo.toml - 适配 Git Submodule 和 Hugo v0.152.2+
 # ===================================================================
 
 # -- 基础设置 --
 baseURL = "https://QwQBiG.github.io/"
 languageCode = "zh-cn"
 title = "QwQBiG's Blog"
-
-theme = "blowfish"
-
-# -- 内容组织 (分类法) --
-[taxonomies]
-  tag = "tags"
-  category = "categories"
-  series = "series"
+theme = "blowfish" # <-- 使用 Submodule 模式时，这里直接写主题文件夹的名字
 
 # -- 核心参数 [params] --
 [params]
-    author = "QwQBiG"
-    description = "114514，1919810"
-
+    # [作者信息] - 这是修正错误二的关键！
+    # Blowfish 需要一个 author 对象，而不是一个简单的字符串
+    [params.author]
+        name = "QwQBiG"
+        
+    description = "在这里记录学习，分享心得。"
     mainSections = ["posts"]
     showReadingTime = true
     
@@ -44,7 +39,7 @@ theme = "blowfish"
         url = "https://space.bilibili.com/3546921071282890"
 
     [params.giscus]
-        repo = "QwQBiG/QwQWebBiG.github.io"
+        repo = "QwQBiG/QwQBiG.github.io"
         repoID = "R_kgDOQUrNow"
         category = "Announcements"
         categoryID = "DIC_kwDOQUrNo84Cxx1C"
@@ -52,6 +47,7 @@ theme = "blowfish"
         theme = "preferred_color_scheme"
         lang = "zh-CN"
     
+    # 自定义资源加载
     custom_css = ["css/custom.css"]
     custom_js = ["js/katex.js"]
 
@@ -74,10 +70,6 @@ theme = "blowfish"
     pageRef = "/posts"
     weight = 10
 [[menu.main]]
-    name = "系列合集"
-    pageRef = "series"
-    weight = 20
-[[menu.main]]
     name = "标签"
     pageRef = "/tags"
     weight = 30
@@ -89,3 +81,8 @@ theme = "blowfish"
     name = "关于"
     pageRef = "/about"
     weight = 50
+
+# -- 分页 (Pagination) --
+# 这是修正错误一的关键！我们使用 Blowfish 内置的分页，不再需要那个旧模板
+[pagination]
+    paginate = 10
