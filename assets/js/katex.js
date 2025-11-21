@@ -1,0 +1,1 @@
+https://raw.githubusercontent.com/nunocoracao/blowfish/main/assets/js/katex.js

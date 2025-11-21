@@ -1,107 +1,102 @@
-# hugo.toml (推荐的完整配置)
+# ===================================================================
+#  最终版 hugo.toml - 为 Blowfish 主题全新适配
+#  包含了您 PaperMod 配置中的所有核心功能
+# ===================================================================
 
+# -- 基础设置 --
 baseURL = "https://QwQBiG.github.io/"
-languageCode = "zh-cn" # 建议修改为中文，对主题更友好
-title = "QwQBiG's Blog" # 这是你的网站总标题
-theme = "github.com/adityatelange/hugo-PaperMod"
+languageCode = "zh-cn"
+title = "QwQBiG's Blog"
+theme = ["blowfish"] # 引入 Blowfish 主题
 
-[markup]
-  [markup.highlight]
-    # true: 在代码块中显示行号
-    lineNos = true
-    # noClasses = false # 保持默认即可
-    # style = "monokai" # 可以选择代码高亮主题，如 dracula, github, monokai 等
-
-[outputs]
-  home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
-
+# -- 内容组织 (分类法) --
 [taxonomies]
   tag = "tags"
   category = "categories"
-  series = "series"  # 启用了“系列”功能
+  series = "series"
 
-# 主菜单配置
-[menu]
-  [[menu.main]]
-    identifier = "archives"
-    name = "归档"
-    url = "/archives/"
-    weight = 10 # 权重决定了菜单的顺序，数字越大越靠后。
-  [[menu.main]]
-    identifier = "series"
-    name = "合集"
-    url = "/series/"
-    weight = 15
-  [[menu.main]]
-    identifier = "tags"
-    name = "标签"
-    url = "/tags/"
-    weight = 20
-  [[menu.main]]
-    identifier = "about"
-    name = "关于"
-    url = "/about/"
-    weight = 30
-  [[menu.main]]
-    identifier = "search"
-    name = "搜索"
-    url = "/search/" # 指向搜索页面
-    weight = 40
-
-# 这是最关键的参数配置部分
+# -- 核心参数 [params] --
 [params]
-    ShowCodeCopyButtons = true
+    # [作者信息]
+    author = "QwQBiG"
+    description = "114514，1919810" # 会显示在浏览器标签页和SEO中
 
-    ShowReadingTime = true
-
-    # 1. 关闭特殊的“个人资料”主页模式
-    # 这会让你的主页变成一个标准的文章列表
-    [params.profileMode]
-        enabled = false
-
-    # 2. 在主页文章列表上方显示一个欢迎语
-    # 这会解决主标题不显示的问题，并让主页更好看
-    [params.homeInfoParams]
-        Title = "你好，世界!"
-        Content = "114514，1919810。"
-
-    # 3. 告诉主题，主页的文章列表主要来源于 "posts" 文件夹
-    mainSections = ["posts"]
-
-    [params.comments]
-        enabled = true
-
-    [[params.socialIcons]]
-        name = "github"
+    # [外观和特性]
+    mainSections = ["posts"] # 告诉主题“文章”主要放在 posts 文件夹
+    showReadingTime = true
+    
+    # [主页设置] - 让主页直接显示文章列表
+    homepage.layout = "list"
+    
+    # [代码块设置] - 行号和复制按钮
+    [params.code]
+        copy = true
+        lineNumbers = true
+    
+    # [文章页面设置] - 全局开启文章目录！
+    [params.article]
+        showTableOfContents = true
+    
+    # [社交链接] - 显示在页脚
+    [[params.social]]
+        name = "GitHub"
+        icon = "brand-github" # Blowfish 使用 Tabler Icons，这是 GitHub 的图标名
         url = "https://github.com/QwQBiG"
-
-    [[params.socialIcons]]
-        name = "bilibili"
+    [[params.social]]
+        name = "Bilibili"
+        icon = "brand-bilibili" # Bilibili 的图标名
         url = "https://space.bilibili.com/3546921071282890"
 
-     [params.author]
-        name = "QwQBiG"
+    # [评论区 Giscus]
+    [params.giscus]
+        repo = "QwQBiG/QwQBiG.github.io"
+        repoID = "R_kgDOQUrNow"
+        category = "Announcements"
+        categoryID = "DIC_kwDOQUrNo84Cxx1C"
+        mapping = "pathname"
+        theme = "preferred_color_scheme"
+        lang = "zh-CN"
+    
+    # [自定义资源加载]
+    # 加载自定义字体 (JetBrains Mono)
+    custom_css = ["css/custom.css"]
+    # 加载数学公式 (KaTeX)
+    custom_js = ["js/katex.js"]
 
-    [params.search]
-        enabled = true
-        # 可选项: 你可以限制只在某些分区/类型的内容里搜索
-        # ex: content/posts, content/docs 等
-        # contentTypes = ["page", "post"]
+# -- 搜索功能 (需要手动创建 search.md) --
+[outputFormats.SearchIndex]
+    mediaType = "application/json"
+    baseName = "search"
+    isPlainText = true
+    notAlternative = true
 
-    [params.Toc] # 没有用
-        enable = true
-        # true: 目录会保持在屏幕上
-        # false: 目录会随页面滚动
-        keepStatic = false
-        # true: 自动在右侧为目录留出空间
-        # false: 目录会嵌入文章内容流中
-        autoEnable = true
+[params.search]
+    enable = true
+    # 告诉搜索功能去哪里找数据
+    index = "/search.json"
 
-    [params.assets]
-        # 启用自定义 CSS (用于更换字体)
-        customCSS = ["css/custom.css"]
-        
-        # 开启 KaTeX 数学公式支持
-        disableHLJS = true
-        [params.assets.math]
-            enable = true
+[outputs]
+    home = ["HTML", "RSS", "SearchIndex"] # 在主页生成搜索索引
+    section = ["HTML", "RSS"]
+
+# -- 主菜单配置 --
+[[menu.main]]
+    name = "文章"
+    pageRef = "/posts"
+    weight = 10
+[[menu.main]]
+    name = "系列合集"
+    pageRef = "series"
+    weight = 20
+[[menu.main]]
+    name = "标签"
+    pageRef = "/tags"
+    weight = 30
+[[menu.main]]
+    name = "搜索"
+    pageRef = "/search"
+    weight = 40
+[[menu.main]]
+    name = "关于"
+    pageRef = "/about"
+    weight = 50
