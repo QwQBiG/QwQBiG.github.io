@@ -7,20 +7,25 @@
         {{- end -}}
 
         <div class="posts-list">
-            {{/* 第一步：先把所有文章找出来 */}}
+            {{/* 1. 找到所有文章 */}}
             {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
 
-            {{/* 第二步：单独处理置顶文章 */}}
-            {{ range where $pages ".Params.pin" "==" true }}
-                {{/* 对于置顶文章，使用我们的专属卡片 */}}
+            {{/* 2. 单独显示所有置顶文章 */}}
+            {{ range where $pages "Params.pin" true }}
                 {{ partial "series_overview_card.html" . }}
             {{ end }}
 
-            {{/* 第三步：处理所有“非置顶”的普通文章 */}}
-            {{ $regular_pages := where $pages ".Params.pin" "!=" true }}
+            {{/*
+            ===================================================================
+             这是最关键的、经过修正的逻辑
+            ===================================================================
+            */}}
+            {{/* 3. 创建一个只包含“非置顶”文章的新列表 */}}
+            {{ $regular_pages := $pages.Complement (where $pages "Params.pin" true) }}
+            
+            {{/* 4. 对这个“非置顶”文章列表进行分页和显示 */}}
             {{ $paginator := .Paginate $regular_pages }}
             {{ range $paginator.Pages }}
-                {{/* 对于普通文章，使用主题默认的摘要卡片 */}}
                 {{ .Render "summary" }}
             {{ end }}
         </div>
