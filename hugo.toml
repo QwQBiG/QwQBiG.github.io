@@ -8,10 +8,7 @@ baseURL = "https://QwQBiG.github.io/"
 languageCode = "zh-cn"
 title = "QwQBiG's Blog"
 
-# -- 核心修正：使用正确的 Hugo Module 语法引入主题 --
-[module]
-  [[module.imports]]
-    path = "github.com/nunocoracao/blowfish"
+theme = "blowfish"
 
 # -- 内容组织 (分类法) --
 [taxonomies]
@@ -22,7 +19,7 @@ title = "QwQBiG's Blog"
 # -- 核心参数 [params] --
 [params]
     author = "QwQBiG"
-    description = "在这里记录学习，分享心得。"
+    description = "114514，1919810"
 
     mainSections = ["posts"]
     showReadingTime = true
