@@ -2,28 +2,33 @@
 
 <div class="main-container">
     <div class="main-left">
+        {{- /* 步骤一：显示欢迎语 */ -}}
         {{- if .Site.Params.homeInfoParams -}}
             {{- partial "home_info.html" . -}}
         {{- end -}}
 
-        <div class="posts-list">
-            {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
-            {{ $paginator := .Paginate $pages }}
+        {{- /* 步骤二：找出所有的“置顶文章”，并循环展示它们 */ -}}
+        {{- $pinnedPages := where .Site.RegularPages "Params.pin" true -}}
+        {{- range $pinnedPages -}}
+            {{- partial "series_overview_card.html" . -}}
+        {{- end -}}
 
-            {{ range $paginator.Pages }}
-                {{ if .Params.pin }}
-                    {{/* 如果文章被置顶 (pin: true)，就使用我们专属的卡片模板 */}}
-                    {{ partial "series_overview_card.html" . }}
-                {{ else }}
-                    {{/* 否则，使用主题默认的卡片模板 */}}
-                    {{ .Render "summary" }}
-                {{ end }}
-            {{ end }}
+        <div class="posts-list">
+            {{- /* 步骤三：找出所有“非置顶”的普通文章 */ -}}
+            {{- $regularPages := where .Site.RegularPages "Params.pin" "ne" true -}}
+            {{- /* 步骤四：只对“普通文章”进行分页 */ -}}
+            {{- $paginator := .Paginate $regularPages -}}
+            {{- range $paginator.Pages -}}
+                {{- /* 步骤五：使用主题默认的卡片样式来渲染它们 */ -}}
+                {{- .Render "summary" -}}
+            {{- end -}}
         </div>
 
+        {{- /* 步骤六：显示分页导航 */ -}}
         {{- template "_internal/pagination.html" . -}}
     </div>
 
+    {{- /* 侧边栏部分，保持不变 */ -}}
     {{- if .Site.Params.profileMode.enabled -}}
     <div class="main-right">
         {{- partial "profile.html" . -}}
