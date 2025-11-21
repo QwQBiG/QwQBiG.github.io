@@ -6,8 +6,22 @@
     <description>Recent content in C&#43;&#43; on QwQBiG&#39;s Blog</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 14 Nov 2025 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 21 Nov 2025 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/c++/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>STL 容器</title>
+      <link>https://QwQBiG.github.io/posts/stlcontainer/</link>
+      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/posts/stlcontainer/</guid>
+      <description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>STL 算法</title>
+      <link>https://QwQBiG.github.io/posts/stlalgorithm/</link>
+      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/posts/stlalgorithm/</guid>
+      <description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description>
+    </item>
     <item>
       <title>C&#43;&#43; STL</title>
       <link>https://QwQBiG.github.io/posts/learning-cpp/</link>
