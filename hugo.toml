@@ -1,13 +1,17 @@
 # ===================================================================
-#  最终版 hugo.toml - 为 Blowfish 主题全新适配
-#  包含了您 PaperMod 配置中的所有核心功能
+#  最终修正版 hugo.toml - 为 Blowfish 主题适配
+#  修正了致命的 theme 声明错误
 # ===================================================================
 
 # -- 基础设置 --
 baseURL = "https://QwQBiG.github.io/"
 languageCode = "zh-cn"
 title = "QwQBiG's Blog"
-theme = ["blowfish"] # 引入 Blowfish 主题
+
+# -- 核心修正：使用正确的 Hugo Module 语法引入主题 --
+[module]
+  [[module.imports]]
+    path = "github.com/nunocoracao/blowfish"
 
 # -- 内容组织 (分类法) --
 [taxonomies]
@@ -17,39 +21,33 @@ theme = ["blowfish"] # 引入 Blowfish 主题
 
 # -- 核心参数 [params] --
 [params]
-    # [作者信息]
     author = "QwQBiG"
-    description = "114514，1919810" # 会显示在浏览器标签页和SEO中
+    description = "在这里记录学习，分享心得。"
 
-    # [外观和特性]
-    mainSections = ["posts"] # 告诉主题“文章”主要放在 posts 文件夹
+    mainSections = ["posts"]
     showReadingTime = true
     
-    # [主页设置] - 让主页直接显示文章列表
-    homepage.layout = "list"
+    [params.homepage]
+      layout = "list"
     
-    # [代码块设置] - 行号和复制按钮
     [params.code]
         copy = true
         lineNumbers = true
     
-    # [文章页面设置] - 全局开启文章目录！
     [params.article]
         showTableOfContents = true
     
-    # [社交链接] - 显示在页脚
     [[params.social]]
         name = "GitHub"
-        icon = "brand-github" # Blowfish 使用 Tabler Icons，这是 GitHub 的图标名
+        icon = "brand-github"
         url = "https://github.com/QwQBiG"
     [[params.social]]
         name = "Bilibili"
-        icon = "brand-bilibili" # Bilibili 的图标名
+        icon = "brand-bilibili"
         url = "https://space.bilibili.com/3546921071282890"
 
-    # [评论区 Giscus]
     [params.giscus]
-        repo = "QwQBiG/QwQBiG.github.io"
+        repo = "QwQBiG/QwQWebBiG.github.io"
         repoID = "R_kgDOQUrNow"
         category = "Announcements"
         categoryID = "DIC_kwDOQUrNo84Cxx1C"
@@ -57,26 +55,20 @@ theme = ["blowfish"] # 引入 Blowfish 主题
         theme = "preferred_color_scheme"
         lang = "zh-CN"
     
-    # [自定义资源加载]
-    # 加载自定义字体 (JetBrains Mono)
     custom_css = ["css/custom.css"]
-    # 加载数学公式 (KaTeX)
     custom_js = ["js/katex.js"]
 
-# -- 搜索功能 (需要手动创建 search.md) --
+# -- 搜索功能 --
 [outputFormats.SearchIndex]
     mediaType = "application/json"
     baseName = "search"
     isPlainText = true
     notAlternative = true
-
 [params.search]
     enable = true
-    # 告诉搜索功能去哪里找数据
     index = "/search.json"
-
 [outputs]
-    home = ["HTML", "RSS", "SearchIndex"] # 在主页生成搜索索引
+    home = ["HTML", "RSS", "SearchIndex"]
     section = ["HTML", "RSS"]
 
 # -- 主菜单配置 --
