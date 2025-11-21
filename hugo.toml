@@ -88,7 +88,7 @@ theme = "github.com/adityatelange/hugo-PaperMod"
         # ex: content/posts, content/docs 等
         # contentTypes = ["page", "post"]
 
-    [params.Toc]
+    [params.Toc] # 没有用
         enable = true
         # true: 目录会保持在屏幕上
         # false: 目录会随页面滚动
