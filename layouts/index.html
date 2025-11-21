@@ -1,36 +1,31 @@
 {{- define "main" -}}
 
 <div class="main-container">
-    <div class="main-content">
-
-        {{/* 1. 渲染欢迎语 */}}
+    <div class="main-left">
         {{- if .Site.Params.homeInfoParams -}}
             {{- partial "home_info.html" . -}}
         {{- end -}}
 
-        {{/* 2. 渲染文章列表 */}}
         <div class="posts-list">
+            {{/* 第一步：先把所有文章找出来 */}}
             {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
 
-            {{/* 关键修正：将置顶文章和普通文章分开处理 */}}
-            {{ $pinnedPages := where $pages ".Params.pin" true }}
-            {{ $regularPages := where $pages ".Params.pin" "ne" true }}
-
-            {{/* 先循环渲染所有置顶文章 */}}
-            {{ range $pinnedPages }}
+            {{/* 第二步：单独处理置顶文章 */}}
+            {{ range where $pages ".Params.pin" "==" true }}
+                {{/* 对于置顶文章，使用我们的专属卡片 */}}
                 {{ partial "series_overview_card.html" . }}
             {{ end }}
 
-            {{/* 再分页渲染所有普通文章 */}}
-            {{ $paginator := .Paginate $regularPages }}
+            {{/* 第三步：处理所有“非置顶”的普通文章 */}}
+            {{ $regular_pages := where $pages ".Params.pin" "!=" true }}
+            {{ $paginator := .Paginate $regular_pages }}
             {{ range $paginator.Pages }}
-                {{ partial "post_entry.html" . }}
+                {{/* 对于普通文章，使用主题默认的摘要卡片 */}}
+                {{ .Render "summary" }}
             {{ end }}
         </div>
 
-        {{/* 3. 渲染分页导航 */}}
         {{- template "_internal/pagination.html" . -}}
-        
     </div>
 </div>
 
