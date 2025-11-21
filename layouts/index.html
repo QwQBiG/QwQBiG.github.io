@@ -7,21 +7,23 @@
         {{- end -}}
 
         <div class="posts-list">
-            {{/* 1. 找到所有文章 */}}
             {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
 
-            {{/* 2. 单独显示所有置顶文章 */}}
+            {{/* 1. 单独显示所有置顶文章 */}}
             {{ range where $pages "Params.pin" true }}
                 {{ partial "series_overview_card.html" . }}
             {{ end }}
 
             {{/*
             ===================================================================
-             这是最关键的、经过修正的逻辑
+             使用兼容性更强的写法来筛选“非置顶”文章
             ===================================================================
             */}}
-            {{/* 3. 创建一个只包含“非置顶”文章的新列表 */}}
-            {{ $regular_pages := $pages.Complement (where $pages "Params.pin" true) }}
+            {{/* 2. 创建一个包含了所有置顶文章 ID 的列表 */}}
+            {{ $pinned_pages := where $pages "Params.pin" true }}
+
+            {{/* 3. 筛选出所有“不属于”置顶列表的文章 */}}
+            {{ $regular_pages := where $pages "not in" $pinned_pages }}
             
             {{/* 4. 对这个“非置顶”文章列表进行分页和显示 */}}
             {{ $paginator := .Paginate $regular_pages }}

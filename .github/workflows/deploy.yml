@@ -28,7 +28,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.125.7'
           extended: true
 
       # 第三步：机器人运行 hugo 命令，构建网站到 public 目录
