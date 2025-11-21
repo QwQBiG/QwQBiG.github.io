@@ -53,8 +53,6 @@ https://qwqbig.github.io/
 
 Kubernetes 之 Pod
 
-Day 1-2: 启程，与“网络结界”的初次交锋
-
 为了在本地搭建一个学习环境，看教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，每次鼓捣东西都没有一次成功的。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。
 
 在屡次失败后，我转换思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都很快。然而，“网络问题”再次出现，Kind 的二进制文件同样无法直接下载。

@@ -15,6 +15,11 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 [outputs]
   home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"  # 启用了“系列”功能
+
 # 主菜单配置
 [menu]
   [[menu.main]]
@@ -22,6 +27,11 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     name = "归档"
     url = "/archives/"
     weight = 10 # 权重决定了菜单的顺序，数字越大越靠后。
+  [[menu.main]]
+    identifier = "series"
+    name = "合集"
+    url = "/series/"
+    weight = 15
   [[menu.main]]
     identifier = "tags"
     name = "标签"
