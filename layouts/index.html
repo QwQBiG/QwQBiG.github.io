@@ -2,33 +2,54 @@
 
 <div class="main-container">
     <div class="main-left">
-        {{- /* 步骤一：显示欢迎语 */ -}}
+        {{- /* 1. 显示欢迎语 */ -}}
         {{- if .Site.Params.homeInfoParams -}}
             {{- partial "home_info.html" . -}}
         {{- end -}}
 
-        {{- /* 步骤二：找出所有的“置顶文章”，并循环展示它们 */ -}}
-        {{- $pinnedPages := where .Site.RegularPages "Params.pin" true -}}
+        {{- /* ------------------------------------------------------ */ -}}
+        {{- /* 核心修复：定义我们要抓取哪些文章 */ -}}
+        {{- /* 如果你在 hugo.toml 配置了 mainSections，这里就会听话地只抓取那些文件夹 */ -}}
+        {{- /* 如果没配置，默认抓取文章最多的那个文件夹 */ -}}
+        {{- $pages := where .Site.RegularPages "Type" "in" site.Params.mainSections -}}
+        
+        {{- /* 如果上面的抓取不到，就用暴力抓取所有普通页面 (备用方案) */ -}}
+        {{- if not $pages -}}
+            {{- $pages = .Site.RegularPages -}}
+        {{- end -}}
+        {{- /* ------------------------------------------------------ */ -}}
+
+        {{- /* 2. 找出“置顶文章” (pin: true) */ -}}
+        {{- $pinnedPages := where $pages "Params.pin" true -}}
+        
         {{- range $pinnedPages -}}
             {{- partial "series_overview_card.html" . -}}
         {{- end -}}
 
         <div class="posts-list">
-            {{- /* 步骤三：找出所有“非置顶”的普通文章 */ -}}
-            {{- $regularPages := where .Site.RegularPages "Params.pin" "ne" true -}}
-            {{- /* 步骤四：只对“普通文章”进行分页 */ -}}
+            {{- /* 3. 找出“散落的博客” (非置顶) */ -}}
+            {{- /* 这里的 "!=" true 能够包含 pin: false 以及 没有写 pin 的文章 */ -}}
+            {{- $regularPages := where $pages "Params.pin" "!=" true -}}
+
+            {{- /* 4. 分页处理 */ -}}
             {{- $paginator := .Paginate $regularPages -}}
-            {{- range $paginator.Pages -}}
-                {{- /* 步骤五：使用主题默认的卡片样式来渲染它们 */ -}}
-                {{- .Render "summary" -}}
+            
+            {{- if $paginator.Pages -}}
+                {{- range $paginator.Pages -}}
+                    {{- /* 5. 渲染文章卡片 */ -}}
+                    {{- .Render "summary" -}}
+                {{- end -}}
+            {{- else -}}
+                {{- /* 调试代码：如果没有文章，显示这行字 (修好后可以删掉) */ -}}
+                <!-- <p>没有找到普通文章，请检查 hugo.toml 里的 mainSections 配置</p> -->
             {{- end -}}
         </div>
 
-        {{- /* 步骤六：显示分页导航 */ -}}
+        {{- /* 6. 分页导航 */ -}}
         {{- template "_internal/pagination.html" . -}}
     </div>
 
-    {{- /* 侧边栏部分，保持不变 */ -}}
+    {{- /* 侧边栏 */ -}}
     {{- if .Site.Params.profileMode.enabled -}}
     <div class="main-right">
         {{- partial "profile.html" . -}}

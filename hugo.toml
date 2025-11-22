@@ -51,6 +51,8 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 # 这是最关键的参数配置部分
 [params]
 
+    mainSections = ["posts", "series"]
+
     ShowCodeCopyButtons = true
 
     ShowReadingTime = true
