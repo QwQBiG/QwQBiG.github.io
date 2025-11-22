@@ -1,14 +1,14 @@
 <style>
+    /* ==========================================
+       1. 基础样式 (默认白天模式)
+       ========================================== */
     .series-overview-card-wrapper {
-        background: #fff; /* 保持干净的白色背景，突出边框 */
-        border: 1px solid #e9ecef; /* 一个淡淡的边框 */
+        /* 白天背景：纯白 */
+        background: #fff; 
+        /* 白天边框：浅灰 */
+        border: 1px solid #e9ecef; 
         
-        /* 
-         * 关键：渐变粉色左边框
-         * border-image 允许我们用渐变色来填充边框
-         * linear-gradient(...) 定义了从上到下的渐变方向和颜色
-         * 我选了两个漂亮的粉色：从樱花粉 (#ffafcc) 到 蜜桃粉 (#ffb3a7)
-        */
+        /* 核心特征：左侧渐变粉色边框 (保留你的设计) */
         border-left-width: 5px;
         border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
 
@@ -16,30 +16,67 @@
         padding: 25px;
         border-radius: 8px;
         margin-bottom: 20px;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.3s ease; /* 让颜色切换也有过渡动画 */
     }
 
+    /* 悬浮效果 (白天) */
     .series-overview-card-wrapper:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3); /* 悬浮时带一点粉色辉光 */
+        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
     }
 
-    /*
-     * 关键：合集大标题的字体颜色
-     * 我们选中标题中的链接 <a> 标签来修改颜色
-     * 我选了一个优雅的紫罗兰色 (#8a2be2)
-    */
+    /* 标题链接颜色 (白天：深紫罗兰) */
     .series-overview-card-wrapper .entry-title a {
-        color: #8a2be2 !important; /* !important 确保覆盖主题的默认颜色 */
+        color: #8a2be2 !important; 
+        transition: color 0.3s ease;
     }
 
-    /* 标题前的 emoji 图标也改成紫色，保持统一 */
+    /* 图标颜色 (白天) */
     .series-overview-card-wrapper .entry-title a::before {
-        content: "🎀 合集 · "; /* 换一个更可爱的图标 */
+        content: "🎀 合集 · ";
         color: #8a2be2;
+    }
+
+    /* ==========================================
+       2. 黑夜模式样式 (当 body 有 dark 类时触发)
+       ========================================== */
+    
+    /* 卡片容器变黑 */
+    body.dark .series-overview-card-wrapper {
+        /* 背景：PaperMod 标准深色背景 (深灰色) */
+        background: #2e2e33; 
+        /* 边框：变暗，防止刺眼 */
+        border-color: #444;
+        /* 阴影：黑夜里阴影要淡一点，或者改用深色阴影 */
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+    /* 悬浮效果 (黑夜) */
+    body.dark .series-overview-card-wrapper:hover {
+        /* 背景稍微变亮一点点，表示被选中 */
+        background: #36363d;
+        /* 阴影加深 */
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    /* 标题链接变色 (黑夜：浅紫罗兰)
+       原因：深色背景上，原来的深紫色看不清，要换成亮一点的粉紫色 */
+    body.dark .series-overview-card-wrapper .entry-title a {
+        color: #d0a9f5 !important; 
+    }
+
+    /* 图标颜色也跟着变亮 */
+    body.dark .series-overview-card-wrapper .entry-title a::before {
+        color: #d0a9f5;
+    }
+    
+    /* 文章摘要文字颜色 (确保黑夜能看清) */
+    body.dark .series-overview-card-wrapper .entry-content {
+        color: #b0b0b0; /* 浅灰色文字 */
     }
 </style>
 
+<!-- HTML 结构保持不变 -->
 <article class="post-entry series-overview-card-wrapper">
     <header class="entry-header">
         <h2 class="entry-hint-parent entry-title">
