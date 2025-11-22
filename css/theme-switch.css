@@ -1,0 +1,91 @@
+/* ==========================================
+   1. 容器设置 (跑道)
+   ========================================== */
+#theme-toggle {
+    /* 调试用的红框，如果你看到红框说明CSS加载成功了！ */
+    /* border: 2px solid red !important;  <-- 测试完后把这一行删掉 */
+
+    /* 强制固定大小，不许动 */
+    width: 60px !important;
+    height: 30px !important;
+    
+    /* 变成一个胶囊形状 */
+    border-radius: 30px !important;
+    background-color: #87CEEB !important; /* 白天：天蓝 */
+    
+    /* 布局修正 */
+    position: relative !important;
+    display: inline-block !important;
+    padding: 0 !important;
+    margin-left: 10px !important;
+    border: none !important;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease !important;
+    overflow: hidden; /* 关键：防止子元素溢出 */
+}
+
+/* ==========================================
+   2. 滑块 (太阳/月亮)
+   ========================================== */
+#theme-toggle::after {
+    content: '';
+    position: absolute;
+    
+    /* 初始位置固定在左边，以后只靠 transform 移动 */
+    top: 3px;
+    left: 3px; 
+    
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #FFD700; /* 太阳金 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    
+    /* 核心修复：使用 transform 替代 left，不再卡顿 */
+    transform: translateX(0); 
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.3s !important;
+    z-index: 10;
+}
+
+/* ==========================================
+   3. 装饰 (云/星星)
+   ========================================== */
+#theme-toggle::before {
+    content: '☁'; 
+    position: absolute;
+    top: 50%;
+    right: 8px; /* 靠右显示 */
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #fff;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+/* ==========================================
+   4. 黑夜模式激活状态 (核心部分)
+   ========================================== */
+
+/* 容器变深色 */
+body.dark #theme-toggle {
+    background-color: #2f3640 !important; /* 深空灰 */
+}
+
+/* 滑块向右位移，并变色 */
+body.dark #theme-toggle::after {
+    /* 向右移动 30px */
+    transform: translateX(30px) !important; 
+    
+    background-color: #f5f6fa; /* 月亮白 */
+    box-shadow: inset -3px -2px 0 0 #bdc3c7; /* 简单的月球坑效果 */
+}
+
+/* 装饰变成星星，并移位 */
+body.dark #theme-toggle::before {
+    content: '✨';
+    right: 35px; /* 把星星挤到左边去 */
+    color: #f1c40f;
+    font-size: 12px;
+}
