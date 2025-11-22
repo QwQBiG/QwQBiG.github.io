@@ -1,64 +1,125 @@
-<link rel="stylesheet" href="/css/theme-switch.css">
+{{- /* Theme Toggle Switch - 嵌入式终极版 */ -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            {{- $label_text := (site.Params.label.text | default site.Title) }}
-            {{- if site.Title }}
+            {{- $label_text := (site.Params.label.text | default site.Title) -}}
             <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
                 {{- if site.Params.label.icon }}
                 {{- $img := resources.Get site.Params.label.icon }}
                 {{- if $img }}
-                    {{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
-                    {{- if hugo.IsExtended -}}
-                        {{- $processableFormats = $processableFormats | append "webp" -}}
-                    {{- end -}}
-                    {{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) }}
-                    {{- if and (in $processableFormats $img.MediaType.SubType) (eq $prod true)}}
-                        {{- if site.Params.label.iconHeight }}
-                            {{- $img = $img.Resize (printf "x%d" site.Params.label.iconHeight) }}
-                        {{ else }}
-                            {{- $img = $img.Resize "x30" }}
-                        {{- end }}
-                    {{- end }}
+                    {{- $img := $img.Resize "35x35" }}
                     <img src="{{ $img.Permalink }}" alt="" aria-label="logo"
-                        height="{{- site.Params.label.iconHeight | default "30" -}}">
+                        height="{{ $img.Height }}" width="{{ $img.Width }}">
                 {{- else }}
-                <img src="{{- site.Params.label.icon | absURL -}}" alt="" aria-label="logo"
-                    height="{{- site.Params.label.iconHeight | default "30" -}}">
+                <img src="{{ site.Params.label.icon | absURL }}" alt="" aria-label="logo"
+                    height="35" width="35">
                 {{- end -}}
-                {{- else if hasPrefix site.Params.label.iconSVG "<svg" }}
-                    {{ site.Params.label.iconSVG | safeHTML }}
                 {{- end -}}
                 {{- $label_text -}}
             </a>
-            {{- end }}
             <div class="logo-switches">
                 {{- if (not site.Params.disableThemeToggle) }}
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)"></button>
-                {{- end }}
                 
-                {{- if (not site.Params.disableLangToggle) }}
-                    {{- $lang := .Lang}}
-                    {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
-                    {{- with site.Home.Translations }}
-                    <ul class="lang-switch">
-                        {{- if $separator }}<li>|</li>{{ end }}
-                        {{- range . -}}
-                        {{- if ne $lang .Lang }}
-                        <li>
-                            <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
-                                aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
-                                {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
-                                {{- .Language.LanguageName | emojify -}}
-                                {{- else }}
-                                {{- .Lang | title -}}
-                                {{- end -}}
-                            </a>
-                        </li>
-                        {{- end -}}
-                        {{- end}}
-                    </ul>
-                    {{- end }}
+                <!-- 这里开始是我们的自定义开关样式，直接嵌入，拒绝不加载 -->
+                <style>
+                    /* 容器：胶囊形状 */
+                    #theme-toggle {
+                        position: relative;
+                        width: 60px !important;
+                        height: 30px !important;
+                        border-radius: 30px !important;
+                        background-color: #87CEEB !important; /* 白天蓝 */
+                        border: none !important;
+                        padding: 0 !important;
+                        margin-left: 10px;
+                        cursor: pointer;
+                        transition: background-color 0.4s ease;
+                        overflow: hidden;
+                        display: inline-block;
+                        vertical-align: middle;
+                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+                    }
+                    
+                    /* 滑块：圆球 (白天是太阳) */
+                    #theme-toggle::after {
+                        content: '';
+                        position: absolute;
+                        top: 3px;
+                        left: 3px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background-color: #FFD700; /* 太阳金 */
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
+                        z-index: 2;
+                        transform: translateX(0); /* 默认位置 */
+                    }
+                    
+                    /* 装饰：云朵 */
+                    #theme-toggle::before {
+                        content: '☁';
+                        position: absolute;
+                        top: 50%;
+                        right: 8px;
+                        transform: translateY(-50%);
+                        font-size: 14px;
+                        color: #fff;
+                        opacity: 0.9;
+                        transition: all 0.4s ease;
+                        z-index: 1;
+                    }
+
+                    /* ============ 黑夜模式触发 ============ */
+                    /* PaperMod 通常把 class="dark" 加在 body 上，但有些版本加在 html 上，这里两个都写上以防万一 */
+                    body.dark #theme-toggle, 
+                    html.dark #theme-toggle {
+                        background-color: #2f3640 !important; /* 深夜灰 */
+                    }
+
+                    /* 黑夜模式：滑块移动并变色 */
+                    body.dark #theme-toggle::after,
+                    html.dark #theme-toggle::after {
+                        transform: translateX(30px); /* 移动到右边 */
+                        background-color: #f5f6fa; /* 月亮白 */
+                    }
+
+                    /* 黑夜模式：装饰变星星 */
+                    body.dark #theme-toggle::before,
+                    html.dark #theme-toggle::before {
+                        content: '✨';
+                        right: auto;
+                        left: 8px;
+                        color: #f1c40f;
+                    }
+                </style>
+
+                <!-- 这是一个空的按钮，里面没有任何 SVG 干扰 -->
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <!-- 里面什么都不要放，全靠 CSS 生成 -->
+                </button>
+
+                {{- end }}
+                {{- $lang := .Lang}}
+                {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
+                {{- with site.Home.AllTranslations }}
+                <ul class="lang-switch">
+                    {{- if $separator }}<li>|</li>{{ end }}
+                    {{- range . -}}
+                    {{- if ne $lang .Lang }}
+                    <li>
+                        <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
+                            aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
+                            {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
+                            {{- .Language.LanguageName | emojify -}}
+                            {{- else }}
+                            {{- .Lang | title -}}
+                            {{- end -}}
+                        </a>
+                    </li>
+                    {{- end -}}
+                    {{- end}}
+                </ul>
                 {{- end }}
             </div>
         </div>
@@ -67,14 +128,14 @@
             {{- range site.Menus.main }}
             {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL) ) | absLangURL }}
             {{- $page_url:= $currentPage.Permalink | absLangURL }}
-            {{- $is_search := eq (site.GetPage .KeyName).Layout `search` }}
+            {{- $is_search := eq (site.GetPage .KeyName).Layout "search" }}
             <li>
-                <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }} {{- cond $is_search (" (Alt + /)" | safeHTMLAttr) ("" | safeHTMLAttr ) }}"
-                {{- cond $is_search (" accesskey=/" | safeHTMLAttr) ("" | safeHTMLAttr ) }}>
+                <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }} {{- cond $is_search " (Alt + /)" "" }}"
+                {{- if $is_search -}}accesskey=/"{{- end -}}>
                     <span {{- if eq $menu_item_url $page_url }} class="active" {{- end }}>
                         {{- .Pre }}
                         {{- .Name -}}
-                        {{ .Post -}}
+                        {{- .Post -}}
                     </span>
                     {{- if (findRE "://" .URL) }}&nbsp;
                     <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
