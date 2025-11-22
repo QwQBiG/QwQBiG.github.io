@@ -1,169 +1,77 @@
-{{- /* Theme Toggle Switch - 最终视觉修正版 */ -}}
-<header class="header">
-    <nav class="nav">
-        <div class="logo">
-            {{- $label_text := (site.Params.label.text | default site.Title) -}}
-            <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
-                {{- if site.Params.label.icon }}
-                {{- $img := resources.Get site.Params.label.icon }}
-                {{- if $img }}
-                    {{- $img := $img.Resize "35x35" }}
-                    <img src="{{ $img.Permalink }}" alt="" aria-label="logo"
-                        height="{{ $img.Height }}" width="{{ $img.Width }}">
-                {{- else }}
-                <img src="{{ site.Params.label.icon | absURL }}" alt="" aria-label="logo"
-                    height="35" width="35">
-                {{- end -}}
-                {{- end -}}
-                {{- $label_text -}}
-            </a>
-            <div class="logo-switches">
-                {{- if (not site.Params.disableThemeToggle) }}
-                
-                <!-- 嵌入样式：高权重修正版 -->
-                <style>
-                    /* 1. 容器样式 */
-                    #theme-toggle {
-                        /* 强制尺寸和外观 */
-                        width: 60px !important;
-                        height: 30px !important;
-                        border-radius: 30px !important;
-                        background-color: #87CEEB !important; /* 白天蓝 */
-                        border: none !important;
-                        padding: 0 !important;
-                        margin-left: 10px;
-                        
-                        /* 布局核心 */
-                        position: relative !important;
-                        cursor: pointer;
-                        display: inline-block !important; /* 确保是块级表现 */
-                        vertical-align: middle;
-                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-                        transition: background-color 0.4s ease !important;
-                        overflow: hidden !important; /* 藏住溢出的部分 */
-                    }
+<style>
+    /* 容器 */
+    button#theme-toggle {
+        position: relative;
+        width: 60px !important;
+        height: 30px !important;
+        border-radius: 30px !important;
+        background-color: #87CEEB !important;
+        border: 2px solid #fff !important; /* 加个白边框，方便你看清它的范围 */
+        padding: 0 !important;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: background-color 0.4s ease;
+        overflow: hidden;
+        display: inline-flex !important;
+        align-items: center;
+        z-index: 100 !important; /* 确保在最上层 */
+    }
 
-                    /* 2. 暴力隐藏原来的 SVG 图标 */
-                    #theme-toggle svg {
-                        display: none !important;
-                        width: 0 !important;
-                        height: 0 !important;
-                        opacity: 0 !important;
-                        position: absolute; /* 让它们脱离文档流，不占空间 */
-                    }
+    /* 隐藏原图标 */
+    button#theme-toggle svg {
+        display: none !important;
+    }
 
-                    /* 3. 滑块（太阳/月亮） */
-                    #theme-toggle::after {
-                        content: '';
-                        position: absolute !important;
-                        top: 3px !important;
-                        left: 3px !important; /* 默认在左边 */
-                        width: 24px !important;
-                        height: 24px !important;
-                        border-radius: 50%;
-                        background-color: #FFD700 !important; /* 太阳金 */
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-                        
-                        /* 动画核心 */
-                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
-                        z-index: 100 !important; /* 确保在最上层 */
-                        transform: translateX(0);
-                    }
-                    
-                    /* 4. 装饰（云朵/星星） */
-                    #theme-toggle::before {
-                        content: '☁';
-                        position: absolute !important;
-                        top: 50% !important;
-                        right: 8px !important;
-                        transform: translateY(-55%);
-                        font-size: 14px;
-                        color: #fff;
-                        opacity: 0.9;
-                        transition: all 0.4s ease;
-                        z-index: 90 !important;
-                    }
+    /* 滑块 (太阳/月亮) */
+    button#theme-toggle::after {
+        content: '';
+        position: absolute;
+        top: 1px; /* 微调位置 */
+        left: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #FFD700;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
+        z-index: 10;
+        pointer-events: none; /* 关键：让鼠标点击能穿透它 */
+    }
 
-                    /* ============ 黑夜模式 ============ */
-                    
-                    /* 容器变色 */
-                    body.dark #theme-toggle,
-                    html.dark #theme-toggle {
-                        background-color: #2f3640 !important; /* 深夜灰 */
-                    }
+    /* 装饰 (云朵/星星) */
+    button#theme-toggle::before {
+        content: '☁';
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: #fff;
+        opacity: 0.9;
+        transition: all 0.4s ease;
+        z-index: 5;
+        pointer-events: none; /* 关键：让鼠标点击能穿透它 */
+    }
 
-                    /* 滑块移动 */
-                    body.dark #theme-toggle::after,
-                    html.dark #theme-toggle::after {
-                        transform: translateX(30px) !important; /* 强制移动 */
-                        background-color: #f5f6fa !important; /* 变白 */
-                    }
+    /* === 激活状态 === */
+    /* 同时匹配 body.dark 和 html.dark */
+    body.dark button#theme-toggle,
+    html.dark button#theme-toggle {
+        background-color: #2f3640 !important;
+        border-color: #555 !important;
+    }
 
-                    /* 装饰变化 */
-                    body.dark #theme-toggle::before,
-                    html.dark #theme-toggle::before {
-                        content: '✨';
-                        right: auto !important;
-                        left: 8px !important;
-                        color: #f1c40f !important;
-                    }
-                </style>
+    body.dark button#theme-toggle::after,
+    html.dark button#theme-toggle::after {
+        transform: translateX(30px);
+        background-color: #f5f6fa;
+    }
 
-                <!-- 按钮主体，包含隐藏的 SVG -->
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                </button>
-
-                {{- end }}
-                {{- $lang := .Lang}}
-                {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
-                {{- with site.Home.AllTranslations }}
-                <ul class="lang-switch">
-                    {{- if $separator }}<li>|</li>{{ end }}
-                    {{- range . -}}
-                    {{- if ne $lang .Lang }}
-                    <li>
-                        <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
-                            aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
-                            {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
-                            {{- .Language.LanguageName | emojify -}}
-                            {{- else }}
-                            {{- .Lang | title -}}
-                            {{- end -}}
-                        </a>
-                    </li>
-                    {{- end -}}
-                    {{- end}}
-                </ul>
-                {{- end }}
-            </div>
-        </div>
-        {{- $currentPage := . }}
-        <ul id="menu">
-            {{- range site.Menus.main }}
-            {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL) ) | absLangURL }}
-            {{- $page_url:= $currentPage.Permalink | absLangURL }}
-            {{- $is_search := eq (site.GetPage .KeyName).Layout "search" }}
-            <li>
-                <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }} {{- cond $is_search " (Alt + /)" "" }}"
-                {{- if $is_search -}}accesskey="/"{{- end -}}>
-                    <span {{- if eq $menu_item_url $page_url }} class="active" {{- end }}>
-                        {{- .Pre }}
-                        {{- .Name -}}
-                        {{- .Post -}}
-                    </span>
-                    {{- if (findRE "://" .URL) }}&nbsp;
-                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
-                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
-                        <path d="M15 3h6v6"></path>
-                        <path d="M10 14L21 3"></path>
-                    </svg>
-                    {{- end }}
-                </a>
-            </li>
-            {{- end }}
-        </ul>
-    </nav>
-</header>
+    body.dark button#theme-toggle::before,
+    html.dark button#theme-toggle::before {
+        content: '✨';
+        right: auto;
+        left: 8px;
+        color: #f1c40f;
+    }
+</style>
