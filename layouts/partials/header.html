@@ -1,77 +1,191 @@
-<style>
-    /* 容器 */
-    button#theme-toggle {
-        position: relative;
-        width: 60px !important;
-        height: 30px !important;
-        border-radius: 30px !important;
-        background-color: #87CEEB !important;
-        border: 2px solid #fff !important; /* 加个白边框，方便你看清它的范围 */
-        padding: 0 !important;
-        margin-left: 10px;
-        cursor: pointer;
-        transition: background-color 0.4s ease;
-        overflow: hidden;
-        display: inline-flex !important;
-        align-items: center;
-        z-index: 100 !important; /* 确保在最上层 */
-    }
+{{- /* Theme Toggle Switch - 终极完整版 (集成强制动画样式) */ -}}
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            {{- $label_text := (site.Params.label.text | default site.Title) -}}
+            <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
+                {{- if site.Params.label.icon }}
+                {{- $img := resources.Get site.Params.label.icon }}
+                {{- if $img }}
+                    {{- $img := $img.Resize "35x35" }}
+                    <img src="{{ $img.Permalink }}" alt="" aria-label="logo"
+                        height="{{ $img.Height }}" width="{{ $img.Width }}">
+                {{- else }}
+                <img src="{{ site.Params.label.icon | absURL }}" alt="" aria-label="logo"
+                    height="35" width="35">
+                {{- end -}}
+                {{- end -}}
+                {{- $label_text -}}
+            </a>
+            <div class="logo-switches">
+                {{- if (not site.Params.disableThemeToggle) }}
+                
+                <!-- ============================================ -->
+                <!-- 自定义动态开关样式 (即使在黑夜模式也强制生效) -->
+                <!-- ============================================ -->
+                <style>
+                    /* 1. 容器样式 (白天默认) */
+                    button#theme-toggle {
+                        position: relative;
+                        width: 60px !important;
+                        height: 30px !important;
+                        border-radius: 30px !important;
+                        background-color: #87CEEB !important; /* 白天蓝 */
+                        border: none !important;
+                        padding: 0 !important;
+                        margin-left: 10px;
+                        cursor: pointer;
+                        transition: background-color 0.4s ease !important;
+                        overflow: hidden;
+                        display: inline-flex !important;
+                        align-items: center;
+                        z-index: 100;
+                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2) !important;
+                    }
 
-    /* 隐藏原图标 */
-    button#theme-toggle svg {
-        display: none !important;
-    }
+                    /* 2. 隐藏 PaperMod 原来的图标 (保留代码但不可见) */
+                    button#theme-toggle svg {
+                        display: none !important;
+                        visibility: hidden !important;
+                        width: 0 !important;
+                    }
 
-    /* 滑块 (太阳/月亮) */
-    button#theme-toggle::after {
-        content: '';
-        position: absolute;
-        top: 1px; /* 微调位置 */
-        left: 2px;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background-color: #FFD700;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
-        z-index: 10;
-        pointer-events: none; /* 关键：让鼠标点击能穿透它 */
-    }
+                    /* 3. 滑块样式 (默认是太阳) */
+                    button#theme-toggle::after {
+                        content: '';
+                        position: absolute;
+                        top: 3px;
+                        left: 3px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background-color: #FFD700 !important; /* 金色 */
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+                        
+                        /* 核心动画：贝塞尔曲线 */
+                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
+                        
+                        z-index: 10;
+                        transform: translateX(0) !important; /* 默认在左边 */
+                        pointer-events: none; /* 让鼠标穿透 */
+                    }
+                    
+                    /* 4. 装饰样式 (默认是云朵) */
+                    button#theme-toggle::before {
+                        content: '☁';
+                        position: absolute;
+                        top: 50%;
+                        right: 8px;
+                        transform: translateY(-50%);
+                        font-size: 14px;
+                        color: #fff !important;
+                        opacity: 0.9;
+                        transition: all 0.4s ease !important;
+                        z-index: 5;
+                        pointer-events: none;
+                    }
 
-    /* 装饰 (云朵/星星) */
-    button#theme-toggle::before {
-        content: '☁';
-        position: absolute;
-        top: 50%;
-        right: 8px;
-        transform: translateY(-50%);
-        font-size: 14px;
-        color: #fff;
-        opacity: 0.9;
-        transition: all 0.4s ease;
-        z-index: 5;
-        pointer-events: none; /* 关键：让鼠标点击能穿透它 */
-    }
+                    /* ============================================ */
+                    /* 黑夜模式激活状态 (核心部分) */
+                    /* 使用 body.dark 和 html.dark 双重保险 */
+                    /* 加 !important 强制覆盖默认样式 */
+                    /* ============================================ */
 
-    /* === 激活状态 === */
-    /* 同时匹配 body.dark 和 html.dark */
-    body.dark button#theme-toggle,
-    html.dark button#theme-toggle {
-        background-color: #2f3640 !important;
-        border-color: #555 !important;
-    }
+                    /* 容器变色：变成深灰 */
+                    body.dark button#theme-toggle,
+                    html.dark button#theme-toggle {
+                        background-color: #2f3640 !important;
+                    }
 
-    body.dark button#theme-toggle::after,
-    html.dark button#theme-toggle::after {
-        transform: translateX(30px);
-        background-color: #f5f6fa;
-    }
+                    /* 滑块移动：变成月亮 */
+                    body.dark button#theme-toggle::after,
+                    html.dark button#theme-toggle::after {
+                        transform: translateX(30px) !important; /* 强制移动到右边 */
+                        background-color: #f5f6fa !important;   /* 强制变白 */
+                    }
 
-    body.dark button#theme-toggle::before,
-    html.dark button#theme-toggle::before {
-        content: '✨';
-        right: auto;
-        left: 8px;
-        color: #f1c40f;
-    }
-</style>
+                    /* 装饰变化：变成星星 */
+                    body.dark button#theme-toggle::before,
+                    html.dark button#theme-toggle::before {
+                        content: '✨';
+                        right: auto;
+                        left: 8px;
+                        color: #f1c40f !important;
+                        transform: translateY(-50%) scale(1.1) !important;
+                    }
+                </style>
+
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <!-- 保留原本的SVG ID，防止JS报错，但已被CSS隐藏 -->
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                {{- end }}
+                {{- $lang := .Lang}}
+                {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
+                {{- with site.Home.AllTranslations }}
+                <ul class="lang-switch">
+                    {{- if $separator }}<li>|</li>{{ end }}
+                    {{- range . -}}
+                    {{- if ne $lang .Lang }}
+                    <li>
+                        <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
+                            aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
+                            {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
+                            {{- .Language.LanguageName | emojify -}}
+                            {{- else }}
+                            {{- .Lang | title -}}
+                            {{- end -}}
+                        </a>
+                    </li>
+                    {{- end -}}
+                    {{- end}}
+                </ul>
+                {{- end }}
+            </div>
+        </div>
+        {{- $currentPage := . }}
+        <ul id="menu">
+            {{- range site.Menus.main }}
+            {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL) ) | absLangURL }}
+            {{- $page_url:= $currentPage.Permalink | absLangURL }}
+            {{- $is_search := eq (site.GetPage .KeyName).Layout "search" }}
+            <li>
+                <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }} {{- cond $is_search " (Alt + /)" "" }}"
+                {{- if $is_search -}}accesskey="/"{{- end -}}>
+                    <span {{- if eq $menu_item_url $page_url }} class="active" {{- end }}>
+                        {{- .Pre }}
+                        {{- .Name -}}
+                        {{- .Post -}}
+                    </span>
+                    {{- if (findRE "://" .URL) }}&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                    {{- end }}
+                </a>
+            </li>
+            {{- end }}
+        </ul>
+    </nav>
+</header>
