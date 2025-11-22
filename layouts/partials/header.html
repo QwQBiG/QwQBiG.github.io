@@ -1,4 +1,4 @@
-{{- /* Theme Toggle Switch - 穿透修复版 (Final Stable) */ -}}
+{{- /* Theme Toggle Switch - 幽灵按钮方案 (The Ghost Button) */ -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
@@ -21,133 +21,82 @@
                 {{- if (not site.Params.disableThemeToggle) }}
                 
                 <!-- ================================================== -->
-                <!-- 核心修复 CSS -->
+                <!-- 容器：把原来的按钮和我们的替身包在一起 -->
                 <!-- ================================================== -->
-                <style>
-                    /* 1. 按钮容器：设定跑道 */
-                    button#theme-toggle {
-                        position: relative;
-                        width: 60px !important; /* 强制宽度 */
-                        height: 30px !important; /* 强制高度 */
-                        border-radius: 30px !important;
-                        background-color: #87CEEB !important; /* 白天：天蓝 */
-                        border: none !important;
-                        padding: 0 !important;
-                        margin-left: 10px;
+                <div class="switch-wrapper" style="position: relative; width: 60px; height: 30px; margin-left: 10px; display: inline-block; vertical-align: middle;">
+                    
+                    <!-- 1. 替身使者 (Visual Layer) -->
+                    <!-- 它只负责好看，不接受任何点击 (pointer-events: none) -->
+                    <div id="visual-toggle"></div>
+                    <style>
+                        /* 替身的基础样式 */
+                        #visual-toggle {
+                            position: absolute;
+                            top: 0; left: 0;
+                            width: 100%; height: 100%;
+                            border-radius: 30px;
+                            background-color: #87CEEB; /* 白天蓝 */
+                            transition: background-color 0.4s ease;
+                            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+                            pointer-events: none !important; /* 关键：点击穿透 */
+                        }
+                        
+                        /* 替身的滑块 (太阳) */
+                        #visual-toggle::after {
+                            content: '';
+                            position: absolute;
+                            top: 3px; left: 3px;
+                            width: 24px; height: 24px;
+                            border-radius: 50%;
+                            background-color: #FFD700; /* 金色 */
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+                            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
+                            z-index: 2;
+                        }
+
+                        /* 替身的装饰 (云朵) */
+                        #visual-toggle::before {
+                            content: '☁';
+                            position: absolute;
+                            top: 50%; right: 8px;
+                            transform: translateY(-50%);
+                            font-size: 14px; color: #fff;
+                            opacity: 0.9;
+                            transition: all 0.4s ease;
+                            z-index: 1;
+                        }
+
+                        /* ====== 只有 body 变黑时，替身才变化 ====== */
+                        body.dark #visual-toggle, html.dark #visual-toggle {
+                            background-color: #2f3640; /* 深空灰 */
+                        }
+                        body.dark #visual-toggle::after, html.dark #visual-toggle::after {
+                            transform: translateX(30px); /* 右移 */
+                            background-color: #f5f6fa;   /* 变白 */
+                        }
+                        body.dark #visual-toggle::before, html.dark #visual-toggle::before {
+                            content: '✨';
+                            right: auto; left: 8px;
+                            color: #f1c40f;
+                        }
+                    </style>
+
+                    <!-- 2. 幽灵按钮 (Logic Layer) -->
+                    <!-- 它是原版按钮，但变成透明并覆盖在最上层 -->
+                    <button id="theme-toggle" accesskey="t" title="(Alt + T)" style="
+                        position: absolute; 
+                        top: 0; left: 0; 
+                        width: 100%; height: 100%; 
+                        opacity: 0; /* 透明不可见 */
+                        z-index: 999; /* 保证在最上层 */
                         cursor: pointer;
-                        /* 关键：确保 transition 定义在基础状态，这样回来时也有动画 */
-                        transition: background-color 0.4s ease !important;
-                        
-                        /* 布局修正 */
-                        display: inline-flex !important;
-                        align-items: center;
-                        justify-content: center;
-                        overflow: hidden;
-                        vertical-align: middle;
-                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-                        
-                        /* 确保按钮在最上层，且能被点到 */
-                        z-index: 100;
-                    }
-
-                    /* 2. 彻底隐藏原来的 SVG (但不删除，防止 JS 报错) */
-                    button#theme-toggle svg {
-                        display: none !important;
-                        width: 0 !important;
-                        height: 0 !important;
-                        visibility: hidden !important;
-                    }
-
-                    /* 3. 滑块 (太阳/月亮) */
-                    button#theme-toggle::after {
-                        content: '';
-                        position: absolute;
-                        top: 3px;
-                        left: 3px;
-                        width: 24px;
-                        height: 24px;
-                        border-radius: 50%;
-                        background-color: #FFD700 !important; /* 太阳金 */
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-                        
-                        /* 动画设置 */
-                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
-                        transform: translateX(0) !important;
-                        z-index: 10;
-                        
-                        /* ================================================== */
-                        /* 【致命关键】让鼠标点击穿透滑块，直接点到按钮上 */
-                        /* 如果没有这行，滑块挡住按钮，第二次点击就失效 */
-                        pointer-events: none !important;
-                        /* ================================================== */
-                    }
-
-                    /* 4. 装饰 (云朵/星星) */
-                    button#theme-toggle::before {
-                        content: '☁';
-                        position: absolute;
-                        top: 50%;
-                        right: 8px;
-                        transform: translateY(-50%);
-                        font-size: 14px;
-                        color: #fff !important;
-                        opacity: 0.9;
-                        transition: all 0.4s ease !important;
-                        z-index: 5;
-                        
-                        /* 【致命关键】同上，防止云彩挡路 */
-                        pointer-events: none !important;
-                    }
-
-                    /* ================================================== */
-                    /* 状态激活：黑夜模式 */
-                    /* 同时匹配 body.dark (常见) 和 html.dark (Safari/某些配置) */
-                    /* ================================================== */
-
-                    /* 容器变黑 */
-                    body.dark button#theme-toggle,
-                    html.dark button#theme-toggle {
-                        background-color: #2f3640 !important; /* 深空灰 */
-                    }
-
-                    /* 滑块右移 + 变色 */
-                    body.dark button#theme-toggle::after,
-                    html.dark button#theme-toggle::after {
-                        transform: translateX(30px) !important; /* 强制位移 */
-                        background-color: #f5f6fa !important;   /* 强制变白 */
-                    }
-
-                    /* 装饰变身 */
-                    body.dark button#theme-toggle::before,
-                    html.dark button#theme-toggle::before {
-                        content: '✨';
-                        right: auto;
-                        left: 8px;
-                        color: #f1c40f !important;
-                    }
-                </style>
-
-                <!-- 按钮 HTML：保持 ID 不变，内容保留 SVG 但隐藏 -->
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
+                        margin: 0; padding: 0; border: none;
+                    ">
+                        <!-- 保留内部 SVG 以防 JS 报错，反正看不见 -->
+                        <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                </div>
 
                 {{- end }}
                 {{- $lang := .Lang}}
