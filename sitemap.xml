@@ -23,9 +23,6 @@
     <loc>https://QwQBiG.github.io/</loc>
     <lastmod>2025-11-21T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://QwQBiG.github.io/series/</loc>
-    <lastmod>2025-11-21T10:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://QwQBiG.github.io/tags/stl/</loc>
     <lastmod>2025-11-21T10:00:00+08:00</lastmod>
   </url><url>
@@ -71,7 +68,10 @@
     <loc>https://QwQBiG.github.io/about/</loc>
     <lastmod>2025-11-14T12:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://QwQBiG.github.io/posts/learning-cpp/</loc>
+    <loc>https://QwQBiG.github.io/series/learning-cpp/</loc>
+    <lastmod>2025-11-14T10:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://QwQBiG.github.io/series/</loc>
     <lastmod>2025-11-14T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://QwQBiG.github.io/tags/github-pages/</loc>

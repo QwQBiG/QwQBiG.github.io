@@ -97,33 +97,6 @@
 &lt;p&gt;在屡次失败后，我转换思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都很快。然而，“网络问题”再次出现，Kind 的二进制文件同样无法直接下载。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>C&#43;&#43; STL</title>
-      <link>https://QwQBiG.github.io/posts/learning-cpp/</link>
-      <pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/learning-cpp/</guid>
-      <description>&lt;h2 id=&#34;系列文章列表&#34;&gt;系列文章列表&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;.%5CSTLalgorithm.md&#34;&gt;Hugo建站指南(一)：环境搭建&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：工欲善其事，必先利其器。本篇将介绍如何在 Windows 环境下使用 Scoop 快速搭建一个稳定、干净的开发环境。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;./hugo-guide-part-2.md&#34;&gt;Hugo建站指南(二)：主题配置&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：选择并配置一个好的主题是成功的一半。本篇将详细介绍 PaperMod 主题的各种实用配置。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第三篇：&lt;a href=&#34;./hugo-guide-part-3.md&#34;&gt;Hugo建站指南(三)：自动化部署&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：告别繁琐的手动部署，拥抱 GitHub Actions。本篇将教你如何实现 &lt;code&gt;git push&lt;/code&gt; 自动更新网站。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    <item>
       <title>史诗级“Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）</title>
       <link>https://QwQBiG.github.io/posts/hello-world/</link>
       <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
