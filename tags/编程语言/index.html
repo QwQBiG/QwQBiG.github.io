@@ -90,131 +90,80 @@
                 
                 
                 
-                <style>
-                     
-                    button#theme-toggle {
-                        position: relative;
-                        width: 60px !important;  
-                        height: 30px !important;  
-                        border-radius: 30px !important;
-                        background-color: #87CEEB !important;  
-                        border: none !important;
-                        padding: 0 !important;
-                        margin-left: 10px;
+                <div class="switch-wrapper" style="position: relative; width: 60px; height: 30px; margin-left: 10px; display: inline-block; vertical-align: middle;">
+                    
+                    
+                    
+                    <div id="visual-toggle"></div>
+                    <style>
+                         
+                        #visual-toggle {
+                            position: absolute;
+                            top: 0; left: 0;
+                            width: 100%; height: 100%;
+                            border-radius: 30px;
+                            background-color: #87CEEB;  
+                            transition: background-color 0.4s ease;
+                            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+                            pointer-events: none !important;  
+                        }
+                        
+                         
+                        #visual-toggle::after {
+                            content: '';
+                            position: absolute;
+                            top: 3px; left: 3px;
+                            width: 24px; height: 24px;
+                            border-radius: 50%;
+                            background-color: #FFD700;  
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+                            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
+                            z-index: 2;
+                        }
+
+                         
+                        #visual-toggle::before {
+                            content: '☁';
+                            position: absolute;
+                            top: 50%; right: 8px;
+                            transform: translateY(-50%);
+                            font-size: 14px; color: #fff;
+                            opacity: 0.9;
+                            transition: all 0.4s ease;
+                            z-index: 1;
+                        }
+
+                         
+                        body.dark #visual-toggle, html.dark #visual-toggle {
+                            background-color: #2f3640;  
+                        }
+                        body.dark #visual-toggle::after, html.dark #visual-toggle::after {
+                            transform: translateX(30px);  
+                            background-color: #f5f6fa;    
+                        }
+                        body.dark #visual-toggle::before, html.dark #visual-toggle::before {
+                            content: '✨';
+                            right: auto; left: 8px;
+                            color: #f1c40f;
+                        }
+                    </style>
+
+                    
+                    
+                    <button id="theme-toggle" accesskey="t" title="(Alt + T)" style="
+                        position: absolute; 
+                        top: 0; left: 0; 
+                        width: 100%; height: 100%; 
+                        opacity: 0; /* 透明不可见 */
+                        z-index: 999; /* 保证在最上层 */
                         cursor: pointer;
-                         
-                        transition: background-color 0.4s ease !important;
+                        margin: 0; padding: 0; border: none;
+                    ">
                         
-                         
-                        display: inline-flex !important;
-                        align-items: center;
-                        justify-content: center;
-                        overflow: hidden;
-                        vertical-align: middle;
-                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-                        
-                         
-                        z-index: 100;
-                    }
-
-                     
-                    button#theme-toggle svg {
-                        display: none !important;
-                        width: 0 !important;
-                        height: 0 !important;
-                        visibility: hidden !important;
-                    }
-
-                     
-                    button#theme-toggle::after {
-                        content: '';
-                        position: absolute;
-                        top: 3px;
-                        left: 3px;
-                        width: 24px;
-                        height: 24px;
-                        border-radius: 50%;
-                        background-color: #FFD700 !important;  
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-                        
-                         
-                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
-                        transform: translateX(0) !important;
-                        z-index: 10;
-                        
-                         
-                         
-                         
-                        pointer-events: none !important;
-                         
-                    }
-
-                     
-                    button#theme-toggle::before {
-                        content: '☁';
-                        position: absolute;
-                        top: 50%;
-                        right: 8px;
-                        transform: translateY(-50%);
-                        font-size: 14px;
-                        color: #fff !important;
-                        opacity: 0.9;
-                        transition: all 0.4s ease !important;
-                        z-index: 5;
-                        
-                         
-                        pointer-events: none !important;
-                    }
-
-                     
-                     
-                     
-                     
-
-                     
-                    body.dark button#theme-toggle,
-                    html.dark button#theme-toggle {
-                        background-color: #2f3640 !important;  
-                    }
-
-                     
-                    body.dark button#theme-toggle::after,
-                    html.dark button#theme-toggle::after {
-                        transform: translateX(30px) !important;  
-                        background-color: #f5f6fa !important;    
-                    }
-
-                     
-                    body.dark button#theme-toggle::before,
-                    html.dark button#theme-toggle::before {
-                        content: '✨';
-                        right: auto;
-                        left: 8px;
-                        color: #f1c40f !important;
-                    }
-                </style>
-
-                
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
+                        <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                </div>
                 <ul class="lang-switch"><li>|</li>
                 </ul>
             </div>
