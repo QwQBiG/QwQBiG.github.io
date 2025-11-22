@@ -136,11 +136,9 @@
             <div class="logo-switches">
                 
                 
-                
-                
                 <style>
                      
-                    button#theme-toggle {
+                    #theme-toggle {
                         position: relative;
                         width: 60px !important;
                         height: 30px !important;
@@ -150,23 +148,19 @@
                         padding: 0 !important;
                         margin-left: 10px;
                         cursor: pointer;
-                        transition: background-color 0.4s ease !important;
                         overflow: hidden;
                         display: inline-flex !important;
                         align-items: center;
-                        z-index: 100;
-                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2) !important;
+                        z-index: 999;
+                         
+                        transition: background-color 0.4s ease !important;
                     }
 
                      
-                    button#theme-toggle svg {
-                        display: none !important;
-                        visibility: hidden !important;
-                        width: 0 !important;
-                    }
+                    #theme-toggle svg { display: none !important; }
 
                      
-                    button#theme-toggle::after {
+                    #theme-toggle::after {
                         content: '';
                         position: absolute;
                         top: 3px;
@@ -176,17 +170,15 @@
                         border-radius: 50%;
                         background-color: #FFD700 !important;  
                         box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-                        
+                        z-index: 10;
+                        pointer-events: none;
                          
                         transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
-                        
-                        z-index: 10;
-                        transform: translateX(0) !important;  
-                        pointer-events: none;  
+                        transform: translateX(0) !important;
                     }
-                    
+
                      
-                    button#theme-toggle::before {
+                    #theme-toggle::before {
                         content: '☁';
                         position: absolute;
                         top: 50%;
@@ -201,56 +193,65 @@
                     }
 
                      
+                    
                      
-                     
-                     
-                     
-
-                     
-                    body.dark button#theme-toggle,
-                    html.dark button#theme-toggle {
-                        background-color: #2f3640 !important;
+                    #theme-toggle.toggled {
+                        background-color: #2f3640 !important;  
                     }
 
                      
-                    body.dark button#theme-toggle::after,
-                    html.dark button#theme-toggle::after {
-                        transform: translateX(30px) !important;  
-                        background-color: #f5f6fa !important;    
+                    #theme-toggle.toggled::after {
+                        transform: translateX(30px) !important;
+                        background-color: #f5f6fa !important;  
                     }
 
                      
-                    body.dark button#theme-toggle::before,
-                    html.dark button#theme-toggle::before {
+                    #theme-toggle.toggled::before {
                         content: '✨';
                         right: auto;
                         left: 8px;
                         color: #f1c40f !important;
-                        transform: translateY(-50%) scale(1.1) !important;
                     }
                 </style>
 
+                
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </button>
+
+                
+                <script>
+                    (function() {
+                        const btn = document.getElementById('theme-toggle');
+                        
+                        
+                        if (document.body.classList.contains('dark') || localStorage.getItem('pref-theme') === 'dark') {
+                            btn.classList.add('toggled');
+                        }
+
+                        
+                        btn.addEventListener('click', function() {
+                            
+                            setTimeout(() => {
+                                if (document.body.classList.contains('dark')) {
+                                    this.classList.add('toggled');
+                                } else {
+                                    this.classList.remove('toggled');
+                                }
+                            }, 10);
+                        });
+                        
+                        
+                        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                            if (event.matches) {
+                                btn.classList.add('toggled');
+                            } else {
+                                btn.classList.remove('toggled');
+                            }
+                        });
+                    })();
+                </script>
                 <ul class="lang-switch"><li>|</li>
                 </ul>
             </div>
