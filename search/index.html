@@ -153,7 +153,6 @@
                         display: inline-flex !important;
                         align-items: center;
                         z-index: 999;
-                         
                         transition: background-color 0.4s ease !important;
                     }
 
@@ -173,7 +172,6 @@
                         box-shadow: 0 2px 4px rgba(0,0,0,0.25);
                         z-index: 10;
                         pointer-events: none;
-                         
                         transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
                         transform: translateX(0) !important;
                     }
@@ -195,18 +193,15 @@
 
                      
                     
-                     
                     #theme-toggle.toggled {
                         background-color: #2f3640 !important;  
                     }
 
-                     
                     #theme-toggle.toggled::after {
                         transform: translateX(30px) !important;
                         background-color: #f5f6fa !important;  
                     }
 
-                     
                     #theme-toggle.toggled::before {
                         content: '✨';
                         right: auto;
@@ -227,30 +222,22 @@
                         const btn = document.getElementById('theme-toggle');
                         
                         
-                        if (document.body.classList.contains('dark') || localStorage.getItem('pref-theme') === 'dark') {
-                            btn.classList.add('toggled');
-                        }
-
-                        
-                        btn.addEventListener('click', function() {
-                            
-                            setTimeout(() => {
-                                if (document.body.classList.contains('dark')) {
-                                    this.classList.add('toggled');
-                                } else {
-                                    this.classList.remove('toggled');
-                                }
-                            }, 10);
-                        });
-                        
-                        
-                        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-                            if (event.matches) {
+                        function syncThemeState() {
+                            const isDark = document.body.classList.contains('dark');
+                            if (isDark) {
                                 btn.classList.add('toggled');
                             } else {
                                 btn.classList.remove('toggled');
                             }
-                        });
+                        }
+
+                        
+                        syncThemeState();
+
+                        
+                        
+                        const observer = new MutationObserver(syncThemeState);
+                        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
                     })();
                 </script>
                 <ul class="lang-switch"><li>|</li>
