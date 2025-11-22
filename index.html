@@ -107,151 +107,202 @@
                 
                 <style>
                      
-                    button#theme-toggle {
-                        position: relative;
-                        width: 60px !important;
-                        height: 30px !important;
-                        border-radius: 30px !important;
-                        border: none !important;
-                        padding: 0 !important;
-                        margin-left: 10px;
-                        cursor: pointer;
-                        overflow: hidden;
-                        
+                    :root {
                          
-                        top: 3px !important; 
-                         
-
-                        display: inline-flex !important;
-                        align-items: center;
-                        z-index: 100;
-                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2) !important;
-                        
-                         
-                        background-color: #83D8FF !important;  
-                        transition: background-color 0.5s ease !important;
+                        --fluid-bezier: cubic-bezier(0.4, 0.0, 0.2, 1);
+                        --bounce-bezier: cubic-bezier(0.68, -0.55, 0.265, 1.55);
                     }
 
                      
-                    button#theme-toggle svg {
-                        display: none !important;
+                    button#theme-toggle {
+                        position: relative;
+                        width: 80px !important;
+                        height: 40px !important;
+                        border-radius: 99px !important;
+                        padding: 0 !important;
+                        margin-left: 12px;
+                        cursor: pointer;
+                        overflow: hidden;
+                        
+                        top: 3px !important;  
+                        
+                        display: inline-flex !important;
+                        align-items: center;
+                        z-index: 100;
+                        
+                         
+                        border: 3px solid rgba(255, 255, 255, 0.5) !important;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.1), inset 0 2px 4px rgba(0,0,0,0.05);
+                        
+                         
+                        background: linear-gradient(135deg, #70F5FF 0%, #4FACFE 100%) !important;
+                        
+                        -webkit-tap-highlight-color: transparent;
+                        outline: none;
                     }
+
+                     
+                    button#theme-toggle svg { display: none !important; }
+
+
+                     
+                    .night-aperture {
+                        position: absolute;
+                        top: 0; left: 0; width: 100%; height: 100%;
+                        z-index: 2;
+                        pointer-events: none;
+                        
+                         
+                        background: linear-gradient(135deg, #120c34 0%, #24243e 100%);
+                        
+                         
+                         
+                        clip-path: circle(0px at 20px 50%);
+                        
+                         
+                        transition: clip-path 0.7s var(--fluid-bezier);
+                    }
+
+
+                     
+                    .clouds-container, .stars-container {
+                        position: absolute;
+                        top: 0; left: 0; width: 100%; height: 100%;
+                    }
+                    
+                     
+                    .clouds-container { z-index: 1; }
+                    .cloud {
+                        position: absolute; background: rgba(255,255,255,0.85); border-radius: 10px;
+                        animation: float 3s infinite ease-in-out;
+                    }
+                    .c1 { top: 12px; left: 40px; width: 20px; height: 10px; }
+                    .c1::after { content:''; position:absolute; top:-5px; right:4px; width:10px; height:10px; background:inherit; border-radius:50%;}
+                    .c2 { top: 24px; left: 55px; width: 14px; height: 7px; opacity:0.8; animation-delay: 1s;}
+
+                     
+                    .stars-container { z-index: 3; }
+                    .star {
+                        position: absolute; background: #fff; border-radius: 50%;
+                        box-shadow: 0 0 4px #fff; opacity: 1;
+                        animation: twinkle 2s infinite ease-in-out;
+                    }
+                    .s1 { top: 10px; left: 15px; width: 2px; height: 2px; }
+                    .s2 { top: 25px; left: 30px; width: 3px; height: 3px; animation-delay: 0.5s; }
+                    .s3 { top: 15px; left: 45px; width: 1px; height: 1px; animation-delay: 1s; }
+
 
                      
                     .toggle-handler {
                         position: absolute;
-                        top: 3px;
-                        left: 3px;
-                        width: 24px;
-                        height: 24px;
+                        top: 3px; left: 3px;  
+                        width: 28px; height: 28px;  
                         border-radius: 50%;
-                        background-color: #FFD700;  
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
                         z-index: 10;
-                        pointer-events: none;  
+                        pointer-events: none;
                         
                          
-                        transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.5s ease;
-                        transform: translateX(0);
+                        overflow: hidden;
+                        box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+                        
+                         
+                        transition: transform 0.7s var(--fluid-bezier);
+                        transform: translateX(0) rotate(0deg);
                     }
 
                      
-                    .crater {
+                    .sun-core {
                         position: absolute;
-                        background-color: #E8E8E8;  
-                        border-radius: 50%;
-                        opacity: 0;  
-                        transition: opacity 0.3s ease;
+                        top: 0; left: 0; width: 100%; height: 100%;
+                        background: radial-gradient(circle at 30% 30%, #fff59d 0%, #ffcc00 100%);
+                        transition: transform 0.7s var(--fluid-bezier);
+                        transform: translateX(0);  
                     }
-                    .crater-1 { top: 9px; left: 5px; width: 4px; height: 4px; }
-                    .crater-2 { top: 5px; left: 12px; width: 6px; height: 6px; }
-                    .crater-3 { top: 14px; left: 10px; width: 3px; height: 3px; }
 
                      
-                    .star {
+                    .moon-core {
                         position: absolute;
-                        background-color: #FFF;
-                        border-radius: 50%;
-                        width: 2px;
-                        height: 2px;
-                        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                        opacity: 0;
-                        z-index: 5;
-                        pointer-events: none;
+                        top: 0; left: 0; width: 100%; height: 100%;
+                        background: radial-gradient(circle at 30% 30%, #ece9e6 0%, #9fa8da 100%);
+                        
+                         
+                        transform: translateX(100%); 
+                        transition: transform 0.7s var(--fluid-bezier);
                     }
+                    
                      
-                    .star-1 { top: 10px; left: 35px; width: 3px; height: 3px; transform: translateY(20px); }
-                    .star-2 { top: 18px; left: 28px; width: 2px; height: 2px; transform: translateY(20px); }
-                    .star-3 { top: 8px; left: 45px; width: 2px; height: 2px; transform: translateY(20px); }
-                    .star-4 { top: 15px; left: 50px; width: 1px; height: 1px; transform: translateY(20px); }
+                    .crater { position: absolute; background: rgba(0,0,0,0.15); border-radius: 50%; }
+                    .cr1 { top: 6px; left: 8px; width: 6px; height: 6px; }
+                    .cr2 { top: 16px; left: 16px; width: 4px; height: 4px; }
+                    .cr3 { top: 18px; left: 6px; width: 3px; height: 3px; }
 
                      
-                    .cloud {
-                        position: absolute;
-                        top: 50%;
-                        right: 10px;
-                        transform: translateY(-50%);
-                        width: 20px;
-                        height: 20px;
-                        opacity: 1;
-                        transition: all 0.5s ease;
-                        pointer-events: none;
-                        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.5 12C18.5 9.51472 16.4853 7.5 14 7.5C13.617 7.5 13.2468 7.55263 12.8931 7.65185C12.2696 4.84982 9.79167 2.75 6.75 2.75C3.02208 2.75 0 5.77208 0 9.5C0 13.2279 3.02208 16.25 6.75 16.25H18.5C20.9853 16.25 23 14.2353 23 11.75C23 12.0634 22.9596 12.3682 22.8832 12.6586C22.9597 12.4459 23 12.2253 23 12H18.5Z'/%3E%3C/svg%3E");
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                    }
+                    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-2px);} }
+                    @keyframes twinkle { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.6);} }
+
 
                      
                     
                      
-                    body.dark button#theme-toggle,
-                    html.dark button#theme-toggle {
-                        background-color: #212121 !important;  
+                    body.dark button#theme-toggle {
+                        border-color: rgba(255, 255, 255, 0.2) !important;
+                    }
+
+                     
+                    body.dark .night-aperture {
+                         
+                         
+                        clip-path: circle(100px at 60px 50%);
                     }
 
                      
                     body.dark .toggle-handler {
-                        transform: translateX(30px);
-                        background-color: #FFF;  
-                        box-shadow: inset -2px -2px 4px rgba(0,0,0,0.1);  
+                         
+                        transform: translateX(40px) rotate(360deg);
                     }
 
                      
-                    body.dark .crater { opacity: 1; }
-
                      
-                    body.dark .star { opacity: 1; }
-                    body.dark .star-1 { transform: translateY(0); }
-                    body.dark .star-2 { transform: translateY(0); transition-delay: 0.1s; }
-                    body.dark .star-3 { transform: translateY(0); transition-delay: 0.2s; }
-                    body.dark .star-4 { transform: translateY(0); transition-delay: 0.1s; }
-
                      
-                    body.dark .cloud {
-                        transform: translateY(20px);
-                        opacity: 0;
+                    
+                    body.dark .sun-core {
+                        transform: translateX(-100%);  
                     }
+                    body.dark .moon-core {
+                        transform: translateX(0);  
+                    }
+
                 </style>
 
                 
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     
                     
+                    <div class="clouds-container">
+                        <div class="cloud c1"></div>
+                        <div class="cloud c2"></div>
+                    </div>
+
+                    
+                    <div class="night-aperture">
+                        <div class="stars-container">
+                            <div class="star s1"></div>
+                            <div class="star s2"></div>
+                            <div class="star s3"></div>
+                        </div>
+                    </div>
+
+                    
                     <span class="toggle-handler">
                         
-                        <span class="crater crater-1"></span>
-                        <span class="crater crater-2"></span>
-                        <span class="crater crater-3"></span>
+                        <div class="sun-core"></div>
+                        
+                        <div class="moon-core">
+                            <span class="crater cr1"></span>
+                            <span class="crater cr2"></span>
+                            <span class="crater cr3"></span>
+                        </div>
                     </span>
-                    
-                    
-                    <span class="star star-1"></span>
-                    <span class="star star-2"></span>
-                    <span class="star star-3"></span>
-                    <span class="star star-4"></span>
-                    
-                    
-                    <span class="cloud"></span>
 
                     
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -264,7 +315,6 @@
                         const originalBtn = document.getElementById("theme-toggle");
                         if (!originalBtn) return;
 
-                        
                         const newBtn = originalBtn.cloneNode(true);
                         originalBtn.parentNode.replaceChild(newBtn, originalBtn);
 
