@@ -1,0 +1,81 @@
+/* 容器 */
+#theme-toggle {
+  background-color: #83D8FF;
+  border: none;
+  width: 60px;
+  height: 30px;
+  border-radius: 30px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.5s ease;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 滑块 (太阳/月亮主体) */
+#theme-toggle .toggle-handler {
+  background-color: #FFD43B;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  position: absolute;
+  left: 3px;
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.5s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+/* 月球坑 (默认隐藏，黑夜显示) */
+.crater {
+  position: absolute;
+  background-color: #EFEEDA;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.crater-1 { top: 9px; left: 5px; width: 4px; height: 4px; }
+.crater-2 { top: 5px; left: 12px; width: 6px; height: 6px; }
+.crater-3 { top: 14px; left: 10px; width: 3px; height: 3px; }
+
+/* 星星 (默认隐藏) */
+.star {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 50%;
+  width: 2px;
+  height: 2px;
+  opacity: 0;
+  transition: all 0.5s ease;
+  z-index: 1;
+}
+/* 星星位置 */
+.star-1 { top: 5px; left: 30px; }
+.star-2 { top: 10px; left: 45px; width: 3px; height: 3px;}
+.star-3 { top: 18px; left: 35px; }
+.star-4 { top: 22px; left: 50px; width: 1px; height: 1px;}
+.star-5 { top: 8px; left: 52px; }
+.star-6 { top: 20px; left: 25px; }
+
+/* =============
+   Dark Mode 激活状态
+   ============= */
+body.dark #theme-toggle {
+  background-color: #353849; /* 夜空黑 */
+}
+
+body.dark #theme-toggle .toggle-handler {
+  transform: translateX(30px);
+  background-color: #EFEEDA; /* 月亮白 */
+}
+
+/* 显示陨石坑 */
+body.dark .crater { opacity: 1; }
+
+/* 显示星星并带动画 */
+body.dark .star { opacity: 1; transform: scale(1.2); }
+body.dark .star-1 { top: 10px; left: 10px; }
+body.dark .star-2 { top: 15px; left: 18px; }
+body.dark .star-3 { top: 20px; left: 10px; }
+/* 这里可以稍微移动星星位置模拟云散开的效果 */
