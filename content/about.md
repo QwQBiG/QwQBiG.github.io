@@ -2,6 +2,7 @@
 title: "我 是 谁（并非宝可梦）" # 这会是页面的大标题
 date: 2025-11-14T12:00:00+08:00
 draft: false
+hidden: true
 ---
 
 ![一只可爱的猫（？）](/avatar.png)

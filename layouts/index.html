@@ -2,50 +2,72 @@
 
 <div class="main-container">
     <div class="main-left">
-        {{- /* 1. 显示欢迎语 */ -}}
+        {{- /* 1. 欢迎语 */ -}}
         {{- if .Site.Params.homeInfoParams -}}
             {{- partial "home_info.html" . -}}
         {{- end -}}
 
-        {{- /* ------------------------------------------------------ */ -}}
-        {{- /* 核心修复：定义我们要抓取哪些文章 */ -}}
-        {{- /* 如果你在 hugo.toml 配置了 mainSections，这里就会听话地只抓取那些文件夹 */ -}}
-        {{- /* 如果没配置，默认抓取文章最多的那个文件夹 */ -}}
-        {{- $pages := where .Site.RegularPages "Type" "in" site.Params.mainSections -}}
+        {{- /* ================================================== */ -}}
+        {{- /* 2. 数据准备与过滤 (智能清洗) */ -}}
+        {{- /* ================================================== */ -}}
         
-        {{- /* 如果上面的抓取不到，就用暴力抓取所有普通页面 (备用方案) */ -}}
-        {{- if not $pages -}}
-            {{- $pages = .Site.RegularPages -}}
-        {{- end -}}
-        {{- /* ------------------------------------------------------ */ -}}
+        {{- /* 第一步：获取全站普通页面 */ -}}
+        {{- $allPages := .Site.RegularPages -}}
 
-        {{- /* 2. 找出“置顶文章” (pin: true) */ -}}
-        {{- $pinnedPages := where $pages "Params.pin" true -}}
+        {{- /* 第二步：剔除掉功能页面 (搜索、归档) */ -}}
+        {{- /* 只要 Layout 是 search 或 archives 的，统统不要 */ -}}
+        {{- $allPages := where $allPages "Layout" "ne" "search" -}}
+        {{- $allPages := where $allPages "Layout" "ne" "archives" -}}
+
+        {{- /* 第三步：剔除掉用户手动隐藏的页面 (比如 "我是谁") */ -}}
+        {{- /* 只要 Front Matter 里写了 hidden: true 的，统统不要 */ -}}
+        {{- $allPages := where $allPages "Params.hidden" "ne" true -}}
+
+        {{- /* -------------------------------------------------- */ -}}
+
+        {{- /* 筛选合集 (置顶) */ -}}
+        {{- $pinnedPages := where $allPages "Params.pin" true -}}
         
+        {{- /* 筛选散落文章 (非置顶) */ -}}
+        {{- $regularPages := where $allPages "Params.pin" "ne" true -}}
+
+        {{- /* 3. 显示合集卡片 */ -}}
         {{- range $pinnedPages -}}
             {{- partial "series_overview_card.html" . -}}
         {{- end -}}
 
         <div class="posts-list">
-            {{- /* 3. 找出“散落的博客” (非置顶) */ -}}
-            {{- /* 这里的 "!=" true 能够包含 pin: false 以及 没有写 pin 的文章 */ -}}
-            {{- $regularPages := where $pages "Params.pin" "!=" true -}}
-
-            {{- /* 4. 分页处理 */ -}}
+            {{- /* 4. 显示散落文章 */ -}}
             {{- $paginator := .Paginate $regularPages -}}
-            
-            {{- if $paginator.Pages -}}
-                {{- range $paginator.Pages -}}
-                    {{- /* 5. 渲染文章卡片 */ -}}
-                    {{- .Render "summary" -}}
-                {{- end -}}
-            {{- else -}}
-                {{- /* 调试代码：如果没有文章，显示这行字 (修好后可以删掉) */ -}}
-                <!-- <p>没有找到普通文章，请检查 hugo.toml 里的 mainSections 配置</p> -->
+
+            {{- range $paginator.Pages -}}
+                <article class="post-entry">
+                    {{- $isHidden := .Params.cover.hidden | default site.Params.cover.hiddenInList -}}
+                    {{- partial "cover.html" (dict "cxt" . "IsHome" true "isHidden" $isHidden) -}}
+                    
+                    <header class="entry-header">
+                        <h2>
+                            {{- .Title -}}
+                            {{- if .Draft -}}<sup><span class="entry-isdraft">&nbsp;&nbsp;[Draft]</span></sup>{{- end -}}
+                        </h2>
+                    </header>
+                    
+                    {{- if (ne .Params.hideSummary true) -}}
+                    <div class="entry-content">
+                        <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+                    </div>
+                    {{- end -}}
+                    
+                    <footer class="entry-footer">
+                        {{- partial "post_meta.html" . -}}
+                    </footer>
+                    
+                    <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+                </article>
             {{- end -}}
         </div>
 
-        {{- /* 6. 分页导航 */ -}}
+        {{- /* 5. 分页导航 */ -}}
         {{- template "_internal/pagination.html" . -}}
     </div>
 
