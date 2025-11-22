@@ -1,4 +1,4 @@
-{{- /* Theme Toggle Switch - 修正版 */ -}}
+{{- /* Theme Toggle Switch - 终极兼容版 (带隐藏图标) */ -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
@@ -20,26 +20,35 @@
             <div class="logo-switches">
                 {{- if (not site.Params.disableThemeToggle) }}
                 
-                <!-- 嵌入式 CSS：定义动态开关样式 -->
+                <!-- 1. 嵌入式样式：定义好看的开关 -->
                 <style>
-                    #theme-toggle {
+                    /* 强制给按钮容器定型 */
+                    button#theme-toggle {
                         position: relative;
                         width: 60px !important;
                         height: 30px !important;
                         border-radius: 30px !important;
-                        background-color: #87CEEB !important;
+                        background-color: #87CEEB !important; /* 白天蓝 */
                         border: none !important;
                         padding: 0 !important;
                         margin-left: 10px;
                         cursor: pointer;
                         transition: background-color 0.4s ease;
-                        overflow: hidden;
-                        display: inline-block;
-                        vertical-align: middle;
-                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+                        overflow: hidden; /* 关键：超出隐藏 */
+                        display: inline-flex !important; /* 关键：防止坍塌 */
+                        align-items: center;
                     }
                     
-                    #theme-toggle::after {
+                    /* 2. 隐藏原本的 SVG 图标 (安抚 JS，但不显示) */
+                    button#theme-toggle svg {
+                        display: none !important;
+                        width: 0 !important;
+                        height: 0 !important;
+                        visibility: hidden !important;
+                    }
+
+                    /* 3. 创建滑块 (太阳) */
+                    button#theme-toggle::after {
                         content: '';
                         position: absolute;
                         top: 3px;
@@ -47,14 +56,14 @@
                         width: 24px;
                         height: 24px;
                         border-radius: 50%;
-                        background-color: #FFD700;
+                        background-color: #FFD700; /* 金色 */
                         box-shadow: 0 2px 4px rgba(0,0,0,0.25);
                         transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
-                        z-index: 2;
-                        transform: translateX(0);
+                        z-index: 10;
                     }
                     
-                    #theme-toggle::before {
+                    /* 4. 创建装饰 (云朵) */
+                    button#theme-toggle::before {
                         content: '☁';
                         position: absolute;
                         top: 50%;
@@ -64,30 +73,55 @@
                         color: #fff;
                         opacity: 0.9;
                         transition: all 0.4s ease;
-                        z-index: 1;
+                        z-index: 5;
                     }
 
-                    body.dark #theme-toggle, 
-                    html.dark #theme-toggle {
-                        background-color: #2f3640 !important;
+                    /* ============ 黑夜模式触发 ============ */
+                    /* PaperMod 加 dark 类可能在 body 也可能在 html，这里通吃 */
+                    body.dark button#theme-toggle, 
+                    html.dark button#theme-toggle {
+                        background-color: #2f3640 !important; /* 深夜灰 */
                     }
 
-                    body.dark #theme-toggle::after,
-                    html.dark #theme-toggle::after {
-                        transform: translateX(30px);
-                        background-color: #f5f6fa;
+                    /* 黑夜模式：滑块移动并变色 */
+                    body.dark button#theme-toggle::after,
+                    html.dark button#theme-toggle::after {
+                        transform: translateX(30px); /* 向右移动 */
+                        background-color: #f5f6fa; /* 变白 */
                     }
 
-                    body.dark #theme-toggle::before,
-                    html.dark #theme-toggle::before {
+                    /* 黑夜模式：装饰变星星 */
+                    body.dark button#theme-toggle::before,
+                    html.dark button#theme-toggle::before {
                         content: '✨';
                         right: auto;
-                        left: 8px;
+                        left: 8px; /* 跑到左边 */
                         color: #f1c40f;
                     }
                 </style>
 
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)"></button>
+                <!-- 5. 按钮主体：保留了 id="moon" 和 id="sun" 以防 JS 报错 -->
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <!-- 这些 SVG 已经被上面的 CSS 隐藏了，但在 DOM 里存在，JS 就能找到它们 -->
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
 
                 {{- end }}
                 {{- $lang := .Lang}}
