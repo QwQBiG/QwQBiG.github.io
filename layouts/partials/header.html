@@ -1,4 +1,4 @@
-{{- /* Theme Toggle Switch - 幽灵按钮方案 (The Ghost Button) */ -}}
+{{- /* Theme Toggle Switch - 独立核心版 (Bypass PaperMod JS) */ -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
@@ -20,83 +20,126 @@
             <div class="logo-switches">
                 {{- if (not site.Params.disableThemeToggle) }}
                 
-                <!-- ================================================== -->
-                <!-- 容器：把原来的按钮和我们的替身包在一起 -->
-                <!-- ================================================== -->
-                <div class="switch-wrapper" style="position: relative; width: 60px; height: 30px; margin-left: 10px; display: inline-block; vertical-align: middle;">
-                    
-                    <!-- 1. 替身使者 (Visual Layer) -->
-                    <!-- 它只负责好看，不接受任何点击 (pointer-events: none) -->
-                    <div id="visual-toggle"></div>
-                    <style>
-                        /* 替身的基础样式 */
-                        #visual-toggle {
-                            position: absolute;
-                            top: 0; left: 0;
-                            width: 100%; height: 100%;
-                            border-radius: 30px;
-                            background-color: #87CEEB; /* 白天蓝 */
-                            transition: background-color 0.4s ease;
-                            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-                            pointer-events: none !important; /* 关键：点击穿透 */
-                        }
-                        
-                        /* 替身的滑块 (太阳) */
-                        #visual-toggle::after {
-                            content: '';
-                            position: absolute;
-                            top: 3px; left: 3px;
-                            width: 24px; height: 24px;
-                            border-radius: 50%;
-                            background-color: #FFD700; /* 金色 */
-                            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-                            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
-                            z-index: 2;
-                        }
+                <!-- 1. 一个隐藏的空 div，保留 id="theme-toggle" -->
+                <!-- 作用：防止 PaperMod 的 main.js 因为找不到元素而报错，当它的替身 -->
+                <div id="theme-toggle" style="display: none;"></div>
 
-                        /* 替身的装饰 (云朵) */
-                        #visual-toggle::before {
-                            content: '☁';
-                            position: absolute;
-                            top: 50%; right: 8px;
-                            transform: translateY(-50%);
-                            font-size: 14px; color: #fff;
-                            opacity: 0.9;
-                            transition: all 0.4s ease;
-                            z-index: 1;
-                        }
+                <!-- 2. 我们的全新按钮：id="my-dynamic-toggle" -->
+                <!-- 作用：完全避开主题 JS 的干扰，由我们自己的脚本控制 -->
+                <button id="my-dynamic-toggle" accesskey="t" title="(Alt + T)">
+                    <!-- 内部没有任何 SVG，纯 CSS 生成 -->
+                </button>
 
-                        /* ====== 只有 body 变黑时，替身才变化 ====== */
-                        body.dark #visual-toggle, html.dark #visual-toggle {
-                            background-color: #2f3640; /* 深空灰 */
-                        }
-                        body.dark #visual-toggle::after, html.dark #visual-toggle::after {
-                            transform: translateX(30px); /* 右移 */
-                            background-color: #f5f6fa;   /* 变白 */
-                        }
-                        body.dark #visual-toggle::before, html.dark #visual-toggle::before {
-                            content: '✨';
-                            right: auto; left: 8px;
-                            color: #f1c40f;
-                        }
-                    </style>
-
-                    <!-- 2. 幽灵按钮 (Logic Layer) -->
-                    <!-- 它是原版按钮，但变成透明并覆盖在最上层 -->
-                    <button id="theme-toggle" accesskey="t" title="(Alt + T)" style="
-                        position: absolute; 
-                        top: 0; left: 0; 
-                        width: 100%; height: 100%; 
-                        opacity: 0; /* 透明不可见 */
-                        z-index: 999; /* 保证在最上层 */
+                <!-- 3. 强力 CSS：直接写死在头部，优先级最高 -->
+                <style>
+                    /* 容器基础样式 */
+                    #my-dynamic-toggle {
+                        position: relative;
+                        width: 60px !important;
+                        height: 30px !important;
+                        border-radius: 30px !important;
+                        background-color: #87CEEB !important; /* 白天蓝 */
+                        border: 2px solid #fff !important;    /* 加个白边框更清晰 */
+                        padding: 0 !important;
+                        margin-left: 10px;
                         cursor: pointer;
-                        margin: 0; padding: 0; border: none;
-                    ">
-                        <!-- 保留内部 SVG 以防 JS 报错，反正看不见 -->
-                        <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                        <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    </button>
-                </div>
+                        overflow: hidden;
+                        display: inline-flex !important;
+                        align-items: center;
+                        z-index: 9999; /* 极高层级，谁也挡不住 */
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                        transition: background-color 0.4s ease !important;
+                    }
+
+                    /* 滑块 (太阳) */
+                    #my-dynamic-toggle::after {
+                        content: '';
+                        position: absolute;
+                        top: 1px; /* 修正位置 */
+                        left: 2px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background-color: #FFD700 !important; /* 金色 */
+                        box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+                        z-index: 10;
+                        /* 动画 */
+                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
+                        transform: translateX(0) !important;
+                        pointer-events: none; /* 让鼠标穿透，防止点到球上没反应 */
+                    }
+
+                    /* 装饰 (云朵) */
+                    #my-dynamic-toggle::before {
+                        content: '☁';
+                        position: absolute;
+                        top: 50%;
+                        right: 8px;
+                        transform: translateY(-50%);
+                        font-size: 14px;
+                        color: #fff !important;
+                        opacity: 0.9;
+                        transition: all 0.4s ease !important;
+                        z-index: 5;
+                        pointer-events: none; /* 让鼠标穿透 */
+                    }
+
+                    /* =========================================
+                       激活状态：依靠 body.dark
+                       ========================================= */
+                    
+                    /* 背景变黑 */
+                    body.dark #my-dynamic-toggle,
+                    html.dark #my-dynamic-toggle {
+                        background-color: #2f3640 !important;
+                        border-color: #555 !important;
+                    }
+
+                    /* 滑块右移 + 变白 */
+                    body.dark #my-dynamic-toggle::after,
+                    html.dark #my-dynamic-toggle::after {
+                        transform: translateX(30px) !important;
+                        background-color: #f5f6fa !important;
+                    }
+
+                    /* 装饰变星星 */
+                    body.dark #my-dynamic-toggle::before,
+                    html.dark #my-dynamic-toggle::before {
+                        content: '✨';
+                        right: auto;
+                        left: 8px;
+                        color: #f1c40f !important;
+                    }
+                </style>
+
+                <!-- 4. 独立控制脚本：直接接管点击事件 -->
+                <script>
+                    (function() {
+                        const btn = document.getElementById('my-dynamic-toggle');
+                        
+                        // 定义切换函数
+                        function toggleTheme(e) {
+                            // 阻止事件冒泡，防止被其他东西拦截
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            if (document.body.classList.contains('dark')) {
+                                // 切换到亮色
+                                document.body.classList.remove('dark');
+                                localStorage.setItem('pref-theme', 'light');
+                            } else {
+                                // 切换到暗色
+                                document.body.classList.add('dark');
+                                localStorage.setItem('pref-theme', 'dark');
+                            }
+                        }
+
+                        // 绑定点击事件 (使用 addEventListener 确保稳定)
+                        if (btn) {
+                            btn.addEventListener('click', toggleTheme);
+                        }
+                    })();
+                </script>
 
                 {{- end }}
                 {{- $lang := .Lang}}
