@@ -1,81 +1,93 @@
-/* 容器 */
+/* 1. 暴力隐藏 PaperMod 原本的 SVG 图标和文字 */
+#theme-toggle svg,
+#theme-toggle span {
+    display: none !important;
+}
+
+/* 2. 重置按钮容器，把它变成一个跑道 */
 #theme-toggle {
-  background-color: #83D8FF;
-  border: none;
-  width: 60px;
-  height: 30px;
-  border-radius: 30px;
-  cursor: pointer;
-  position: relative;
-  transition: background-color 0.5s ease;
-  overflow: hidden;
-  padding: 0;
-  display: flex;
-  align-items: center;
+    /* 强制覆盖原来的尺寸和边距 */
+    width: 60px !important; 
+    height: 30px !important;
+    padding: 0 !important;
+    margin: 0 10px !important; /* 给左右留点空隙 */
+    border: none !important;
+    background: transparent !important;
+    
+    /* 开启定位，作为参照物 */
+    position: relative !important;
+    display: inline-block !important;
+    cursor: pointer;
+    
+    /* 自身变成背景条 */
+    border-radius: 30px;
+    background-color: #87CEEB !important; /* 白天：天空蓝 */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease !important;
+    
+    /* 解决某些浏览器垂直不居中的问题 */
+    vertical-align: middle;
 }
 
-/* 滑块 (太阳/月亮主体) */
-#theme-toggle .toggle-handler {
-  background-color: #FFD43B;
-  height: 24px;
-  width: 24px;
-  border-radius: 50%;
-  position: absolute;
-  left: 3px;
-  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.5s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  z-index: 2;
+/* 3. 制作那个圆球（太阳/月亮）- 利用伪元素 */
+#theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px; /* 初始位置在左边 */
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #FFD700; /* 太阳金 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    
+    /* 核心：贝塞尔曲线模拟弹性动画 */
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    transform: translateX(0); /* 默认不偏移 */
+    z-index: 10;
 }
 
-/* 月球坑 (默认隐藏，黑夜显示) */
-.crater {
-  position: absolute;
-  background-color: #EFEEDA;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+/* 4. 制作一些装饰（云朵/星星）- 利用另一个伪元素 */
+#theme-toggle::before {
+    content: '☁'; /* 白天显示云 */
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-55%);
+    font-size: 16px;
+    color: #fff;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    z-index: 5;
+    line-height: 1;
 }
-.crater-1 { top: 9px; left: 5px; width: 4px; height: 4px; }
-.crater-2 { top: 5px; left: 12px; width: 6px; height: 6px; }
-.crater-3 { top: 14px; left: 10px; width: 3px; height: 3px; }
 
-/* 星星 (默认隐藏) */
-.star {
-  position: absolute;
-  background-color: #ffffff;
-  border-radius: 50%;
-  width: 2px;
-  height: 2px;
-  opacity: 0;
-  transition: all 0.5s ease;
-  z-index: 1;
-}
-/* 星星位置 */
-.star-1 { top: 5px; left: 30px; }
-.star-2 { top: 10px; left: 45px; width: 3px; height: 3px;}
-.star-3 { top: 18px; left: 35px; }
-.star-4 { top: 22px; left: 50px; width: 1px; height: 1px;}
-.star-5 { top: 8px; left: 52px; }
-.star-6 { top: 20px; left: 25px; }
+/* ============================================
+   黑暗模式激活状态 (PaperMod 会在 body 加 dark 类)
+   ============================================ */
 
-/* =============
-   Dark Mode 激活状态
-   ============= */
+/* 背景变黑夜 */
 body.dark #theme-toggle {
-  background-color: #353849; /* 夜空黑 */
+    background-color: #2c3e50 !important; /* 深夜蓝 */
 }
 
-body.dark #theme-toggle .toggle-handler {
-  transform: translateX(30px);
-  background-color: #EFEEDA; /* 月亮白 */
+/* 圆球跑到右边，变色成月亮 */
+body.dark #theme-toggle::after {
+    /* 这里的 30px 是 (容器宽度60 - 圆球宽度26 - 左边距2 - 右边预留2) */
+    transform: translateX(30px) !important; 
+    background-color: #f5f6fa; /* 月亮白 */
+    box-shadow: inset -3px -2px 0 1px #e0e0e0; /* 模拟月球阴影 */
 }
 
-/* 显示陨石坑 */
-body.dark .crater { opacity: 1; }
+/* 装饰变成星星，跑到左边 */
+body.dark #theme-toggle::before {
+    content: '✨';
+    right: auto;
+    left: 8px;
+    color: #f1c40f;
+}
 
-/* 显示星星并带动画 */
-body.dark .star { opacity: 1; transform: scale(1.2); }
-body.dark .star-1 { top: 10px; left: 10px; }
-body.dark .star-2 { top: 15px; left: 18px; }
-body.dark .star-3 { top: 20px; left: 10px; }
-/* 这里可以稍微移动星星位置模拟云散开的效果 */
+/* 鼠标悬停效果 */
+#theme-toggle:hover {
+    transform: scale(1.05);
+}
