@@ -1,4 +1,4 @@
-{{- /* Theme Toggle Switch - 终极兼容版 (带隐藏图标) */ -}}
+{{- /* Theme Toggle Switch - 最终视觉修正版 */ -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
@@ -20,11 +20,11 @@
             <div class="logo-switches">
                 {{- if (not site.Params.disableThemeToggle) }}
                 
-                <!-- 1. 嵌入式样式：定义好看的开关 -->
+                <!-- 嵌入样式：高权重修正版 -->
                 <style>
-                    /* 强制给按钮容器定型 */
-                    button#theme-toggle {
-                        position: relative;
+                    /* 1. 容器样式 */
+                    #theme-toggle {
+                        /* 强制尺寸和外观 */
                         width: 60px !important;
                         height: 30px !important;
                         border-radius: 30px !important;
@@ -32,95 +32,87 @@
                         border: none !important;
                         padding: 0 !important;
                         margin-left: 10px;
+                        
+                        /* 布局核心 */
+                        position: relative !important;
                         cursor: pointer;
-                        transition: background-color 0.4s ease;
-                        overflow: hidden; /* 关键：超出隐藏 */
-                        display: inline-flex !important; /* 关键：防止坍塌 */
-                        align-items: center;
+                        display: inline-block !important; /* 确保是块级表现 */
+                        vertical-align: middle;
+                        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+                        transition: background-color 0.4s ease !important;
+                        overflow: hidden !important; /* 藏住溢出的部分 */
                     }
-                    
-                    /* 2. 隐藏原本的 SVG 图标 (安抚 JS，但不显示) */
-                    button#theme-toggle svg {
+
+                    /* 2. 暴力隐藏原来的 SVG 图标 */
+                    #theme-toggle svg {
                         display: none !important;
                         width: 0 !important;
                         height: 0 !important;
-                        visibility: hidden !important;
+                        opacity: 0 !important;
+                        position: absolute; /* 让它们脱离文档流，不占空间 */
                     }
 
-                    /* 3. 创建滑块 (太阳) */
-                    button#theme-toggle::after {
+                    /* 3. 滑块（太阳/月亮） */
+                    #theme-toggle::after {
                         content: '';
-                        position: absolute;
-                        top: 3px;
-                        left: 3px;
-                        width: 24px;
-                        height: 24px;
+                        position: absolute !important;
+                        top: 3px !important;
+                        left: 3px !important; /* 默认在左边 */
+                        width: 24px !important;
+                        height: 24px !important;
                         border-radius: 50%;
-                        background-color: #FFD700; /* 金色 */
+                        background-color: #FFD700 !important; /* 太阳金 */
                         box-shadow: 0 2px 4px rgba(0,0,0,0.25);
-                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
-                        z-index: 10;
+                        
+                        /* 动画核心 */
+                        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease !important;
+                        z-index: 100 !important; /* 确保在最上层 */
+                        transform: translateX(0);
                     }
                     
-                    /* 4. 创建装饰 (云朵) */
-                    button#theme-toggle::before {
+                    /* 4. 装饰（云朵/星星） */
+                    #theme-toggle::before {
                         content: '☁';
-                        position: absolute;
-                        top: 50%;
-                        right: 8px;
-                        transform: translateY(-50%);
+                        position: absolute !important;
+                        top: 50% !important;
+                        right: 8px !important;
+                        transform: translateY(-55%);
                         font-size: 14px;
                         color: #fff;
                         opacity: 0.9;
                         transition: all 0.4s ease;
-                        z-index: 5;
+                        z-index: 90 !important;
                     }
 
-                    /* ============ 黑夜模式触发 ============ */
-                    /* PaperMod 加 dark 类可能在 body 也可能在 html，这里通吃 */
-                    body.dark button#theme-toggle, 
-                    html.dark button#theme-toggle {
+                    /* ============ 黑夜模式 ============ */
+                    
+                    /* 容器变色 */
+                    body.dark #theme-toggle,
+                    html.dark #theme-toggle {
                         background-color: #2f3640 !important; /* 深夜灰 */
                     }
 
-                    /* 黑夜模式：滑块移动并变色 */
-                    body.dark button#theme-toggle::after,
-                    html.dark button#theme-toggle::after {
-                        transform: translateX(30px); /* 向右移动 */
-                        background-color: #f5f6fa; /* 变白 */
+                    /* 滑块移动 */
+                    body.dark #theme-toggle::after,
+                    html.dark #theme-toggle::after {
+                        transform: translateX(30px) !important; /* 强制移动 */
+                        background-color: #f5f6fa !important; /* 变白 */
                     }
 
-                    /* 黑夜模式：装饰变星星 */
-                    body.dark button#theme-toggle::before,
-                    html.dark button#theme-toggle::before {
+                    /* 装饰变化 */
+                    body.dark #theme-toggle::before,
+                    html.dark #theme-toggle::before {
                         content: '✨';
-                        right: auto;
-                        left: 8px; /* 跑到左边 */
-                        color: #f1c40f;
+                        right: auto !important;
+                        left: 8px !important;
+                        color: #f1c40f !important;
                     }
                 </style>
 
-                <!-- 5. 按钮主体：保留了 id="moon" 和 id="sun" 以防 JS 报错 -->
+                <!-- 按钮主体，包含隐藏的 SVG -->
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <!-- 这些 SVG 已经被上面的 CSS 隐藏了，但在 DOM 里存在，JS 就能找到它们 -->
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </button>
 
                 {{- end }}
