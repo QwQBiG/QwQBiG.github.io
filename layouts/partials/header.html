@@ -1,4 +1,4 @@
-{{- /* Theme Toggle Switch - 嵌入式终极版 */ -}}
+{{- /* Theme Toggle Switch - 修正版 */ -}}
 <header class="header">
     <nav class="nav">
         <div class="logo">
@@ -20,15 +20,14 @@
             <div class="logo-switches">
                 {{- if (not site.Params.disableThemeToggle) }}
                 
-                <!-- 这里开始是我们的自定义开关样式，直接嵌入，拒绝不加载 -->
+                <!-- 嵌入式 CSS：定义动态开关样式 -->
                 <style>
-                    /* 容器：胶囊形状 */
                     #theme-toggle {
                         position: relative;
                         width: 60px !important;
                         height: 30px !important;
                         border-radius: 30px !important;
-                        background-color: #87CEEB !important; /* 白天蓝 */
+                        background-color: #87CEEB !important;
                         border: none !important;
                         padding: 0 !important;
                         margin-left: 10px;
@@ -40,7 +39,6 @@
                         box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
                     }
                     
-                    /* 滑块：圆球 (白天是太阳) */
                     #theme-toggle::after {
                         content: '';
                         position: absolute;
@@ -49,14 +47,13 @@
                         width: 24px;
                         height: 24px;
                         border-radius: 50%;
-                        background-color: #FFD700; /* 太阳金 */
+                        background-color: #FFD700;
                         box-shadow: 0 2px 4px rgba(0,0,0,0.25);
                         transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.4s ease;
                         z-index: 2;
-                        transform: translateX(0); /* 默认位置 */
+                        transform: translateX(0);
                     }
                     
-                    /* 装饰：云朵 */
                     #theme-toggle::before {
                         content: '☁';
                         position: absolute;
@@ -70,21 +67,17 @@
                         z-index: 1;
                     }
 
-                    /* ============ 黑夜模式触发 ============ */
-                    /* PaperMod 通常把 class="dark" 加在 body 上，但有些版本加在 html 上，这里两个都写上以防万一 */
                     body.dark #theme-toggle, 
                     html.dark #theme-toggle {
-                        background-color: #2f3640 !important; /* 深夜灰 */
+                        background-color: #2f3640 !important;
                     }
 
-                    /* 黑夜模式：滑块移动并变色 */
                     body.dark #theme-toggle::after,
                     html.dark #theme-toggle::after {
-                        transform: translateX(30px); /* 移动到右边 */
-                        background-color: #f5f6fa; /* 月亮白 */
+                        transform: translateX(30px);
+                        background-color: #f5f6fa;
                     }
 
-                    /* 黑夜模式：装饰变星星 */
                     body.dark #theme-toggle::before,
                     html.dark #theme-toggle::before {
                         content: '✨';
@@ -94,10 +87,7 @@
                     }
                 </style>
 
-                <!-- 这是一个空的按钮，里面没有任何 SVG 干扰 -->
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
-                    <!-- 里面什么都不要放，全靠 CSS 生成 -->
-                </button>
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)"></button>
 
                 {{- end }}
                 {{- $lang := .Lang}}
@@ -131,7 +121,7 @@
             {{- $is_search := eq (site.GetPage .KeyName).Layout "search" }}
             <li>
                 <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }} {{- cond $is_search " (Alt + /)" "" }}"
-                {{- if $is_search -}}accesskey=/"{{- end -}}>
+                {{- if $is_search -}}accesskey="/"{{- end -}}>
                     <span {{- if eq $menu_item_url $page_url }} class="active" {{- end }}>
                         {{- .Pre }}
                         {{- .Name -}}
