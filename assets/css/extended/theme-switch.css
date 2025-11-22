@@ -1,93 +1,85 @@
-/* 1. 暴力隐藏 PaperMod 原本的 SVG 图标和文字 */
-#theme-toggle svg,
-#theme-toggle span {
-    display: none !important;
-}
-
-/* 2. 重置按钮容器，把它变成一个跑道 */
+/* 1. 定义开关容器（跑道） */
 #theme-toggle {
-    /* 强制覆盖原来的尺寸和边距 */
-    width: 60px !important; 
-    height: 30px !important;
-    padding: 0 !important;
-    margin: 0 10px !important; /* 给左右留点空隙 */
+    /* 强制设置尺寸，防止被压缩 */
+    width: 54px !important;
+    height: 28px !important;
+    
+    /* 清除默认按钮样式 */
     border: none !important;
-    background: transparent !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin-left: 10px !important; /* 和左边的菜单拉开点距离 */
     
-    /* 开启定位，作为参照物 */
+    /* 背景色：白天是天蓝色 */
+    background: #87CEEB !important; 
+    border-radius: 30px !important;
+    
+    /* 布局属性 */
     position: relative !important;
-    display: inline-block !important;
     cursor: pointer;
+    transition: background 0.5s ease;
     
-    /* 自身变成背景条 */
-    border-radius: 30px;
-    background-color: #87CEEB !important; /* 白天：天空蓝 */
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-    transition: background-color 0.3s ease !important;
-    
-    /* 解决某些浏览器垂直不居中的问题 */
+    /* 确保它不会被隐藏 */
+    display: inline-block !important;
     vertical-align: middle;
+    
+    /* 阴影增加立体感 */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* 3. 制作那个圆球（太阳/月亮）- 利用伪元素 */
+/* 2. 定义滑块（太阳） - 使用 ::after 伪元素 */
 #theme-toggle::after {
     content: '';
     position: absolute;
     top: 2px;
-    left: 2px; /* 初始位置在左边 */
-    width: 26px;
-    height: 26px;
+    left: 2px; /* 初始位置在左侧 */
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    background-color: #FFD700; /* 太阳金 */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    background: #FFD700; /* 金色太阳 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     
-    /* 核心：贝塞尔曲线模拟弹性动画 */
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
-    transform: translateX(0); /* 默认不偏移 */
-    z-index: 10;
+    /* 弹跳动画核心 */
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 2;
 }
 
-/* 4. 制作一些装饰（云朵/星星）- 利用另一个伪元素 */
+/* 3. 定义装饰（云彩） - 使用 ::before 伪元素 */
 #theme-toggle::before {
     content: '☁'; /* 白天显示云 */
     position: absolute;
+    right: 6px;
     top: 50%;
-    right: 8px;
     transform: translateY(-55%);
-    font-size: 16px;
-    color: #fff;
-    opacity: 0.8;
-    transition: all 0.3s ease;
-    z-index: 5;
-    line-height: 1;
+    color: white;
+    font-size: 14px;
+    opacity: 0.9;
+    transition: all 0.4s ease;
+    z-index: 1;
 }
 
-/* ============================================
-   黑暗模式激活状态 (PaperMod 会在 body 加 dark 类)
-   ============================================ */
+/* ====================================
+   黑夜模式样式 (Body 有 dark 类时触发)
+   ==================================== */
 
-/* 背景变黑夜 */
+/* 容器变色：变成深空灰 */
 body.dark #theme-toggle {
-    background-color: #2c3e50 !important; /* 深夜蓝 */
+    background: #2f3640 !important;
 }
 
-/* 圆球跑到右边，变色成月亮 */
+/* 滑块移动：太阳变月亮 */
 body.dark #theme-toggle::after {
-    /* 这里的 30px 是 (容器宽度60 - 圆球宽度26 - 左边距2 - 右边预留2) */
-    transform: translateX(30px) !important; 
-    background-color: #f5f6fa; /* 月亮白 */
-    box-shadow: inset -3px -2px 0 1px #e0e0e0; /* 模拟月球阴影 */
+    /* 向右移动 26px (54宽 - 24球 - 2边距 - 2边距) */
+    left: calc(100% - 26px); 
+    background: #f5f6fa; /* 月亮白 */
+    box-shadow: inset -3px -2px 0 0 #bdc3c7; /* 月球坑纹理 */
 }
 
-/* 装饰变成星星，跑到左边 */
+/* 装饰变化：云彩变星星 */
 body.dark #theme-toggle::before {
     content: '✨';
-    right: auto;
-    left: 8px;
+    right: auto; /* 清除右边距 */
+    left: 6px;   /* 跑到左边 */
     color: #f1c40f;
-}
-
-/* 鼠标悬停效果 */
-#theme-toggle:hover {
-    transform: scale(1.05);
+    transform: translateY(-50%) scale(0.9);
 }
