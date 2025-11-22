@@ -1,88 +1,107 @@
-# ===================================================================
-#  最终修正版 hugo.toml - 适配 Git Submodule 和 Hugo v0.152.2+
-# ===================================================================
+# hugo.toml (推荐的完整配置)
 
-# -- 基础设置 --
 baseURL = "https://QwQBiG.github.io/"
-languageCode = "zh-cn"
-title = "QwQBiG's Blog"
-theme = "blowfish" # <-- 使用 Submodule 模式时，这里直接写主题文件夹的名字
+languageCode = "zh-cn" # 建议修改为中文，对主题更友好
+title = "QwQBiG's Blog" # 这是你的网站总标题
+theme = "github.com/adityatelange/hugo-PaperMod"
 
-# -- 核心参数 [params] --
+[markup]
+  [markup.highlight]
+    # true: 在代码块中显示行号
+    lineNos = true
+    # noClasses = false # 保持默认即可
+    # style = "monokai" # 可以选择代码高亮主题，如 dracula, github, monokai 等
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"  # 启用了“系列”功能
+
+# 主菜单配置
+[menu]
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 10 # 权重决定了菜单的顺序，数字越大越靠后。
+  [[menu.main]]
+    identifier = "series"
+    name = "合集"
+    url = "/series/"
+    weight = 15
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 20
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 30
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/" # 指向搜索页面
+    weight = 40
+
+# 这是最关键的参数配置部分
 [params]
-    # [作者信息] - 这是修正错误二的关键！
-    # Blowfish 需要一个 author 对象，而不是一个简单的字符串
-    [params.author]
-        name = "QwQBiG"
-        
-    description = "在这里记录学习，分享心得。"
+    ShowCodeCopyButtons = true
+
+    ShowReadingTime = true
+
+    # 1. 关闭特殊的“个人资料”主页模式
+    # 这会让你的主页变成一个标准的文章列表
+    [params.profileMode]
+        enabled = false
+
+    # 2. 在主页文章列表上方显示一个欢迎语
+    # 这会解决主标题不显示的问题，并让主页更好看
+    [params.homeInfoParams]
+        Title = "你好，世界!"
+        Content = "114514，1919810。"
+
+    # 3. 告诉主题，主页的文章列表主要来源于 "posts" 文件夹
     mainSections = ["posts"]
-    showReadingTime = true
-    
-    [params.homepage]
-      layout = "list"
-    
-    [params.code]
-        copy = true
-        lineNumbers = true
-    
-    [params.article]
-        showTableOfContents = true
-    
-    [[params.social]]
-        name = "GitHub"
-        icon = "brand-github"
+
+    [params.comments]
+        enabled = true
+
+    [[params.socialIcons]]
+        name = "github"
         url = "https://github.com/QwQBiG"
-    [[params.social]]
-        name = "Bilibili"
-        icon = "brand-bilibili"
+
+    [[params.socialIcons]]
+        name = "bilibili"
         url = "https://space.bilibili.com/3546921071282890"
 
-    [params.giscus]
-        repo = "QwQBiG/QwQBiG.github.io"
-        repoID = "R_kgDOQUrNow"
-        category = "Announcements"
-        categoryID = "DIC_kwDOQUrNo84Cxx1C"
-        mapping = "pathname"
-        theme = "preferred_color_scheme"
-        lang = "zh-CN"
-    
-    # 自定义资源加载
-    custom_css = ["css/custom.css"]
-    custom_js = ["js/katex.js"]
+     [params.author]
+        name = "QwQBiG"
 
-# -- 搜索功能 --
-[outputFormats.SearchIndex]
-    mediaType = "application/json"
-    baseName = "search"
-    isPlainText = true
-    notAlternative = true
-[params.search]
-    enable = true
-    index = "/search.json"
-[outputs]
-    home = ["HTML", "RSS", "SearchIndex"]
-    section = ["HTML", "RSS"]
+    [params.search]
+        enabled = true
+        # 可选项: 你可以限制只在某些分区/类型的内容里搜索
+        # ex: content/posts, content/docs 等
+        # contentTypes = ["page", "post"]
 
-# -- 主菜单配置 --
-[[menu.main]]
-    name = "文章"
-    pageRef = "/posts"
-    weight = 10
-[[menu.main]]
-    name = "标签"
-    pageRef = "/tags"
-    weight = 30
-[[menu.main]]
-    name = "搜索"
-    pageRef = "/search"
-    weight = 40
-[[menu.main]]
-    name = "关于"
-    pageRef = "/about"
-    weight = 50
+    [params.Toc] # 没有用
+        enable = true
+        # true: 目录会保持在屏幕上
+        # false: 目录会随页面滚动
+        keepStatic = false
+        # true: 自动在右侧为目录留出空间
+        # false: 目录会嵌入文章内容流中
+        autoEnable = true
 
-# -- 分页 (Pagination) --
-# 这是修正错误一的关键！我们使用 Blowfish 内置的分页，不再需要那个旧模板
-[pagination]
-    paginate = 10
+    [params.assets]
+        # 启用自定义 CSS (用于更换字体)
+        customCSS = ["css/custom.css"]
+        
+        # 开启 KaTeX 数学公式支持
+        disableHLJS = true
+        [params.assets.math]
+            enable = true

@@ -1,8 +1,9 @@
-# .github/workflows/deploy.yml 
+# .github/workflows/deploy.yml (最终授权版本)
 
 name: Deploy Hugo Site to Pages
 
 on:
+  # 当 main 分支有 push 时触发
   push:
     branches:
       - main
@@ -10,32 +11,31 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
+    # --- 这是我们新增的魔法授权代码 ---
+    permissions:
+      contents: write
+    # ------------------------------------
+
     steps:
+      # 第一步：机器人先“检出”你的源代码 (main 分支)
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: true
 
-      # 新增步骤：我们先安装 Go 环境
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21' # 使用一个稳定的 Go 版本
-
-      # 核心修正：在安装 Hugo 之前，强制清除所有旧的 Go 模块缓存
-      - name: Clean Go Module Cache
-        run: go clean -modcache
-
-      # 现在，在一个绝对干净的环境里安装 Hugo
+      # 第二步：机器人安装 Hugo 环境
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest' # 拥抱我们唯一能稳定安装的最新版
+          hugo-version: 'latest'
           extended: true
 
+      # 第三步：机器人运行 hugo 命令，构建网站到 public 目录
       - name: Build
         run: hugo
 
+      # 第四步：机器人将 public 目录的内容，部署到 gh-pages 分支
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
