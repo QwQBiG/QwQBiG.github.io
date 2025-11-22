@@ -414,9 +414,12 @@
 
     </footer>
 </article><style>
+     
     .series-overview-card-wrapper {
-        background: #fff;  
-        border: 1px solid #e9ecef;  
+         
+        background: #fff; 
+         
+        border: 1px solid #e9ecef; 
         
          
         border-left-width: 5px;
@@ -426,25 +429,63 @@
         padding: 25px;
         border-radius: 8px;
         margin-bottom: 20px;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.3s ease;  
     }
 
+     
     .series-overview-card-wrapper:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);  
+        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
     }
 
      
     .series-overview-card-wrapper .entry-title a {
-        color: #8a2be2 !important;  
+        color: #8a2be2 !important; 
+        transition: color 0.3s ease;
     }
 
      
     .series-overview-card-wrapper .entry-title a::before {
-        content: "🎀 合集 · ";  
+        content: "🎀 合集 · ";
         color: #8a2be2;
     }
+
+     
+    
+     
+    body.dark .series-overview-card-wrapper {
+         
+        background: #2e2e33; 
+         
+        border-color: #444;
+         
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+     
+    body.dark .series-overview-card-wrapper:hover {
+         
+        background: #36363d;
+         
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+     
+    body.dark .series-overview-card-wrapper .entry-title a {
+        color: #d0a9f5 !important; 
+    }
+
+     
+    body.dark .series-overview-card-wrapper .entry-title a::before {
+        color: #d0a9f5;
+    }
+    
+     
+    body.dark .series-overview-card-wrapper .entry-content {
+        color: #b0b0b0;  
+    }
 </style>
+
 
 <article class="post-entry series-overview-card-wrapper">
     <header class="entry-header">
