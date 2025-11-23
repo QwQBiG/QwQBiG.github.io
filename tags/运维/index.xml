@@ -82,17 +82,8 @@
 &lt;p&gt;总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;主要是 K8s 本地环境搭建与 Pod 编排&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;
-由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。
-&lt;strong&gt;2. 核心概念：从命令式到声明式&lt;/strong&gt;
-基础：熟悉 kubectl 动词语法，并且迅速从命令式（CLI）转向声明式（YAML），主要是有版本控制这些好处。
-Pod 深度理解：通过实操 边车（Sidecar） 模式（Nginx + Busybox 共享存储），深刻理解 Pod 作为“最小原子单元”的共享网络与存储特性。
-&lt;strong&gt;3. 运维与排错方法&lt;/strong&gt;
-镜像策略：面对 ImagePullBackOff，除了替换国内源（如 m.daocloud.io），还掌握了 docker pull + kind load 的离线镜像预加载手段。（就是有点大）
-Debug 流程：建立了标准排错链：若是资源调度问题（如 Crash/PullErr）用 kubectl describe 看 Events，应用内部报错查 kubectl logs。
-&lt;strong&gt;4. 搞一搞&lt;/strong&gt;
-隔离：掌握 Namespace 进行环境隔离，利用 Labels/Selectors 实现资源的灵活分组与发现。
-实操：在一个独立 Namespace 中，全流程部署 Redis 7.0（含自定义 Labels），完成从 YAML 编写、镜像加载、服务启动到 exec 验证及最终清理（干净的一）的完整生命周期管理。&lt;/p&gt;</description>
+&lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

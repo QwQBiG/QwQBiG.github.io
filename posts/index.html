@@ -532,7 +532,7 @@
   </header>
   <div class="entry-content">
     <p>以下是2025.11.20第一次搞得周报 C已完。C&#43;&#43;已学完STL容器和算法（和一些好玩的特性）。 数据结构在学STL都涉及了，纯学数据结构的话停留在串。 运维相关内容多且杂，具体内容见组会报告。
-之后有点东西都可以从这写着，刚做草稿： 比如今天，2025.11.23开始使用CLion来做Qt的程序。
+之后有点东西都可以从这写着，刚做草稿： 比如今天，2025.11.23开始使用CLion来做Qt的程序。 而且，给网站上搞了一个昼夜切换的无敌按键（hhhh）。
 </p>
   </div>
   <footer class="entry-footer"><span title='2025-11-22 12:00:00 +0800 +0800'>November 22, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
@@ -611,8 +611,9 @@ https://qwqbig.github.io/
 欧克，完事了，bye~
 组会报告 2 总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
 主要是 K8s 本地环境搭建与 Pod 编排
-1. 可恶的网：Kind &#43; 国内源 由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。 2. 核心概念：从命令式到声明式 基础：熟悉 kubectl 动词语法，并且迅速从命令式（CLI）转向声明式（YAML），主要是有版本控制这些好处。 Pod 深度理解：通过实操 边车（Sidecar） 模式（Nginx &#43; Busybox 共享存储），深刻理解 Pod 作为“最小原子单元”的共享网络与存储特性。 3. 运维与排错方法 镜像策略：面对 ImagePullBackOff，除了替换国内源（如 m.daocloud.io），还掌握了 docker pull &#43; kind load 的离线镜像预加载手段。（就是有点大） Debug 流程：建立了标准排错链：若是资源调度问题（如 Crash/PullErr）用 kubectl describe 看 Events，应用内部报错查 kubectl logs。 4. 搞一搞 隔离：掌握 Namespace 进行环境隔离，利用 Labels/Selectors 实现资源的灵活分组与发现。 实操：在一个独立 Namespace 中，全流程部署 Redis 7.0（含自定义 Labels），完成从 YAML 编写、镜像加载、服务启动到 exec 验证及最终清理（干净的一）的完整生命周期管理。
-</p>
+1. 可恶的网：Kind &#43; 国内源
+由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。
+...</p>
   </div>
   <footer class="entry-footer"><span title='2025-11-14 15:00:00 +0800 +0800'>November 14, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
   <a class="entry-link" aria-label="post link to 我の组会" href="https://QwQBiG.github.io/posts/zuhui/"></a>
