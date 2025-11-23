@@ -11,6 +11,8 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     lineNos = true
     # noClasses = false # 保持默认即可
     # style = "monokai" # 可以选择代码高亮主题，如 dracula, github, monokai 等
+    [markup.goldmark.renderer]
+      unsafe = true
 
 [outputs]
   home = ["HTML", "RSS", "JSON"] # 确保 home会输出 JSON 格式（为了搜索）
@@ -47,11 +49,6 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     name = "搜索"
     url = "/search/" # 指向搜索页面
     weight = 40
-
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true  # 这一行是关键，允许渲染 HTML 标签
 
 # 这是最关键的参数配置部分
 [params]
