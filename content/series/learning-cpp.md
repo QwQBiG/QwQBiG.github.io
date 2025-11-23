@@ -8,9 +8,9 @@ pin: true
 
 ## 文章列表
 
-*   **第一篇：[STL 容器](./posts/STLcontainer.md)**
+*   **第一篇：[STL 容器](../posts/STLcontainer.md)**
     > 简介：人如其名
 
-*   **第二篇：[STL 算法](./posts/STLalgorithm.md)**
+*   **第二篇：[STL 算法](../posts/STLalgorithm.md)**
     > 简介：+1
 
