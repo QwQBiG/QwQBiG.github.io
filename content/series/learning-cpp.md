@@ -6,13 +6,11 @@ categories: ["语言学习"]
 pin: true 
 ---
 
-## 系列文章列表
+## 文章列表
 
-*   **第一篇：[Hugo建站指南(一)：环境搭建](.\STLalgorithm.md)**
-    > 简介：工欲善其事，必先利其器。本篇将介绍如何在 Windows 环境下使用 Scoop 快速搭建一个稳定、干净的开发环境。
+*   **第一篇：[STL 容器](./STLcontainer.md)**
+    > 简介：人如其名
 
-*   **第二篇：[Hugo建站指南(二)：主题配置](./hugo-guide-part-2.md)**
-    > 简介：选择并配置一个好的主题是成功的一半。本篇将详细介绍 PaperMod 主题的各种实用配置。
+*   **第二篇：[STL 算法](./STLalgorithm.md)**
+    > 简介：+1
 
-*   **第三篇：[Hugo建站指南(三)：自动化部署](./hugo-guide-part-3.md)**
-    > 简介：告别繁琐的手动部署，拥抱 GitHub Actions。本篇将教你如何实现 `git push` 自动更新网站。
