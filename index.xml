@@ -121,13 +121,13 @@
       <description>&lt;h2 id=&#34;文章列表&#34;&gt;文章列表&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;./posts/STLcontainer.md&#34;&gt;STL 容器&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;../posts/STLcontainer.md&#34;&gt;STL 容器&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;简介：人如其名&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;./posts/STLalgorithm.md&#34;&gt;STL 算法&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;../posts/STLalgorithm.md&#34;&gt;STL 算法&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;简介：+1&lt;/p&gt;
 &lt;/blockquote&gt;
