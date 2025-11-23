@@ -527,6 +527,20 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">我の周报
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>以下是2025.11.20第一次搞得周报 C已完。C&#43;&#43;已学完STL容器和算法（和一些好玩的特性）。 数据结构在学STL都涉及了，纯学数据结构的话停留在串。 运维相关内容多且杂，具体内容见组会报告。
+之后有点东西都可以从这写着，刚做草稿： 比如今天，2025.11.23开始使用CLion来做Qt的程序。
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-11-22 12:00:00 +0800 +0800'>November 22, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to 我の周报" href="https://QwQBiG.github.io/posts/zhouji/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">STL 容器
     </h2>
   </header>
@@ -577,7 +591,7 @@
     <p>组会报告 1 容我想想上几周我干了什么：
 首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）
 然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了…那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb momo（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人…但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。
-或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的”鸟兽草木之名“，也有帮助。
+或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的“鸟兽草木之名”，也有帮助。
 之后，我深刻的了解到、并可以熟练进行Ubuntu的紧急操作界面的恢复…因为可能是我把第二个开的虚拟机，放到了第一个虚拟机没有清理完全的文件夹，导致lvm卷他找不到，那两天左右，我大概有20次以上的重启到紧急模式到好了到测试的经历，可以说是十分熟练（酸爽）了。
 然后转折点：毛学长给我分了一块实验室服务器的Ubuntu，所以开始搞远程终端的美化：
 最终是扔了Xshell，用了开源的Tabby Terminal，如下图（还没整）哈，这么多好用的远程，难道主要是因为这个有壁纸插件吗？还真是。插件好啊，点下安装就让用。
@@ -595,12 +609,12 @@ https://qwqbig.github.io/
 本来我都想开始把原来做的题用cpp重写的，像是把这个世界用Rust重写一遍似的…(话说蟹教有干翻C&#43;&#43;的未来吗，不清楚)。
 写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh
 欧克，完事了，bye~
-组会报告 2 Kubernetes 之 Pod
-为了在本地搭建一个学习环境，看教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，每次鼓捣东西都没有一次成功的。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。
-在屡次失败后，我转换思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都很快。然而，“网络问题”再次出现，Kind 的二进制文件同样无法直接下载。
-...</p>
+组会报告 2 总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
+主要是 K8s 本地环境搭建与 Pod 编排
+1. 可恶的网：Kind &#43; 国内源 由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。 2. 核心概念：从命令式到声明式 基础：熟悉 kubectl 动词语法，并且迅速从命令式（CLI）转向声明式（YAML），主要是有版本控制这些好处。 Pod 深度理解：通过实操 边车（Sidecar） 模式（Nginx &#43; Busybox 共享存储），深刻理解 Pod 作为“最小原子单元”的共享网络与存储特性。 3. 运维与排错方法 镜像策略：面对 ImagePullBackOff，除了替换国内源（如 m.daocloud.io），还掌握了 docker pull &#43; kind load 的离线镜像预加载手段。（就是有点大） Debug 流程：建立了标准排错链：若是资源调度问题（如 Crash/PullErr）用 kubectl describe 看 Events，应用内部报错查 kubectl logs。 4. 搞一搞 隔离：掌握 Namespace 进行环境隔离，利用 Labels/Selectors 实现资源的灵活分组与发现。 实操：在一个独立 Namespace 中，全流程部署 Redis 7.0（含自定义 Labels），完成从 YAML 编写、镜像加载、服务启动到 exec 验证及最终清理（干净的一）的完整生命周期管理。
+</p>
   </div>
-  <footer class="entry-footer"><span title='2025-11-14 15:00:00 +0800 +0800'>November 14, 2025</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <footer class="entry-footer"><span title='2025-11-14 15:00:00 +0800 +0800'>November 14, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
   <a class="entry-link" aria-label="post link to 我の组会" href="https://QwQBiG.github.io/posts/zuhui/"></a>
 </article>
 

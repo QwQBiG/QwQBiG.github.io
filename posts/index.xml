@@ -6,8 +6,20 @@
     <description>Recent content in Posts on QwQBiG&#39;s Blog</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 21 Nov 2025 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 22 Nov 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>我の周报</title>
+      <link>https://QwQBiG.github.io/posts/zhouji/</link>
+      <pubDate>Sat, 22 Nov 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/posts/zhouji/</guid>
+      <description>&lt;h2 id=&#34;以下是20251120第一次搞得周报&#34;&gt;以下是2025.11.20第一次搞得周报&lt;/h2&gt;
+&lt;p&gt;C已完。C++已学完STL容器和算法（和一些好玩的特性）。
+数据结构在学STL都涉及了，纯学数据结构的话停留在串。
+运维相关内容多且杂，具体内容见组会报告。&lt;/p&gt;
+&lt;h3 id=&#34;之后有点东西都可以从这写着刚做草稿&#34;&gt;之后有点东西都可以从这写着，刚做草稿：&lt;/h3&gt;
+&lt;p&gt;比如今天，2025.11.23开始使用CLion来做Qt的程序。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>STL 容器</title>
       <link>https://QwQBiG.github.io/posts/stlcontainer/</link>
@@ -73,7 +85,7 @@
 &lt;p&gt;容我想想上几周我干了什么：&lt;/p&gt;
 &lt;p&gt;首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）&lt;/p&gt;
 &lt;p&gt;然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了&amp;hellip;那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb momo（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人&amp;hellip;但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。&lt;/p&gt;
-&lt;p&gt;或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的”鸟兽草木之名“，也有帮助。&lt;/p&gt;
+&lt;p&gt;或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的“鸟兽草木之名”，也有帮助。&lt;/p&gt;
 &lt;p&gt;之后，我深刻的了解到、并可以熟练进行Ubuntu的紧急操作界面的恢复&amp;hellip;因为可能是我把第二个开的虚拟机，放到了第一个虚拟机没有清理完全的文件夹，导致lvm卷他找不到，那两天左右，我大概有20次以上的重启到紧急模式到好了到测试的经历，可以说是十分熟练（酸爽）了。&lt;/p&gt;
 &lt;p&gt;然后转折点：毛学长给我分了一块实验室服务器的Ubuntu，所以开始搞远程终端的美化：&lt;/p&gt;
 &lt;p&gt;最终是扔了Xshell，用了开源的Tabby Terminal，如下图（还没整）哈，这么多好用的远程，难道主要是因为这个有壁纸插件吗？还真是。插件好啊，点下安装就让用。&lt;/p&gt;
@@ -92,9 +104,21 @@
 &lt;p&gt;写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh&lt;/p&gt;
 &lt;p&gt;欧克，完事了，bye~&lt;/p&gt;
 &lt;h2 id=&#34;组会报告-2&#34;&gt;组会报告 2&lt;/h2&gt;
-&lt;p&gt;Kubernetes 之 Pod&lt;/p&gt;
-&lt;p&gt;为了在本地搭建一个学习环境，看教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，每次鼓捣东西都没有一次成功的。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。&lt;/p&gt;
-&lt;p&gt;在屡次失败后，我转换思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都很快。然而，“网络问题”再次出现，Kind 的二进制文件同样无法直接下载。&lt;/p&gt;</description>
+&lt;blockquote&gt;
+&lt;p&gt;总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;主要是 K8s 本地环境搭建与 Pod 编排&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;
+由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。
+&lt;strong&gt;2. 核心概念：从命令式到声明式&lt;/strong&gt;
+基础：熟悉 kubectl 动词语法，并且迅速从命令式（CLI）转向声明式（YAML），主要是有版本控制这些好处。
+Pod 深度理解：通过实操 边车（Sidecar） 模式（Nginx + Busybox 共享存储），深刻理解 Pod 作为“最小原子单元”的共享网络与存储特性。
+&lt;strong&gt;3. 运维与排错方法&lt;/strong&gt;
+镜像策略：面对 ImagePullBackOff，除了替换国内源（如 m.daocloud.io），还掌握了 docker pull + kind load 的离线镜像预加载手段。（就是有点大）
+Debug 流程：建立了标准排错链：若是资源调度问题（如 Crash/PullErr）用 kubectl describe 看 Events，应用内部报错查 kubectl logs。
+&lt;strong&gt;4. 搞一搞&lt;/strong&gt;
+隔离：掌握 Namespace 进行环境隔离，利用 Labels/Selectors 实现资源的灵活分组与发现。
+实操：在一个独立 Namespace 中，全流程部署 Redis 7.0（含自定义 Labels），完成从 YAML 编写、镜像加载、服务启动到 exec 验证及最终清理（干净的一）的完整生命周期管理。&lt;/p&gt;</description>
     </item>
     <item>
       <title>史诗级“Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）</title>

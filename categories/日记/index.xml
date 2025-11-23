@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>日记 on QwQBiG&#39;s Blog</title>
+    <link>https://QwQBiG.github.io/categories/%E6%97%A5%E8%AE%B0/</link>
+    <description>Recent content in 日记 on QwQBiG&#39;s Blog</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 22 Nov 2025 12:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/categories/%E6%97%A5%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>我の周报</title>
+      <link>https://QwQBiG.github.io/posts/zhouji/</link>
+      <pubDate>Sat, 22 Nov 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/posts/zhouji/</guid>
+      <description>&lt;h2 id=&#34;以下是20251120第一次搞得周报&#34;&gt;以下是2025.11.20第一次搞得周报&lt;/h2&gt;
+&lt;p&gt;C已完。C++已学完STL容器和算法（和一些好玩的特性）。
+数据结构在学STL都涉及了，纯学数据结构的话停留在串。
+运维相关内容多且杂，具体内容见组会报告。&lt;/p&gt;
+&lt;h3 id=&#34;之后有点东西都可以从这写着刚做草稿&#34;&gt;之后有点东西都可以从这写着，刚做草稿：&lt;/h3&gt;
+&lt;p&gt;比如今天，2025.11.23开始使用CLion来做Qt的程序。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
