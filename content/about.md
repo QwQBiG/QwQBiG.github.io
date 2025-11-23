@@ -15,7 +15,8 @@ hidden: true
 
 ### 我的兴趣
 *   C++ 与算法
-*   Web 开发
+*   Qt 开发
+*   Web 开发 （这是myai写的（笑））
 *   Linux 系统
 
 你可以在 [GitHub](https://github.com/QwQBiG) 上找到我。欢迎通过任何方式与我交流！
