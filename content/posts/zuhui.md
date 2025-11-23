@@ -13,7 +13,7 @@ categories: ["运维"]
 
 然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了...那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb momo（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人...但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。
 
-或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的”鸟兽草木之名“，也有帮助。
+或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的“鸟兽草木之名”，也有帮助。
 
 之后，我深刻的了解到、并可以熟练进行Ubuntu的紧急操作界面的恢复...因为可能是我把第二个开的虚拟机，放到了第一个虚拟机没有清理完全的文件夹，导致lvm卷他找不到，那两天左右，我大概有20次以上的重启到紧急模式到好了到测试的经历，可以说是十分熟练（酸爽）了。
 
@@ -51,44 +51,18 @@ https://qwqbig.github.io/
 
 ## 组会报告 2
 
-Kubernetes 之 Pod
+>总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
 
-为了在本地搭建一个学习环境，看教程推荐了 Minikube，说是它能在我的 Ubuntu 里创建一个小巧的单节点 K8s 集群。然而，每次鼓捣东西都没有一次成功的。无论是安装核心工具 kubectl 时下载 Google Cloud 公共签名密钥（用于验证软件包的真实性），还是下载 Minikube 本身，都因“众所周知的原因”而停滞不前。
+主要是 K8s 本地环境搭建与 Pod 编排
 
-在屡次失败后，我转换思路，选择了开发者社区中更流行的方案——Kind (Kubernetes in Docker)。它的理念：将 K8s 的所有节点，无论是控制节点（Master）还是工作节点（Node），都作为轻量的 Docker 容器来运行，启动和销毁都很快。然而，“网络问题”再次出现，Kind 的二进制文件同样无法直接下载。
-
-天天搞心态，都有点免疫了。最终的破局点是 Go 语言。通过为 Go 设置国内代理通道 export GOPROXY=https://goproxy.cn,direct，我终于成功地在本地编译并安装了 Kind。
-
-环境搭建的最后一步是创建集群。编写 kind-config.yaml 配置文件，提前将 K8s 核心组件的镜像仓库指向国内源，并修改端口映射，避免与虚拟机上其他服务的端口冲突。敲下 kind create cluster --config=kind-config.yaml 看到集群成功启动时，才开始了真正的学习。
-
-kubectl cluster-info 和 kubectl get nodes 来查看信息。体会到 kubectl 的通用语法 kubectl [动作] [资源类型] [资源名字] [参数]，并下达指令：kubectl create deployment my-nginx--image=nginx。我理解到，Deployment 就像一个“项目经理”，而它负责创建和管理的 Pod 才是真正干活的“员工”。
-
-然而，ImagePullBackOff 的错误再次出现。经过 kubectl describe pod 的检查，和对 Events 日志的分析，呃呃，问题依然是网络。Pod 内部无法访问官方的 Nginx 镜像源。经过无数次的尝试，我发现 m.daocloud.io 这个国内镜像源是可用的。最终，kubectl create deployment my-nginx --image=m.daocloud.io/docker.io/bitnami/nginx 这条命令，让我第一次看到了 Pod 状态栏里那抹令人心安的绿色——Running。
-
-带着成功的喜悦，我用 kubectl exec 钻进了容器内部，用 ps aux 确认了 Nginx 进程的存在；用 kubectl logs 查看了它的日志。最后，通过删除 Deployment kubectl delete deployment my-nginx，我体会到了 K8s 强大的生命周期管理能力——“老板”下班，“员工”也随之解散。
-
-Day 3-4: 思想飞跃，从“命令”到“契约”
-
-我意识到，像 kubectl create 这样的命令式操作虽然直观，但难以追踪和复用。是时候拥抱 YAML 声明式配置了。我理解到，YAML 文件就像一份“订单契约”，我只在其中声明我想要的最终状态，而 kubectl apply -f 的动作就是把这份“契约”交给 K8s，由它自己去实现。这种方式的好处是显而易见的：版本控制、幂等性、易于协作。
-
-我编写了第一个 Pod 的 YAML 文件，并成功部署。接着，我挑战了更高级的 Sidecar (边车)模式。我设计了一个 Pod，其中主容器是 Nginx，边车容器是 Busybox，后者持续向一个共享文件写入时间戳，前者则将这个文件作为网页内容展示。这是对 Pod——这个 K8s 原子单元——最深刻的诠释：它不是单个容器的简单包装，而是一个共享网络和存储的、紧密协作的作战单元。
-
-当然，网络问题再次出现。这次，我采用了“釜底抽薪”的办法：在主机上手动拉取镜像，打上标签，再通过 kind load docker-image 命令将镜像“硬塞”进 Kind 集群的本地存储中。虽然过程曲折，但它让我彻底掌握了在复杂网络环境下的镜像处理策略。
-
-Day 5-7: 巩固与升华，成为“城市规划师”
-
-掌握了基础操作，我开始学习如何排错和组织资源。我主动模拟了 ImagePullBackOff 和 CrashLoopBackOff 这两种最常见的 Pod 故障。我建立了清晰的调试流程：遇到前者，第一时间想到 kubectl describe 看 Events；遇到后者，则首先用 kubectl logs 查看容器自身的报错。
-
-接着，我学习了 Namespace (命名空间) 和 Labels (标签)。我理解到，Namespace 就像操作系统的**“文件夹”，它为资源提供了逻辑隔离**，避免了命名冲突，也为权限和资源配额管理打下了基础。我学会了创建 dev 命名空间，并使用 -n 参数在其中部署资源。
-
-而 Labels 则更像是贴在文件上的**“彩色便签”，它与 Selector (选择器) 相结合，提供了极其灵活的资源分组和筛选**能力。我理解到，标签是 K8s 中连接不同资源的“胶水”，是实现服务发现和负载均衡等高级功能的基石。
-
-学习的最后一天，是一场综合挑战。我接到了一个明确的任务：部署一个 Redis 缓存服务 Pod。
-环境准备：我检查并确保了 Kind 集群的运行。
-隔离环境：kubectl create namespace week2-review，为项目创建了专属空间。
-绘制蓝图：我编写了 redis-deployment.yaml，在 metadata 中精确地定义了 namespace: week2-review 和 labels: {project: review, component: cache}。
-处理镜像：鉴于之前的经验，我直接采用了本地加载的方式，确保了 redis:7.0 镜像在 Kind 节点中可用。
-部署与验证：kubectl apply 之后，我使用 kubectl get pods -n week2-review --show-labels 验证了 Pod 的状态和标签，并用 -l project=review 选择器精准地找到了它。
-功能测试：我用 kubectl exec 进入容器，启动 redis-cli，成功执行了 SET 和 GET 操作，验证了服务的可用性。
-清理收尾：最后，我依次删除了 Pod 和命名空间，并用 kind delete cluster 关闭了集群，为本周的学习画上了完美的句号。
-这一周，我不仅掌握了 K8s 的环境搭建、kubectl 核心命令、YAML 编写、多容器 Pod 设计、核心调试技巧以及 Namespace 和 Labels 的使用，更重要的是，我在与真实世界的网络问题不断斗争的过程中，锻炼了解决问题的耐心和智慧。我已不再是那个只会 docker run 的新手，而是真正踏入了云原生世界的大门。
+**1. 可恶的网：Kind + 国内源**
+由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。
+**2. 核心概念：从命令式到声明式**
+基础：熟悉 kubectl 动词语法，并且迅速从命令式（CLI）转向声明式（YAML），主要是有版本控制这些好处。
+Pod 深度理解：通过实操 边车（Sidecar） 模式（Nginx + Busybox 共享存储），深刻理解 Pod 作为“最小原子单元”的共享网络与存储特性。
+**3. 运维与排错方法**
+镜像策略：面对 ImagePullBackOff，除了替换国内源（如 m.daocloud.io），还掌握了 docker pull + kind load 的离线镜像预加载手段。（就是有点大）
+Debug 流程：建立了标准排错链：若是资源调度问题（如 Crash/PullErr）用 kubectl describe 看 Events，应用内部报错查 kubectl logs。
+**4. 搞一搞**
+隔离：掌握 Namespace 进行环境隔离，利用 Labels/Selectors 实现资源的灵活分组与发现。
+实操：在一个独立 Namespace 中，全流程部署 Redis 7.0（含自定义 Labels），完成从 YAML 编写、镜像加载、服务启动到 exec 验证及最终清理（干净的一）的完整生命周期管理。
