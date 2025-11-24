@@ -1,7 +1,7 @@
 <!-- 
   =======================================================================
   PROJECT: NEKO-FALL-ENGINE
-  VERSION: 3.8 (Dark Mode Fix & DOM Elevation)
+  VERSION: 3.9 (Zero Margin / Flush Corner Edition)
   =======================================================================
 -->
 
@@ -16,17 +16,16 @@
     --neko-secondary: #fad0c4;
   }
 
-  /* 【修复】暗黑模式适配 (适配 PaperMod 及主流 Hugo 主题) */
+  /* 暗黑模式适配 */
   @media (prefers-color-scheme: dark) {
     :root {
-      --neko-glass-bg: rgba(0, 0, 0, 0.4);       /* 深色磨砂 */
-      --neko-glass-border: rgba(255, 255, 255, 0.1); /* 微弱白边 */
+      --neko-glass-bg: rgba(0, 0, 0, 0.4);
+      --neko-glass-border: rgba(255, 255, 255, 0.1);
       --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-      --neko-text: #ddd;                         /* 浅色文字 */
+      --neko-text: #ddd;
     }
   }
   
-  /* 强制适配 PaperMod 的 .dark 类名 */
   body.dark {
     --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
     --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
@@ -36,16 +35,20 @@
 
   #neko-engine-root {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    /* 【关键改动】完全贴合左下角，不留空隙 */
+    bottom: 0; 
+    left: 0;
+    
     width: 420px;
     height: 500px;
-    z-index: 2147483647; /* 最高层级 */
-    pointer-events: none; /* 允许点击穿透 */
+    z-index: 2147483647;
+    pointer-events: none;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
+    
+    /* 缩放保持 70%，基点设为左下角，确保缩放后依然贴边 */
     transform: scale(0.7); 
     transform-origin: 0% 100%;
   }
@@ -54,6 +57,7 @@
 
   #neko-ui-layer {
     position: absolute;
+    /* 稍微调整按钮位置，以免贴边太紧不好看 */
     bottom: 120px;
     left: 20px;
     pointer-events: auto;
@@ -66,7 +70,6 @@
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    /* 按钮保持粉色，但在深色模式下稍微亮一点 */
     background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
     box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
     border: 2px solid rgba(255,255,255,0.8);
@@ -102,12 +105,10 @@
 
   .neko-info {
     padding: 8px 16px;
-    /* 使用适配后的变量 */
     background: var(--neko-glass-bg);
     border: 1px solid var(--neko-glass-border);
     color: var(--neko-text);
     box-shadow: var(--neko-shadow);
-    
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
@@ -152,16 +153,13 @@
 
 <script>
 /**
- * 🐱 NEKO ENGINE v3.8
- * Fixes:
- * 1. DOM Elevation: Moves widget to body to prevent Dark Mode overlay issues.
- * 2. Adaptive CSS: Glassmorphism adapts to dark themes.
+ * 🐱 NEKO ENGINE v3.9
+ * Updates: Zero Margin (Flush Left-Bottom)
  */
 
 const CONFIG = {
   musicTitle: "雯华妲歌名",
   
-  // 物理参数
   gravity: 0.038,
   airResistance: 0.998,
   bounceDamping: 0.6,
@@ -410,13 +408,11 @@ class KawaiiCat {
     if (this.type === 2) colors = CONFIG.colors.orangeCat;
     if (this.type === 3) colors = CONFIG.colors.greyCat;
     
-    // Body
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = colors.shadow;
     ctx.beginPath(); ctx.arc(0, 8, this.radius - 2, 0.2 * Math.PI, 0.8 * Math.PI); ctx.fill();
     
-    // Ears
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(28, -28, 10, -20); ctx.fill();
@@ -424,7 +420,6 @@ class KawaiiCat {
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
 
-    // Patterns
     if (this.type === 1) {
       ctx.fillStyle = colors.pattern1;
       ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
@@ -439,7 +434,6 @@ class KawaiiCat {
        ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
     }
 
-    // Expressions
     ctx.strokeStyle = '#3e3e3e';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
@@ -477,7 +471,6 @@ class KawaiiCat {
 class NekoEngine {
   constructor() {
     this.root = document.getElementById('neko-engine-root');
-    // 【关键修复】将组件移动到 body 根目录下，防止被主题的 dark mode 图层遮挡
     document.body.appendChild(this.root);
 
     this.canvas = document.getElementById('neko-canvas');
