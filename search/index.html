@@ -616,10 +616,10 @@
     position: fixed;
     bottom: 0; 
     left: 0;
-    width: 420px;
-    height: 500px;
+    width: 700px;  
+    height: 143vh; 
     z-index: 2147483647;
-    pointer-events: none;  
+    pointer-events: none;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     opacity: 0;
     transition: opacity 1s ease;
@@ -634,11 +634,21 @@
     position: absolute;
     bottom: 120px;
     left: 20px;
-     
-    pointer-events: auto; 
+    pointer-events: auto;
     display: flex;
     align-items: center;
     gap: 12px;
+  }
+
+  #piano-click-zone {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 420px; 
+    height: 120px;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 10;
   }
 
   .neko-fab {
@@ -706,21 +716,15 @@
     100% { transform: scale(1.6); opacity: 0; }
   }
 
-   
-  canvas { 
-    display: block; 
-    width: 100%; 
-    height: 100%;
-    pointer-events: auto;  
-    cursor: pointer;       
-  }
+  canvas { display: block; width: 100%; height: 100%; }
 </style>
 
 <div id="neko-engine-root">
   <audio id="neko-audio" loop crossorigin="anonymous">
-    
     <source src="/music/oblivious.mp3" type="audio/mpeg">
   </audio>
+
+  <div id="piano-click-zone"></div>
 
   <div id="neko-ui-layer">
     <div class="neko-fab" id="neko-toggle-btn">
@@ -739,6 +743,7 @@
 
 const CONFIG = {
   musicTitle: "雯华妲歌名",
+  pianoWidth: 420, 
   
   gravity: 0.038,
   airResistance: 0.998,
@@ -752,8 +757,7 @@ const CONFIG = {
     calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
   },
   
-  bpm: 80,
-  
+  bpm: 100,
   keyHeights: { white: 100, black: 65 }
 };
 
@@ -771,7 +775,6 @@ const Utils = {
     ctx.closePath();
   }
 };
-
 
 class NoteParticle {
   constructor(x, y) {
@@ -912,9 +915,9 @@ class PianoKey {
 }
 
 class KawaiiCat {
-  constructor(canvasWidth) {
+  constructor(limitWidth) {
     this.radius = 24;
-    this.x = Utils.random(this.radius + 20, canvasWidth - this.radius - 20);
+    this.x = Utils.random(this.radius + 10, limitWidth - this.radius - 10);
     this.y = -60;
     this.vx = 0;
     this.vy = Utils.random(0.05, 0.3); 
@@ -948,15 +951,15 @@ class KawaiiCat {
     }
 
     if (!targetKey) {
-        const keyWidth = 420 / 7; 
+        const keyWidth = CONFIG.pianoWidth / 7; 
         const keyIdx = Math.floor(this.x / keyWidth);
         if (keys[keyIdx]) {
             targetKey = keys[keyIdx];
         }
     }
 
-    if (this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
-        if (targetKey) targetKey.hit();
+    if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
+        targetKey.hit();
         
         this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - 2.5; 
         this.vx = Utils.random(-1.2, 1.2); 
@@ -988,8 +991,6 @@ class KawaiiCat {
     
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = colors.shadow;
-    ctx.beginPath(); ctx.arc(0, 8, this.radius - 2, 0.2 * Math.PI, 0.8 * Math.PI); ctx.fill();
     
     
     ctx.fillStyle = colors.base;
@@ -1023,21 +1024,32 @@ class KawaiiCat {
     
     if (this.expression === 'IDLE') {
       ctx.fillStyle = '#3e3e3e';
+      
       ctx.beginPath(); ctx.arc(-8, 0, 2.5, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(8, 0, 2.5, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(-4, 6); ctx.quadraticCurveTo(0, 8, 4, 6); ctx.stroke();
+      
+      ctx.beginPath(); 
+      ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
+      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5);
+      ctx.stroke();
+
     } else if (this.expression === 'SHOCK') {
       ctx.beginPath();
       ctx.moveTo(-12, -2); ctx.lineTo(-6, 2); ctx.lineTo(-12, 6);
       ctx.moveTo(12, -2); ctx.lineTo(6, 2); ctx.lineTo(12, 6);
       ctx.stroke();
       ctx.beginPath(); ctx.arc(0, 8, 3, 0, Math.PI*2); ctx.strokeStyle='#3e3e3e'; ctx.stroke();
+
     } else if (this.expression === 'HAPPY') {
       ctx.beginPath();
+      
       ctx.moveTo(-12, 2); ctx.quadraticCurveTo(-8, -2, -4, 2);
       ctx.moveTo(4, 2); ctx.quadraticCurveTo(8, -2, 12, 2);
-      ctx.moveTo(-4, 6); ctx.quadraticCurveTo(0, 8, 4, 6); 
+      
+      ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
+      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5);
       ctx.stroke(); 
+      
       ctx.fillStyle = colors.blush;
       ctx.globalAlpha = 0.6;
       ctx.beginPath(); ctx.arc(-14, 6, 4, 0, Math.PI*2); ctx.fill();
@@ -1053,6 +1065,7 @@ class NekoEngine {
   constructor() {
     this.root = document.getElementById('neko-engine-root');
     document.body.appendChild(this.root);
+    this.clickZone = document.getElementById('piano-click-zone');
 
     this.canvas = document.getElementById('neko-canvas');
     this.ctx = this.canvas.getContext('2d');
@@ -1060,8 +1073,9 @@ class NekoEngine {
     this.uiBtn = document.getElementById('neko-toggle-btn');
     this.uiInfo = document.querySelector('.neko-info');
     
-    this.width = 420;
-    this.height = 500;
+    this.width = 700; 
+    this.height = this.root.offsetHeight; 
+    
     this.isPlaying = false;
     this.lastTime = 0;
     this.keys = [];
@@ -1070,22 +1084,14 @@ class NekoEngine {
     this.beatTimer = 0;
     this.nextBeat = 0;
     
-    
     this.bindInteraction();
-    
     this.init();
   }
 
-  
   bindInteraction() {
     const handleInput = (clientX, clientY) => {
-      
       const rect = this.root.getBoundingClientRect();
-      
-      
-      
-      const scale = 0.7; 
-      
+      const scale = 0.7;
       
       const logicX = (clientX - rect.left) / scale;
       const logicY = (clientY - rect.top) / scale;
@@ -1093,27 +1099,20 @@ class NekoEngine {
       this.triggerKeyAt(logicX, logicY);
     };
 
-    
-    this.canvas.addEventListener('mousedown', (e) => {
+    this.clickZone.addEventListener('mousedown', (e) => {
       handleInput(e.clientX, e.clientY);
     });
     
-    
-    this.canvas.addEventListener('touchstart', (e) => {
-      
-      
+    this.clickZone.addEventListener('touchstart', (e) => {
       if(e.touches.length > 0) {
         handleInput(e.touches[0].clientX, e.touches[0].clientY);
       }
     }, {passive: true});
   }
 
-  
   triggerKeyAt(x, y) {
-    
     let targetKey = null;
 
-    
     if (y > this.height - CONFIG.keyHeights.black) {
       for (let k of this.keys) {
         if (k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1123,7 +1122,6 @@ class NekoEngine {
       }
     }
 
-    
     if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
       for (let k of this.keys) {
         if (!k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1133,15 +1131,10 @@ class NekoEngine {
       }
     }
 
-    
     if (targetKey) {
-      targetKey.hit(); 
-      
-      
-      
+      targetKey.hit();
       const centerX = targetKey.x + targetKey.w / 2;
       const centerY = this.height - (targetKey.isBlack ? CONFIG.keyHeights.black : CONFIG.keyHeights.white) + 20;
-      
       this.spawnParticles(centerX, centerY);
     }
   }
@@ -1153,7 +1146,7 @@ class NekoEngine {
     this.uiInfo.innerText = "Ready: " + CONFIG.musicTitle;
 
     const whiteCount = 7;
-    const whiteW = this.width / whiteCount;
+    const whiteW = CONFIG.pianoWidth / whiteCount;
     const blackW = whiteW * 0.65;
     const whiteH = CONFIG.keyHeights.white;
     const blackH = CONFIG.keyHeights.black;
@@ -1173,8 +1166,9 @@ class NekoEngine {
   
   resize() {
     const dpr = window.devicePixelRatio || 1;
-    this.width = 420; 
-    this.height = 500;
+    this.width = 700; 
+    this.height = this.root.offsetHeight; 
+    
     this.canvas.width = this.width * dpr;
     this.canvas.height = this.height * dpr;
     this.ctx.scale(dpr, dpr);
@@ -1199,7 +1193,7 @@ class NekoEngine {
   }
   
   spawnCat() {
-    this.cats.push(new KawaiiCat(this.width));
+    this.cats.push(new KawaiiCat(CONFIG.pianoWidth));
   }
   
   spawnParticles(x, y) {
@@ -1226,7 +1220,7 @@ class NekoEngine {
     
     const pianoY = this.height - CONFIG.keyHeights.white;
     this.ctx.fillStyle = '#6d1b1b';
-    this.ctx.fillRect(0, pianoY - 5, this.width, 5);
+    this.ctx.fillRect(0, pianoY - 5, CONFIG.pianoWidth, 5);
     
     const whiteKeys = this.keys.filter(k => !k.isBlack);
     const blackKeys = this.keys.filter(k => k.isBlack);
