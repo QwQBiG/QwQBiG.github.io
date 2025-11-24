@@ -1413,8 +1413,15 @@
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
+    
     transform: scale(0.7); 
     transform-origin: 0% 100%;
+
+     
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
   }
 
   #neko-engine-root.loaded { opacity: 1; }
@@ -1438,6 +1445,8 @@
     pointer-events: auto;
     cursor: pointer;
     z-index: 10;
+     
+    -webkit-tap-highlight-color: transparent;
   }
 
   .neko-fab {
@@ -1533,19 +1542,25 @@
 const CONFIG = {
   musicTitle: "雯华妲歌名",
   pianoWidth: 420, 
+  
   gravity: 0.038,
   airResistance: 0.998,
   bounceDamping: 0.6,
   softBodyStiffness: 0.08,
+  
   colors: {
     whiteCat:  { base: '#fdfbf7', shadow: '#e6e2d6', blush: '#ffcdd2' },
     orangeCat: { base: '#f8d29d', shadow: '#e0b075', blush: '#ff8a80', pattern: '#e6a23c' },
     greyCat:   { base: '#d1d5db', shadow: '#9ca3af', blush: '#fca5a5' },
     calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
   },
+  
   bpm: 100,
   keyHeights: { white: 100, black: 65 }
 };
+
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
 const Utils = {
   random: (min, max) => Math.random() * (max - min) + min,
@@ -1563,79 +1578,36 @@ const Utils = {
 };
 
 
-
-
-
-
-
-
-
-
-
-
 const PianoSound = {
   ctx: null,
-  
   frequencies: {
     white: {
-      0: 329.63, 
-      1: 293.66, 
-      2: 261.63, 
-      3: 246.94, 
-      4: 220.00, 
-      5: 196.00, 
-      6: 174.61  
+      0: 329.63, 1: 293.66, 2: 261.63, 3: 246.94, 4: 220.00, 5: 196.00, 6: 174.61
     },
-    
-    
-    
-    
-    
-    
     black: {
-      100: 311.13, 
-      101: 277.18, 
-      103: 233.08, 
-      104: 207.65, 
-      105: 185.00  
+      100: 311.13, 101: 277.18, 103: 233.08, 104: 207.65, 105: 185.00
     }
   },
-
   init: function() {
     if (!this.ctx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioContext();
     }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
   },
-
   play: function(keyIndex, isBlack) {
     this.init();
-
     const osc = this.ctx.createOscillator();
     const gainNode = this.ctx.createGain();
-
-    let freq = 0;
-    if (isBlack) {
-      freq = this.frequencies.black[keyIndex];
-    } else {
-      freq = this.frequencies.white[keyIndex];
-    }
-
+    let freq = isBlack ? this.frequencies.black[keyIndex] : this.frequencies.white[keyIndex];
     if (!freq) return;
-
     osc.type = 'triangle'; 
     osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-
     gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
     gainNode.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 0.02);
     gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
-
     osc.connect(gainNode);
     gainNode.connect(this.ctx.destination);
-
     osc.start();
     osc.stop(this.ctx.currentTime + 1.5);
   }
@@ -1824,8 +1796,7 @@ class KawaiiCat {
     }
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
-        targetKey.hit();
-        
+        targetKey.hit(); 
         this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - 2.5; 
         this.vx = Utils.random(-1.2, 1.2); 
         this.rotVelocity = Utils.random(-0.03, 0.03);
@@ -1833,7 +1804,6 @@ class KawaiiCat {
         this.scaleY = 0.6;
         this.expression = 'SHOCK';
         setTimeout(() => { if(!this.dead) this.expression = 'HAPPY'; }, 300);
-        
         this.y = groundLevel - this.radius;
         return { hit: true, x: this.x, y: groundLevel };
     }
@@ -1853,10 +1823,8 @@ class KawaiiCat {
     if (this.type === 2) colors = CONFIG.colors.orangeCat;
     if (this.type === 3) colors = CONFIG.colors.greyCat;
     
-    
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
-    
     
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
@@ -1865,7 +1833,6 @@ class KawaiiCat {
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
 
-    
     if (this.type === 1) {
       ctx.fillStyle = colors.pattern1;
       ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
@@ -1880,7 +1847,6 @@ class KawaiiCat {
        ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
     }
 
-    
     ctx.strokeStyle = '#3e3e3e';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
@@ -1947,10 +1913,8 @@ class NekoEngine {
     const handleInput = (clientX, clientY) => {
       const rect = this.root.getBoundingClientRect();
       const scale = 0.7;
-      
       const logicX = (clientX - rect.left) / scale;
       const logicY = (clientY - rect.top) / scale;
-      
       this.triggerKeyAt(logicX, logicY);
     };
 
@@ -1967,7 +1931,6 @@ class NekoEngine {
 
   triggerKeyAt(x, y) {
     let targetKey = null;
-
     if (y > this.height - CONFIG.keyHeights.black) {
       for (let k of this.keys) {
         if (k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1976,7 +1939,6 @@ class NekoEngine {
         }
       }
     }
-
     if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
       for (let k of this.keys) {
         if (!k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1985,7 +1947,6 @@ class NekoEngine {
         }
       }
     }
-
     if (targetKey) {
       targetKey.hit(); 
       PianoSound.play(targetKey.index, targetKey.isBlack);
@@ -2021,7 +1982,8 @@ class NekoEngine {
   }
   
   resize() {
-    const dpr = window.devicePixelRatio || 1;
+    
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.width = 700; 
     this.height = this.root.offsetHeight; 
     
@@ -2053,7 +2015,10 @@ class NekoEngine {
   }
   
   spawnParticles(x, y) {
-    for(let i=0; i<4; i++) this.particles.push(new Particle(x, y));
+    
+    const limit = isMobile ? 2 : 4;
+    for(let i=0; i<limit; i++) this.particles.push(new Particle(x, y));
+    
     const noteCount = Math.floor(Math.random() * 2) + 1;
     for(let i=0; i<noteCount; i++) this.particles.push(new NoteParticle(x, y));
   }
