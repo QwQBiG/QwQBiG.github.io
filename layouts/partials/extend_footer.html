@@ -1,7 +1,7 @@
 <!-- 
   =======================================================================
   PROJECT: NEKO-FALL-ENGINE
-  VERSION: 4.6 (Mirrored Piano Scale / Right-to-Left Pitch)
+  VERSION: 4.7 (Mobile Performance Optimization & Lag Fix)
   =======================================================================
 -->
 
@@ -43,8 +43,15 @@
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
+    
     transform: scale(0.7); 
     transform-origin: 0% 100%;
+
+    /* 【优化点 1】开启 GPU 硬件加速，解决滚动卡顿 */
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
   }
 
   #neko-engine-root.loaded { opacity: 1; }
@@ -68,6 +75,8 @@
     pointer-events: auto;
     cursor: pointer;
     z-index: 10;
+    /* 解决移动端点击高亮闪烁 */
+    -webkit-tap-highlight-color: transparent;
   }
 
   .neko-fab {
@@ -158,26 +167,35 @@
 
 <script>
 /**
- * 🐱 NEKO ENGINE v4.6
- * Feature: Mirrored Scale (Right-to-Left Pitch Increase)
+ * 🐱 NEKO ENGINE v4.7
+ * Optimizations:
+ * 1. Capped DevicePixelRation to 2 (Huge performance boost on mobile)
+ * 2. CSS Hardware Acceleration (Fixes scroll lag)
+ * 3. Mobile Particle Throttling
  */
 
 const CONFIG = {
   musicTitle: "雯华妲歌名",
   pianoWidth: 420, 
+  
   gravity: 0.038,
   airResistance: 0.998,
   bounceDamping: 0.6,
   softBodyStiffness: 0.08,
+  
   colors: {
     whiteCat:  { base: '#fdfbf7', shadow: '#e6e2d6', blush: '#ffcdd2' },
     orangeCat: { base: '#f8d29d', shadow: '#e0b075', blush: '#ff8a80', pattern: '#e6a23c' },
     greyCat:   { base: '#d1d5db', shadow: '#9ca3af', blush: '#fca5a5' },
     calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
   },
+  
   bpm: 100,
   keyHeights: { white: 100, black: 65 }
 };
+
+// 检测是否为移动端
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
 const Utils = {
   random: (min, max) => Math.random() * (max - min) + min,
@@ -194,80 +212,37 @@ const Utils = {
   }
 };
 
-// --- 【修改】镜像乐理音源 ---
-// 逻辑：从右向左音调升高 (Right=Low, Left=High)
-// 视觉索引：0(最左) -> 6(最右)
-// 映射：
-// 白键 0: Mi (E4) - 高
-// 白键 1: Re (D4)
-// 白键 2: Do (C4) - 中间C
-// 白键 3: Si (B3)
-// 白键 4: La (A3)
-// 白键 5: Sol (G3)
-// 白键 6: Fa (F3) - 低
+// 钢琴音源 (镜像)
 const PianoSound = {
   ctx: null,
-  
   frequencies: {
     white: {
-      0: 329.63, // E4 (Mi)
-      1: 293.66, // D4 (Re)
-      2: 261.63, // C4 (Do)
-      3: 246.94, // B3 (Si)
-      4: 220.00, // A3 (La)
-      5: 196.00, // G3 (Sol)
-      6: 174.61  // F3 (Fa)
+      0: 329.63, 1: 293.66, 2: 261.63, 3: 246.94, 4: 220.00, 5: 196.00, 6: 174.61
     },
-    // 黑键需要对应白键的缝隙，并反转音高
-    // 视觉0(Key0-1之间): E4和D4之间 -> D#4/Eb4
-    // 视觉1(Key1-2之间): D4和C4之间 -> C#4/Db4
-    // 视觉3(Key3-4之间): B3和A3之间 -> A#3/Bb3
-    // 视觉4(Key4-5之间): A3和G3之间 -> G#3/Ab3
-    // 视觉5(Key5-6之间): G3和F3之间 -> F#3/Gb3
     black: {
-      100: 311.13, // D#4
-      101: 277.18, // C#4
-      103: 233.08, // A#3
-      104: 207.65, // G#3
-      105: 185.00  // F#3
+      100: 311.13, 101: 277.18, 103: 233.08, 104: 207.65, 105: 185.00
     }
   },
-
   init: function() {
     if (!this.ctx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioContext();
     }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
   },
-
   play: function(keyIndex, isBlack) {
     this.init();
-
     const osc = this.ctx.createOscillator();
     const gainNode = this.ctx.createGain();
-
-    let freq = 0;
-    if (isBlack) {
-      freq = this.frequencies.black[keyIndex];
-    } else {
-      freq = this.frequencies.white[keyIndex];
-    }
-
+    let freq = isBlack ? this.frequencies.black[keyIndex] : this.frequencies.white[keyIndex];
     if (!freq) return;
-
     osc.type = 'triangle'; 
     osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-
     gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
     gainNode.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 0.02);
     gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
-
     osc.connect(gainNode);
     gainNode.connect(this.ctx.destination);
-
     osc.start();
     osc.stop(this.ctx.currentTime + 1.5);
   }
@@ -456,8 +431,7 @@ class KawaiiCat {
     }
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
-        targetKey.hit();
-        
+        targetKey.hit(); 
         this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - 2.5; 
         this.vx = Utils.random(-1.2, 1.2); 
         this.rotVelocity = Utils.random(-0.03, 0.03);
@@ -465,7 +439,6 @@ class KawaiiCat {
         this.scaleY = 0.6;
         this.expression = 'SHOCK';
         setTimeout(() => { if(!this.dead) this.expression = 'HAPPY'; }, 300);
-        
         this.y = groundLevel - this.radius;
         return { hit: true, x: this.x, y: groundLevel };
     }
@@ -485,11 +458,9 @@ class KawaiiCat {
     if (this.type === 2) colors = CONFIG.colors.orangeCat;
     if (this.type === 3) colors = CONFIG.colors.greyCat;
     
-    // Body
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
     
-    // Ears
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(28, -28, 10, -20); ctx.fill();
@@ -497,7 +468,6 @@ class KawaiiCat {
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
 
-    // Patterns
     if (this.type === 1) {
       ctx.fillStyle = colors.pattern1;
       ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
@@ -512,7 +482,6 @@ class KawaiiCat {
        ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
     }
 
-    // Expressions
     ctx.strokeStyle = '#3e3e3e';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
@@ -579,10 +548,8 @@ class NekoEngine {
     const handleInput = (clientX, clientY) => {
       const rect = this.root.getBoundingClientRect();
       const scale = 0.7;
-      
       const logicX = (clientX - rect.left) / scale;
       const logicY = (clientY - rect.top) / scale;
-      
       this.triggerKeyAt(logicX, logicY);
     };
 
@@ -599,7 +566,6 @@ class NekoEngine {
 
   triggerKeyAt(x, y) {
     let targetKey = null;
-
     if (y > this.height - CONFIG.keyHeights.black) {
       for (let k of this.keys) {
         if (k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -608,7 +574,6 @@ class NekoEngine {
         }
       }
     }
-
     if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
       for (let k of this.keys) {
         if (!k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -617,7 +582,6 @@ class NekoEngine {
         }
       }
     }
-
     if (targetKey) {
       targetKey.hit(); 
       PianoSound.play(targetKey.index, targetKey.isBlack);
@@ -653,7 +617,8 @@ class NekoEngine {
   }
   
   resize() {
-    const dpr = window.devicePixelRatio || 1;
+    // 【优化点 2】限制像素比最大为 2，防止手机渲染过大
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.width = 700; 
     this.height = this.root.offsetHeight; 
     
@@ -685,7 +650,10 @@ class NekoEngine {
   }
   
   spawnParticles(x, y) {
-    for(let i=0; i<4; i++) this.particles.push(new Particle(x, y));
+    // 【优化点 3】如果是移动端，粒子数量减半
+    const limit = isMobile ? 2 : 4;
+    for(let i=0; i<limit; i++) this.particles.push(new Particle(x, y));
+    
     const noteCount = Math.floor(Math.random() * 2) + 1;
     for(let i=0; i<noteCount; i++) this.particles.push(new NoteParticle(x, y));
   }
