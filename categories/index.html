@@ -541,7 +541,6 @@
 
 <style>
   :root {
-     
     --neko-glass-bg: rgba(255, 255, 255, 0.25);
     --neko-glass-border: rgba(255, 255, 255, 0.5);
     --neko-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
@@ -550,7 +549,6 @@
     --neko-secondary: #fad0c4;
   }
 
-   
   @media (prefers-color-scheme: dark) {
     :root {
       --neko-glass-bg: rgba(0, 0, 0, 0.4);
@@ -569,20 +567,16 @@
 
   #neko-engine-root {
     position: fixed;
-     
     bottom: 0; 
     left: 0;
-    
     width: 420px;
     height: 500px;
     z-index: 2147483647;
-    pointer-events: none;
+    pointer-events: none;  
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
-    
-     
     transform: scale(0.7); 
     transform-origin: 0% 100%;
   }
@@ -591,10 +585,10 @@
 
   #neko-ui-layer {
     position: absolute;
-     
     bottom: 120px;
     left: 20px;
-    pointer-events: auto;
+     
+    pointer-events: auto; 
     display: flex;
     align-items: center;
     gap: 12px;
@@ -665,7 +659,14 @@
     100% { transform: scale(1.6); opacity: 0; }
   }
 
-  canvas { display: block; width: 100%; height: 100%; }
+   
+  canvas { 
+    display: block; 
+    width: 100%; 
+    height: 100%;
+    pointer-events: auto;  
+    cursor: pointer;       
+  }
 </style>
 
 <div id="neko-engine-root">
@@ -724,6 +725,7 @@ const Utils = {
   }
 };
 
+
 class NoteParticle {
   constructor(x, y) {
     this.x = x;
@@ -762,17 +764,13 @@ class NoteParticle {
 
     ctx.beginPath();
     if (this.type === 'single') {
-      ctx.ellipse(-4, 6, 4, 3, -0.2, 0, Math.PI * 2); 
-      ctx.fill();
+      ctx.ellipse(-4, 6, 4, 3, -0.2, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.moveTo(-1, 6); ctx.lineTo(-1, -10); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(-1, -10); ctx.bezierCurveTo(4, -6, 8, -4, 6, 2); ctx.stroke();
     } else {
       ctx.beginPath(); ctx.ellipse(-6, 6, 3.5, 2.5, -0.2, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(6, 4, 3.5, 2.5, -0.2, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(-3, 6); ctx.lineTo(-3, -8);
-      ctx.moveTo(9, 4); ctx.lineTo(9, -10);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-3, 6); ctx.lineTo(-3, -8); ctx.moveTo(9, 4); ctx.lineTo(9, -10); ctx.stroke();
       ctx.lineWidth = 3;
       ctx.beginPath(); ctx.moveTo(-3, -8); ctx.bezierCurveTo(3, -7, 6, -9, 9, -10); ctx.stroke();
     }
@@ -940,10 +938,12 @@ class KawaiiCat {
     if (this.type === 2) colors = CONFIG.colors.orangeCat;
     if (this.type === 3) colors = CONFIG.colors.greyCat;
     
+    
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = colors.shadow;
     ctx.beginPath(); ctx.arc(0, 8, this.radius - 2, 0.2 * Math.PI, 0.8 * Math.PI); ctx.fill();
+    
     
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
@@ -952,6 +952,7 @@ class KawaiiCat {
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
 
+    
     if (this.type === 1) {
       ctx.fillStyle = colors.pattern1;
       ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
@@ -966,6 +967,7 @@ class KawaiiCat {
        ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
     }
 
+    
     ctx.strokeStyle = '#3e3e3e';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
@@ -1020,7 +1022,81 @@ class NekoEngine {
     this.particles = [];
     this.beatTimer = 0;
     this.nextBeat = 0;
+    
+    
+    this.bindInteraction();
+    
     this.init();
+  }
+
+  
+  bindInteraction() {
+    const handleInput = (clientX, clientY) => {
+      
+      const rect = this.root.getBoundingClientRect();
+      
+      
+      
+      const scale = 0.7; 
+      
+      
+      const logicX = (clientX - rect.left) / scale;
+      const logicY = (clientY - rect.top) / scale;
+      
+      this.triggerKeyAt(logicX, logicY);
+    };
+
+    
+    this.canvas.addEventListener('mousedown', (e) => {
+      handleInput(e.clientX, e.clientY);
+    });
+    
+    
+    this.canvas.addEventListener('touchstart', (e) => {
+      
+      
+      if(e.touches.length > 0) {
+        handleInput(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, {passive: true});
+  }
+
+  
+  triggerKeyAt(x, y) {
+    
+    let targetKey = null;
+
+    
+    if (y > this.height - CONFIG.keyHeights.black) {
+      for (let k of this.keys) {
+        if (k.isBlack && x >= k.x && x <= k.x + k.w) {
+          targetKey = k;
+          break;
+        }
+      }
+    }
+
+    
+    if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
+      for (let k of this.keys) {
+        if (!k.isBlack && x >= k.x && x <= k.x + k.w) {
+          targetKey = k;
+          break;
+        }
+      }
+    }
+
+    
+    if (targetKey) {
+      targetKey.hit(); 
+      
+      
+      
+      const centerX = targetKey.x + targetKey.w / 2;
+      const centerY = this.height - (targetKey.isBlack ? CONFIG.keyHeights.black : CONFIG.keyHeights.white) + 20;
+      
+      this.spawnParticles(centerX, centerY);
+    }
   }
   
   init() {
