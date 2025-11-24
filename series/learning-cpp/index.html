@@ -700,7 +700,7 @@
     position: fixed;
     bottom: 0; 
     left: 0;
-    width: 700px;  
+    width: 700px;
     height: 143vh; 
     z-index: 2147483647;
     pointer-events: none;
@@ -731,7 +731,8 @@
     width: 420px; 
     height: 120px;
     pointer-events: auto;
-    cursor: pointer;
+     
+    cursor: pointer; 
     z-index: 10;
   }
 
@@ -808,6 +809,7 @@
     <source src="/music/oblivious.mp3" type="audio/mpeg">
   </audio>
 
+  
   <div id="piano-click-zone"></div>
 
   <div id="neko-ui-layer">
@@ -828,19 +830,16 @@
 const CONFIG = {
   musicTitle: "雯华妲歌名",
   pianoWidth: 420, 
-  
   gravity: 0.038,
   airResistance: 0.998,
   bounceDamping: 0.6,
   softBodyStiffness: 0.08,
-  
   colors: {
     whiteCat:  { base: '#fdfbf7', shadow: '#e6e2d6', blush: '#ffcdd2' },
     orangeCat: { base: '#f8d29d', shadow: '#e0b075', blush: '#ff8a80', pattern: '#e6a23c' },
     greyCat:   { base: '#d1d5db', shadow: '#9ca3af', blush: '#fca5a5' },
     calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
   },
-  
   bpm: 100,
   keyHeights: { white: 100, black: 65 }
 };
@@ -857,6 +856,71 @@ const Utils = {
     ctx.arcTo(x, y + h, x, y, r);
     ctx.arcTo(x, y, x + w, y, r);
     ctx.closePath();
+  }
+};
+
+
+const PianoSound = {
+  ctx: null,
+  
+  
+  frequencies: {
+    
+    white: [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88], 
+    
+    
+    black: {
+      100: 277.18, 
+      101: 311.13, 
+      103: 369.99, 
+      104: 415.30, 
+      105: 466.16  
+    }
+  },
+
+  init: function() {
+    if (!this.ctx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioContext();
+    }
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  },
+
+  play: function(keyIndex, isBlack) {
+    this.init(); 
+
+    const osc = this.ctx.createOscillator();
+    const gainNode = this.ctx.createGain();
+
+    
+    let freq = 0;
+    if (isBlack) {
+      freq = this.frequencies.black[keyIndex];
+    } else {
+      freq = this.frequencies.white[keyIndex];
+    }
+
+    if (!freq) return; 
+
+    
+    osc.type = 'triangle'; 
+    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+    
+    
+    gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 0.02);
+    
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
+
+    
+    osc.connect(gainNode);
+    gainNode.connect(this.ctx.destination);
+
+    osc.start();
+    osc.stop(this.ctx.currentTime + 1.5); 
   }
 };
 
@@ -1043,6 +1107,7 @@ class KawaiiCat {
     }
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
+        
         targetKey.hit();
         
         this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - 2.5; 
@@ -1108,32 +1173,23 @@ class KawaiiCat {
     
     if (this.expression === 'IDLE') {
       ctx.fillStyle = '#3e3e3e';
-      
       ctx.beginPath(); ctx.arc(-8, 0, 2.5, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(8, 0, 2.5, 0, Math.PI*2); ctx.fill();
-      
-      ctx.beginPath(); 
-      ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
-      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5);
-      ctx.stroke();
-
+      ctx.beginPath(); ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
+      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5); ctx.stroke();
     } else if (this.expression === 'SHOCK') {
       ctx.beginPath();
       ctx.moveTo(-12, -2); ctx.lineTo(-6, 2); ctx.lineTo(-12, 6);
       ctx.moveTo(12, -2); ctx.lineTo(6, 2); ctx.lineTo(12, 6);
       ctx.stroke();
       ctx.beginPath(); ctx.arc(0, 8, 3, 0, Math.PI*2); ctx.strokeStyle='#3e3e3e'; ctx.stroke();
-
     } else if (this.expression === 'HAPPY') {
       ctx.beginPath();
-      
       ctx.moveTo(-12, 2); ctx.quadraticCurveTo(-8, -2, -4, 2);
       ctx.moveTo(4, 2); ctx.quadraticCurveTo(8, -2, 12, 2);
-      
       ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
       ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5);
       ctx.stroke(); 
-      
       ctx.fillStyle = colors.blush;
       ctx.globalAlpha = 0.6;
       ctx.beginPath(); ctx.arc(-14, 6, 4, 0, Math.PI*2); ctx.fill();
@@ -1197,6 +1253,7 @@ class NekoEngine {
   triggerKeyAt(x, y) {
     let targetKey = null;
 
+    
     if (y > this.height - CONFIG.keyHeights.black) {
       for (let k of this.keys) {
         if (k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1206,6 +1263,7 @@ class NekoEngine {
       }
     }
 
+    
     if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
       for (let k of this.keys) {
         if (!k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1215,8 +1273,15 @@ class NekoEngine {
       }
     }
 
+    
     if (targetKey) {
-      targetKey.hit();
+      
+      targetKey.hit(); 
+      
+      
+      PianoSound.play(targetKey.index, targetKey.isBlack);
+
+      
       const centerX = targetKey.x + targetKey.w / 2;
       const centerY = this.height - (targetKey.isBlack ? CONFIG.keyHeights.black : CONFIG.keyHeights.white) + 20;
       this.spawnParticles(centerX, centerY);
