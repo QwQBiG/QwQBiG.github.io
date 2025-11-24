@@ -1436,8 +1436,7 @@
     width: 420px; 
     height: 120px;
     pointer-events: auto;
-     
-    cursor: pointer; 
+    cursor: pointer;
     z-index: 10;
   }
 
@@ -1514,7 +1513,6 @@
     <source src="/music/oblivious.mp3" type="audio/mpeg">
   </audio>
 
-  
   <div id="piano-click-zone"></div>
 
   <div id="neko-ui-layer">
@@ -1565,21 +1563,41 @@ const Utils = {
 };
 
 
+
+
+
+
+
+
+
+
+
+
 const PianoSound = {
   ctx: null,
   
-  
   frequencies: {
+    white: {
+      0: 329.63, 
+      1: 293.66, 
+      2: 261.63, 
+      3: 246.94, 
+      4: 220.00, 
+      5: 196.00, 
+      6: 174.61  
+    },
     
-    white: [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88], 
+    
+    
+    
     
     
     black: {
-      100: 277.18, 
-      101: 311.13, 
-      103: 369.99, 
-      104: 415.30, 
-      105: 466.16  
+      100: 311.13, 
+      101: 277.18, 
+      103: 233.08, 
+      104: 207.65, 
+      105: 185.00  
     }
   },
 
@@ -1594,12 +1612,11 @@ const PianoSound = {
   },
 
   play: function(keyIndex, isBlack) {
-    this.init(); 
+    this.init();
 
     const osc = this.ctx.createOscillator();
     const gainNode = this.ctx.createGain();
 
-    
     let freq = 0;
     if (isBlack) {
       freq = this.frequencies.black[keyIndex];
@@ -1607,25 +1624,20 @@ const PianoSound = {
       freq = this.frequencies.white[keyIndex];
     }
 
-    if (!freq) return; 
+    if (!freq) return;
 
-    
     osc.type = 'triangle'; 
     osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
 
-    
-    
     gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
     gainNode.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 0.02);
-    
     gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
 
-    
     osc.connect(gainNode);
     gainNode.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 1.5); 
+    osc.stop(this.ctx.currentTime + 1.5);
   }
 };
 
@@ -1812,7 +1824,6 @@ class KawaiiCat {
     }
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
-        
         targetKey.hit();
         
         this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - 2.5; 
@@ -1892,8 +1903,7 @@ class KawaiiCat {
       ctx.beginPath();
       ctx.moveTo(-12, 2); ctx.quadraticCurveTo(-8, -2, -4, 2);
       ctx.moveTo(4, 2); ctx.quadraticCurveTo(8, -2, 12, 2);
-      ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
-      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5);
+      ctx.moveTo(-4, 6); ctx.quadraticCurveTo(0, 8, 4, 6); 
       ctx.stroke(); 
       ctx.fillStyle = colors.blush;
       ctx.globalAlpha = 0.6;
@@ -1958,7 +1968,6 @@ class NekoEngine {
   triggerKeyAt(x, y) {
     let targetKey = null;
 
-    
     if (y > this.height - CONFIG.keyHeights.black) {
       for (let k of this.keys) {
         if (k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1968,7 +1977,6 @@ class NekoEngine {
       }
     }
 
-    
     if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
       for (let k of this.keys) {
         if (!k.isBlack && x >= k.x && x <= k.x + k.w) {
@@ -1978,15 +1986,9 @@ class NekoEngine {
       }
     }
 
-    
     if (targetKey) {
-      
       targetKey.hit(); 
-      
-      
       PianoSound.play(targetKey.index, targetKey.isBlack);
-
-      
       const centerX = targetKey.x + targetKey.w / 2;
       const centerY = this.height - (targetKey.isBlack ? CONFIG.keyHeights.black : CONFIG.keyHeights.white) + 20;
       this.spawnParticles(centerX, centerY);
