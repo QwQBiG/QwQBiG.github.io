@@ -750,14 +750,13 @@ https://qwqbig.github.io/
    
   @media (prefers-color-scheme: dark) {
     :root {
-      --neko-glass-bg: rgba(0, 0, 0, 0.4);        
-      --neko-glass-border: rgba(255, 255, 255, 0.1);  
+      --neko-glass-bg: rgba(0, 0, 0, 0.4);
+      --neko-glass-border: rgba(255, 255, 255, 0.1);
       --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-      --neko-text: #ddd;                          
+      --neko-text: #ddd;
     }
   }
   
-   
   body.dark {
     --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
     --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
@@ -767,16 +766,20 @@ https://qwqbig.github.io/
 
   #neko-engine-root {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+     
+    bottom: 0; 
+    left: 0;
+    
     width: 420px;
     height: 500px;
-    z-index: 2147483647;  
-    pointer-events: none;  
+    z-index: 2147483647;
+    pointer-events: none;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
+    
+     
     transform: scale(0.7); 
     transform-origin: 0% 100%;
   }
@@ -785,6 +788,7 @@ https://qwqbig.github.io/
 
   #neko-ui-layer {
     position: absolute;
+     
     bottom: 120px;
     left: 20px;
     pointer-events: auto;
@@ -797,7 +801,6 @@ https://qwqbig.github.io/
     width: 56px;
     height: 56px;
     border-radius: 50%;
-     
     background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
     box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
     border: 2px solid rgba(255,255,255,0.8);
@@ -833,12 +836,10 @@ https://qwqbig.github.io/
 
   .neko-info {
     padding: 8px 16px;
-     
     background: var(--neko-glass-bg);
     border: 1px solid var(--neko-glass-border);
     color: var(--neko-text);
     box-shadow: var(--neko-shadow);
-    
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
@@ -887,7 +888,6 @@ https://qwqbig.github.io/
 
 const CONFIG = {
   musicTitle: "雯华妲歌名",
-  
   
   gravity: 0.038,
   airResistance: 0.998,
@@ -1137,12 +1137,10 @@ class KawaiiCat {
     if (this.type === 2) colors = CONFIG.colors.orangeCat;
     if (this.type === 3) colors = CONFIG.colors.greyCat;
     
-    
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = colors.shadow;
     ctx.beginPath(); ctx.arc(0, 8, this.radius - 2, 0.2 * Math.PI, 0.8 * Math.PI); ctx.fill();
-    
     
     ctx.fillStyle = colors.base;
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
@@ -1151,7 +1149,6 @@ class KawaiiCat {
     ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
     ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
 
-    
     if (this.type === 1) {
       ctx.fillStyle = colors.pattern1;
       ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
@@ -1166,7 +1163,6 @@ class KawaiiCat {
        ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
     }
 
-    
     ctx.strokeStyle = '#3e3e3e';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
@@ -1204,7 +1200,6 @@ class KawaiiCat {
 class NekoEngine {
   constructor() {
     this.root = document.getElementById('neko-engine-root');
-    
     document.body.appendChild(this.root);
 
     this.canvas = document.getElementById('neko-canvas');
