@@ -95,7 +95,7 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     color: transparent; 
     
     /* 5. 设置动画：5秒流光，线性匀速，无限循环 */
-    animation: rainbow-flow 5s linear infinite;
+    animation: rainbow-flow 3s linear infinite;
     
     /* 6. 基础字体设置（保持图案不乱） */
     font-family: 'MS PGothic', 'SimSun', monospace; 
