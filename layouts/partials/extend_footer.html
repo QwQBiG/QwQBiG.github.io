@@ -182,7 +182,7 @@ const CONFIG = {
   
   // 【改动 1】物理参数分流
   // 移动端重力翻倍(0.076)，PC端保持优雅(0.038)
-  gravity: isMobile ? 0.076 : 0.038,
+  gravity: isMobile ? 0.076 : 0.04,
   airResistance: 0.998,
   bounceDamping: 0.6,
   softBodyStiffness: 0.08,
@@ -197,7 +197,7 @@ const CONFIG = {
   // 【改动 2】BPM设置
   // PC端 100 (如你所愿)
   // 移动端 80 (防止下落太快屏幕上堆积太多对象导致卡顿)
-  bpm: isMobile ? 80 : 100,
+  bpm: isMobile ? 80 : 110,
   
   keyHeights: { white: 100, black: 65 },
   
