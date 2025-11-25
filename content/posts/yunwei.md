@@ -5,7 +5,7 @@ tags: ["运维","k8s"]
 categories: ["运维"]
 ---
 
-# Kubernetes 第一周精细化学习笔记
+# Kubernetes 学习笔记
 
 ## 核心思想篇：两大基石
 
@@ -175,24 +175,24 @@ spec:
 
 ### 2. 状态检查“三板斧”
 
-1.  **`kubectl get` **: 快速查看资源列表和状态。
+1.  -   `kubectl get` : 快速查看资源列表和状态。
     -   `kubectl get pods`: 查看当前命名空间的 Pod。
     -   `kubectl get pods -n <命名空间>`: 查看指定命名空间的 Pod。
     -   `kubectl get pods -A`: 查看所有命名空间的 Pod。
     -   `kubectl get pods -o wide`: 查看更多信息（IP, 所在节点）。
 
-2.  **`kubectl describe` **: 查看资源的详细信息和事件日志。
+2.  -   `kubectl describe` : 查看资源的详细信息和事件日志。
     -   `kubectl describe pod <pod名>`
     > **排错关键**：永远第一时间查看最下方的 `Events` 部分，它记录了 Pod 创建过程中的所有成功和失败信息。
 
-3.  **`kubectl logs` : 查看容器内部的标准输出日志。
+3.  -   `kubectl logs` : 查看容器内部的标准输出日志。
     -   `kubectl logs <pod名>`
     -   `kubectl logs <pod名> -c <容器名>`: 查看多容器 Pod 中特定容器的日志。
     -   `kubectl logs <pod名> --previous`: 查看上一次崩溃退出的容器的日志。
 
 ### 3. 交互命令
 
--   **`kubectl exec` **: 进入一个正在运行的容器内部。
+-   `kubectl exec` : 进入一个正在运行的容器内部。
     ```bash
     kubectl exec -it <pod名> -c <容器名> -- /bin/bash
     ```
@@ -228,7 +228,7 @@ spec:
     image: m.daocloud.io/docker.io/library/redis:7.0
 ```
 
-### 方案二：(极端网络环境下的杀手锏) 本地加载
+### 方案二：(极端网络环境) 本地加载
 
 当所有镜像源都无法从 Kind 节点内部访问时，采用“主机下载，加载进集群”的策略。
 
@@ -238,7 +238,7 @@ spec:
     docker pull m.daocloud.io/docker.io/library/redis:7.0
     ```
 
-2.  **为镜像打上官方标签 (关键步骤！)**
+2.  **为镜像打上官方标签 (关键)**
     > K8s Pod 的 YAML 里使用的是官方短名称，所以必须打这个标签。
 
     ```bash
