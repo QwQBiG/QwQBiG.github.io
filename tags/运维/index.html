@@ -554,7 +554,7 @@ https://qwqbig.github.io/
 本来我都想开始把原来做的题用cpp重写的，像是把这个世界用Rust重写一遍似的…(话说蟹教有干翻C&#43;&#43;的未来吗，不清楚)。
 写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh
 欧克，完事了，bye~
-组会报告 2 总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
+组会报告 2 总结：本周主要搞了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
 主要是 K8s 本地环境搭建与 Pod 编排
 1. 可恶的网：Kind &#43; 国内源
 由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。

@@ -21,7 +21,7 @@
 &lt;p&gt;比如今天，2025.11.23开始使用CLion来做Qt的程序。
 而且，给网站上搞了一个昼夜切换的无敌按键（hhhh）。
 还有猫猫砸钢琴音乐播放器！！！
-和闪光miku&lt;/p&gt;</description>
+和闪光miku！&lt;/p&gt;</description>
     </item>
     <item>
       <title>我の组会</title>
@@ -52,7 +52,7 @@
 &lt;p&gt;欧克，完事了，bye~&lt;/p&gt;
 &lt;h2 id=&#34;组会报告-2&#34;&gt;组会报告 2&lt;/h2&gt;
 &lt;blockquote&gt;
-&lt;p&gt;总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。&lt;/p&gt;
+&lt;p&gt;总结：本周主要搞了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;主要是 K8s 本地环境搭建与 Pod 编排&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;&lt;/p&gt;
