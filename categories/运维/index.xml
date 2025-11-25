@@ -24,7 +24,7 @@
 &lt;li&gt;&lt;strong&gt;扩缩容&lt;/strong&gt;：如何根据负载自动增加或减少容器数量？&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Kubernetes (K8s) 就是一个&lt;strong&gt;容器编排平台&lt;/strong&gt;，它以标准化的方式完美地解决了以上所有问题。&lt;/p&gt;
-&lt;h3 id=&#34;2-命令式-vs-声明式-核心思想转变&#34;&gt;2. 命令式 vs. 声明式 (核心思想转变)&lt;/h3&gt;
+&lt;h3 id=&#34;2-命令式-vs-声明式-转变&#34;&gt;2. 命令式 vs. 声明式 (转变)&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;命令式 (Imperative)&lt;/strong&gt;：你一步步告诉 K8s &lt;strong&gt;“做什么”&lt;/strong&gt; (&lt;code&gt;kubectl create&lt;/code&gt;, &lt;code&gt;kubectl scale&lt;/code&gt;)。这就像手动驾驶，直观但难以追踪和重复。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;声明式 (Declarative)&lt;/strong&gt;：你向 K8s 提交一个 YAML 文件，告诉它你**“想要什么状态”**。这就像设定导航目的地，K8s 会自己想办法开车到达，并且如果偏离了航线（比如有 Pod 挂了），它会自动修正。&lt;strong&gt;这是 K8s 的精髓，也是现代化的管理方式。&lt;/strong&gt;&lt;/li&gt;
