@@ -678,11 +678,8 @@ C已完。C&#43;&#43;已学完STL容器和算法（和一些好玩的特性）�
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
-    
     transform: scale(0.7); 
     transform-origin: 0% 100%;
-
-     
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -804,7 +801,6 @@ C已完。C&#43;&#43;已学完STL容器和算法（和一些好玩的特性）�
 
 
 
-
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
 const CONFIG = {
@@ -812,9 +808,12 @@ const CONFIG = {
   pianoWidth: 420, 
   
   
-  gravity: isMobile ? 0.3 : 0.138,
-  airResistance: 0.998,
-  bounceDamping: 0.54,
+  
+  gravity: isMobile ? 0.15 : 0.07, 
+  airResistance: 0.995,
+  
+  
+  bounceDamping: 0.7, 
   softBodyStiffness: 0.08,
   
   colors: {
@@ -824,19 +823,14 @@ const CONFIG = {
     calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
   },
   
-  
-  
-  
   bpm: isMobile ? 80 : 105,
-  
   keyHeights: { white: 100, black: 65 },
   
   poolSize: {
-    cats: isMobile ? 10 : 20,      
+    cats: isMobile ? 10 : 20,
     particles: isMobile ? 20 : 60 
   }
 };
-
 
 const targetFPS = isMobile ? 30 : 60;
 const frameInterval = 1000 / targetFPS;
@@ -898,7 +892,7 @@ class NoteParticle {
     this.scale = 0;
     this.targetScale = Utils.random(0.6, 1.0);
     this.life = 1.0;
-    this.decay = isMobile ? 0.05 : 0.02; 
+    this.decay = isMobile ? 0.05 : 0.02;
     this.type = Math.random() > 0.5 ? 'single' : 'double';
     this.color = `hsl(${Utils.random(200, 340)}, 80%, 65%)`;
     this.active = true;
@@ -980,7 +974,10 @@ class PianoKey {
     this.isBlack = isBlack; this.pressOffset = 0; this.targetOffset = 0;
   }
   update() {
-    this.pressOffset += (this.targetOffset - this.pressOffset) * (isMobile ? 0.3 : 0.1); 
+    
+    
+    const speed = isMobile ? 0.6 : 0.3; 
+    this.pressOffset += (this.targetOffset - this.pressOffset) * speed;
     if (Math.abs(this.targetOffset - this.pressOffset) < 0.5 && this.targetOffset > 0) this.targetOffset = 0;
   }
   hit() { this.targetOffset = 20; }
@@ -1053,7 +1050,12 @@ class KawaiiCat {
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
         targetKey.hit(); 
-        this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 5.0 : 2.5); 
+        
+        
+        
+        
+        this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 12.0 : 7.0); 
+        
         this.vx = Utils.random(-1.2, 1.2); 
         this.rotVelocity = Utils.random(-0.03, 0.03);
         this.scaleX = 1.4; this.scaleY = 0.6;
@@ -1251,7 +1253,6 @@ class NekoEngine {
   }
   
   resize() {
-    
     const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
     this.width = 700; 
     this.height = this.root.offsetHeight; 
@@ -1280,7 +1281,6 @@ class NekoEngine {
   
   loop(timestamp) {
     requestAnimationFrame((t) => this.loop(t));
-    
     const elapsed = timestamp - this.lastTime;
     if (elapsed < frameInterval) return;
     this.lastTime = timestamp - (elapsed % frameInterval);
