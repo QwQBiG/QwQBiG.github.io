@@ -842,7 +842,7 @@ const CONFIG = {
   pianoWidth: 420, 
   
   
-  gravity: isMobile ? 0.3 : 0.158,
+  gravity: isMobile ? 0.3 : 0.138,
   airResistance: 0.998,
   bounceDamping: 0.54,
   softBodyStiffness: 0.08,
@@ -857,7 +857,7 @@ const CONFIG = {
   
   
   
-  bpm: isMobile ? 80 : 100,
+  bpm: isMobile ? 80 : 105,
   
   keyHeights: { white: 100, black: 65 },
   
@@ -1016,7 +1016,7 @@ class PianoKey {
   hit() { this.targetOffset = 20; }
   draw(ctx, baseY) {
     const drawX = this.x; const drawY = baseY - this.h + this.pressOffset;
-    if (!isMobile) { 
+    if (!isMobile) {
         ctx.shadowColor = 'rgba(0,0,0,0.1)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
     }
     const grad = ctx.createLinearGradient(drawX, drawY, drawX, drawY + this.h);
