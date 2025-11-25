@@ -51,13 +51,14 @@ https://qwqbig.github.io/
 
 ## 组会报告 2
 
->总结：本周攻克了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
+>总结：本周主要搞了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
 
 主要是 K8s 本地环境搭建与 Pod 编排
 
 **1. 可恶的网：Kind + 国内源**
 
 由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。
+>（Kind 把 Docker 容器当成 K8s 的节点（Node）来跑）
 
 **2. 核心概念：从命令式到声明式**
 
