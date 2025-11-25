@@ -1,7 +1,8 @@
 <!-- 
   =======================================================================
   PROJECT: NEKO-FALL-ENGINE
-  VERSION: 4.9 (Mobile Turbo & Resolution Downscaling)
+  VERSION: 5.0 (Snappy Keys & High Bounce Physics)
+  STATUS: Final Polish
   =======================================================================
 -->
 
@@ -43,11 +44,8 @@
     opacity: 0;
     transition: opacity 1s ease;
     user-select: none;
-    
     transform: scale(0.7); 
     transform-origin: 0% 100%;
-
-    /* 硬件加速 */
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -167,23 +165,23 @@
 
 <script>
 /**
- * 🐱 NEKO ENGINE v4.9
- * Strategy:
- * - PC: High Res, BPM 100, Slow Gravity (0.038)
- * - Mobile: Low Res (0.5x), BPM 80, Fast Gravity (0.076), 30FPS lock
+ * 🐱 NEKO ENGINE v5.0
+ * Fix: Snappy keys & High bounce physics
  */
 
-// 检测移动端
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
 const CONFIG = {
   musicTitle: "雯华妲歌名",
   pianoWidth: 420, 
   
-  // 【改动 1】物理参数分流
-  gravity: isMobile ? 0.3 : 0.138,
-  airResistance: 0.998,
-  bounceDamping: 0.54,
+  // 【改动 1】物理调优：降低重力，但增加弹跳力
+  // 之前重力太大把猫吸住了，现在调小重力，让它能飞起来
+  gravity: isMobile ? 0.15 : 0.07, 
+  airResistance: 0.995,
+  
+  // 弹力系数：0.7 表示保留 70% 的速度
+  bounceDamping: 0.7, 
   softBodyStiffness: 0.08,
   
   colors: {
@@ -193,20 +191,15 @@ const CONFIG = {
     calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
   },
   
-  // 【改动 2】BPM设置
-  // PC端 100 (如你所愿)
-  // 移动端 80 (防止下落太快屏幕上堆积太多对象导致卡顿)
   bpm: isMobile ? 80 : 105,
-  
   keyHeights: { white: 100, black: 65 },
   
   poolSize: {
-    cats: isMobile ? 10 : 20,      // 移动端减少同时存在的猫
+    cats: isMobile ? 10 : 20,
     particles: isMobile ? 20 : 60 
   }
 };
 
-// 移动端锁定 30fps 节能，PC端 60fps 丝滑
 const targetFPS = isMobile ? 30 : 60;
 const frameInterval = 1000 / targetFPS;
 
@@ -267,7 +260,7 @@ class NoteParticle {
     this.scale = 0;
     this.targetScale = Utils.random(0.6, 1.0);
     this.life = 1.0;
-    this.decay = isMobile ? 0.05 : 0.02; // 移动端消失得更快
+    this.decay = isMobile ? 0.05 : 0.02;
     this.type = Math.random() > 0.5 ? 'single' : 'double';
     this.color = `hsl(${Utils.random(200, 340)}, 80%, 65%)`;
     this.active = true;
@@ -314,7 +307,7 @@ class Particle {
     this.vx = Utils.random(-1, 1);
     this.vy = Utils.random(-1.5, -0.2);
     this.life = 1.0;
-    this.decay = isMobile ? 0.05 : 0.015; // 移动端消失快
+    this.decay = isMobile ? 0.05 : 0.015; 
     this.size = Utils.random(3, 5);
     this.color = `hsl(${Utils.random(30, 60)}, 100%, 75%)`;
     this.rotation = Math.random() * Math.PI;
@@ -349,7 +342,10 @@ class PianoKey {
     this.isBlack = isBlack; this.pressOffset = 0; this.targetOffset = 0;
   }
   update() {
-    this.pressOffset += (this.targetOffset - this.pressOffset) * (isMobile ? 0.3 : 0.1); // 移动端回弹更快
+    // 【改动 2】大幅提高琴键回弹速度
+    // 0.3/0.6 意味着每帧恢复 30%-60% 的位移，非常干脆
+    const speed = isMobile ? 0.6 : 0.3; 
+    this.pressOffset += (this.targetOffset - this.pressOffset) * speed;
     if (Math.abs(this.targetOffset - this.pressOffset) < 0.5 && this.targetOffset > 0) this.targetOffset = 0;
   }
   hit() { this.targetOffset = 20; }
@@ -422,7 +418,12 @@ class KawaiiCat {
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
         targetKey.hit(); 
-        this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 5.0 : 2.5); // 移动端反弹力度加大
+        
+        // 【改动 3】爆发性弹跳
+        // 基础弹力大幅提升 (Mobile: 12, PC: 7)
+        // 这样即使重力小，也能弹得很高很快
+        this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 12.0 : 7.0); 
+        
         this.vx = Utils.random(-1.2, 1.2); 
         this.rotVelocity = Utils.random(-0.03, 0.03);
         this.scaleX = 1.4; this.scaleY = 0.6;
@@ -620,7 +621,6 @@ class NekoEngine {
   }
   
   resize() {
-    // 【改动 3】降低分辨率，这是解决卡顿的关键
     const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
     this.width = 700; 
     this.height = this.root.offsetHeight; 
@@ -649,7 +649,6 @@ class NekoEngine {
   
   loop(timestamp) {
     requestAnimationFrame((t) => this.loop(t));
-    // 【性能】锁帧逻辑
     const elapsed = timestamp - this.lastTime;
     if (elapsed < frameInterval) return;
     this.lastTime = timestamp - (elapsed % frameInterval);
