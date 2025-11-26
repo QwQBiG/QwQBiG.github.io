@@ -13,7 +13,7 @@
       <link>https://QwQBiG.github.io/posts/yunwei/</link>
       <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/posts/yunwei/</guid>
-      <description>&lt;h1 id=&#34;kubernetes-学习笔记&#34;&gt;Kubernetes 学习笔记&lt;/h1&gt;
+      <description>&lt;h1 id=&#34;kubernetes-学习笔记-1&#34;&gt;Kubernetes 学习笔记 1&lt;/h1&gt;
 &lt;h2 id=&#34;核心思想篇两大基石&#34;&gt;核心思想篇：两大基石&lt;/h2&gt;
 &lt;h3 id=&#34;1-为何选择-kubernetes&#34;&gt;1. 为何选择 Kubernetes？&lt;/h3&gt;
 &lt;p&gt;单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：&lt;/p&gt;
