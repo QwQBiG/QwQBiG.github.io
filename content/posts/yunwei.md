@@ -5,7 +5,7 @@ tags: ["运维","k8s"]
 categories: ["运维"]
 ---
 
-# Kubernetes 学习笔记
+# Kubernetes 学习笔记 1
 
 ## 核心思想篇：两大基石
 
@@ -252,3 +252,239 @@ spec:
     ```
 
 4.  **最后，使用包含官方短名称 (`image: redis:7.0`) 的 YAML 文件进行部署。** K8s 会直接使用节点上的本地镜像，不再进行网络拉取。
+
+---
+
+# Kubernetes 学习周报 2
+
+## 核心主题：从"裸砖"到"自动化建筑" - Pod 的高级管理
+
+从管理单个、脆弱的 Pod，过渡到使用 Deployment 和 Service 来部署、管理和暴露真正健壮、高可用的应用。
+
+## 第一部分：环境搭建与镜像管理（基础）
+
+### 1. 搭建本地 Kubernetes (Kind) 环境
+
+**目标：** 在本地快速搭建一个功能完整的 K8s 集群用于学习和实验。
+
+**工具：** Kind (Kubernetes in Docker)，它将 K8s 节点作为 Docker 容器运行，启动快，资源占用少。
+
+**关键步骤：**
+
+**安装 kind CLI：**
+
+```bash
+# 推荐：为 Go 语言设置国内代理，然后通过 go install 安装
+export GOPROXY=https://goproxy.cn,direct
+go install sigs.k8s.io/kind@v0.22.0
+sudo mv ~/go/bin/kind /usr/local/bin/
+```
+
+> **备注：** 这是解决国内网络环境下 kind 程序下载困难的最佳实践。GOPROXY 环境变量是关键。
+
+**编写 kind-config.yaml 配置文件：**
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  # 关键配置1: 端口映射，用于后续从主机访问 NodePort 服务
+  extraPortMappings:
+  - containerPort: 30007 # Kind 节点(容器)内部的端口
+    hostPort: 8080      # 映射到宿主机(VM或物理机)的端口
+    protocol: TCP
+# 关键配置2: 指定 K8s 核心组件的镜像仓库
+kubeadmConfigPatches:
+- |
+  apiVersion: kubeadm.k8s.io/v1beta3
+  kind: ClusterConfiguration
+  imageRepository: registry.aliyuncs.com/google_containers
+```
+
+**解释：**
+
+- `extraPortMappings`：提前规划端口，解决 NodePort 服务在复杂网络环境下（如VM、远程服务器）难以直接访问的问题。
+- `imageRepository`：将 K8s 核心组件的镜像源指向国内的阿里云，从根本上解决了因网络问题导致的集群创建失败。
+
+**创建集群：**
+
+```bash
+kind create cluster --config=kind-config.yaml
+```
+
+## 2. 镜像管理：一劳永逸的"镜像预加载"SOP
+
+**问题背景：** 在受限的网络环境中，K8s 节点（Kubelet）无法直接从 Docker Hub 等官方源拉取应用镜像，导致 Pod 状态卡在 ImagePullBackOff 或 ErrImagePull。
+
+**核心思想：** 既然 K8s 节点自己"出不去"，我们就在网络通畅的主机上把镜像准备好，然后强行"塞"给它。
+
+**标准操作流程 (SOP)：**
+
+**【拉取】** 在主机终端，从可靠的国内镜像源（如 m.daocloud.io）拉取镜像。
+```bash
+docker pull m.daocloud.io/docker.io/library/nginx:1.22
+```
+
+**【标记】** 为拉取下来的镜像打上官方的"短名称"标签。这是为了让镜像名与 YAML 文件中的 image 字段完全匹配。
+```bash
+docker tag m.daocloud.io/docker.io/library/nginx:1.22 nginx:1.22
+```
+
+**【加载】** 使用 kind load 命令，将主机上的镜像复制到 Kind 集群的内部镜像仓库中。
+
+```bash
+kind load docker-image nginx:1.22
+```
+
+> **备注：** 养成习惯，在部署任何包含新镜像的应用前，都先执行此"三部曲"。这能 100% 避免因镜像拉取失败导致的部署问题，极大提高学习和实验效率。
+
+## 第二部分：核心控制器 - Deployment
+
+### 1. 为何需要 Deployment：告别"裸Pod"
+
+**"裸Pod"的脆弱性：** 直接创建的 Pod，在被删除、所在节点宕机或自身进程崩溃后，会永久消失，导致服务中断。
+
+**Deployment 的价值：**
+
+- **高可用性 (自愈能力):** Deployment 通过管理 ReplicaSet，确保始终有预定数量的 Pod 副本在运行。当有 Pod 意外消失时，它会自动创建一个新的来替代。
+- **可伸缩性:** 可以轻松地增加或减少 Pod 的副本数量，以应对流量变化。
+- **声明式更新:** 提供强大的滚动更新和回滚机制，实现应用的平滑发布和快速修复。
+
+### 2. 编写 Deployment YAML
+
+```yaml
+apiVersion: apps/v1 # Deployment 属于 apps API 组
+kind: Deployment
+metadata:
+  name: my-app # Deployment 的名字
+spec:
+  replicas: 3   # 期望状态：需要 3 个 Pod 副本
+
+  # selector: 定义了 Deployment 如何"识别"它应该管理的孩子(Pod)
+  selector:
+    matchLabels:
+      app: my-app # 匹配所有带有 "app: my-app" 标签的 Pod
+
+  # template: Pod 的"出生模板"
+  template:
+    metadata:
+      # 关键：模板中的 Pod 必须带有能与 selector 匹配的标签
+      labels:
+        app: my-app
+    spec:
+      # 这里是标准的 Pod.spec 定义
+      containers:
+      - name: nginx
+        image: nginx:1.22
+        ports:
+        - containerPort: 80
+```
+
+> **核心关系解释：** Deployment 通过 spec.selector 来找到并管理 Pods。ReplicaSet (由 Deployment 自动创建) 则根据 spec.template 来创建新的 Pod。template.metadata.labels 和 selector.matchLabels 之间的匹配是它们能协同工作的关键。
+
+### 3. 核心运维操作
+
+**部署与查看：**
+```bash
+kubectl apply -f <deployment.yaml>
+kubectl get deployment
+kubectl get replicaset # 查看 Deployment 创建的 rs
+kubectl get pods       # 查看 rs 创建的 pods
+```
+
+**伸缩 (Scaling)：**
+
+- **命令式 (快速):** `kubectl scale deployment my-app --replicas=5`
+- **声明式 (推荐):** 修改 YAML 文件中的 `replicas` 字段，然后重新 `kubectl apply`
+
+**滚动更新 (Rolling Update)：**
+
+1. 修改 YAML 文件中的 `template.spec.containers[0].image` 字段为新版本
+2. 执行 `kubectl apply -f <deployment.yaml>`
+3. 监控更新过程：
+```bash
+# 实时观察 Pod 的增删交替过程
+kubectl get pods -w
+# 查看官方的滚动更新状态报告
+kubectl rollout status deployment/my-app
+```
+
+**回滚 (Rollback)：**
+
+- 查看历史版本：`kubectl rollout history deployment/my-app`
+- 一键回滚到上一个版本：`kubectl rollout undo deployment/my-app`
+- 回滚到指定版本：`kubectl rollout undo deployment/my-app --to-revision=<NUMBER>`
+
+## 第三部分：服务发现 - Service
+
+### 1. 为何需要 Service：解决 Pod 的"动态"问题
+
+**问题背景：** Deployment 管理的 Pod IP 地址是动态的、不固定的，且 Pod 会随时被销毁和重建。应用之间无法直接通过 Pod IP 进行可靠通信。
+
+**Service 的价值：** 为一组功能相同的 Pod 提供一个稳定、统一的访问入口。它有固定的虚拟 IP (ClusterIP) 和 DNS 名称，并能自动对后端的健康 Pod 进行负载均衡。
+
+### 2. Service 类型与实践
+
+#### ClusterIP (默认类型 - 对内交通)
+
+**用途：** 用于集群内部服务之间的通信，是构建微服务架构的基础。
+
+**YAML 示例：**
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-svc # Service 的名字，也是内部的 DNS 名
+spec:
+  type: ClusterIP # 可省略
+  # selector: Service 如何找到它要代理的 Pod
+  selector:
+    app: my-app # 匹配所有带 "app: my-app" 标签的 Pod
+  ports:
+  - port: 80         # Service 自身监听的端口
+    targetPort: 80   # 转发到后端 Pod 容器的目标端口
+```
+
+**测试方法：** 启动一个临时的调试 Pod，通过 Service 的 DNS 名称访问。
+
+```bash
+# 启动临时 Pod 并进入 shell
+kubectl run tester --rm -it --image=busybox:1.35 -- /bin/sh
+# 在临时 Pod 内部访问
+/ # wget -O- http://my-app-svc
+```
+
+#### NodePort (对外暴露 - 开发/测试用)
+
+**用途：** 在 ClusterIP 的基础上，在集群的每个节点上都暴露一个相同的静态端口（30000-32767），从而允许从集群外部访问。
+
+**YAML 示例 (在 ClusterIP 基础上修改)：**
+```yaml
+spec:
+  type: NodePort # 明确指定类型
+  selector:
+    app: my-app
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30007 # 可选，手动指定一个端口方便访问
+```
+
+**测试方法：**
+1. 获取节点的 IP 地址 (对于 Kind in VM，是 VM 的 IP)
+2. 在本地浏览器中访问 `http://<Node-IP>:<NodePort>`
+
+#### kubectl port-forward (终极调试工具)
+
+**用途：** 当 NodePort 因复杂的网络环境（防火墙、云安全组）无法访问时，这是最可靠的本地调试方法。
+
+**原理：** 在本地机器和指定的 Pod/Service 之间建立一个安全的流量转发隧道。
+
+**使用方法：**
+```bash
+# 在一个终端中运行，它会阻塞
+kubectl port-forward svc/my-app-svc 8888:80
+# 在另一个终端中，访问本地的 8888 端口
+curl http://localhost:8888
+```
