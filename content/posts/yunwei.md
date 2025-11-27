@@ -488,3 +488,251 @@ kubectl port-forward svc/my-app-svc 8888:80
 # 在另一个终端中，访问本地的 8888 端口
 curl http://localhost:8888
 ```
+
+---
+
+# Kubernetes 学习周报 3
+
+## 核心思想：十二因子应用 (The Twelve-Factor App)
+
+本周所有学习内容的理论基石，源于云原生开发的最佳实践，特别是第三条：**在环境中存储配置**。
+
+**目标：** 将配置 (Config) 与代码/镜像彻底分离。
+
+**优势：**
+- **高效：** 修改配置无需重新构建镜像。
+- **灵活：** 同一个镜像可以无缝部署到不同环境（开发、测试、生产）。
+- **安全：** 敏感信息（如密码）不会被硬编码到镜像中。
+
+**Kubernetes 解决方案：**
+- 非敏感配置：**ConfigMap**
+- 敏感配置：**Secret**
+- 运行时数据/文件：**Volume**
+
+## 一、ConfigMap：非敏感配置管理
+
+ConfigMap 以键值对（key-value）的形式存储非敏感的配置数据。
+
+### 1. 创建 ConfigMap
+
+**方式A：从字面值创建** (适用于少量、简单的键值对)
+```bash
+# 格式: kubectl create configmap <NAME> --from-literal=<KEY1>=<VALUE1> ...
+kubectl create configmap my-app-config --from-literal=APP_COLOR=blue --from-literal=APP_GREETING="Hello World"
+```
+
+**方式B：从文件创建** (适用于已有的配置文件)
+```bash
+# 1. 先创建本地文件
+echo "APP_MODE=production" > app.properties
+
+# 2. 从文件创建ConfigMap (文件名将作为key，文件内容作为value)
+kubectl create configmap my-app-config-from-file --from-file=app.properties
+```
+
+## 2. 使用 ConfigMap
+
+### 方式一：作为环境变量注入 Pod
+
+这是最符合"十二因子"理念的方式。Kubelet 在启动容器前，会将指定的 ConfigMap 值设置为容器的环境变量。
+
+**pod-with-cm-env.yaml 示例：**
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-cm-env
+spec:
+  containers:
+  - name: test-container
+    image: busybox:1.35
+    # 严谨的 echo 命令，用 \"...\" 包围变量以处理空格
+    command: [ "/bin/sh", "-c", "echo The app color is $APP_COLOR and the greeting is \"$APP_GREETING\"; sleep 3600" ]
+    env:
+    - name: APP_COLOR      # 在容器中定义的环境变量名
+      valueFrom:
+        configMapKeyRef:   # 引用一个ConfigMap的key
+          name: my-app-config # ConfigMap的名字
+          key: APP_COLOR    # ConfigMap中的key
+    - name: APP_GREETING
+      valueFrom:
+        configMapKeyRef:
+          name: my-app-config
+          key: APP_GREETING
+```
+
+**部署与验证：**
+```bash
+# 部署前，必须先创建依赖的ConfigMap
+kubectl create configmap my-app-config --from-literal=APP_COLOR=blue --from-literal=APP_GREETING="Hello World"
+# 部署Pod
+kubectl apply -f pod-with-cm-env.yaml
+# 查看日志验证
+kubectl logs pod-cm-env
+```
+### 方式二：作为文件挂载到 Pod
+
+适用于需要读取传统配置文件的应用。
+
+**pod-with-cm-volume.yaml 示例：**
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-cm-volume
+spec:
+  containers:
+  - name: test-container
+    image: busybox:1.35
+    command: [ "/bin/sh", "-c", "cat /etc/config/app.properties; sleep 3600" ]
+    # 步骤2: 把下面定义的Volume挂载到容器的指定路径
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+  # 步骤1: 在Pod层面定义一个Volume，数据来源是ConfigMap
+  volumes:
+  - name: config-volume
+    configMap:
+      name: my-app-config-from-file
+```
+
+## 二、Secret：敏感信息管理
+
+Secret 专用于存储密码、API密钥等敏感数据。其使用方式与 ConfigMap 几乎完全一样，但有关键区别。
+
+**核心区别：**
+- **用途：** 专用于敏感数据。
+- **编码：** 值默认进行 Base64 编码（注意：不是加密！）。
+- **安全：** K8s 会对其提供更强的安全机制（如静态加密、访问控制、内存存储等）。
+
+### 1. 创建 Secret
+```bash
+# 格式: kubectl create secret generic <NAME> --from-literal=<KEY1>=<VALUE1> ...
+kubectl create secret generic db-credentials --from-literal=username=admin --from-literal=password='S3cr3tP@ssw0rd!'
+```
+
+## 2. 使用 Secret
+
+与 ConfigMap 类似，仅需将 `configMapKeyRef` 替换为 `secretKeyRef`，或将 `configMap:` 替换为 `secret:`。
+
+**pod-with-secret.yaml (环境变量注入) 示例：**
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-secret
+spec:
+  containers:
+  - name: test-container
+    image: busybox:1.35
+    command: [ "/bin/sh", "-c", "echo User is $DB_USER and Password is \"$DB_PASS\"; sleep 3600" ]
+    env:
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef: # <-- 关键区别
+          name: db-credentials
+          key: username
+    - name: DB_PASS
+      valueFrom:
+        secretKeyRef: # <-- 关键区别
+          name: db-credentials
+          key: password
+```
+
+**部署与验证：**
+```bash
+# 部署前，必须先创建依赖的Secret
+kubectl create secret generic db-credentials --from-literal=username=admin --from-literal=password='S3cr3tP@ssw0rd!'
+# 部署Pod
+kubectl apply -f pod-with-secret.yaml
+# 查看日志验证 (仅用于学习，生产环境严禁打印密码)
+kubectl logs pod-with-secret
+```
+
+## 三、Volume：Pod 的存储卷
+
+Volume 是连接外部存储和 Pod 的桥梁，其生命周期与 Pod 绑定（Pod 在，Volume 在）。
+
+### 1. emptyDir：Pod 内的临时共享存储
+
+**特性：**
+- Pod 创建时，K8s 在节点上为其分配一个空目录。
+- Pod 删除时，该目录及其内容被永久删除。
+- 容器崩溃重启，数据不丢失。
+
+**核心用途：** 同一个 Pod 内多个容器之间共享文件（Sidecar 模式）。
+
+**Sidecar 示例 pod-with-emptydir.yaml:**
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-server-pod
+spec:
+  volumes:
+  - name: shared-html
+    emptyDir: {} # 定义一个emptyDir类型的Volume
+  containers:
+  - name: web-server
+    image: nginx
+    volumeMounts: # 挂载Volume
+    - name: shared-html
+      mountPath: /usr/share/nginx/html
+  - name: content-generator
+    image: busybox
+    command: ["/bin/sh", "-c", "while true; do echo \"Generated at $(date)\" > /html/index.html; sleep 5; done"]
+    volumeMounts: # 挂载同一个Volume
+    - name: shared-html
+      mountPath: /html
+```
+
+**验证方法 (端口转发):**
+```bash
+# 在一个终端运行
+kubectl port-forward pod/web-server-pod 8080:80
+# 在另一个终端验证
+curl http://localhost:8080
+```
+
+## 2. hostPath：与节点主机的存储交互
+
+**特性：**
+- 将 Node 主机上的文件或目录直接挂载到 Pod 中。
+- 数据不会随 Pod 删除而消失。
+- **重大风险：** 破坏 Pod 可移植性，带来严重安全风险。应极力避免在常规应用中使用。
+
+**核心用途：** 日志收集、监控代理等需要访问节点底层资源的系统级应用。
+
+**pod-with-hostpath.yaml 示例：**
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-hostpath
+spec:
+  containers:
+  - name: test-container
+    image: busybox:1.35
+    command: [ "/bin/sh", "-c", "cat /host-data/host-file.txt; sleep 3600" ]
+    volumeMounts:
+    - name: host-storage
+      mountPath: /host-data
+  volumes:
+  - name: host-storage
+    hostPath:
+      path: /mnt/data # 指定要挂载的主机路径
+      type: Directory
+```
+
+**验证方法：**
+```bash
+# 1. 进入Kind节点容器，创建文件
+docker exec -it kind-control-plane /bin/bash
+# root@kind-control-plane:/# mkdir /mnt/data
+# root@kind-control-plane:/# echo "Hello from Host" > /mnt/data/host-file.txt
+# root@kind-control-plane:/# exit
+# 2. 部署Pod
+kubectl apply -f pod-with-hostpath.yaml
+# 3. 查看日志
+kubectl logs pod-hostpath
+```
