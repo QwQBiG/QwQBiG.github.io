@@ -703,6 +703,99 @@
 <article class="post-entry series-overview-card-wrapper">
     <header class="entry-header">
         <h2 class="entry-hint-parent entry-title">
+            <a href="https://QwQBiG.github.io/series/yunwei/">运维</a>
+        </h2>
+    </header>
+    <div class="entry-content">
+        <p>文章列表 第一篇：K8s学习笔记
+简介：就是K8s
+第二篇：我の组会
+简介：每周二下午三点三楼组会（简称233）
+第三篇：远程失灵了
+简介：突发情况
+...</p>
+    </div>
+    <footer class="entry-footer">
+        <span title='2025-329-11 12:00:00 &#43;0800 &#43;0800'>November 25, 2025</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;
+        <ul class="post-tags"><li><a href="https://QwQBiG.github.io/tags/%E8%BF%90%E7%BB%B4/">运维</a></li><li><a href="https://QwQBiG.github.io/tags/docker/">Docker</a></li><li><a href="https://QwQBiG.github.io/tags/linux/">Linux</a></li><li><a href="https://QwQBiG.github.io/tags/k8s/">K8s</a></li></ul></footer>
+    <a class="entry-link" aria-label="post link to 运维" href="https://QwQBiG.github.io/series/yunwei/"></a>
+</article><style>
+     
+    .series-overview-card-wrapper {
+         
+        background: #fff; 
+         
+        border: 1px solid #e9ecef; 
+        
+         
+        border-left-width: 5px;
+        border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
+
+        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        padding: 25px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;  
+    }
+
+     
+    .series-overview-card-wrapper:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
+    }
+
+     
+    .series-overview-card-wrapper .entry-title a {
+        color: #8a2be2 !important; 
+        transition: color 0.3s ease;
+    }
+
+     
+    .series-overview-card-wrapper .entry-title a::before {
+        content: "🎀 合集 · ";
+        color: #8a2be2;
+    }
+
+     
+    
+     
+    body.dark .series-overview-card-wrapper {
+         
+        background: #2e2e33; 
+         
+        border-color: #444;
+         
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+     
+    body.dark .series-overview-card-wrapper:hover {
+         
+        background: #36363d;
+         
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+     
+    body.dark .series-overview-card-wrapper .entry-title a {
+        color: #d0a9f5 !important; 
+    }
+
+     
+    body.dark .series-overview-card-wrapper .entry-title a::before {
+        color: #d0a9f5;
+    }
+    
+     
+    body.dark .series-overview-card-wrapper .entry-content {
+        color: #b0b0b0;  
+    }
+</style>
+
+
+<article class="post-entry series-overview-card-wrapper">
+    <header class="entry-header">
+        <h2 class="entry-hint-parent entry-title">
             <a href="https://QwQBiG.github.io/series/learning-cpp/">C&#43;&#43; STL</a>
         </h2>
     </header>
@@ -718,6 +811,18 @@
         <ul class="post-tags"><li><a href="https://QwQBiG.github.io/tags/c&#43;&#43;/">C&#43;&#43;</a></li><li><a href="https://QwQBiG.github.io/tags/stl/">STL</a></li><li><a href="https://QwQBiG.github.io/tags/cpp/">cpp</a></li><li><a href="https://QwQBiG.github.io/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></li><li><a href="https://QwQBiG.github.io/tags/c%E8%89%B9/">C艹</a></li><li><a href="https://QwQBiG.github.io/tags/%E7%AE%97%E6%B3%95/">算法</a></li></ul></footer>
     <a class="entry-link" aria-label="post link to C&#43;&#43; STL" href="https://QwQBiG.github.io/series/learning-cpp/"></a>
 </article><div class="posts-list"><article class="post-entry"> <header class="entry-header">
+                        <h2>远程失灵了</h2>
+                    </header><div class="entry-content">
+                        <p>Docker 部署 FRP 客户端终极避坑指南 适用于： Linux (Ubuntu/CentOS) &#43; Docker 环境，目标是穿透本地 SSH 或其他服务。
+核心结论 不要使用 Docker 默认的网络模式，直接使用 Host 模式 &#43; 强制指定 DNS。
+这将解决：容器内网不通、DNS 解析失败、路由器重启导致 IP 变动失效等所有常见问题。
+1. 部署命令 (黄金标准版) 直接复制替换参数，一步到位：
+1 2 3 4 5 6 7 8 9 10 11 sudo docker run -d \ --name frp-client \ --restart=always \ --network host \ --dns 223.5.5.5 \ --dns 8.8.8.8 \ vaalacat/frp-panel \ client -s &lt;你的服务端Key&gt; \ -i &lt;你的客户端ID&gt; \ --api-url &lt;面板API地址&gt; \ --rpc-url &lt;面板RPC地址&gt; 本地地址 (Local IP): 填 127.0.0.1
+...</p>
+                    </div><footer class="entry-footer"><span title='2025-11-29 10:00:00 +0800 +0800'>November 29, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+                    
+                    <a class="entry-link" aria-label="post link to 远程失灵了" href="https://QwQBiG.github.io/posts/yuancheng/"></a>
+                </article><article class="post-entry"> <header class="entry-header">
                         <h2>我の周报</h2>
                     </header><div class="entry-content">
                         <p>以下是2025.11.20第一次搞得周报 C已完。C&#43;&#43;已学完STL容器和算法（和一些好玩的特性）。 数据结构在学STL都涉及了，纯学数据结构的话停留在串。 运维相关内容多且杂，具体内容见组会报告。
@@ -743,7 +848,7 @@
                     
                     <a class="entry-link" aria-label="post link to STL 算法" href="https://QwQBiG.github.io/posts/stlalgorithm/"></a>
                 </article><article class="post-entry"> <header class="entry-header">
-                        <h2>运维</h2>
+                        <h2>K8s学习笔记</h2>
                     </header><div class="entry-content">
                         <p>Kubernetes 学习笔记 1 核心思想篇：两大基石 1. 为何选择 Kubernetes？ 单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：
 故障恢复：一个容器挂了怎么办？ 服务发现：容器 B 如何找到容器 A 的 IP 地址？ 负载均衡：如何将流量平均分配给多个相同的容器？ 扩缩容：如何根据负载自动增加或减少容器数量？ Kubernetes (K8s) 就是一个容器编排平台，它以标准化的方式完美地解决了以上所有问题。
@@ -753,7 +858,7 @@
 ...</p>
                     </div><footer class="entry-footer"><span title='2025-11-18 12:00:00 +0800 +0800'>November 18, 2025</span>&nbsp;·&nbsp;<span>9 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
                     
-                    <a class="entry-link" aria-label="post link to 运维" href="https://QwQBiG.github.io/posts/yunwei/"></a>
+                    <a class="entry-link" aria-label="post link to K8s学习笔记" href="https://QwQBiG.github.io/posts/yunweistudy/"></a>
                 </article><article class="post-entry"> <header class="entry-header">
                         <h2>我の组会</h2>
                     </header><div class="entry-content">

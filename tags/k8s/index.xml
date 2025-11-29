@@ -6,13 +6,40 @@
     <description>Recent content in K8s on QwQBiG&#39;s Blog</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 18 Nov 2025 12:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 25 Nov 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>运维</title>
-      <link>https://QwQBiG.github.io/posts/yunwei/</link>
+      <link>https://QwQBiG.github.io/series/yunwei/</link>
+      <pubDate>Tue, 25 Nov 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/series/yunwei/</guid>
+      <description>&lt;h2 id=&#34;文章列表&#34;&gt;文章列表&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;../../posts/yunweiStudy/&#34;&gt;K8s学习笔记&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：就是K8s&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;../../posts/zuhui/&#34;&gt;我の组会&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：每周二下午三点三楼组会（简称233）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第三篇：&lt;a href=&#34;../..posts/yuancheng/&#34;&gt;远程失灵了&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：突发情况&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>K8s学习笔记</title>
+      <link>https://QwQBiG.github.io/posts/yunweistudy/</link>
       <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/yunwei/</guid>
+      <guid>https://QwQBiG.github.io/posts/yunweistudy/</guid>
       <description>&lt;h1 id=&#34;kubernetes-学习笔记-1&#34;&gt;Kubernetes 学习笔记 1&lt;/h1&gt;
 &lt;h2 id=&#34;核心思想篇两大基石&#34;&gt;核心思想篇：两大基石&lt;/h2&gt;
 &lt;h3 id=&#34;1-为何选择-kubernetes&#34;&gt;1. 为何选择 Kubernetes？&lt;/h3&gt;
