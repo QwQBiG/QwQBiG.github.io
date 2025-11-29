@@ -1,8 +1,9 @@
 ---
-title: "运维"
+title: "K8s学习笔记"
 date: 2025-11-18T12:00:00+08:00
 tags: ["运维","k8s"]
 categories: ["运维"]
+series: ["运维"]
 ---
 
 # Kubernetes 学习笔记 1
@@ -736,3 +737,12 @@ kubectl apply -f pod-with-hostpath.yaml
 # 3. 查看日志
 kubectl logs pod-hostpath
 ```
+
+---
+
+## 突发状况：远程失效了
+
+总结下来就是：Docker 跑 FRP，认准 `--network host` 和 `--dns`，内网 IP 填 `127.0.0.1`，永远不掉线。
+
+---
+
