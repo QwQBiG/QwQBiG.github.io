@@ -8,11 +8,11 @@ pin: true
 
 ## 文章列表
 
-*   **第一篇：[K8s学习笔记](../../posts/yunweiStudy/)**
+*   **第一篇：[K8s学习笔记](../../posts/yunweistudy/)**
     > 简介：就是K8s
 
 *   **第二篇：[我の组会](../../posts/zuhui/)**
     > 简介：每周二下午三点三楼组会（简称233）
 
-*   **第三篇：[远程失灵了](../..posts/yuancheng/)**
+*   **第三篇：[远程失灵了](../../posts/yuancheng/)**
     > 简介：突发情况
