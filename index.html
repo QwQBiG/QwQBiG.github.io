@@ -816,7 +816,7 @@
                         <p>Docker 部署 FRP 客户端终极避坑指南 适用于： Linux (Ubuntu/CentOS) &#43; Docker 环境，目标是穿透本地 SSH 或其他服务。
 核心结论 不要使用 Docker 默认的网络模式，直接使用 Host 模式 &#43; 强制指定 DNS。
 这将解决：容器内网不通、DNS 解析失败、路由器重启导致 IP 变动失效等所有常见问题。
-1. 部署命令 (黄金标准版) 直接复制替换参数，一步到位：
+1. 部署命令 (模版) 直接复制替换参数，一步到位：
 1 2 3 4 5 6 7 8 9 10 11 sudo docker run -d \ --name frp-client \ --restart=always \ --network host \ --dns 223.5.5.5 \ --dns 8.8.8.8 \ vaalacat/frp-panel \ client -s &lt;你的服务端Key&gt; \ -i &lt;你的客户端ID&gt; \ --api-url &lt;面板API地址&gt; \ --rpc-url &lt;面板RPC地址&gt; 本地地址 (Local IP): 填 127.0.0.1
 ...</p>
                     </div><footer class="entry-footer"><span title='2025-11-29 10:00:00 +0800 +0800'>November 29, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
