@@ -96,3 +96,7 @@ Debug 流程：建立了标准排错链：若是资源调度问题（如 Crash/P
 好玩的：我在测试自愈时，删除完了立马 kubectl get pods -w 都看不到旧的 Pod 的 Terminating ，只能看见新的 Pod 。
 
 感受：没有什么问题是加一个中间层解决不了的，如果有，就再来一层。
+
+因为我们这个网站现在就是 GitHub Actions 搞得，所以我又去深入了解 CI/CD（持续集成/持续部署）了一下，用 docker 搞搞 jenkins 。
+
+搞了个 qwqOps (AIops)

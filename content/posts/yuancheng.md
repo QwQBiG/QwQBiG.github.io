@@ -6,7 +6,7 @@ categories: ["语言学习"]
 series: ["运维"]
 ---
 
-# Docker 部署 FRP 客户端终极避坑指南
+# Docker 部署 FRP 客户端避坑指南
 
 **适用于：** Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。
 
