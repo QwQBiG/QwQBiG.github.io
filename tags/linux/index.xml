@@ -6,14 +6,70 @@
     <description>Recent content in Linux on QwQBiG&#39;s Blog</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 29 Nov 2025 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 18 Dec 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>搞搞WSL</title>
+      <link>https://QwQBiG.github.io/posts/getwsl/</link>
+      <pubDate>Thu, 18 Dec 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/posts/getwsl/</guid>
+      <description>&lt;h1 id=&#34;我要玩臭企鹅linux&#34;&gt;我要玩臭企鹅（Linux）&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;咕咕嘎嘎&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;紧接着上一篇内容（必须要专业版哦）：
+&lt;strong&gt;&lt;a href=&#34;../../posts/professionalEditionWindows/&#34;&gt;Windows家庭版激活成专业版&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;高雅人士们虽然有很多虚拟机软件来玩&lt;code&gt;Linux&lt;/code&gt;，也比较好使，但是还是想试试&lt;code&gt;win&lt;/code&gt;自带的&lt;code&gt;WSL&lt;/code&gt;对不对~
+好b（￣▽￣）d~　启动~&lt;/p&gt;
+&lt;p&gt;由于&lt;strong&gt;网络原因&lt;/strong&gt;，所以我来分步安装而不去使用直接安装的代码，可以试试（大概没用）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;1功能启用&#34;&gt;1.功能启用&lt;/h2&gt;
+&lt;p&gt;在搜索框搜索 “启用或关闭 Windows 功能” 并打开。
+勾选以下&lt;strong&gt;两&lt;/strong&gt;项：
+适用于 Linux 的 Windows 子系统
+虚拟机平台
+点击确定，系统会配置组件，完成后 必须&lt;strong&gt;重启&lt;/strong&gt;电脑&lt;/p&gt;
+&lt;h2 id=&#34;2手动下载安装-wsl2-内核更新包&#34;&gt;2.手动下载安装 WSL2 内核更新包&lt;/h2&gt;
+&lt;p&gt;以下是网址：
+打开&lt;code&gt;GitHub&lt;/code&gt;：
+&lt;code&gt;https://github.com/microsoft/WSL/releases&lt;/code&gt;
+寻找最新版本（例如 2.3.26 或你看到的最新版）：
+在 Assets 栏目下，点击下载：wsl.2.3.26.x64.msi (文件名根据版本号可能略有不同)。
+直接下载链接 (如果版本已更新可能失效)： wsl.x64.msi
+下载完成后，双击运行该 .msi 文件进行安装。&lt;/p&gt;
+&lt;h2 id=&#34;3设置-wsl2-为默认版本&#34;&gt;3.设置 WSL2 为默认版本&lt;/h2&gt;
+&lt;p&gt;安装完更新包后，右键点击“开始”按钮，选择 终端（&lt;strong&gt;管理员&lt;/strong&gt;），输入并回车：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Powershell&#34; data-lang=&#34;Powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --set-default-version &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;4下载ubuntu镜像&#34;&gt;4.下载Ubuntu镜像&lt;/h2&gt;
+&lt;p&gt;这个是主网址：
+&lt;code&gt;https://cdimages.ubuntu.com/ubuntu-wsl/&lt;/code&gt;
+找到&lt;code&gt;Index of /ubuntu-wsl/noble/daily-live&lt;/code&gt;再点击&lt;code&gt;current/&lt;/code&gt;
+点击下载&lt;code&gt;noble-wsl-amd64.wsl&lt;/code&gt;
+（不会找可以点这个链接：&lt;code&gt;https://cdimages.ubuntu.com/ubuntu-wsl/noble/daily-live/current/&lt;/code&gt;）&lt;/p&gt;
+&lt;h2 id=&#34;5使用命令行安装&#34;&gt;5.使用命令行安装&lt;/h2&gt;
+&lt;p&gt;下载完成后，找到文件夹中。请打开 PowerShell（&lt;strong&gt;管理员&lt;/strong&gt;），先切换到这个文件夹：
+例如在D盘：&lt;/p&gt;</description>
+    </item>
     <item>
       <title>远程失灵了</title>
       <link>https://QwQBiG.github.io/posts/yuancheng/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/posts/yuancheng/</guid>
-      <description>&lt;h1 id=&#34;docker-部署-frp-客户端终极避坑指南&#34;&gt;Docker 部署 FRP 客户端终极避坑指南&lt;/h1&gt;
+      <description>&lt;h1 id=&#34;docker-部署-frp-客户端避坑指南&#34;&gt;Docker 部署 FRP 客户端避坑指南&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用于：&lt;/strong&gt; Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。&lt;/p&gt;
 &lt;h2 id=&#34;核心结论&#34;&gt;核心结论&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;不要使用 Docker 默认的网络模式，直接使用 Host 模式 + 强制指定 DNS。&lt;/strong&gt;&lt;/p&gt;

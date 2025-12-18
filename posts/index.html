@@ -527,11 +527,52 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">搞搞WSL
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>我要玩臭企鹅（Linux） 咕咕嘎嘎
+紧接着上一篇内容（必须要专业版哦）： Windows家庭版激活成专业版
+高雅人士们虽然有很多虚拟机软件来玩Linux，也比较好使，但是还是想试试win自带的WSL对不对~ 好b（￣▽￣）d~　启动~
+由于网络原因，所以我来分步安装而不去使用直接安装的代码，可以试试（大概没用）：
+1 wsl --install 1.功能启用 在搜索框搜索 “启用或关闭 Windows 功能” 并打开。 勾选以下两项： 适用于 Linux 的 Windows 子系统 虚拟机平台 点击确定，系统会配置组件，完成后 必须重启电脑
+2.手动下载安装 WSL2 内核更新包 以下是网址： 打开GitHub： https://github.com/microsoft/WSL/releases 寻找最新版本（例如 2.3.26 或你看到的最新版）： 在 Assets 栏目下，点击下载：wsl.2.3.26.x64.msi (文件名根据版本号可能略有不同)。 直接下载链接 (如果版本已更新可能失效)： wsl.x64.msi 下载完成后，双击运行该 .msi 文件进行安装。
+3.设置 WSL2 为默认版本 安装完更新包后，右键点击“开始”按钮，选择 终端（管理员），输入并回车：
+1 wsl --set-default-version 2 4.下载Ubuntu镜像 这个是主网址： https://cdimages.ubuntu.com/ubuntu-wsl/ 找到Index of /ubuntu-wsl/noble/daily-live再点击current/ 点击下载noble-wsl-amd64.wsl （不会找可以点这个链接：https://cdimages.ubuntu.com/ubuntu-wsl/noble/daily-live/current/）
+5.使用命令行安装 下载完成后，找到文件夹中。请打开 PowerShell（管理员），先切换到这个文件夹： 例如在D盘：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-12-18 12:00:00 +0800 +0800'>December 18, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to 搞搞WSL" href="https://QwQBiG.github.io/posts/getwsl/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Windows家庭版激活成专业版 
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Windows 激活成专业版 1. 断开网络（拔网线或关 WiFi）。
+原因：联网状态下验证密钥会失败，断网可以让它先通过验证并执行升级文件。
+2. 点击 开始 -&gt; 设置 搜索并点开 “更改产品密钥” 输入这个通用的转换密钥（这是微软官方给出的 RTM 安装密钥，非破解）：
+1 VK7JG-NPHTM-C97JM-9MPGT-3V66T 3. 点击“下一步”或“开始”。 系统会提示“无法验证密钥”或者直接提示“准备升级”。 让它跑完进度条，电脑会自动重启。
+4. 重启之后连上网，右键开始菜单，以管理员身份运行 Windows PowerShell (管理员！) 复制并粘贴下面这行新命令，然后回车：
+1 irm https://get.activated.win | iex 5. 等待几秒钟，会出现一个彩色的菜单窗口。 按键盘上的数字键 1 (选择 HWID 激活)。 HWID 是永久数字权利激活，最稳的一种。 脚本跑完后提示绿色文字（Successfully activated）即可关闭。
+然后就是可以搞 WSL 玩玩 Linux 啦! 还有沙箱可以搞病毒乱斗…
+接着玩哈： 搞搞WSL
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-12-16 12:00:00 +0800 +0800'>December 16, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to Windows家庭版激活成专业版 " href="https://QwQBiG.github.io/posts/professionaleditionwindows/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">远程失灵了
     </h2>
   </header>
   <div class="entry-content">
-    <p>Docker 部署 FRP 客户端终极避坑指南 适用于： Linux (Ubuntu/CentOS) &#43; Docker 环境，目标是穿透本地 SSH 或其他服务。
+    <p>Docker 部署 FRP 客户端避坑指南 适用于： Linux (Ubuntu/CentOS) &#43; Docker 环境，目标是穿透本地 SSH 或其他服务。
 核心结论 不要使用 Docker 默认的网络模式，直接使用 Host 模式 &#43; 强制指定 DNS。
 这将解决：容器内网不通、DNS 解析失败、路由器重启导致 IP 变动失效等所有常见问题。
 1. 部署命令 (模版) 直接复制替换参数，一步到位：

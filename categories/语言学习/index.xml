@@ -13,7 +13,7 @@
       <link>https://QwQBiG.github.io/posts/yuancheng/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/posts/yuancheng/</guid>
-      <description>&lt;h1 id=&#34;docker-部署-frp-客户端终极避坑指南&#34;&gt;Docker 部署 FRP 客户端终极避坑指南&lt;/h1&gt;
+      <description>&lt;h1 id=&#34;docker-部署-frp-客户端避坑指南&#34;&gt;Docker 部署 FRP 客户端避坑指南&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用于：&lt;/strong&gt; Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。&lt;/p&gt;
 &lt;h2 id=&#34;核心结论&#34;&gt;核心结论&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;不要使用 Docker 默认的网络模式，直接使用 Host 模式 + 强制指定 DNS。&lt;/strong&gt;&lt;/p&gt;
