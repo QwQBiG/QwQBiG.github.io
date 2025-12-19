@@ -9,7 +9,7 @@ categories: ["技术实践"]
 > 咕咕嘎嘎
 
 紧接着上一篇内容（必须要专业版哦）：
-**[Windows家庭版激活成专业版](../posts/professionalEditionWindows/)**
+**[Windows家庭版激活成专业版](/posts/professionalEditionWindows/)**
 
 高雅人士们虽然有很多虚拟机软件来玩`Linux`，也比较好使，但是还是想试试`win`自带的`WSL`对不对~
 好b（￣▽￣）d~　启动~
