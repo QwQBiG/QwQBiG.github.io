@@ -151,6 +151,6 @@ for (const auto& [index, name] : std::views::enumerate(names)) {
 |----------|----------------|----------|
 | **C++11** | `for (auto& item : container)` | **基础遍历**：告别手动索引，更安全、简洁。 |
 | **C++17** | `for (const auto& [k, v] : map)` | **结构化绑定**：优雅地处理 `pair`, `tuple` 等复合类型。 |
-| **C++20/23** | `for (item : container | views::filter(...))` | **ranges 视图**：实现完全可定制的遍历，如索引循环、筛选、转换、反向、组合等。 |
+| **C++20/23** | <code>for (item : container \| views::filter(...))</code> | **ranges 视图**：实现完全可定制的遍历，如索引循环、筛选、转换、反向、组合等。 |
 
 现代 C++ 的范围 for 循环，已经从一个简单的语法糖，进化成了一个能够承载复杂、声明式数据处理逻辑的强大框架。掌握它的不同形态，是写出高效、优雅、现代 C++ 代码的关键。
