@@ -4,7 +4,7 @@
     <title>日记 on QwQBiG&#39;s Blog</title>
     <link>https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/</link>
     <description>Recent content in 日记 on QwQBiG&#39;s Blog</description>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.153.4</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 22 Nov 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
@@ -21,7 +21,20 @@
 &lt;p&gt;比如今天，2025.11.23开始使用CLion来做Qt的程序。
 而且，给网站上搞了一个昼夜切换的无敌按键（hhhh）。
 还有猫猫砸钢琴音乐播放器！！！
-和闪光miku！&lt;/p&gt;</description>
+和闪光miku！&lt;/p&gt;
+&lt;h3 id=&#34;1223&#34;&gt;12.23&lt;/h3&gt;
+&lt;p&gt;图灵完备里面目前是在学逻辑电路和数字电路 -&amp;gt; 底层、嵌入式；
+openCV -&amp;gt; 机器视觉；
+自己配MinGW和Cmake来配置openCV和yolov8，然后把MinGW换掉，
+换成MSVC，来使用显卡（不然就只有5帧左右）；
+要学ROS 2&lt;/p&gt;
+&lt;p&gt;我现在不是在“配置”，而是在当 NVIDIA 和 OpenCV 的测试工程师，请问了：适配呢？
+（20 多分钟编译 + 一堆 C1012 + LNK1181）&lt;/p&gt;
+&lt;p&gt;最终环境：CLion + VS2026的MSVC + TensorRT 10 + CUDA 13.1 + OpenCV 4.12 + Yolov8&lt;/p&gt;
+&lt;h3 id=&#34;1226&#34;&gt;12.26&lt;/h3&gt;
+&lt;p&gt;教员生日快乐！！！&lt;/p&gt;
+&lt;h3 id=&#34;1227&#34;&gt;12.27&lt;/h3&gt;
+&lt;p&gt;刷LeetCode&amp;hellip;&lt;/p&gt;</description>
     </item>
     <item>
       <title>我の组会</title>

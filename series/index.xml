@@ -4,22 +4,22 @@
     <title>Series on QwQBiG&#39;s Blog</title>
     <link>https://QwQBiG.github.io/series/</link>
     <description>Recent content in Series on QwQBiG&#39;s Blog</description>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.153.4</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 29 Nov 2025 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 30 Dec 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/series/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;的世界</title>
+      <link>https://QwQBiG.github.io/series/c&#43;&#43;%E7%9A%84%E4%B8%96%E7%95%8C/</link>
+      <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/series/c&#43;&#43;%E7%9A%84%E4%B8%96%E7%95%8C/</guid>
+      <description></description>
+    </item>
     <item>
       <title>运维</title>
       <link>https://QwQBiG.github.io/series/%E8%BF%90%E7%BB%B4/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/series/%E8%BF%90%E7%BB%B4/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>C&#43;&#43;的世界</title>
-      <link>https://QwQBiG.github.io/series/c&#43;&#43;%E7%9A%84%E4%B8%96%E7%95%8C/</link>
-      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/series/c&#43;&#43;%E7%9A%84%E4%B8%96%E7%95%8C/</guid>
       <description></description>
     </item>
   </channel>
