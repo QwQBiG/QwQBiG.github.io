@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>物联网 on QwQBiG&#39;s Blog</title>
+    <link>https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/</link>
+    <description>Recent content in 物联网 on QwQBiG&#39;s Blog</description>
+    <generator>Hugo -- 0.154.5</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 21 Jan 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>成就-来硬的</title>
+      <link>https://QwQBiG.github.io/series/yingjian/</link>
+      <pubDate>Wed, 21 Jan 2026 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/series/yingjian/</guid>
+      <description>&lt;p&gt;别看，我还没有施工呢！&lt;/p&gt;
+&lt;h2 id=&#34;文章列表&#34;&gt;文章列表&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;../../posts/stlcontainer/&#34;&gt;STL 容器&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：人如其名&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;../../posts/stlalgorithm/&#34;&gt;STL 算法&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：+1&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第三篇：&lt;a href=&#34;../../fanweiforxunhuan/&#34;&gt;范围for循环&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;简介：全面的范围for循环！！！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

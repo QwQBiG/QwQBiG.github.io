@@ -527,6 +527,81 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">LuckFox RV1103 板子烧录开机登录~
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 2026 寒假 任务04 “启动：硬起来的臭企鹅”
+🦊 Luckfox Pico Mini B (RV1103) 嵌入式开发笔记 目标：从零开始搭建嵌入式 Linux &#43; AI 环境
+硬件：Luckfox Pico Mini B (RV1103) &#43; SC3336 摄像头
+达成：✅ 系统烧录 | ✅ 驱动排查 | ✅ SSH 连接 (ADB 隧道方案)
+要跟着官方文档来玩~
+🛠️ 第一章：系统镜像与烧录 Luckfox Pico Mini B 支持两种启动方式：TF 卡启动 (MicroSD) 和 板载闪存启动 (SPI NAND Flash)。
+启动优先级：TF 卡 &gt; 板载 Flash。只要插了 TF 卡，板子就会优先读卡。
+1. 烧录板载 Flash (使用 SocToolKit) 适用场景：不插 TF 卡时运行的基础系统。
+工具：SocToolKit (瑞芯微官方工具)。
+操作要点：
+按住 BOOT 键连接电脑进入 MaskRom 模式。 选择 Download 模式。 选择对应的分区文件烧录。 经验：我们这一步操作是正确的。虽然我们主要用 TF 卡，但刷好 Flash 作为备用系统（救砖用）是个好习惯。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-01-27 12:00:00 +0800 +0800'>January 27, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to LuckFox RV1103 板子烧录开机登录~" href="https://QwQBiG.github.io/posts/q26han04/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">三星平板刷机
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 2026 寒假 任务03 “刷机，让14年的平板重获新生。”
+📝 Samsung Galaxy Tab Pro 8.4 (SM-T320) 刷机改造日志 目标：将 2014 年的老平板改造为基于 Android 13 的便携式 Linux/C&#43;&#43; 开发终端。
+硬件：Samsung SM-T320 (骁龙800 / 2GB RAM / 2K屏幕)
+🛠️ 第一阶段：刷机 (Flashing) 1. 准备工作 电脑端：
+安装三星 USB 驱动 (SAMSUNG_USB_Driver...exe)。 解压 Odin3_v3.14.1.zip。 文件准备：
+Recovery: twrp-3.7.0_9-0-mondrianwifi.img.tar ROM: lineage-20.0-xxxx-UNOFFICIAL-mondrianwifi.zip (Android 13) GApps: BiTGApps-arm-13.0.0-v1.7_signed.zip (我是 ARM 架构) 2. 刷入 TWRP 进挖煤模式：
+关机状态下，按 音量减 &#43; Home &#43; 电源，出现警告按 音量加。 Odin 设置：
+点击 AP，选择 twrp...tar 文件。 关键：左侧 Options 栏 取消勾选 Auto Reboot。 点击 Start，等待显示 PASS。 强制进 TWRP：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-01-22 12:00:00 +0800 +0800'>January 22, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to 三星平板刷机" href="https://QwQBiG.github.io/posts/q26han03/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">ESP-32 Web 端远控点灯
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 2026 寒假 任务02 “我想用 ESP32 做一个 Web 服务器。用 C&#43;&#43; 代码： 让 ESP32 使用 AP 模式（Access Point）启动一个 Web Server，当手机访问 ESP32 的 IP 地址时，显示两个按钮 “ON” 和 “OFF”。点击按钮可以通过 GPIO 控制面包板上外接的 LED 灯（假设接在 GPIO 23）。”
+方案思路：ESP32 自己做“路由器” 在这个模式下，ESP32 不去连接自己家里的 WiFi，而是它自己发射一个 WiFi 热点。
+手机搜索并连接 ESP32 发出的 WiFi。 连接后，直接访问 ESP32 的地址控制灯光。 优点：这样我们走到哪里都能演示，完全不需要依赖环境的 WiFi。
+第一部分：接线与“如何让它好看” “感觉不好看”，通常是因为面包板上的杜邦线飞来飞去乱糟糟的。
+1. 极简方案（最“好看”） 直接使用板载 LED（GPIO 2）。
+ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。 你可以完全不接外面的线，代码里把 LED_PIN 改成 2，直接看板子上的灯亮灭，最整洁。 2. 外接 LED 优化方案（让面包板接线整齐） 如果你必须外接 LED（假设 GPIO 23），可以尝试**“紧凑型”接法**，避免使用很长的飞线。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-01-21 14:00:00 +0800 +0800'>January 21, 2026</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to ESP-32 Web 端远控点灯" href="https://QwQBiG.github.io/posts/q26han02/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">再一次梦开始的地方——ESP-32点灯
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 2026 寒假 任务01 “我现在手头有 ESP32-WROOM-32 开发板，使用 VS Code。请教我安装 PlatformIO 插件，并创建一个 Arduino 框架的 C&#43;&#43; 项目。给我一段简单的 Blink 代码，解释 setup() 和 loop() 的作用，并告诉我如何将代码烧录进板子。”
+第一步：安装 PlatformIO 插件 打开 VS Code。 点击左侧边栏的 扩展图标 (Extensions)，或按下快捷键 Ctrl&#43;Shift&#43;X。 在搜索框中输入 PlatformIO IDE。 选择由 PlatformIO 发布的插件（图标为蚂蚁头像），点击 Install。 注意：安装完成后，右下角通常会提示“Installing PlatformIO Core…”。请耐心等待其安装完成并提示“Reload”（重启 VS Code）。此过程可能需要几分钟。 第二步：创建新项目 插件安装成功后，VS Code 左侧边栏会出现一个 PlatformIO 图标（蚂蚁）。点击它。 在打开的 PlatformIO 主页中，点击 New Project 按钮。 配置新项目： Name：输入项目名称，例如 ESP32_Blink（建议不要使用中文或空格）。 Board：在搜索框输入 DOIT ESP32，通常选择 DOIT ESP32 DEVKIT V1。这是 ESP32-WROOM-32 最常见的通用配置。 Framework：选择 Arduino。 点击 Finish。 首次创建项目时，PlatformIO 会自动下载 ESP32 的编译工具链和库文件。请保持网络通畅，耐心等待下载完成。 第三步：编写 Blink 代码 项目创建后，在 VS Code 的资源管理器（Explorer）中：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-01-21 12:00:00 +0800 +0800'>January 21, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to 再一次梦开始的地方——ESP-32点灯" href="https://QwQBiG.github.io/posts/q26han01/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">范围for循环
     </h2>
   </header>
@@ -630,96 +705,16 @@
   <footer class="entry-footer"><span title='2025-11-21 10:00:00 +0800 +0800'>November 21, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
   <a class="entry-link" aria-label="post link to STL 容器" href="https://QwQBiG.github.io/posts/stlcontainer/"></a>
 </article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">STL 算法
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>算法最爽了~
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-21 10:00:00 +0800 +0800'>November 21, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to STL 算法" href="https://QwQBiG.github.io/posts/stlalgorithm/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">K8s学习笔记
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Kubernetes 学习笔记 1 核心思想篇：两大基石 1. 为何选择 Kubernetes？ 单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：
-故障恢复：一个容器挂了怎么办？ 服务发现：容器 B 如何找到容器 A 的 IP 地址？ 负载均衡：如何将流量平均分配给多个相同的容器？ 扩缩容：如何根据负载自动增加或减少容器数量？ Kubernetes (K8s) 就是一个容器编排平台，它以标准化的方式完美地解决了以上所有问题。
-2. 命令式 vs. 声明式 (转变) 命令式 (Imperative)：你一步步告诉 K8s “做什么” (kubectl create, kubectl scale)。这就像手动驾驶，直观但难以追踪和重复。 声明式 (Declarative)：你向 K8s 提交一个 YAML 文件，告诉它你**“想要什么状态”**。这就像设定导航目的地，K8s 会自己想办法开车到达，并且如果偏离了航线（比如有 Pod 挂了），它会自动修正。这是 K8s 的精髓，也是现代化的管理方式。 环境搭建篇：Kind (Kubernetes in Docker) 在复杂的网络环境下，使用 Kind 搭建本地集群是最可靠、轻量且快速的方式。
-1. 安装核心工具 安装 kubectl (K8s 命令行客户端)
-1 2 # (根据官方文档，使用 apt 或其他包管理器安装) sudo apt-get update &amp;&amp; sudo apt-get install -y kubectl 安装 Go 语言环境 (用于安装 Kind)
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-18 12:00:00 +0800 +0800'>November 18, 2025</span>&nbsp;·&nbsp;<span>9 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to K8s学习笔记" href="https://QwQBiG.github.io/posts/yunweistudy/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">我の组会
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>组会报告 1 容我想想上几周我干了什么：
-首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）
-然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了…那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb momo（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人…但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。
-或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的“鸟兽草木之名”，也有帮助。
-之后，我深刻的了解到、并可以熟练进行Ubuntu的紧急操作界面的恢复…因为可能是我把第二个开的虚拟机，放到了第一个虚拟机没有清理完全的文件夹，导致lvm卷他找不到，那两天左右，我大概有20次以上的重启到紧急模式到好了到测试的经历，可以说是十分熟练（酸爽）了。
-然后转折点：毛学长给我分了一块实验室服务器的Ubuntu，所以开始搞远程终端的美化：
-最终是扔了Xshell，用了开源的Tabby Terminal，如下图（还没整）哈，这么多好用的远程，难道主要是因为这个有壁纸插件吗？还真是。插件好啊，点下安装就让用。
-然后，在我回宿舍路上，想要点开终端fuck一下，猛然发现连接寄掉了，原因都知道，这是在实验室的内网，问学长让我瞅瞅内网穿透，我听着有点高级哈，”穿透“，像是网安的词。当我下载、点开樱花穿透后：发现，这不是我的世界联机用的吗hh。由此，以及后来用的panel.frplients，以及学长给到的http协议的代理，都是，额，应该是计算机网络都要学的内容，TCP/SSH/HTTP/HTTPS这些协议嗯。以及一点防火墙的设置，都有学到。
-在这些内容的中间，从linux(BV1cq421w72c )到docker（BV14s4y1i7Vf ）（BV1THKyzBER6 ）的基础视频，我是跟着敲了的。当然docker pull 不了镜像，问ai快给我俩问四了，发现是另有缘由是吧（当然有了代理，一路畅通）。
-看的相关的科普视频关于docker,k8s,k3s,docker compose,docker swarm…比较杂…
-然后就是调教ai（为了多玩玩docker），想搞个网站，一开始是吧，docker建了个文件夹搞点html,css做了个界面，发现内网…然后拉了一个wordpress是个动态网站，依旧内网…再看域名，看累了没搞，之后还想内网穿透，结果https…相关视频看了大概，网络协议也是大概学到了一些…
-最终是用的Github Pages静态网站，不用自己搞sql、redis啥的，也不用搞安全，还是很爽的，加上Github Action 发布文章只要win终端git push一下就好了。
-这边，主要是接触了git、前端代码、以及重要的shell内容。
-https://qwqbig.github.io/
-网址如上，里面有建站的全流程，想看的话。我应该有两天时间在干这个。
-最后这两天就感到有点子无聊了，回到了 STL 和 C&#43;&#43;11 以上的好的特性上去玩。
-那我正好鼓捣k8s玩了，还以为要再docker几天的。
-对了，我学过py（第一个学的就是py），脚本方面的接触在网站上建站过程中提及到了也。
-本来我都想开始把原来做的题用cpp重写的，像是把这个世界用Rust重写一遍似的…(话说蟹教有干翻C&#43;&#43;的未来吗，不清楚)。
-写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh
-欧克，完事了，bye~
-组会报告 2 总结：本周主要搞了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级（应该高级吧）模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。
-主要是 K8s 本地环境搭建与 Pod 编排： 1. 可恶的网：Kind &#43; 国内源
-由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-14 15:00:00 +0800 +0800'>November 14, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to 我の组会" href="https://QwQBiG.github.io/posts/zuhui/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">史诗级“Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>你好，世界！
-多年之后，看到这些文字，如今的你，是否还会想起，多年前看b站视频打印“hello world!”的那个遥远的下午…
-如果你能看到这篇文章，那说明我成功了。作为一只冲浪老资历，我一直梦想拥有一个属于自己的、可以记录学习笔记、分享心得的个人博客（东方homo馆）。这便是我的“Hello World”——一个通往更广阔数字世界的起点。（兴许是“读瘾”犯了，要写点东西自己咂摸）
-溯洄从之，道阻且长。如同伊人，此间追寻的过程远比我想象的要曲折，但也比我想象的要收获更多。我遇到了各种各样的问题：从 Docker 的内网穿透失败（其实成功了（但是https）），到 Windows 开发环境的重重陷阱，再到网络连接的神秘莫测，最后到项目结构的频频阻折…
-所幸“时来天地皆同力”，假借实验室老老资历学长给的焚诀（代理，ai，服务器的一块ubuntu…）得以为今后的所有故事作一个序。
-而我的感觉是：尽管ai飞速发展，博客、论坛、群聊比比皆是，我自己搜寻资料时，找相应操作时，或者找一些有的没有的奇怪资源时，还是有些力不从心（主要是豆沙包和臭鲸鱼现在确实一般般（25.11））；加上我喜欢鼓捣些长久的、有趣的、有意味（意味深）的东西，顾影自怜，自我怀念，比如写诗著文，都是些艺术形式，于是便有了这个界面的出现。
-谁不想要一个自己的文章网站呢~
-现在，我想把这条被我“踩”出来的、不怕ta“爱而不见”的路，分享给你。
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-11-13 21:00:00 +0800 +0800'>November 13, 2025</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to 史诗级“Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）" href="https://QwQBiG.github.io/posts/hello-world/"></a>
-</article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="next" href="https://QwQBiG.github.io/posts/page/2/">Next&nbsp;&nbsp;»
+    </a>
+  </nav>
+</footer>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="https://QwQBiG.github.io/">QwQBiG&#39;s Blog</a></span> · 
+        <span>&copy; 2026 <a href="https://QwQBiG.github.io/">QwQBiG&#39;s Blog</a></span> · 
 
     <span>
         Powered by
