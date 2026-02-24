@@ -1,0 +1,451 @@
+{{ define "main" }}
+
+<style>
+/* 404 页面容器 */
+.not-found-container {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* 打字机效果容器 */
+.typewriter-wrapper {
+    margin-bottom: 40px;
+}
+
+/* 打字机文字样式 */
+.typewriter-text {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-weight: 600;
+    color: #ff6b9d;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    min-height: 3em;
+}
+
+/* 光标样式 */
+.typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1.2em;
+    background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%);
+    margin-left: 4px;
+    vertical-align: text-bottom;
+    animation: cursor-blink 0.8s infinite;
+    border-radius: 2px;
+}
+
+/* 光标闪烁动画 */
+@keyframes cursor-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* 404 大数字 */
+.not-found-code {
+    font-size: clamp(6rem, 15vw, 12rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #ff6b9d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    line-height: 1;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 浮动动画 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* 返回首页按钮 */
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: 20px;
+}
+
+.back-home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
+}
+
+.back-home-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* 装饰元素 */
+.decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.1) 0%, rgba(250, 208, 196, 0.1) 100%);
+    animation: float-shape 15s infinite ease-in-out;
+}
+
+.floating-shape:nth-child(1) {
+    width: 100px;
+    height: 100px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-shape:nth-child(2) {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    right: 10%;
+    animation-delay: -5s;
+}
+
+.floating-shape:nth-child(3) {
+    width: 80px;
+    height: 80px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: -10s;
+}
+
+@keyframes float-shape {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-30px) rotate(180deg);
+        opacity: 0.6;
+    }
+}
+
+/* 音量控制按钮 */
+.sound-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.sound-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 154, 158, 0.5);
+}
+
+.sound-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+}
+
+.sound-toggle.muted {
+    background: linear-gradient(135deg, #ccc 0%, #999 100%);
+}
+
+/* 深色模式适配 */
+body.dark .typewriter-text {
+    color: #ff8fab;
+}
+
+body.dark .not-found-code {
+    background: linear-gradient(135deg, #ff8fab 0%, #ffb3c6 50%, #ff6b9d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .not-found-container {
+        min-height: 50vh;
+        padding: 20px;
+    }
+    
+    .typewriter-text {
+        font-size: 1.2rem;
+    }
+    
+    .back-home-btn {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .sound-toggle {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .sound-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+</style>
+
+<!-- 装饰背景 -->
+<div class="decorations">
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+</div>
+
+<div class="not-found-container">
+    <!-- 404 大数字 -->
+    <div class="not-found-code">404</div>
+    
+    <!-- 打字机效果文字 -->
+    <div class="typewriter-wrapper">
+        <span class="typewriter-text" id="typewriter-text"></span>
+        <span class="typewriter-cursor"></span>
+    </div>
+    
+    <!-- 返回首页按钮 -->
+    <a href="{{ "" | absURL }}" class="back-home-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        返回首页
+    </a>
+</div>
+
+<!-- 音量控制按钮 -->
+<button class="sound-toggle" id="sound-toggle" title="点击切换音效">
+    <svg id="sound-on-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+    <svg id="sound-off-icon" viewBox="0 0 24 24" style="display: none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+</button>
+
+<script>
+(function() {
+    // 随机错误消息
+    const messages = [
+        "404 Not Found",
+        "就像我的头发一样，这个页面不存在",
+        "此页面已被 rm -rf"
+    ];
+    
+    // 随机选择一条消息
+    const targetText = messages[Math.floor(Math.random() * messages.length)];
+    
+    const textElement = document.getElementById('typewriter-text');
+    let charIndex = 0;
+    
+    // 音频上下文
+    let audioContext = null;
+    let isSoundEnabled = true;
+    
+    // 初始化音频上下文（用户交互后）
+    function initAudioContext() {
+        if (!audioContext) {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log('Web Audio API 不支持');
+                isSoundEnabled = false;
+            }
+        }
+    }
+    
+    // 生成青轴机械键盘敲击音效
+    function playKeySound() {
+        if (!isSoundEnabled || !audioContext) return;
+        
+        try {
+            const now = audioContext.currentTime;
+            
+            // ===== 第一层：清脆的敲击声（Click）=====
+            const clickOsc = audioContext.createOscillator();
+            const clickGain = audioContext.createGain();
+            const clickFilter = audioContext.createBiquadFilter();
+            
+            // 青轴特点：高频清脆，约 1200-1800Hz
+            const clickFreq = 1400 + Math.random() * 400;
+            clickOsc.frequency.setValueAtTime(clickFreq, now);
+            clickOsc.frequency.exponentialRampToValueAtTime(clickFreq * 0.3, now + 0.03);
+            
+            // 三角波产生清脆感
+            clickOsc.type = 'triangle';
+            
+            // 高通滤波突出清脆感
+            clickFilter.type = 'highpass';
+            clickFilter.frequency.setValueAtTime(800, now);
+            clickFilter.Q.setValueAtTime(1.5, now);
+            
+            // 快速衰减包络 - 清脆短促
+            clickGain.gain.setValueAtTime(0, now);
+            clickGain.gain.linearRampToValueAtTime(0.25, now + 0.002);
+            clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            
+            clickOsc.connect(clickFilter);
+            clickFilter.connect(clickGain);
+            clickGain.connect(audioContext.destination);
+            
+            clickOsc.start(now);
+            clickOsc.stop(now + 0.06);
+            
+            // ===== 第二层：底部撞击声（Clack）=====
+            const clackOsc = audioContext.createOscillator();
+            const clackGain = audioContext.createGain();
+            const clackFilter = audioContext.createBiquadFilter();
+            
+            // 底部撞击：中低频 300-600Hz
+            const clackFreq = 400 + Math.random() * 200;
+            clackOsc.frequency.setValueAtTime(clackFreq, now);
+            clackOsc.frequency.exponentialRampToValueAtTime(clackFreq * 0.5, now + 0.08);
+            
+            // 方波产生厚重感
+            clackOsc.type = 'square';
+            
+            // 低通滤波柔化
+            clackFilter.type = 'lowpass';
+            clackFilter.frequency.setValueAtTime(2500, now);
+            
+            // 稍慢的衰减 - 底部撞击的回响
+            clackGain.gain.setValueAtTime(0, now);
+            clackGain.gain.linearRampToValueAtTime(0.15, now + 0.005);
+            clackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            
+            clackOsc.connect(clackFilter);
+            clackFilter.connect(clackGain);
+            clackGain.connect(audioContext.destination);
+            
+            clackOsc.start(now);
+            clackOsc.stop(now + 0.15);
+            
+            // ===== 第三层：金属回弹声（Ping）=====
+            const pingOsc = audioContext.createOscillator();
+            const pingGain = audioContext.createGain();
+            const pingFilter = audioContext.createBiquadFilter();
+            
+            // 金属音：高频泛音 2000-3500Hz
+            const pingFreq = 2200 + Math.random() * 800;
+            pingOsc.frequency.setValueAtTime(pingFreq, now + 0.01);
+            pingOsc.frequency.exponentialRampToValueAtTime(pingFreq * 0.8, now + 0.1);
+            
+            // 正弦波产生纯净泛音
+            pingOsc.type = 'sine';
+            
+            // 带通滤波突出金属感
+            pingFilter.type = 'bandpass';
+            pingFilter.frequency.setValueAtTime(3000, now);
+            pingFilter.Q.setValueAtTime(5, now);
+            
+            // 很轻的金属回弹
+            pingGain.gain.setValueAtTime(0, now + 0.01);
+            pingGain.gain.linearRampToValueAtTime(0.05, now + 0.015);
+            pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            
+            pingOsc.connect(pingFilter);
+            pingFilter.connect(pingGain);
+            pingGain.connect(audioContext.destination);
+            
+            pingOsc.start(now + 0.01);
+            pingOsc.stop(now + 0.18);
+            
+        } catch (e) {
+            console.log('音效播放失败:', e);
+        }
+    }
+    
+    // 打字机效果函数
+    function typeWriter() {
+        if (charIndex < targetText.length) {
+            textElement.textContent += targetText.charAt(charIndex);
+            
+            // 播放按键音效
+            playKeySound();
+            
+            charIndex++;
+            
+            // 随机打字速度，模拟真实打字
+            const randomDelay = Math.random() * 80 + 40;
+            setTimeout(typeWriter, randomDelay);
+        }
+    }
+    
+    // 音量控制
+    const soundToggle = document.getElementById('sound-toggle');
+    const soundOnIcon = document.getElementById('sound-on-icon');
+    const soundOffIcon = document.getElementById('sound-off-icon');
+    
+    soundToggle.addEventListener('click', function() {
+        initAudioContext();
+        isSoundEnabled = !isSoundEnabled;
+        
+        if (isSoundEnabled) {
+            soundOnIcon.style.display = 'block';
+            soundOffIcon.style.display = 'none';
+            soundToggle.classList.remove('muted');
+        } else {
+            soundOnIcon.style.display = 'none';
+            soundOffIcon.style.display = 'block';
+            soundToggle.classList.add('muted');
+        }
+    });
+    
+    // 页面加载后开始打字效果
+    function startTypewriter() {
+        initAudioContext();
+        setTimeout(typeWriter, 600);
+    }
+    
+    // 首次用户交互时初始化音频（浏览器策略要求）
+    let hasInteracted = false;
+    function handleFirstInteraction() {
+        if (!hasInteracted) {
+            hasInteracted = true;
+            initAudioContext();
+            document.removeEventListener('click', handleFirstInteraction);
+            document.removeEventListener('touchstart', handleFirstInteraction);
+        }
+    }
+    
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+    
+    // 页面加载后开始
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startTypewriter);
+    } else {
+        startTypewriter();
+    }
+})();
+</script>
+
+{{ end }}

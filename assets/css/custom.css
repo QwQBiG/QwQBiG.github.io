@@ -14,3 +14,309 @@ code, pre {
     font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
 }
 
+/*——————————————————————————————————————————————
+                阅读进度条
+——————————————————————————————————————————————*/
+.reading-progress-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 3px !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    z-index: 2147483647 !important;
+    pointer-events: none !important;
+}
+
+.reading-progress-bar {
+    height: 100% !important;
+    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%) !important;
+    background-size: 200% 100% !important;
+    width: 0% !important;
+    transition: width 0.1s ease-out !important;
+    box-shadow: 0 0 10px rgba(255, 154, 158, 0.5) !important;
+    animation: progress-shimmer 2s linear infinite !important;
+}
+
+@keyframes progress-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+body.dark .reading-progress-container {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/*——————————————————————————————————————————————
+                返回顶部按钮 - 覆盖主题默认
+——————————————————————————————————————————————*/
+/* 隐藏主题自带的返回顶部按钮 */
+.top-link,
+#top-link,
+.scroll-to-top,
+.back-to-top {
+    display: none !important;
+}
+
+/* 我们的自定义返回顶部按钮 */
+.custom-back-to-top {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(20px) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4) !important;
+    z-index: 2147483646 !important;
+    pointer-events: auto !important;
+}
+
+.custom-back-to-top.visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+.custom-back-to-top:hover {
+    transform: translateY(-5px) scale(1.1) !important;
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.6) !important;
+}
+
+.custom-back-to-top:active {
+    transform: translateY(-2px) scale(0.95) !important;
+}
+
+.custom-back-to-top svg {
+    width: 24px !important;
+    height: 24px !important;
+    fill: white !important;
+    transition: transform 0.3s ease !important;
+}
+
+.custom-back-to-top:hover svg {
+    transform: translateY(-2px) !important;
+}
+
+/*——————————————————————————————————————————————
+                代码复制按钮 - 覆盖主题默认
+——————————————————————————————————————————————*/
+/* 隐藏主题自带的复制按钮 */
+.copy-code,
+button.copy-code {
+    display: none !important;
+}
+
+/* 我们的自定义复制按钮 */
+.custom-copy-code {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    opacity: 0 !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4) !important;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+}
+
+.highlight:hover .custom-copy-code,
+.chroma:hover .custom-copy-code,
+pre:hover .custom-copy-code {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.custom-copy-code:hover {
+    transform: scale(1.05) translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.6) !important;
+}
+
+.custom-copy-code:active {
+    transform: scale(0.95) !important;
+}
+
+.custom-copy-code.copied {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4) !important;
+}
+
+/* 代码块容器 */
+.highlight,
+.chroma {
+    position: relative !important;
+}
+
+/*——————————————————————————————————————————————
+                移动端优化
+——————————————————————————————————————————————*/
+@media (max-width: 768px) {
+    /* 调整文章列表 */
+    .post-entry {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .entry-header h2 {
+        font-size: 1.1em;
+    }
+    
+    /* 调整代码块 */
+    .highlight pre,
+    .chroma pre {
+        padding: 0.8em;
+        font-size: 0.85em;
+    }
+    
+    .custom-copy-code {
+        opacity: 1 !important;
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+    
+    /* 调整返回顶部按钮 */
+    .custom-back-to-top {
+        width: 44px !important;
+        height: 44px !important;
+        bottom: 20px !important;
+        right: 20px !important;
+    }
+    
+    .custom-back-to-top svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    /* 调整导航栏 */
+    .nav {
+        padding: 0 15px;
+    }
+    
+    /* 调整主内容区域 */
+    .main {
+        padding: 15px;
+    }
+    
+    /* 调整标题 */
+    .post-title {
+        font-size: 1.5em;
+    }
+    
+    /* 优化触摸区域 */
+    .post-entry a {
+        padding: 5px 0;
+    }
+    
+    /* 调整分页 */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    /* 优化表格显示 */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* 优化图片 */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* 阅读进度条在移动端 */
+    .reading-progress-container {
+        height: 2px !important;
+    }
+}
+
+/* 更小的屏幕 */
+@media (max-width: 480px) {
+    .entry-header h2 {
+        font-size: 1em;
+    }
+    
+    .post-content {
+        font-size: 0.95em;
+    }
+    
+    .nav {
+        flex-wrap: wrap;
+    }
+}
+
+/*——————————————————————————————————————————————
+                猫咪钢琴关闭按钮
+——————————————————————————————————————————————*/
+.neko-close-btn {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 107, 107, 0.9);
+    border: 2px solid white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+    pointer-events: auto;
+    z-index: 100;
+}
+
+.neko-info-container:hover .neko-close-btn {
+    opacity: 1;
+    right: -28px;
+}
+
+.neko-close-btn:hover {
+    transform: translateY(-50%) scale(1.15);
+    background: rgba(255, 71, 87, 1);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
+}
+
+.neko-close-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.neko-close-btn svg {
+    width: 12px;
+    height: 12px;
+    fill: white;
+}
+
+body.dark .neko-close-btn {
+    background: rgba(220, 53, 69, 0.9);
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* 猫咪钢琴隐藏状态 */
+#neko-engine-root.neko-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(100px) scale(0.7) !important;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}

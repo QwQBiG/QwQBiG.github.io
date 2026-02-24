@@ -1,0 +1,315 @@
+{{- /* macOS Style Page Transitions JavaScript */ -}}
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  const CONFIG = {
+    animationDuration: 500,
+    excludedSelectors: [
+      'a[href^="#"]',
+      'a[href^="javascript:"]',
+      'a[target="_blank"]',
+      'a[download]',
+      'a[rel*="external"]',
+      '.no-transition'
+    ],
+    minLoadTime: 300
+  };
+  
+  // State management
+  let isTransitioning = false;
+  let transitionOverlay = null;
+  
+  // Initialize page transitions
+  function init() {
+    // Create transition overlay
+    createTransitionOverlay();
+    
+    // Add page container class to body
+    document.body.classList.add('page-container');
+    
+    // Handle link clicks
+    document.addEventListener('click', handleLinkClick, true);
+    
+    // Handle popstate (back/forward buttons)
+    window.addEventListener('popstate', handlePopState);
+    
+    // Add enter animation on initial load
+    if (!sessionStorage.getItem('pageTransitionInitialLoad')) {
+      sessionStorage.setItem('pageTransitionInitialLoad', 'true');
+      document.body.classList.add('page-enter');
+      
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+      }, CONFIG.animationDuration);
+    }
+  }
+  
+  // Create transition overlay element
+  function createTransitionOverlay() {
+    transitionOverlay = document.createElement('div');
+    transitionOverlay.className = 'page-transition-overlay';
+    transitionOverlay.innerHTML = `
+      <div class="page-transition-backdrop"></div>
+      <div class="page-transition-loader">
+        <span class="page-transition-loader-text">少女祈祷中~</span>
+      </div>
+    `;
+    document.body.appendChild(transitionOverlay);
+  }
+  
+  // Handle link clicks
+  function handleLinkClick(e) {
+    const link = e.target.closest('a');
+    
+    if (!link) return;
+    
+    // Check if link should be excluded
+    if (shouldExcludeLink(link)) return;
+    
+    // Check if already transitioning
+    if (isTransitioning) {
+      e.preventDefault();
+      return;
+    }
+    
+    const href = link.getAttribute('href');
+    
+    // Only handle internal links
+    if (!isInternalLink(href)) return;
+    
+    e.preventDefault();
+    
+    // Perform transition
+    performTransition(href);
+  }
+  
+  // Check if link should be excluded
+  function shouldExcludeLink(link) {
+    return CONFIG.excludedSelectors.some(selector => link.matches(selector));
+  }
+  
+  // Check if link is internal
+  function isInternalLink(href) {
+    if (!href) return false;
+    if (href.startsWith('#')) return false;
+    if (href.startsWith('javascript:')) return false;
+    if (href.startsWith('mailto:')) return false;
+    if (href.startsWith('tel:')) return false;
+    
+    // Check if it's same origin
+    try {
+      const url = new URL(href, window.location.origin);
+      return url.origin === window.location.origin;
+    } catch (e) {
+      return true; // Assume internal if URL parsing fails
+    }
+  }
+  
+  // Perform the page transition
+  function performTransition(targetUrl) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    
+    // Add loading state
+    document.documentElement.classList.add('page-transition-loading');
+    
+    // Show overlay with backdrop blur
+    transitionOverlay.classList.add('active');
+    
+    // Start exit animation
+    document.body.classList.add('page-exit');
+    
+    // Preload the next page
+    const preloadStartTime = Date.now();
+    
+    fetch(targetUrl, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      const loadTime = Date.now() - preloadStartTime;
+      const remainingTime = Math.max(0, CONFIG.minLoadTime - loadTime);
+      
+      // Ensure minimum animation time for smooth feel
+      setTimeout(() => {
+        navigateToPage(targetUrl, html);
+      }, remainingTime);
+    })
+    .catch(() => {
+      // Fallback: navigate normally if fetch fails
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, CONFIG.animationDuration);
+    });
+  }
+  
+  // Navigate to the new page
+  function navigateToPage(url, html) {
+    // Parse the new HTML
+    const parser = new DOMParser();
+    const newDoc = parser.parseFromString(html, 'text/html');
+    
+    // Update the URL
+    window.history.pushState({}, '', url);
+    
+    // Get the new body content
+    const newBody = newDoc.body;
+    
+    // Replace document content while keeping the overlay
+    document.body.innerHTML = newBody.innerHTML;
+    
+    // Re-create and append the overlay to ensure it's in the DOM
+    if (!document.querySelector('.page-transition-overlay')) {
+      createTransitionOverlay();
+      transitionOverlay.classList.add('active');
+    }
+    
+    // Update title
+    document.title = newDoc.title;
+    
+    // Update meta tags
+    updateMetaTags(newDoc);
+    
+    // Start enter animation
+    document.body.classList.remove('page-exit');
+    document.body.classList.add('page-enter');
+    
+    // Immediately hide the loader text but keep backdrop briefly
+    const loaderText = document.querySelector('.page-transition-loader-text');
+    if (loaderText) {
+      loaderText.style.opacity = '0';
+      loaderText.style.transition = 'opacity 0.2s ease';
+    }
+    
+    // Hide overlay completely after animation
+    setTimeout(() => {
+      if (transitionOverlay) {
+        transitionOverlay.classList.remove('active');
+      }
+      
+      // Remove animation classes
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+        document.documentElement.classList.remove('page-transition-loading');
+        isTransitioning = false;
+        
+        // Scroll to top or hash
+        handleScroll();
+        
+        // Re-initialize any scripts
+        reinitializeScripts();
+      }, 100);
+    }, CONFIG.animationDuration - 100);
+  }
+  
+  // Update meta tags
+  function updateMetaTags(newDoc) {
+    const metaSelectors = [
+      'meta[name="description"]',
+      'meta[property^="og:"]',
+      'meta[name^="twitter:"]',
+      'link[rel="canonical"]'
+    ];
+    
+    metaSelectors.forEach(selector => {
+      const newMeta = newDoc.querySelector(selector);
+      const currentMeta = document.querySelector(selector);
+      
+      if (newMeta && currentMeta) {
+        currentMeta.content = newMeta.content;
+      } else if (newMeta) {
+        document.head.appendChild(newMeta.cloneNode(true));
+      }
+    });
+  }
+  
+  // Handle scroll position
+  function handleScroll() {
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  
+  // Handle popstate (back/forward buttons)
+  function handlePopState(e) {
+    if (isTransitioning) return;
+    
+    // Reload the page for back/forward to ensure proper state
+    window.location.reload();
+  }
+  
+  // Reinitialize scripts after page transition
+  function reinitializeScripts() {
+    // Dispatch custom event for other scripts to listen to
+    window.dispatchEvent(new CustomEvent('pageTransitionComplete'));
+    
+    // Re-initialize common functionality
+    initCommonFeatures();
+  }
+  
+  // Initialize common features
+  function initCommonFeatures() {
+    // Re-attach event listeners to new content
+    document.querySelectorAll('a').forEach(link => {
+      // Re-apply any existing click handlers
+      if (link.dataset.originalHref) {
+        link.href = link.dataset.originalHref;
+      }
+    });
+    
+    // Initialize theme toggle if exists
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', handleThemeToggle);
+    }
+  }
+  
+  // Handle theme toggle
+  function handleThemeToggle() {
+    const html = document.querySelector('html');
+    const currentTheme = html.dataset.theme;
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.dataset.theme = newTheme;
+    localStorage.setItem('pref-theme', newTheme);
+  }
+  
+  // Check for reduced motion preference
+  function checkReducedMotion() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+      CONFIG.animationDuration = 150;
+      document.documentElement.classList.add('reduced-motion');
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      checkReducedMotion();
+      init();
+    });
+  } else {
+    checkReducedMotion();
+    init();
+  }
+  
+  // Expose API for manual control
+  window.PageTransitions = {
+    navigate: performTransition,
+    isTransitioning: () => isTransitioning
+  };
+})();
+</script>

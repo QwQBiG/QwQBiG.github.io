@@ -1,0 +1,192 @@
+{{ define "main" }}
+
+<style>
+/* CS板块页面样式 */
+.cs-section-header {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.1) 0%, rgba(250, 208, 196, 0.1) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 154, 158, 0.2);
+}
+
+.cs-section-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #ff9a9e;
+}
+
+.cs-section-header h1 .emoji {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.cs-section-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+body.dark .cs-section-header p {
+    color: #aaa;
+}
+
+/* 合集区域 */
+.series-section {
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 154, 158, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::before {
+    content: '📚';
+}
+
+/* 文章列表 */
+.posts-section {
+    margin-top: 50px;
+}
+
+.posts-section .section-title::before {
+    content: '📝';
+}
+
+/* 返回首页按钮 */
+.back-home {
+    text-align: center;
+    margin-top: 50px;
+    padding: 30px;
+}
+
+.back-home a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+}
+
+.back-home a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
+}
+</style>
+
+<div class="cs-section-header">
+    <h1><span class="emoji">💻</span> CS</h1>
+    <p>{{ .Description }}</p>
+</div>
+
+<!-- 合集区域 - 只在第一页显示 -->
+{{- if eq .Paginator.PageNumber 1 -}}
+{{- $allPages := .Site.RegularPages -}}
+{{- $allPages := where $allPages "Layout" "ne" "search" -}}
+{{- $allPages := where $allPages "Layout" "ne" "archives" -}}
+{{- $allPages := where $allPages "Params.hidden" "ne" true -}}
+{{- $pinnedPages := where $allPages "Params.pin" true -}}
+
+{{- if $pinnedPages -}}
+<div class="series-section">
+    <h2 class="section-title">合集</h2>
+    {{- range $pinnedPages -}}
+        {{- partial "components/cards/series-overview.html" . -}}
+    {{- end -}}
+</div>
+{{- end -}}
+{{- end -}}
+
+<!-- 文章列表 -->
+<div class="posts-section">
+    <h2 class="section-title">文章</h2>
+    <div class="posts-list">
+        {{- $regularPages := where .Site.RegularPages "Section" "cs" -}}
+        {{- $regularPages := where $regularPages "Params.pin" "ne" true -}}
+        {{- $paginator := .Paginate $regularPages -}}
+
+        {{- range $paginator.Pages -}}
+        <article class="post-entry">
+            {{- $isHidden := .Params.cover.hidden | default site.Params.cover.hiddenInList -}}
+            {{- if and .Params.cover.image (not $isHidden) -}}
+                {{- $alt := (.Params.cover.alt | default .Params.cover.caption | plainify) -}}
+                <figure class="entry-cover">
+                  {{- $addLink := (and site.Params.cover.linkToFeaturedImage (not $.IsHome)) -}}
+                  {{- if $addLink }}<a href="{{ .Params.cover.image | absURL }}" target="_blank" rel="noopener noreferrer">{{- end -}}
+                    {{- if eq .Params.cover.relative true -}}
+                      {{- $img := resources.Get .Params.cover.image -}}
+                      {{- if $img -}}
+                        {{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+                        {{- if hugo.IsExtended -}}
+                          {{- $processableFormats = $processableFormats | append "webp" -}}
+                        {{- end -}}
+                        {{- if in $processableFormats $img.MediaType.SubType -}}
+                          {{- if not .Params.cover.small -}}
+                            {{- $image := $img.Resize site.Params.cover.imageSize -}}
+                            {{- $2x_image := $img.Resize site.Params.cover.imageSize2x -}}
+                            <img src="{{ $image.RelPermalink }}" 
+                                 srcset="{{ $image.RelPermalink }} 1x, {{ $2x_image.RelPermalink }} 2x" 
+                                 alt="{{ $alt }}"
+                                 loading="lazy"
+                                 decoding="async">
+                          {{- else -}}
+                            <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+                          {{- end -}}
+                        {{- else -}}
+                          <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+                        {{- end -}}
+                      {{- else -}}
+                        <img src="{{ .Params.cover.image | absURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+                      {{- end -}}
+                    {{- else -}}
+                      <img src="{{ .Params.cover.image | absURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+                    {{- end -}}
+                  {{- if $addLink }}</a>{{- end -}}
+                </figure>
+            {{- end -}}
+            
+            <header class="entry-header">
+                <h2>
+                    <a href="{{ .Permalink }}">
+                        {{- .Title -}}
+                        {{- if .Draft -}}<sup><span class="entry-isdraft">&nbsp;&nbsp;[Draft]</span></sup>{{- end -}}
+                    </a>
+                </h2>
+            </header>
+            
+            {{- if (ne .Params.hideSummary true) -}}
+            <div class="entry-content">
+                <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+            </div>
+            {{- end -}}
+            
+            <footer class="entry-footer">
+                {{- partial "post_meta.html" . -}}
+            </footer>
+            
+            <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+        </article>
+        {{- end -}}
+    </div>
+
+    {{- template "_internal/pagination.html" . -}}
+</div>
+
+<div class="back-home">
+    <a href="/">← 返回首页</a>
+</div>
+
+{{ end }}

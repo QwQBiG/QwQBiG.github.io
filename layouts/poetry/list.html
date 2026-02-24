@@ -1,0 +1,212 @@
+{{ define "main" }}
+
+<style>
+/* 诗歌板块页面样式 */
+.poetry-section-header {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.1) 0%, rgba(250, 208, 196, 0.1) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 154, 158, 0.2);
+}
+
+.poetry-section-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #ff9a9e;
+}
+
+.poetry-section-header h1 .emoji {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.poetry-section-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+body.dark .poetry-section-header p {
+    color: #aaa;
+}
+
+/* 诗歌系列区域 */
+.poetry-series-section {
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 154, 158, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::before {
+    content: '📚';
+}
+
+/* 诗歌列表 */
+.poetry-list-section {
+    margin-top: 50px;
+}
+
+.poetry-list-section .section-title::before {
+    content: '📝';
+}
+
+/* 诗歌系列卡片 */
+.poetry-series-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-left-width: 5px;
+    border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.poetry-series-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
+}
+
+body.dark .poetry-series-card {
+    background: #2e2e33;
+    border-color: #444;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+body.dark .poetry-series-card:hover {
+    background: #36363d;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.poetry-series-card .entry-title a {
+    color: #8a2be2 !important;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+body.dark .poetry-series-card .entry-title a {
+    color: #d0a9f5 !important;
+}
+
+.poetry-series-card .entry-content {
+    color: #666;
+    margin-top: 10px;
+}
+
+body.dark .poetry-series-card .entry-content {
+    color: #b0b0b0;
+}
+
+/* 返回首页按钮 */
+.back-home {
+    text-align: center;
+    margin-top: 50px;
+    padding: 30px;
+}
+
+.back-home a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+}
+
+.back-home a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
+}
+</style>
+
+<div class="poetry-section-header">
+    <h1><span class="emoji">🌸</span> {{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+</div>
+
+<!-- 诗歌系列区域 -->
+{{- $seriesPages := where .Site.Pages "Params.type" "series" -}}
+{{- $seriesPages := where $seriesPages "Section" "poetry" -}}
+
+{{- if $seriesPages -}}
+<div class="poetry-series-section">
+    <h2 class="section-title">诗歌系列</h2>
+    {{- range $seriesPages -}}
+    <article class="post-entry poetry-series-card">
+        <header class="entry-header">
+            <h2 class="entry-title">
+                <a href="{{ .Permalink }}">
+                    {{- .Title -}}
+                </a>
+            </h2>
+        </header>
+        {{- if .Summary -}}
+        <div class="entry-content">
+            <p>{{ .Summary | plainify | htmlUnescape }}</p>
+        </div>
+        {{- end -}}
+        <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+    </article>
+    {{- end -}}
+</div>
+{{- end -}}
+
+<!-- 诗歌列表 -->
+<div class="poetry-list-section">
+    <h2 class="section-title">诗歌</h2>
+    <div class="posts-list">
+        {{- $allPoetryPages := where .Site.RegularPages "Section" "poetry" -}}
+        {{- $allPoetryPages := where $allPoetryPages "Params.type" "ne" "series" -}}
+        {{- $paginator := .Paginate $allPoetryPages -}}
+
+        {{- range $paginator.Pages -}}
+        <article class="post-entry">
+            <header class="entry-header">
+                <h2>
+                    <a href="{{ .Permalink }}">
+                        {{- .Title -}}
+                        {{- if .Draft -}}<sup><span class="entry-isdraft">&nbsp;&nbsp;[Draft]</span></sup>{{- end -}}
+                    </a>
+                </h2>
+            </header>
+            
+            {{- if (ne .Params.hideSummary true) -}}
+            <div class="entry-content">
+                <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+            </div>
+            {{- end -}}
+            
+            <footer class="entry-footer">
+                {{- partial "post_meta.html" . -}}
+            </footer>
+            
+            <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+        </article>
+        {{- end -}}
+    </div>
+
+    {{- template "_internal/pagination.html" . -}}
+</div>
+
+<div class="back-home">
+    <a href="/">← 返回首页</a>
+</div>
+
+{{ end }}

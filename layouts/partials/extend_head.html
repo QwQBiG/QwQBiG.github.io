@@ -1,0 +1,6 @@
+{{- /* macOS Style Page Transitions */ -}}
+{{- $pageTransitions := resources.Get "css/page-transitions.css" | resources.Minify -}}
+<link rel="stylesheet" href="{{ $pageTransitions.RelPermalink }}">
+
+{{- /* Page Transitions JavaScript */ -}}
+{{- partial "page-transitions-js.html" . -}}

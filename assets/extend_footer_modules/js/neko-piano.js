@@ -1,0 +1,562 @@
+/**
+ * 🐱 NEKO ENGINE v6.0
+ * Added: Close/Restore functionality
+ */
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+const CONFIG = {
+  musicTitle: "Oblivious",
+  pianoWidth: 420, 
+  
+  gravity: isMobile ? 0.18 : 0.09, 
+  airResistance: 0.995,
+  bounceDamping: 0.425, 
+  softBodyStiffness: 0.08,
+  
+  colors: {
+    whiteCat:  { base: '#fdfbf7', shadow: '#e6e2d6', blush: '#ffcdd2' },
+    orangeCat: { base: '#f8d29d', shadow: '#e0b075', blush: '#ff8a80', pattern: '#e6a23c' },
+    greyCat:   { base: '#d1d5db', shadow: '#9ca3af', blush: '#fca5a5' },
+    calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
+  },
+  
+  bpm: isMobile ? 80 : 109,
+  keyHeights: { white: 100, black: 65 },
+  
+  poolSize: {
+    cats: isMobile ? 10 : 20,
+    particles: isMobile ? 20 : 60 
+  }
+};
+
+const targetFPS = isMobile ? 30 : 60;
+const frameInterval = 1000 / targetFPS;
+
+const Utils = {
+  random: (min, max) => Math.random() * (max - min) + min,
+  drawRoundRect: (ctx, x, y, w, h, r) => {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+};
+
+const PianoSound = {
+  ctx: null,
+  frequencies: {
+    white: { 0: 329.63, 1: 293.66, 2: 261.63, 3: 246.94, 4: 220.00, 5: 196.00, 6: 174.61 },
+    black: { 100: 311.13, 101: 277.18, 103: 233.08, 104: 207.65, 105: 185.00 }
+  },
+  init: function() {
+    if (!this.ctx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioContext();
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  play: function(keyIndex, isBlack) {
+    this.init();
+    const osc = this.ctx.createOscillator();
+    const gainNode = this.ctx.createGain();
+    let freq = isBlack ? this.frequencies.black[keyIndex] : this.frequencies.white[keyIndex];
+    if (!freq) return;
+    osc.type = 'triangle'; 
+    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
+    osc.connect(gainNode);
+    gainNode.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 1.5);
+  }
+};
+
+class NoteParticle {
+  constructor() { this.active = false; }
+  activate(x, y) {
+    this.x = x; this.y = y;
+    this.vx = Utils.random(-1.5, 1.5);
+    this.vy = Utils.random(-3, -1);
+    this.rotation = Utils.random(-0.5, 0.5);
+    this.rotSpeed = Utils.random(-0.05, 0.05);
+    this.scale = 0;
+    this.targetScale = Utils.random(0.6, 1.0);
+    this.life = 1.0;
+    this.decay = isMobile ? 0.05 : 0.02;
+    this.type = Math.random() > 0.5 ? 'single' : 'double';
+    this.color = `hsl(${Utils.random(200, 340)}, 80%, 65%)`;
+    this.active = true;
+  }
+  update() {
+    if (!this.active) return;
+    this.x += this.vx; this.y += this.vy; this.vy += 0.05;
+    this.rotation += this.rotSpeed; this.life -= this.decay;
+    if (this.scale < this.targetScale) this.scale += (this.targetScale - this.scale) * 0.2;
+    if (this.life <= 0) this.active = false;
+  }
+  draw(ctx) {
+    if (!this.active) return;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scale, this.scale);
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    if (this.type === 'single') {
+      ctx.ellipse(-4, 6, 4, 3, -0.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-1, 6); ctx.lineTo(-1, -10); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-1, -10); ctx.bezierCurveTo(4, -6, 8, -4, 6, 2); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.ellipse(-6, 6, 3.5, 2.5, -0.2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(6, 4, 3.5, 2.5, -0.2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-3, 6); ctx.lineTo(-3, -8); ctx.moveTo(9, 4); ctx.lineTo(9, -10); ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(-3, -8); ctx.bezierCurveTo(3, -7, 6, -9, 9, -10); ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
+
+class Particle {
+  constructor() { this.active = false; }
+  activate(x, y) {
+    this.x = x; this.y = y;
+    this.vx = Utils.random(-1, 1);
+    this.vy = Utils.random(-1.5, -0.2);
+    this.life = 1.0;
+    this.decay = isMobile ? 0.05 : 0.015; 
+    this.size = Utils.random(3, 5);
+    this.color = `hsl(${Utils.random(30, 60)}, 100%, 75%)`;
+    this.rotation = Math.random() * Math.PI;
+    this.active = true;
+  }
+  update() {
+    if (!this.active) return;
+    this.x += this.vx; this.y += this.vy; this.vy += 0.03;
+    this.life -= this.decay; this.rotation += 0.05;
+    if (this.life <= 0) this.active = false;
+  }
+  draw(ctx) {
+    if (!this.active) return;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    for (let i = 0; i < 4; i++) {
+      ctx.lineTo(Math.cos(i * Math.PI / 2) * this.size, Math.sin(i * Math.PI / 2) * this.size);
+      ctx.lineTo(Math.cos((i * Math.PI / 2) + Math.PI / 4) * (this.size * 0.4), Math.sin((i * Math.PI / 2) + Math.PI / 4) * (this.size * 0.4));
+    }
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+class PianoKey {
+  constructor(index, x, w, h, isBlack) {
+    this.index = index; this.x = x; this.y = 0; this.w = w; this.h = h;
+    this.isBlack = isBlack; this.pressOffset = 0; this.targetOffset = 0;
+  }
+  update() {
+    const speed = isMobile ? 0.6 : 0.3; 
+    this.pressOffset += (this.targetOffset - this.pressOffset) * speed;
+    if (Math.abs(this.targetOffset - this.pressOffset) < 0.5 && this.targetOffset > 0) this.targetOffset = 0;
+  }
+  hit() { this.targetOffset = 20; }
+  draw(ctx, baseY) {
+    const drawX = this.x; const drawY = baseY - this.h + this.pressOffset;
+    if (!isMobile) {
+        ctx.shadowColor = 'rgba(0,0,0,0.1)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
+    }
+    const grad = ctx.createLinearGradient(drawX, drawY, drawX, drawY + this.h);
+    if (this.isBlack) {
+      grad.addColorStop(0, '#434343'); grad.addColorStop(1, '#000000'); ctx.fillStyle = grad;
+      Utils.drawRoundRect(ctx, drawX, drawY, this.w, this.h, 3); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fillRect(drawX + 4, drawY + 5, this.w - 8, this.h - 10);
+    } else {
+      grad.addColorStop(0, '#ffffff'); grad.addColorStop(1, '#f0f0f0'); ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.roundRect(drawX, drawY, this.w, this.h, [0, 0, 4, 4]); ctx.fill();
+      ctx.fillStyle = '#ddd'; ctx.fillRect(drawX, drawY + this.h - 10, this.w, 10);
+    }
+    ctx.shadowColor = 'transparent';
+  }
+}
+
+class KawaiiCat {
+  constructor() { this.active = false; }
+  activate(limitWidth) {
+    this.radius = 24;
+    this.x = Utils.random(this.radius + 10, limitWidth - this.radius - 10);
+    this.y = -60;
+    this.vx = 0;
+    this.vy = Utils.random(0.05, 0.3); 
+    this.rotation = Utils.random(-0.1, 0.1);
+    this.rotVelocity = 0;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.type = Math.floor(Math.random() * 4);
+    this.expression = 'IDLE';
+    this.active = true;
+    this.collisionTime = 0;
+  }
+  
+  update(gravity, airRes, height, keys) {
+    if (!this.active) return null;
+    this.vy += gravity;
+    this.vx *= airRes;
+    this.y += this.vy;
+    this.x += this.vx;
+    this.rotation += this.rotVelocity;
+    this.scaleX += (1 - this.scaleX) * CONFIG.softBodyStiffness;
+    this.scaleY += (1 - this.scaleY) * CONFIG.softBodyStiffness;
+    
+    if (this.expression === 'SHOCK') {
+      this.collisionTime++;
+      if (this.collisionTime > (isMobile ? 8 : 15)) this.expression = 'HAPPY';
+    }
+
+    let groundLevel = height - CONFIG.keyHeights.white;
+    let targetKey = null;
+    for (let k of keys) {
+        if (k.isBlack && this.x >= k.x && this.x <= k.x + k.w) {
+            groundLevel = height - CONFIG.keyHeights.black;
+            targetKey = k;
+            break; 
+        }
+    }
+    if (!targetKey) {
+        const keyWidth = CONFIG.pianoWidth / 7; 
+        const keyIdx = Math.floor(this.x / keyWidth);
+        if (keys[keyIdx]) targetKey = keys[keyIdx];
+    }
+
+    if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
+        targetKey.hit(); 
+        this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 12.0 : 7.0); 
+        this.vx = Utils.random(-1.2, 1.2); 
+        this.rotVelocity = Utils.random(-0.03, 0.03);
+        this.scaleX = 1.4; this.scaleY = 0.6;
+        this.expression = 'SHOCK';
+        this.collisionTime = 0;
+        this.y = groundLevel - this.radius;
+        return { hit: true, x: this.x, y: groundLevel };
+    }
+    
+    if (this.y > height + 100) this.active = false; 
+    return null;
+  }
+  
+  draw(ctx) {
+    if (!this.active) return;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scaleX, this.scaleY);
+    
+    let colors = CONFIG.colors.whiteCat;
+    if (this.type === 1) colors = CONFIG.colors.calicoCat;
+    if (this.type === 2) colors = CONFIG.colors.orangeCat;
+    if (this.type === 3) colors = CONFIG.colors.greyCat;
+    
+    ctx.fillStyle = colors.base;
+    ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
+    
+    ctx.fillStyle = colors.base;
+    ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(28, -28, 10, -20); ctx.fill();
+    ctx.fillStyle = colors.blush;
+    ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
+
+    if (this.type === 1) {
+      ctx.fillStyle = colors.pattern1;
+      ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = colors.pattern2;
+      ctx.beginPath(); ctx.arc(12, -8, 6, 0, Math.PI*2); ctx.fill();
+    }
+    if (this.type === 2) {
+       ctx.strokeStyle = colors.pattern;
+       ctx.lineWidth = 2;
+       ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, -10); ctx.stroke();
+       ctx.beginPath(); ctx.moveTo(-6, -18); ctx.lineTo(-6, -12); ctx.stroke();
+       ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
+    }
+
+    ctx.strokeStyle = '#3e3e3e';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    
+    if (this.expression === 'IDLE') {
+      ctx.fillStyle = '#3e3e3e';
+      ctx.beginPath(); ctx.arc(-8, 0, 2.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(8, 0, 2.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
+      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5); ctx.stroke();
+    } else if (this.expression === 'SHOCK') {
+      ctx.beginPath();
+      ctx.moveTo(-12, -2); ctx.lineTo(-6, 2); ctx.lineTo(-12, 6);
+      ctx.moveTo(12, -2); ctx.lineTo(6, 2); ctx.lineTo(12, 6);
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, 8, 3, 0, Math.PI*2); ctx.strokeStyle='#3e3e3e'; ctx.stroke();
+    } else if (this.expression === 'HAPPY') {
+      ctx.beginPath();
+      ctx.moveTo(-12, 2); ctx.quadraticCurveTo(-8, -2, -4, 2);
+      ctx.moveTo(4, 2); ctx.quadraticCurveTo(8, -2, 12, 2);
+      ctx.moveTo(-4, 6); ctx.quadraticCurveTo(0, 8, 4, 6); 
+      ctx.stroke(); 
+      ctx.fillStyle = colors.blush;
+      ctx.globalAlpha = 0.6;
+      ctx.beginPath(); ctx.arc(-14, 6, 4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(14, 6, 4, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.beginPath();
+    }
+    ctx.restore();
+  }
+}
+
+class NekoEngine {
+  constructor() {
+    this.root = document.getElementById('neko-engine-root');
+    this.restoreBtn = document.getElementById('neko-restore-btn');
+    this.clickZone = document.getElementById('piano-click-zone');
+    this.canvas = document.getElementById('neko-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.audio = document.getElementById('neko-audio');
+    this.uiBtn = document.getElementById('neko-toggle-btn');
+    this.uiInfo = document.querySelector('.neko-info');
+    this.closeBtn = document.getElementById('neko-close-btn');
+    
+    this.width = 700; 
+    this.height = this.root.offsetHeight; 
+    this.isPlaying = false;
+    this.lastTime = 0;
+    this.beatTimer = 0;
+    this.nextBeat = 0;
+    this.isClosed = false;
+    
+    this.keys = [];
+    this.catPool = [];
+    this.particlePool = [];
+    this.notePool = [];
+    
+    this.bindInteraction();
+    this.init();
+  }
+
+  initPools() {
+    for(let i=0; i<CONFIG.poolSize.cats; i++) this.catPool.push(new KawaiiCat());
+    for(let i=0; i<CONFIG.poolSize.particles; i++) {
+      this.particlePool.push(new Particle());
+      this.notePool.push(new NoteParticle());
+    }
+  }
+
+  spawnCat() {
+    const cat = this.catPool.find(c => !c.active);
+    if (cat) cat.activate(CONFIG.pianoWidth);
+  }
+
+  spawnParticles(x, y) {
+    const pLimit = isMobile ? 2 : 4;
+    let pCount = 0;
+    for (let p of this.particlePool) {
+      if (!p.active) {
+        p.activate(x, y); pCount++;
+        if (pCount >= pLimit) break;
+      }
+    }
+    const note = this.notePool.find(n => !n.active);
+    if (note) note.activate(x, y);
+  }
+
+  bindInteraction() {
+    const handleInput = (clientX, clientY) => {
+      const rect = this.root.getBoundingClientRect();
+      const scale = 0.7;
+      const logicX = (clientX - rect.left) / scale;
+      const logicY = (clientY - rect.top) / scale;
+      this.triggerKeyAt(logicX, logicY);
+    };
+    this.clickZone.addEventListener('mousedown', (e) => handleInput(e.clientX, e.clientY));
+    this.clickZone.addEventListener('touchstart', (e) => {
+      if(e.touches.length > 0) handleInput(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive: true});
+
+    // 关闭按钮事件
+    this.closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.close();
+    });
+
+    // 恢复按钮事件
+    this.restoreBtn.addEventListener('click', () => {
+      this.restore();
+    });
+  }
+
+  close() {
+    this.isClosed = true;
+    this.root.classList.add('neko-hidden');
+    this.restoreBtn.classList.add('visible');
+    
+    // 暂停音乐
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.uiBtn.classList.remove('active');
+      document.getElementById('icon-play').style.display = 'block';
+      document.getElementById('icon-pause').style.display = 'none';
+    }
+    
+    // 保存状态到 localStorage
+    localStorage.setItem('neko-closed', 'true');
+  }
+
+  restore() {
+    this.isClosed = false;
+    this.root.classList.remove('neko-hidden');
+    this.restoreBtn.classList.remove('visible');
+    localStorage.setItem('neko-closed', 'false');
+  }
+
+  triggerKeyAt(x, y) {
+    let targetKey = null;
+    if (y > this.height - CONFIG.keyHeights.black) {
+      for (let k of this.keys) {
+        if (k.isBlack && x >= k.x && x <= k.x + k.w) { targetKey = k; break; }
+      }
+    }
+    if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
+      for (let k of this.keys) {
+        if (!k.isBlack && x >= k.x && x <= k.x + k.w) { targetKey = k; break; }
+      }
+    }
+    if (targetKey) {
+      targetKey.hit(); 
+      PianoSound.play(targetKey.index, targetKey.isBlack);
+      const centerX = targetKey.x + targetKey.w / 2;
+      const centerY = this.height - (targetKey.isBlack ? CONFIG.keyHeights.black : CONFIG.keyHeights.white) + 20;
+      this.spawnParticles(centerX, centerY);
+    }
+  }
+  
+  init() {
+    // 检查之前是否关闭过
+    const wasClosed = localStorage.getItem('neko-closed');
+    if (wasClosed === 'true') {
+      this.close();
+    }
+
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    this.uiInfo.innerText = "Ready: " + CONFIG.musicTitle;
+    this.initPools();
+
+    const whiteCount = 7;
+    const whiteW = CONFIG.pianoWidth / whiteCount;
+    const blackW = whiteW * 0.65;
+    const whiteH = CONFIG.keyHeights.white;
+    const blackH = CONFIG.keyHeights.black;
+    for (let i = 0; i < whiteCount; i++) {
+      this.keys.push(new PianoKey(i, i * whiteW, whiteW, whiteH, false));
+    }
+    const blackIndices = [0, 1, 3, 4, 5]; 
+    blackIndices.forEach(i => {
+      this.keys.push(new PianoKey(100+i, (i + 1) * whiteW - blackW/2, blackW, blackH, true));
+    });
+    
+    this.uiBtn.addEventListener('click', () => this.toggleState());
+    setTimeout(() => this.root.classList.add('loaded'), 500);
+    requestAnimationFrame((t) => this.loop(t));
+  }
+  
+  resize() {
+    const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
+    this.width = 700; 
+    this.height = this.root.offsetHeight; 
+    this.canvas.width = this.width * dpr;
+    this.canvas.height = this.height * dpr;
+    this.ctx.scale(dpr, dpr);
+  }
+  
+  toggleState() {
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.uiBtn.classList.remove('active');
+      this.uiInfo.innerText = "Music Paused";
+      document.getElementById('icon-play').style.display = 'block';
+      document.getElementById('icon-pause').style.display = 'none';
+    } else {
+      this.audio.play().catch(e => console.log("Autoplay blocked", e));
+      this.isPlaying = true;
+      this.uiBtn.classList.add('active');
+      this.uiInfo.innerText = "Playing \u00b7 " + CONFIG.musicTitle;
+      document.getElementById('icon-play').style.display = 'none';
+      document.getElementById('icon-pause').style.display = 'block';
+    }
+  }
+  
+  loop(timestamp) {
+    requestAnimationFrame((t) => this.loop(t));
+    
+    // 如果已关闭，不渲染
+    if (this.isClosed) return;
+    
+    const elapsed = timestamp - this.lastTime;
+    if (elapsed < frameInterval) return;
+    this.lastTime = timestamp - (elapsed % frameInterval);
+
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    
+    if (this.isPlaying) {
+      this.beatTimer += elapsed;
+      if (this.beatTimer >= this.nextBeat) {
+        this.spawnCat();
+        const beatDuration = 60000 / CONFIG.bpm; 
+        const multiplier = Math.random() > 0.7 ? 0.5 : 1;
+        this.nextBeat = beatDuration * multiplier * (1 + Utils.random(-0.1, 0.1));
+        this.beatTimer = 0;
+      }
+    }
+    
+    const pianoY = this.height - CONFIG.keyHeights.white;
+    this.ctx.fillStyle = '#6d1b1b';
+    this.ctx.fillRect(0, pianoY - 5, CONFIG.pianoWidth, 5);
+    
+    const whiteKeys = this.keys.filter(k => !k.isBlack);
+    const blackKeys = this.keys.filter(k => k.isBlack);
+    whiteKeys.forEach(k => { k.update(); k.draw(this.ctx, this.height); });
+    blackKeys.forEach(k => { k.update(); k.draw(this.ctx, this.height); });
+    
+    this.catPool.forEach(cat => {
+        const res = cat.update(CONFIG.gravity, CONFIG.airResistance, this.height, this.keys);
+        if (res && res.hit) this.spawnParticles(res.x, res.y);
+        cat.draw(this.ctx);
+    });
+    
+    this.particlePool.forEach(p => { p.update(); p.draw(this.ctx); });
+    this.notePool.forEach(n => { n.update(); n.draw(this.ctx); });
+  }
+}
+
+window.addEventListener('load', () => {
+  new NekoEngine();
+});

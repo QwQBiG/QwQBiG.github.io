@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>脚本 on QwQBiG's World</title><link>https://QwQBiG.github.io/tags/%E8%84%9A%E6%9C%AC/</link><description>Recent content in 脚本 on QwQBiG's World</description><generator>Hugo -- 0.152.2</generator><language>zh-cn</language><lastBuildDate>Tue, 16 Dec 2025 12:00:00 +0800</lastBuildDate><atom:link href="https://QwQBiG.github.io/tags/%E8%84%9A%E6%9C%AC/index.xml" rel="self" type="application/rss+xml"/><item><title>Windows家庭版激活成专业版</title><link>https://QwQBiG.github.io/posts/professionaleditionwindows/</link><pubDate>Tue, 16 Dec 2025 12:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/professionaleditionwindows/</guid><description>&lt;h1 id="windows-激活成专业版"&gt;Windows 激活成专业版&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; 断开网络（拔网线或关 &lt;code&gt;WiFi&lt;/code&gt;）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原因：联网状态下验证密钥会失败，断网可以让它先通过验证并执行升级文件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; 点击 开始 -&amp;gt; 设置 搜索并点开 “更改产品密钥”
+输入这个通用的转换密钥（这是微软官方给出的 &lt;code&gt;RTM&lt;/code&gt; 安装密钥，非破解）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;VK7JG-NPHTM-C97JM-9MPGT-3V66T
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; 点击“下一步”或“开始”。
+系统会提示“无法验证密钥”或者直接提示“准备升级”。
+让它跑完进度条，电脑会自动重启。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; 重启之后连上网，右键开始菜单，以管理员身份运行 &lt;code&gt;Windows PowerShell&lt;/code&gt; (管理员！)
+复制并粘贴下面这行新命令，然后回车：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
+&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;irm https://get.activated.win | iex
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; 等待几秒钟，会出现一个彩色的菜单窗口。
+按键盘上的数字键 1 (选择 HWID 激活)。
+HWID 是永久数字权利激活，最稳的一种。
+脚本跑完后提示绿色文字（Successfully activated）即可关闭。&lt;/p&gt;
+&lt;p&gt;然后就是可以搞 &lt;code&gt;WSL&lt;/code&gt; 玩玩 &lt;code&gt;Linux&lt;/code&gt; 啦!
+还有沙箱可以搞病毒乱斗&amp;hellip;&lt;/p&gt;
+&lt;p&gt;接着玩哈：
+&lt;strong&gt;&lt;a href="../getwsl/"&gt;搞搞WSL&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;</description></item></channel></rss>

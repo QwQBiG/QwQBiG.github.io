@@ -1,8 +1,8 @@
 # hugo.toml (推荐的完整配置)
 
 baseURL = "https://QwQBiG.github.io/"
-languageCode = "zh-cn" # 建议修改为中文，对主题更友好
-title = "QwQBiG's Blog" # 这是你的网站总标题
+languageCode = "zh-cn" # 修改为中文
+title = "QwQBiG's World" # 网站总标题
 theme = "github.com/adityatelange/hugo-PaperMod"
 
 [markup]
@@ -28,7 +28,7 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     identifier = "archives"
     name = "归档"
     url = "/archives/"
-    weight = 10 # 权重决定了菜单的顺序，数字越大越靠后。
+    weight = 10
   [[menu.main]]
     identifier = "series"
     name = "合集"
@@ -47,30 +47,30 @@ theme = "github.com/adityatelange/hugo-PaperMod"
   [[menu.main]]
     identifier = "search"
     name = "搜索"
-    url = "/search/" # 指向搜索页面
+    url = "/search/"
     weight = 40
 
 # 这是最关键的参数配置部分
 [params]
 
-    mainSections = ["posts", "series"]
+    mainSections = ["cs", "series"]
 
     ShowCodeCopyButtons = true
 
     ShowReadingTime = true
 
     # 1. 关闭特殊的“个人资料”主页模式
-    # 这会让你的主页变成一个标准的文章列表
+    # 主页变成一个标准的文章列表
     [params.profileMode]
         enabled = false
 
     # 2. 在主页文章列表上方显示一个欢迎语
-    # 这会解决主标题不显示的问题，并让主页更好看
+    # 这会解决主标题不显示的问题
     [params.homeInfoParams]
-        # Title 放简短的欢迎语
+        # Title 欢迎语
     Title = "欢迎来到我的网站 👋"
 
-    # Content 放你的字符画，用 <pre> 包裹，并设置好样式
+    # Content 放字符画，用 <pre> 包裹，并设置好样式
     Content = """
 <style>
   /* 定义彩虹流动的动画关键帧 */
@@ -87,7 +87,7 @@ theme = "github.com/adityatelange/hugo-PaperMod"
     /* 2. 拉大背景尺寸，这样才有空间移动 */
     background-size: 200% auto;
     
-    /* 3. 核心魔法：将背景裁剪到文字形状 */
+    /* 3. 将背景裁剪到文字形状 */
     -webkit-background-clip: text;
     background-clip: text;
     
@@ -163,12 +163,16 @@ theme = "github.com/adityatelange/hugo-PaperMod"
         name = "bilibili"
         url = "https://space.bilibili.com/3546921071282890"
 
+    [[params.socialIcons]]
+        name = "leetcode"
+        url = "https://leetcode.cn/u/heuristic-agnesipjp/"
+
      [params.author]
         name = "QwQBiG"
 
     [params.search]
         enabled = true
-        # 可选项: 你可以限制只在某些分区/类型的内容里搜索
+        # 可选项: 可以限制只在某些分区/类型的内容里搜索
         # ex: content/posts, content/docs 等
         # contentTypes = ["page", "post"]
 

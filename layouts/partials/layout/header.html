@@ -1,0 +1,459 @@
+{{- /* Theme Toggle Switch - Final Version with Shooting Stars */ -}}
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            {{- $label_text := (site.Params.label.text | default site.Title) -}}
+            <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
+                {{- if site.Params.label.icon }}
+                {{- $img := resources.Get site.Params.label.icon }}
+                {{- if $img }}
+                    {{- $img := $img.Resize "35x35" }}
+                    <img src="{{ $img.Permalink }}" alt="" aria-label="logo"
+                        height="{{ $img.Height }}" width="{{ $img.Width }}">
+                {{- else }}
+                <img src="{{ site.Params.label.icon | absURL }}" alt="" aria-label="logo"
+                    height="35" width="35">
+                {{- end -}}
+                {{- end -}}
+                {{- $label_text -}}
+            </a>
+            <div class="logo-switches">
+                {{- if (not site.Params.disableThemeToggle) }}
+                
+                <style>
+                    :root {
+                        --sz-w: 68px;
+                        --sz-h: 34px;
+                        --sz-gap: 3px;
+                        --sz-orb: calc(var(--sz-h) - (var(--sz-gap) * 2));
+                        --travel: calc(var(--sz-w) - var(--sz-orb) - (var(--sz-gap) * 2));
+                        
+                        --ease-damp: cubic-bezier(0.25, 1, 0.5, 1);
+                        --dur-main: 0.7s;
+                        --dur-env: 0.9s;
+                        --dur-border: 1.2s;
+
+                        --c-sky-1: #62cff4;
+                        --c-sky-2: #2c67f2;
+                        --c-sun-inner: #ffdd55;
+                        --c-sun-outer: #ffaa00;
+                        
+                        --c-border-day: #00f2fe;
+                        --c-border-night: #5f2c82;
+
+                        --c-cloud-1: #ffffff;
+                        --c-cloud-2: rgba(255,255,255,0.85);
+                        --c-cloud-3: rgba(255,255,255,0.6);
+
+                        --c-void-1: #1a1c29;
+                        --c-void-2: #0f1016;
+                        --c-moon-base: #d6dbe0;
+                        --c-moon-shadow: #9da5b0;
+                    }
+
+                    button#theme-toggle {
+                        appearance: none; -webkit-appearance: none;
+                        border: none; background: none; cursor: pointer;
+                        padding: 0; margin-left: 20px;
+                        width: var(--sz-w) !important;
+                        height: var(--sz-h) !important;
+                        border-radius: 100px !important;
+                        position: relative;
+                        overflow: hidden;
+                        z-index: 100;
+                        
+                        box-shadow: 
+                            0 0 0 1.5px var(--c-border-day),
+                            0 5px 15px rgba(0,0,0,0.15),
+                            inset 0 4px 6px rgba(255,255,255,0.4),
+                            inset 0 -4px 6px rgba(0,0,0,0.1);
+                        
+                        background: var(--c-sky-2);
+                        transition: transform 0.1s, box-shadow var(--dur-border) ease;
+                        -webkit-tap-highlight-color: transparent;
+                        outline: none;
+                    }
+
+                    body.dark button#theme-toggle {
+                        box-shadow: 
+                            0 0 0 1.5px var(--c-border-night),
+                            0 5px 15px rgba(0,0,0,0.3),
+                            inset 0 4px 6px rgba(255,255,255,0.1),
+                            inset 0 -4px 6px rgba(0,0,0,0.3);
+                    }
+
+                    button#theme-toggle:active {
+                        transform: scale(0.97);
+                    }
+
+                    .layer-bg-day, .layer-bg-night {
+                        position: absolute; inset: 0;
+                        z-index: 1;
+                        transition: opacity var(--dur-env) ease;
+                    }
+
+                    .layer-bg-day {
+                        background: linear-gradient(180deg, var(--c-sky-1) 0%, var(--c-sky-2) 100%);
+                        opacity: 1;
+                    }
+
+                    .layer-bg-night {
+                        background: radial-gradient(circle at 50% 120%, #2b3242 0%, var(--c-void-1) 50%, var(--c-void-2) 100%);
+                        opacity: 0;
+                    }
+
+                    body.dark .layer-bg-day { opacity: 0; }
+                    body.dark .layer-bg-night { opacity: 1; }
+
+                    .star-matrix {
+                        position: absolute; width: 100%; height: 100%;
+                        z-index: 2;
+                        transform: translateY(-150%) scale(0.8);
+                        opacity: 0;
+                        transition: transform var(--dur-main) var(--ease-damp), opacity 0.5s ease;
+                    }
+
+                    body.dark .star-matrix {
+                        transform: translateY(0) scale(1);
+                        opacity: 1;
+                    }
+
+                    .star-dot {
+                        position: absolute;
+                        background: #fff;
+                        border-radius: 50%;
+                        box-shadow: 0 0 2px rgba(255,255,255,0.9);
+                    }
+
+                    .sd-1 { top: 20%; left: 20%; width: 1.5px; height: 1.5px; animation: blink 3s infinite; }
+                    .sd-2 { top: 30%; left: 45%; width: 1px; height: 1px; opacity: 0.6; }
+                    .sd-3 { top: 15%; left: 65%; width: 1.2px; height: 1.2px; animation: blink 4s infinite 1s; }
+                    .sd-4 { top: 60%; left: 15%; width: 1px; height: 1px; opacity: 0.5; }
+                    .sd-5 { top: 75%; left: 35%; width: 1.2px; height: 1.2px; animation: blink 5s infinite 0.5s; }
+                    .sd-6 { top: 50%; left: 80%; width: 1.5px; height: 1.5px; animation: blink 2.5s infinite; }
+                    .sd-7 { top: 80%; left: 70%; width: 1px; height: 1px; opacity: 0.7; }
+
+                    .shooting-star-zone {
+                        position: absolute; inset: 0;
+                        z-index: 2; pointer-events: none; overflow: hidden;
+                    }
+
+                    .s-meteor {
+                        position: absolute;
+                        top: 0; right: 20%;
+                        width: 20px; height: 1px;
+                        background: linear-gradient(to left, transparent, rgba(255,255,255,1), transparent);
+                        transform: rotate(-45deg) translateX(0);
+                        opacity: 0;
+                    }
+
+                    body.dark .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
+                    body.dark .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
+
+                    .cloud-stack {
+                        position: absolute; inset: 0;
+                        z-index: 3;
+                        transition: transform var(--dur-main) var(--ease-damp), opacity var(--dur-main) ease;
+                    }
+
+                    body.dark .cloud-stack {
+                        transform: translateY(100%);
+                        opacity: 0;
+                    }
+
+                    .cloud-puff {
+                        position: absolute;
+                        border-radius: 100px;
+                    }
+                    .cloud-puff::before, .cloud-puff::after {
+                        content: ''; position: absolute; background: inherit; border-radius: 50%;
+                    }
+
+                    .cl-back {
+                        top: 35%; right: 10%;
+                        width: 20px; height: 8px;
+                        background: var(--c-cloud-3);
+                        filter: blur(1.5px);
+                        animation: float-h 10s ease-in-out infinite alternate;
+                    }
+
+                    .cl-mid {
+                        bottom: 10%; left: 15%;
+                        width: 24px; height: 10px;
+                        background: var(--c-cloud-2);
+                        animation: float-h 7s ease-in-out infinite alternate-reverse;
+                    }
+                    .cl-mid::before { width: 12px; height: 12px; top: -6px; left: 3px; }
+
+                    .cl-front {
+                        top: 15%; left: 25%;
+                        width: 28px; height: 11px;
+                        background: var(--c-cloud-1);
+                        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+                        animation: float-h 5s ease-in-out infinite alternate;
+                    }
+                    .cl-front::before { width: 13px; height: 13px; top: -6px; left: 5px; }
+                    .cl-front::after { width: 9px; height: 9px; top: -4px; right: 3px; }
+
+                    .orb-track {
+                        position: absolute;
+                        width: 100%; height: 100%;
+                        top: 0; left: 0;
+                        pointer-events: none;
+                    }
+
+                    .orb {
+                        position: absolute;
+                        width: var(--sz-orb);
+                        height: var(--sz-orb);
+                        top: 50%;
+                        transform: translateY(-50%) translateX(var(--sz-gap)) rotate(0deg);
+                        border-radius: 50%;
+                        background: transparent;
+                        z-index: 10;
+                        overflow: hidden;
+                        box-shadow: 
+                            inset 0 2px 4px rgba(255,255,255,0.5),
+                            inset 0 -2px 4px rgba(0,0,0,0.15),
+                            0 2px 6px rgba(0,0,0,0.2);
+                        transition: transform var(--dur-main) var(--ease-damp);
+                    }
+
+                    body.dark .orb {
+                        transform: translateY(-50%) translateX(calc(var(--sz-gap) + var(--travel))) rotate(360deg);
+                    }
+
+                    .face-sun {
+                        position: absolute; inset: 0;
+                        background: radial-gradient(circle at 40% 40%, var(--c-sun-inner) 0%, var(--c-sun-outer) 100%);
+                        border-radius: 50%;
+                    }
+
+                    .face-moon {
+                        position: absolute; inset: 0;
+                        border-radius: 50%;
+                        background: radial-gradient(circle at 60% 40%, #f0f2f5, var(--c-moon-base));
+                        transform: translateX(100%);
+                        transition: transform var(--dur-main) var(--ease-damp);
+                        box-shadow: inset 2px 0 6px rgba(0,0,0,0.1);
+                        z-index: 5;
+                    }
+
+                    body.dark .face-moon {
+                        transform: translateX(0);
+                    }
+
+                    .crater {
+                        position: absolute;
+                        background: var(--c-moon-shadow);
+                        border-radius: 50%;
+                        opacity: 0;
+                        box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
+                        transition: opacity 0.4s ease;
+                    }
+                    
+                    body.dark .crater {
+                        opacity: 1;
+                        transition-delay: 0.4s;
+                    }
+
+                    .cr-1 { top: 25%; left: 35%; width: 6px; height: 6px; }
+                    .cr-2 { top: 60%; left: 55%; width: 4px; height: 4px; }
+                    .cr-3 { top: 50%; left: 20%; width: 3px; height: 3px; }
+
+                    .halo-container {
+                        position: absolute; 
+                        left: calc(var(--sz-gap) + (var(--sz-orb) / 2));
+                        top: 50%;
+                        width: 0; height: 0;
+                        z-index: 9;
+                        transition: transform var(--dur-main) var(--ease-damp);
+                    }
+                    
+                    body.dark .halo-container {
+                        transform: translateX(var(--travel));
+                    }
+
+                    .sun-halo {
+                        position: absolute; 
+                        top: 50%; left: 50%;
+                        width: 90px; height: 90px;
+                        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+                        transform: translate(-50%, -50%);
+                        opacity: 1;
+                        transition: opacity 0.5s;
+                        pointer-events: none;
+                    }
+                    
+                    .ray-ring {
+                        position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
+                        transform: translate(-50%, -50%);
+                        animation: spin 12s linear infinite;
+                    }
+                    .ray {
+                        position: absolute; top: 0; left: 50%; width: 2px; height: 100%;
+                        background: linear-gradient(to bottom, transparent 0%, rgba(255,221,85,0.4) 20%, rgba(255,221,85,0.4) 80%, transparent 100%);
+                        transform: translateX(-50%);
+                    }
+                    .ray:nth-child(2) { transform: translateX(-50%) rotate(45deg); }
+                    .ray:nth-child(3) { transform: translateX(-50%) rotate(90deg); }
+                    .ray:nth-child(4) { transform: translateX(-50%) rotate(135deg); }
+
+                    body.dark .sun-halo { opacity: 0; }
+
+                    @keyframes float-h {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(2px); }
+                    }
+                    @keyframes blink {
+                        0%, 100% { opacity: 1; transform: scale(1); }
+                        50% { opacity: 0.4; transform: scale(0.7); }
+                    }
+                    @keyframes spin {
+                        to { transform: translate(-50%, -50%) rotate(360deg); }
+                    }
+                    @keyframes meteor {
+                        0% { opacity: 0; transform: rotate(-45deg) translateX(0); }
+                        10% { opacity: 1; }
+                        20% { opacity: 0; transform: rotate(-45deg) translateX(-30px); }
+                        100% { opacity: 0; transform: rotate(-45deg) translateX(-30px); }
+                    }
+                </style>
+
+                <button id="theme-toggle" accesskey="t" title="Switch Theme (Alt + T)">
+                    <div class="layer-bg-day"></div>
+                    <div class="layer-bg-night"></div>
+
+                    <div class="star-matrix">
+                        <div class="star-dot sd-1"></div> <div class="star-dot sd-2"></div>
+                        <div class="star-dot sd-3"></div> <div class="star-dot sd-4"></div>
+                        <div class="star-dot sd-5"></div> <div class="star-dot sd-6"></div>
+                        <div class="star-dot sd-7"></div>
+                    </div>
+
+                    <div class="shooting-star-zone">
+                        <div class="s-meteor sm-1"></div>
+                        <div class="s-meteor sm-2"></div>
+                    </div>
+
+                    <div class="cloud-stack">
+                        <div class="cloud-puff cl-back"></div>
+                        <div class="cloud-puff cl-mid"></div>
+                        <div class="cloud-puff cl-front"></div>
+                    </div>
+
+                    <div class="halo-container">
+                        <div class="sun-halo">
+                            <div class="ray-ring">
+                                <div class="ray"></div> <div class="ray"></div> 
+                                <div class="ray"></div> <div class="ray"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="orb-track">
+                        <div class="orb">
+                            <div class="face-sun"></div>
+                            <div class="face-moon">
+                                <div class="crater cr-1"></div>
+                                <div class="crater cr-2"></div>
+                                <div class="crater cr-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+
+                <script>
+                    (function() {
+                        const originalBtn = document.getElementById("theme-toggle");
+                        if (!originalBtn) return;
+
+                        const newBtn = originalBtn.cloneNode(true);
+                        originalBtn.parentNode.replaceChild(newBtn, originalBtn);
+
+                        function setDark(isDark) {
+                            if (isDark) {
+                                document.body.classList.add('dark');
+                                document.documentElement.classList.add('dark');
+                                localStorage.setItem('pref-theme', 'dark');
+                            } else {
+                                document.body.classList.remove('dark');
+                                document.documentElement.classList.remove('dark');
+                                localStorage.setItem('pref-theme', 'light');
+                            }
+                            window.dispatchEvent(new Event('theme-change'));
+                        }
+
+                        newBtn.addEventListener("click", function(e) {
+                            e.preventDefault(); e.stopPropagation();
+                            const isDark = document.body.classList.contains('dark') || 
+                                         document.documentElement.classList.contains('dark');
+                            setDark(!isDark);
+                        });
+
+                        const savedTheme = localStorage.getItem('pref-theme');
+                        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+                            setDark(true);
+                        } else {
+                            setDark(false);
+                        }
+
+                        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                            if (!localStorage.getItem('pref-theme')) setDark(e.matches);
+                        });
+                    })();
+                </script>
+
+                {{- end }}
+                {{- $lang := .Lang}}
+                {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
+                {{- with site.Home.AllTranslations }}
+                <ul class="lang-switch">
+                    {{- if $separator }}<li>|</li>{{ end }}
+                    {{- range . -}}
+                    {{- if ne $lang .Lang }}
+                    <li>
+                        <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
+                            aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
+                            {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
+                            {{- .Language.LanguageName | emojify -}}
+                            {{- else }}
+                            {{- .Lang | title -}}
+                            {{- end -}}
+                        </a>
+                    </li>
+                    {{- end -}}
+                    {{- end}}
+                </ul>
+                {{- end }}
+            </div>
+        </div>
+        {{- $currentPage := . }}
+        <ul id="menu">
+            {{- range site.Menus.main }}
+            {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL) ) | absLangURL }}
+            {{- $page_url:= $currentPage.Permalink | absLangURL }}
+            {{- $is_search := eq (site.GetPage .KeyName).Layout "search" }}
+            <li>
+                <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }} {{- cond $is_search " (Alt + /)" "" }}"
+                {{- if $is_search -}}accesskey="/"{{- end -}}>
+                    <span {{- if eq $menu_item_url $page_url }} class="active" {{- end }}>
+                        {{- .Pre }}
+                        {{- .Name -}}
+                        {{- .Post -}}
+                    </span>
+                    {{- if (findRE "://" .URL) }}&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                    {{- end }}
+                </a>
+            </li>
+            {{- end }}
+        </ul>
+    </nav>
+</header>

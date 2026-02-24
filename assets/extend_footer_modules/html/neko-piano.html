@@ -1,0 +1,27 @@
+<div id="neko-engine-root">
+  <audio id="neko-audio" loop crossorigin="anonymous">
+    <source src="/music/oblivious.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="piano-click-zone"></div>
+
+  <div id="neko-ui-layer">
+    <div class="neko-fab" id="neko-toggle-btn">
+      <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="icon-pause" viewBox="0 0 24 24" style="display:none; transform: scale(0.9);"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </div>
+    <div class="neko-info-container">
+      <div class="neko-info">Loading...</div>
+      <div class="neko-close-btn" id="neko-close-btn" title="关闭猫咪钢琴">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="neko-canvas"></canvas>
+</div>
+
+<!-- 重新显示按钮 -->
+<div class="neko-restore-btn" id="neko-restore-btn" title="显示猫咪钢琴">
+  <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+</div>

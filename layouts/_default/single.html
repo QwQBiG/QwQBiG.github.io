@@ -1,0 +1,76 @@
+{{- define "main" -}}
+
+<article class="post-single">
+  <header class="post-header">
+    {{- if not .Params.hideTitle -}}
+      <h1 class="post-title">
+        {{- .Title -}}
+        {{- if .Draft -}}<sup><span class="entry-isdraft">&nbsp;&nbsp;[Draft]</span></sup>{{- end -}}
+      </h1>
+    {{- end -}}
+
+    {{- if not .Date.IsZero -}}
+      <div class="post-meta">
+        {{- partial "post_meta.html" . -}}
+      </div>
+    {{- end -}}
+  </header>
+
+  {{- $isHidden := (.Params.cover.hidden | default site.Params.cover.hiddenInSingle) -}}
+  {{- if and .Params.cover.image (not $isHidden) -}}
+    {{- $alt := (.Params.cover.alt | default .Params.cover.caption | plainify) -}}
+    <figure class="entry-cover">
+      {{- $addLink := (and site.Params.cover.linkToFeaturedImage (not $.IsHome)) -}}
+      {{- if $addLink }}<a href="{{ .Params.cover.image | absURL }}" target="_blank" rel="noopener noreferrer">{{- end -}}
+        {{- if eq .Params.cover.relative true -}}
+          {{- $img := resources.Get .Params.cover.image -}}
+          {{- if $img -}}
+            {{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+            {{- if hugo.IsExtended -}}
+              {{- $processableFormats = $processableFormats | append "webp" -}}
+            {{- end -}}
+            {{- if in $processableFormats $img.MediaType.SubType -}}
+              {{- if not .Params.cover.small -}}
+                {{- $image := $img.Resize site.Params.cover.imageSize -}}
+                {{- $2x_image := $img.Resize site.Params.cover.imageSize2x -}}
+                <img src="{{ $image.RelPermalink }}" 
+                     srcset="{{ $image.RelPermalink }} 1x, {{ $2x_image.RelPermalink }} 2x" 
+                     alt="{{ $alt }}"
+                     loading="lazy"
+                     decoding="async">
+              {{- else -}}
+                <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+              {{- end -}}
+            {{- else -}}
+              <img src="{{ $img.RelPermalink }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+            {{- end -}}
+          {{- else -}}
+            <img src="{{ .Params.cover.image | absURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+          {{- end -}}
+        {{- else -}}
+          <img src="{{ .Params.cover.image | absURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+        {{- end -}}
+      {{- if $addLink }}</a>{{- end -}}
+    </figure>
+  {{- end -}}
+
+  {{- if .Content -}}
+    <div class="post-content">
+      {{- if or .Params.showToc .Params.Toc -}}
+        {{- partial "toc.html" . -}}
+      {{- end -}}
+      {{- .Content -}}
+    </div>
+  {{- end -}}
+
+  <footer class="post-footer">
+    {{- partial "post_nav_links.html" . -}}
+    {{- partial "comments.html" . -}}
+  </footer>
+</article>
+
+{{- end -}}
+
+{{- define "toc" -}}
+  {{- partial "toc.html" . -}}
+{{- end -}}
