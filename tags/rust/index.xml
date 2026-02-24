@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Rust on QwQBiG&#39;s World</title>
+    <link>https://QwQBiG.github.io/tags/rust/</link>
+    <description>Recent content in Rust on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.156.0</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C/C&#43;&#43;速通Java?JS?Rust?</title>
+      <link>https://QwQBiG.github.io/cs/posts/siguoyuyan/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/siguoyuyan/</guid>
+      <description>&lt;h1 id=&#34;-编程语言速通指南cc-选手的多宇宙生存手册&#34;&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;适用人群&lt;/strong&gt;：已掌握 C，进修 C++ 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。&lt;br&gt;
+&lt;strong&gt;核心心法&lt;/strong&gt;：语言只是工具，设计哲学才是灵魂。不要背语法，要懂“为什么这么设计”。&lt;/p&gt;
+&lt;h2 id=&#34;-第一章总览--四角恋&#34;&gt;🗺️ 第一章：总览 —— 四角恋&lt;/h2&gt;
+&lt;p&gt;在开始具体语言之前，先建立坐标系。&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;特性维度&lt;/th&gt;
+          &lt;th&gt;🛡️ C++ (主修)&lt;/th&gt;
+          &lt;th&gt;☕ Java (学校的作业)&lt;/th&gt;
+          &lt;th&gt;🌐 JavaScript (Web必修)&lt;/th&gt;
+          &lt;th&gt;🦀 Rust (加入蟹教！)&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;内存管理&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;手动/RAII&lt;br&gt;(自由但危险)&lt;/td&gt;
+          &lt;td&gt;GC 垃圾回收&lt;br&gt;(省心但不可控)&lt;/td&gt;
+          &lt;td&gt;GC 垃圾回收&lt;br&gt;(完全黑盒)&lt;/td&gt;
+          &lt;td&gt;所有权 (Ownership)&lt;br&gt;(编译期强制管理)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;类型系统&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;静态强类型&lt;br&gt;(但也允许指针瞎转)&lt;/td&gt;
+          &lt;td&gt;静态强类型&lt;br&gt;(泛型是擦除法做的)&lt;/td&gt;
+          &lt;td&gt;动态弱类型&lt;br&gt;(变量类型随时变)&lt;/td&gt;
+          &lt;td&gt;静态极强类型&lt;br&gt;(几乎零隐式转换)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;核心哲学&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;零开销抽象&lt;br&gt;(相信程序员)&lt;/td&gt;
+          &lt;td&gt;工程安全性&lt;br&gt;(防住菜鸟程序员)&lt;/td&gt;
+          &lt;td&gt;灵活与交互&lt;br&gt;(先跑起来再说)&lt;/td&gt;
+          &lt;td&gt;安全与性能并存&lt;br&gt;(编译器是你爹)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;运行机制&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 机器码&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 字节码 -&amp;gt; JVM&lt;/td&gt;
+          &lt;td&gt;源码 -&amp;gt; V8引擎 -&amp;gt; 解释/JIT&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 机器码 (LLVM)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;-第二章java--被阉割且穿上防弹衣的-c&#34;&gt;☕ 第二章：Java —— “被阉割且穿上防弹衣的 C++”&lt;/h2&gt;
+&lt;p&gt;💡 &lt;strong&gt;速通注解&lt;/strong&gt;：把 Java 当作一个没有指针、强制面向对象、自带内存管家的 C++ 子集。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

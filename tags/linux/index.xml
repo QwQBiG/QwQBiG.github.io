@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Linux on QwQBiG&#39;s Blog</title>
+    <title>Linux on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/linux/</link>
-    <description>Recent content in Linux on QwQBiG&#39;s Blog</description>
-    <generator>Hugo -- 0.154.5</generator>
+    <description>Recent content in Linux on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.156.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 27 Jan 2026 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>LuckFox RV1103 板子烧录开机登录~</title>
-      <link>https://QwQBiG.github.io/posts/q26han04/</link>
+      <link>https://QwQBiG.github.io/cs/posts/q26han04/</link>
       <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/q26han04/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han04/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;2026 寒假 任务04 “启动：硬起来的臭企鹅”&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -40,9 +40,9 @@
     </item>
     <item>
       <title>搞搞WSL</title>
-      <link>https://QwQBiG.github.io/posts/getwsl/</link>
+      <link>https://QwQBiG.github.io/cs/posts/getwsl/</link>
       <pubDate>Thu, 18 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/getwsl/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/getwsl/</guid>
       <description>&lt;h1 id=&#34;我要玩臭企鹅linux&#34;&gt;我要玩臭企鹅（Linux）&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;咕咕嘎嘎&lt;/p&gt;
@@ -52,12 +52,12 @@
 &lt;p&gt;高雅人士们虽然有很多虚拟机软件来玩&lt;code&gt;Linux&lt;/code&gt;，也比较好使，但是还是想试试&lt;code&gt;win&lt;/code&gt;自带的&lt;code&gt;WSL&lt;/code&gt;对不对~
 好b（￣▽￣）d~　启动~&lt;/p&gt;
 &lt;p&gt;由于&lt;strong&gt;网络原因&lt;/strong&gt;，所以我来分步安装而不去使用直接安装的代码，可以试试（大概没用）：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --install
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --install
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;1功能启用&#34;&gt;1.功能启用&lt;/h2&gt;
@@ -76,12 +76,12 @@
 下载完成后，双击运行该 .msi 文件进行安装。&lt;/p&gt;
 &lt;h2 id=&#34;3设置-wsl2-为默认版本&#34;&gt;3.设置 WSL2 为默认版本&lt;/h2&gt;
 &lt;p&gt;安装完更新包后，右键点击“开始”按钮，选择 终端（&lt;strong&gt;管理员&lt;/strong&gt;），输入并回车：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Powershell&#34; data-lang=&#34;Powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --set-default-version &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-Powershell&#34; data-lang=&#34;Powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --set-default-version &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;4下载ubuntu镜像&#34;&gt;4.下载Ubuntu镜像&lt;/h2&gt;
@@ -96,9 +96,9 @@
     </item>
     <item>
       <title>远程失灵了</title>
-      <link>https://QwQBiG.github.io/posts/yuancheng/</link>
+      <link>https://QwQBiG.github.io/cs/posts/yuancheng/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/yuancheng/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/yuancheng/</guid>
       <description>&lt;h1 id=&#34;docker-部署-frp-客户端避坑指南&#34;&gt;Docker 部署 FRP 客户端避坑指南&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用于：&lt;/strong&gt; Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。&lt;/p&gt;
 &lt;h2 id=&#34;核心结论&#34;&gt;核心结论&lt;/h2&gt;
@@ -106,9 +106,9 @@
 &lt;p&gt;这将解决：容器内网不通、DNS 解析失败、路由器重启导致 IP 变动失效等所有常见问题。&lt;/p&gt;
 &lt;h2 id=&#34;1-部署命令-模版&#34;&gt;1. 部署命令 (模版)&lt;/h2&gt;
 &lt;p&gt;直接复制替换参数，一步到位：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;
 &lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
@@ -121,7 +121,7 @@
 &lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker run -d &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker run -d &lt;span style=&#34;color:#ae81ff&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  --name frp-client &lt;span style=&#34;color:#ae81ff&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  --restart&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;always &lt;span style=&#34;color:#ae81ff&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  --network host &lt;span style=&#34;color:#ae81ff&#34;&gt;\
@@ -138,30 +138,10 @@
     </item>
     <item>
       <title>运维</title>
-      <link>https://QwQBiG.github.io/series/yunwei/</link>
-      <pubDate>Tue, 25 Nov 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/series/yunwei/</guid>
-      <description>&lt;h2 id=&#34;文章列表&#34;&gt;文章列表&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href=&#34;../../posts/yunweistudy/&#34;&gt;K8s学习笔记&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：就是K8s&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href=&#34;../../posts/zuhui/&#34;&gt;我の组会&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：每周二下午三点三楼组会（简称233）&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第三篇：&lt;a href=&#34;../../posts/yuancheng/&#34;&gt;远程失灵了&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：突发情况&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</description>
+      <link>https://QwQBiG.github.io/cs/series/yunwei/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://QwQBiG.github.io/cs/series/yunwei/</guid>
+      <description>Linux运维、Docker、K8s等技术实践</description>
     </item>
   </channel>
 </rss>

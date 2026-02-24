@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>成就-来硬的 on QwQBiG&#39;s Blog</title>
+    <title>成就-来硬的 on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/series/%E6%88%90%E5%B0%B1-%E6%9D%A5%E7%A1%AC%E7%9A%84/</link>
-    <description>Recent content in 成就-来硬的 on QwQBiG&#39;s Blog</description>
-    <generator>Hugo -- 0.154.5</generator>
+    <description>Recent content in 成就-来硬的 on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.156.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 27 Jan 2026 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/series/%E6%88%90%E5%B0%B1-%E6%9D%A5%E7%A1%AC%E7%9A%84/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>LuckFox RV1103 板子烧录开机登录~</title>
-      <link>https://QwQBiG.github.io/posts/q26han04/</link>
+      <link>https://QwQBiG.github.io/cs/posts/q26han04/</link>
       <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/q26han04/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han04/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;2026 寒假 任务04 “启动：硬起来的臭企鹅”&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -40,9 +40,9 @@
     </item>
     <item>
       <title>三星平板刷机</title>
-      <link>https://QwQBiG.github.io/posts/q26han03/</link>
+      <link>https://QwQBiG.github.io/cs/posts/q26han03/</link>
       <pubDate>Thu, 22 Jan 2026 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/q26han03/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han03/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;2026 寒假 任务03 “刷机，让14年的平板重获新生。”&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -78,9 +78,9 @@
     </item>
     <item>
       <title>ESP-32 Web 端远控点灯</title>
-      <link>https://QwQBiG.github.io/posts/q26han02/</link>
+      <link>https://QwQBiG.github.io/cs/posts/q26han02/</link>
       <pubDate>Wed, 21 Jan 2026 14:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/q26han02/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han02/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;2026 寒假 任务02 “我想用 ESP32 做一个 Web 服务器。用 C++ 代码：
 让 ESP32 使用 AP 模式（Access Point）启动一个 Web Server，当手机访问 ESP32 的 IP 地址时，显示两个按钮 &amp;ldquo;ON&amp;rdquo; 和 &amp;ldquo;OFF&amp;rdquo;。点击按钮可以通过 GPIO 控制面包板上外接的 LED 灯（假设接在 GPIO 23）。”&lt;/p&gt;
@@ -106,9 +106,9 @@
     </item>
     <item>
       <title>再一次梦开始的地方——ESP-32点灯</title>
-      <link>https://QwQBiG.github.io/posts/q26han01/</link>
+      <link>https://QwQBiG.github.io/cs/posts/q26han01/</link>
       <pubDate>Wed, 21 Jan 2026 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/q26han01/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han01/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;2026 寒假 任务01 “我现在手头有 ESP32-WROOM-32 开发板，使用 VS Code。请教我安装 PlatformIO 插件，并创建一个 Arduino 框架的 C++ 项目。给我一段简单的 Blink 代码，解释 setup() 和 loop() 的作用，并告诉我如何将代码烧录进板子。”&lt;/p&gt;
 &lt;/blockquote&gt;

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>实践 | QwQBiG&#39;s Blog</title>
+<title>实践 | QwQBiG&#39;s World</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="map[name:QwQBiG]">
@@ -71,8 +71,321 @@
         document.querySelector("html").dataset.theme = 'light';
     }
 
+</script><link rel="stylesheet" href="/css/page-transitions.min.css"><script>
+(function() {
+  'use strict';
+  
+  
+  const CONFIG = {
+    animationDuration: 500,
+    excludedSelectors: [
+      'a[href^="#"]',
+      'a[href^="javascript:"]',
+      'a[target="_blank"]',
+      'a[download]',
+      'a[rel*="external"]',
+      '.no-transition'
+    ],
+    minLoadTime: 300
+  };
+  
+  
+  let isTransitioning = false;
+  let transitionOverlay = null;
+  
+  
+  function init() {
+    
+    createTransitionOverlay();
+    
+    
+    document.body.classList.add('page-container');
+    
+    
+    document.addEventListener('click', handleLinkClick, true);
+    
+    
+    window.addEventListener('popstate', handlePopState);
+    
+    
+    if (!sessionStorage.getItem('pageTransitionInitialLoad')) {
+      sessionStorage.setItem('pageTransitionInitialLoad', 'true');
+      document.body.classList.add('page-enter');
+      
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+      }, CONFIG.animationDuration);
+    }
+  }
+  
+  
+  function createTransitionOverlay() {
+    transitionOverlay = document.createElement('div');
+    transitionOverlay.className = 'page-transition-overlay';
+    transitionOverlay.innerHTML = `
+      <div class="page-transition-backdrop"></div>
+      <div class="page-transition-loader">
+        <span class="page-transition-loader-text">少女祈祷中~</span>
+      </div>
+    `;
+    document.body.appendChild(transitionOverlay);
+  }
+  
+  
+  function handleLinkClick(e) {
+    const link = e.target.closest('a');
+    
+    if (!link) return;
+    
+    
+    if (shouldExcludeLink(link)) return;
+    
+    
+    if (isTransitioning) {
+      e.preventDefault();
+      return;
+    }
+    
+    const href = link.getAttribute('href');
+    
+    
+    if (!isInternalLink(href)) return;
+    
+    e.preventDefault();
+    
+    
+    performTransition(href);
+  }
+  
+  
+  function shouldExcludeLink(link) {
+    return CONFIG.excludedSelectors.some(selector => link.matches(selector));
+  }
+  
+  
+  function isInternalLink(href) {
+    if (!href) return false;
+    if (href.startsWith('#')) return false;
+    if (href.startsWith('javascript:')) return false;
+    if (href.startsWith('mailto:')) return false;
+    if (href.startsWith('tel:')) return false;
+    
+    
+    try {
+      const url = new URL(href, window.location.origin);
+      return url.origin === window.location.origin;
+    } catch (e) {
+      return true; 
+    }
+  }
+  
+  
+  function performTransition(targetUrl) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    
+    
+    document.documentElement.classList.add('page-transition-loading');
+    
+    
+    transitionOverlay.classList.add('active');
+    
+    
+    document.body.classList.add('page-exit');
+    
+    
+    const preloadStartTime = Date.now();
+    
+    fetch(targetUrl, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      const loadTime = Date.now() - preloadStartTime;
+      const remainingTime = Math.max(0, CONFIG.minLoadTime - loadTime);
+      
+      
+      setTimeout(() => {
+        navigateToPage(targetUrl, html);
+      }, remainingTime);
+    })
+    .catch(() => {
+      
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, CONFIG.animationDuration);
+    });
+  }
+  
+  
+  function navigateToPage(url, html) {
+    
+    const parser = new DOMParser();
+    const newDoc = parser.parseFromString(html, 'text/html');
+    
+    
+    window.history.pushState({}, '', url);
+    
+    
+    const newBody = newDoc.body;
+    
+    
+    document.body.innerHTML = newBody.innerHTML;
+    
+    
+    if (!document.querySelector('.page-transition-overlay')) {
+      createTransitionOverlay();
+      transitionOverlay.classList.add('active');
+    }
+    
+    
+    document.title = newDoc.title;
+    
+    
+    updateMetaTags(newDoc);
+    
+    
+    document.body.classList.remove('page-exit');
+    document.body.classList.add('page-enter');
+    
+    
+    const loaderText = document.querySelector('.page-transition-loader-text');
+    if (loaderText) {
+      loaderText.style.opacity = '0';
+      loaderText.style.transition = 'opacity 0.2s ease';
+    }
+    
+    
+    setTimeout(() => {
+      if (transitionOverlay) {
+        transitionOverlay.classList.remove('active');
+      }
+      
+      
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+        document.documentElement.classList.remove('page-transition-loading');
+        isTransitioning = false;
+        
+        
+        handleScroll();
+        
+        
+        reinitializeScripts();
+      }, 100);
+    }, CONFIG.animationDuration - 100);
+  }
+  
+  
+  function updateMetaTags(newDoc) {
+    const metaSelectors = [
+      'meta[name="description"]',
+      'meta[property^="og:"]',
+      'meta[name^="twitter:"]',
+      'link[rel="canonical"]'
+    ];
+    
+    metaSelectors.forEach(selector => {
+      const newMeta = newDoc.querySelector(selector);
+      const currentMeta = document.querySelector(selector);
+      
+      if (newMeta && currentMeta) {
+        currentMeta.content = newMeta.content;
+      } else if (newMeta) {
+        document.head.appendChild(newMeta.cloneNode(true));
+      }
+    });
+  }
+  
+  
+  function handleScroll() {
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  
+  
+  function handlePopState(e) {
+    if (isTransitioning) return;
+    
+    
+    window.location.reload();
+  }
+  
+  
+  function reinitializeScripts() {
+    
+    window.dispatchEvent(new CustomEvent('pageTransitionComplete'));
+    
+    
+    initCommonFeatures();
+  }
+  
+  
+  function initCommonFeatures() {
+    
+    document.querySelectorAll('a').forEach(link => {
+      
+      if (link.dataset.originalHref) {
+        link.href = link.dataset.originalHref;
+      }
+    });
+    
+    
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', handleThemeToggle);
+    }
+  }
+  
+  
+  function handleThemeToggle() {
+    const html = document.querySelector('html');
+    const currentTheme = html.dataset.theme;
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.dataset.theme = newTheme;
+    localStorage.setItem('pref-theme', newTheme);
+  }
+  
+  
+  function checkReducedMotion() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+      CONFIG.animationDuration = 150;
+      document.documentElement.classList.add('reduced-motion');
+    }
+  }
+  
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      checkReducedMotion();
+      init();
+    });
+  } else {
+    checkReducedMotion();
+    init();
+  }
+  
+  
+  window.PageTransitions = {
+    navigate: performTransition,
+    isTransitioning: () => isTransitioning
+  };
+})();
 </script><meta property="og:url" content="https://QwQBiG.github.io/tags/%E5%AE%9E%E8%B7%B5/">
-  <meta property="og:site_name" content="QwQBiG&#39;s Blog">
+  <meta property="og:site_name" content="QwQBiG&#39;s World">
   <meta property="og:title" content="实践">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="website">
@@ -84,7 +397,7 @@
 <body class="list" id="top">
     <header class="header">
     <nav class="nav">
-        <div class="logo"><a href="https://QwQBiG.github.io/" accesskey="h" title="QwQBiG&#39;s Blog (Alt + H)">QwQBiG&#39;s Blog</a>
+        <div class="logo"><a href="https://QwQBiG.github.io/" accesskey="h" title="QwQBiG&#39;s World (Alt + H)">QwQBiG&#39;s World</a>
             <div class="logo-switches">
                 
                 <style>
@@ -527,12 +840,25 @@ Recovery: twrp-3.7.0_9-0-mondrianwifi.img.tar ROM: lineage-20.0-xxxx-UNOFFICIAL-
 ...</p>
   </div>
   <footer class="entry-footer"><span title='2026-01-22 12:00:00 +0800 +0800'>January 22, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to 三星平板刷机" href="https://QwQBiG.github.io/posts/q26han03/"></a>
+  <a class="entry-link" aria-label="post link to 三星平板刷机" href="https://QwQBiG.github.io/cs/posts/q26han03/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">逃课-速通
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>别看，我还没有施工呢！
+文章列表 第一篇：STL 容器 简介：人如其名 第二篇：STL 算法 简介：&#43;1 第三篇：范围for循环 </p>
+  </div>
+  <footer class="entry-footer"><span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
+  <a class="entry-link" aria-label="post link to 逃课-速通" href="https://QwQBiG.github.io/cs/series/taoke/"></a>
 </article>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="https://QwQBiG.github.io/">QwQBiG&#39;s Blog</a></span> · 
+        <span>&copy; 2026 <a href="https://QwQBiG.github.io/">QwQBiG&#39;s World</a></span> · 
 
     <span>
         Powered by
@@ -546,143 +872,617 @@ Recovery: twrp-3.7.0_9-0-mondrianwifi.img.tar ROM: lineage-20.0-xxxx-UNOFFICIAL-
     </svg>
 </a>
 
-<style>
-  :root {
-    --neko-glass-bg: rgba(255, 255, 255, 0.25);
-    --neko-glass-border: rgba(255, 255, 255, 0.5);
-    --neko-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    --neko-text: #555;
-    --neko-primary: #ff9a9e;
-    --neko-secondary: #fad0c4;
-  }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --neko-glass-bg: rgba(0, 0, 0, 0.4);
-      --neko-glass-border: rgba(255, 255, 255, 0.1);
-      --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-      --neko-text: #ddd;
-    }
+<style>/*——————————————————————————————————————————————
+                阅读进度条样式
+——————————————————————————————————————————————*/
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  pointer-events: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #ff0000 0%,
+    #ff8000 16.67%,
+    #ffff00 33.33%,
+    #80ff00 50%,
+    #0080ff 66.67%,
+    #8000ff 83.33%,
+    #ff00ff 100%
+  );
+  background-size: 600% 100%;
+  width: 0%;
+  min-width: 3px;
+  transition: width 0.1s linear;
+  box-shadow: 
+    0 0 10px rgba(255, 100, 100, 0.8),
+    0 0 20px rgba(255, 150, 50, 0.6),
+    0 0 30px rgba(255, 200, 0, 0.4),
+    0 0 40px rgba(100, 200, 255, 0.3);
+  animation: progress-shimmer 10s linear infinite;
+  will-change: width, background-position;
+  display: block;
+  border-radius: 0 2px 2px 0;
+  transform-origin: left center;
+  max-width: 100%;
+  position: relative;
+}
+
+/* 进度条发光头部 */
+.reading-progress-bar::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px #ffffff,
+    0 0 20px rgba(255, 255, 255, 0.8),
+    0 0 30px rgba(255, 255, 255, 0.6);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes progress-shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 600% 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+  50% { opacity: 0.7; transform: translateY(-50%) scale(1.2); }
+}
+
+/* 百分比显示 */
+.reading-progress-percent {
+  position: fixed;
+  top: 8px;
+  right: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(100, 100, 100, 0.7);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 2px 6px;
+  border-radius: 10px;
+  z-index: 2147483647;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .reading-progress-container {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .reading-progress-percent {
+  color: rgba(200, 200, 200, 0.8);
+  background: rgba(30, 30, 30, 0.8);
+}
+/*——————————————————————————————————————————————
+                返回顶部按钮样式
+——————————————————————————————————————————————*/
+.top-link, #top-link, .scroll-to-top, .back-to-top {
+  display: none !important;
+}
+
+.custom-back-to-top {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 30px !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(20px) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3) !important;
+  z-index: 2147483646 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.custom-back-to-top.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+
+.custom-back-to-top:hover {
+  transform: translateY(-5px) scale(1.1) !important;
+  box-shadow: 0 8px 25px rgba(255, 154, 158, 0.6) !important;
+}
+
+.custom-back-to-top:active {
+  transform: translateY(-2px) scale(0.95) !important;
+}
+
+.custom-back-to-top svg {
+  width: 24px !important;
+  height: 24px !important;
+  fill: white !important;
+  transition: transform 0.3s ease !important;
+}
+
+.custom-back-to-top:hover svg {
+  transform: translateY(-2px) !important;
+}
+
+@media (max-width: 768px) {
+  .custom-back-to-top {
+    width: 44px !important;
+    height: 44px !important;
+    bottom: 15px !important;
+    right: 20px !important;
+  }
+}
+/*——————————————————————————————————————————————
+                代码复制按钮样式
+——————————————————————————————————————————————*/
+.copy-code, button.copy-code {
+  display: none !important;
+}
+
+.custom-copy-code {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+  line-height: 1.2 !important;
+}
+
+.highlight:hover .custom-copy-code,
+.chroma:hover .custom-copy-code {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.custom-copy-code:hover {
+  transform: scale(1.05) translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
+}
+
+.custom-copy-code:active {
+  transform: scale(0.95) !important;
+}
+
+.custom-copy-code.copied {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+  box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4) !important;
+}
+
+.highlight, .chroma {
+  position: relative !important;
+}
+
+/* 彩虹画 pre 元素不需要复制按钮 */
+pre.rainbow-miku .custom-copy-code,
+pre:not(.highlight):not(.chroma) .custom-copy-code {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .custom-copy-code {
+    opacity: 1 !important;
+    padding: 3px 8px !important;
+    font-size: 10px !important;
+    top: 4px !important;
+    right: 4px !important;
+  }
+}
+/*——————————————————————————————————————————————
+            代码块折叠/展开功能样式
+——————————————————————————————————————————————*/
+.code-fold-toggle {
+  position: absolute !important;
+  top: 6px !important;
+  right: 52px !important;
+  width: 28px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.code-fold-toggle svg {
+  width: 12px !important;
+  height: 12px !important;
+  fill: currentColor !important;
+  transition: transform 0.3s ease !important;
+}
+
+.code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+.highlight:hover .code-fold-toggle,
+.chroma:hover .code-fold-toggle {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.code-fold-toggle:hover {
+  transform: scale(1.05) translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
+}
+
+.code-fold-toggle:active {
+  transform: scale(0.95) !important;
+}
+
+/* 折叠提示文字 */
+.code-fold-hint {
+  padding: 8px 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  color: #888 !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-bottom: 1px dashed rgba(255, 105, 135, 0.3) !important;
+  font-style: italic !important;
+  margin: 0 !important;
+}
+
+body.dark .code-fold-hint {
+  color: #aaa !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-bottom-color: rgba(255, 105, 135, 0.2) !important;
+}
+
+/* 折叠状态 */
+.highlight.code-folded,
+.chroma.code-folded {
+  max-height: 150px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.highlight.code-folded::after,
+.chroma.code-folded::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 50px !important;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.95)) !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+body.dark .highlight.code-folded::after,
+body.dark .chroma.code-folded::after {
+  background: linear-gradient(transparent, rgba(30, 30, 30, 0.95)) !important;
+}
+
+@media (max-width: 768px) {
+  .code-fold-toggle {
+    opacity: 1 !important;
+    width: 24px !important;
+    height: 20px !important;
+    top: 4px !important;
+    right: 44px !important;
   }
   
-  body.dark {
-    --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
-    --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
-    --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
-    --neko-text: #ddd !important;
+  .code-fold-toggle svg {
+    width: 10px !important;
+    height: 10px !important;
   }
+  
+  .code-fold-hint {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+  }
+}
+/*——————————————————————————————————————————————
+                猫咪钢琴样式
+——————————————————————————————————————————————*/
+:root {
+  --neko-glass-bg: rgba(255, 255, 255, 0.25);
+  --neko-glass-border: rgba(255, 255, 255, 0.5);
+  --neko-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --neko-text: #555;
+  --neko-primary: #ff9a9e;
+  --neko-secondary: #fad0c4;
+}
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --neko-glass-bg: rgba(0, 0, 0, 0.4);
+    --neko-glass-border: rgba(255, 255, 255, 0.1);
+    --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --neko-text: #ddd;
+  }
+}
+
+body.dark {
+  --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
+  --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
+  --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
+  --neko-text: #ddd !important;
+}
+
+#neko-engine-root {
+  position: fixed;
+  bottom: 0; 
+  left: 0;
+  width: 700px;
+  height: 143vh; 
+  z-index: 2147483647;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  opacity: 0;
+  transition: opacity 1s ease;
+  user-select: none;
+  transform: scale(0.7); 
+  transform-origin: 0% 100%;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+#neko-engine-root.loaded { opacity: 1; }
+
+#neko-ui-layer {
+  position: absolute;
+  bottom: 120px;
+  left: 20px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#piano-click-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 420px; 
+  height: 120px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; 
+}
+
+.neko-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
+  border: 2px solid rgba(255,255,255,0.8);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(4px);
+  position: relative;
+}
+
+.neko-fab:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 105, 135, 0.5);
+}
+
+.neko-fab svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+  transition: transform 0.3s ease;
+}
+
+.neko-fab.active::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--neko-primary);
+  animation: ripple 2s infinite;
+}
+
+.neko-info-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.neko-info {
+  padding: 8px 16px;
+  background: var(--neko-glass-bg);
+  border: 1px solid var(--neko-glass-border);
+  color: var(--neko-text);
+  box-shadow: var(--neko-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transform: translateX(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap; 
+}
+
+#neko-ui-layer:hover .neko-info {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* 关闭按钮样式 */
+.neko-close-btn {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.9);
+  border: 2px solid white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+  pointer-events: auto;
+  z-index: 100;
+}
+
+.neko-info-container:hover .neko-close-btn {
+  opacity: 1;
+  right: -28px;
+}
+
+.neko-close-btn:hover {
+  transform: translateY(-50%) scale(1.15);
+  background: rgba(255, 71, 87, 1);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
+}
+
+.neko-close-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.neko-close-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: white;
+}
+
+body.dark .neko-close-btn {
+  background: rgba(220, 53, 69, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* 猫咪钢琴隐藏状态 */
+#neko-engine-root.neko-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(100px) scale(0.7) !important;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* 重新显示按钮 */
+.neko-restore-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
+  border: 2px solid rgba(255,255,255,0.8);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
+  z-index: 2147483646;
+  backdrop-filter: blur(4px);
+}
+
+.neko-restore-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.neko-restore-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 105, 135, 0.5);
+}
+
+.neko-restore-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+/* 移动端隐藏猫咪钢琴 */
+@media (max-width: 768px) {
   #neko-engine-root {
-    position: fixed;
-    bottom: 0; 
-    left: 0;
-    width: 700px;
-    height: 143vh; 
-    z-index: 2147483647;
-    pointer-events: none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    opacity: 0;
-    transition: opacity 1s ease;
-    user-select: none;
-    transform: scale(0.7); 
-    transform-origin: 0% 100%;
-    will-change: transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform-style: preserve-3d;
+    display: none !important;
   }
-
-  #neko-engine-root.loaded { opacity: 1; }
-
-  #neko-ui-layer {
-    position: absolute;
-    bottom: 120px;
-    left: 20px;
-    pointer-events: auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .neko-restore-btn {
+    display: none !important;
   }
-
-  #piano-click-zone {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 420px; 
-    height: 120px;
-    pointer-events: auto;
-    cursor: pointer;
-    z-index: 10;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation; 
-  }
-
-  .neko-fab {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
-    box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
-    border: 2px solid rgba(255,255,255,0.8);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    backdrop-filter: blur(4px);
-  }
-
-  .neko-fab:hover {
-    transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 105, 135, 0.5);
-  }
-
-  .neko-fab svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-    transition: transform 0.3s ease;
-  }
-
-  .neko-fab.active::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 2px solid var(--neko-primary);
-    animation: ripple 2s infinite;
-  }
-
-  .neko-info {
-    padding: 8px 16px;
-    background: var(--neko-glass-bg);
-    border: 1px solid var(--neko-glass-border);
-    color: var(--neko-text);
-    box-shadow: var(--neko-shadow);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    transform: translateX(-10px);
-    opacity: 0;
-    transition: all 0.3s ease;
-    white-space: nowrap; 
-  }
-
-  #neko-ui-layer:hover .neko-info {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  @keyframes ripple {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.6); opacity: 0; }
-  }
-
-  canvas { display: block; width: 100%; height: 100%; }
+}
 </style>
 
 <div id="neko-engine-root">
@@ -697,28 +1497,354 @@ Recovery: twrp-3.7.0_9-0-mondrianwifi.img.tar ROM: lineage-20.0-xxxx-UNOFFICIAL-
       <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       <svg id="icon-pause" viewBox="0 0 24 24" style="display:none; transform: scale(0.9);"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </div>
-    <div class="neko-info">Loading...</div>
+    <div class="neko-info-container">
+      <div class="neko-info">Loading...</div>
+      <div class="neko-close-btn" id="neko-close-btn" title="关闭猫咪钢琴">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </div>
+    </div>
   </div>
 
   <canvas id="neko-canvas"></canvas>
 </div>
 
-<script>
+<!-- 重新显示按钮 -->
+<div class="neko-restore-btn" id="neko-restore-btn" title="显示猫咪钢琴">
+  <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+</div>
 
+<script>/**
+ * 阅读进度条功能
+ */
+(function() {
+  // 确保在 DOM 加载完成后执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgressBar);
+  } else {
+    initProgressBar();
+  }
+  
+  function initProgressBar() {
+    // 检查是否已存在
+    if (document.querySelector('.reading-progress-container')) {
+      console.log('Progress bar already exists');
+      return;
+    }
+    
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'reading-progress-container';
+    progressContainer.innerHTML = '<div class="reading-progress-bar"></div>';
+    
+    // 确保 body 元素存在
+    if (!document.body) {
+      console.error('Body element not found');
+      return;
+    }
+    
+    // 插入到 body 元素的最前面，确保它在所有内容之上
+    if (document.body) {
+      if (document.body.firstChild) {
+        document.body.insertBefore(progressContainer, document.body.firstChild);
+      } else {
+        document.body.appendChild(progressContainer);
+      }
+    } else {
+      // 如果 body 不存在，插入到 html 元素
+      if (document.documentElement.firstChild) {
+        document.documentElement.insertBefore(progressContainer, document.documentElement.firstChild);
+      } else {
+        document.documentElement.appendChild(progressContainer);
+      }
+    }
+    
+    console.log('Progress bar inserted');
 
+    const progressBar = progressContainer.querySelector('.reading-progress-bar');
+    
+    // 创建百分比显示元素
+    const percentDisplay = document.createElement('div');
+    percentDisplay.className = 'reading-progress-percent';
+    percentDisplay.textContent = '0%';
+    document.body.appendChild(percentDisplay);
+
+    function updateProgress() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+      percentDisplay.textContent = Math.round(progress) + '%';
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    updateProgress();
+    
+    console.log('Reading progress bar initialized with percent display');
+  }
+})();
+/**
+ * 返回顶部按钮功能
+ */
+(function() {
+  // 移除主题自带的返回顶部按钮
+  const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
+  existingTopLinks.forEach(el => el.remove());
+  
+  const backToTop = document.createElement('button');
+  backToTop.className = 'custom-back-to-top';
+  backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
+  backToTop.setAttribute('aria-label', '返回顶部');
+  document.body.appendChild(backToTop);
+
+  function toggleVisibility() {
+    if (window.scrollY > 300) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }
+
+  backToTop.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+
+  window.addEventListener('scroll', toggleVisibility, { passive: true });
+  toggleVisibility();
+})();
+/**
+ * 禁用主题自带的滚动事件处理
+ */
+(function() {
+  function disableThemeScroll() {
+    // 如果主题代码设置了 onscroll，覆盖它
+    if (window.onscroll) {
+      window.onscroll = function() {
+        // 空函数，禁用主题自带的滚动处理
+      };
+    }
+  }
+  
+  // 立即执行一次
+  disableThemeScroll();
+  
+  // 在页面加载完成后再次执行
+  window.addEventListener('load', function() {
+    setTimeout(disableThemeScroll, 0);
+    setTimeout(disableThemeScroll, 100);
+    setTimeout(disableThemeScroll, 500);
+  });
+  
+  // 使用 MutationObserver 监视 DOM 变化
+  if (typeof MutationObserver !== 'undefined') {
+    var observer = new MutationObserver(function() {
+      disableThemeScroll();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    
+    // 5秒后停止观察
+    setTimeout(function() {
+      observer.disconnect();
+    }, 5000);
+  }
+})();
+/**
+ * 代码复制按钮功能
+ */
+(function() {
+  // 隐藏主题自带的复制按钮
+  const hideDefaultCopyButtons = function() {
+    const defaultButtons = document.querySelectorAll('.copy-code, button.copy-code');
+    defaultButtons.forEach(btn => {
+      btn.style.display = 'none';
+    });
+  };
+  
+  // 添加自定义复制按钮 - 只给 highlight 和 chroma 类添加
+  const addCustomCopyButtons = function() {
+    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
+    
+    codeBlocks.forEach(block => {
+      // 跳过已经添加过按钮的代码块
+      if (block.querySelector('.custom-copy-code')) return;
+      
+      const button = document.createElement('button');
+      button.className = 'custom-copy-code';
+      button.textContent = 'copy';
+      button.setAttribute('aria-label', 'copy code');
+      
+      button.addEventListener('click', function() {
+        const code = block.querySelector('code')?.textContent || block.textContent;
+        navigator.clipboard.writeText(code).then(function() {
+          button.textContent = 'copied';
+          button.classList.add('copied');
+          setTimeout(function() {
+            button.textContent = 'copy';
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(function() {
+          button.textContent = 'failed';
+          setTimeout(function() {
+            button.textContent = 'copy';
+          }, 2000);
+        });
+      });
+      
+      block.style.position = 'relative';
+      block.appendChild(button);
+    });
+  };
+  
+  // 初始执行
+  hideDefaultCopyButtons();
+  addCustomCopyButtons();
+  
+  // 监听动态添加的代码块
+  const observer = new MutationObserver(function() {
+    hideDefaultCopyButtons();
+    addCustomCopyButtons();
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  // 页面加载完成后再次执行
+  window.addEventListener('load', function() {
+    hideDefaultCopyButtons();
+    addCustomCopyButtons();
+  });
+})();
+/**
+ * 代码块折叠/展开功能
+ */
+(function() {
+  // 向上箭头 SVG
+  const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
+  
+  // 检查代码块是否需要折叠（超过10行）
+  const shouldEnableFold = function(block) {
+    // 获取代码行数 - 通过行号元素计算
+    const lineNumbers = block.querySelectorAll('.ln, .line-number');
+    if (lineNumbers.length > 10) {
+      return true;
+    }
+    
+    // 备用方案：通过代码内容计算
+    const codeElement = block.querySelector('code');
+    if (codeElement) {
+      const lines = codeElement.textContent.split('\n');
+      // 过滤掉空行后计算
+      const nonEmptyLines = lines.filter(line => line.trim() !== '');
+      if (nonEmptyLines.length > 10 || lines.length > 12) {
+        return true;
+      }
+    }
+    
+    // 检查 table 行数（带行号的代码块）
+    const tableElement = block.querySelector('table');
+    if (tableElement) {
+      const rows = tableElement.querySelectorAll('tr');
+      if (rows.length > 10) {
+        return true;
+      }
+    }
+    
+    return false;
+  };
+  
+  // 添加折叠功能到代码块
+  const addFoldFunctionality = function() {
+    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
+    
+    codeBlocks.forEach(block => {
+      // 跳过已经添加过折叠按钮的代码块
+      if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 检查是否需要折叠功能
+      if (!shouldEnableFold(block)) return;
+      
+      // 确保代码块有相对定位
+      block.style.position = 'relative';
+      
+      // 创建折叠按钮
+      const foldButton = document.createElement('button');
+      foldButton.className = 'code-fold-toggle';
+      foldButton.innerHTML = arrowUpSVG;
+      foldButton.setAttribute('aria-label', 'fold code');
+      foldButton.title = '折叠/展开代码';
+      
+      // 插入到代码块中
+      block.appendChild(foldButton);
+      
+      // 创建折叠提示（初始隐藏）
+      const hint = document.createElement('div');
+      hint.className = 'code-fold-hint';
+      hint.textContent = '当前内容已折叠呐~';
+      hint.style.display = 'none';
+      block.insertBefore(hint, block.firstChild);
+      
+      // 折叠状态
+      let isFolded = false;
+      
+      // 点击事件
+      foldButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isFolded = !isFolded;
+        
+        if (isFolded) {
+          block.classList.add('code-folded');
+          foldButton.classList.add('folded');
+          hint.style.display = 'block';
+          foldButton.setAttribute('aria-label', 'unfold code');
+        } else {
+          block.classList.remove('code-folded');
+          foldButton.classList.remove('folded');
+          hint.style.display = 'none';
+          foldButton.setAttribute('aria-label', 'fold code');
+        }
+      });
+    });
+  };
+  
+  // 初始执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addFoldFunctionality);
+  } else {
+    addFoldFunctionality();
+  }
+  
+  // 监听动态添加的代码块
+  const observer = new MutationObserver(function() {
+    addFoldFunctionality();
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  // 页面加载完成后再次执行
+  window.addEventListener('load', function() {
+    addFoldFunctionality();
+  });
+})();
+/**
+ * 🐱 NEKO ENGINE v6.0
+ * Added: Close/Restore functionality
+ */
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
 const CONFIG = {
-  musicTitle: "雯华妲歌名",
+  musicTitle: "Oblivious",
   pianoWidth: 420, 
-  
-  
   
   gravity: isMobile ? 0.18 : 0.09, 
   airResistance: 0.995,
-  
-  
   bounceDamping: 0.425, 
   softBodyStiffness: 0.08,
   
@@ -880,8 +2006,6 @@ class PianoKey {
     this.isBlack = isBlack; this.pressOffset = 0; this.targetOffset = 0;
   }
   update() {
-    
-    
     const speed = isMobile ? 0.6 : 0.3; 
     this.pressOffset += (this.targetOffset - this.pressOffset) * speed;
     if (Math.abs(this.targetOffset - this.pressOffset) < 0.5 && this.targetOffset > 0) this.targetOffset = 0;
@@ -956,12 +2080,7 @@ class KawaiiCat {
 
     if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
         targetKey.hit(); 
-        
-        
-        
-        
         this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 12.0 : 7.0); 
-        
         this.vx = Utils.random(-1.2, 1.2); 
         this.rotVelocity = Utils.random(-0.03, 0.03);
         this.scaleX = 1.4; this.scaleY = 0.6;
@@ -1049,13 +2168,14 @@ class KawaiiCat {
 class NekoEngine {
   constructor() {
     this.root = document.getElementById('neko-engine-root');
-    document.body.appendChild(this.root);
+    this.restoreBtn = document.getElementById('neko-restore-btn');
     this.clickZone = document.getElementById('piano-click-zone');
     this.canvas = document.getElementById('neko-canvas');
     this.ctx = this.canvas.getContext('2d');
     this.audio = document.getElementById('neko-audio');
     this.uiBtn = document.getElementById('neko-toggle-btn');
     this.uiInfo = document.querySelector('.neko-info');
+    this.closeBtn = document.getElementById('neko-close-btn');
     
     this.width = 700; 
     this.height = this.root.offsetHeight; 
@@ -1063,6 +2183,7 @@ class NekoEngine {
     this.lastTime = 0;
     this.beatTimer = 0;
     this.nextBeat = 0;
+    this.isClosed = false;
     
     this.keys = [];
     this.catPool = [];
@@ -1111,6 +2232,42 @@ class NekoEngine {
     this.clickZone.addEventListener('touchstart', (e) => {
       if(e.touches.length > 0) handleInput(e.touches[0].clientX, e.touches[0].clientY);
     }, {passive: true});
+
+    // 关闭按钮事件
+    this.closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.close();
+    });
+
+    // 恢复按钮事件
+    this.restoreBtn.addEventListener('click', () => {
+      this.restore();
+    });
+  }
+
+  close() {
+    this.isClosed = true;
+    this.root.classList.add('neko-hidden');
+    this.restoreBtn.classList.add('visible');
+    
+    // 暂停音乐
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.uiBtn.classList.remove('active');
+      document.getElementById('icon-play').style.display = 'block';
+      document.getElementById('icon-pause').style.display = 'none';
+    }
+    
+    // 保存状态到 localStorage
+    localStorage.setItem('neko-closed', 'true');
+  }
+
+  restore() {
+    this.isClosed = false;
+    this.root.classList.remove('neko-hidden');
+    this.restoreBtn.classList.remove('visible');
+    localStorage.setItem('neko-closed', 'false');
   }
 
   triggerKeyAt(x, y) {
@@ -1135,6 +2292,12 @@ class NekoEngine {
   }
   
   init() {
+    // 检查之前是否关闭过
+    const wasClosed = localStorage.getItem('neko-closed');
+    if (wasClosed === 'true') {
+      this.close();
+    }
+
     this.resize();
     window.addEventListener('resize', () => this.resize());
     this.uiInfo.innerText = "Ready: " + CONFIG.musicTitle;
@@ -1179,7 +2342,7 @@ class NekoEngine {
       this.audio.play().catch(e => console.log("Autoplay blocked", e));
       this.isPlaying = true;
       this.uiBtn.classList.add('active');
-      this.uiInfo.innerText = "Playing · " + CONFIG.musicTitle;
+      this.uiInfo.innerText = "Playing \u00b7 " + CONFIG.musicTitle;
       document.getElementById('icon-play').style.display = 'none';
       document.getElementById('icon-pause').style.display = 'block';
     }
@@ -1187,6 +2350,10 @@ class NekoEngine {
   
   loop(timestamp) {
     requestAnimationFrame((t) => this.loop(t));
+    
+    // 如果已关闭，不渲染
+    if (this.isClosed) return;
+    
     const elapsed = timestamp - this.lastTime;
     if (elapsed < frameInterval) return;
     this.lastTime = timestamp - (elapsed % frameInterval);
@@ -1228,6 +2395,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 </script>
+
 
 <script>
     let menu = document.getElementById('menu');

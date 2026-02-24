@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>日记 on QwQBiG&#39;s Blog</title>
+    <title>日记 on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/</link>
-    <description>Recent content in 日记 on QwQBiG&#39;s Blog</description>
-    <generator>Hugo -- 0.154.5</generator>
+    <description>Recent content in 日记 on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.156.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 22 Nov 2025 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>我の周报</title>
-      <link>https://QwQBiG.github.io/posts/zhouji/</link>
+      <link>https://QwQBiG.github.io/cs/posts/zhouji/</link>
       <pubDate>Sat, 22 Nov 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/zhouji/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/zhouji/</guid>
       <description>&lt;h2 id=&#34;以下是20251120第一次搞得周报&#34;&gt;以下是2025.11.20第一次搞得周报&lt;/h2&gt;
 &lt;p&gt;C已完。C++已学完STL容器和算法（和一些好玩的特性）。
 数据结构在学STL都涉及了，纯学数据结构的话停留在串。
@@ -38,9 +38,9 @@ openCV -&amp;gt; 机器视觉；
     </item>
     <item>
       <title>我の组会</title>
-      <link>https://QwQBiG.github.io/posts/zuhui/</link>
+      <link>https://QwQBiG.github.io/cs/posts/zuhui/</link>
       <pubDate>Fri, 14 Nov 2025 15:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/posts/zuhui/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/zuhui/</guid>
       <description>&lt;h2 id=&#34;组会报告-1&#34;&gt;组会报告 1&lt;/h2&gt;
 &lt;p&gt;容我想想上几周我干了什么：&lt;/p&gt;
 &lt;p&gt;首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）&lt;/p&gt;

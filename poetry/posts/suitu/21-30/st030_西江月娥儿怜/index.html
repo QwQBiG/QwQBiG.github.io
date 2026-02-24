@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>西江月•娥儿怜 | QwQBiG&#39;s World</title>
+<meta name="keywords" content="词, 随吐集, 正篇, 早期作品">
+<meta name="description" content="西江月•娥儿怜
+念久寻星墨透，磨心一水银涓。
+广寒彩练舞香烟，谁为素娥请愿？
+笙月拂衣霜路，箫风唤夜浓眠。
+通天大道步无边，风月世来人探。
+
+背景：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。
+日期：23.2.23">
+<meta name="author" content="白告">
+<link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/21-30/st030_%E8%A5%BF%E6%B1%9F%E6%9C%88%E5%A8%A5%E5%84%BF%E6%80%9C/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://QwQBiG.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://QwQBiG.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://QwQBiG.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://QwQBiG.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://QwQBiG.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://QwQBiG.github.io/poetry/posts/suitu/21-30/st030_%E8%A5%BF%E6%B1%9F%E6%9C%88%E5%A8%A5%E5%84%BF%E6%80%9C/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><link rel="stylesheet" href="/css/page-transitions.min.css"><script>
+(function() {
+  'use strict';
+  
+  
+  const CONFIG = {
+    animationDuration: 500,
+    excludedSelectors: [
+      'a[href^="#"]',
+      'a[href^="javascript:"]',
+      'a[target="_blank"]',
+      'a[download]',
+      'a[rel*="external"]',
+      '.no-transition'
+    ],
+    minLoadTime: 300
+  };
+  
+  
+  let isTransitioning = false;
+  let transitionOverlay = null;
+  
+  
+  function init() {
+    
+    createTransitionOverlay();
+    
+    
+    document.body.classList.add('page-container');
+    
+    
+    document.addEventListener('click', handleLinkClick, true);
+    
+    
+    window.addEventListener('popstate', handlePopState);
+    
+    
+    if (!sessionStorage.getItem('pageTransitionInitialLoad')) {
+      sessionStorage.setItem('pageTransitionInitialLoad', 'true');
+      document.body.classList.add('page-enter');
+      
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+      }, CONFIG.animationDuration);
+    }
+  }
+  
+  
+  function createTransitionOverlay() {
+    transitionOverlay = document.createElement('div');
+    transitionOverlay.className = 'page-transition-overlay';
+    transitionOverlay.innerHTML = `
+      <div class="page-transition-backdrop"></div>
+      <div class="page-transition-loader">
+        <span class="page-transition-loader-text">少女祈祷中~</span>
+      </div>
+    `;
+    document.body.appendChild(transitionOverlay);
+  }
+  
+  
+  function handleLinkClick(e) {
+    const link = e.target.closest('a');
+    
+    if (!link) return;
+    
+    
+    if (shouldExcludeLink(link)) return;
+    
+    
+    if (isTransitioning) {
+      e.preventDefault();
+      return;
+    }
+    
+    const href = link.getAttribute('href');
+    
+    
+    if (!isInternalLink(href)) return;
+    
+    e.preventDefault();
+    
+    
+    performTransition(href);
+  }
+  
+  
+  function shouldExcludeLink(link) {
+    return CONFIG.excludedSelectors.some(selector => link.matches(selector));
+  }
+  
+  
+  function isInternalLink(href) {
+    if (!href) return false;
+    if (href.startsWith('#')) return false;
+    if (href.startsWith('javascript:')) return false;
+    if (href.startsWith('mailto:')) return false;
+    if (href.startsWith('tel:')) return false;
+    
+    
+    try {
+      const url = new URL(href, window.location.origin);
+      return url.origin === window.location.origin;
+    } catch (e) {
+      return true; 
+    }
+  }
+  
+  
+  function performTransition(targetUrl) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    
+    
+    document.documentElement.classList.add('page-transition-loading');
+    
+    
+    transitionOverlay.classList.add('active');
+    
+    
+    document.body.classList.add('page-exit');
+    
+    
+    const preloadStartTime = Date.now();
+    
+    fetch(targetUrl, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      const loadTime = Date.now() - preloadStartTime;
+      const remainingTime = Math.max(0, CONFIG.minLoadTime - loadTime);
+      
+      
+      setTimeout(() => {
+        navigateToPage(targetUrl, html);
+      }, remainingTime);
+    })
+    .catch(() => {
+      
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, CONFIG.animationDuration);
+    });
+  }
+  
+  
+  function navigateToPage(url, html) {
+    
+    const parser = new DOMParser();
+    const newDoc = parser.parseFromString(html, 'text/html');
+    
+    
+    window.history.pushState({}, '', url);
+    
+    
+    const newBody = newDoc.body;
+    
+    
+    document.body.innerHTML = newBody.innerHTML;
+    
+    
+    if (!document.querySelector('.page-transition-overlay')) {
+      createTransitionOverlay();
+      transitionOverlay.classList.add('active');
+    }
+    
+    
+    document.title = newDoc.title;
+    
+    
+    updateMetaTags(newDoc);
+    
+    
+    document.body.classList.remove('page-exit');
+    document.body.classList.add('page-enter');
+    
+    
+    const loaderText = document.querySelector('.page-transition-loader-text');
+    if (loaderText) {
+      loaderText.style.opacity = '0';
+      loaderText.style.transition = 'opacity 0.2s ease';
+    }
+    
+    
+    setTimeout(() => {
+      if (transitionOverlay) {
+        transitionOverlay.classList.remove('active');
+      }
+      
+      
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+        document.documentElement.classList.remove('page-transition-loading');
+        isTransitioning = false;
+        
+        
+        handleScroll();
+        
+        
+        reinitializeScripts();
+      }, 100);
+    }, CONFIG.animationDuration - 100);
+  }
+  
+  
+  function updateMetaTags(newDoc) {
+    const metaSelectors = [
+      'meta[name="description"]',
+      'meta[property^="og:"]',
+      'meta[name^="twitter:"]',
+      'link[rel="canonical"]'
+    ];
+    
+    metaSelectors.forEach(selector => {
+      const newMeta = newDoc.querySelector(selector);
+      const currentMeta = document.querySelector(selector);
+      
+      if (newMeta && currentMeta) {
+        currentMeta.content = newMeta.content;
+      } else if (newMeta) {
+        document.head.appendChild(newMeta.cloneNode(true));
+      }
+    });
+  }
+  
+  
+  function handleScroll() {
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  
+  
+  function handlePopState(e) {
+    if (isTransitioning) return;
+    
+    
+    window.location.reload();
+  }
+  
+  
+  function reinitializeScripts() {
+    
+    window.dispatchEvent(new CustomEvent('pageTransitionComplete'));
+    
+    
+    initCommonFeatures();
+  }
+  
+  
+  function initCommonFeatures() {
+    
+    document.querySelectorAll('a').forEach(link => {
+      
+      if (link.dataset.originalHref) {
+        link.href = link.dataset.originalHref;
+      }
+    });
+    
+    
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', handleThemeToggle);
+    }
+  }
+  
+  
+  function handleThemeToggle() {
+    const html = document.querySelector('html');
+    const currentTheme = html.dataset.theme;
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.dataset.theme = newTheme;
+    localStorage.setItem('pref-theme', newTheme);
+  }
+  
+  
+  function checkReducedMotion() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion) {
+      CONFIG.animationDuration = 150;
+      document.documentElement.classList.add('reduced-motion');
+    }
+  }
+  
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      checkReducedMotion();
+      init();
+    });
+  } else {
+    checkReducedMotion();
+    init();
+  }
+  
+  
+  window.PageTransitions = {
+    navigate: performTransition,
+    isTransitioning: () => isTransitioning
+  };
+})();
+</script><meta property="og:url" content="https://QwQBiG.github.io/poetry/posts/suitu/21-30/st030_%E8%A5%BF%E6%B1%9F%E6%9C%88%E5%A8%A5%E5%84%BF%E6%80%9C/">
+  <meta property="og:site_name" content="QwQBiG&#39;s World">
+  <meta property="og:title" content="西江月•娥儿怜">
+  <meta property="og:description" content="西江月•娥儿怜 念久寻星墨透，磨心一水银涓。
+广寒彩练舞香烟，谁为素娥请愿？
+笙月拂衣霜路，箫风唤夜浓眠。
+通天大道步无边，风月世来人探。
+背景：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。
+日期：23.2.23">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="poetry">
+    <meta property="article:published_time" content="2023-02-23T12:00:00+08:00">
+    <meta property="article:modified_time" content="2023-02-23T12:00:00+08:00">
+    <meta property="article:tag" content="词">
+    <meta property="article:tag" content="随吐集">
+    <meta property="article:tag" content="正篇">
+    <meta property="article:tag" content="早期作品">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="西江月•娥儿怜">
+<meta name="twitter:description" content="西江月•娥儿怜
+念久寻星墨透，磨心一水银涓。
+广寒彩练舞香烟，谁为素娥请愿？
+笙月拂衣霜路，箫风唤夜浓眠。
+通天大道步无边，风月世来人探。
+
+背景：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。
+日期：23.2.23">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "诗歌",
+      "item": "https://QwQBiG.github.io/poetry/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "《随吐集》",
+      "item": "https://QwQBiG.github.io/poetry/posts/suitu/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "西江月•娥儿怜",
+      "item": "https://QwQBiG.github.io/poetry/posts/suitu/21-30/st030_%E8%A5%BF%E6%B1%9F%E6%9C%88%E5%A8%A5%E5%84%BF%E6%80%9C/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "西江月•娥儿怜",
+  "name": "西江月•娥儿怜",
+  "description": "西江月•娥儿怜 念久寻星墨透，磨心一水银涓。\n广寒彩练舞香烟，谁为素娥请愿？\n笙月拂衣霜路，箫风唤夜浓眠。\n通天大道步无边，风月世来人探。\n背景：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。\n日期：23.2.23\n",
+  "keywords": [
+    "词", "随吐集", "正篇", "早期作品"
+  ],
+  "articleBody": "西江月•娥儿怜 念久寻星墨透，磨心一水银涓。\n广寒彩练舞香烟，谁为素娥请愿？\n笙月拂衣霜路，箫风唤夜浓眠。\n通天大道步无边，风月世来人探。\n背景：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。\n日期：23.2.23\n",
+  "wordCount" : "7",
+  "inLanguage": "en",
+  "datePublished": "2023-02-23T12:00:00+08:00",
+  "dateModified": "2023-02-23T12:00:00+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "白告"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://QwQBiG.github.io/poetry/posts/suitu/21-30/st030_%E8%A5%BF%E6%B1%9F%E6%9C%88%E5%A8%A5%E5%84%BF%E6%80%9C/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "QwQBiG's World",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://QwQBiG.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo"><a href="https://QwQBiG.github.io/" accesskey="h" title="QwQBiG&#39;s World (Alt + H)">QwQBiG&#39;s World</a>
+            <div class="logo-switches">
+                
+                <style>
+                    :root {
+                        --sz-w: 68px;
+                        --sz-h: 34px;
+                        --sz-gap: 3px;
+                        --sz-orb: calc(var(--sz-h) - (var(--sz-gap) * 2));
+                        --travel: calc(var(--sz-w) - var(--sz-orb) - (var(--sz-gap) * 2));
+                        
+                        --ease-damp: cubic-bezier(0.25, 1, 0.5, 1);
+                        --dur-main: 0.7s;
+                        --dur-env: 0.9s;
+                        --dur-border: 1.2s;
+
+                        --c-sky-1: #62cff4;
+                        --c-sky-2: #2c67f2;
+                        --c-sun-inner: #ffdd55;
+                        --c-sun-outer: #ffaa00;
+                        
+                        --c-border-day: #00f2fe;
+                        --c-border-night: #5f2c82;
+
+                        --c-cloud-1: #ffffff;
+                        --c-cloud-2: rgba(255,255,255,0.85);
+                        --c-cloud-3: rgba(255,255,255,0.6);
+
+                        --c-void-1: #1a1c29;
+                        --c-void-2: #0f1016;
+                        --c-moon-base: #d6dbe0;
+                        --c-moon-shadow: #9da5b0;
+                    }
+
+                    button#theme-toggle {
+                        appearance: none; -webkit-appearance: none;
+                        border: none; background: none; cursor: pointer;
+                        padding: 0; margin-left: 20px;
+                        width: var(--sz-w) !important;
+                        height: var(--sz-h) !important;
+                        border-radius: 100px !important;
+                        position: relative;
+                        overflow: hidden;
+                        z-index: 100;
+                        
+                        box-shadow: 
+                            0 0 0 1.5px var(--c-border-day),
+                            0 5px 15px rgba(0,0,0,0.15),
+                            inset 0 4px 6px rgba(255,255,255,0.4),
+                            inset 0 -4px 6px rgba(0,0,0,0.1);
+                        
+                        background: var(--c-sky-2);
+                        transition: transform 0.1s, box-shadow var(--dur-border) ease;
+                        -webkit-tap-highlight-color: transparent;
+                        outline: none;
+                    }
+
+                    body.dark button#theme-toggle {
+                        box-shadow: 
+                            0 0 0 1.5px var(--c-border-night),
+                            0 5px 15px rgba(0,0,0,0.3),
+                            inset 0 4px 6px rgba(255,255,255,0.1),
+                            inset 0 -4px 6px rgba(0,0,0,0.3);
+                    }
+
+                    button#theme-toggle:active {
+                        transform: scale(0.97);
+                    }
+
+                    .layer-bg-day, .layer-bg-night {
+                        position: absolute; inset: 0;
+                        z-index: 1;
+                        transition: opacity var(--dur-env) ease;
+                    }
+
+                    .layer-bg-day {
+                        background: linear-gradient(180deg, var(--c-sky-1) 0%, var(--c-sky-2) 100%);
+                        opacity: 1;
+                    }
+
+                    .layer-bg-night {
+                        background: radial-gradient(circle at 50% 120%, #2b3242 0%, var(--c-void-1) 50%, var(--c-void-2) 100%);
+                        opacity: 0;
+                    }
+
+                    body.dark .layer-bg-day { opacity: 0; }
+                    body.dark .layer-bg-night { opacity: 1; }
+
+                    .star-matrix {
+                        position: absolute; width: 100%; height: 100%;
+                        z-index: 2;
+                        transform: translateY(-150%) scale(0.8);
+                        opacity: 0;
+                        transition: transform var(--dur-main) var(--ease-damp), opacity 0.5s ease;
+                    }
+
+                    body.dark .star-matrix {
+                        transform: translateY(0) scale(1);
+                        opacity: 1;
+                    }
+
+                    .star-dot {
+                        position: absolute;
+                        background: #fff;
+                        border-radius: 50%;
+                        box-shadow: 0 0 2px rgba(255,255,255,0.9);
+                    }
+
+                    .sd-1 { top: 20%; left: 20%; width: 1.5px; height: 1.5px; animation: blink 3s infinite; }
+                    .sd-2 { top: 30%; left: 45%; width: 1px; height: 1px; opacity: 0.6; }
+                    .sd-3 { top: 15%; left: 65%; width: 1.2px; height: 1.2px; animation: blink 4s infinite 1s; }
+                    .sd-4 { top: 60%; left: 15%; width: 1px; height: 1px; opacity: 0.5; }
+                    .sd-5 { top: 75%; left: 35%; width: 1.2px; height: 1.2px; animation: blink 5s infinite 0.5s; }
+                    .sd-6 { top: 50%; left: 80%; width: 1.5px; height: 1.5px; animation: blink 2.5s infinite; }
+                    .sd-7 { top: 80%; left: 70%; width: 1px; height: 1px; opacity: 0.7; }
+
+                    .shooting-star-zone {
+                        position: absolute; inset: 0;
+                        z-index: 2; pointer-events: none; overflow: hidden;
+                    }
+
+                    .s-meteor {
+                        position: absolute;
+                        top: 0; right: 20%;
+                        width: 20px; height: 1px;
+                        background: linear-gradient(to left, transparent, rgba(255,255,255,1), transparent);
+                        transform: rotate(-45deg) translateX(0);
+                        opacity: 0;
+                    }
+
+                    body.dark .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
+                    body.dark .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
+
+                    .cloud-stack {
+                        position: absolute; inset: 0;
+                        z-index: 3;
+                        transition: transform var(--dur-main) var(--ease-damp), opacity var(--dur-main) ease;
+                    }
+
+                    body.dark .cloud-stack {
+                        transform: translateY(100%);
+                        opacity: 0;
+                    }
+
+                    .cloud-puff {
+                        position: absolute;
+                        border-radius: 100px;
+                    }
+                    .cloud-puff::before, .cloud-puff::after {
+                        content: ''; position: absolute; background: inherit; border-radius: 50%;
+                    }
+
+                    .cl-back {
+                        top: 35%; right: 10%;
+                        width: 20px; height: 8px;
+                        background: var(--c-cloud-3);
+                        filter: blur(1.5px);
+                        animation: float-h 10s ease-in-out infinite alternate;
+                    }
+
+                    .cl-mid {
+                        bottom: 10%; left: 15%;
+                        width: 24px; height: 10px;
+                        background: var(--c-cloud-2);
+                        animation: float-h 7s ease-in-out infinite alternate-reverse;
+                    }
+                    .cl-mid::before { width: 12px; height: 12px; top: -6px; left: 3px; }
+
+                    .cl-front {
+                        top: 15%; left: 25%;
+                        width: 28px; height: 11px;
+                        background: var(--c-cloud-1);
+                        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+                        animation: float-h 5s ease-in-out infinite alternate;
+                    }
+                    .cl-front::before { width: 13px; height: 13px; top: -6px; left: 5px; }
+                    .cl-front::after { width: 9px; height: 9px; top: -4px; right: 3px; }
+
+                    .orb-track {
+                        position: absolute;
+                        width: 100%; height: 100%;
+                        top: 0; left: 0;
+                        pointer-events: none;
+                    }
+
+                    .orb {
+                        position: absolute;
+                        width: var(--sz-orb);
+                        height: var(--sz-orb);
+                        top: 50%;
+                        transform: translateY(-50%) translateX(var(--sz-gap)) rotate(0deg);
+                        border-radius: 50%;
+                        background: transparent;
+                        z-index: 10;
+                        overflow: hidden;
+                        box-shadow: 
+                            inset 0 2px 4px rgba(255,255,255,0.5),
+                            inset 0 -2px 4px rgba(0,0,0,0.15),
+                            0 2px 6px rgba(0,0,0,0.2);
+                        transition: transform var(--dur-main) var(--ease-damp);
+                    }
+
+                    body.dark .orb {
+                        transform: translateY(-50%) translateX(calc(var(--sz-gap) + var(--travel))) rotate(360deg);
+                    }
+
+                    .face-sun {
+                        position: absolute; inset: 0;
+                        background: radial-gradient(circle at 40% 40%, var(--c-sun-inner) 0%, var(--c-sun-outer) 100%);
+                        border-radius: 50%;
+                    }
+
+                    .face-moon {
+                        position: absolute; inset: 0;
+                        border-radius: 50%;
+                        background: radial-gradient(circle at 60% 40%, #f0f2f5, var(--c-moon-base));
+                        transform: translateX(100%);
+                        transition: transform var(--dur-main) var(--ease-damp);
+                        box-shadow: inset 2px 0 6px rgba(0,0,0,0.1);
+                        z-index: 5;
+                    }
+
+                    body.dark .face-moon {
+                        transform: translateX(0);
+                    }
+
+                    .crater {
+                        position: absolute;
+                        background: var(--c-moon-shadow);
+                        border-radius: 50%;
+                        opacity: 0;
+                        box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
+                        transition: opacity 0.4s ease;
+                    }
+                    
+                    body.dark .crater {
+                        opacity: 1;
+                        transition-delay: 0.4s;
+                    }
+
+                    .cr-1 { top: 25%; left: 35%; width: 6px; height: 6px; }
+                    .cr-2 { top: 60%; left: 55%; width: 4px; height: 4px; }
+                    .cr-3 { top: 50%; left: 20%; width: 3px; height: 3px; }
+
+                    .halo-container {
+                        position: absolute; 
+                        left: calc(var(--sz-gap) + (var(--sz-orb) / 2));
+                        top: 50%;
+                        width: 0; height: 0;
+                        z-index: 9;
+                        transition: transform var(--dur-main) var(--ease-damp);
+                    }
+                    
+                    body.dark .halo-container {
+                        transform: translateX(var(--travel));
+                    }
+
+                    .sun-halo {
+                        position: absolute; 
+                        top: 50%; left: 50%;
+                        width: 90px; height: 90px;
+                        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+                        transform: translate(-50%, -50%);
+                        opacity: 1;
+                        transition: opacity 0.5s;
+                        pointer-events: none;
+                    }
+                    
+                    .ray-ring {
+                        position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
+                        transform: translate(-50%, -50%);
+                        animation: spin 12s linear infinite;
+                    }
+                    .ray {
+                        position: absolute; top: 0; left: 50%; width: 2px; height: 100%;
+                        background: linear-gradient(to bottom, transparent 0%, rgba(255,221,85,0.4) 20%, rgba(255,221,85,0.4) 80%, transparent 100%);
+                        transform: translateX(-50%);
+                    }
+                    .ray:nth-child(2) { transform: translateX(-50%) rotate(45deg); }
+                    .ray:nth-child(3) { transform: translateX(-50%) rotate(90deg); }
+                    .ray:nth-child(4) { transform: translateX(-50%) rotate(135deg); }
+
+                    body.dark .sun-halo { opacity: 0; }
+
+                    @keyframes float-h {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(2px); }
+                    }
+                    @keyframes blink {
+                        0%, 100% { opacity: 1; transform: scale(1); }
+                        50% { opacity: 0.4; transform: scale(0.7); }
+                    }
+                    @keyframes spin {
+                        to { transform: translate(-50%, -50%) rotate(360deg); }
+                    }
+                    @keyframes meteor {
+                        0% { opacity: 0; transform: rotate(-45deg) translateX(0); }
+                        10% { opacity: 1; }
+                        20% { opacity: 0; transform: rotate(-45deg) translateX(-30px); }
+                        100% { opacity: 0; transform: rotate(-45deg) translateX(-30px); }
+                    }
+                </style>
+
+                <button id="theme-toggle" accesskey="t" title="Switch Theme (Alt + T)">
+                    <div class="layer-bg-day"></div>
+                    <div class="layer-bg-night"></div>
+
+                    <div class="star-matrix">
+                        <div class="star-dot sd-1"></div> <div class="star-dot sd-2"></div>
+                        <div class="star-dot sd-3"></div> <div class="star-dot sd-4"></div>
+                        <div class="star-dot sd-5"></div> <div class="star-dot sd-6"></div>
+                        <div class="star-dot sd-7"></div>
+                    </div>
+
+                    <div class="shooting-star-zone">
+                        <div class="s-meteor sm-1"></div>
+                        <div class="s-meteor sm-2"></div>
+                    </div>
+
+                    <div class="cloud-stack">
+                        <div class="cloud-puff cl-back"></div>
+                        <div class="cloud-puff cl-mid"></div>
+                        <div class="cloud-puff cl-front"></div>
+                    </div>
+
+                    <div class="halo-container">
+                        <div class="sun-halo">
+                            <div class="ray-ring">
+                                <div class="ray"></div> <div class="ray"></div> 
+                                <div class="ray"></div> <div class="ray"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="orb-track">
+                        <div class="orb">
+                            <div class="face-sun"></div>
+                            <div class="face-moon">
+                                <div class="crater cr-1"></div>
+                                <div class="crater cr-2"></div>
+                                <div class="crater cr-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+
+                <script>
+                    (function() {
+                        const originalBtn = document.getElementById("theme-toggle");
+                        if (!originalBtn) return;
+
+                        const newBtn = originalBtn.cloneNode(true);
+                        originalBtn.parentNode.replaceChild(newBtn, originalBtn);
+
+                        function setDark(isDark) {
+                            if (isDark) {
+                                document.body.classList.add('dark');
+                                document.documentElement.classList.add('dark');
+                                localStorage.setItem('pref-theme', 'dark');
+                            } else {
+                                document.body.classList.remove('dark');
+                                document.documentElement.classList.remove('dark');
+                                localStorage.setItem('pref-theme', 'light');
+                            }
+                            window.dispatchEvent(new Event('theme-change'));
+                        }
+
+                        newBtn.addEventListener("click", function(e) {
+                            e.preventDefault(); e.stopPropagation();
+                            const isDark = document.body.classList.contains('dark') || 
+                                         document.documentElement.classList.contains('dark');
+                            setDark(!isDark);
+                        });
+
+                        const savedTheme = localStorage.getItem('pref-theme');
+                        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+                            setDark(true);
+                        } else {
+                            setDark(false);
+                        }
+
+                        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                            if (!localStorage.getItem('pref-theme')) setDark(e.matches);
+                        });
+                    })();
+                </script>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://QwQBiG.github.io/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://QwQBiG.github.io/series/" title="合集">
+                    <span>合集</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://QwQBiG.github.io/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://QwQBiG.github.io/about/" title="关于">
+                    <span>关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://QwQBiG.github.io/search/" title="搜索 (Alt &#43; /)"accesskey="/">
+                    <span>搜索</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header><main class="main"><article class="post-single">
+  <header class="post-header"><h1 class="post-title">西江月•娥儿怜</h1><div class="post-meta"><span title='2023-02-23 12:00:00 +0800 +0800'>February 23, 2023</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></div></header><div class="post-content"><h3 id="西江月娥儿怜">西江月•娥儿怜</h3>
+<p>念久寻星墨透，磨心一水银涓。<br>
+广寒彩练舞香烟，谁为素娥请愿？</p>
+<p>笙月拂衣霜路，箫风唤夜浓眠。<br>
+通天大道步无边，风月世来人探。</p>
+<hr>
+<p><strong>背景</strong>：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。</p>
+<p><strong>日期</strong>：23.2.23</p>
+</div><footer class="post-footer">
+<script src="https://giscus.app/client.js"
+        data-repo="QwQBiG/QwQBiG.github.io"
+        data-repo-id="R_kgDOQUrNow"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOQUrNo84Cxx1C"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script></footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://QwQBiG.github.io/">QwQBiG&#39;s World</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+
+<style>/*——————————————————————————————————————————————
+                阅读进度条样式
+——————————————————————————————————————————————*/
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  pointer-events: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reading-progress-bar {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #ff0000 0%,
+    #ff8000 16.67%,
+    #ffff00 33.33%,
+    #80ff00 50%,
+    #0080ff 66.67%,
+    #8000ff 83.33%,
+    #ff00ff 100%
+  );
+  background-size: 600% 100%;
+  width: 0%;
+  min-width: 3px;
+  transition: width 0.1s linear;
+  box-shadow: 
+    0 0 10px rgba(255, 100, 100, 0.8),
+    0 0 20px rgba(255, 150, 50, 0.6),
+    0 0 30px rgba(255, 200, 0, 0.4),
+    0 0 40px rgba(100, 200, 255, 0.3);
+  animation: progress-shimmer 10s linear infinite;
+  will-change: width, background-position;
+  display: block;
+  border-radius: 0 2px 2px 0;
+  transform-origin: left center;
+  max-width: 100%;
+  position: relative;
+}
+
+/* 进度条发光头部 */
+.reading-progress-bar::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px #ffffff,
+    0 0 20px rgba(255, 255, 255, 0.8),
+    0 0 30px rgba(255, 255, 255, 0.6);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes progress-shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 600% 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+  50% { opacity: 0.7; transform: translateY(-50%) scale(1.2); }
+}
+
+/* 百分比显示 */
+.reading-progress-percent {
+  position: fixed;
+  top: 8px;
+  right: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(100, 100, 100, 0.7);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 2px 6px;
+  border-radius: 10px;
+  z-index: 2147483647;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .reading-progress-container {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .reading-progress-percent {
+  color: rgba(200, 200, 200, 0.8);
+  background: rgba(30, 30, 30, 0.8);
+}
+/*——————————————————————————————————————————————
+                返回顶部按钮样式
+——————————————————————————————————————————————*/
+.top-link, #top-link, .scroll-to-top, .back-to-top {
+  display: none !important;
+}
+
+.custom-back-to-top {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 30px !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(20px) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3) !important;
+  z-index: 2147483646 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.custom-back-to-top.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+
+.custom-back-to-top:hover {
+  transform: translateY(-5px) scale(1.1) !important;
+  box-shadow: 0 8px 25px rgba(255, 154, 158, 0.6) !important;
+}
+
+.custom-back-to-top:active {
+  transform: translateY(-2px) scale(0.95) !important;
+}
+
+.custom-back-to-top svg {
+  width: 24px !important;
+  height: 24px !important;
+  fill: white !important;
+  transition: transform 0.3s ease !important;
+}
+
+.custom-back-to-top:hover svg {
+  transform: translateY(-2px) !important;
+}
+
+@media (max-width: 768px) {
+  .custom-back-to-top {
+    width: 44px !important;
+    height: 44px !important;
+    bottom: 15px !important;
+    right: 20px !important;
+  }
+}
+/*——————————————————————————————————————————————
+                代码复制按钮样式
+——————————————————————————————————————————————*/
+.copy-code, button.copy-code {
+  display: none !important;
+}
+
+.custom-copy-code {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+  line-height: 1.2 !important;
+}
+
+.highlight:hover .custom-copy-code,
+.chroma:hover .custom-copy-code {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.custom-copy-code:hover {
+  transform: scale(1.05) translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
+}
+
+.custom-copy-code:active {
+  transform: scale(0.95) !important;
+}
+
+.custom-copy-code.copied {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+  box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4) !important;
+}
+
+.highlight, .chroma {
+  position: relative !important;
+}
+
+/* 彩虹画 pre 元素不需要复制按钮 */
+pre.rainbow-miku .custom-copy-code,
+pre:not(.highlight):not(.chroma) .custom-copy-code {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .custom-copy-code {
+    opacity: 1 !important;
+    padding: 3px 8px !important;
+    font-size: 10px !important;
+    top: 4px !important;
+    right: 4px !important;
+  }
+}
+/*——————————————————————————————————————————————
+            代码块折叠/展开功能样式
+——————————————————————————————————————————————*/
+.code-fold-toggle {
+  position: absolute !important;
+  top: 6px !important;
+  right: 52px !important;
+  width: 28px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.code-fold-toggle svg {
+  width: 12px !important;
+  height: 12px !important;
+  fill: currentColor !important;
+  transition: transform 0.3s ease !important;
+}
+
+.code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+.highlight:hover .code-fold-toggle,
+.chroma:hover .code-fold-toggle {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.code-fold-toggle:hover {
+  transform: scale(1.05) translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
+}
+
+.code-fold-toggle:active {
+  transform: scale(0.95) !important;
+}
+
+/* 折叠提示文字 */
+.code-fold-hint {
+  padding: 8px 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  color: #888 !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-bottom: 1px dashed rgba(255, 105, 135, 0.3) !important;
+  font-style: italic !important;
+  margin: 0 !important;
+}
+
+body.dark .code-fold-hint {
+  color: #aaa !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-bottom-color: rgba(255, 105, 135, 0.2) !important;
+}
+
+/* 折叠状态 */
+.highlight.code-folded,
+.chroma.code-folded {
+  max-height: 150px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.highlight.code-folded::after,
+.chroma.code-folded::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 50px !important;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.95)) !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+body.dark .highlight.code-folded::after,
+body.dark .chroma.code-folded::after {
+  background: linear-gradient(transparent, rgba(30, 30, 30, 0.95)) !important;
+}
+
+@media (max-width: 768px) {
+  .code-fold-toggle {
+    opacity: 1 !important;
+    width: 24px !important;
+    height: 20px !important;
+    top: 4px !important;
+    right: 44px !important;
+  }
+  
+  .code-fold-toggle svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
+  .code-fold-hint {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+  }
+}
+/*——————————————————————————————————————————————
+                猫咪钢琴样式
+——————————————————————————————————————————————*/
+:root {
+  --neko-glass-bg: rgba(255, 255, 255, 0.25);
+  --neko-glass-border: rgba(255, 255, 255, 0.5);
+  --neko-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --neko-text: #555;
+  --neko-primary: #ff9a9e;
+  --neko-secondary: #fad0c4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --neko-glass-bg: rgba(0, 0, 0, 0.4);
+    --neko-glass-border: rgba(255, 255, 255, 0.1);
+    --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --neko-text: #ddd;
+  }
+}
+
+body.dark {
+  --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
+  --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
+  --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
+  --neko-text: #ddd !important;
+}
+
+#neko-engine-root {
+  position: fixed;
+  bottom: 0; 
+  left: 0;
+  width: 700px;
+  height: 143vh; 
+  z-index: 2147483647;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  opacity: 0;
+  transition: opacity 1s ease;
+  user-select: none;
+  transform: scale(0.7); 
+  transform-origin: 0% 100%;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+#neko-engine-root.loaded { opacity: 1; }
+
+#neko-ui-layer {
+  position: absolute;
+  bottom: 120px;
+  left: 20px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#piano-click-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 420px; 
+  height: 120px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; 
+}
+
+.neko-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
+  border: 2px solid rgba(255,255,255,0.8);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(4px);
+  position: relative;
+}
+
+.neko-fab:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 105, 135, 0.5);
+}
+
+.neko-fab svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+  transition: transform 0.3s ease;
+}
+
+.neko-fab.active::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--neko-primary);
+  animation: ripple 2s infinite;
+}
+
+.neko-info-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.neko-info {
+  padding: 8px 16px;
+  background: var(--neko-glass-bg);
+  border: 1px solid var(--neko-glass-border);
+  color: var(--neko-text);
+  box-shadow: var(--neko-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transform: translateX(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap; 
+}
+
+#neko-ui-layer:hover .neko-info {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* 关闭按钮样式 */
+.neko-close-btn {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.9);
+  border: 2px solid white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+  pointer-events: auto;
+  z-index: 100;
+}
+
+.neko-info-container:hover .neko-close-btn {
+  opacity: 1;
+  right: -28px;
+}
+
+.neko-close-btn:hover {
+  transform: translateY(-50%) scale(1.15);
+  background: rgba(255, 71, 87, 1);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
+}
+
+.neko-close-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.neko-close-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: white;
+}
+
+body.dark .neko-close-btn {
+  background: rgba(220, 53, 69, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* 猫咪钢琴隐藏状态 */
+#neko-engine-root.neko-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(100px) scale(0.7) !important;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* 重新显示按钮 */
+.neko-restore-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--neko-primary) 0%, var(--neko-secondary) 100%);
+  border: 2px solid rgba(255,255,255,0.8);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.3);
+  z-index: 2147483646;
+  backdrop-filter: blur(4px);
+}
+
+.neko-restore-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.neko-restore-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 105, 135, 0.5);
+}
+
+.neko-restore-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+/* 移动端隐藏猫咪钢琴 */
+@media (max-width: 768px) {
+  #neko-engine-root {
+    display: none !important;
+  }
+  .neko-restore-btn {
+    display: none !important;
+  }
+}
+</style>
+
+<div id="neko-engine-root">
+  <audio id="neko-audio" loop crossorigin="anonymous">
+    <source src="/music/oblivious.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="piano-click-zone"></div>
+
+  <div id="neko-ui-layer">
+    <div class="neko-fab" id="neko-toggle-btn">
+      <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="icon-pause" viewBox="0 0 24 24" style="display:none; transform: scale(0.9);"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </div>
+    <div class="neko-info-container">
+      <div class="neko-info">Loading...</div>
+      <div class="neko-close-btn" id="neko-close-btn" title="关闭猫咪钢琴">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="neko-canvas"></canvas>
+</div>
+
+<!-- 重新显示按钮 -->
+<div class="neko-restore-btn" id="neko-restore-btn" title="显示猫咪钢琴">
+  <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+</div>
+
+<script>/**
+ * 阅读进度条功能
+ */
+(function() {
+  // 确保在 DOM 加载完成后执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgressBar);
+  } else {
+    initProgressBar();
+  }
+  
+  function initProgressBar() {
+    // 检查是否已存在
+    if (document.querySelector('.reading-progress-container')) {
+      console.log('Progress bar already exists');
+      return;
+    }
+    
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'reading-progress-container';
+    progressContainer.innerHTML = '<div class="reading-progress-bar"></div>';
+    
+    // 确保 body 元素存在
+    if (!document.body) {
+      console.error('Body element not found');
+      return;
+    }
+    
+    // 插入到 body 元素的最前面，确保它在所有内容之上
+    if (document.body) {
+      if (document.body.firstChild) {
+        document.body.insertBefore(progressContainer, document.body.firstChild);
+      } else {
+        document.body.appendChild(progressContainer);
+      }
+    } else {
+      // 如果 body 不存在，插入到 html 元素
+      if (document.documentElement.firstChild) {
+        document.documentElement.insertBefore(progressContainer, document.documentElement.firstChild);
+      } else {
+        document.documentElement.appendChild(progressContainer);
+      }
+    }
+    
+    console.log('Progress bar inserted');
+
+    const progressBar = progressContainer.querySelector('.reading-progress-bar');
+    
+    // 创建百分比显示元素
+    const percentDisplay = document.createElement('div');
+    percentDisplay.className = 'reading-progress-percent';
+    percentDisplay.textContent = '0%';
+    document.body.appendChild(percentDisplay);
+
+    function updateProgress() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+      percentDisplay.textContent = Math.round(progress) + '%';
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    updateProgress();
+    
+    console.log('Reading progress bar initialized with percent display');
+  }
+})();
+/**
+ * 返回顶部按钮功能
+ */
+(function() {
+  // 移除主题自带的返回顶部按钮
+  const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
+  existingTopLinks.forEach(el => el.remove());
+  
+  const backToTop = document.createElement('button');
+  backToTop.className = 'custom-back-to-top';
+  backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
+  backToTop.setAttribute('aria-label', '返回顶部');
+  document.body.appendChild(backToTop);
+
+  function toggleVisibility() {
+    if (window.scrollY > 300) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }
+
+  backToTop.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+
+  window.addEventListener('scroll', toggleVisibility, { passive: true });
+  toggleVisibility();
+})();
+/**
+ * 禁用主题自带的滚动事件处理
+ */
+(function() {
+  function disableThemeScroll() {
+    // 如果主题代码设置了 onscroll，覆盖它
+    if (window.onscroll) {
+      window.onscroll = function() {
+        // 空函数，禁用主题自带的滚动处理
+      };
+    }
+  }
+  
+  // 立即执行一次
+  disableThemeScroll();
+  
+  // 在页面加载完成后再次执行
+  window.addEventListener('load', function() {
+    setTimeout(disableThemeScroll, 0);
+    setTimeout(disableThemeScroll, 100);
+    setTimeout(disableThemeScroll, 500);
+  });
+  
+  // 使用 MutationObserver 监视 DOM 变化
+  if (typeof MutationObserver !== 'undefined') {
+    var observer = new MutationObserver(function() {
+      disableThemeScroll();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+    
+    // 5秒后停止观察
+    setTimeout(function() {
+      observer.disconnect();
+    }, 5000);
+  }
+})();
+/**
+ * 代码复制按钮功能
+ */
+(function() {
+  // 隐藏主题自带的复制按钮
+  const hideDefaultCopyButtons = function() {
+    const defaultButtons = document.querySelectorAll('.copy-code, button.copy-code');
+    defaultButtons.forEach(btn => {
+      btn.style.display = 'none';
+    });
+  };
+  
+  // 添加自定义复制按钮 - 只给 highlight 和 chroma 类添加
+  const addCustomCopyButtons = function() {
+    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
+    
+    codeBlocks.forEach(block => {
+      // 跳过已经添加过按钮的代码块
+      if (block.querySelector('.custom-copy-code')) return;
+      
+      const button = document.createElement('button');
+      button.className = 'custom-copy-code';
+      button.textContent = 'copy';
+      button.setAttribute('aria-label', 'copy code');
+      
+      button.addEventListener('click', function() {
+        const code = block.querySelector('code')?.textContent || block.textContent;
+        navigator.clipboard.writeText(code).then(function() {
+          button.textContent = 'copied';
+          button.classList.add('copied');
+          setTimeout(function() {
+            button.textContent = 'copy';
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(function() {
+          button.textContent = 'failed';
+          setTimeout(function() {
+            button.textContent = 'copy';
+          }, 2000);
+        });
+      });
+      
+      block.style.position = 'relative';
+      block.appendChild(button);
+    });
+  };
+  
+  // 初始执行
+  hideDefaultCopyButtons();
+  addCustomCopyButtons();
+  
+  // 监听动态添加的代码块
+  const observer = new MutationObserver(function() {
+    hideDefaultCopyButtons();
+    addCustomCopyButtons();
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  // 页面加载完成后再次执行
+  window.addEventListener('load', function() {
+    hideDefaultCopyButtons();
+    addCustomCopyButtons();
+  });
+})();
+/**
+ * 代码块折叠/展开功能
+ */
+(function() {
+  // 向上箭头 SVG
+  const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
+  
+  // 检查代码块是否需要折叠（超过10行）
+  const shouldEnableFold = function(block) {
+    // 获取代码行数 - 通过行号元素计算
+    const lineNumbers = block.querySelectorAll('.ln, .line-number');
+    if (lineNumbers.length > 10) {
+      return true;
+    }
+    
+    // 备用方案：通过代码内容计算
+    const codeElement = block.querySelector('code');
+    if (codeElement) {
+      const lines = codeElement.textContent.split('\n');
+      // 过滤掉空行后计算
+      const nonEmptyLines = lines.filter(line => line.trim() !== '');
+      if (nonEmptyLines.length > 10 || lines.length > 12) {
+        return true;
+      }
+    }
+    
+    // 检查 table 行数（带行号的代码块）
+    const tableElement = block.querySelector('table');
+    if (tableElement) {
+      const rows = tableElement.querySelectorAll('tr');
+      if (rows.length > 10) {
+        return true;
+      }
+    }
+    
+    return false;
+  };
+  
+  // 添加折叠功能到代码块
+  const addFoldFunctionality = function() {
+    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
+    
+    codeBlocks.forEach(block => {
+      // 跳过已经添加过折叠按钮的代码块
+      if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 检查是否需要折叠功能
+      if (!shouldEnableFold(block)) return;
+      
+      // 确保代码块有相对定位
+      block.style.position = 'relative';
+      
+      // 创建折叠按钮
+      const foldButton = document.createElement('button');
+      foldButton.className = 'code-fold-toggle';
+      foldButton.innerHTML = arrowUpSVG;
+      foldButton.setAttribute('aria-label', 'fold code');
+      foldButton.title = '折叠/展开代码';
+      
+      // 插入到代码块中
+      block.appendChild(foldButton);
+      
+      // 创建折叠提示（初始隐藏）
+      const hint = document.createElement('div');
+      hint.className = 'code-fold-hint';
+      hint.textContent = '当前内容已折叠呐~';
+      hint.style.display = 'none';
+      block.insertBefore(hint, block.firstChild);
+      
+      // 折叠状态
+      let isFolded = false;
+      
+      // 点击事件
+      foldButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isFolded = !isFolded;
+        
+        if (isFolded) {
+          block.classList.add('code-folded');
+          foldButton.classList.add('folded');
+          hint.style.display = 'block';
+          foldButton.setAttribute('aria-label', 'unfold code');
+        } else {
+          block.classList.remove('code-folded');
+          foldButton.classList.remove('folded');
+          hint.style.display = 'none';
+          foldButton.setAttribute('aria-label', 'fold code');
+        }
+      });
+    });
+  };
+  
+  // 初始执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addFoldFunctionality);
+  } else {
+    addFoldFunctionality();
+  }
+  
+  // 监听动态添加的代码块
+  const observer = new MutationObserver(function() {
+    addFoldFunctionality();
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  // 页面加载完成后再次执行
+  window.addEventListener('load', function() {
+    addFoldFunctionality();
+  });
+})();
+/**
+ * 🐱 NEKO ENGINE v6.0
+ * Added: Close/Restore functionality
+ */
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+const CONFIG = {
+  musicTitle: "Oblivious",
+  pianoWidth: 420, 
+  
+  gravity: isMobile ? 0.18 : 0.09, 
+  airResistance: 0.995,
+  bounceDamping: 0.425, 
+  softBodyStiffness: 0.08,
+  
+  colors: {
+    whiteCat:  { base: '#fdfbf7', shadow: '#e6e2d6', blush: '#ffcdd2' },
+    orangeCat: { base: '#f8d29d', shadow: '#e0b075', blush: '#ff8a80', pattern: '#e6a23c' },
+    greyCat:   { base: '#d1d5db', shadow: '#9ca3af', blush: '#fca5a5' },
+    calicoCat: { base: '#fff', shadow: '#ddd', pattern1: '#333', pattern2: '#f6ad55' }
+  },
+  
+  bpm: isMobile ? 80 : 109,
+  keyHeights: { white: 100, black: 65 },
+  
+  poolSize: {
+    cats: isMobile ? 10 : 20,
+    particles: isMobile ? 20 : 60 
+  }
+};
+
+const targetFPS = isMobile ? 30 : 60;
+const frameInterval = 1000 / targetFPS;
+
+const Utils = {
+  random: (min, max) => Math.random() * (max - min) + min,
+  drawRoundRect: (ctx, x, y, w, h, r) => {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+};
+
+const PianoSound = {
+  ctx: null,
+  frequencies: {
+    white: { 0: 329.63, 1: 293.66, 2: 261.63, 3: 246.94, 4: 220.00, 5: 196.00, 6: 174.61 },
+    black: { 100: 311.13, 101: 277.18, 103: 233.08, 104: 207.65, 105: 185.00 }
+  },
+  init: function() {
+    if (!this.ctx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioContext();
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+  },
+  play: function(keyIndex, isBlack) {
+    this.init();
+    const osc = this.ctx.createOscillator();
+    const gainNode = this.ctx.createGain();
+    let freq = isBlack ? this.frequencies.black[keyIndex] : this.frequencies.white[keyIndex];
+    if (!freq) return;
+    osc.type = 'triangle'; 
+    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.5);
+    osc.connect(gainNode);
+    gainNode.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 1.5);
+  }
+};
+
+class NoteParticle {
+  constructor() { this.active = false; }
+  activate(x, y) {
+    this.x = x; this.y = y;
+    this.vx = Utils.random(-1.5, 1.5);
+    this.vy = Utils.random(-3, -1);
+    this.rotation = Utils.random(-0.5, 0.5);
+    this.rotSpeed = Utils.random(-0.05, 0.05);
+    this.scale = 0;
+    this.targetScale = Utils.random(0.6, 1.0);
+    this.life = 1.0;
+    this.decay = isMobile ? 0.05 : 0.02;
+    this.type = Math.random() > 0.5 ? 'single' : 'double';
+    this.color = `hsl(${Utils.random(200, 340)}, 80%, 65%)`;
+    this.active = true;
+  }
+  update() {
+    if (!this.active) return;
+    this.x += this.vx; this.y += this.vy; this.vy += 0.05;
+    this.rotation += this.rotSpeed; this.life -= this.decay;
+    if (this.scale < this.targetScale) this.scale += (this.targetScale - this.scale) * 0.2;
+    if (this.life <= 0) this.active = false;
+  }
+  draw(ctx) {
+    if (!this.active) return;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scale, this.scale);
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    if (this.type === 'single') {
+      ctx.ellipse(-4, 6, 4, 3, -0.2, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-1, 6); ctx.lineTo(-1, -10); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-1, -10); ctx.bezierCurveTo(4, -6, 8, -4, 6, 2); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.ellipse(-6, 6, 3.5, 2.5, -0.2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(6, 4, 3.5, 2.5, -0.2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-3, 6); ctx.lineTo(-3, -8); ctx.moveTo(9, 4); ctx.lineTo(9, -10); ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(-3, -8); ctx.bezierCurveTo(3, -7, 6, -9, 9, -10); ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
+
+class Particle {
+  constructor() { this.active = false; }
+  activate(x, y) {
+    this.x = x; this.y = y;
+    this.vx = Utils.random(-1, 1);
+    this.vy = Utils.random(-1.5, -0.2);
+    this.life = 1.0;
+    this.decay = isMobile ? 0.05 : 0.015; 
+    this.size = Utils.random(3, 5);
+    this.color = `hsl(${Utils.random(30, 60)}, 100%, 75%)`;
+    this.rotation = Math.random() * Math.PI;
+    this.active = true;
+  }
+  update() {
+    if (!this.active) return;
+    this.x += this.vx; this.y += this.vy; this.vy += 0.03;
+    this.life -= this.decay; this.rotation += 0.05;
+    if (this.life <= 0) this.active = false;
+  }
+  draw(ctx) {
+    if (!this.active) return;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    for (let i = 0; i < 4; i++) {
+      ctx.lineTo(Math.cos(i * Math.PI / 2) * this.size, Math.sin(i * Math.PI / 2) * this.size);
+      ctx.lineTo(Math.cos((i * Math.PI / 2) + Math.PI / 4) * (this.size * 0.4), Math.sin((i * Math.PI / 2) + Math.PI / 4) * (this.size * 0.4));
+    }
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+class PianoKey {
+  constructor(index, x, w, h, isBlack) {
+    this.index = index; this.x = x; this.y = 0; this.w = w; this.h = h;
+    this.isBlack = isBlack; this.pressOffset = 0; this.targetOffset = 0;
+  }
+  update() {
+    const speed = isMobile ? 0.6 : 0.3; 
+    this.pressOffset += (this.targetOffset - this.pressOffset) * speed;
+    if (Math.abs(this.targetOffset - this.pressOffset) < 0.5 && this.targetOffset > 0) this.targetOffset = 0;
+  }
+  hit() { this.targetOffset = 20; }
+  draw(ctx, baseY) {
+    const drawX = this.x; const drawY = baseY - this.h + this.pressOffset;
+    if (!isMobile) {
+        ctx.shadowColor = 'rgba(0,0,0,0.1)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
+    }
+    const grad = ctx.createLinearGradient(drawX, drawY, drawX, drawY + this.h);
+    if (this.isBlack) {
+      grad.addColorStop(0, '#434343'); grad.addColorStop(1, '#000000'); ctx.fillStyle = grad;
+      Utils.drawRoundRect(ctx, drawX, drawY, this.w, this.h, 3); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fillRect(drawX + 4, drawY + 5, this.w - 8, this.h - 10);
+    } else {
+      grad.addColorStop(0, '#ffffff'); grad.addColorStop(1, '#f0f0f0'); ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.roundRect(drawX, drawY, this.w, this.h, [0, 0, 4, 4]); ctx.fill();
+      ctx.fillStyle = '#ddd'; ctx.fillRect(drawX, drawY + this.h - 10, this.w, 10);
+    }
+    ctx.shadowColor = 'transparent';
+  }
+}
+
+class KawaiiCat {
+  constructor() { this.active = false; }
+  activate(limitWidth) {
+    this.radius = 24;
+    this.x = Utils.random(this.radius + 10, limitWidth - this.radius - 10);
+    this.y = -60;
+    this.vx = 0;
+    this.vy = Utils.random(0.05, 0.3); 
+    this.rotation = Utils.random(-0.1, 0.1);
+    this.rotVelocity = 0;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.type = Math.floor(Math.random() * 4);
+    this.expression = 'IDLE';
+    this.active = true;
+    this.collisionTime = 0;
+  }
+  
+  update(gravity, airRes, height, keys) {
+    if (!this.active) return null;
+    this.vy += gravity;
+    this.vx *= airRes;
+    this.y += this.vy;
+    this.x += this.vx;
+    this.rotation += this.rotVelocity;
+    this.scaleX += (1 - this.scaleX) * CONFIG.softBodyStiffness;
+    this.scaleY += (1 - this.scaleY) * CONFIG.softBodyStiffness;
+    
+    if (this.expression === 'SHOCK') {
+      this.collisionTime++;
+      if (this.collisionTime > (isMobile ? 8 : 15)) this.expression = 'HAPPY';
+    }
+
+    let groundLevel = height - CONFIG.keyHeights.white;
+    let targetKey = null;
+    for (let k of keys) {
+        if (k.isBlack && this.x >= k.x && this.x <= k.x + k.w) {
+            groundLevel = height - CONFIG.keyHeights.black;
+            targetKey = k;
+            break; 
+        }
+    }
+    if (!targetKey) {
+        const keyWidth = CONFIG.pianoWidth / 7; 
+        const keyIdx = Math.floor(this.x / keyWidth);
+        if (keys[keyIdx]) targetKey = keys[keyIdx];
+    }
+
+    if (targetKey && this.y + this.radius >= groundLevel && this.vy > 0 && this.expression !== 'HAPPY') {
+        targetKey.hit(); 
+        this.vy = -Math.abs(this.vy * CONFIG.bounceDamping) - (isMobile ? 12.0 : 7.0); 
+        this.vx = Utils.random(-1.2, 1.2); 
+        this.rotVelocity = Utils.random(-0.03, 0.03);
+        this.scaleX = 1.4; this.scaleY = 0.6;
+        this.expression = 'SHOCK';
+        this.collisionTime = 0;
+        this.y = groundLevel - this.radius;
+        return { hit: true, x: this.x, y: groundLevel };
+    }
+    
+    if (this.y > height + 100) this.active = false; 
+    return null;
+  }
+  
+  draw(ctx) {
+    if (!this.active) return;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.scale(this.scaleX, this.scaleY);
+    
+    let colors = CONFIG.colors.whiteCat;
+    if (this.type === 1) colors = CONFIG.colors.calicoCat;
+    if (this.type === 2) colors = CONFIG.colors.orangeCat;
+    if (this.type === 3) colors = CONFIG.colors.greyCat;
+    
+    ctx.fillStyle = colors.base;
+    ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2); ctx.fill();
+    
+    ctx.fillStyle = colors.base;
+    ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-28, -28, -10, -20); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(28, -28, 10, -20); ctx.fill();
+    ctx.fillStyle = colors.blush;
+    ctx.beginPath(); ctx.moveTo(-18, -10); ctx.quadraticCurveTo(-24, -22, -12, -18); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(18, -10); ctx.quadraticCurveTo(24, -22, 12, -18); ctx.fill();
+
+    if (this.type === 1) {
+      ctx.fillStyle = colors.pattern1;
+      ctx.beginPath(); ctx.arc(-10, -10, 8, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = colors.pattern2;
+      ctx.beginPath(); ctx.arc(12, -8, 6, 0, Math.PI*2); ctx.fill();
+    }
+    if (this.type === 2) {
+       ctx.strokeStyle = colors.pattern;
+       ctx.lineWidth = 2;
+       ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, -10); ctx.stroke();
+       ctx.beginPath(); ctx.moveTo(-6, -18); ctx.lineTo(-6, -12); ctx.stroke();
+       ctx.beginPath(); ctx.moveTo(6, -18); ctx.lineTo(6, -12); ctx.stroke();
+    }
+
+    ctx.strokeStyle = '#3e3e3e';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    
+    if (this.expression === 'IDLE') {
+      ctx.fillStyle = '#3e3e3e';
+      ctx.beginPath(); ctx.arc(-8, 0, 2.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(8, 0, 2.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-6, 5); ctx.quadraticCurveTo(-3, 8, 0, 5);
+      ctx.moveTo(0, 5); ctx.quadraticCurveTo(3, 8, 6, 5); ctx.stroke();
+    } else if (this.expression === 'SHOCK') {
+      ctx.beginPath();
+      ctx.moveTo(-12, -2); ctx.lineTo(-6, 2); ctx.lineTo(-12, 6);
+      ctx.moveTo(12, -2); ctx.lineTo(6, 2); ctx.lineTo(12, 6);
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, 8, 3, 0, Math.PI*2); ctx.strokeStyle='#3e3e3e'; ctx.stroke();
+    } else if (this.expression === 'HAPPY') {
+      ctx.beginPath();
+      ctx.moveTo(-12, 2); ctx.quadraticCurveTo(-8, -2, -4, 2);
+      ctx.moveTo(4, 2); ctx.quadraticCurveTo(8, -2, 12, 2);
+      ctx.moveTo(-4, 6); ctx.quadraticCurveTo(0, 8, 4, 6); 
+      ctx.stroke(); 
+      ctx.fillStyle = colors.blush;
+      ctx.globalAlpha = 0.6;
+      ctx.beginPath(); ctx.arc(-14, 6, 4, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(14, 6, 4, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.beginPath();
+    }
+    ctx.restore();
+  }
+}
+
+class NekoEngine {
+  constructor() {
+    this.root = document.getElementById('neko-engine-root');
+    this.restoreBtn = document.getElementById('neko-restore-btn');
+    this.clickZone = document.getElementById('piano-click-zone');
+    this.canvas = document.getElementById('neko-canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.audio = document.getElementById('neko-audio');
+    this.uiBtn = document.getElementById('neko-toggle-btn');
+    this.uiInfo = document.querySelector('.neko-info');
+    this.closeBtn = document.getElementById('neko-close-btn');
+    
+    this.width = 700; 
+    this.height = this.root.offsetHeight; 
+    this.isPlaying = false;
+    this.lastTime = 0;
+    this.beatTimer = 0;
+    this.nextBeat = 0;
+    this.isClosed = false;
+    
+    this.keys = [];
+    this.catPool = [];
+    this.particlePool = [];
+    this.notePool = [];
+    
+    this.bindInteraction();
+    this.init();
+  }
+
+  initPools() {
+    for(let i=0; i<CONFIG.poolSize.cats; i++) this.catPool.push(new KawaiiCat());
+    for(let i=0; i<CONFIG.poolSize.particles; i++) {
+      this.particlePool.push(new Particle());
+      this.notePool.push(new NoteParticle());
+    }
+  }
+
+  spawnCat() {
+    const cat = this.catPool.find(c => !c.active);
+    if (cat) cat.activate(CONFIG.pianoWidth);
+  }
+
+  spawnParticles(x, y) {
+    const pLimit = isMobile ? 2 : 4;
+    let pCount = 0;
+    for (let p of this.particlePool) {
+      if (!p.active) {
+        p.activate(x, y); pCount++;
+        if (pCount >= pLimit) break;
+      }
+    }
+    const note = this.notePool.find(n => !n.active);
+    if (note) note.activate(x, y);
+  }
+
+  bindInteraction() {
+    const handleInput = (clientX, clientY) => {
+      const rect = this.root.getBoundingClientRect();
+      const scale = 0.7;
+      const logicX = (clientX - rect.left) / scale;
+      const logicY = (clientY - rect.top) / scale;
+      this.triggerKeyAt(logicX, logicY);
+    };
+    this.clickZone.addEventListener('mousedown', (e) => handleInput(e.clientX, e.clientY));
+    this.clickZone.addEventListener('touchstart', (e) => {
+      if(e.touches.length > 0) handleInput(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive: true});
+
+    // 关闭按钮事件
+    this.closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.close();
+    });
+
+    // 恢复按钮事件
+    this.restoreBtn.addEventListener('click', () => {
+      this.restore();
+    });
+  }
+
+  close() {
+    this.isClosed = true;
+    this.root.classList.add('neko-hidden');
+    this.restoreBtn.classList.add('visible');
+    
+    // 暂停音乐
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.uiBtn.classList.remove('active');
+      document.getElementById('icon-play').style.display = 'block';
+      document.getElementById('icon-pause').style.display = 'none';
+    }
+    
+    // 保存状态到 localStorage
+    localStorage.setItem('neko-closed', 'true');
+  }
+
+  restore() {
+    this.isClosed = false;
+    this.root.classList.remove('neko-hidden');
+    this.restoreBtn.classList.remove('visible');
+    localStorage.setItem('neko-closed', 'false');
+  }
+
+  triggerKeyAt(x, y) {
+    let targetKey = null;
+    if (y > this.height - CONFIG.keyHeights.black) {
+      for (let k of this.keys) {
+        if (k.isBlack && x >= k.x && x <= k.x + k.w) { targetKey = k; break; }
+      }
+    }
+    if (!targetKey && y > this.height - CONFIG.keyHeights.white) {
+      for (let k of this.keys) {
+        if (!k.isBlack && x >= k.x && x <= k.x + k.w) { targetKey = k; break; }
+      }
+    }
+    if (targetKey) {
+      targetKey.hit(); 
+      PianoSound.play(targetKey.index, targetKey.isBlack);
+      const centerX = targetKey.x + targetKey.w / 2;
+      const centerY = this.height - (targetKey.isBlack ? CONFIG.keyHeights.black : CONFIG.keyHeights.white) + 20;
+      this.spawnParticles(centerX, centerY);
+    }
+  }
+  
+  init() {
+    // 检查之前是否关闭过
+    const wasClosed = localStorage.getItem('neko-closed');
+    if (wasClosed === 'true') {
+      this.close();
+    }
+
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    this.uiInfo.innerText = "Ready: " + CONFIG.musicTitle;
+    this.initPools();
+
+    const whiteCount = 7;
+    const whiteW = CONFIG.pianoWidth / whiteCount;
+    const blackW = whiteW * 0.65;
+    const whiteH = CONFIG.keyHeights.white;
+    const blackH = CONFIG.keyHeights.black;
+    for (let i = 0; i < whiteCount; i++) {
+      this.keys.push(new PianoKey(i, i * whiteW, whiteW, whiteH, false));
+    }
+    const blackIndices = [0, 1, 3, 4, 5]; 
+    blackIndices.forEach(i => {
+      this.keys.push(new PianoKey(100+i, (i + 1) * whiteW - blackW/2, blackW, blackH, true));
+    });
+    
+    this.uiBtn.addEventListener('click', () => this.toggleState());
+    setTimeout(() => this.root.classList.add('loaded'), 500);
+    requestAnimationFrame((t) => this.loop(t));
+  }
+  
+  resize() {
+    const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
+    this.width = 700; 
+    this.height = this.root.offsetHeight; 
+    this.canvas.width = this.width * dpr;
+    this.canvas.height = this.height * dpr;
+    this.ctx.scale(dpr, dpr);
+  }
+  
+  toggleState() {
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.uiBtn.classList.remove('active');
+      this.uiInfo.innerText = "Music Paused";
+      document.getElementById('icon-play').style.display = 'block';
+      document.getElementById('icon-pause').style.display = 'none';
+    } else {
+      this.audio.play().catch(e => console.log("Autoplay blocked", e));
+      this.isPlaying = true;
+      this.uiBtn.classList.add('active');
+      this.uiInfo.innerText = "Playing \u00b7 " + CONFIG.musicTitle;
+      document.getElementById('icon-play').style.display = 'none';
+      document.getElementById('icon-pause').style.display = 'block';
+    }
+  }
+  
+  loop(timestamp) {
+    requestAnimationFrame((t) => this.loop(t));
+    
+    // 如果已关闭，不渲染
+    if (this.isClosed) return;
+    
+    const elapsed = timestamp - this.lastTime;
+    if (elapsed < frameInterval) return;
+    this.lastTime = timestamp - (elapsed % frameInterval);
+
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    
+    if (this.isPlaying) {
+      this.beatTimer += elapsed;
+      if (this.beatTimer >= this.nextBeat) {
+        this.spawnCat();
+        const beatDuration = 60000 / CONFIG.bpm; 
+        const multiplier = Math.random() > 0.7 ? 0.5 : 1;
+        this.nextBeat = beatDuration * multiplier * (1 + Utils.random(-0.1, 0.1));
+        this.beatTimer = 0;
+      }
+    }
+    
+    const pianoY = this.height - CONFIG.keyHeights.white;
+    this.ctx.fillStyle = '#6d1b1b';
+    this.ctx.fillRect(0, pianoY - 5, CONFIG.pianoWidth, 5);
+    
+    const whiteKeys = this.keys.filter(k => !k.isBlack);
+    const blackKeys = this.keys.filter(k => k.isBlack);
+    whiteKeys.forEach(k => { k.update(); k.draw(this.ctx, this.height); });
+    blackKeys.forEach(k => { k.update(); k.draw(this.ctx, this.height); });
+    
+    this.catPool.forEach(cat => {
+        const res = cat.update(CONFIG.gravity, CONFIG.airResistance, this.height, this.keys);
+        if (res && res.hit) this.spawnParticles(res.x, res.y);
+        cat.draw(this.ctx);
+    });
+    
+    this.particlePool.forEach(p => { p.update(); p.draw(this.ctx); });
+    this.notePool.forEach(n => { n.update(); n.draw(this.ctx); });
+  }
+}
+
+window.addEventListener('load', () => {
+  new NekoEngine();
+});
+</script>
+
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
