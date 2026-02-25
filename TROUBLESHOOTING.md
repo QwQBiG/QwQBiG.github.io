@@ -90,3 +90,182 @@ mainElement.classList.add('page-exit');  // 或 'page-enter'
 
 - [MDN: Containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block)
 - [CSS Spec: Transform Rendering Model](https://www.w3.org/TR/css-transforms-1/#transform-rendering)
+
+## 问题 2：Hugo 自定义模板未被应用
+
+### 问题描述
+用户反馈：为随吐集诗歌集合页面创建了自定义的 `list.html` 模板，包含网格布局和特殊样式，但页面始终显示默认样式，自定义模板未被应用。
+
+### 根本原因
+**1. `type` 参数影响模板查找优先级**
+
+随吐集的 `_index.md` 文件中设置了 `type: series`：
+
+```yaml
+---
+title: "《随吐集》"
+description: "随吐随吐，恣意吐出，不拾牙慧。"
+type: series
+---
+```
+
+根据 Hugo 的模板查找规则，当页面有 `type` 设置时，Hugo 会优先查找与 `type` 对应的模板（如 `layouts/series/list.html`），而不是使用基于 section 路径的模板层次结构（如 `layouts/poetry/posts/suitu/list.html`）。
+
+**2. 目录名称大小写不匹配**
+
+内容文件目录名为大写的 `SuiTu`，但 Hugo 生成的 URL 是小写的 `suitu`。Hugo 的模板查找是基于 URL 路径的，因此需要创建小写的目录才能匹配。
+
+### 解决方案
+
+**1. 移除 `type` 参数**
+
+删除 `_index.md` 中的 `type: series` 设置，让随吐集使用诗歌 section 的模板层次结构：
+
+```yaml
+---
+title: "《随吐集》"
+description: "随吐随吐，恣意吐出，不拾牙慧。"
+cascade:
+  sort_by: "Weight"
+---
+```
+
+**2. 创建小写的模板目录**
+
+创建 `layouts/poetry/posts/suitu/` 目录（小写），在其中创建 `list.html` 文件：
+
+```
+layouts/
+└── poetry/
+    └── posts/
+        └── suitu/          # 小写目录名
+            └── list.html    # 自定义模板
+```
+
+**3. 修复模板语法错误**
+
+原模板中存在语法错误，需要修复：
+
+```hugo
+{{- $allPoetryPages := where .Site.RegularPages "Section" "poetry" -}}
+{{- $allPoetryPages := where $allPoetryPages "Params.type" "ne" "series" -}}
+{{- $allPoetryPages := where $allPoetryPages "RelPermalink" "contains" "/poetry/posts/suitu/" -}}
+```
+
+问题：`where` 函数不支持 `contains` 操作符
+
+修复：直接使用 `.RegularPages` 获取当前 section 的页面
+
+```hugo
+{{- $allPoetryPages := .RegularPages -}}
+{{- $allPoetryPages := where $allPoetryPages "Params.type" "ne" "series" -}}
+{{- $allPoetryPages := $allPoetryPages.ByParam "Weight" -}}
+{{- $paginator := .Paginate $allPoetryPages -}}
+```
+
+另一个语法错误：
+
+```hugo
+{{- range first 3 .Params.tags -}}
+```
+
+问题：当 `.Params.tags` 不存在或为空时会报错
+
+修复：添加条件检查
+
+```hugo
+{{- if .Params.tags -}}
+{{- range first 3 .Params.tags -}}
+<span class="tag">{{ . }}</span>
+{{- end -}}
+{{- end -}}
+```
+
+### 影响文件
+
+1. `content/poetry/posts/SuiTu/_index.md` - 移除 `type: series` 参数
+2. `layouts/poetry/posts/suitu/list.html` - 创建自定义模板（新建）
+
+### 关键代码变更
+
+**_index.md 变更：**
+```yaml
+---
+title: "《随吐集》"
+description: "随吐随吐，恣意吐出，不拾牙慧。"
+# 删除了 type: series
+cascade:
+  sort_by: "Weight"
+---
+```
+
+**list.html 模板结构：**
+```hugo
+{{ define "main" }}
+
+<style>
+/* 随吐集诗歌列表样式 */
+.suitu-poetry-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+/* ... 其他样式 ... */
+</style>
+
+<div class="suitu-section-header">
+    <h1><span class="emoji">📜</span> {{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+</div>
+
+<div class="suitu-poetry-list">
+    <ul>
+        {{- $allPoetryPages := .RegularPages -}}
+        {{- $allPoetryPages := where $allPoetryPages "Params.type" "ne" "series" -}}
+        {{- $allPoetryPages := $allPoetryPages.ByParam "Weight" -}}
+        {{- $paginator := .Paginate $allPoetryPages -}}
+
+        {{- range $paginator.Pages -}}
+        <li>
+            <a href="{{ .Permalink }}">
+                <div class="poetry-title">{{ .Title }}</div>
+                {{- if (ne .Params.hideSummary true) -}}
+                <div class="poetry-summary">{{ .Summary | plainify | htmlUnescape }}</div>
+                {{- end -}}
+                <div class="poetry-meta">
+                    {{- if .Date -}}
+                    <span>📅 {{ .Date.Format "2006-01-02" }}</span>
+                    {{- end -}}
+                    {{- if .Params.tags -}}
+                    {{- range first 3 .Params.tags -}}
+                    <span class="tag">{{ . }}</span>
+                    {{- end -}}
+                    {{- end -}}
+                </div>
+            </a>
+        </li>
+        {{- end -}}
+    </ul>
+
+    {{- template "_internal/pagination.html" . -}}
+</div>
+
+{{ end }}
+```
+
+### 经验总结
+
+1. **`type` 参数会改变模板查找优先级** - 如果不需要特殊的类型处理，尽量避免使用 `type` 参数
+2. **Hugo URL 默认小写** - 模板目录名应该与生成的 URL 路径匹配（小写）
+3. **`where` 函数的语法限制** - 不支持 `contains` 等复杂操作符，需要使用其他方法筛选
+4. **模板中的条件检查很重要** - 使用 `first`、`where` 等函数时，要确保数据存在且不为空
+5. **调试模板问题** - 检查生成的 HTML 文件（如 `public/poetry/posts/suitu/index.html`）可以确认模板是否被正确应用
+
+### 相关资源
+
+- [Hugo Template Lookup Order](https://gohugo.io/templates/lookup-order/)
+- [Hugo where Function](https://gohugo.io/functions/where/)
+- [Hugo Type Parameter](https://gohugo.io/content-management/types/)

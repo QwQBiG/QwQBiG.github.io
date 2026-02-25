@@ -1,0 +1,261 @@
+{{ define "main" }}
+
+<style>
+/* 随吐集诗歌列表样式 */
+.suitu-poetry-list .poetry-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.suitu-poetry-list .poetry-grid li {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.08) 0%, rgba(255, 179, 167, 0.08) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.suitu-poetry-list .poetry-grid li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ffafcc 0%, #ffb3a7 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.suitu-poetry-list .poetry-grid li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 175, 204, 0.3);
+    border-color: rgba(255, 175, 204, 0.4);
+}
+
+.suitu-poetry-list .poetry-grid li:hover::before {
+    opacity: 1;
+}
+
+.suitu-poetry-list .poetry-grid li a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ff9a9e;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.suitu-poetry-list .poetry-grid li:hover .poetry-title {
+    color: #ff6b8a;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-summary {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-meta {
+    font-size: 0.85rem;
+    color: #999;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-meta .tag {
+    background: rgba(255, 175, 204, 0.15);
+    color: #ff9a9e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+body.dark .suitu-poetry-list .poetry-grid li {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
+    border-color: rgba(255, 175, 204, 0.3);
+}
+
+body.dark .suitu-poetry-list .poetry-grid li .poetry-summary {
+    color: #aaa;
+}
+
+body.dark .suitu-poetry-list .poetry-grid li .poetry-meta {
+    color: #777;
+}
+
+body.dark .suitu-poetry-list .poetry-grid li .poetry-meta .tag {
+    background: rgba(255, 175, 204, 0.2);
+    color: #ffb3a7;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .suitu-poetry-list ul {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .suitu-poetry-list ul li {
+        padding: 15px;
+    }
+    
+    .suitu-poetry-list ul li .poetry-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* 随吐集页面样式 */
+.suitu-section-header {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.1) 0%, rgba(255, 179, 167, 0.1) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 175, 204, 0.2);
+}
+
+.suitu-section-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #ff9a9e;
+}
+
+.suitu-section-header h1 .emoji {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.suitu-section-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+body.dark .suitu-section-header p {
+    color: #aaa;
+}
+
+/* 诗歌列表 */
+.suitu-poetry-list {
+    margin-top: 30px;
+}
+
+/* 分页样式 */
+.suitu-poetry-list .pagination,
+.suitu-poetry-list .pagination-default {
+    display: none !important;
+}
+
+.suitu-poetry-list .custom-pagination {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 40px 0;
+    padding: 20px;
+    list-style: none;
+}
+
+/* 返回诗歌首页按钮 */
+.back-to-poetry {
+    text-align: center;
+    margin-top: 50px;
+    padding: 30px;
+}
+
+.back-to-poetry a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #ffafcc 0%, #ffb3a7 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+}
+
+.back-to-poetry a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 175, 204, 0.5);
+}
+</style>
+
+<div class="suitu-section-header">
+    <h1><span class="emoji">📜</span> {{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+</div>
+
+<!-- 随吐集诗歌列表 -->
+<div class="suitu-poetry-list">
+    <ul class="poetry-grid">
+        {{- $allPoetryPages := .RegularPages -}}
+        {{- $allPoetryPages := where $allPoetryPages "Params.type" "ne" "series" -}}
+        {{- $allPoetryPages := $allPoetryPages.ByParam "Weight" -}}
+        {{- $paginator := .Paginate $allPoetryPages -}}
+
+        {{- range $paginator.Pages -}}
+        <li>
+            <a href="{{ .Permalink }}">
+                <div class="poetry-title">
+                    {{- .Title -}}
+                    {{- if .Draft -}}<sup><span class="entry-isdraft">&nbsp;&nbsp;[Draft]</span></sup>{{- end -}}
+                </div>
+                
+                {{- if (ne .Params.hideSummary true) -}}
+                <div class="poetry-summary">
+                    {{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}
+                </div>
+                {{- end -}}
+                
+                <div class="poetry-meta">
+                    {{- if .Date -}}
+                    <span>📅 {{ .Date.Format "2006-01-02" }}</span>
+                    {{- end -}}
+                    
+                    {{- if .Params.tags -}}
+                    {{- range first 3 .Params.tags -}}
+                    <span class="tag">{{ . }}</span>
+                    {{- end -}}
+                    {{- end -}}
+                </div>
+            </a>
+        </li>
+        {{- end -}}
+    </ul>
+
+    {{- template "_internal/pagination.html" . -}}
+</div>
+
+<div class="back-to-poetry">
+    <a href="/poetry/">← 返回诗歌首页</a>
+</div>
+
+{{ end }}
