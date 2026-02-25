@@ -94,12 +94,17 @@
   let transitionOverlay = null;
   
   
+  let readingProgressUpdate = null;
+  let backToTopUpdate = null;
+  
+  
   function init() {
     
     createTransitionOverlay();
     
     
-    document.body.classList.add('page-container');
+    const mainElement = document.querySelector('main') || document.body;
+    mainElement.classList.add('page-container');
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -110,10 +115,10 @@
     
     if (!sessionStorage.getItem('pageTransitionInitialLoad')) {
       sessionStorage.setItem('pageTransitionInitialLoad', 'true');
-      document.body.classList.add('page-enter');
+      mainElement.classList.add('page-enter');
       
       setTimeout(() => {
-        document.body.classList.remove('page-enter');
+        mainElement.classList.remove('page-enter');
       }, CONFIG.animationDuration);
     }
   }
@@ -185,13 +190,16 @@
     isTransitioning = true;
     
     
+    const mainElement = document.querySelector('main') || document.body;
+    
+    
     document.documentElement.classList.add('page-transition-loading');
     
     
     transitionOverlay.classList.add('active');
     
     
-    document.body.classList.add('page-exit');
+    mainElement.classList.add('page-exit');
     
     
     const preloadStartTime = Date.now();
@@ -248,8 +256,11 @@
     updateMetaTags(newDoc);
     
     
-    document.body.classList.remove('page-exit');
-    document.body.classList.add('page-enter');
+    const mainElement = document.querySelector('main') || document.body;
+    
+    
+    mainElement.classList.remove('page-exit');
+    mainElement.classList.add('page-enter');
     
     
     const loaderText = document.querySelector('.page-transition-loader-text');
@@ -266,7 +277,7 @@
       
       
       setTimeout(() => {
-        document.body.classList.remove('page-enter');
+        mainElement.classList.remove('page-enter');
         document.documentElement.classList.remove('page-transition-loading');
         isTransitioning = false;
         
@@ -328,6 +339,271 @@
     
     
     initCommonFeatures();
+    
+    
+    initExtendFooterModules();
+  }
+  
+  
+  function initExtendFooterModules() {
+    
+    initReadingProgress();
+    
+    
+    initBackToTop();
+    
+    
+    initNekoPiano();
+    
+    
+    initCodeCopy();
+    
+    
+    initCodeFold();
+    
+    
+    initDisableThemeScroll();
+    
+    
+    if (typeof initCustomPagination === 'function') {
+      initCustomPagination();
+    }
+  }
+  
+  
+  function initReadingProgress() {
+    
+    const existingProgress = document.querySelector('.reading-progress-container');
+    if (existingProgress) {
+      existingProgress.remove();
+    }
+    const existingPercent = document.querySelector('.reading-progress-percent');
+    if (existingPercent) {
+      existingPercent.remove();
+    }
+    
+    
+    if (readingProgressUpdate) {
+      window.removeEventListener('scroll', readingProgressUpdate);
+      window.removeEventListener('resize', readingProgressUpdate);
+    }
+    
+    
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'reading-progress-container';
+    progressContainer.innerHTML = '<div class="reading-progress-bar"></div>';
+    
+    if (document.body.firstChild) {
+      document.body.insertBefore(progressContainer, document.body.firstChild);
+    } else {
+      document.body.appendChild(progressContainer);
+    }
+    
+    const progressBar = progressContainer.querySelector('.reading-progress-bar');
+    
+    
+    const percentDisplay = document.createElement('div');
+    percentDisplay.className = 'reading-progress-percent';
+    percentDisplay.textContent = '0%';
+    document.body.appendChild(percentDisplay);
+    
+    
+    readingProgressUpdate = function() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      
+      progressBar.style.width = scrollPercent + '%';
+      percentDisplay.textContent = Math.round(scrollPercent) + '%';
+    };
+    
+    window.addEventListener('scroll', readingProgressUpdate, { passive: true });
+    window.addEventListener('resize', readingProgressUpdate, { passive: true });
+    readingProgressUpdate();
+  }
+  
+  
+  function initBackToTop() {
+    
+    const existingBtn = document.querySelector('.custom-back-to-top');
+    if (existingBtn) {
+      existingBtn.remove();
+    }
+    
+    
+    if (backToTopUpdate) {
+      window.removeEventListener('scroll', backToTopUpdate);
+    }
+    
+    
+    const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
+    existingTopLinks.forEach(el => el.remove());
+    
+    
+    const backToTop = document.createElement('button');
+    backToTop.className = 'custom-back-to-top';
+    backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
+    backToTop.setAttribute('aria-label', '返回顶部');
+    document.body.appendChild(backToTop);
+    
+    
+    backToTopUpdate = function() {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    };
+    
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    window.addEventListener('scroll', backToTopUpdate, { passive: true });
+    backToTopUpdate();
+  }
+  
+  
+  function initNekoPiano() {
+    
+    const existingNeko = document.getElementById('neko-engine-root');
+    if (existingNeko) {
+      existingNeko.remove();
+    }
+    const existingRestoreBtn = document.getElementById('neko-restore-btn');
+    if (existingRestoreBtn) {
+      existingRestoreBtn.remove();
+    }
+    
+    
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (isMobile) return;
+    
+    
+    const nekoHTML = `
+      <div id="neko-engine-root">
+        <audio id="neko-audio" loop crossorigin="anonymous">
+          <source src="/music/oblivious.mp3" type="audio/mpeg">
+        </audio>
+        <div id="piano-click-zone"></div>
+        <div id="neko-ui-layer">
+          <div class="neko-fab" id="neko-toggle-btn">
+            <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="icon-pause" viewBox="0 0 24 24" style="display:none; transform: scale(0.9);"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </div>
+          <div class="neko-info-container">
+            <div class="neko-info">Loading...</div>
+            <div class="neko-close-btn" id="neko-close-btn" title="关闭猫咪钢琴">
+              <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+          </div>
+        </div>
+        <canvas id="neko-canvas"></canvas>
+      </div>
+      <div class="neko-restore-btn" id="neko-restore-btn" title="显示猫咪钢琴">
+        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </div>
+    `;
+    
+    const nekoContainer = document.createElement('div');
+    nekoContainer.innerHTML = nekoHTML;
+    document.body.appendChild(nekoContainer);
+    
+    
+    if (typeof NekoEngine !== 'undefined') {
+      setTimeout(() => {
+        new NekoEngine();
+        const nekoRoot = document.getElementById('neko-engine-root');
+        if (nekoRoot) {
+          nekoRoot.classList.add('loaded');
+        }
+      }, 500);
+    }
+  }
+  
+  
+  function initCodeCopy() {
+    
+    document.querySelectorAll('.code-copy-btn').forEach(btn => btn.remove());
+    
+    
+    document.querySelectorAll('pre code').forEach((codeBlock, index) => {
+      const pre = codeBlock.parentElement;
+      if (!pre.querySelector('.code-copy-btn')) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'code-copy-btn';
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+        copyBtn.title = '复制代码';
+        
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(codeBlock.textContent);
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        });
+        
+        pre.style.position = 'relative';
+        pre.appendChild(copyBtn);
+      }
+    });
+  }
+  
+  
+  function initCodeFold() {
+    
+    document.querySelectorAll('.code-fold-btn').forEach(btn => btn.remove());
+    
+    
+    document.querySelectorAll('pre').forEach(pre => {
+      const codeBlock = pre.querySelector('code');
+      if (!codeBlock) return;
+      
+      const lineCount = codeBlock.textContent.split('\n').length;
+      if (lineCount > 15 && !pre.querySelector('.code-fold-btn')) {
+        pre.classList.add('code-foldable');
+        
+        const foldBtn = document.createElement('button');
+        foldBtn.className = 'code-fold-btn';
+        foldBtn.innerHTML = '<span class="fold-text">展开</span><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>';
+        
+        foldBtn.addEventListener('click', () => {
+          pre.classList.toggle('code-expanded');
+          const isExpanded = pre.classList.contains('code-expanded');
+          foldBtn.querySelector('.fold-text').textContent = isExpanded ? '收起' : '展开';
+          foldBtn.querySelector('svg').style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+        
+        pre.appendChild(foldBtn);
+      }
+    });
+  }
+  
+  
+  function initDisableThemeScroll() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      
+      const newToggle = themeToggle.cloneNode(true);
+      themeToggle.parentNode.replaceChild(newToggle, themeToggle);
+      
+      newToggle.addEventListener('click', () => {
+        
+        const scrollPos = window.pageYOffset;
+        setTimeout(() => {
+          window.scrollTo(0, scrollPos);
+        }, 0);
+      });
+    }
   }
   
   
@@ -384,7 +660,8 @@
     isTransitioning: () => isTransitioning
   };
 })();
-</script><meta property="og:url" content="https://QwQBiG.github.io/poetry/posts/suitu/">
+</script>
+<meta property="og:url" content="https://QwQBiG.github.io/poetry/posts/suitu/">
   <meta property="og:site_name" content="QwQBiG&#39;s World">
   <meta property="og:title" content="《随吐集》">
   <meta property="og:description" content="随吐随吐，恣意吐出，不拾牙慧。">
@@ -857,24 +1134,6 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">随吐
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>随吐 金戈铁马，年少风发。流雉群，玉鹤啧讶。
-廉颇老乏？拳向愁暇。阑倚断，青衫泪下。
-村尨齐牙，秽土叱咤。吠声近，人间不假。
-背景：早年间掉书袋作品，自诩才盖贾生，鹤立鸡群，不过愿景未成现实，空自忧愁忉忉之语。
-闲话：可以入眼。
-日期：22.3.2
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 11:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 随吐" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st002_%E9%9A%8F%E5%90%90/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
     <h2 class="entry-hint-parent">前言
     </h2>
   </header>
@@ -902,6 +1161,41 @@
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
   <a class="entry-link" aria-label="post link to 前言" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st000_%E5%89%8D%E8%A8%80/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">涵英
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>涵英 白虹挽日笑颜晴，丝竹掩罄乐魂萦。
+神游老庄魏晋亭，偷来闲灯焕五经。
+背景：在一青，中午早到学校，静候人流，便下楼在紫藤萝连廊里偷瞥众人，悠然自得，无所烦事。今念之，白驹过隙，故情难觅。
+闲话：这首诗并非我所写的第一首诗，但是由于本诗是我当时认为还算有点意趣、可以入眼，所以才收录于此。以及，白虹是当时跑操时确有发生的事，即“日晕”现象。
+日期：2021.12.9
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 涵英" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st001_%E6%B6%B5%E8%8B%B1/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">随吐
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>随吐 金戈铁马，年少风发。流雉群，玉鹤啧讶。
+廉颇老乏？拳向愁暇。阑倚断，青衫泪下。
+村尨齐牙，秽土叱咤。吠声近，人间不假。
+背景：早年间掉书袋作品，自诩才盖贾生，鹤立鸡群，不过愿景未成现实，空自忧愁忉忉之语。
+闲话：可以入眼。
+日期：22.3.2
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 随吐" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st002_%E9%9A%8F%E5%90%90/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -934,133 +1228,102 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">涵英
+    <h2 class="entry-hint-parent">点绛唇•闺情
     </h2>
   </header>
   <div class="entry-content">
-    <p>涵英 白虹挽日笑颜晴，丝竹掩罄乐魂萦。
-神游老庄魏晋亭，偷来闲灯焕五经。
-背景：在一青，中午早到学校，静候人流，便下楼在紫藤萝连廊里偷瞥众人，悠然自得，无所烦事。今念之，白驹过隙，故情难觅。
-闲话：这首诗并非我所写的第一首诗，但是由于本诗是我当时认为还算有点意趣、可以入眼，所以才收录于此。以及，白虹是当时跑操时确有发生的事，即“日晕”现象。
-日期：2021.12.9
+    <p>点绛唇•闺情 梦里逢君，恐相执手佳期少。
+暖光怀抱，料峭愁心晓。
+醉眼迢迢，应是春容好。
+一颦笑，绛唇谁讨，雨点樱桃俏。
+日期：22.3.3
 </p>
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 涵英" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st001_%E6%B6%B5%E8%8B%B1/"></a>
+  <a class="entry-link" aria-label="post link to 点绛唇•闺情" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st004_%E7%82%B9%E7%BB%9B%E5%94%87%E9%97%BA%E6%83%85/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">是孩子
+    <h2 class="entry-hint-parent">玉兰赋
     </h2>
   </header>
   <div class="entry-content">
-    <p>是孩子 我写不出这首诗 因为我不确定我是否 还是 激动于下午为灾区 捐出零钱的孩子
-那些个230万的耳环 消费的不是金钱 而是人们 一如孩子般的心
-但我确信我仍是孩子 我不是代孕出的孩子 我不是亡命车祸 一家三口的孩子 我不是加沙 被屠戮的孩子
-——我只是身处另一局中 袖手旁观的孩子
-但我也看到一些孩子 羊水这道分水岭中 有的练习游泳成为水鬼 有的学习数学搞四加四 这里有硕鼠 还有北极的鱼
-——而我是万马齐喑的万分之一… 我是被强暴尊严的孩子
-而有的孩子 有一柄烛火 火光不会沉默 拔出灯芯才会： 化作天台上的一缕烟
-作为孩子 我想说 今天狂人或许学了医 刘和珍或许奔赴巴以 所以：来
-救救孩子……
-日期：25.8.24
+    <p>玉兰赋 命途之际，人世之行，总愧她意，难免动情。玉兰花开，记，不敢猜疑，几有重开日。
+玉兰香砌，纤纤轻抚，不思徇书思花语，锦瑟成曲，轻歌寄何意？馥薰迷人眼，晕红映人颜，岚婉若嫣，秀色可餐，欲把爱涕凝曳笺，心幽也便，延君岁岁年。瓣色雕瑾，珺璟银屏，可胜青女入甘霖，雨脚润雪也酥情，谁不夜清吟。见花如君，绝世独立，娇里慵春困，只教远赏不忍及，只教冬夏失清隽，只教吾驻怜花绮，玉环素华服，命殊花间也无觅。花可爱几载，几载又别离，见君得我幸，失君离人行，若湿青衫泪，恨也绵绵无绝期。
+总念玉兰，学祠何不槐柳起，五柳萧疏乐自怡，三槐华贵氲佳气。斫去玉兰，好侃大业言。总见，世风炎炎，树下埋笔为冢，枝头挂信作家，只念折桂来簪花，恐，玉兰久也殒科举。思君又堕，欲诉世理，无异，袂无铜臭，也需励来千钧力。愁眉峰聚，眼窝泉倾，路正展迢迢，此去仅青鸟，愿续。襟存大鹏扶摇，也羡鸳鸯偎依，变局有志斩宵小，思君细烛却难熄。错也莫，莫就错。
+背景：仅一小时成文，文成玉兰留痕。实为初四一次作文作业，却馀我一寸风情。“见花如君，绝世独立”。
+日期：22.3.12
 </p>
   </div>
-  <footer class="entry-footer"><span title='2025-08-24 12:00:00 +0800 +0800'>August 24, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 是孩子" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st100_%E6%98%AF%E5%AD%A9%E5%AD%90/"></a>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 玉兰赋" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st005_%E7%8E%89%E5%85%B0%E8%B5%8B/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">LDDDL
+    <h2 class="entry-hint-parent">一池蛙
     </h2>
   </header>
   <div class="entry-content">
-    <p>LDDDL（Love’s date and deadline） Tell me a fairytale where love never ends, Vows are kept, through seasons and trends. Explain the date when love was kindled Because it touched my heart to twiddle.
-Till I deemed that you’re the Mr. Right When you sold everything just for my delight. So, what is the love’s date If it weren’t to open a gate. What a shame, it…
-Now I’m trapped in love’s deadline It means: “Love, Dead and Line”. “L” is not allowed to trans to “F”, Fine Just like the “M” left behind.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-08-18 12:00:00 +0800 +0800'>August 18, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to LDDDL" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st099_ldddl/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">如果存在是未完成的押韵
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>如果存在是未完成的押韵 “群星并不孤独， 它们共鸣。”
-星星独处之时，或许会更亮一些。少女慵懒地把咖啡杯放下，手里翻弄的，是一本终将毫无意义的人文书。风儿无心，翻开一页，月儿有意，恰好投上光影。你们有兴致，我倒是心疲。当人独处时，总让我叩问何为意义。
-所以她写下祷告，唱诗：
-楔子：在影子初醒时
-虚无为存在剜去了胎膜 篝火啃噬岩壁的夜 如果影子从未学会站立 指缝漏下星点的碎屑 仍会烫在掌心—— 原来追问，是肋骨间 没调准的弦
-第一乐章：泥板与舌尖的悖论
-当熟睡者好奇以天问 当消化繁衍出剩余 如果青铜未曾篆刻太一 那用星子锻造的勺子 却更慧有人情 广寒外 一道银弓 天上人间 脉脉醉眼
-第二乐章：血是焚的理想国
-把人写作神话中的盗火 喙在刺破，石在腾挪 真理是世俗扫不清的烬 世界便从萤火焚就心火 鹰在挑剔，王在犹疑 理智投诚了神迹 星星退行，被炮火焚缺神祗 船舶挺进，亦难以为存在证明 喙正刺破，石正挪移
-第三乐章：陌生女人的e-mail
-为俄狄浦斯命运屏息 与智能体的对话调戏 暗房里，彩虹正在褪皮 NPC谈人间：有机渐变无机 每个载体都是透明的琥珀 我却没过多期待你 如果星星是混沌的
-日期：25.8.15
+    <p>一池蛙 蛙号厚鼓恸我心，小池烟柳唤不亲。
+汨罗乌地历历影，匝匝心鸣漫不矜。
+背景：青蛙大晚上叫个不停，伤时之情作此。
+日期：22.4.10
 </p>
   </div>
-  <footer class="entry-footer"><span title='2025-08-15 12:00:00 +0800 +0800'>August 15, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 如果存在是未完成的押韵" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st098_%E5%A6%82%E6%9E%9C%E5%AD%98%E5%9C%A8%E6%98%AF%E6%9C%AA%E5%AE%8C%E6%88%90%E7%9A%84%E6%8A%BC%E9%9F%B5/"></a>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 一池蛙" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st006_%E4%B8%80%E6%B1%A0%E8%9B%99/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">过江楼
+    <h2 class="entry-hint-parent">天不经
     </h2>
   </header>
   <div class="entry-content">
-    <p>过江楼 六代烟霞浮槛外，大江日夜撼城根。
-潮侵楚甸涛声厉，月照梁台旧梦存。
-莫问兴亡千帐月，且听今古一钟昏。
-临流欲续渔樵话，唯有沙鸥立浪痕。
-日期：25.8.14
+    <p>天不经 云霓澹澹漂清绫，荡荡太虚吞长鲸。
+绣闼雕亭盼登临，乌峰白冠适中行。
+龙门跃鲤困涸辙，晖落化霞待新晴。
+孤鹜逐明悠空影，秋水长天最似卿。
+背景：此作，适时临近中考，放学收拾晚些，没记错我们在三楼，栏外长云似化鲸落，云如海波，叹为观止；归家途中，乌云如峰，白云作雪，似有亭台搂阁林立，美极。
+日期：22.6
 </p>
   </div>
-  <footer class="entry-footer"><span title='2025-08-14 12:00:00 +0800 +0800'>August 14, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 过江楼" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st097_%E8%BF%87%E6%B1%9F%E6%A5%BC/"></a>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 天不经" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st007_%E5%A4%A9%E4%B8%8D%E7%BB%8F/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">摊破浣溪沙•闺怨
+    <h2 class="entry-hint-parent">赠别
     </h2>
   </header>
   <div class="entry-content">
-    <p>摊破浣溪沙•闺怨 卑妾踯躅叹路难，繁花一道又青山。灯下曾摹屠龙技，怯凭栏。
-天若有情君亦远，无情伴月更难眠。新火新茶熬旧恨，泪苍天。
-注释：
-屠龙技：典出《庄子》罢了。 新火新茶：“休对故人思故国，且将新火试新茶。诗酒趁年华。&#34;《望江南》苏轼。 日期：25.8.13
+    <p>赠别 雨霁乱虹晴自濡，浮槎星海瞰江湖。
+小窗周易春色奂，不作弱风哀残烛。
+背景：“闲坐小窗读周易，不知春去几多时。&#34;《暮春即事》叶采。考前赠别友人之作，相濡以沫，不若相忘于江湖。
+日期：22.6
 </p>
   </div>
-  <footer class="entry-footer"><span title='2025-08-13 12:00:00 +0800 +0800'>August 13, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 摊破浣溪沙•闺怨" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st096_%E6%91%8A%E7%A0%B4%E6%B5%A3%E6%BA%AA%E6%B2%99%E9%97%BA%E6%80%A8/"></a>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 赠别" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st008_%E8%B5%A0%E5%88%AB/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">蝶恋花·咏危瓷
+    <h2 class="entry-hint-parent">无题
     </h2>
   </header>
   <div class="entry-content">
-    <p>蝶恋花·咏危瓷 釉底金鳞深几许？
-不注清波，只恐瓶身去。
-忍看宫花红颤处，斜簪犹作扶风舞。
-宴散烛孤凝玉露。
-手抚危瓷，幽契凭谁诉？
-一霎风回惊且顾，满堂花月皆尘土。
-背景：咏物诗，最近冲浪了很久，故作此。
-日期：25.8.6
+    <p>无题 落第松邱惹疚愁，鱼游鹤唳断箜篌。
+眠花藉柳邀醉月，我落人间一风流。
+背景：记吾中考没考好，正是语文作文字未够，仍记得题目是&#34;机遇&#34;，甚是嘲讽，字若够了便多十分去一新，可能别是一番风景，但题目是&#34;机遇&#34;，甚是有趣，今我笑盈盈，如此，甚好。然后&#34;眠花藉柳&#34;我应无淫乱之义。
+日期：22.7
 </p>
   </div>
-  <footer class="entry-footer"><span title='2025-08-06 12:00:00 +0800 +0800'>August 6, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 蝶恋花·咏危瓷" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st106%E8%9D%B6%E6%81%8B%E8%8A%B1%E5%92%8F%E5%8D%B1%E7%93%B7/"></a>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 无题" href="https://QwQBiG.github.io/poetry/posts/suitu/01-10/st009_%E6%97%A0%E9%A2%98/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
@@ -1695,6 +1958,182 @@ canvas { display: block; width: 100%; height: 100%; }
   .neko-restore-btn {
     display: none !important;
   }
+}
+/*——————————————————————————————————————————————
+                分页导航样式 - 粉红主题
+——————————————————————————————————————————————*/
+
+/* 隐藏主题默认的分页样式 */
+.pagination,
+.page-footer .pagination,
+nav.pagination,
+.pagination-default {
+  display: none !important;
+}
+
+/* 自定义分页容器 */
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 40px 0;
+  padding: 20px;
+  list-style: none;
+}
+
+/* 分页项 */
+.custom-pagination .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 分页链接 - 默认状态 */
+.custom-pagination .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(255, 154, 158, 0.3);
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+/* 分页链接 - 悬停状态 */
+.custom-pagination .page-link:hover {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+}
+
+/* 分页链接 - 激活状态（当前页） */
+.custom-pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+  cursor: default;
+}
+
+/* 分页链接 - 禁用状态 */
+.custom-pagination .page-item.disabled .page-link {
+  background: rgba(200, 200, 200, 0.3);
+  border-color: rgba(200, 200, 200, 0.3);
+  color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 分页链接 - 禁用状态悬停 */
+.custom-pagination .page-item.disabled .page-link:hover {
+  background: rgba(200, 200, 200, 0.3);
+  border-color: rgba(200, 200, 200, 0.3);
+  color: #aaa;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 上一页/下一页按钮 */
+.custom-pagination .page-item.prev .page-link,
+.custom-pagination .page-item.next .page-link {
+  min-width: 50px;
+  font-weight: 600;
+}
+
+/* 首页/末页按钮 */
+.custom-pagination .page-item.first .page-link,
+.custom-pagination .page-item.last .page-link {
+  min-width: 50px;
+  font-size: 12px;
+}
+
+/* 省略号 */
+.custom-pagination .page-item.ellipsis .page-link {
+  background: transparent;
+  border: none;
+  cursor: default;
+  color: #999;
+}
+
+.custom-pagination .page-item.ellipsis .page-link:hover {
+  background: transparent;
+  border: none;
+  transform: none;
+  box-shadow: none;
+  color: #999;
+}
+
+/* 深色模式适配 */
+body.dark .custom-pagination .page-link {
+  background: rgba(46, 46, 51, 0.7);
+  border-color: rgba(255, 154, 158, 0.2);
+  color: #ccc;
+}
+
+body.dark .custom-pagination .page-link:hover {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+}
+
+body.dark .custom-pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+}
+
+body.dark .custom-pagination .page-item.disabled .page-link {
+  background: rgba(60, 60, 70, 0.5);
+  border-color: rgba(100, 100, 110, 0.3);
+  color: #666;
+}
+
+body.dark .custom-pagination .page-item.ellipsis .page-link {
+  color: #666;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .custom-pagination {
+    gap: 4px;
+    padding: 15px 10px;
+  }
+  
+  .custom-pagination .page-link {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+  
+  .custom-pagination .page-item.prev .page-link,
+  .custom-pagination .page-item.next .page-link,
+  .custom-pagination .page-item.first .page-link,
+  .custom-pagination .page-item.last .page-link {
+    min-width: 40px;
+  }
+}
+
+/* 隐藏原来的分页导航 */
+.page-footer nav.pagination,
+.pagination-default,
+nav[aria-label="pagination"],
+.pagination {
+  display: none !important;
 }
 </style>
 
@@ -2607,13 +3046,178 @@ class NekoEngine {
 window.addEventListener('load', () => {
   new NekoEngine();
 });
+/**
+ * 自定义分页组件 - 粉红主题
+ * 替换 Hugo 默认的分页样式
+ */
+
+(function() {
+  'use strict';
+  
+  // 初始化分页
+  function initCustomPagination() {
+    // 查找所有分页容器
+    const paginationContainers = document.querySelectorAll('.pagination, .pagination-default, nav[aria-label="pagination"]');
+    
+    paginationContainers.forEach((container, index) => {
+      // 如果已经处理过，跳过
+      if (container.dataset.customPagination === 'true') {
+        return;
+      }
+      
+      // 获取分页信息
+      const pageLinks = container.querySelectorAll('.page-link');
+      const currentPageEl = container.querySelector('.page-item.active .page-link');
+      const currentPageNum = currentPageEl ? parseInt(currentPageEl.textContent) || 1 : 1;
+      
+      // 从链接中提取基础 URL
+      let baseUrl = '';
+      let totalPages = currentPageNum; // 默认总页数为当前页
+      
+      // 遍历所有链接，寻找最大页码
+      pageLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href) {
+          // 从链接中提取页码，比如 /page/7/ 中的 7
+          const match = href.match(/\/page\/(\d+)\/$/);
+          if (match && match[1]) {
+            const pageNum = parseInt(match[1]);
+            if (pageNum > totalPages) {
+              totalPages = pageNum;
+            }
+            // 提取基础 URL
+            if (!baseUrl) {
+              baseUrl = href.replace(/\/page\/\d+\/$/, '/');
+            }
+          }
+        }
+      });
+      
+      // 方法2: 从当前页面 URL 推断
+      if (!baseUrl) {
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('/page/')) {
+          baseUrl = currentPath.replace(/\/page\/\d+\/$/, '/');
+        } else {
+          baseUrl = currentPath.endsWith('/') ? currentPath : currentPath + '/';
+        }
+      }
+      
+      // 确保 baseUrl 以 / 结尾
+      if (!baseUrl.endsWith('/')) {
+        baseUrl += '/';
+      }
+      
+      // 创建自定义分页
+      const customPagination = createPaginationHTML(currentPageNum, totalPages, baseUrl);
+      
+      // 替换原分页
+      container.innerHTML = customPagination;
+      container.className = 'custom-pagination';
+      container.dataset.customPagination = 'true';
+    });
+  }
+  
+  // 创建分页 HTML
+  function createPaginationHTML(currentPage, totalPages, baseUrl) {
+    let html = '';
+    
+    // 确保 baseUrl 以 / 结尾
+    if (!baseUrl.endsWith('/')) {
+      baseUrl += '/';
+    }
+    
+    // 首页按钮
+    if (currentPage > 1) {
+      html += `<li class="page-item first"><a href="${baseUrl}" class="page-link" aria-label="First">««</a></li>`;
+    } else {
+      html += `<li class="page-item first disabled"><span class="page-link" aria-label="First">««</span></li>`;
+    }
+    
+    // 上一页按钮
+    if (currentPage > 1) {
+      const prevUrl = currentPage === 2 ? baseUrl : `${baseUrl}page/${currentPage - 1}/`;
+      html += `<li class="page-item prev"><a href="${prevUrl}" class="page-link" aria-label="Previous">«</a></li>`;
+    } else {
+      html += `<li class="page-item prev disabled"><span class="page-link" aria-label="Previous">«</span></li>`;
+    }
+    
+    // 页码 - 只显示以当前页为中心的5页
+    const pageRange = getCenteredPageRange(currentPage, totalPages);
+    
+    pageRange.forEach(page => {
+      if (page === currentPage) {
+        html += `<li class="page-item active"><span class="page-link" aria-current="page">${page}</span></li>`;
+      } else {
+        const pageUrl = page === 1 ? baseUrl : `${baseUrl}page/${page}/`;
+        html += `<li class="page-item"><a href="${pageUrl}" class="page-link" aria-label="Page ${page}">${page}</a></li>`;
+      }
+    });
+    
+    // 下一页按钮
+    if (currentPage < totalPages) {
+      html += `<li class="page-item next"><a href="${baseUrl}page/${currentPage + 1}/" class="page-link" aria-label="Next">»</a></li>`;
+    } else {
+      html += `<li class="page-item next disabled"><span class="page-link" aria-label="Next">»</span></li>`;
+    }
+    
+    // 末页按钮
+    if (currentPage < totalPages) {
+      html += `<li class="page-item last"><a href="${baseUrl}page/${totalPages}/" class="page-link" aria-label="Last">»»</a></li>`;
+    } else {
+      html += `<li class="page-item last disabled"><span class="page-link" aria-label="Last">»»</span></li>`;
+    }
+    
+    return html;
+  }
+  
+  // 获取以当前页为中心的5页范围
+  function getCenteredPageRange(currentPage, totalPages) {
+    const range = [];
+    const pageCount = 5; // 显示5页
+    
+    // 计算起始页码
+    let startPage = currentPage - Math.floor(pageCount / 2);
+    let endPage = currentPage + Math.floor(pageCount / 2);
+    
+    // 调整起始和结束页码，确保在有效范围内
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = Math.min(pageCount, totalPages);
+    }
+    
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, totalPages - pageCount + 1);
+    }
+    
+    // 生成页码范围
+    for (let i = startPage; i <= endPage; i++) {
+      range.push(i);
+    }
+    
+    return range;
+  }
+  
+  // 页面加载时初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCustomPagination);
+  } else {
+    initCustomPagination();
+  }
+  
+  // 页面过渡完成后重新初始化
+  window.addEventListener('pageTransitionComplete', initCustomPagination);
+  
+  // 暴露到全局
+  window.initCustomPagination = initCustomPagination;
+})();
 </script>
 
 
 <script>
     let menu = document.getElementById('menu');
     if (menu) {
-        
         const scrollPosition = localStorage.getItem("menu-scroll-position");
         if (scrollPosition) {
             menu.scrollLeft = parseInt(scrollPosition, 10);
@@ -2642,7 +3246,6 @@ window.addEventListener('load', () => {
             }
         });
     });
-
 </script>
 <script>
     var mybutton = document.getElementById("top-link");
@@ -2655,20 +3258,6 @@ window.addEventListener('load', () => {
             mybutton.style.opacity = "0";
         }
     };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
 </script>
 </body>
 

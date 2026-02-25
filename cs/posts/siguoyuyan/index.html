@@ -140,12 +140,17 @@
   let transitionOverlay = null;
   
   
+  let readingProgressUpdate = null;
+  let backToTopUpdate = null;
+  
+  
   function init() {
     
     createTransitionOverlay();
     
     
-    document.body.classList.add('page-container');
+    const mainElement = document.querySelector('main') || document.body;
+    mainElement.classList.add('page-container');
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -156,10 +161,10 @@
     
     if (!sessionStorage.getItem('pageTransitionInitialLoad')) {
       sessionStorage.setItem('pageTransitionInitialLoad', 'true');
-      document.body.classList.add('page-enter');
+      mainElement.classList.add('page-enter');
       
       setTimeout(() => {
-        document.body.classList.remove('page-enter');
+        mainElement.classList.remove('page-enter');
       }, CONFIG.animationDuration);
     }
   }
@@ -231,13 +236,16 @@
     isTransitioning = true;
     
     
+    const mainElement = document.querySelector('main') || document.body;
+    
+    
     document.documentElement.classList.add('page-transition-loading');
     
     
     transitionOverlay.classList.add('active');
     
     
-    document.body.classList.add('page-exit');
+    mainElement.classList.add('page-exit');
     
     
     const preloadStartTime = Date.now();
@@ -294,8 +302,11 @@
     updateMetaTags(newDoc);
     
     
-    document.body.classList.remove('page-exit');
-    document.body.classList.add('page-enter');
+    const mainElement = document.querySelector('main') || document.body;
+    
+    
+    mainElement.classList.remove('page-exit');
+    mainElement.classList.add('page-enter');
     
     
     const loaderText = document.querySelector('.page-transition-loader-text');
@@ -312,7 +323,7 @@
       
       
       setTimeout(() => {
-        document.body.classList.remove('page-enter');
+        mainElement.classList.remove('page-enter');
         document.documentElement.classList.remove('page-transition-loading');
         isTransitioning = false;
         
@@ -374,6 +385,271 @@
     
     
     initCommonFeatures();
+    
+    
+    initExtendFooterModules();
+  }
+  
+  
+  function initExtendFooterModules() {
+    
+    initReadingProgress();
+    
+    
+    initBackToTop();
+    
+    
+    initNekoPiano();
+    
+    
+    initCodeCopy();
+    
+    
+    initCodeFold();
+    
+    
+    initDisableThemeScroll();
+    
+    
+    if (typeof initCustomPagination === 'function') {
+      initCustomPagination();
+    }
+  }
+  
+  
+  function initReadingProgress() {
+    
+    const existingProgress = document.querySelector('.reading-progress-container');
+    if (existingProgress) {
+      existingProgress.remove();
+    }
+    const existingPercent = document.querySelector('.reading-progress-percent');
+    if (existingPercent) {
+      existingPercent.remove();
+    }
+    
+    
+    if (readingProgressUpdate) {
+      window.removeEventListener('scroll', readingProgressUpdate);
+      window.removeEventListener('resize', readingProgressUpdate);
+    }
+    
+    
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'reading-progress-container';
+    progressContainer.innerHTML = '<div class="reading-progress-bar"></div>';
+    
+    if (document.body.firstChild) {
+      document.body.insertBefore(progressContainer, document.body.firstChild);
+    } else {
+      document.body.appendChild(progressContainer);
+    }
+    
+    const progressBar = progressContainer.querySelector('.reading-progress-bar');
+    
+    
+    const percentDisplay = document.createElement('div');
+    percentDisplay.className = 'reading-progress-percent';
+    percentDisplay.textContent = '0%';
+    document.body.appendChild(percentDisplay);
+    
+    
+    readingProgressUpdate = function() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      
+      progressBar.style.width = scrollPercent + '%';
+      percentDisplay.textContent = Math.round(scrollPercent) + '%';
+    };
+    
+    window.addEventListener('scroll', readingProgressUpdate, { passive: true });
+    window.addEventListener('resize', readingProgressUpdate, { passive: true });
+    readingProgressUpdate();
+  }
+  
+  
+  function initBackToTop() {
+    
+    const existingBtn = document.querySelector('.custom-back-to-top');
+    if (existingBtn) {
+      existingBtn.remove();
+    }
+    
+    
+    if (backToTopUpdate) {
+      window.removeEventListener('scroll', backToTopUpdate);
+    }
+    
+    
+    const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
+    existingTopLinks.forEach(el => el.remove());
+    
+    
+    const backToTop = document.createElement('button');
+    backToTop.className = 'custom-back-to-top';
+    backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
+    backToTop.setAttribute('aria-label', '返回顶部');
+    document.body.appendChild(backToTop);
+    
+    
+    backToTopUpdate = function() {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    };
+    
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    window.addEventListener('scroll', backToTopUpdate, { passive: true });
+    backToTopUpdate();
+  }
+  
+  
+  function initNekoPiano() {
+    
+    const existingNeko = document.getElementById('neko-engine-root');
+    if (existingNeko) {
+      existingNeko.remove();
+    }
+    const existingRestoreBtn = document.getElementById('neko-restore-btn');
+    if (existingRestoreBtn) {
+      existingRestoreBtn.remove();
+    }
+    
+    
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (isMobile) return;
+    
+    
+    const nekoHTML = `
+      <div id="neko-engine-root">
+        <audio id="neko-audio" loop crossorigin="anonymous">
+          <source src="/music/oblivious.mp3" type="audio/mpeg">
+        </audio>
+        <div id="piano-click-zone"></div>
+        <div id="neko-ui-layer">
+          <div class="neko-fab" id="neko-toggle-btn">
+            <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="icon-pause" viewBox="0 0 24 24" style="display:none; transform: scale(0.9);"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </div>
+          <div class="neko-info-container">
+            <div class="neko-info">Loading...</div>
+            <div class="neko-close-btn" id="neko-close-btn" title="关闭猫咪钢琴">
+              <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+          </div>
+        </div>
+        <canvas id="neko-canvas"></canvas>
+      </div>
+      <div class="neko-restore-btn" id="neko-restore-btn" title="显示猫咪钢琴">
+        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </div>
+    `;
+    
+    const nekoContainer = document.createElement('div');
+    nekoContainer.innerHTML = nekoHTML;
+    document.body.appendChild(nekoContainer);
+    
+    
+    if (typeof NekoEngine !== 'undefined') {
+      setTimeout(() => {
+        new NekoEngine();
+        const nekoRoot = document.getElementById('neko-engine-root');
+        if (nekoRoot) {
+          nekoRoot.classList.add('loaded');
+        }
+      }, 500);
+    }
+  }
+  
+  
+  function initCodeCopy() {
+    
+    document.querySelectorAll('.code-copy-btn').forEach(btn => btn.remove());
+    
+    
+    document.querySelectorAll('pre code').forEach((codeBlock, index) => {
+      const pre = codeBlock.parentElement;
+      if (!pre.querySelector('.code-copy-btn')) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'code-copy-btn';
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+        copyBtn.title = '复制代码';
+        
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(codeBlock.textContent);
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        });
+        
+        pre.style.position = 'relative';
+        pre.appendChild(copyBtn);
+      }
+    });
+  }
+  
+  
+  function initCodeFold() {
+    
+    document.querySelectorAll('.code-fold-btn').forEach(btn => btn.remove());
+    
+    
+    document.querySelectorAll('pre').forEach(pre => {
+      const codeBlock = pre.querySelector('code');
+      if (!codeBlock) return;
+      
+      const lineCount = codeBlock.textContent.split('\n').length;
+      if (lineCount > 15 && !pre.querySelector('.code-fold-btn')) {
+        pre.classList.add('code-foldable');
+        
+        const foldBtn = document.createElement('button');
+        foldBtn.className = 'code-fold-btn';
+        foldBtn.innerHTML = '<span class="fold-text">展开</span><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>';
+        
+        foldBtn.addEventListener('click', () => {
+          pre.classList.toggle('code-expanded');
+          const isExpanded = pre.classList.contains('code-expanded');
+          foldBtn.querySelector('.fold-text').textContent = isExpanded ? '收起' : '展开';
+          foldBtn.querySelector('svg').style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+        
+        pre.appendChild(foldBtn);
+      }
+    });
+  }
+  
+  
+  function initDisableThemeScroll() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      
+      const newToggle = themeToggle.cloneNode(true);
+      themeToggle.parentNode.replaceChild(newToggle, themeToggle);
+      
+      newToggle.addEventListener('click', () => {
+        
+        const scrollPos = window.pageYOffset;
+        setTimeout(() => {
+          window.scrollTo(0, scrollPos);
+        }, 0);
+      });
+    }
   }
   
   
@@ -430,7 +706,8 @@
     isTransitioning: () => isTransitioning
   };
 })();
-</script><meta property="og:url" content="https://QwQBiG.github.io/cs/posts/siguoyuyan/">
+</script>
+<meta property="og:url" content="https://QwQBiG.github.io/cs/posts/siguoyuyan/">
   <meta property="og:site_name" content="QwQBiG&#39;s World">
   <meta property="og:title" content="C/C&#43;&#43;速通Java?JS?Rust?">
   <meta property="og:description" content="🚀 编程语言速通指南：C/C&#43;&#43; 选手的多宇宙生存手册 适用人群：已掌握 C，进修 C&#43;&#43; 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。
@@ -1958,6 +2235,182 @@ canvas { display: block; width: 100%; height: 100%; }
     display: none !important;
   }
 }
+/*——————————————————————————————————————————————
+                分页导航样式 - 粉红主题
+——————————————————————————————————————————————*/
+
+/* 隐藏主题默认的分页样式 */
+.pagination,
+.page-footer .pagination,
+nav.pagination,
+.pagination-default {
+  display: none !important;
+}
+
+/* 自定义分页容器 */
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 40px 0;
+  padding: 20px;
+  list-style: none;
+}
+
+/* 分页项 */
+.custom-pagination .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 分页链接 - 默认状态 */
+.custom-pagination .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(255, 154, 158, 0.3);
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+/* 分页链接 - 悬停状态 */
+.custom-pagination .page-link:hover {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+}
+
+/* 分页链接 - 激活状态（当前页） */
+.custom-pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+  cursor: default;
+}
+
+/* 分页链接 - 禁用状态 */
+.custom-pagination .page-item.disabled .page-link {
+  background: rgba(200, 200, 200, 0.3);
+  border-color: rgba(200, 200, 200, 0.3);
+  color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 分页链接 - 禁用状态悬停 */
+.custom-pagination .page-item.disabled .page-link:hover {
+  background: rgba(200, 200, 200, 0.3);
+  border-color: rgba(200, 200, 200, 0.3);
+  color: #aaa;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 上一页/下一页按钮 */
+.custom-pagination .page-item.prev .page-link,
+.custom-pagination .page-item.next .page-link {
+  min-width: 50px;
+  font-weight: 600;
+}
+
+/* 首页/末页按钮 */
+.custom-pagination .page-item.first .page-link,
+.custom-pagination .page-item.last .page-link {
+  min-width: 50px;
+  font-size: 12px;
+}
+
+/* 省略号 */
+.custom-pagination .page-item.ellipsis .page-link {
+  background: transparent;
+  border: none;
+  cursor: default;
+  color: #999;
+}
+
+.custom-pagination .page-item.ellipsis .page-link:hover {
+  background: transparent;
+  border: none;
+  transform: none;
+  box-shadow: none;
+  color: #999;
+}
+
+/* 深色模式适配 */
+body.dark .custom-pagination .page-link {
+  background: rgba(46, 46, 51, 0.7);
+  border-color: rgba(255, 154, 158, 0.2);
+  color: #ccc;
+}
+
+body.dark .custom-pagination .page-link:hover {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+}
+
+body.dark .custom-pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-color: rgba(255, 154, 158, 0.8);
+  color: white;
+}
+
+body.dark .custom-pagination .page-item.disabled .page-link {
+  background: rgba(60, 60, 70, 0.5);
+  border-color: rgba(100, 100, 110, 0.3);
+  color: #666;
+}
+
+body.dark .custom-pagination .page-item.ellipsis .page-link {
+  color: #666;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .custom-pagination {
+    gap: 4px;
+    padding: 15px 10px;
+  }
+  
+  .custom-pagination .page-link {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+  
+  .custom-pagination .page-item.prev .page-link,
+  .custom-pagination .page-item.next .page-link,
+  .custom-pagination .page-item.first .page-link,
+  .custom-pagination .page-item.last .page-link {
+    min-width: 40px;
+  }
+}
+
+/* 隐藏原来的分页导航 */
+.page-footer nav.pagination,
+.pagination-default,
+nav[aria-label="pagination"],
+.pagination {
+  display: none !important;
+}
 </style>
 
 <div id="neko-engine-root">
@@ -2869,13 +3322,178 @@ class NekoEngine {
 window.addEventListener('load', () => {
   new NekoEngine();
 });
+/**
+ * 自定义分页组件 - 粉红主题
+ * 替换 Hugo 默认的分页样式
+ */
+
+(function() {
+  'use strict';
+  
+  // 初始化分页
+  function initCustomPagination() {
+    // 查找所有分页容器
+    const paginationContainers = document.querySelectorAll('.pagination, .pagination-default, nav[aria-label="pagination"]');
+    
+    paginationContainers.forEach((container, index) => {
+      // 如果已经处理过，跳过
+      if (container.dataset.customPagination === 'true') {
+        return;
+      }
+      
+      // 获取分页信息
+      const pageLinks = container.querySelectorAll('.page-link');
+      const currentPageEl = container.querySelector('.page-item.active .page-link');
+      const currentPageNum = currentPageEl ? parseInt(currentPageEl.textContent) || 1 : 1;
+      
+      // 从链接中提取基础 URL
+      let baseUrl = '';
+      let totalPages = currentPageNum; // 默认总页数为当前页
+      
+      // 遍历所有链接，寻找最大页码
+      pageLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href) {
+          // 从链接中提取页码，比如 /page/7/ 中的 7
+          const match = href.match(/\/page\/(\d+)\/$/);
+          if (match && match[1]) {
+            const pageNum = parseInt(match[1]);
+            if (pageNum > totalPages) {
+              totalPages = pageNum;
+            }
+            // 提取基础 URL
+            if (!baseUrl) {
+              baseUrl = href.replace(/\/page\/\d+\/$/, '/');
+            }
+          }
+        }
+      });
+      
+      // 方法2: 从当前页面 URL 推断
+      if (!baseUrl) {
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('/page/')) {
+          baseUrl = currentPath.replace(/\/page\/\d+\/$/, '/');
+        } else {
+          baseUrl = currentPath.endsWith('/') ? currentPath : currentPath + '/';
+        }
+      }
+      
+      // 确保 baseUrl 以 / 结尾
+      if (!baseUrl.endsWith('/')) {
+        baseUrl += '/';
+      }
+      
+      // 创建自定义分页
+      const customPagination = createPaginationHTML(currentPageNum, totalPages, baseUrl);
+      
+      // 替换原分页
+      container.innerHTML = customPagination;
+      container.className = 'custom-pagination';
+      container.dataset.customPagination = 'true';
+    });
+  }
+  
+  // 创建分页 HTML
+  function createPaginationHTML(currentPage, totalPages, baseUrl) {
+    let html = '';
+    
+    // 确保 baseUrl 以 / 结尾
+    if (!baseUrl.endsWith('/')) {
+      baseUrl += '/';
+    }
+    
+    // 首页按钮
+    if (currentPage > 1) {
+      html += `<li class="page-item first"><a href="${baseUrl}" class="page-link" aria-label="First">««</a></li>`;
+    } else {
+      html += `<li class="page-item first disabled"><span class="page-link" aria-label="First">««</span></li>`;
+    }
+    
+    // 上一页按钮
+    if (currentPage > 1) {
+      const prevUrl = currentPage === 2 ? baseUrl : `${baseUrl}page/${currentPage - 1}/`;
+      html += `<li class="page-item prev"><a href="${prevUrl}" class="page-link" aria-label="Previous">«</a></li>`;
+    } else {
+      html += `<li class="page-item prev disabled"><span class="page-link" aria-label="Previous">«</span></li>`;
+    }
+    
+    // 页码 - 只显示以当前页为中心的5页
+    const pageRange = getCenteredPageRange(currentPage, totalPages);
+    
+    pageRange.forEach(page => {
+      if (page === currentPage) {
+        html += `<li class="page-item active"><span class="page-link" aria-current="page">${page}</span></li>`;
+      } else {
+        const pageUrl = page === 1 ? baseUrl : `${baseUrl}page/${page}/`;
+        html += `<li class="page-item"><a href="${pageUrl}" class="page-link" aria-label="Page ${page}">${page}</a></li>`;
+      }
+    });
+    
+    // 下一页按钮
+    if (currentPage < totalPages) {
+      html += `<li class="page-item next"><a href="${baseUrl}page/${currentPage + 1}/" class="page-link" aria-label="Next">»</a></li>`;
+    } else {
+      html += `<li class="page-item next disabled"><span class="page-link" aria-label="Next">»</span></li>`;
+    }
+    
+    // 末页按钮
+    if (currentPage < totalPages) {
+      html += `<li class="page-item last"><a href="${baseUrl}page/${totalPages}/" class="page-link" aria-label="Last">»»</a></li>`;
+    } else {
+      html += `<li class="page-item last disabled"><span class="page-link" aria-label="Last">»»</span></li>`;
+    }
+    
+    return html;
+  }
+  
+  // 获取以当前页为中心的5页范围
+  function getCenteredPageRange(currentPage, totalPages) {
+    const range = [];
+    const pageCount = 5; // 显示5页
+    
+    // 计算起始页码
+    let startPage = currentPage - Math.floor(pageCount / 2);
+    let endPage = currentPage + Math.floor(pageCount / 2);
+    
+    // 调整起始和结束页码，确保在有效范围内
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = Math.min(pageCount, totalPages);
+    }
+    
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, totalPages - pageCount + 1);
+    }
+    
+    // 生成页码范围
+    for (let i = startPage; i <= endPage; i++) {
+      range.push(i);
+    }
+    
+    return range;
+  }
+  
+  // 页面加载时初始化
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCustomPagination);
+  } else {
+    initCustomPagination();
+  }
+  
+  // 页面过渡完成后重新初始化
+  window.addEventListener('pageTransitionComplete', initCustomPagination);
+  
+  // 暴露到全局
+  window.initCustomPagination = initCustomPagination;
+})();
 </script>
 
 
 <script>
     let menu = document.getElementById('menu');
     if (menu) {
-        
         const scrollPosition = localStorage.getItem("menu-scroll-position");
         if (scrollPosition) {
             menu.scrollLeft = parseInt(scrollPosition, 10);
@@ -2904,7 +3522,6 @@ window.addEventListener('load', () => {
             }
         });
     });
-
 </script>
 <script>
     var mybutton = document.getElementById("top-link");
@@ -2917,67 +3534,6 @@ window.addEventListener('load', () => {
             mybutton.style.opacity = "0";
         }
     };
-
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
-
-</script>
-<script>
-    document.querySelectorAll('pre > code').forEach((codeblock) => {
-        const container = codeblock.parentNode.parentNode;
-
-        const copybutton = document.createElement('button');
-        copybutton.classList.add('copy-code');
-        copybutton.innerHTML = 'copy';
-
-        function copyingDone() {
-            copybutton.innerHTML = 'copied!';
-            setTimeout(() => {
-                copybutton.innerHTML = 'copy';
-            }, 2000);
-        }
-
-        copybutton.addEventListener('click', (cb) => {
-            if ('clipboard' in navigator) {
-                navigator.clipboard.writeText(codeblock.textContent);
-                copyingDone();
-                return;
-            }
-
-            const range = document.createRange();
-            range.selectNodeContents(codeblock);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            try {
-                document.execCommand('copy');
-                copyingDone();
-            } catch (e) { };
-            selection.removeRange(range);
-        });
-
-        if (container.classList.contains("highlight")) {
-            container.appendChild(copybutton);
-        } else if (container.parentNode.firstChild == container) {
-            
-        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
-            
-            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
-        } else {
-            
-            codeblock.parentNode.appendChild(copybutton);
-        }
-    });
 </script>
 </body>
 
