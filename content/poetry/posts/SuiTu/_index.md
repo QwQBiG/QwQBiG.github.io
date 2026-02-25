@@ -2,6 +2,8 @@
 title: "《随吐集》"
 description: "随吐随吐，恣意吐出，不拾牙慧。"
 type: series
+cascade:
+  sort_by: "Weight"
 ---
 ## 说明
 

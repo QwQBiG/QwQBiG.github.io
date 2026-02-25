@@ -1,10 +1,11 @@
 ---
 title: "LDDDL"
-date: 2025-08-18T12:00:00+08:00
+date: 2026-02-24T10:30:00+08:00
 draft: false
 tags: ["英文诗", "随吐集", "正篇", "早期作品"]
 categories: ["诗歌", "随吐集"]
 author: "白告"
+weight: 100
 ---
 
 ### LDDDL（Love's date and deadline）

@@ -20,6 +20,7 @@
 {{- readFile (printf "%s%s" $cssPath "code-copy.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "code-fold.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "neko-piano.css") | safeCSS -}}
+{{- readFile (printf "%s%s" $cssPath "pagination.css") | safeCSS -}}
 </style>
 
 <!-- HTML 组件模块 -->
@@ -35,4 +36,5 @@
 {{- readFile (printf "%s%s" $jsPath "code-copy.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "code-fold.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "neko-piano.js") | safeJS -}}
+{{- readFile (printf "%s%s" $jsPath "pagination.js") | safeJS -}}
 </script>

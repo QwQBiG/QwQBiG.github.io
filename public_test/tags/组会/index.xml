@@ -1,7 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>组会 on QwQBiG's World</title><link>https://QwQBiG.github.io/tags/%E7%BB%84%E4%BC%9A/</link><description>Recent content in 组会 on QwQBiG's World</description><generator>Hugo -- 0.152.2</generator><language>zh-cn</language><lastBuildDate>Fri, 14 Nov 2025 15:00:00 +0800</lastBuildDate><atom:link href="https://QwQBiG.github.io/tags/%E7%BB%84%E4%BC%9A/index.xml" rel="self" type="application/rss+xml"/><item><title>我の组会</title><link>https://QwQBiG.github.io/posts/zuhui/</link><pubDate>Fri, 14 Nov 2025 15:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/zuhui/</guid><description>&lt;h2 id="组会报告-1"&gt;组会报告 1&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>组会 on QwQBiG&#39;s World</title>
+    <link>https://QwQBiG.github.io/tags/%E7%BB%84%E4%BC%9A/</link>
+    <description>Recent content in 组会 on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 14 Nov 2025 15:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/%E7%BB%84%E4%BC%9A/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>我の组会</title>
+      <link>https://QwQBiG.github.io/cs/posts/zuhui/</link>
+      <pubDate>Fri, 14 Nov 2025 15:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/zuhui/</guid>
+      <description>&lt;h2 id=&#34;组会报告-1&#34;&gt;组会报告 1&lt;/h2&gt;
 &lt;p&gt;容我想想上几周我干了什么：&lt;/p&gt;
 &lt;p&gt;首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）&lt;/p&gt;
-&lt;p&gt;然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了&amp;hellip;那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb momo（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人&amp;hellip;但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。&lt;/p&gt;
+&lt;p&gt;然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了&amp;hellip;那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb mono（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人&amp;hellip;但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。&lt;/p&gt;
 &lt;p&gt;或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的“鸟兽草木之名”，也有帮助。&lt;/p&gt;
 &lt;p&gt;之后，我深刻的了解到、并可以熟练进行Ubuntu的紧急操作界面的恢复&amp;hellip;因为可能是我把第二个开的虚拟机，放到了第一个虚拟机没有清理完全的文件夹，导致lvm卷他找不到，那两天左右，我大概有20次以上的重启到紧急模式到好了到测试的经历，可以说是十分熟练（酸爽）了。&lt;/p&gt;
 &lt;p&gt;然后转折点：毛学长给我分了一块实验室服务器的Ubuntu，所以开始搞远程终端的美化：&lt;/p&gt;
@@ -12,7 +27,7 @@
 &lt;p&gt;然后就是调教ai（为了多玩玩docker），想搞个网站，一开始是吧，docker建了个文件夹搞点html,css做了个界面，发现内网&amp;hellip;然后拉了一个wordpress是个动态网站，依旧内网&amp;hellip;再看域名，看累了没搞，之后还想内网穿透，结果https&amp;hellip;相关视频看了大概，网络协议也是大概学到了一些&amp;hellip;&lt;/p&gt;
 &lt;p&gt;最终是用的Github Pages静态网站，不用自己搞sql、redis啥的，也不用搞安全，还是很爽的，加上Github Action 发布文章只要win终端git push一下就好了。&lt;/p&gt;
 &lt;p&gt;这边，主要是接触了git、前端代码、以及重要的shell内容。&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://qwqbig.github.io/"&gt;https://qwqbig.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://qwqbig.github.io/&#34;&gt;https://qwqbig.github.io/&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;网址如上，里面有建站的全流程，想看的话。我应该有两天时间在干这个。&lt;/p&gt;
 &lt;p&gt;最后这两天就感到有点子无聊了，回到了 STL 和 C++11 以上的好的特性上去玩。&lt;/p&gt;
 &lt;p&gt;那我正好鼓捣k8s玩了，还以为要再docker几天的。&lt;/p&gt;
@@ -20,10 +35,13 @@
 &lt;p&gt;本来我都想开始把原来做的题用cpp重写的，像是把这个世界用Rust重写一遍似的&amp;hellip;(话说蟹教有干翻C++的未来吗，不清楚)。&lt;/p&gt;
 &lt;p&gt;写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh&lt;/p&gt;
 &lt;p&gt;欧克，完事了，bye~&lt;/p&gt;
-&lt;h2 id="组会报告-2"&gt;组会报告 2&lt;/h2&gt;
+&lt;h2 id=&#34;组会报告-2&#34;&gt;组会报告 2&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;总结：本周主要搞了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级（应该高级吧）模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h4 id="主要是-k8s-本地环境搭建与-pod-编排"&gt;主要是 K8s 本地环境搭建与 Pod 编排：&lt;/h4&gt;
+&lt;h4 id=&#34;主要是-k8s-本地环境搭建与-pod-编排&#34;&gt;主要是 K8s 本地环境搭建与 Pod 编排：&lt;/h4&gt;
 &lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

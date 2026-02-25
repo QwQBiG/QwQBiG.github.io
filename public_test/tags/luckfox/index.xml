@@ -1,18 +1,33 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Luckfox on QwQBiG's World</title><link>https://QwQBiG.github.io/tags/luckfox/</link><description>Recent content in Luckfox on QwQBiG's World</description><generator>Hugo -- 0.152.2</generator><language>zh-cn</language><lastBuildDate>Tue, 27 Jan 2026 12:00:00 +0800</lastBuildDate><atom:link href="https://QwQBiG.github.io/tags/luckfox/index.xml" rel="self" type="application/rss+xml"/><item><title>LuckFox RV1103 板子烧录开机登录~</title><link>https://QwQBiG.github.io/posts/q26han04/</link><pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/q26han04/</guid><description>&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Luckfox on QwQBiG&#39;s World</title>
+    <link>https://QwQBiG.github.io/tags/luckfox/</link>
+    <description>Recent content in Luckfox on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 27 Jan 2026 12:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/luckfox/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LuckFox RV1103 板子烧录开机登录~</title>
+      <link>https://QwQBiG.github.io/cs/posts/q26han04/</link>
+      <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han04/</guid>
+      <description>&lt;blockquote&gt;
 &lt;p&gt;2026 寒假 任务04 “启动：硬起来的臭企鹅”&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;hr&gt;
-&lt;h1 id="-luckfox-pico-mini-b-rv1103-嵌入式开发笔记"&gt;🦊 Luckfox Pico Mini B (RV1103) 嵌入式开发笔记&lt;/h1&gt;
+&lt;h1 id=&#34;-luckfox-pico-mini-b-rv1103-嵌入式开发笔记&#34;&gt;🦊 Luckfox Pico Mini B (RV1103) 嵌入式开发笔记&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;目标&lt;/strong&gt;：从零开始搭建嵌入式 Linux + AI 环境&lt;br&gt;
 &lt;strong&gt;硬件&lt;/strong&gt;：Luckfox Pico Mini B (RV1103) + SC3336 摄像头&lt;br&gt;
 &lt;strong&gt;达成&lt;/strong&gt;：✅ 系统烧录 | ✅ 驱动排查 | ✅ SSH 连接 (ADB 隧道方案)&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;要跟着官方文档来玩~&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id="-第一章系统镜像与烧录"&gt;🛠️ 第一章：系统镜像与烧录&lt;/h2&gt;
+&lt;h2 id=&#34;-第一章系统镜像与烧录&#34;&gt;🛠️ 第一章：系统镜像与烧录&lt;/h2&gt;
 &lt;p&gt;Luckfox Pico Mini B 支持两种启动方式：&lt;strong&gt;TF 卡启动 (MicroSD)&lt;/strong&gt; 和 &lt;strong&gt;板载闪存启动 (SPI NAND Flash)&lt;/strong&gt;。&lt;br&gt;
 &lt;strong&gt;启动优先级&lt;/strong&gt;：TF 卡 &amp;gt; 板载 Flash。只要插了 TF 卡，板子就会优先读卡。&lt;/p&gt;
-&lt;h3 id="1-烧录板载-flash-使用-soctoolkit"&gt;1. 烧录板载 Flash (使用 SocToolKit)&lt;/h3&gt;
+&lt;h3 id=&#34;1-烧录板载-flash-使用-soctoolkit&#34;&gt;1. 烧录板载 Flash (使用 SocToolKit)&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：不插 TF 卡时运行的基础系统。&lt;br&gt;
 &lt;strong&gt;工具&lt;/strong&gt;：SocToolKit (瑞芯微官方工具)。&lt;br&gt;
 &lt;strong&gt;操作要点&lt;/strong&gt;：&lt;/p&gt;
@@ -21,4 +36,7 @@
 &lt;li&gt;选择 Download 模式。&lt;/li&gt;
 &lt;li&gt;选择对应的分区文件烧录。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;经验&lt;/strong&gt;：我们这一步操作是正确的。虽然我们主要用 TF 卡，但刷好 Flash 作为备用系统（救砖用）是个好习惯。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;经验&lt;/strong&gt;：我们这一步操作是正确的。虽然我们主要用 TF 卡，但刷好 Flash 作为备用系统（救砖用）是个好习惯。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

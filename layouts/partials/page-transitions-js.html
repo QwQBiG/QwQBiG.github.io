@@ -21,13 +21,18 @@
   let isTransitioning = false;
   let transitionOverlay = null;
   
+  // Global update functions for extend_footer modules
+  let readingProgressUpdate = null;
+  let backToTopUpdate = null;
+  
   // Initialize page transitions
   function init() {
     // Create transition overlay
     createTransitionOverlay();
     
-    // Add page container class to body
-    document.body.classList.add('page-container');
+    // Add page container class to main element (not body) to avoid breaking fixed positioning
+    const mainElement = document.querySelector('main') || document.body;
+    mainElement.classList.add('page-container');
     
     // Handle link clicks
     document.addEventListener('click', handleLinkClick, true);
@@ -38,10 +43,10 @@
     // Add enter animation on initial load
     if (!sessionStorage.getItem('pageTransitionInitialLoad')) {
       sessionStorage.setItem('pageTransitionInitialLoad', 'true');
-      document.body.classList.add('page-enter');
+      mainElement.classList.add('page-enter');
       
       setTimeout(() => {
-        document.body.classList.remove('page-enter');
+        mainElement.classList.remove('page-enter');
       }, CONFIG.animationDuration);
     }
   }
@@ -112,14 +117,17 @@
     if (isTransitioning) return;
     isTransitioning = true;
     
+    // Get main element for animation
+    const mainElement = document.querySelector('main') || document.body;
+    
     // Add loading state
     document.documentElement.classList.add('page-transition-loading');
     
     // Show overlay with backdrop blur
     transitionOverlay.classList.add('active');
     
-    // Start exit animation
-    document.body.classList.add('page-exit');
+    // Start exit animation on main element (not body) to preserve fixed positioning
+    mainElement.classList.add('page-exit');
     
     // Preload the next page
     const preloadStartTime = Date.now();
@@ -175,9 +183,12 @@
     // Update meta tags
     updateMetaTags(newDoc);
     
-    // Start enter animation
-    document.body.classList.remove('page-exit');
-    document.body.classList.add('page-enter');
+    // Get main element for animation
+    const mainElement = document.querySelector('main') || document.body;
+    
+    // Start enter animation on main element (not body) to preserve fixed positioning
+    mainElement.classList.remove('page-exit');
+    mainElement.classList.add('page-enter');
     
     // Immediately hide the loader text but keep backdrop briefly
     const loaderText = document.querySelector('.page-transition-loader-text');
@@ -194,7 +205,7 @@
       
       // Remove animation classes
       setTimeout(() => {
-        document.body.classList.remove('page-enter');
+        mainElement.classList.remove('page-enter');
         document.documentElement.classList.remove('page-transition-loading');
         isTransitioning = false;
         
@@ -256,6 +267,271 @@
     
     // Re-initialize common functionality
     initCommonFeatures();
+    
+    // Re-initialize extend_footer modules
+    initExtendFooterModules();
+  }
+  
+  // Initialize extend_footer modules (reading progress, back to top, neko piano, etc.)
+  function initExtendFooterModules() {
+    // 1. Re-initialize reading progress bar
+    initReadingProgress();
+    
+    // 2. Re-initialize back to top button
+    initBackToTop();
+    
+    // 3. Re-initialize neko piano
+    initNekoPiano();
+    
+    // 4. Re-initialize code copy buttons
+    initCodeCopy();
+    
+    // 5. Re-initialize code fold functionality
+    initCodeFold();
+    
+    // 6. Re-initialize disable theme scroll
+    initDisableThemeScroll();
+    
+    // 7. Re-initialize custom pagination
+    if (typeof initCustomPagination === 'function') {
+      initCustomPagination();
+    }
+  }
+  
+  // Initialize reading progress bar
+  function initReadingProgress() {
+    // Remove existing progress bar and percent display
+    const existingProgress = document.querySelector('.reading-progress-container');
+    if (existingProgress) {
+      existingProgress.remove();
+    }
+    const existingPercent = document.querySelector('.reading-progress-percent');
+    if (existingPercent) {
+      existingPercent.remove();
+    }
+    
+    // Remove old global update function
+    if (readingProgressUpdate) {
+      window.removeEventListener('scroll', readingProgressUpdate);
+      window.removeEventListener('resize', readingProgressUpdate);
+    }
+    
+    // Create new progress bar
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'reading-progress-container';
+    progressContainer.innerHTML = '<div class="reading-progress-bar"></div>';
+    
+    if (document.body.firstChild) {
+      document.body.insertBefore(progressContainer, document.body.firstChild);
+    } else {
+      document.body.appendChild(progressContainer);
+    }
+    
+    const progressBar = progressContainer.querySelector('.reading-progress-bar');
+    
+    // Create percentage display - add to body, not container (for fixed positioning to work correctly)
+    const percentDisplay = document.createElement('div');
+    percentDisplay.className = 'reading-progress-percent';
+    percentDisplay.textContent = '0%';
+    document.body.appendChild(percentDisplay);
+    
+    // Create global update function
+    readingProgressUpdate = function() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      
+      progressBar.style.width = scrollPercent + '%';
+      percentDisplay.textContent = Math.round(scrollPercent) + '%';
+    };
+    
+    window.addEventListener('scroll', readingProgressUpdate, { passive: true });
+    window.addEventListener('resize', readingProgressUpdate, { passive: true });
+    readingProgressUpdate();
+  }
+  
+  // Initialize back to top button
+  function initBackToTop() {
+    // Remove existing back to top button
+    const existingBtn = document.querySelector('.custom-back-to-top');
+    if (existingBtn) {
+      existingBtn.remove();
+    }
+    
+    // Remove old global update function
+    if (backToTopUpdate) {
+      window.removeEventListener('scroll', backToTopUpdate);
+    }
+    
+    // Remove theme's default back to top button
+    const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
+    existingTopLinks.forEach(el => el.remove());
+    
+    // Create new back to top button
+    const backToTop = document.createElement('button');
+    backToTop.className = 'custom-back-to-top';
+    backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
+    backToTop.setAttribute('aria-label', '返回顶部');
+    document.body.appendChild(backToTop);
+    
+    // Create global update function
+    backToTopUpdate = function() {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    };
+    
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    window.addEventListener('scroll', backToTopUpdate, { passive: true });
+    backToTopUpdate();
+  }
+  
+  // Initialize neko piano
+  function initNekoPiano() {
+    // Remove existing neko piano elements
+    const existingNeko = document.getElementById('neko-engine-root');
+    if (existingNeko) {
+      existingNeko.remove();
+    }
+    const existingRestoreBtn = document.getElementById('neko-restore-btn');
+    if (existingRestoreBtn) {
+      existingRestoreBtn.remove();
+    }
+    
+    // Check if mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (isMobile) return;
+    
+    // Create neko piano HTML structure
+    const nekoHTML = `
+      <div id="neko-engine-root">
+        <audio id="neko-audio" loop crossorigin="anonymous">
+          <source src="/music/oblivious.mp3" type="audio/mpeg">
+        </audio>
+        <div id="piano-click-zone"></div>
+        <div id="neko-ui-layer">
+          <div class="neko-fab" id="neko-toggle-btn">
+            <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="icon-pause" viewBox="0 0 24 24" style="display:none; transform: scale(0.9);"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </div>
+          <div class="neko-info-container">
+            <div class="neko-info">Loading...</div>
+            <div class="neko-close-btn" id="neko-close-btn" title="关闭猫咪钢琴">
+              <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+          </div>
+        </div>
+        <canvas id="neko-canvas"></canvas>
+      </div>
+      <div class="neko-restore-btn" id="neko-restore-btn" title="显示猫咪钢琴">
+        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </div>
+    `;
+    
+    const nekoContainer = document.createElement('div');
+    nekoContainer.innerHTML = nekoHTML;
+    document.body.appendChild(nekoContainer);
+    
+    // Trigger neko piano initialization if the NekoEngine class exists
+    if (typeof NekoEngine !== 'undefined') {
+      setTimeout(() => {
+        new NekoEngine();
+        const nekoRoot = document.getElementById('neko-engine-root');
+        if (nekoRoot) {
+          nekoRoot.classList.add('loaded');
+        }
+      }, 500);
+    }
+  }
+  
+  // Initialize code copy functionality
+  function initCodeCopy() {
+    // Remove existing copy buttons
+    document.querySelectorAll('.code-copy-btn').forEach(btn => btn.remove());
+    
+    // Add copy buttons to code blocks
+    document.querySelectorAll('pre code').forEach((codeBlock, index) => {
+      const pre = codeBlock.parentElement;
+      if (!pre.querySelector('.code-copy-btn')) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'code-copy-btn';
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+        copyBtn.title = '复制代码';
+        
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(codeBlock.textContent);
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy:', err);
+          }
+        });
+        
+        pre.style.position = 'relative';
+        pre.appendChild(copyBtn);
+      }
+    });
+  }
+  
+  // Initialize code fold functionality
+  function initCodeFold() {
+    // Remove existing fold buttons
+    document.querySelectorAll('.code-fold-btn').forEach(btn => btn.remove());
+    
+    // Add fold functionality to long code blocks
+    document.querySelectorAll('pre').forEach(pre => {
+      const codeBlock = pre.querySelector('code');
+      if (!codeBlock) return;
+      
+      const lineCount = codeBlock.textContent.split('\n').length;
+      if (lineCount > 15 && !pre.querySelector('.code-fold-btn')) {
+        pre.classList.add('code-foldable');
+        
+        const foldBtn = document.createElement('button');
+        foldBtn.className = 'code-fold-btn';
+        foldBtn.innerHTML = '<span class="fold-text">展开</span><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>';
+        
+        foldBtn.addEventListener('click', () => {
+          pre.classList.toggle('code-expanded');
+          const isExpanded = pre.classList.contains('code-expanded');
+          foldBtn.querySelector('.fold-text').textContent = isExpanded ? '收起' : '展开';
+          foldBtn.querySelector('svg').style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+        
+        pre.appendChild(foldBtn);
+      }
+    });
+  }
+  
+  // Initialize disable theme scroll functionality
+  function initDisableThemeScroll() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      // Remove existing listener to avoid duplicates
+      const newToggle = themeToggle.cloneNode(true);
+      themeToggle.parentNode.replaceChild(newToggle, themeToggle);
+      
+      newToggle.addEventListener('click', () => {
+        // Prevent scroll to top when toggling theme
+        const scrollPos = window.pageYOffset;
+        setTimeout(() => {
+          window.scrollTo(0, scrollPos);
+        }, 0);
+      });
+    }
   }
   
   // Initialize common features

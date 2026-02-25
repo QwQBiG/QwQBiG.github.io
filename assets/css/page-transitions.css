@@ -50,15 +50,16 @@
    PAGE STATES FOR TRANSITIONS
    ============================================ */
 
-/* Base page container */
+/* Base page container - applied to main element (not body) to preserve fixed positioning */
 .page-container {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height, 60px));
   transform-origin: center center;
   will-change: transform, opacity;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  /* Note: transform is only applied during animation, not by default */
 }
 
 /* Old page - exiting state */

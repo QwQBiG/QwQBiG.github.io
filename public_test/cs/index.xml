@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>CS on QwQBiG&#39;s World</title>
+    <link>https://QwQBiG.github.io/cs/</link>
+    <description>Recent content in CS on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/cs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C/C&#43;&#43;速通Java?JS?Rust?</title>
+      <link>https://QwQBiG.github.io/cs/posts/siguoyuyan/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/siguoyuyan/</guid>
+      <description>&lt;h1 id=&#34;-编程语言速通指南cc-选手的多宇宙生存手册&#34;&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;适用人群&lt;/strong&gt;：已掌握 C，进修 C++ 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。&lt;br&gt;
+&lt;strong&gt;核心心法&lt;/strong&gt;：语言只是工具，设计哲学才是灵魂。不要背语法，要懂“为什么这么设计”。&lt;/p&gt;
+&lt;h2 id=&#34;-第一章总览--四角恋&#34;&gt;🗺️ 第一章：总览 —— 四角恋&lt;/h2&gt;
+&lt;p&gt;在开始具体语言之前，先建立坐标系。&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;特性维度&lt;/th&gt;
+          &lt;th&gt;🛡️ C++ (主修)&lt;/th&gt;
+          &lt;th&gt;☕ Java (学校的作业)&lt;/th&gt;
+          &lt;th&gt;🌐 JavaScript (Web必修)&lt;/th&gt;
+          &lt;th&gt;🦀 Rust (加入蟹教！)&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;内存管理&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;手动/RAII&lt;br&gt;(自由但危险)&lt;/td&gt;
+          &lt;td&gt;GC 垃圾回收&lt;br&gt;(省心但不可控)&lt;/td&gt;
+          &lt;td&gt;GC 垃圾回收&lt;br&gt;(完全黑盒)&lt;/td&gt;
+          &lt;td&gt;所有权 (Ownership)&lt;br&gt;(编译期强制管理)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;类型系统&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;静态强类型&lt;br&gt;(但也允许指针瞎转)&lt;/td&gt;
+          &lt;td&gt;静态强类型&lt;br&gt;(泛型是擦除法做的)&lt;/td&gt;
+          &lt;td&gt;动态弱类型&lt;br&gt;(变量类型随时变)&lt;/td&gt;
+          &lt;td&gt;静态极强类型&lt;br&gt;(几乎零隐式转换)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;核心哲学&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;零开销抽象&lt;br&gt;(相信程序员)&lt;/td&gt;
+          &lt;td&gt;工程安全性&lt;br&gt;(防住菜鸟程序员)&lt;/td&gt;
+          &lt;td&gt;灵活与交互&lt;br&gt;(先跑起来再说)&lt;/td&gt;
+          &lt;td&gt;安全与性能并存&lt;br&gt;(编译器是你爹)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;运行机制&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 机器码&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 字节码 -&amp;gt; JVM&lt;/td&gt;
+          &lt;td&gt;源码 -&amp;gt; V8引擎 -&amp;gt; 解释/JIT&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 机器码 (LLVM)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;-第二章java--被阉割且穿上防弹衣的-c&#34;&gt;☕ 第二章：Java —— “被阉割且穿上防弹衣的 C++”&lt;/h2&gt;
+&lt;p&gt;💡 &lt;strong&gt;速通注解&lt;/strong&gt;：把 Java 当作一个没有指针、强制面向对象、自带内存管家的 C++ 子集。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>LuckFox RV1103 板子烧录开机登录~</title>
+      <link>https://QwQBiG.github.io/cs/posts/q26han04/</link>
+      <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han04/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2026 寒假 任务04 “启动：硬起来的臭企鹅”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;-luckfox-pico-mini-b-rv1103-嵌入式开发笔记&#34;&gt;🦊 Luckfox Pico Mini B (RV1103) 嵌入式开发笔记&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;目标&lt;/strong&gt;：从零开始搭建嵌入式 Linux + AI 环境&lt;br&gt;
+&lt;strong&gt;硬件&lt;/strong&gt;：Luckfox Pico Mini B (RV1103) + SC3336 摄像头&lt;br&gt;
+&lt;strong&gt;达成&lt;/strong&gt;：✅ 系统烧录 | ✅ 驱动排查 | ✅ SSH 连接 (ADB 隧道方案)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;要跟着官方文档来玩~&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;-第一章系统镜像与烧录&#34;&gt;🛠️ 第一章：系统镜像与烧录&lt;/h2&gt;
+&lt;p&gt;Luckfox Pico Mini B 支持两种启动方式：&lt;strong&gt;TF 卡启动 (MicroSD)&lt;/strong&gt; 和 &lt;strong&gt;板载闪存启动 (SPI NAND Flash)&lt;/strong&gt;。&lt;br&gt;
+&lt;strong&gt;启动优先级&lt;/strong&gt;：TF 卡 &amp;gt; 板载 Flash。只要插了 TF 卡，板子就会优先读卡。&lt;/p&gt;
+&lt;h3 id=&#34;1-烧录板载-flash-使用-soctoolkit&#34;&gt;1. 烧录板载 Flash (使用 SocToolKit)&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;适用场景&lt;/strong&gt;：不插 TF 卡时运行的基础系统。&lt;br&gt;
+&lt;strong&gt;工具&lt;/strong&gt;：SocToolKit (瑞芯微官方工具)。&lt;br&gt;
+&lt;strong&gt;操作要点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;按住 BOOT 键连接电脑进入 MaskRom 模式。&lt;/li&gt;
+&lt;li&gt;选择 Download 模式。&lt;/li&gt;
+&lt;li&gt;选择对应的分区文件烧录。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;经验&lt;/strong&gt;：我们这一步操作是正确的。虽然我们主要用 TF 卡，但刷好 Flash 作为备用系统（救砖用）是个好习惯。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>三星平板刷机</title>
+      <link>https://QwQBiG.github.io/cs/posts/q26han03/</link>
+      <pubDate>Thu, 22 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han03/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2026 寒假 任务03 “刷机，让14年的平板重获新生。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;-samsung-galaxy-tab-pro-84-sm-t320-刷机改造日志&#34;&gt;📝 Samsung Galaxy Tab Pro 8.4 (SM-T320) 刷机改造日志&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;目标&lt;/strong&gt;：将 2014 年的老平板改造为基于 Android 13 的便携式 Linux/C++ 开发终端。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;硬件&lt;/strong&gt;：Samsung SM-T320 (骁龙800 / 2GB RAM / 2K屏幕)&lt;/p&gt;
+&lt;h2 id=&#34;-第一阶段刷机-flashing&#34;&gt;🛠️ 第一阶段：刷机 (Flashing)&lt;/h2&gt;
+&lt;h3 id=&#34;1-准备工作&#34;&gt;1. 准备工作&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;电脑端&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装三星 USB 驱动 (&lt;code&gt;SAMSUNG_USB_Driver...exe&lt;/code&gt;)。&lt;/li&gt;
+&lt;li&gt;解压 &lt;code&gt;Odin3_v3.14.1.zip&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;文件准备&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Recovery&lt;/strong&gt;: &lt;code&gt;twrp-3.7.0_9-0-mondrianwifi.img.tar&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ROM&lt;/strong&gt;: &lt;code&gt;lineage-20.0-xxxx-UNOFFICIAL-mondrianwifi.zip&lt;/code&gt; (Android 13)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GApps&lt;/strong&gt;: &lt;code&gt;BiTGApps-arm-13.0.0-v1.7_signed.zip&lt;/code&gt; (我是 &lt;strong&gt;ARM&lt;/strong&gt; 架构)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-刷入-twrp&#34;&gt;2. 刷入 TWRP&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;进挖煤模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关机状态下，按 &lt;strong&gt;音量减 + Home + 电源&lt;/strong&gt;，出现警告按 &lt;strong&gt;音量加&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Odin 设置&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;点击 &lt;strong&gt;AP&lt;/strong&gt;，选择 &lt;code&gt;twrp...tar&lt;/code&gt; 文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关键&lt;/strong&gt;：左侧 &lt;strong&gt;Options&lt;/strong&gt; 栏 &lt;strong&gt;取消勾选&lt;/strong&gt; Auto Reboot。&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;Start&lt;/strong&gt;，等待显示 &lt;strong&gt;PASS&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;强制进 TWRP&lt;/strong&gt;：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>ESP-32 Web 端远控点灯</title>
+      <link>https://QwQBiG.github.io/cs/posts/q26han02/</link>
+      <pubDate>Wed, 21 Jan 2026 14:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han02/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2026 寒假 任务02 “我想用 ESP32 做一个 Web 服务器。用 C++ 代码：
+让 ESP32 使用 AP 模式（Access Point）启动一个 Web Server，当手机访问 ESP32 的 IP 地址时，显示两个按钮 &amp;ldquo;ON&amp;rdquo; 和 &amp;ldquo;OFF&amp;rdquo;。点击按钮可以通过 GPIO 控制面包板上外接的 LED 灯（假设接在 GPIO 23）。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;方案思路esp32-自己做路由器&#34;&gt;方案思路：ESP32 自己做“路由器”&lt;/h2&gt;
+&lt;p&gt;在这个模式下，ESP32 不去连接自己家里的 WiFi，而是它自己发射一个 WiFi 热点。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;手机搜索并连接 ESP32 发出的 WiFi。&lt;/li&gt;
+&lt;li&gt;连接后，直接访问 ESP32 的地址控制灯光。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：这样我们走到哪里都能演示，完全不需要依赖环境的 WiFi。&lt;/p&gt;
+&lt;h2 id=&#34;第一部分接线与如何让它好看&#34;&gt;第一部分：接线与“如何让它好看”&lt;/h2&gt;
+&lt;p&gt;“感觉不好看”，通常是因为面包板上的杜邦线飞来飞去乱糟糟的。&lt;/p&gt;
+&lt;h3 id=&#34;1-极简方案最好看&#34;&gt;1. 极简方案（最“好看”）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;直接使用板载 LED（GPIO 2）。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。&lt;/li&gt;
+&lt;li&gt;你可以完全不接外面的线，代码里把 LED_PIN 改成 2，直接看板子上的灯亮灭，最整洁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-外接-led-优化方案让面包板接线整齐&#34;&gt;2. 外接 LED 优化方案（让面包板接线整齐）&lt;/h3&gt;
+&lt;p&gt;如果你必须外接 LED（假设 GPIO 23），可以尝试**“紧凑型”接法**，避免使用很长的飞线。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>再一次梦开始的地方——ESP-32点灯</title>
+      <link>https://QwQBiG.github.io/cs/posts/q26han01/</link>
+      <pubDate>Wed, 21 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/q26han01/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2026 寒假 任务01 “我现在手头有 ESP32-WROOM-32 开发板，使用 VS Code。请教我安装 PlatformIO 插件，并创建一个 Arduino 框架的 C++ 项目。给我一段简单的 Blink 代码，解释 setup() 和 loop() 的作用，并告诉我如何将代码烧录进板子。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;第一步安装-platformio-插件&#34;&gt;第一步：安装 PlatformIO 插件&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;打开 VS Code&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;点击左侧边栏的 &lt;strong&gt;扩展图标&lt;/strong&gt; (&lt;code&gt;Extensions&lt;/code&gt;)，或按下快捷键 &lt;code&gt;Ctrl+Shift+X&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;在搜索框中输入 &lt;strong&gt;&lt;code&gt;PlatformIO IDE&lt;/code&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;选择由 &lt;strong&gt;PlatformIO&lt;/strong&gt; 发布的插件（图标为蚂蚁头像），点击 &lt;strong&gt;&lt;code&gt;Install&lt;/code&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;注意&lt;/strong&gt;：安装完成后，右下角通常会提示“Installing PlatformIO Core&amp;hellip;”。请耐心等待其安装完成并提示“Reload”（重启 VS Code）。此过程可能需要几分钟。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;第二步创建新项目&#34;&gt;第二步：创建新项目&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;插件安装成功后，VS Code 左侧边栏会出现一个 &lt;strong&gt;PlatformIO 图标&lt;/strong&gt;（蚂蚁）。点击它。&lt;/li&gt;
+&lt;li&gt;在打开的 PlatformIO 主页中，点击 &lt;strong&gt;&lt;code&gt;New Project&lt;/code&gt;&lt;/strong&gt; 按钮。&lt;/li&gt;
+&lt;li&gt;配置新项目：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Name&lt;/strong&gt;：输入项目名称，例如 &lt;code&gt;ESP32_Blink&lt;/code&gt;（建议不要使用中文或空格）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Board&lt;/strong&gt;：在搜索框输入 &lt;code&gt;DOIT ESP32&lt;/code&gt;，通常选择 &lt;strong&gt;&lt;code&gt;DOIT ESP32 DEVKIT V1&lt;/code&gt;&lt;/strong&gt;。这是 ESP32-WROOM-32 最常见的通用配置。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Framework&lt;/strong&gt;：选择 &lt;strong&gt;&lt;code&gt;Arduino&lt;/code&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;&lt;code&gt;Finish&lt;/code&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;首次创建项目时，PlatformIO 会自动下载 ESP32 的编译工具链和库文件。请保持网络通畅，耐心等待下载完成。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;第三步编写-blink-代码&#34;&gt;第三步：编写 Blink 代码&lt;/h2&gt;
+&lt;p&gt;项目创建后，在 VS Code 的资源管理器（Explorer）中：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>范围for循环</title>
+      <link>https://QwQBiG.github.io/cs/posts/fanweiforxunhuan/</link>
+      <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/fanweiforxunhuan/</guid>
+      <description>&lt;h1 id=&#34;c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记&#34;&gt;C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记&lt;/h1&gt;
+&lt;h2 id=&#34;一-核心概念告别索引拥抱元素&#34;&gt;一、 核心概念：告别索引，拥抱元素&lt;/h2&gt;
+&lt;p&gt;基于范围的 for 循环（C++11 引入）是为了解决一个最常见的编程任务：遍历一个序列（如 vector, string）中的每一个元素。
+它的核心思想是让你直接关注元素本身，而不用手动管理索引 i。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;基础语法:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; ( declaration : range ) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// 循环体
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;range&lt;/code&gt;&lt;/strong&gt;: 你想要遍历的东西，比如一个 &lt;code&gt;vector&lt;/code&gt; 或 &lt;code&gt;string&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;declaration&lt;/code&gt;&lt;/strong&gt;: 一个变量声明，在每次循环时，&lt;code&gt;range&lt;/code&gt; 中的一个元素会被赋值（或引用）给这个变量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;示例：告别传统 &lt;code&gt;for&lt;/code&gt; 循环&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;vector&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; nums &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 传统写法 (命令式：告诉计算机&amp;#34;如何做&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (size_t i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; nums.size(); i&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;cout &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; nums[i] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 范围 for 写法 (声明式：告诉计算机&amp;#34;想要什么&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; num : nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;cout &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; num &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>搞搞WSL</title>
+      <link>https://QwQBiG.github.io/cs/posts/getwsl/</link>
+      <pubDate>Thu, 18 Dec 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/getwsl/</guid>
+      <description>&lt;h1 id=&#34;我要玩臭企鹅linux&#34;&gt;我要玩臭企鹅（Linux）&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;咕咕嘎嘎&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;紧接着上一篇内容（必须要专业版哦）：
+&lt;strong&gt;&lt;a href=&#34;../professionaleditionwindows/&#34;&gt;Windows家庭版激活成专业版&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;高雅人士们虽然有很多虚拟机软件来玩&lt;code&gt;Linux&lt;/code&gt;，也比较好使，但是还是想试试&lt;code&gt;win&lt;/code&gt;自带的&lt;code&gt;WSL&lt;/code&gt;对不对~
+好b（￣▽￣）d~　启动~&lt;/p&gt;
+&lt;p&gt;由于&lt;strong&gt;网络原因&lt;/strong&gt;，所以我来分步安装而不去使用直接安装的代码，可以试试（大概没用）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;1功能启用&#34;&gt;1.功能启用&lt;/h2&gt;
+&lt;p&gt;在搜索框搜索 “启用或关闭 Windows 功能” 并打开。
+勾选以下&lt;strong&gt;两&lt;/strong&gt;项：
+适用于 Linux 的 Windows 子系统
+虚拟机平台
+点击确定，系统会配置组件，完成后 必须&lt;strong&gt;重启&lt;/strong&gt;电脑&lt;/p&gt;
+&lt;h2 id=&#34;2手动下载安装-wsl2-内核更新包&#34;&gt;2.手动下载安装 WSL2 内核更新包&lt;/h2&gt;
+&lt;p&gt;以下是网址：
+打开&lt;code&gt;GitHub&lt;/code&gt;：
+&lt;code&gt;https://github.com/microsoft/WSL/releases&lt;/code&gt;
+寻找最新版本（例如 2.3.26 或你看到的最新版）：
+在 Assets 栏目下，点击下载：wsl.2.3.26.x64.msi (文件名根据版本号可能略有不同)。
+直接下载链接 (如果版本已更新可能失效)： wsl.x64.msi
+下载完成后，双击运行该 .msi 文件进行安装。&lt;/p&gt;
+&lt;h2 id=&#34;3设置-wsl2-为默认版本&#34;&gt;3.设置 WSL2 为默认版本&lt;/h2&gt;
+&lt;p&gt;安装完更新包后，右键点击“开始”按钮，选择 终端（&lt;strong&gt;管理员&lt;/strong&gt;），输入并回车：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Powershell&#34; data-lang=&#34;Powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wsl --set-default-version &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;4下载ubuntu镜像&#34;&gt;4.下载Ubuntu镜像&lt;/h2&gt;
+&lt;p&gt;这个是主网址：
+&lt;code&gt;https://cdimages.ubuntu.com/ubuntu-wsl/&lt;/code&gt;
+找到&lt;code&gt;Index of /ubuntu-wsl/noble/daily-live&lt;/code&gt;再点击&lt;code&gt;current/&lt;/code&gt;
+点击下载&lt;code&gt;noble-wsl-amd64.wsl&lt;/code&gt;
+（不会找可以点这个链接：&lt;code&gt;https://cdimages.ubuntu.com/ubuntu-wsl/noble/daily-live/current/&lt;/code&gt;）&lt;/p&gt;
+&lt;h2 id=&#34;5使用命令行安装&#34;&gt;5.使用命令行安装&lt;/h2&gt;
+&lt;p&gt;下载完成后，找到文件夹中。请打开 PowerShell（&lt;strong&gt;管理员&lt;/strong&gt;），先切换到这个文件夹：
+例如在D盘：&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Windows家庭版激活成专业版 </title>
+      <link>https://QwQBiG.github.io/cs/posts/professionaleditionwindows/</link>
+      <pubDate>Tue, 16 Dec 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/professionaleditionwindows/</guid>
+      <description>&lt;h1 id=&#34;windows-激活成专业版&#34;&gt;Windows 激活成专业版&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; 断开网络（拔网线或关 &lt;code&gt;WiFi&lt;/code&gt;）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原因：联网状态下验证密钥会失败，断网可以让它先通过验证并执行升级文件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; 点击 开始 -&amp;gt; 设置 搜索并点开 “更改产品密钥”
+输入这个通用的转换密钥（这是微软官方给出的 &lt;code&gt;RTM&lt;/code&gt; 安装密钥，非破解）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;VK7JG-NPHTM-C97JM-9MPGT-3V66T
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; 点击“下一步”或“开始”。
+系统会提示“无法验证密钥”或者直接提示“准备升级”。
+让它跑完进度条，电脑会自动重启。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.&lt;/strong&gt; 重启之后连上网，右键开始菜单，以管理员身份运行 &lt;code&gt;Windows PowerShell&lt;/code&gt; (管理员！)
+复制并粘贴下面这行新命令，然后回车：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;irm https://get.activated.win | iex
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;5.&lt;/strong&gt; 等待几秒钟，会出现一个彩色的菜单窗口。
+按键盘上的数字键 1 (选择 HWID 激活)。
+HWID 是永久数字权利激活，最稳的一种。
+脚本跑完后提示绿色文字（Successfully activated）即可关闭。&lt;/p&gt;
+&lt;p&gt;然后就是可以搞 &lt;code&gt;WSL&lt;/code&gt; 玩玩 &lt;code&gt;Linux&lt;/code&gt; 啦!
+还有沙箱可以搞病毒乱斗&amp;hellip;&lt;/p&gt;
+&lt;p&gt;接着玩哈：
+&lt;strong&gt;&lt;a href=&#34;../getwsl/&#34;&gt;搞搞WSL&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>远程失灵了</title>
+      <link>https://QwQBiG.github.io/cs/posts/yuancheng/</link>
+      <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/yuancheng/</guid>
+      <description>&lt;h1 id=&#34;docker-部署-frp-客户端避坑指南&#34;&gt;Docker 部署 FRP 客户端避坑指南&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;适用于：&lt;/strong&gt; Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。&lt;/p&gt;
+&lt;h2 id=&#34;核心结论&#34;&gt;核心结论&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;不要使用 Docker 默认的网络模式，直接使用 Host 模式 + 强制指定 DNS。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这将解决：容器内网不通、DNS 解析失败、路由器重启导致 IP 变动失效等所有常见问题。&lt;/p&gt;
+&lt;h2 id=&#34;1-部署命令-模版&#34;&gt;1. 部署命令 (模版)&lt;/h2&gt;
+&lt;p&gt;直接复制替换参数，一步到位：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker run -d &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --name frp-client &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --restart&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;always &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --network host &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --dns 223.5.5.5 &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --dns 8.8.8.8 &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  vaalacat/frp-panel &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  client -s &amp;lt;你的服务端Key&amp;gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  -i &amp;lt;你的客户端ID&amp;gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --api-url &amp;lt;面板API地址&amp;gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --rpc-url &amp;lt;面板RPC地址&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;本地地址 (Local IP):&lt;/strong&gt; 填 &lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>我の周报</title>
+      <link>https://QwQBiG.github.io/cs/posts/zhouji/</link>
+      <pubDate>Sat, 22 Nov 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/zhouji/</guid>
+      <description>&lt;h2 id=&#34;以下是20251120第一次搞得周报&#34;&gt;以下是2025.11.20第一次搞得周报&lt;/h2&gt;
+&lt;p&gt;C已完。C++已学完STL容器和算法（和一些好玩的特性）。
+数据结构在学STL都涉及了，纯学数据结构的话停留在串。
+运维相关内容多且杂，具体内容见组会报告。&lt;/p&gt;
+&lt;h3 id=&#34;之后有点东西都可以从这写着刚做草稿&#34;&gt;之后有点东西都可以从这写着，刚做草稿：&lt;/h3&gt;
+&lt;p&gt;比如今天，2025.11.23开始使用CLion来做Qt的程序。
+而且，给网站上搞了一个昼夜切换的无敌按键（hhhh）。
+还有猫猫砸钢琴音乐播放器！！！
+和闪光miku！&lt;/p&gt;
+&lt;h3 id=&#34;1223&#34;&gt;12.23&lt;/h3&gt;
+&lt;p&gt;图灵完备里面目前是在学逻辑电路和数字电路 -&amp;gt; 底层、嵌入式；
+openCV -&amp;gt; 机器视觉；
+自己配MinGW和Cmake来配置openCV和yolov8，然后把MinGW换掉，
+换成MSVC，来使用显卡（不然就只有5帧左右）；
+要学ROS 2&lt;/p&gt;
+&lt;p&gt;我现在不是在“配置”，而是在当 NVIDIA 和 OpenCV 的测试工程师，请问了：适配呢？
+（20 多分钟编译 + 一堆 C1012 + LNK1181）&lt;/p&gt;
+&lt;p&gt;最终环境：CLion + VS2026的MSVC + TensorRT 10 + CUDA 13.1 + OpenCV 4.12 + Yolov8&lt;/p&gt;
+&lt;h3 id=&#34;1226&#34;&gt;12.26&lt;/h3&gt;
+&lt;p&gt;教员生日快乐！！！&lt;/p&gt;
+&lt;h3 id=&#34;1227&#34;&gt;12.27&lt;/h3&gt;
+&lt;p&gt;刷LeetCode&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>STL 容器</title>
+      <link>https://QwQBiG.github.io/cs/posts/stlcontainer/</link>
+      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/stlcontainer/</guid>
+      <description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>STL 算法</title>
+      <link>https://QwQBiG.github.io/cs/posts/stlalgorithm/</link>
+      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/stlalgorithm/</guid>
+      <description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>K8s学习笔记</title>
+      <link>https://QwQBiG.github.io/cs/posts/yunweistudy/</link>
+      <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/yunweistudy/</guid>
+      <description>&lt;h1 id=&#34;kubernetes-学习笔记-1&#34;&gt;Kubernetes 学习笔记 1&lt;/h1&gt;
+&lt;h2 id=&#34;核心思想篇两大基石&#34;&gt;核心思想篇：两大基石&lt;/h2&gt;
+&lt;h3 id=&#34;1-为何选择-kubernetes&#34;&gt;1. 为何选择 Kubernetes？&lt;/h3&gt;
+&lt;p&gt;单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;故障恢复&lt;/strong&gt;：一个容器挂了怎么办？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务发现&lt;/strong&gt;：容器 B 如何找到容器 A 的 IP 地址？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;负载均衡&lt;/strong&gt;：如何将流量平均分配给多个相同的容器？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩缩容&lt;/strong&gt;：如何根据负载自动增加或减少容器数量？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Kubernetes (K8s) 就是一个&lt;strong&gt;容器编排平台&lt;/strong&gt;，它以标准化的方式完美地解决了以上所有问题。&lt;/p&gt;
+&lt;h3 id=&#34;2-命令式-vs-声明式-转变&#34;&gt;2. 命令式 vs. 声明式 (转变)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;命令式 (Imperative)&lt;/strong&gt;：你一步步告诉 K8s &lt;strong&gt;“做什么”&lt;/strong&gt; (&lt;code&gt;kubectl create&lt;/code&gt;, &lt;code&gt;kubectl scale&lt;/code&gt;)。这就像手动驾驶，直观但难以追踪和重复。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;声明式 (Declarative)&lt;/strong&gt;：你向 K8s 提交一个 YAML 文件，告诉它你**“想要什么状态”**。这就像设定导航目的地，K8s 会自己想办法开车到达，并且如果偏离了航线（比如有 Pod 挂了），它会自动修正。&lt;strong&gt;这是 K8s 的精髓，也是现代化的管理方式。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;环境搭建篇kind-kubernetes-in-docker&#34;&gt;环境搭建篇：Kind (Kubernetes in Docker)&lt;/h2&gt;
+&lt;p&gt;在复杂的网络环境下，使用 Kind 搭建本地集群是最可靠、轻量且快速的方式。&lt;/p&gt;
+&lt;h3 id=&#34;1-安装核心工具&#34;&gt;1. 安装核心工具&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安装 &lt;code&gt;kubectl&lt;/code&gt; (K8s 命令行客户端)&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# (根据官方文档，使用 apt 或其他包管理器安装)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt-get install -y kubectl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安装 Go 语言环境 (用于安装 Kind)&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>我の组会</title>
+      <link>https://QwQBiG.github.io/cs/posts/zuhui/</link>
+      <pubDate>Fri, 14 Nov 2025 15:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/zuhui/</guid>
+      <description>&lt;h2 id=&#34;组会报告-1&#34;&gt;组会报告 1&lt;/h2&gt;
+&lt;p&gt;容我想想上几周我干了什么：&lt;/p&gt;
+&lt;p&gt;首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）&lt;/p&gt;
+&lt;p&gt;然后就是新机必做的美化，有道是：”用着爽不一定真爽，但看着爽一定是真爽。“终端是块黑黢黢的方块，字体是被压缩成俄式比例的，那确实很可怕了&amp;hellip;那时还没找毛学长，没搞zsh，终端还是bash，此时搞了个kitty图形化终端，以此来搞出来壁纸画面；之后开始使用oh my zsh和字体pl10k，搞出了jb mono（全拼一直忘）和代码高亮，和右键补全，这时的我受到豆沙包和臭鲸鱼的极致恶心，所幸镜像一天10次对话的ChatGPT还像是个人&amp;hellip;但是还是让我感觉出，整这种相对完整的内容，还是博客、论坛、b站（一般）啥的好一些，我的美化，是跟着收藏的一篇CSDN的文章搞得（安装oh-my-zsh，配置命令行高亮，命令提示，打造高效终端_oh my zsh-CSDN博客）。终于，也是有了一个好看些的Ubuntu。&lt;/p&gt;
+&lt;p&gt;或许，我们感觉美化有点搞偏了，但是也可以学到pip,git一些下载、拉镜像源的方法，比如说找马云对吧（Gitee）。就像是孔老二说的可以“兴观群怨”的《诗经》，退一步说，这也算是一种识字教育，见识这些奇怪的“鸟兽草木之名”，也有帮助。&lt;/p&gt;
+&lt;p&gt;之后，我深刻的了解到、并可以熟练进行Ubuntu的紧急操作界面的恢复&amp;hellip;因为可能是我把第二个开的虚拟机，放到了第一个虚拟机没有清理完全的文件夹，导致lvm卷他找不到，那两天左右，我大概有20次以上的重启到紧急模式到好了到测试的经历，可以说是十分熟练（酸爽）了。&lt;/p&gt;
+&lt;p&gt;然后转折点：毛学长给我分了一块实验室服务器的Ubuntu，所以开始搞远程终端的美化：&lt;/p&gt;
+&lt;p&gt;最终是扔了Xshell，用了开源的Tabby Terminal，如下图（还没整）哈，这么多好用的远程，难道主要是因为这个有壁纸插件吗？还真是。插件好啊，点下安装就让用。&lt;/p&gt;
+&lt;p&gt;然后，在我回宿舍路上，想要点开终端fuck一下，猛然发现连接寄掉了，原因都知道，这是在实验室的内网，问学长让我瞅瞅内网穿透，我听着有点高级哈，”穿透“，像是网安的词。当我下载、点开樱花穿透后：发现，这不是我的世界联机用的吗hh。由此，以及后来用的panel.frplients，以及学长给到的http协议的代理，都是，额，应该是计算机网络都要学的内容，TCP/SSH/HTTP/HTTPS这些协议嗯。以及一点防火墙的设置，都有学到。&lt;/p&gt;
+&lt;p&gt;在这些内容的中间，从linux(BV1cq421w72c )到docker（BV14s4y1i7Vf ）（BV1THKyzBER6 ）的基础视频，我是跟着敲了的。当然docker pull 不了镜像，问ai快给我俩问四了，发现是另有缘由是吧（当然有了代理，一路畅通）。&lt;/p&gt;
+&lt;p&gt;看的相关的科普视频关于docker,k8s,k3s,docker compose,docker swarm&amp;hellip;比较杂&amp;hellip;&lt;/p&gt;
+&lt;p&gt;然后就是调教ai（为了多玩玩docker），想搞个网站，一开始是吧，docker建了个文件夹搞点html,css做了个界面，发现内网&amp;hellip;然后拉了一个wordpress是个动态网站，依旧内网&amp;hellip;再看域名，看累了没搞，之后还想内网穿透，结果https&amp;hellip;相关视频看了大概，网络协议也是大概学到了一些&amp;hellip;&lt;/p&gt;
+&lt;p&gt;最终是用的Github Pages静态网站，不用自己搞sql、redis啥的，也不用搞安全，还是很爽的，加上Github Action 发布文章只要win终端git push一下就好了。&lt;/p&gt;
+&lt;p&gt;这边，主要是接触了git、前端代码、以及重要的shell内容。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://qwqbig.github.io/&#34;&gt;https://qwqbig.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;网址如上，里面有建站的全流程，想看的话。我应该有两天时间在干这个。&lt;/p&gt;
+&lt;p&gt;最后这两天就感到有点子无聊了，回到了 STL 和 C++11 以上的好的特性上去玩。&lt;/p&gt;
+&lt;p&gt;那我正好鼓捣k8s玩了，还以为要再docker几天的。&lt;/p&gt;
+&lt;p&gt;对了，我学过py（第一个学的就是py），脚本方面的接触在网站上建站过程中提及到了也。&lt;/p&gt;
+&lt;p&gt;本来我都想开始把原来做的题用cpp重写的，像是把这个世界用Rust重写一遍似的&amp;hellip;(话说蟹教有干翻C++的未来吗，不清楚)。&lt;/p&gt;
+&lt;p&gt;写日记挺好玩的，我要同步到https://qwqbig.github.io/上hhh&lt;/p&gt;
+&lt;p&gt;欧克，完事了，bye~&lt;/p&gt;
+&lt;h2 id=&#34;组会报告-2&#34;&gt;组会报告 2&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;总结：本周主要搞了 K8s 本地环境的网络与镜像难题，完成了从 kubectl 命令式操作到 YAML 声明式管理的思维转变，掌握了 Pod 高级（应该高级吧）模式（Sidecar）、资源隔离（Namespace/Labels）及标准排错流程。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;主要是-k8s-本地环境搭建与-pod-编排&#34;&gt;主要是 K8s 本地环境搭建与 Pod 编排：&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>史诗级 ”Hello World“：如何从0到1（划掉）搭建个人技博（技术博客）</title>
+      <link>https://QwQBiG.github.io/cs/posts/hello-world/</link>
+      <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/hello-world/</guid>
+      <description>从零开始搭建个人技术博客的完整指南</description>
+    </item>
+    <item>
+      <title>C&#43;&#43;的世界</title>
+      <link>https://QwQBiG.github.io/cs/series/cpp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://QwQBiG.github.io/cs/series/cpp/</guid>
+      <description>C&#43;&#43;编程语言学习笔记与进阶指南</description>
+    </item>
+    <item>
+      <title>成就-来硬的</title>
+      <link>https://QwQBiG.github.io/cs/series/embedded/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://QwQBiG.github.io/cs/series/embedded/</guid>
+      <description>嵌入式开发学习笔记与项目实践</description>
+    </item>
+    <item>
+      <title>运维</title>
+      <link>https://QwQBiG.github.io/cs/series/yunwei/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://QwQBiG.github.io/cs/series/yunwei/</guid>
+      <description>Linux运维、Docker、K8s等技术实践</description>
+    </item>
+    <item>
+      <title>逃课-速通</title>
+      <link>https://QwQBiG.github.io/cs/series/taoke/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://QwQBiG.github.io/cs/series/taoke/</guid>
+      <description>快速学习各类技术的速成指南</description>
+    </item>
+  </channel>
+</rss>

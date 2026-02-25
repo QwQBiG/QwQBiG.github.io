@@ -1,65 +1,87 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Cpp on QwQBiG's World</title><link>https://QwQBiG.github.io/tags/cpp/</link><description>Recent content in Cpp on QwQBiG's World</description><generator>Hugo -- 0.152.2</generator><language>zh-cn</language><lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate><atom:link href="https://QwQBiG.github.io/tags/cpp/index.xml" rel="self" type="application/rss+xml"/><item><title>C/C++速通Java?JS?Rust?</title><link>https://QwQBiG.github.io/posts/siguoyuyan/</link><pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/siguoyuyan/</guid><description>&lt;h1 id="-编程语言速通指南cc-选手的多宇宙生存手册"&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Cpp on QwQBiG&#39;s World</title>
+    <link>https://QwQBiG.github.io/tags/cpp/</link>
+    <description>Recent content in Cpp on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate>
+    <atom:link href="https://QwQBiG.github.io/tags/cpp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C/C&#43;&#43;速通Java?JS?Rust?</title>
+      <link>https://QwQBiG.github.io/cs/posts/siguoyuyan/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/siguoyuyan/</guid>
+      <description>&lt;h1 id=&#34;-编程语言速通指南cc-选手的多宇宙生存手册&#34;&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用人群&lt;/strong&gt;：已掌握 C，进修 C++ 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。&lt;br&gt;
 &lt;strong&gt;核心心法&lt;/strong&gt;：语言只是工具，设计哲学才是灵魂。不要背语法，要懂“为什么这么设计”。&lt;/p&gt;
-&lt;h2 id="-第一章总览--四角恋"&gt;🗺️ 第一章：总览 —— 四角恋&lt;/h2&gt;
+&lt;h2 id=&#34;-第一章总览--四角恋&#34;&gt;🗺️ 第一章：总览 —— 四角恋&lt;/h2&gt;
 &lt;p&gt;在开始具体语言之前，先建立坐标系。&lt;/p&gt;
 &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;特性维度&lt;/th&gt;
-&lt;th&gt;🛡️ C++ (主修)&lt;/th&gt;
-&lt;th&gt;☕ Java (学校的作业)&lt;/th&gt;
-&lt;th&gt;🌐 JavaScript (Web必修)&lt;/th&gt;
-&lt;th&gt;🦀 Rust (加入蟹教！)&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;内存管理&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;手动/RAII&lt;br&gt;(自由但危险)&lt;/td&gt;
-&lt;td&gt;GC 垃圾回收&lt;br&gt;(省心但不可控)&lt;/td&gt;
-&lt;td&gt;GC 垃圾回收&lt;br&gt;(完全黑盒)&lt;/td&gt;
-&lt;td&gt;所有权 (Ownership)&lt;br&gt;(编译期强制管理)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;类型系统&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;静态强类型&lt;br&gt;(但也允许指针瞎转)&lt;/td&gt;
-&lt;td&gt;静态强类型&lt;br&gt;(泛型是擦除法做的)&lt;/td&gt;
-&lt;td&gt;动态弱类型&lt;br&gt;(变量类型随时变)&lt;/td&gt;
-&lt;td&gt;静态极强类型&lt;br&gt;(几乎零隐式转换)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;核心哲学&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;零开销抽象&lt;br&gt;(相信程序员)&lt;/td&gt;
-&lt;td&gt;工程安全性&lt;br&gt;(防住菜鸟程序员)&lt;/td&gt;
-&lt;td&gt;灵活与交互&lt;br&gt;(先跑起来再说)&lt;/td&gt;
-&lt;td&gt;安全与性能并存&lt;br&gt;(编译器是你爹)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;运行机制&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;编译 -&amp;gt; 机器码&lt;/td&gt;
-&lt;td&gt;编译 -&amp;gt; 字节码 -&amp;gt; JVM&lt;/td&gt;
-&lt;td&gt;源码 -&amp;gt; V8引擎 -&amp;gt; 解释/JIT&lt;/td&gt;
-&lt;td&gt;编译 -&amp;gt; 机器码 (LLVM)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;特性维度&lt;/th&gt;
+          &lt;th&gt;🛡️ C++ (主修)&lt;/th&gt;
+          &lt;th&gt;☕ Java (学校的作业)&lt;/th&gt;
+          &lt;th&gt;🌐 JavaScript (Web必修)&lt;/th&gt;
+          &lt;th&gt;🦀 Rust (加入蟹教！)&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;内存管理&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;手动/RAII&lt;br&gt;(自由但危险)&lt;/td&gt;
+          &lt;td&gt;GC 垃圾回收&lt;br&gt;(省心但不可控)&lt;/td&gt;
+          &lt;td&gt;GC 垃圾回收&lt;br&gt;(完全黑盒)&lt;/td&gt;
+          &lt;td&gt;所有权 (Ownership)&lt;br&gt;(编译期强制管理)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;类型系统&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;静态强类型&lt;br&gt;(但也允许指针瞎转)&lt;/td&gt;
+          &lt;td&gt;静态强类型&lt;br&gt;(泛型是擦除法做的)&lt;/td&gt;
+          &lt;td&gt;动态弱类型&lt;br&gt;(变量类型随时变)&lt;/td&gt;
+          &lt;td&gt;静态极强类型&lt;br&gt;(几乎零隐式转换)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;核心哲学&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;零开销抽象&lt;br&gt;(相信程序员)&lt;/td&gt;
+          &lt;td&gt;工程安全性&lt;br&gt;(防住菜鸟程序员)&lt;/td&gt;
+          &lt;td&gt;灵活与交互&lt;br&gt;(先跑起来再说)&lt;/td&gt;
+          &lt;td&gt;安全与性能并存&lt;br&gt;(编译器是你爹)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;运行机制&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 机器码&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 字节码 -&amp;gt; JVM&lt;/td&gt;
+          &lt;td&gt;源码 -&amp;gt; V8引擎 -&amp;gt; 解释/JIT&lt;/td&gt;
+          &lt;td&gt;编译 -&amp;gt; 机器码 (LLVM)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h2 id="-第二章java--被阉割且穿上防弹衣的-c"&gt;☕ 第二章：Java —— “被阉割且穿上防弹衣的 C++”&lt;/h2&gt;
-&lt;p&gt;💡 &lt;strong&gt;速通注解&lt;/strong&gt;：把 Java 当作一个没有指针、强制面向对象、自带内存管家的 C++ 子集。&lt;/p&gt;</description></item><item><title>范围for循环</title><link>https://QwQBiG.github.io/posts/fanweiforxunhuan/</link><pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/fanweiforxunhuan/</guid><description>&lt;h1 id="c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记"&gt;C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记&lt;/h1&gt;
-&lt;h2 id="一-核心概念告别索引拥抱元素"&gt;一、 核心概念：告别索引，拥抱元素&lt;/h2&gt;
+&lt;h2 id=&#34;-第二章java--被阉割且穿上防弹衣的-c&#34;&gt;☕ 第二章：Java —— “被阉割且穿上防弹衣的 C++”&lt;/h2&gt;
+&lt;p&gt;💡 &lt;strong&gt;速通注解&lt;/strong&gt;：把 Java 当作一个没有指针、强制面向对象、自带内存管家的 C++ 子集。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>范围for循环</title>
+      <link>https://QwQBiG.github.io/cs/posts/fanweiforxunhuan/</link>
+      <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/fanweiforxunhuan/</guid>
+      <description>&lt;h1 id=&#34;c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记&#34;&gt;C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记&lt;/h1&gt;
+&lt;h2 id=&#34;一-核心概念告别索引拥抱元素&#34;&gt;一、 核心概念：告别索引，拥抱元素&lt;/h2&gt;
 &lt;p&gt;基于范围的 for 循环（C++11 引入）是为了解决一个最常见的编程任务：遍历一个序列（如 vector, string）中的每一个元素。
 它的核心思想是让你直接关注元素本身，而不用手动管理索引 i。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;基础语法:&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
-&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;1
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;2
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;3
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;3
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
-&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; ( declaration : range ) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 循环体
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;}
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; ( declaration : range ) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;// 循环体
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
@@ -67,53 +89,49 @@
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;declaration&lt;/code&gt;&lt;/strong&gt;: 一个变量声明，在每次循环时，&lt;code&gt;range&lt;/code&gt; 中的一个元素会被赋值（或引用）给这个变量。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;示例：告别传统 &lt;code&gt;for&lt;/code&gt; 循环&lt;/strong&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;"&gt;&lt;tr&gt;&lt;td style="vertical-align:top;padding:0;margin:0;border:0;"&gt;
-&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 1
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 2
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 3
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 4
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 5
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 6
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 7
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 8
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt; 9
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;10
-&lt;/span&gt;&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"&gt;11
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%"&gt;
-&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;vector&lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; nums &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {&lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;20&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;30&lt;/span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 传统写法 (命令式：告诉计算机&amp;#34;如何做&amp;#34;)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (size_t i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; nums.size(); i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; nums[i] &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 范围 for 写法 (声明式：告诉计算机&amp;#34;想要什么&amp;#34;)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; num : nums) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; std&lt;span style="color:#f92672"&gt;::&lt;/span&gt;cout &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; num &lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;vector&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; nums &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 传统写法 (命令式：告诉计算机&amp;#34;如何做&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (size_t i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; nums.size(); i&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;cout &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; nums[i] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 范围 for 写法 (声明式：告诉计算机&amp;#34;想要什么&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; num : nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;cout &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; num &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>STL 容器</title><link>https://QwQBiG.github.io/posts/stlcontainer/</link><pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/stlcontainer/</guid><description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description></item><item><title>STL 算法</title><link>https://QwQBiG.github.io/posts/stlalgorithm/</link><pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/posts/stlalgorithm/</guid><description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description></item><item><title>C++的世界</title><link>https://QwQBiG.github.io/series/cpp/</link><pubDate>Fri, 14 Nov 2025 10:00:00 +0800</pubDate><guid>https://QwQBiG.github.io/series/cpp/</guid><description>&lt;p&gt;一直没有写STL内容主要是已经学过了，而且有点懒~&lt;/p&gt;
-&lt;h2 id="文章列表"&gt;文章列表&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第一篇：&lt;a href="../../posts/stlcontainer/"&gt;STL 容器&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：人如其名&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第二篇：&lt;a href="../../posts/stlalgorithm/"&gt;STL 算法&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：+1&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;第三篇：&lt;a href="../../fanweiforxunhuan/"&gt;范围for循环&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;简介：全面的范围for循环！！！&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</description></item></channel></rss>
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>STL 容器</title>
+      <link>https://QwQBiG.github.io/cs/posts/stlcontainer/</link>
+      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/stlcontainer/</guid>
+      <description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>STL 算法</title>
+      <link>https://QwQBiG.github.io/cs/posts/stlalgorithm/</link>
+      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/cs/posts/stlalgorithm/</guid>
+      <description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
