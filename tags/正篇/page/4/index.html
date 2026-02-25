@@ -1871,10 +1871,6 @@ body.dark {
   box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
 }
 
-.neko-close-btn:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
 .neko-close-btn svg {
   width: 12px;
   height: 12px;
@@ -1941,13 +1937,37 @@ body.dark .neko-close-btn {
 
 canvas { display: block; width: 100%; height: 100%; }
 
-/* 移动端隐藏猫咪钢琴 */
+/* 移动端适配 */
 @media (max-width: 768px) {
   #neko-engine-root {
-    display: none !important;
+    transform: scale(0.6); /* 缩小一点 */
   }
+  
+  #neko-ui-layer {
+    bottom: 100px; /* 调整位置 */
+    left: 15px;
+  }
+  
+  .neko-fab {
+    width: 48px; /* 缩小按钮 */
+    height: 48px;
+  }
+  
+  .neko-fab svg {
+    width: 20px; /* 缩小图标 */
+    height: 20px;
+  }
+  
+  #piano-click-zone {
+    width: 350px; /* 调整点击区域 */
+    height: 100px;
+  }
+  
   .neko-restore-btn {
-    display: none !important;
+    bottom: 15px; /* 调整恢复按钮位置 */
+    left: 15px;
+    width: 44px;
+    height: 44px;
   }
 }
 /*——————————————————————————————————————————————
