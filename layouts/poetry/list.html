@@ -301,6 +301,98 @@ body.dark .poetry-section-header p {
     content: '📝';
 }
 
+/* 诗歌卡片样式 - 竖向排列 */
+.poetry-list-section .post-entry {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.08) 0%, rgba(255, 179, 167, 0.08) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.poetry-list-section .post-entry::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ffafcc 0%, #ffb3a7 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.poetry-list-section .post-entry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 175, 204, 0.3);
+    border-color: rgba(255, 175, 204, 0.4);
+}
+
+.poetry-list-section .post-entry:hover::before {
+    opacity: 1;
+}
+
+.poetry-list-section .post-entry .entry-header h2 a {
+    color: #ff9a9e;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.poetry-list-section .post-entry:hover .entry-header h2 a {
+    color: #ff6b8a;
+}
+
+.poetry-list-section .post-entry .entry-content {
+    color: #666;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.poetry-list-section .post-entry .entry-footer {
+    font-size: 0.85rem;
+    color: #999;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.poetry-list-section .post-entry .entry-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.poetry-list-section .post-entry .entry-footer .tag {
+    background: rgba(255, 175, 204, 0.15);
+    color: #ff9a9e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+body.dark .poetry-list-section .post-entry {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
+    border-color: rgba(255, 175, 204, 0.3);
+}
+
+body.dark .poetry-list-section .post-entry .entry-content {
+    color: #aaa;
+}
+
+body.dark .poetry-list-section .post-entry .entry-footer {
+    color: #777;
+}
+
+body.dark .poetry-list-section .post-entry .entry-footer .tag {
+    background: rgba(255, 175, 204, 0.2);
+    color: #ffb3a7;
+}
+
 /* 诗歌系列卡片 */
 .poetry-series-card {
     background: #fff;
@@ -386,7 +478,7 @@ body.dark .poetry-series-card .entry-content {
 {{- $seriesPages := where .Site.Pages "Params.type" "series" -}}
 {{- $seriesPages := where $seriesPages "Section" "poetry" -}}
 
-{{- if $seriesPages -}}
+{{- if or $seriesPages (where .Site.Pages "Title" "《随吐集》") -}}
 <div class="poetry-series-section">
     <h2 class="section-title">诗歌系列</h2>
     {{- range $seriesPages -}}
@@ -405,6 +497,27 @@ body.dark .poetry-series-card .entry-content {
         {{- end -}}
         <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
     </article>
+    {{- end -}}
+    
+    {{- $suituPage := where .Site.Pages "Title" "《随吐集》" -}}
+    {{- if $suituPage -}}
+    {{- range $suituPage -}}
+    <article class="post-entry poetry-series-card">
+        <header class="entry-header">
+            <h2 class="entry-title">
+                <a href="{{ .Permalink }}">
+                    {{- .Title -}}
+                </a>
+            </h2>
+        </header>
+        {{- if .Description -}}
+        <div class="entry-content">
+            <p>{{ .Description | plainify | htmlUnescape }}</p>
+        </div>
+        {{- end -}}
+        <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+    </article>
+    {{- end -}}
     {{- end -}}
 </div>
 {{- end -}}
@@ -435,7 +548,15 @@ body.dark .poetry-series-card .entry-content {
             {{- end -}}
             
             <footer class="entry-footer">
-                {{- partial "post_meta.html" . -}}
+                {{- if .Date -}}
+                <span>📅 {{ .Date.Format "2006-01-02" }}</span>
+                {{- end -}}
+                
+                {{- if .Params.tags -}}
+                {{- range first 3 .Params.tags -}}
+                <span class="tag">{{ . }}</span>
+                {{- end -}}
+                {{- end -}}
             </footer>
             
             <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
