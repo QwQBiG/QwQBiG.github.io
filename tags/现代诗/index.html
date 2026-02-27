@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1177,7 +1210,7 @@
 飞啊，奔向，
 儿时的纸船可否等候在那远方！
 驶入云间泛起夕阳。
-背景：巧妙小诗，毓秀灵性。
+背景： 巧妙小诗，毓秀灵性。
 日期：22.12.5
 </p>
   </div>
@@ -1228,7 +1261,7 @@
 两个愿意陪你的&#34;人”，
 你的爱人与你的敌人。
 我也便不再彷徨…
-背景：与《毛泽东选集·中国社会各阶级的分析》同旨：辨清敌友，应谁共勉，将谁扼杀。
+背景： 与《毛泽东选集·中国社会各阶级的分析》同旨：辨清敌友，应谁共勉，将谁扼杀。
 日期：23.1.7
 </p>
   </div>
@@ -1307,7 +1340,7 @@
 请你不要回首，
 也请把你的光带往下个路口。
 它能照到我…
-背景：记没陪伊等公交车。感觉我总是忙于现在，以至于忘了还有未来。
+背景： 记没陪伊等公交车。感觉我总是忙于现在，以至于忘了还有未来。
 日期：23.8.26
 </p>
   </div>
@@ -1406,7 +1439,7 @@
 手汗上晶莹的回忆，“不过是风颠”;
 风儿颠到喧嚣才是最终，
 终于一切都只是风颠。
-背景：“风是我为自嘲，风非我为讽喻。“写作背景是老师给我们布置的作业。
+背景： “风是我为自嘲，风非我为讽喻。“写作背景是老师给我们布置的作业。
 日期：24.3.25
 </p>
   </div>
@@ -1750,6 +1783,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2521,21 +2559,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2544,7 +2595,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2554,11 +2605,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3191,7 +3246,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

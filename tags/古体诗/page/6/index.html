@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1102,6 +1135,60 @@
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">符号游戏
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>符号游戏 语似情笺相似媚，奴为意妾亦为姘。
+从来心上尽禾火，怹去字间惟你心。
+若草信风风訫子，如花见月月湔君。
+姮娥早作天边客，哪可戚戚梦里寻。
+注释：
+颔联中游戏为怂、愁、怹、您。 尾联劝学。 日期：24.8.29
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 符号游戏" href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st086_%E7%AC%A6%E5%8F%B7%E6%B8%B8%E6%88%8F/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">一月十二苦心作业心已游山而作
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>一月十二苦心作业心已游山而作 冬山静若何？抱朴守嵯峨。
+冷月穿林瘦，寒枝向宇歌。
+荣枯皆有数，圆缺岂无讹。
+寂历幽蹊处，霜华覆薜萝。
+背景： 神游罢了，渴望&#34;犹怜草木青&#34;矣。（平水）
+日期：25.1.12
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 一月十二苦心作业心已游山而作" href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st089_%E4%B8%80%E6%9C%88%E5%8D%81%E4%BA%8C%E8%8B%A6%E5%BF%83%E4%BD%9C%E4%B8%9A%E5%BF%83%E5%B7%B2%E6%B8%B8%E5%B1%B1%E8%80%8C%E4%BD%9C/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">新五禽戏戏话南归猫旁东萍燕笑狗舔糯鸡腿
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>新五禽戏戏话南归猫旁东萍燕笑狗舔糯鸡腿 纵看当垆意若霜，缘何同枕梦参商？
+霓虹影里欢颜假，网络屏中蜜语荒。
+本自鹣鲽情化岳，奈何俗好欲为伥。
+多矜女子今难见，喑懦男儿作跪郎。
+注释：
+首联典故&#34;当垆卖酒&#34;和&#34;同床异梦&#34;。 尾联&#34;跪郎&#34;亦为&#34;龟郎&#34;。 日期：25.1.17
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 新五禽戏戏话南归猫旁东萍燕笑狗舔糯鸡腿" href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st090_%E6%96%B0%E4%BA%94%E7%A6%BD%E6%88%8F%E6%88%8F%E8%AF%9D%E5%8D%97%E5%BD%92%E7%8C%AB%E6%97%81%E4%B8%9C%E8%90%8D%E7%87%95%E7%AC%91%E7%8B%97%E8%88%94%E7%B3%AF%E9%B8%A1%E8%85%BF/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">过江楼
     </h2>
   </header>
@@ -1132,7 +1219,7 @@
 </p>
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 招秋" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st104%E6%8B%9B%E7%A7%8B/"></a>
+  <a class="entry-link" aria-label="post link to 招秋" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st104_%E6%8B%9B%E7%A7%8B/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
@@ -1436,6 +1523,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2207,21 +2299,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2230,7 +2335,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2240,11 +2345,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -2877,7 +2986,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

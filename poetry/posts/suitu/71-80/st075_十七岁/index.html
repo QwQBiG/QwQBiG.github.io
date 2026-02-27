@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>QwQBiG&#39;s World</title>
-<meta name="keywords" content="">
+<title>十七岁 | QwQBiG&#39;s World</title>
+<meta name="keywords" content="现代诗, 随吐集, 正篇, 早期作品">
 <meta name="description" content="十七岁
 这是一滩  躁动的死水，
 就业与婚姻  像是生活的大烟；
@@ -42,7 +42,7 @@
 她想说 拜托~
 十七岁以后麻烦请你陪着我。
 24.6.9">
-<meta name="author" content="map[name:QwQBiG]">
+<meta name="author" content="白告">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st075_%E5%8D%81%E4%B8%83%E5%B2%81/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://QwQBiG.github.io/favicon.ico">
@@ -138,6 +138,17 @@
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -629,12 +640,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -654,16 +668,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -696,9 +729,8 @@
 </script>
 <meta property="og:url" content="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st075_%E5%8D%81%E4%B8%83%E5%B2%81/">
   <meta property="og:site_name" content="QwQBiG&#39;s World">
-  <meta property="og:title" content="QwQBiG&#39;s World">
-  <meta property="og:description" content="十七岁
-这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。
+  <meta property="og:title" content="十七岁">
+  <meta property="og:description" content="十七岁 这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。
 麦子是几片外婆的海， 孩子 一群群泛红的青涩； 生殖是几根大地的芽， 升职 一次次晕光的绛色； 涩的是口音 裹着土壤， 寒喧 揶揄 回忆 和沉默， 她的是笑容 品着往来， 日月走了 她感觉留不住什么。
 她不习惯吸二手烟， 尤其是茶里的烟， 肺叶里 人情与关系， 她感觉刻意 又存在意义， 可像是窒息 又不知觉， 倒被人玷污被风摧残在地。
 哪有什么小桥流水， 只有她那噎着鱼刺的十七岁。 风鸣云淡 她感觉没一分虚伪， 温存的虫儿 温柔的夜 不如早睡。
@@ -707,8 +739,14 @@
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="poetry">
+    <meta property="article:published_time" content="2026-02-24T10:30:00+08:00">
+    <meta property="article:modified_time" content="2026-02-24T10:30:00+08:00">
+    <meta property="article:tag" content="现代诗">
+    <meta property="article:tag" content="随吐集">
+    <meta property="article:tag" content="正篇">
+    <meta property="article:tag" content="早期作品">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="">
+<meta name="twitter:title" content="十七岁">
 <meta name="twitter:description" content="十七岁
 这是一滩  躁动的死水，
 就业与婚姻  像是生活的大烟；
@@ -759,6 +797,12 @@
     }, 
     {
       "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
+    }, 
+    {
+      "@type": "ListItem",
       "position":  3 ,
       "name": "《随吐集》",
       "item": "https://QwQBiG.github.io/poetry/posts/suitu/"
@@ -766,7 +810,7 @@
     {
       "@type": "ListItem",
       "position":  4 ,
-      "name": "",
+      "name": "十七岁",
       "item": "https://QwQBiG.github.io/poetry/posts/suitu/71-80/st075_%E5%8D%81%E4%B8%83%E5%B2%81/"
     }
   ]
@@ -776,20 +820,20 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "",
-  "name": "",
-  "description": "十七岁\n这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。\n麦子是几片外婆的海， 孩子 一群群泛红的青涩； 生殖是几根大地的芽， 升职 一次次晕光的绛色； 涩的是口音 裹着土壤， 寒喧 揶揄 回忆 和沉默， 她的是笑容 品着往来， 日月走了 她感觉留不住什么。\n她不习惯吸二手烟， 尤其是茶里的烟， 肺叶里 人情与关系， 她感觉刻意 又存在意义， 可像是窒息 又不知觉， 倒被人玷污被风摧残在地。\n哪有什么小桥流水， 只有她那噎着鱼刺的十七岁。 风鸣云淡 她感觉没一分虚伪， 温存的虫儿 温柔的夜 不如早睡。\n喜 怒 哀 惧， 在黄土里 都开出花。 围城或怪圈， 你的对错又该去问谁。\n这些都是要素 才杂揉出你我， 她感觉 也不必留住什么。 坏坏的东西 更显出你爱的多， 美好的东西 那就天天对你说， 她想说 拜托~ 十七岁以后麻烦请你陪着我。 24.6.9\n",
+  "headline": "十七岁",
+  "name": "十七岁",
+  "description": "十七岁 这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。\n麦子是几片外婆的海， 孩子 一群群泛红的青涩； 生殖是几根大地的芽， 升职 一次次晕光的绛色； 涩的是口音 裹着土壤， 寒喧 揶揄 回忆 和沉默， 她的是笑容 品着往来， 日月走了 她感觉留不住什么。\n她不习惯吸二手烟， 尤其是茶里的烟， 肺叶里 人情与关系， 她感觉刻意 又存在意义， 可像是窒息 又不知觉， 倒被人玷污被风摧残在地。\n哪有什么小桥流水， 只有她那噎着鱼刺的十七岁。 风鸣云淡 她感觉没一分虚伪， 温存的虫儿 温柔的夜 不如早睡。\n喜 怒 哀 惧， 在黄土里 都开出花。 围城或怪圈， 你的对错又该去问谁。\n这些都是要素 才杂揉出你我， 她感觉 也不必留住什么。 坏坏的东西 更显出你爱的多， 美好的东西 那就天天对你说， 她想说 拜托~ 十七岁以后麻烦请你陪着我。 24.6.9\n",
   "keywords": [
-    
+    "现代诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "十七岁\n这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。\n麦子是几片外婆的海， 孩子 一群群泛红的青涩； 生殖是几根大地的芽， 升职 一次次晕光的绛色； 涩的是口音 裹着土壤， 寒喧 揶揄 回忆 和沉默， 她的是笑容 品着往来， 日月走了 她感觉留不住什么。\n她不习惯吸二手烟， 尤其是茶里的烟， 肺叶里 人情与关系， 她感觉刻意 又存在意义， 可像是窒息 又不知觉， 倒被人玷污被风摧残在地。\n哪有什么小桥流水， 只有她那噎着鱼刺的十七岁。 风鸣云淡 她感觉没一分虚伪， 温存的虫儿 温柔的夜 不如早睡。\n喜 怒 哀 惧， 在黄土里 都开出花。 围城或怪圈， 你的对错又该去问谁。\n这些都是要素 才杂揉出你我， 她感觉 也不必留住什么。 坏坏的东西 更显出你爱的多， 美好的东西 那就天天对你说， 她想说 拜托~ 十七岁以后麻烦请你陪着我。 24.6.9\n",
+  "articleBody": "十七岁 这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。\n麦子是几片外婆的海， 孩子 一群群泛红的青涩； 生殖是几根大地的芽， 升职 一次次晕光的绛色； 涩的是口音 裹着土壤， 寒喧 揶揄 回忆 和沉默， 她的是笑容 品着往来， 日月走了 她感觉留不住什么。\n她不习惯吸二手烟， 尤其是茶里的烟， 肺叶里 人情与关系， 她感觉刻意 又存在意义， 可像是窒息 又不知觉， 倒被人玷污被风摧残在地。\n哪有什么小桥流水， 只有她那噎着鱼刺的十七岁。 风鸣云淡 她感觉没一分虚伪， 温存的虫儿 温柔的夜 不如早睡。\n喜 怒 哀 惧， 在黄土里 都开出花。 围城或怪圈， 你的对错又该去问谁。\n这些都是要素 才杂揉出你我， 她感觉 也不必留住什么。 坏坏的东西 更显出你爱的多， 美好的东西 那就天天对你说， 她想说 拜托~ 十七岁以后麻烦请你陪着我。 24.6.9\n",
   "wordCount" : "61",
   "inLanguage": "en",
-  "datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "datePublished": "2026-02-24T10:30:00+08:00",
+  "dateModified": "2026-02-24T10:30:00+08:00",
   "author":{
     "@type": "Person",
-    "name": {"name":"QwQBiG"}
+    "name": "白告"
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -1229,7 +1273,7 @@
         </ul>
     </nav>
 </header><main class="main"><article class="post-single">
-  <header class="post-header"><h1 class="post-title"></h1></header><div class="post-content"><p>十七岁</p>
+  <header class="post-header"><h1 class="post-title">十七岁</h1><div class="post-meta"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></div></header><div class="post-content"><h3 id="十七岁">十七岁</h3>
 <p>这是一滩  躁动的死水，
 就业与婚姻  像是生活的大烟；
 这是县城  她的十七岁，
@@ -1576,6 +1620,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2347,21 +2396,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2370,7 +2432,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2380,11 +2442,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3017,7 +3083,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

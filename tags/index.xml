@@ -4,7 +4,7 @@
     <title>Tags on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/</link>
     <description>Recent content in Tags on QwQBiG&#39;s World</description>
-    <generator>Hugo -- 0.156.0</generator>
+    <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 24 Feb 2026 10:30:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
@@ -27,6 +27,13 @@
       <link>https://QwQBiG.github.io/tags/%E5%8F%A4%E6%96%87/</link>
       <pubDate>Tue, 24 Feb 2026 10:30:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/tags/%E5%8F%A4%E6%96%87/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>合集</title>
+      <link>https://QwQBiG.github.io/tags/%E5%90%88%E9%9B%86/</link>
+      <pubDate>Tue, 24 Feb 2026 10:30:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E5%90%88%E9%9B%86/</guid>
       <description></description>
     </item>
     <item>
@@ -69,6 +76,13 @@
       <link>https://QwQBiG.github.io/tags/%E8%AF%8D/</link>
       <pubDate>Tue, 24 Feb 2026 10:30:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/tags/%E8%AF%8D/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>诗歌</title>
+      <link>https://QwQBiG.github.io/tags/%E8%AF%97%E6%AD%8C/</link>
+      <pubDate>Tue, 24 Feb 2026 10:30:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E8%AF%97%E6%AD%8C/</guid>
       <description></description>
     </item>
     <item>
@@ -128,10 +142,38 @@
       <description></description>
     </item>
     <item>
+      <title>学校</title>
+      <link>https://QwQBiG.github.io/tags/%E5%AD%A6%E6%A0%A1/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E5%AD%A6%E6%A0%A1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>实践</title>
+      <link>https://QwQBiG.github.io/tags/%E5%AE%9E%E8%B7%B5/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E5%AE%9E%E8%B7%B5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>竞赛</title>
+      <link>https://QwQBiG.github.io/tags/%E7%AB%9E%E8%B5%9B/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E7%AB%9E%E8%B5%9B/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>编程语言</title>
       <link>https://QwQBiG.github.io/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</link>
       <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>项目</title>
+      <link>https://QwQBiG.github.io/tags/%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E9%A1%B9%E7%9B%AE/</guid>
       <description></description>
     </item>
     <item>
@@ -170,6 +212,13 @@
       <description></description>
     </item>
     <item>
+      <title>工程</title>
+      <link>https://QwQBiG.github.io/tags/%E5%B7%A5%E7%A8%8B/</link>
+      <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E5%B7%A5%E7%A8%8B/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>幸狐</title>
       <link>https://QwQBiG.github.io/tags/%E5%B9%B8%E7%8B%90/</link>
       <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
@@ -184,6 +233,13 @@
       <description></description>
     </item>
     <item>
+      <title>物联网</title>
+      <link>https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/</link>
+      <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>网络协议</title>
       <link>https://QwQBiG.github.io/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</link>
       <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
@@ -191,17 +247,17 @@
       <description></description>
     </item>
     <item>
+      <title>软硬结合</title>
+      <link>https://QwQBiG.github.io/tags/%E8%BD%AF%E7%A1%AC%E7%BB%93%E5%90%88/</link>
+      <pubDate>Tue, 27 Jan 2026 12:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/%E8%BD%AF%E7%A1%AC%E7%BB%93%E5%90%88/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>刷机</title>
       <link>https://QwQBiG.github.io/tags/%E5%88%B7%E6%9C%BA/</link>
       <pubDate>Thu, 22 Jan 2026 12:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/tags/%E5%88%B7%E6%9C%BA/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>实践</title>
-      <link>https://QwQBiG.github.io/tags/%E5%AE%9E%E8%B7%B5/</link>
-      <pubDate>Thu, 22 Jan 2026 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E5%AE%9E%E8%B7%B5/</guid>
       <description></description>
     </item>
     <item>
@@ -282,6 +338,20 @@
       <description></description>
     </item>
     <item>
+      <title>Docker</title>
+      <link>https://QwQBiG.github.io/tags/docker/</link>
+      <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>K8s</title>
+      <link>https://QwQBiG.github.io/tags/k8s/</link>
+      <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
+      <guid>https://QwQBiG.github.io/tags/k8s/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>运维</title>
       <link>https://QwQBiG.github.io/tags/%E8%BF%90%E7%BB%B4/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
@@ -293,13 +363,6 @@
       <link>https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/</link>
       <pubDate>Sat, 22 Nov 2025 12:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/tags/%E6%97%A5%E8%AE%B0/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>K8s</title>
-      <link>https://QwQBiG.github.io/tags/k8s/</link>
-      <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/tags/k8s/</guid>
       <description></description>
     </item>
     <item>
@@ -328,55 +391,6 @@
       <link>https://QwQBiG.github.io/tags/%E5%BB%BA%E7%AB%99/</link>
       <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
       <guid>https://QwQBiG.github.io/tags/%E5%BB%BA%E7%AB%99/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Docker</title>
-      <link>https://QwQBiG.github.io/tags/docker/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/docker/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>学校</title>
-      <link>https://QwQBiG.github.io/tags/%E5%AD%A6%E6%A0%A1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E5%AD%A6%E6%A0%A1/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>工程</title>
-      <link>https://QwQBiG.github.io/tags/%E5%B7%A5%E7%A8%8B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E5%B7%A5%E7%A8%8B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>物联网</title>
-      <link>https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>竞赛</title>
-      <link>https://QwQBiG.github.io/tags/%E7%AB%9E%E8%B5%9B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E7%AB%9E%E8%B5%9B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>软硬结合</title>
-      <link>https://QwQBiG.github.io/tags/%E8%BD%AF%E7%A1%AC%E7%BB%93%E5%90%88/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E8%BD%AF%E7%A1%AC%E7%BB%93%E5%90%88/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>项目</title>
-      <link>https://QwQBiG.github.io/tags/%E9%A1%B9%E7%9B%AE/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/tags/%E9%A1%B9%E7%9B%AE/</guid>
       <description></description>
     </item>
   </channel>

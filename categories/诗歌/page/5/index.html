@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1109,7 +1142,7 @@
     <p>人生五禽戏 朝暮投饼欺顽狙，俯首甘为马户驴。
 青花金荣不胜狗，鹏稚为雉谋摸鱼。
 注释：
-朝暮：“朝三暮四” 《庄子·齐物论》 狙：猕猴 “众狙皆怒” 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 背景：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
+朝暮：“朝三暮四” 《庄子·齐物论》 狙：猕猴 “众狙皆怒” 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 注释： 被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
 日期：23.8.4
 </p>
   </div>
@@ -1129,7 +1162,7 @@
 天下市场苦百姓，教唆驯化只能从。
 本是那，人民皆愿正义行，
 可叹那，吃住医育贷余生。
-背景：最动人就属三吏三别，秦妇吟之诸。可叹那！吃住医育货余生！
+背景： 最动人就属三吏三别，秦妇吟之诸。可叹那！吃住医育货余生！
 日期：23.8.4
 </p>
   </div>
@@ -1150,7 +1183,7 @@
 鹏友急风休暖羽，
 泼茶句？官言圣简人失语。
 注释：
-雨文：语文。鹏友：朋友。 栋里云：“不知栋里云，去作人间雨。“王维。 担簦：背着伞；谓奔走，跋涉。 廉纤：细小，细微；借指细雨。 阒：寂静。喅：喧哗。 喑：沉默。 泼茶句：赌书泼茶，典出李清照。纳兰性德有句。 背景：说不出来的话，文字之狱兮扰我小情耳语。
+雨文：语文。鹏友：朋友。 栋里云：“不知栋里云，去作人间雨。“王维。 担簦：背着伞；谓奔走，跋涉。 廉纤：细小，细微；借指细雨。 阒：寂静。喅：喧哗。 喑：沉默。 泼茶句：赌书泼茶，典出李清照。纳兰性德有句。 注释： 说不出来的话，文字之狱兮扰我小情耳语。
 日期：23.8.12
 </p>
   </div>
@@ -1180,7 +1213,7 @@
 请你不要回首，
 也请把你的光带往下个路口。
 它能照到我…
-背景：记没陪伊等公交车。感觉我总是忙于现在，以至于忘了还有未来。
+背景： 记没陪伊等公交车。感觉我总是忙于现在，以至于忘了还有未来。
 日期：23.8.26
 </p>
   </div>
@@ -1196,7 +1229,7 @@
   <div class="entry-content">
     <p>忆教员 节慰教师逢九九，马出桑梓踏青山。
 人知黄鹤逐仙去，岂又霜天忆教员。
-背景：“遍地哀鸿满城血，无非一念救苍生。&#34;《七律·忆重庆谈判》毛泽东。
+背景： “遍地哀鸿满城血，无非一念救苍生。&#34;《七律·忆重庆谈判》毛泽东。
 日期：23.9.9＆9.10
 </p>
   </div>
@@ -1231,7 +1264,7 @@
 归雨晨天阙，
 离骓淖自然。
 注释：
-南冠：借指囚犯。《左传·成公九年》。 “尔曹身与名俱灭，不废江河万古流。“戏为六绝句·其二 唐·杜甫。 “其生若浮，其死若休。&#34;《庄子·刻意》。 《艺文类聚》卷九十引晋葛洪《抱朴子》：“周穆王南征，一军尽化，君子为猿为鹤，小人为虫为沙。” 存舌：典出《史记·张仪列传》此典表示虽遇挫折或虽未显达，而赖以进取的资本还在。 恫瘝在抱：意思是像病痛在自己身上一样。指把人民的疾苦放在心上。典出清·冯桂芬《与许抚部书》。 背景：此曲内容五个名字，是谓&#34;名&#34;曲。
+南冠：借指囚犯。《左传·成公九年》。 “尔曹身与名俱灭，不废江河万古流。“戏为六绝句·其二 唐·杜甫。 “其生若浮，其死若休。&#34;《庄子·刻意》。 《艺文类聚》卷九十引晋葛洪《抱朴子》：“周穆王南征，一军尽化，君子为猿为鹤，小人为虫为沙。” 存舌：典出《史记·张仪列传》此典表示虽遇挫折或虽未显达，而赖以进取的资本还在。 恫瘝在抱：意思是像病痛在自己身上一样。指把人民的疾苦放在心上。典出清·冯桂芬《与许抚部书》。 注释： 此曲内容五个名字，是谓&#34;名&#34;曲。
 日期：23.9.17
 </p>
   </div>
@@ -1254,7 +1287,7 @@
 绵雨抚发乾坤匿，举头唯见黑雾幽。
 去年云月仍相视，几时凉风尽除忧。
 临首翻滚霆欲袭，人间何处能长休。
-背景：“唯见月寒日暖，来煎人寿。“出自李贺《苦昼短》，于首句为续，平仄韵虽不全，但求兴趣。《前夜惶恐》为同学所作，吾与之和。
+背景： “唯见月寒日暖，来煎人寿。“出自李贺《苦昼短》，于首句为续，平仄韵虽不全，但求兴趣。《前夜惶恐》为同学所作，吾与之和。
 日期：23.9.18
 </p>
   </div>
@@ -1272,7 +1305,7 @@
 青衿望瀑白逐浪，老朽观潮苏默言。
 逆判阴阳混一色，塞流百水僻独川。
 春秋走笔三皇土，旨卫虚名哄众黔。
-背景：“五帝三皇神圣事，骗了无涯过客。&#34;《贺新郎·读史》毛泽东。
+背景： “五帝三皇神圣事，骗了无涯过客。&#34;《贺新郎·读史》毛泽东。
 日期：23.9.20
 </p>
   </div>
@@ -1290,7 +1323,7 @@
 真气凌人权纵己，剑成不败欲阉根。
 千方教众三尸脑，万里腥云彩绣针。
 万载千秋碑上罪，东方只幸日红尘。
-背景：颔联前为左冷禅，后为岳不群，真小人与伪君子，按金老先生作，东方不败为两者合。颈联为金老先生的行文，吾借之作反语，叩问。尾联为人世间之幸，日出东方，泽被苍生。原作&#34;绣花针&#34;，改平仄为此。
+背景： 颔联前为左冷禅，后为岳不群，真小人与伪君子，按金老先生作，东方不败为两者合。颈联为金老先生的行文，吾借之作反语，叩问。尾联为人世间之幸，日出东方，泽被苍生。原作&#34;绣花针&#34;，改平仄为此。
 日期：23.9.28
 </p>
   </div>
@@ -1620,6 +1653,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2391,21 +2429,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2414,7 +2465,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2424,11 +2475,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3061,7 +3116,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

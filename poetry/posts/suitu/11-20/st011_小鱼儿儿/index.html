@@ -11,7 +11,8 @@
 蟾阙泅鱼黯波送，花桥舞尾先乞食。
 亲询北海神若道，苦岸垂纶岂为楫。
 
-背景：此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。
+背景：
+此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。
 日期：22.8">
 <meta name="author" content="白告">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/11-20/st011_%E5%B0%8F%E9%B1%BC%E5%84%BF%E5%84%BF/">
@@ -109,6 +110,17 @@
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -600,12 +612,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -625,16 +640,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -670,7 +704,7 @@
   <meta property="og:title" content="小鱼儿儿">
   <meta property="og:description" content="小鱼儿儿 蟾阙泅鱼黯波送，花桥舞尾先乞食。
 亲询北海神若道，苦岸垂纶岂为楫。
-背景：此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。
+背景： 此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。
 日期：22.8">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
@@ -687,7 +721,8 @@
 蟾阙泅鱼黯波送，花桥舞尾先乞食。
 亲询北海神若道，苦岸垂纶岂为楫。
 
-背景：此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。
+背景：
+此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。
 日期：22.8">
 
 
@@ -701,6 +736,12 @@
       "position":  1 ,
       "name": "诗歌",
       "item": "https://QwQBiG.github.io/poetry/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
     }, 
     {
       "@type": "ListItem",
@@ -723,12 +764,12 @@
   "@type": "BlogPosting",
   "headline": "小鱼儿儿",
   "name": "小鱼儿儿",
-  "description": "小鱼儿儿 蟾阙泅鱼黯波送，花桥舞尾先乞食。\n亲询北海神若道，苦岸垂纶岂为楫。\n背景：此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。\n日期：22.8\n",
+  "description": "小鱼儿儿 蟾阙泅鱼黯波送，花桥舞尾先乞食。\n亲询北海神若道，苦岸垂纶岂为楫。\n背景： 此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。\n日期：22.8\n",
   "keywords": [
     "古体诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "小鱼儿儿 蟾阙泅鱼黯波送，花桥舞尾先乞食。\n亲询北海神若道，苦岸垂纶岂为楫。\n背景：此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。\n日期：22.8\n",
-  "wordCount" : "5",
+  "articleBody": "小鱼儿儿 蟾阙泅鱼黯波送，花桥舞尾先乞食。\n亲询北海神若道，苦岸垂纶岂为楫。\n背景： 此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。\n日期：22.8\n",
+  "wordCount" : "6",
   "inLanguage": "en",
   "datePublished": "2026-02-24T10:30:00+08:00",
   "dateModified": "2026-02-24T10:30:00+08:00",
@@ -1178,7 +1219,8 @@
 <p>蟾阙泅鱼黯波送，花桥舞尾先乞食。<br>
 亲询北海神若道，苦岸垂纶岂为楫。</p>
 <hr>
-<p><strong>背景</strong>：此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。</p>
+<p><strong>背景</strong>：
+此作以写鱼的动作，讽科举制度。蟾宫折桂？鱼儿自顾自在蟾光里泅水，不过千番繁华热闹，生机为大；玄道我待刍狗，苦岸不渡。</p>
 <p><strong>日期</strong>：22.8</p>
 </div><footer class="post-footer">
 <script src="https://giscus.app/client.js"
@@ -1492,6 +1534,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2263,21 +2310,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2286,7 +2346,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2296,11 +2356,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -2933,7 +2997,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

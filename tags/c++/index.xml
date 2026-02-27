@@ -4,15 +4,15 @@
     <title>C&#43;&#43; on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/c&#43;&#43;/</link>
     <description>Recent content in C&#43;&#43; on QwQBiG&#39;s World</description>
-    <generator>Hugo -- 0.156.0</generator>
+    <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/c++/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>C/C&#43;&#43;速通Java?JS?Rust?</title>
-      <link>https://QwQBiG.github.io/cs/posts/siguoyuyan/</link>
+      <link>https://QwQBiG.github.io/cs/posts/taokeseries/siguoyuyan/</link>
       <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/siguoyuyan/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/taokeseries/siguoyuyan/</guid>
       <description>&lt;h1 id=&#34;-编程语言速通指南cc-选手的多宇宙生存手册&#34;&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用人群&lt;/strong&gt;：已掌握 C，进修 C++ 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。&lt;br&gt;
 &lt;strong&gt;核心心法&lt;/strong&gt;：语言只是工具，设计哲学才是灵魂。不要背语法，要懂“为什么这么设计”。&lt;/p&gt;
@@ -64,9 +64,9 @@
     </item>
     <item>
       <title>范围for循环</title>
-      <link>https://QwQBiG.github.io/cs/posts/fanweiforxunhuan/</link>
+      <link>https://QwQBiG.github.io/cs/posts/cppseries/fanweiforxunhuan/</link>
       <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/fanweiforxunhuan/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/cppseries/fanweiforxunhuan/</guid>
       <description>&lt;h1 id=&#34;c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记&#34;&gt;C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记&lt;/h1&gt;
 &lt;h2 id=&#34;一-核心概念告别索引拥抱元素&#34;&gt;一、 核心概念：告别索引，拥抱元素&lt;/h2&gt;
 &lt;p&gt;基于范围的 for 循环（C++11 引入）是为了解决一个最常见的编程任务：遍历一个序列（如 vector, string）中的每一个元素。
@@ -121,31 +121,17 @@
     </item>
     <item>
       <title>STL 容器</title>
-      <link>https://QwQBiG.github.io/cs/posts/stlcontainer/</link>
+      <link>https://QwQBiG.github.io/cs/posts/cppseries/stlcontainer/</link>
       <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/stlcontainer/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/cppseries/stlcontainer/</guid>
       <description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description>
     </item>
     <item>
       <title>STL 算法</title>
-      <link>https://QwQBiG.github.io/cs/posts/stlalgorithm/</link>
+      <link>https://QwQBiG.github.io/cs/posts/cppseries/stlalgorithm/</link>
       <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/stlalgorithm/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/cppseries/stlalgorithm/</guid>
       <description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>C&#43;&#43;的世界</title>
-      <link>https://QwQBiG.github.io/cs/series/cpp/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/cs/series/cpp/</guid>
-      <description>C&#43;&#43;编程语言学习笔记与进阶指南</description>
-    </item>
-    <item>
-      <title>成就-来硬的</title>
-      <link>https://QwQBiG.github.io/cs/series/embedded/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/cs/series/embedded/</guid>
-      <description>嵌入式开发学习笔记与项目实践</description>
     </item>
   </channel>
 </rss>

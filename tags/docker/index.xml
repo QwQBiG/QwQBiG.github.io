@@ -4,15 +4,9 @@
     <title>Docker on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/docker/</link>
     <description>Recent content in Docker on QwQBiG&#39;s World</description>
-    <generator>Hugo -- 0.156.0</generator>
+    <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
+    <lastBuildDate></lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>运维</title>
-      <link>https://QwQBiG.github.io/cs/series/yunwei/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/cs/series/yunwei/</guid>
-      <description>Linux运维、Docker、K8s等技术实践</description>
-    </item>
   </channel>
 </rss>

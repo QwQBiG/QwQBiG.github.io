@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>《随吐集》 | QwQBiG&#39;s World</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="诗歌, 随吐集, 合集">
 <meta name="description" content="随吐随吐，恣意吐出，不拾牙慧。">
 <meta name="author" content="map[name:QwQBiG]">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/">
@@ -105,6 +105,17 @@
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -686,6 +719,12 @@
     {
       "@type": "ListItem",
       "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
       "name": "《随吐集》",
       "item": "https://QwQBiG.github.io/poetry/posts/suitu/"
     }
@@ -1115,48 +1154,445 @@
             </li>
         </ul>
     </nav>
-</header><main class="main"> 
-<header class="page-header">
-  <h1>
-    《随吐集》
-  </h1>
-  <div class="post-description">
-    随吐随吐，恣意吐出，不拾牙慧。
-  </div>
-</header>
-<div class="post-content"><h2 id="说明">说明<a hidden class="anchor" aria-hidden="true" href="#说明">#</a></h2>
-<p>时间顺序收录，所以可以去最后一页看看最近的内容~
-所谓<strong>背景</strong>内容是写序的时候统一整理写成的，就是高中那时候闲爽了。</p>
-<hr>
+</header><main class="main">
 
+<style>
+ 
+.suitu-poetry-list .poetry-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
 
+.suitu-poetry-list .poetry-grid li {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.08) 0%, rgba(255, 179, 167, 0.08) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.suitu-poetry-list .poetry-grid li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ffafcc 0%, #ffb3a7 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.suitu-poetry-list .poetry-grid li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 175, 204, 0.3);
+    border-color: rgba(255, 175, 204, 0.4);
+}
+
+.suitu-poetry-list .poetry-grid li:hover::before {
+    opacity: 1;
+}
+
+.suitu-poetry-list .poetry-grid li a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ff9a9e;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.suitu-poetry-list .poetry-grid li:hover .poetry-title {
+    color: #ff6b8a;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-summary {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-meta {
+    font-size: 0.85rem;
+    color: #999;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.suitu-poetry-list .poetry-grid li .poetry-meta .tag {
+    background: rgba(255, 175, 204, 0.15);
+    color: #ff9a9e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .poetry-grid li {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
+    border-color: rgba(255, 175, 204, 0.3);
+}
+
+html[data-theme="dark"] .suitu-poetry-list .poetry-grid li .poetry-summary {
+    color: #aaa;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .poetry-grid li .poetry-meta {
+    color: #777;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .poetry-grid li .poetry-meta .tag {
+    background: rgba(255, 175, 204, 0.2);
+    color: #ffb3a7;
+}
+
+ 
+@media (max-width: 768px) {
+    .suitu-poetry-list ul {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .suitu-poetry-list ul li {
+        padding: 15px;
+    }
+    
+    .suitu-poetry-list ul li .poetry-title {
+        font-size: 1.1rem;
+    }
+}
+
+ 
+.suitu-section-header {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.1) 0%, rgba(255, 179, 167, 0.1) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 175, 204, 0.2);
+}
+
+.suitu-section-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #ff9a9e;
+}
+
+.suitu-section-header h1 .emoji {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.suitu-section-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+html[data-theme="dark"] .suitu-section-header p {
+    color: #aaa;
+}
+
+ 
+.suitu-poetry-list {
+    margin-top: 30px;
+}
+
+ 
+.suitu-poetry-list .custom-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid rgba(255, 154, 158, 0.3);
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    cursor: pointer;
+}
+
+.suitu-poetry-list .custom-pagination .page-link:hover {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    border-color: rgba(255, 154, 158, 0.8);
+    color: white;
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+}
+
+.suitu-poetry-list .custom-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    border-color: rgba(255, 154, 158, 0.8);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
+    cursor: default;
+}
+
+.suitu-poetry-list .custom-pagination .page-item.disabled .page-link {
+    background: rgba(200, 200, 200, 0.3);
+    border-color: rgba(200, 200, 200, 0.3);
+    color: #aaa;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.suitu-poetry-list .custom-pagination .page-item.disabled .page-link:hover {
+    background: rgba(200, 200, 200, 0.3);
+    border-color: rgba(200, 200, 200, 0.3);
+    color: #aaa;
+    transform: none;
+    box-shadow: none;
+}
+
+.suitu-poetry-list .custom-pagination .page-item.prev .page-link,
+.suitu-poetry-list .custom-pagination .page-item.next .page-link {
+    min-width: 50px;
+    font-weight: 600;
+}
+
+.suitu-poetry-list .custom-pagination .page-item.first .page-link,
+.suitu-poetry-list .custom-pagination .page-item.last .page-link {
+    min-width: 50px;
+    font-size: 12px;
+}
+
+.suitu-poetry-list .custom-pagination .page-item.ellipsis .page-link {
+    background: transparent;
+    border: none;
+    cursor: default;
+    color: #999;
+}
+
+.suitu-poetry-list .custom-pagination .page-item.ellipsis .page-link:hover {
+    background: transparent;
+    border: none;
+    transform: none;
+    box-shadow: none;
+    color: #999;
+}
+
+ 
+html[data-theme="dark"] .suitu-poetry-list .custom-pagination .page-link {
+    background: rgba(46, 46, 51, 0.7);
+    border-color: rgba(255, 154, 158, 0.2);
+    color: #ccc;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .custom-pagination .page-link:hover {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    border-color: rgba(255, 154, 158, 0.8);
+    color: white;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .custom-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    border-color: rgba(255, 154, 158, 0.8);
+    color: white;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .custom-pagination .page-item.disabled .page-link {
+    background: rgba(60, 60, 70, 0.5);
+    border-color: rgba(100, 100, 110, 0.3);
+    color: #666;
+}
+
+html[data-theme="dark"] .suitu-poetry-list .custom-pagination .page-item.ellipsis .page-link {
+    color: #666;
+}
+
+ 
+.suitu-poetry-list .pagination,
+.suitu-poetry-list .pagination-default {
+    display: none !important;
+}
+
+.suitu-poetry-list .custom-pagination {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 40px 0;
+    padding: 20px;
+    list-style: none;
+}
+
+ 
+.back-to-poetry {
+    text-align: center;
+    margin-top: 50px;
+    padding: 30px;
+}
+
+.back-to-poetry a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #ffafcc 0%, #ffb3a7 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+}
+
+.back-to-poetry a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 175, 204, 0.5);
+}
+</style>
+
+<div class="suitu-section-header">
+    <h1><span class="emoji">📜</span> 《随吐集》</h1>
+    <p>随吐随吐，恣意吐出，不拾牙慧。</p>
 </div>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">招秋
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>招秋 商信卷葭苕，君恩薄素绡。
+
+<div class="suitu-poetry-list">
+    <ul class="poetry-grid"><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st100_%E6%98%AF%E5%AD%A9%E5%AD%90/">
+                <div class="poetry-title">是孩子</div><div class="poetry-summary">
+                    是孩子 我写不出这首诗 因为我不确定我是否 还是 激动于下午为灾区 捐出零钱的孩子
+那些个230万的耳环 消费的不是金钱 而是人们 一如孩子般的心
+但我确信我仍是孩子 我不是代孕出的孩子 我不是亡命车祸 一家三口的孩子 我不是加沙 被屠戮的孩子
+——我只是身处另一局中 袖手旁观的孩子
+但我也看到一些孩子 羊水这道分水岭中 有的练习游泳成为水鬼 有的学习数学搞四加四 这里有硕鼠 还有北极的鱼
+——而我是万马齐喑的万分之一… 我是被强暴尊严的孩子
+而有的孩子 有一柄烛火 火光不会沉默 拔出灯芯才会： 化作天台上的一缕烟
+作为孩子 我想说 今天狂人或许学了医 刘和珍或许奔赴巴以 所以：来
+救救孩子……
+日期：25.8.24
+
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">现代诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st101_%E9%87%8D%E8%AF%BB%E9%87%91%E7%93%B6%E6%A2%85%E6%9C%89%E6%84%9F/">
+                <div class="poetry-title">重读《金瓶梅》有感</div><div class="poetry-summary">
+                    重读《金瓶梅》有感 武大确实错了
+武二被逼反又不太容易
+唯金莲有知心姐姐王婆
+往西方，在西门大官人家里
+与李瓶儿等姐妹
+互助相宜
+武大被毒杀，那又咋啦
+竟不知这是金莲自诩一届女流的权利
+金莲又怎不知那西门官人床上
+淫眷贱妾
+可不过利己攀枝
+立什么牌坊贞洁
+事关公平正义，人命关天
+容不得小厮为卖炊饼的叫苦喊冤
+西门大官人贵为一省首富
+官府对那厮武二也不必去招安
+不过草芥飘萍，风吹即散
+说甚日后义结梁山？
+高太尉来来来，咱个把酒言欢
+日期：25.8.1
+
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">现代诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st102_%E9%87%8D%E8%AF%BB%E5%8A%A8%E7%89%A9%E5%86%9C%E5%9C%BA%E6%9C%89%E6%84%9F/">
+                <div class="poetry-title">重读《动物农场》有感</div><div class="poetry-summary">
+                    重读《动物农场》有感 我又发现了一个&#34;动物农场&#34;，
+串联于蜘蛛织就的一张网。
+周围伫立高高一道道防火的墙，
+防止那人类荼毒动物们的思想。
+守候这片纯净的地方，
+没有暴恐与赌黄。
+可是小猪们的繁殖本为天性，
+不能让压抑与禁令，
+变成滋养犯罪的温床。
+所以看吧：
+什么在挑逗动物们黄色的欲望；
+所以寻吧：
+看他们杀猪吃肉喝汤；
+这算自由吗？
+我不知道…
+纯洁有灵性的小鹿，她不懂：
+那些虎豹警察为何
+不全面查封这些污秽之地，
+便清净无需叨扰。
+而当社会舆论引爆农场，
+这边的小猪听到
+那边的小猪听不到。
+小鸟叽叽喳喳的叫…
+之后的小猪们，
+滚在泥潭一块玩儿玩儿，
+看一些其他动物们，
+做一些其他的无关紧要…
+有一天天清气爽，
+几只小猪坐在防火墙。
+“海的那面是什么？”
+“海的那边有…”
+什么算做自由呢？
+我不知道…
+还是做些无足轻重的事儿，
+对着大海发发牢骚…
+日期：25.8.2
+
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">现代诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st103_%E4%B8%80%E5%89%AA%E6%A2%85%E5%8F%88%E5%BF%AB%E8%A6%81%E8%A2%AB%E7%A9%BA%E8%B0%83%E5%86%BB%E6%84%9F%E5%86%92%E4%BA%86/">
+                <div class="poetry-title">一剪梅•又快要被空调冻感冒了</div><div class="poetry-summary">
+                    一剪梅•又快要被空调冻感冒了 谁染枫红任意描？烟曳山腰，云倦青霄。
+樽前怎奈岁寒凋，雁字离人，桂子香招。
+忽有风来卷素绡，叶又萧萧，蛩又叨叨。
+醉醒何计对空调，不是春醪，是病难消。
+注释：对空调：解语为&#34;清秋寂寥&#34;。可也就是空调，冻死我了。
+日期：25.8.3
+
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">词</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st104_%E6%8B%9B%E7%A7%8B/">
+                <div class="poetry-title">招秋</div><div class="poetry-summary">
+                    招秋 商信卷葭苕，君恩薄素绡。
 鬓云羞落帽，苑土羡分茅。
 纵雁离人字，摧枝并剪刀。
 枝前无久夜，枝后路䬙䬙。
 注释：典故略；我无秋招，故招秋；谐音自拟。
 日期：25.8.4
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 招秋" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st104%E6%8B%9B%E7%A7%8B/"></a>
-</article>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">临江仙•失落一代
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>临江仙•失落一代 陌上樱云飞若雪，依稀梦里蓬莱。
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st105_%E4%B8%B4%E6%B1%9F%E4%BB%99%E5%A4%B1%E8%90%BD%E4%B8%80%E4%BB%A3/">
+                <div class="poetry-title">临江仙•失落一代</div><div class="poetry-summary">
+                    临江仙•失落一代 陌上樱云飞若雪，依稀梦里蓬莱。
 金银宫阙久尘埃。
 晚风吹酒醒，独上小楼台。
 五十年来身是客，输赢曾定休猜。
@@ -1164,124 +1600,59 @@
 青山无限好，无计买花开。
 注释：本词写日本&#34;失落的一代&#34;。
 日期：25.8.5
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 临江仙•失落一代" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st105%E4%B8%B4%E6%B1%9F%E4%BB%99%E5%A4%B1%E8%90%BD%E4%B8%80%E4%BB%A3/"></a>
-</article>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">蝶恋花·咏危瓷
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>蝶恋花·咏危瓷 釉底金鳞深几许？
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">词</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li><li>
+            <a href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st106_%E8%9D%B6%E6%81%8B%E8%8A%B1%E5%92%8F%E5%8D%B1%E7%93%B7/">
+                <div class="poetry-title">蝶恋花·咏危瓷</div><div class="poetry-summary">
+                    蝶恋花·咏危瓷 釉底金鳞深几许？
 不注清波，只恐瓶身去。
 忍看宫花红颤处，斜簪犹作扶风舞。
 宴散烛孤凝玉露。
 手抚危瓷，幽契凭谁诉？
 一霎风回惊且顾，满堂花月皆尘土。
-背景：咏物诗，最近冲浪了很久，故作此。
+背景： 咏物诗，最近冲浪了很久，故作此。
 日期：25.8.6
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 蝶恋花·咏危瓷" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st106%E8%9D%B6%E6%81%8B%E8%8A%B1%E5%92%8F%E5%8D%B1%E7%93%B7/"></a>
-</article>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st107/"></a>
-</article>
+                </div><div class="poetry-meta"><span>📅 2026-02-24</span><span class="tag">词</span><span class="tag">随吐集</span><span class="tag">正篇</span></div>
+            </a>
+        </li></ul>
+    <ul class="pagination pagination-default">
+      <li class="page-item">
+        <a href="/poetry/posts/suitu/" aria-label="First" class="page-link" role="button"><span aria-hidden="true">&laquo;&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/poetry/posts/suitu/page/10/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/poetry/posts/suitu/page/7/" aria-label="Page 7" class="page-link" role="button">7</a>
+      </li>
+      <li class="page-item">
+        <a href="/poetry/posts/suitu/page/8/" aria-label="Page 8" class="page-link" role="button">8</a>
+      </li>
+      <li class="page-item">
+        <a href="/poetry/posts/suitu/page/9/" aria-label="Page 9" class="page-link" role="button">9</a>
+      </li>
+      <li class="page-item">
+        <a href="/poetry/posts/suitu/page/10/" aria-label="Page 10" class="page-link" role="button">10</a>
+      </li>
+      <li class="page-item active">
+        <a aria-current="page" aria-label="Page 11" class="page-link" role="button">11</a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Next" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Last" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      </li>
+    </ul></div>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st108/"></a>
-</article>
+<div class="back-to-poetry">
+    <a href="/poetry/">← 返回诗歌首页</a>
+</div>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st109/"></a>
-</article>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st110/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/111-120/st111/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/111-120/st112/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p></p>
-  </div>
-  <footer class="entry-footer"><span>0 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></footer>
-  <a class="entry-link" aria-label="post link to " href="https://QwQBiG.github.io/poetry/posts/suitu/111-120/st113/"></a>
-</article>
-<footer class="page-footer">
-  <nav class="pagination">
-    <a class="prev" href="https://QwQBiG.github.io/poetry/posts/suitu/page/10/">
-      «&nbsp;Prev&nbsp;
-    </a>
-    <a class="next" href="https://QwQBiG.github.io/poetry/posts/suitu/page/12/">Next&nbsp;&nbsp;»
-    </a>
-  </nav>
-</footer>
     </main>
     
 <footer class="footer">
@@ -1577,6 +1948,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2348,21 +2724,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2371,7 +2760,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2381,11 +2770,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3018,7 +3411,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

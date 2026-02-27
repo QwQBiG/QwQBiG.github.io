@@ -23,7 +23,8 @@
 虫沙：&ldquo;一军尽化，君子为猿为鹤，小人为虫为沙。&ldquo;我此处小人指百姓，指人民子弟兵。
 凌烟：&ldquo;凌烟阁&rdquo;。
 
-背景：其实，教员与李贺&quot;关系很好&rdquo;，其中，&ldquo;天若有情天亦老，人间正道是沧桑。&ldquo;&ldquo;一唱雄鸡天下白，万方乐奏有于阗。&ldquo;皆语引李贺原诗。或许，&ldquo;今日长缨在手，何时缚住苍龙&rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。
+注释：
+其实，教员与李贺&quot;关系很好&rdquo;，其中，&ldquo;天若有情天亦老，人间正道是沧桑。&ldquo;&ldquo;一唱雄鸡天下白，万方乐奏有于阗。&ldquo;皆语引李贺原诗。或许，&ldquo;今日长缨在手，何时缚住苍龙&rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。
 日期：24.4.2">
 <meta name="author" content="白告">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/61-70/st068_%E5%91%95%E5%BF%83%E4%B8%80%E9%85%B9%E5%A8%84%E5%B1%B1%E5%85%B3/">
@@ -121,6 +122,17 @@
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -612,12 +624,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -637,16 +652,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -685,7 +719,7 @@
 黄尘碧水白骸筑，绿柳红墙紫禁残。
 泼酒虫沙何处吊，王侯不过贬凌烟。
 注释：
-此诗易见学的李贺，以酹&#34;雄关漫道真如铁，而今迈步从头越。“所写苍黄变易，如是尾联：一为缅先烈，二为意同教员反对新式&#34;军阀横道”。 烛龙：“衔烛龙”。 迂兵：指我军迂回战术。 颔联：是&#34;名实&#34;的对比。 黄尘碧水：“沧海桑田”。 虫沙：“一军尽化，君子为猿为鹤，小人为虫为沙。“我此处小人指百姓，指人民子弟兵。 凌烟：“凌烟阁”。 背景：其实，教员与李贺&#34;关系很好”，其中，“天若有情天亦老，人间正道是沧桑。““一唱雄鸡天下白，万方乐奏有于阗。“皆语引李贺原诗。或许，“今日长缨在手，何时缚住苍龙”，除反蒋外，可能也与李贺《苦昼短》相关吧。
+此诗易见学的李贺，以酹&#34;雄关漫道真如铁，而今迈步从头越。“所写苍黄变易，如是尾联：一为缅先烈，二为意同教员反对新式&#34;军阀横道”。 烛龙：“衔烛龙”。 迂兵：指我军迂回战术。 颔联：是&#34;名实&#34;的对比。 黄尘碧水：“沧海桑田”。 虫沙：“一军尽化，君子为猿为鹤，小人为虫为沙。“我此处小人指百姓，指人民子弟兵。 凌烟：“凌烟阁”。 注释： 其实，教员与李贺&#34;关系很好”，其中，“天若有情天亦老，人间正道是沧桑。““一唱雄鸡天下白，万方乐奏有于阗。“皆语引李贺原诗。或许，“今日长缨在手，何时缚住苍龙”，除反蒋外，可能也与李贺《苦昼短》相关吧。
 日期：24.4.2">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
@@ -714,7 +748,8 @@
 虫沙：&ldquo;一军尽化，君子为猿为鹤，小人为虫为沙。&ldquo;我此处小人指百姓，指人民子弟兵。
 凌烟：&ldquo;凌烟阁&rdquo;。
 
-背景：其实，教员与李贺&quot;关系很好&rdquo;，其中，&ldquo;天若有情天亦老，人间正道是沧桑。&ldquo;&ldquo;一唱雄鸡天下白，万方乐奏有于阗。&ldquo;皆语引李贺原诗。或许，&ldquo;今日长缨在手，何时缚住苍龙&rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。
+注释：
+其实，教员与李贺&quot;关系很好&rdquo;，其中，&ldquo;天若有情天亦老，人间正道是沧桑。&ldquo;&ldquo;一唱雄鸡天下白，万方乐奏有于阗。&ldquo;皆语引李贺原诗。或许，&ldquo;今日长缨在手，何时缚住苍龙&rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。
 日期：24.4.2">
 
 
@@ -728,6 +763,12 @@
       "position":  1 ,
       "name": "诗歌",
       "item": "https://QwQBiG.github.io/poetry/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
     }, 
     {
       "@type": "ListItem",
@@ -750,12 +791,12 @@
   "@type": "BlogPosting",
   "headline": "呕心一酹娄山关",
   "name": "呕心一酹娄山关",
-  "description": "呕心一酹娄山关 长缨云带吴钩月，此缚烛龙屠路餐。\n回日金车消蜀道，迂兵黯铁血娄关。\n黄尘碧水白骸筑，绿柳红墙紫禁残。\n泼酒虫沙何处吊，王侯不过贬凌烟。\n注释：\n此诗易见学的李贺，以酹\u0026quot;雄关漫道真如铁，而今迈步从头越。\u0026ldquo;所写苍黄变易，如是尾联：一为缅先烈，二为意同教员反对新式\u0026quot;军阀横道\u0026rdquo;。 烛龙：\u0026ldquo;衔烛龙\u0026rdquo;。 迂兵：指我军迂回战术。 颔联：是\u0026quot;名实\u0026quot;的对比。 黄尘碧水：\u0026ldquo;沧海桑田\u0026rdquo;。 虫沙：\u0026ldquo;一军尽化，君子为猿为鹤，小人为虫为沙。\u0026ldquo;我此处小人指百姓，指人民子弟兵。 凌烟：\u0026ldquo;凌烟阁\u0026rdquo;。 背景：其实，教员与李贺\u0026quot;关系很好\u0026rdquo;，其中，\u0026ldquo;天若有情天亦老，人间正道是沧桑。\u0026ldquo;\u0026ldquo;一唱雄鸡天下白，万方乐奏有于阗。\u0026ldquo;皆语引李贺原诗。或许，\u0026ldquo;今日长缨在手，何时缚住苍龙\u0026rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。\n日期：24.4.2\n",
+  "description": "呕心一酹娄山关 长缨云带吴钩月，此缚烛龙屠路餐。\n回日金车消蜀道，迂兵黯铁血娄关。\n黄尘碧水白骸筑，绿柳红墙紫禁残。\n泼酒虫沙何处吊，王侯不过贬凌烟。\n注释：\n此诗易见学的李贺，以酹\u0026quot;雄关漫道真如铁，而今迈步从头越。\u0026ldquo;所写苍黄变易，如是尾联：一为缅先烈，二为意同教员反对新式\u0026quot;军阀横道\u0026rdquo;。 烛龙：\u0026ldquo;衔烛龙\u0026rdquo;。 迂兵：指我军迂回战术。 颔联：是\u0026quot;名实\u0026quot;的对比。 黄尘碧水：\u0026ldquo;沧海桑田\u0026rdquo;。 虫沙：\u0026ldquo;一军尽化，君子为猿为鹤，小人为虫为沙。\u0026ldquo;我此处小人指百姓，指人民子弟兵。 凌烟：\u0026ldquo;凌烟阁\u0026rdquo;。 注释： 其实，教员与李贺\u0026quot;关系很好\u0026rdquo;，其中，\u0026ldquo;天若有情天亦老，人间正道是沧桑。\u0026ldquo;\u0026ldquo;一唱雄鸡天下白，万方乐奏有于阗。\u0026ldquo;皆语引李贺原诗。或许，\u0026ldquo;今日长缨在手，何时缚住苍龙\u0026rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。\n日期：24.4.2\n",
   "keywords": [
     "古体诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "呕心一酹娄山关 长缨云带吴钩月，此缚烛龙屠路餐。\n回日金车消蜀道，迂兵黯铁血娄关。\n黄尘碧水白骸筑，绿柳红墙紫禁残。\n泼酒虫沙何处吊，王侯不过贬凌烟。\n注释：\n此诗易见学的李贺，以酹\"雄关漫道真如铁，而今迈步从头越。“所写苍黄变易，如是尾联：一为缅先烈，二为意同教员反对新式\"军阀横道”。 烛龙：“衔烛龙”。 迂兵：指我军迂回战术。 颔联：是\"名实\"的对比。 黄尘碧水：“沧海桑田”。 虫沙：“一军尽化，君子为猿为鹤，小人为虫为沙。“我此处小人指百姓，指人民子弟兵。 凌烟：“凌烟阁”。 背景：其实，教员与李贺\"关系很好”，其中，“天若有情天亦老，人间正道是沧桑。““一唱雄鸡天下白，万方乐奏有于阗。“皆语引李贺原诗。或许，“今日长缨在手，何时缚住苍龙”，除反蒋外，可能也与李贺《苦昼短》相关吧。\n日期：24.4.2\n",
-  "wordCount" : "15",
+  "articleBody": "呕心一酹娄山关 长缨云带吴钩月，此缚烛龙屠路餐。\n回日金车消蜀道，迂兵黯铁血娄关。\n黄尘碧水白骸筑，绿柳红墙紫禁残。\n泼酒虫沙何处吊，王侯不过贬凌烟。\n注释：\n此诗易见学的李贺，以酹\"雄关漫道真如铁，而今迈步从头越。“所写苍黄变易，如是尾联：一为缅先烈，二为意同教员反对新式\"军阀横道”。 烛龙：“衔烛龙”。 迂兵：指我军迂回战术。 颔联：是\"名实\"的对比。 黄尘碧水：“沧海桑田”。 虫沙：“一军尽化，君子为猿为鹤，小人为虫为沙。“我此处小人指百姓，指人民子弟兵。 凌烟：“凌烟阁”。 注释： 其实，教员与李贺\"关系很好”，其中，“天若有情天亦老，人间正道是沧桑。““一唱雄鸡天下白，万方乐奏有于阗。“皆语引李贺原诗。或许，“今日长缨在手，何时缚住苍龙”，除反蒋外，可能也与李贺《苦昼短》相关吧。\n日期：24.4.2\n",
+  "wordCount" : "16",
   "inLanguage": "en",
   "datePublished": "2026-02-24T10:30:00+08:00",
   "dateModified": "2026-02-24T10:30:00+08:00",
@@ -1217,7 +1258,8 @@
 <li>虫沙：&ldquo;一军尽化，君子为猿为鹤，小人为虫为沙。&ldquo;我此处小人指百姓，指人民子弟兵。</li>
 <li>凌烟：&ldquo;凌烟阁&rdquo;。</li>
 </ol>
-<p><strong>背景</strong>：其实，教员与李贺&quot;关系很好&rdquo;，其中，&ldquo;天若有情天亦老，人间正道是沧桑。&ldquo;&ldquo;一唱雄鸡天下白，万方乐奏有于阗。&ldquo;皆语引李贺原诗。或许，&ldquo;今日长缨在手，何时缚住苍龙&rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。</p>
+<p><strong>注释</strong>：
+其实，教员与李贺&quot;关系很好&rdquo;，其中，&ldquo;天若有情天亦老，人间正道是沧桑。&ldquo;&ldquo;一唱雄鸡天下白，万方乐奏有于阗。&ldquo;皆语引李贺原诗。或许，&ldquo;今日长缨在手，何时缚住苍龙&rdquo;，除反蒋外，可能也与李贺《苦昼短》相关吧。</p>
 <p><strong>日期</strong>：24.4.2</p>
 </div><footer class="post-footer">
 <script src="https://giscus.app/client.js"
@@ -1531,6 +1573,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2302,21 +2349,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2325,7 +2385,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2335,11 +2395,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -2972,7 +3036,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

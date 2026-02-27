@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1102,13 +1135,77 @@
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">行香子•道闲愁
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>行香子•道闲愁 山外云悠，云外霞柔。眺霞边、恰似浮沤。清风拂袖，淡月盈钩。念谢公屐，庄生梦，谪仙舟。
+严光钓处，陶朱归否。问谁人、能解闲愁？古今兴废，皆付沙鸥。任舟中醉，醉中梦，梦中留。
+背景：（词林正韵）
+日期：25.1.23
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 行香子•道闲愁" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st091_%E8%A1%8C%E9%A6%99%E5%AD%90%E9%81%93%E9%97%B2%E6%84%81/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">情感是我意象的排泄物
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>情感是我意象的排泄物 情感是我意象的排泄物 比如说，我写： “雪，是老天的头皮屑扑扑簌簌” 有趣的同类即刻想到： “雨，应当也是老天的排泄物” 我笑道： “一朵孤独的积雨云里， 那雹子便是祂的结石” 毕竟嘛 文章是精神食粮 灵性被文火煨作汤 文人扯尽百转千结的柔肠 把文明剜出去 文身上标榜 就好似世有神明驻足 风趣地为文人推销开塞露 于是嘛： 情感是我意象的排泄物 而他们不一样： 朵朵积雨云充盈又有温度 文章是他们自己的排泄物。
+日期：25.2.28
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 情感是我意象的排泄物" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st092_%E6%83%85%E6%84%9F%E6%98%AF%E6%88%91%E6%84%8F%E8%B1%A1%E7%9A%84%E6%8E%92%E6%B3%84%E7%89%A9/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">罪
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>罪 你醒了… 我欲控诉 你予我的罪过
+把我的理性 锁在你搏动的匣 把我的七情 碎在你流转的火 煨作一锅定制的毒药 罪名为诱惑
+你偏执着 让我怀抱他人的能力 全被割舍 你冷漠着 让我候选他人的权利 全被剥夺 成为我世界的神创论 清醒着 让我沉沦着 不被达尔文选择
+你束缚我 像柳条紧握晚风 你玩弄我 像孩子手捧糖果 无助的我 被你支使成了菲佣 弱小的我 被你打理成了蠢货 我仍是我
+把我的病情 和你的罪行 凑合着过 做一对孤独患者 但先说好 如果有爱河 不是我&#34;坠入&#34; 而是自尽投河 “淇则有岸， 隰则有泮” 我仍是我
+为你罪行开脱的那一个
+日期：25.3.28
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 罪" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st093_%E7%BD%AA/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">相见欢·次韵后主
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>相见欢·次韵后主 暮云送尽归鸿，去何从？独倚危楼看老一江红。故国烬，铜驼泪，月如弓。忽化星漦散作蓼花风。
+注释：
+铜驼：承晋代索靖典故。 漦：（音迟），龙漦：周幽王典故。“龙漦帝后，识夏庭之遽衰。&#34;《为徐敬业讨武曌檄》骆宾王。 蓼花：秋季开放。Z只是次韵吧，绝非借尸还魂。 日期：25.7.19
+</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+  <a class="entry-link" aria-label="post link to 相见欢·次韵后主" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st094_%E7%9B%B8%E8%A7%81%E6%AC%A2%E6%AC%A1%E9%9F%B5%E5%90%8E%E4%B8%BB/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">行香子
     </h2>
   </header>
   <div class="entry-content">
     <p>行香子 团扇扑萤，纨素尘蒙。他日零星两池萍。莫惜行雨，且换追风。剩灯儿昏，影儿瘦，枕儿平。
 玉人独立，思君总念。似水衾纹咽更声。晨钟暮鼓，素手调羹。正灶烟细，茶烟淡，柳烟轻。
-注释：行雨指爱妾，追风意宝马。“忍将行雨换追风。&#34;《爱妾换马》张祜。
+背景：行雨指爱妾，追风意宝马。“忍将行雨换追风。&#34;《爱妾换马》张祜。
 日期：25.7.24
 </p>
   </div>
@@ -1208,122 +1305,6 @@ Now I’m trapped in love’s deadline It means: “Love, Dead and Line”. “L
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
   <a class="entry-link" aria-label="post link to 是孩子" href="https://QwQBiG.github.io/poetry/posts/suitu/91-100/st100_%E6%98%AF%E5%AD%A9%E5%AD%90/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">重读《金瓶梅》有感
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>重读《金瓶梅》有感 武大确实错了
-武二被逼反又不太容易
-唯金莲有知心姐姐王婆
-往西方，在西门大官人家里
-与李瓶儿等姐妹
-互助相宜
-武大被毒杀，那又咋啦
-竟不知这是金莲自诩一届女流的权利
-金莲又怎不知那西门官人床上
-淫眷贱妾
-可不过利己攀枝
-立什么牌坊贞洁
-事关公平正义，人命关天
-容不得小厮为卖炊饼的叫苦喊冤
-西门大官人贵为一省首富
-官府对那厮武二也不必去招安
-不过草芥飘萍，风吹即散
-说甚日后义结梁山？
-高太尉来来来，咱个把酒言欢
-日期：25.8.1
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 重读《金瓶梅》有感" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st101%E9%87%8D%E8%AF%BB%E9%87%91%E7%93%B6%E6%A2%85%E6%9C%89%E6%84%9F/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">重读《动物农场》有感
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>重读《动物农场》有感 我又发现了一个&#34;动物农场&#34;，
-串联于蜘蛛织就的一张网。
-周围伫立高高一道道防火的墙，
-防止那人类荼毒动物们的思想。
-守候这片纯净的地方，
-没有暴恐与赌黄。
-可是小猪们的繁殖本为天性，
-不能让压抑与禁令，
-变成滋养犯罪的温床。
-所以看吧：
-什么在挑逗动物们黄色的欲望；
-所以寻吧：
-看他们杀猪吃肉喝汤；
-这算自由吗？
-我不知道…
-纯洁有灵性的小鹿，她不懂：
-那些虎豹警察为何
-不全面查封这些污秽之地，
-便清净无需叨扰。
-而当社会舆论引爆农场，
-这边的小猪听到
-那边的小猪听不到。
-小鸟叽叽喳喳的叫…
-之后的小猪们，
-滚在泥潭一块玩儿玩儿，
-看一些其他动物们，
-做一些其他的无关紧要…
-有一天天清气爽，
-几只小猪坐在防火墙。
-“海的那面是什么？”
-“海的那边有…”
-什么算做自由呢？
-我不知道…
-还是做些无足轻重的事儿，
-对着大海发发牢骚…
-日期：25.8.2
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 重读《动物农场》有感" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st102%E9%87%8D%E8%AF%BB%E5%8A%A8%E7%89%A9%E5%86%9C%E5%9C%BA%E6%9C%89%E6%84%9F/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">一剪梅•又快要被空调冻感冒了
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>一剪梅•又快要被空调冻感冒了 谁染枫红任意描？烟曳山腰，云倦青霄。
-樽前怎奈岁寒凋，雁字离人，桂子香招。
-忽有风来卷素绡，叶又萧萧，蛩又叨叨。
-醉醒何计对空调，不是春醪，是病难消。
-注释：对空调：解语为&#34;清秋寂寥&#34;。可也就是空调，冻死我了。
-日期：25.8.3
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 一剪梅•又快要被空调冻感冒了" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st103%E4%B8%80%E5%89%AA%E6%A2%85%E5%8F%88%E5%BF%AB%E8%A6%81%E8%A2%AB%E7%A9%BA%E8%B0%83%E5%86%BB%E6%84%9F%E5%86%92%E4%BA%86/"></a>
-</article>
-
-<article class="post-entry tag-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">招秋
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>招秋 商信卷葭苕，君恩薄素绡。
-鬓云羞落帽，苑土羡分茅。
-纵雁离人字，摧枝并剪刀。
-枝前无久夜，枝后路䬙䬙。
-注释：典故略；我无秋招，故招秋；谐音自拟。
-日期：25.8.4
-</p>
-  </div>
-  <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 招秋" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st104%E6%8B%9B%E7%A7%8B/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
@@ -1629,6 +1610,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2400,21 +2386,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2423,7 +2422,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2433,11 +2432,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3070,7 +3073,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

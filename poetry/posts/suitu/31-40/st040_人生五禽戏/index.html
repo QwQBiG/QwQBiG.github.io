@@ -17,7 +17,8 @@
 狙：猕猴 &ldquo;众狙皆怒&rdquo; 《庄子·齐物论》
 俯首甘为：鲁迅《自嘲》
 
-背景：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
+注释：
+被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
 日期：23.8.4">
 <meta name="author" content="白告">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/31-40/st040_%E4%BA%BA%E7%94%9F%E4%BA%94%E7%A6%BD%E6%88%8F/">
@@ -115,6 +116,17 @@
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -606,12 +618,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -631,16 +646,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -677,7 +711,7 @@
   <meta property="og:description" content="人生五禽戏 朝暮投饼欺顽狙，俯首甘为马户驴。
 青花金荣不胜狗，鹏稚为雉谋摸鱼。
 注释：
-朝暮：“朝三暮四” 《庄子·齐物论》 狙：猕猴 “众狙皆怒” 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 背景：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
+朝暮：“朝三暮四” 《庄子·齐物论》 狙：猕猴 “众狙皆怒” 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 注释： 被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
 日期：23.8.4">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
@@ -700,7 +734,8 @@
 狙：猕猴 &ldquo;众狙皆怒&rdquo; 《庄子·齐物论》
 俯首甘为：鲁迅《自嘲》
 
-背景：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
+注释：
+被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。
 日期：23.8.4">
 
 
@@ -714,6 +749,12 @@
       "position":  1 ,
       "name": "诗歌",
       "item": "https://QwQBiG.github.io/poetry/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
     }, 
     {
       "@type": "ListItem",
@@ -736,12 +777,12 @@
   "@type": "BlogPosting",
   "headline": "人生五禽戏",
   "name": "人生五禽戏",
-  "description": "人生五禽戏 朝暮投饼欺顽狙，俯首甘为马户驴。\n青花金荣不胜狗，鹏稚为雉谋摸鱼。\n注释：\n朝暮：\u0026ldquo;朝三暮四\u0026rdquo; 《庄子·齐物论》 狙：猕猴 \u0026ldquo;众狙皆怒\u0026rdquo; 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 背景：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。\n日期：23.8.4\n",
+  "description": "人生五禽戏 朝暮投饼欺顽狙，俯首甘为马户驴。\n青花金荣不胜狗，鹏稚为雉谋摸鱼。\n注释：\n朝暮：\u0026ldquo;朝三暮四\u0026rdquo; 《庄子·齐物论》 狙：猕猴 \u0026ldquo;众狙皆怒\u0026rdquo; 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 注释： 被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。\n日期：23.8.4\n",
   "keywords": [
     "古体诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "人生五禽戏 朝暮投饼欺顽狙，俯首甘为马户驴。\n青花金荣不胜狗，鹏稚为雉谋摸鱼。\n注释：\n朝暮：“朝三暮四” 《庄子·齐物论》 狙：猕猴 “众狙皆怒” 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 背景：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。\n日期：23.8.4\n",
-  "wordCount" : "12",
+  "articleBody": "人生五禽戏 朝暮投饼欺顽狙，俯首甘为马户驴。\n青花金荣不胜狗，鹏稚为雉谋摸鱼。\n注释：\n朝暮：“朝三暮四” 《庄子·齐物论》 狙：猕猴 “众狙皆怒” 《庄子·齐物论》 俯首甘为：鲁迅《自嘲》 注释： 被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。\n日期：23.8.4\n",
+  "wordCount" : "13",
   "inLanguage": "en",
   "datePublished": "2026-02-24T10:30:00+08:00",
   "dateModified": "2026-02-24T10:30:00+08:00",
@@ -1197,7 +1238,8 @@
 <li>狙：猕猴 &ldquo;众狙皆怒&rdquo; 《庄子·齐物论》</li>
 <li>俯首甘为：鲁迅《自嘲》</li>
 </ol>
-<p><strong>背景</strong>：被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。</p>
+<p><strong>注释</strong>：
+被时代朝三暮四画饼的猴子，驯化成见多识广又可默不作声的优质磨驴。像那，清华金融系的九冠王柯洁终败于阿尔法狗，也终同化成狗头人铁分奴。便知，心中怀揣幼稚的鸿鹕之志总比不上现实中尚有力量可以扑扇翅膀的鸡。可总是自我感动的鲲鹏，和贪求摸鱼的鸡，他要在社会市场中标价未来，再在时代中跳一出五禽戏。</p>
 <p><strong>日期</strong>：23.8.4</p>
 </div><footer class="post-footer">
 <script src="https://giscus.app/client.js"
@@ -1511,6 +1553,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2282,21 +2329,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2305,7 +2365,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2315,11 +2375,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -2952,7 +3016,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

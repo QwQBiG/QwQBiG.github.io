@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1112,7 +1145,7 @@
 卿卿性命红中土，恣垩从容郢人顾。
 伶客青眸嗟尔汝？
 碧云天锁，莲桥枫渡，渊默霜惊鹭。
-背景：理想托我作此言。
+背景： 理想托我作此言。
 日期：22.12.3
 </p>
   </div>
@@ -1130,7 +1163,7 @@
 杖倚青苍蓑雨颠。
 丹龙走笔学天帝，仄海平川，不啻鸿言，
 取次花丛虫语喧。
-背景：史，政器、自慰，皆，止增笑耳。
+背景： 史，政器、自慰，皆，止增笑耳。
 日期：22.12.5
 </p>
   </div>
@@ -1148,7 +1181,7 @@
 铁马冰河，万千广厦，忍求贪睡？
 魂泉揽术屠龙？倚天剑、凭空断水。
 石塑弥音，叶公长乐，鸟虫分袂？
-背景：政治批评。
+背景： 政治批评。
 日期：22.12.8
 </p>
   </div>
@@ -1171,7 +1204,7 @@
 今与不周齐粉碎，岂安天道为牲畜。
 这社稷，遍血肉河山，皆黎庶！
 注释：
-桃花源：“陶令不知何处去，桃花源里可耕田？“《七律·登庐山》毛泽东。 金棒过：“金猴奋起千钧棒，玉宇澄清万里埃。“《七律·和郭沫若同志》毛泽东。 背景：诗谨循人民史观，唯物史观。个人崇拜不要搞，可像列宁在《国家与革命》中所说：要把我们共产主义者塑成无害雕像，那当然更是不让。
+桃花源：“陶令不知何处去，桃花源里可耕田？&#34;《七律·登庐山》毛泽东。 金棒过：“金猴奋起千钧棒，玉宇澄清万里埃。&#34;《七律·和郭沫若同志》毛泽东。 背景： 诗谨循人民史观，唯物史观。个人崇拜不要搞，可像列宁在《国家与革命》中所说：要把我们共产主义者塑成无害雕像，那当然更是不让。
 日期：23.1.24
 </p>
   </div>
@@ -1190,7 +1223,7 @@
 万语千番托照月，
 愁思一碗酒当泼，
 难与外人说。
-背景：“无感霜风侵蚀骨，此生煎熬难与外人吐。&#34;《蝶恋花·向板仓》毛泽东。
+背景： “无感霜风侵蚀骨，此生煎熬难与外人吐。&#34;《蝶恋花·向板仓》毛泽东。
 日期：23.1.29
 </p>
   </div>
@@ -1206,7 +1239,7 @@
   <div class="entry-content">
     <p>捣练子•辞劳 拾倦体，价功曹，笑向囚天可试刀。
 只罢贱蛾争赴炬，必颠星焰覆新朝。
-背景：多音。
+背景： 多音。
 日期：23.2.17
 </p>
   </div>
@@ -1222,7 +1255,7 @@
   <div class="entry-content">
     <p>忆王孙•佯嗔 昔人劳许颂卑文，绪醉泥躯赖拄魂。
 仙盼千年且幸闻。笑同尘，共剑光兮辞月樽。
-背景：赖拄句，学的”天欲堕,赖以拄其间“《十六字令》毛泽东。
+背景： 赖拄句，学的”天欲堕,赖以拄其间“《十六字令》毛泽东。
 日期：23.2.21
 </p>
   </div>
@@ -1239,7 +1272,7 @@
     <p>调笑令•佛经 “隔命，隔命，万法闹猴泼性。”
 怪皆朝我山灵，天簿歌吾涧清。
 “竹罄，竹罄，仙去妖风未定。”
-背景：同音。
+背景： 同音。
 日期：23.2.21
 </p>
   </div>
@@ -1257,7 +1290,7 @@
 广寒彩练舞香烟，谁为素娥请愿？
 笙月拂衣霜路，箫风唤夜浓眠。
 通天大道步无边，风月世来人探。
-背景：实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。
+背景： 实也为咏怀毛主席。“广寒彩练舞香烟”学的“赤橙黄绿青蓝紫，谁持彩练当空舞？”《菩萨蛮·大柏地》毛泽东。
 日期：23.2.23
 </p>
   </div>
@@ -1275,7 +1308,7 @@
 世人咲我忒疯癫。朝生暮死，花酒壮人言。
 知我者忧忧何处，良辰美景人全。
 心潮痴许逝余年。清浊沧浪，不废覆苍天。
-背景：与伊共勉！
+背景： 与伊共勉！
 日期：23.3.5
 </p>
   </div>
@@ -1583,6 +1616,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2354,21 +2392,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2377,7 +2428,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2387,11 +2438,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3024,7 +3079,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

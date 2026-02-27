@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1130,7 +1163,7 @@
 还殢江流，多情依旧，催愁舟去。
 醒蓬瀛绮梦，沧桑正道，话渔樵曲。
 注释：
-“枕上片时春梦中，行尽江南数千里。“岑参《春梦》。本词与岑参诗的背景相似。 “垆边人似月，皓腕凝霜雪。“韦庄《菩萨蛮》。 “江南无所有，聊赠一枝春。“陆凯《赠范晔诗》。 “弱柳从风疑举袂，丛兰裛露似沾巾。“刘禹锡《忆江南》。 辛弃疾《水龙吟·登建康赏心亭》。 “天若有情天亦老，人间正道是沧桑。&#34;《七律•人民解放军占领南京》。 背景：（受不了一点。书上《白香词谱》与网上的有几处谬误，还全是我用专有名词的地儿…图个乐呵叭。）
+“枕上片时春梦中，行尽江南数千里。“岑参《春梦》。本词与岑参诗的背景相似。 “垆边人似月，皓腕凝霜雪。“韦庄《菩萨蛮》。 “江南无所有，聊赠一枝春。“陆凯《赠范晔诗》。 “弱柳从风疑举袂，丛兰裛露似沾巾。“刘禹锡《忆江南》。 辛弃疾《水龙吟·登建康赏心亭》。 “天若有情天亦老，人间正道是沧桑。&#34;《七律•人民解放军占领南京》。 注释： （受不了一点。书上《白香词谱》与网上的有几处谬误，还全是我用专有名词的地儿…图个乐呵叭。）
 日期：24.12.22
 </p>
   </div>
@@ -1146,7 +1179,7 @@
   <div class="entry-content">
     <p>行香子•道闲愁 山外云悠，云外霞柔。眺霞边、恰似浮沤。清风拂袖，淡月盈钩。念谢公屐，庄生梦，谪仙舟。
 严光钓处，陶朱归否。问谁人、能解闲愁？古今兴废，皆付沙鸥。任舟中醉，醉中梦，梦中留。
-注释：（词林正韵）
+背景：（词林正韵）
 日期：25.1.23
 </p>
   </div>
@@ -1177,7 +1210,7 @@
   <div class="entry-content">
     <p>行香子 团扇扑萤，纨素尘蒙。他日零星两池萍。莫惜行雨，且换追风。剩灯儿昏，影儿瘦，枕儿平。
 玉人独立，思君总念。似水衾纹咽更声。晨钟暮鼓，素手调羹。正灶烟细，茶烟淡，柳烟轻。
-注释：行雨指爱妾，追风意宝马。“忍将行雨换追风。&#34;《爱妾换马》张祜。
+背景：行雨指爱妾，追风意宝马。“忍将行雨换追风。&#34;《爱妾换马》张祜。
 日期：25.7.24
 </p>
   </div>
@@ -1216,7 +1249,7 @@
 </p>
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 一剪梅•又快要被空调冻感冒了" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st103%E4%B8%80%E5%89%AA%E6%A2%85%E5%8F%88%E5%BF%AB%E8%A6%81%E8%A2%AB%E7%A9%BA%E8%B0%83%E5%86%BB%E6%84%9F%E5%86%92%E4%BA%86/"></a>
+  <a class="entry-link" aria-label="post link to 一剪梅•又快要被空调冻感冒了" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st103_%E4%B8%80%E5%89%AA%E6%A2%85%E5%8F%88%E5%BF%AB%E8%A6%81%E8%A2%AB%E7%A9%BA%E8%B0%83%E5%86%BB%E6%84%9F%E5%86%92%E4%BA%86/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -1236,7 +1269,7 @@
 </p>
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 临江仙•失落一代" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st105%E4%B8%B4%E6%B1%9F%E4%BB%99%E5%A4%B1%E8%90%BD%E4%B8%80%E4%BB%A3/"></a>
+  <a class="entry-link" aria-label="post link to 临江仙•失落一代" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st105_%E4%B8%B4%E6%B1%9F%E4%BB%99%E5%A4%B1%E8%90%BD%E4%B8%80%E4%BB%A3/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 
@@ -1251,12 +1284,12 @@
 宴散烛孤凝玉露。
 手抚危瓷，幽契凭谁诉？
 一霎风回惊且顾，满堂花月皆尘土。
-背景：咏物诗，最近冲浪了很久，故作此。
+背景： 咏物诗，最近冲浪了很久，故作此。
 日期：25.8.6
 </p>
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-  <a class="entry-link" aria-label="post link to 蝶恋花·咏危瓷" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st106%E8%9D%B6%E6%81%8B%E8%8A%B1%E5%92%8F%E5%8D%B1%E7%93%B7/"></a>
+  <a class="entry-link" aria-label="post link to 蝶恋花·咏危瓷" href="https://QwQBiG.github.io/poetry/posts/suitu/101-110/st106_%E8%9D%B6%E6%81%8B%E8%8A%B1%E5%92%8F%E5%8D%B1%E7%93%B7/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
@@ -1560,6 +1593,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2331,21 +2369,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2354,7 +2405,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2364,11 +2415,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3001,7 +3056,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

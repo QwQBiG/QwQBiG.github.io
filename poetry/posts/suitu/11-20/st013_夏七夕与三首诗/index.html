@@ -177,6 +177,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -666,12 +677,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -691,16 +705,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -877,6 +910,12 @@
     }, 
     {
       "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
+    }, 
+    {
+      "@type": "ListItem",
       "position":  3 ,
       "name": "《随吐集》",
       "item": "https://QwQBiG.github.io/poetry/posts/suitu/"
@@ -900,8 +939,8 @@
   "keywords": [
     "现代诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "夏、七夕与三首诗 七夕结于夏暑，\n我与夏天缘起于斑驳树影。\n爱她指缝滑落的新晖，\n撞在池潭间的泠泠轻音，\n爱她如抽芽风信子的残霞古山，\n火热颜色，\n曲卷着委婉浪漫。\n饭碗、脸盆，\n转场着夏日素朴；\n新月、满月，\n回闪着谁的多舛。\n柴米油盐酱醋，\n我教夏天暖茶赠你，\n总会凉，\n再沏上，\n莫凉了我化的顾望。\n记起木心慢慢的从前，\n挂起的时间，\n“嘀嗒嗒\"地响，\n像老师父告诫学徒：\n“不要误！”\n赌书，泼茶，趣对，\n我许下往后每一夏日早午，\n檐下藤椅上呢喃的青春，\n唔，诗页折的纸飞机便有了归宿。\n念头，\n是崔护的人面桃花，\n灼灼如拭的面容；\n是撷下王维玲珑的红豆，\n用相思熬成的苦粥。\n是你小别不经意地挥袖，\n没带走，\n我身边却飘来彩云甜柔。\n是银河里两叶浮槎，\n纵来，纵去，脉脉寻游，\n梦入君眸。\n蝉是夏的精灵，\n昙花是最纯洁的美玉。\n你说，和着蝉鸣，\n睡梦中能听到昙花盛放的声音，\n我想，思念你，\n梦会是心动的涟漪。\n两指抵唇， 你对蝉的议论作噤声示意； 轻挥私语， 嘈杂是夏天的你， 热烈如炬； 飞舞翩翩的花火， 燃尽风景外的闲绪。\n你， 仍是盛夏的你， 我早已， 零作枯萍碎去。 欣喜的是， 在最憧憬清凉时投诚夏天。 毕竟秋雨与冬雪也会， 失意，老去， 而我只留美好与你， 回忆，期许。\n葬花后又被风割裂的琴弦， 花落了， 经年还会满山， 琴断了， 累月可生五十弦。 别了， 青衫上涕泗的哀泉， 别了， 秦观的一鹊双仙。 思忖西窗点滴， 千秋万里， 不争朝夕。\n西风将荡却流淌的月华， 奠夏天沉闷快活一朵清霜。 今夜喜鹊曾在几世的梦里陈情， 早已惘然，只道寻常。 杯盏煮过物是人非的憔悴， 饮干， 未凉， 心窗几经新添纸， 只余微光。\n别了，再续——\n背景：七夕前夜作成，七夕时七点七分发出，此情绵绵。趣味兴佳，多典故，具画面感。“王维诗里的红豆好像是有毒的嘛~”\n日期：22.8\n",
-  "wordCount" : "84",
+  "articleBody": "夏、七夕与三首诗 七夕结于夏暑，\n我与夏天缘起于斑驳树影。\n爱她指缝滑落的新晖，\n撞在池潭间的泠泠轻音，\n爱她如抽芽风信子的残霞古山，\n火热颜色，\n曲卷着委婉浪漫。\n饭碗、脸盆，\n转场着夏日素朴；\n新月、满月，\n回闪着谁的多舛。\n柴米油盐酱醋，\n我教夏天暖茶赠你，\n总会凉，\n再沏上，\n莫凉了我化的顾望。\n记起木心慢慢的从前，\n挂起的时间，\n“嘀嗒嗒\"地响，\n像老师父告诫学徒：\n“不要误！”\n赌书，泼茶，趣对，\n我许下往后每一夏日早午，\n檐下藤椅上呢喃的青春，\n唔，诗页折的纸飞机便有了归宿。\n念头，\n是崔护的人面桃花，\n灼灼如拭的面容；\n是撷下王维玲珑的红豆，\n用相思熬成的苦粥。\n是你小别不经意地挥袖，\n没带走，\n我身边却飘来彩云甜柔。\n是银河里两叶浮槎，\n纵来，纵去，脉脉寻游，\n梦入君眸。\n蝉是夏的精灵，\n昙花是最纯洁的美玉。\n你说，和着蝉鸣，\n睡梦中能听到昙花盛放的声音，\n我想，思念你，\n梦会是心动的涟漪。\n两指抵唇， 你对蝉的议论作噤声示意； 轻挥私语， 嘈杂是夏天的你， 热烈如炬； 飞舞翩翩的花火， 燃尽风景外的闲绪。\n你， 仍是盛夏的你， 我早已， 零作枯萍碎去。 欣喜的是， 在最憧憬清凉时投诚夏天。 毕竟秋雨与冬雪也会， 失意，老去， 而我只留美好与你， 回忆，期许。\n葬花后又被风割裂的琴弦， 花落了， 经年还会满山， 琴断了， 累月可生五十弦。 别了， 青衫上涕泗的哀泉， 别了， 秦观的一鹊双仙。 思忖西窗点滴， 千秋万里， 不争朝夕。\n西风将荡却流淌的月华， 奠夏天沉闷快活一朵清霜。 今夜喜鹊曾在几世的梦里陈情， 早已惘然，只道寻常。 杯盏煮过物是人非的憔悴， 饮干， 未凉， 心窗几经新添纸， 只余微光。\n别了，再续——\n背景： 七夕前夜作成，七夕时七点七分发出，此情绵绵。趣味兴佳，多典故，具画面感。“王维诗里的红豆好像是有毒的嘛~”\n日期：22.8\n",
+  "wordCount" : "85",
   "inLanguage": "en",
   "datePublished": "2026-02-24T10:30:00+08:00",
   "dateModified": "2026-02-24T10:30:00+08:00",
@@ -1430,7 +1469,8 @@
 只余微光。</p>
 <p>别了，再续——</p>
 <hr>
-<p><strong>背景</strong>：七夕前夜作成，七夕时七点七分发出，此情绵绵。趣味兴佳，多典故，具画面感。“王维诗里的红豆好像是有毒的嘛~”</p>
+<p><strong>背景</strong>：
+七夕前夜作成，七夕时七点七分发出，此情绵绵。趣味兴佳，多典故，具画面感。“王维诗里的红豆好像是有毒的嘛~”</p>
 <p><strong>日期</strong>：22.8</p>
 </div><footer class="post-footer">
 <script src="https://giscus.app/client.js"
@@ -1744,6 +1784,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2515,21 +2560,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2538,7 +2596,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2548,11 +2606,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3185,7 +3247,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

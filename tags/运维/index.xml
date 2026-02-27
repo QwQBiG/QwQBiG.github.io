@@ -4,15 +4,15 @@
     <title>运维 on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/%E8%BF%90%E7%BB%B4/</link>
     <description>Recent content in 运维 on QwQBiG&#39;s World</description>
-    <generator>Hugo -- 0.156.0</generator>
+    <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 29 Nov 2025 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>远程失灵了</title>
-      <link>https://QwQBiG.github.io/cs/posts/yuancheng/</link>
+      <link>https://QwQBiG.github.io/cs/posts/yunweiseries/yuancheng/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/yuancheng/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/yunweiseries/yuancheng/</guid>
       <description>&lt;h1 id=&#34;docker-部署-frp-客户端避坑指南&#34;&gt;Docker 部署 FRP 客户端避坑指南&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用于：&lt;/strong&gt; Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。&lt;/p&gt;
 &lt;h2 id=&#34;核心结论&#34;&gt;核心结论&lt;/h2&gt;
@@ -52,9 +52,9 @@
     </item>
     <item>
       <title>K8s学习笔记</title>
-      <link>https://QwQBiG.github.io/cs/posts/yunweistudy/</link>
+      <link>https://QwQBiG.github.io/cs/posts/yunweiseries/yunweistudy/</link>
       <pubDate>Tue, 18 Nov 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/yunweistudy/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/yunweiseries/yunweistudy/</guid>
       <description>&lt;h1 id=&#34;kubernetes-学习笔记-1&#34;&gt;Kubernetes 学习笔记 1&lt;/h1&gt;
 &lt;h2 id=&#34;核心思想篇两大基石&#34;&gt;核心思想篇：两大基石&lt;/h2&gt;
 &lt;h3 id=&#34;1-为何选择-kubernetes&#34;&gt;1. 为何选择 Kubernetes？&lt;/h3&gt;
@@ -94,9 +94,9 @@
     </item>
     <item>
       <title>我の组会</title>
-      <link>https://QwQBiG.github.io/cs/posts/zuhui/</link>
+      <link>https://QwQBiG.github.io/cs/posts/yunweiseries/zuhui/</link>
       <pubDate>Fri, 14 Nov 2025 15:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/zuhui/</guid>
+      <guid>https://QwQBiG.github.io/cs/posts/yunweiseries/zuhui/</guid>
       <description>&lt;h2 id=&#34;组会报告-1&#34;&gt;组会报告 1&lt;/h2&gt;
 &lt;p&gt;容我想想上几周我干了什么：&lt;/p&gt;
 &lt;p&gt;首先在最开始，我搞了一个VMware开始玩弄Ubuntu，这个时候，我是在有这个项目通知之前，到货了一个鸿蒙系统的平板（书接上回），凭借“来都来了”与“捣鼓捣鼓”的心态，我开始安装搞termux和X11，想着搞个linux终端玩玩，但是因为鸿蒙，所以是无法启动的，但是我都看了好几个视频了，还是想试试linux，所以从电脑装了VMware，我这边是跟着千峰的（BV1VH1aBtEz2 ）视频来的，主要学的是虚拟机相关内容，同时包括一些Ubuntu命令：基础的ls,apt,tree,cd,pwd,cat,管道，重定向等，安装了插件：vmtools,samba,一些命令提示组件啥的（还有TheFuck，白月光），接触了主要是用SSH协议的Xshell远程终端（最后扔了）。算是对linux的Ubuntu发行版有了基础认识哈。（千峰的东西还是太过时了qwq）&lt;/p&gt;
@@ -126,13 +126,6 @@
 &lt;h4 id=&#34;主要是-k8s-本地环境搭建与-pod-编排&#34;&gt;主要是 K8s 本地环境搭建与 Pod 编排：&lt;/h4&gt;
 &lt;p&gt;&lt;strong&gt;1. 可恶的网：Kind + 国内源&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;由于 Minikube 网络受限，转用 Kind (Kubernetes in Docker)。通过配置 GOPROXY 完成源码编译安装，配合 kind-config.yaml 定制国内镜像源及端口映射，解决了环境初始化问题。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>运维</title>
-      <link>https://QwQBiG.github.io/cs/series/yunwei/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/cs/series/yunwei/</guid>
-      <description>Linux运维、Docker、K8s等技术实践</description>
     </item>
   </channel>
 </rss>

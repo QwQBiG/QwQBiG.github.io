@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1209,7 +1242,7 @@
   <div class="entry-content">
     <p>生查子•冬半 故人自雪来，参与商流亚。天地掷杨花，垒块推心话。
 日暹云客归，再别光天大。冰与骨冻结，雪共心融化。
-背景：垒块与光天有意。
+背景： 垒块与光天有意。
 日期：24.2.15
 </p>
   </div>
@@ -1225,7 +1258,7 @@
   <div class="entry-content">
     <p>相见欢•伤怀 妾非日日开怀，绪难裁。失弁二八花钿却君钗。
 林下卧，月明错，几重来？如此莺迁龙化剩胡柴。
-背景：“雪满山中高士卧，月明林下美人来。&#34;《咏梅九首》高启。此作梅花好景欲逝之哀嗟。
+背景： “雪满山中高士卧，月明林下美人来。&#34;《咏梅九首》高启。此作梅花好景欲逝之哀嗟。
 日期：24.2.16
 </p>
   </div>
@@ -1243,7 +1276,7 @@
 晋往陈情彰孝表，楚来掩涕赋离骚。
 心生恻隐方名泪，怒里无情乞舜尧。
 世事沧桑民尽苦，应觉一梦烂柯樵。
-背景：不注释了，简单翻译一下。首联写的是李白，他虽然写从&#34;天姥连天向横&#34;或者&#34;蚕丛及鱼凫&#34;那般&#34;安能摧眉折腰事权贵，使我不得开心颜&#34;；却仍然是把所谓一纸雄文写就了《与韩荆州书》，把韩荆州比作周公吐哺，尧舜之人，自降身份说如果到他门下就可以，如鲤鱼跃龙门一般，“幸愿张开心颜…&#34;。颔联写了李密《陈情表》，屈原《离骚》，“晋往，楚来&#34;写的便是他做文章的统治阶级性质，我们说李密向晋武帝呈文之时，蜀灭吴仍存，李密曾仕蜀汉，晋王以此招安以彰圣上自己之圣明；毕竟在几年后，李密真的来做官的时候，只有一个小小官职，最后又因一些小小的事就受贬回乡。对于另一边的屈原来说，主要是要写爱国不是奉君守礼，不是&#34;乞舜尧”。同时，“晋往，楚来&#34;从时间上来说是开历史的倒车。颈联直抒胸臆，尾联典化&#34;天若有情天亦老，人间正道是沧桑&#34;以及&#34;兴，百姓苦，亡，百姓苦”，最后昏昏然大梦初醒，感觉这封建历史正如烂柯棋局一般，只余重复。最后尝觉古代写诗很大一部分是体现在文化方面上的世袭手段，阶级划分方式。
+背景： 不注释了，简单翻译一下。首联写的是李白，他虽然写从&#34;天姥连天向横&#34;或者&#34;蚕丛及鱼凫&#34;那般&#34;安能摧眉折腰事权贵，使我不得开心颜&#34;；却仍然是把所谓一纸雄文写就了《与韩荆州书》，把韩荆州比作周公吐哺，尧舜之人，自降身份说如果到他门下就可以，如鲤鱼跃龙门一般，“幸愿张开心颜…&#34;。颔联写了李密《陈情表》，屈原《离骚》，“晋往，楚来&#34;写的便是他做文章的统治阶级性质，我们说李密向晋武帝呈文之时，蜀灭吴仍存，李密曾仕蜀汉，晋王以此招安以彰圣上自己之圣明；毕竟在几年后，李密真的来做官的时候，只有一个小小官职，最后又因一些小小的事就受贬回乡。对于另一边的屈原来说，主要是要写爱国不是奉君守礼，不是&#34;乞舜尧”。同时，“晋往，楚来&#34;从时间上来说是开历史的倒车。颈联直抒胸臆，尾联典化&#34;天若有情天亦老，人间正道是沧桑&#34;以及&#34;兴，百姓苦，亡，百姓苦”，最后昏昏然大梦初醒，感觉这封建历史正如烂柯棋局一般，只余重复。最后尝觉古代写诗很大一部分是体现在文化方面上的世袭手段，阶级划分方式。
 日期：24.2.20
 </p>
   </div>
@@ -1572,6 +1605,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2343,21 +2381,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2366,7 +2417,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2376,11 +2427,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3013,7 +3068,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

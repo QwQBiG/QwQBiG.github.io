@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1108,8 +1141,8 @@
   <div class="entry-content">
     <p>涵英 白虹挽日笑颜晴，丝竹掩罄乐魂萦。
 神游老庄魏晋亭，偷来闲灯焕五经。
-背景：在一青，中午早到学校，静候人流，便下楼在紫藤萝连廊里偷瞥众人，悠然自得，无所烦事。今念之，白驹过隙，故情难觅。
 闲话：这首诗并非我所写的第一首诗，但是由于本诗是我当时认为还算有点意趣、可以入眼，所以才收录于此。以及，白虹是当时跑操时确有发生的事，即“日晕”现象。
+背景： 在一青，中午早到学校，静候人流，便下楼在紫藤萝连廊里偷瞥众人，悠然自得，无所烦事。今念之，白驹过隙，故情难觅。
 日期：2021.12.9
 </p>
   </div>
@@ -1126,8 +1159,8 @@
     <p>随吐 金戈铁马，年少风发。流雉群，玉鹤啧讶。
 廉颇老乏？拳向愁暇。阑倚断，青衫泪下。
 村尨齐牙，秽土叱咤。吠声近，人间不假。
-背景：早年间掉书袋作品，自诩才盖贾生，鹤立鸡群，不过愿景未成现实，空自忧愁忉忉之语。
 闲话：可以入眼。
+背景： 早年间掉书袋作品，自诩才盖贾生，鹤立鸡群，不过愿景未成现实，空自忧愁忉忉之语。
 日期：22.3.2
 </p>
   </div>
@@ -1154,8 +1187,8 @@
 帝王抚褴，升平歌舞饮杯欢。
 梦美失鼾，望眼凭栏霞竟残。
 脉脉醉眼，思情倚云帆。
-背景：大唐盛世，此作品是友人投笔，夜半写之，短促洒之，不甚成辞之作。可所谓大唐却是&#34;望眼凭栏霞竟残&#34;。
 闲话：物华天宝，人杰地灵。然而我最最有感觉的是一句“梦美失鼾”。
+背景： 大唐盛世，此作品是友人投笔，夜半写之，短促洒之，不甚成辞之作。可所谓大唐却是&#34;望眼凭栏霞竟残&#34;。
 日期：2022.3.2
 </p>
   </div>
@@ -1205,7 +1238,7 @@
   <div class="entry-content">
     <p>一池蛙 蛙号厚鼓恸我心，小池烟柳唤不亲。
 汨罗乌地历历影，匝匝心鸣漫不矜。
-背景：青蛙大晚上叫个不停，伤时之情作此。
+背景： 青蛙大晚上叫个不停，伤时之情作此。
 日期：22.4.10
 </p>
   </div>
@@ -1223,7 +1256,7 @@
 绣闼雕亭盼登临，乌峰白冠适中行。
 龙门跃鲤困涸辙，晖落化霞待新晴。
 孤鹜逐明悠空影，秋水长天最似卿。
-背景：此作，适时临近中考，放学收拾晚些，没记错我们在三楼，栏外长云似化鲸落，云如海波，叹为观止；归家途中，乌云如峰，白云作雪，似有亭台搂阁林立，美极。
+背景： 此作，适时临近中考，放学收拾晚些，没记错我们在三楼，栏外长云似化鲸落，云如海波，叹为观止；归家途中，乌云如峰，白云作雪，似有亭台搂阁林立，美极。
 日期：22.6
 </p>
   </div>
@@ -1239,7 +1272,7 @@
   <div class="entry-content">
     <p>赠别 雨霁乱虹晴自濡，浮槎星海瞰江湖。
 小窗周易春色奂，不作弱风哀残烛。
-背景：“闲坐小窗读周易，不知春去几多时。&#34;《暮春即事》叶采。考前赠别友人之作，相濡以沫，不若相忘于江湖。
+背景： “闲坐小窗读周易，不知春去几多时。&#34;《暮春即事》叶采。考前赠别友人之作，相濡以沫，不若相忘于江湖。
 日期：22.6
 </p>
   </div>
@@ -1255,7 +1288,7 @@
   <div class="entry-content">
     <p>无题 落第松邱惹疚愁，鱼游鹤唳断箜篌。
 眠花藉柳邀醉月，我落人间一风流。
-背景：记吾中考没考好，正是语文作文字未够，仍记得题目是&#34;机遇&#34;，甚是嘲讽，字若够了便多十分去一新，可能别是一番风景，但题目是&#34;机遇&#34;，甚是有趣，今我笑盈盈，如此，甚好。然后&#34;眠花藉柳&#34;我应无淫乱之义。
+背景： 记吾中考没考好，正是语文作文字未够，仍记得题目是&#34;机遇&#34;，甚是嘲讽，字若够了便多十分去一新，可能别是一番风景，但题目是&#34;机遇&#34;，甚是有趣，今我笑盈盈，如此，甚好。然后&#34;眠花藉柳&#34;我应无淫乱之义。
 日期：22.7
 </p>
   </div>
@@ -1273,7 +1306,7 @@
 体撞长钟非瓮豸，眸容日月换新天。
 操邀煮酒梅青路，浪引飞舟杏红船。
 阒寂雷惊鸡唱晓，心寰地阔任吾言。
-背景：荃不察乎？
+背景： 荃不察乎？
 日期：22.8
 </p>
   </div>
@@ -1581,6 +1614,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2352,21 +2390,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2375,7 +2426,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2385,11 +2436,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3022,7 +3077,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

@@ -33,7 +33,8 @@
 风儿颠到喧嚣才是最终，
 终于一切都只是风颠。
 
-背景：&ldquo;风是我为自嘲，风非我为讽喻。&ldquo;写作背景是老师给我们布置的作业。
+背景：
+&ldquo;风是我为自嘲，风非我为讽喻。&ldquo;写作背景是老师给我们布置的作业。
 日期：24.3.25">
 <meta name="author" content="白告">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/61-70/st067_%E9%A3%8E%E9%A2%A0/">
@@ -131,6 +132,17 @@
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -622,12 +634,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -647,16 +662,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -714,7 +748,7 @@
 手汗上晶莹的回忆，“不过是风颠”;
 风儿颠到喧嚣才是最终，
 终于一切都只是风颠。
-背景：“风是我为自嘲，风非我为讽喻。“写作背景是老师给我们布置的作业。
+背景： “风是我为自嘲，风非我为讽喻。“写作背景是老师给我们布置的作业。
 日期：24.3.25">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
@@ -753,7 +787,8 @@
 风儿颠到喧嚣才是最终，
 终于一切都只是风颠。
 
-背景：&ldquo;风是我为自嘲，风非我为讽喻。&ldquo;写作背景是老师给我们布置的作业。
+背景：
+&ldquo;风是我为自嘲，风非我为讽喻。&ldquo;写作背景是老师给我们布置的作业。
 日期：24.3.25">
 
 
@@ -767,6 +802,12 @@
       "position":  1 ,
       "name": "诗歌",
       "item": "https://QwQBiG.github.io/poetry/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
     }, 
     {
       "@type": "ListItem",
@@ -789,12 +830,12 @@
   "@type": "BlogPosting",
   "headline": "风颠",
   "name": "风颠",
-  "description": "风颠 风颠是青年的厚书卷，\n哗哗啦啦，是几楼坠下的三年；\n风儿被六月鹅毛涤净，\n鹅毛是阳春别后的笑颜。\n风颠是听令的星辰，\n流过了，那君王的后宫就叫时间；\n风儿再问问阿多尼斯，\n错爱一片不属于自己的花园。\n风颠是少女的玉铃铛，\n羊车寻不到的腰儿，不过一曲烟；\n风儿为花卿折了细柳，\n留住心尖上断序的秋天。\n风颠是人间的鸡毛掸，\n哔哔剥剥，是天上仙人的床单；\n风儿被团团云朵推搡，\n云朵是天空吐出的白棉。\n风颠是不来回的枝儿，\n石尤急，吹来一双停摆的新燕；\n风儿有心无意地雕琢，\n羽饰他们避犹不及的弓弦。\n风颠是诗人颤抖的诗篇，\n手汗上晶莹的回忆，\u0026ldquo;不过是风颠\u0026rdquo;;\n风儿颠到喧嚣才是最终，\n终于一切都只是风颠。\n背景：\u0026ldquo;风是我为自嘲，风非我为讽喻。\u0026ldquo;写作背景是老师给我们布置的作业。\n日期：24.3.25\n",
+  "description": "风颠 风颠是青年的厚书卷，\n哗哗啦啦，是几楼坠下的三年；\n风儿被六月鹅毛涤净，\n鹅毛是阳春别后的笑颜。\n风颠是听令的星辰，\n流过了，那君王的后宫就叫时间；\n风儿再问问阿多尼斯，\n错爱一片不属于自己的花园。\n风颠是少女的玉铃铛，\n羊车寻不到的腰儿，不过一曲烟；\n风儿为花卿折了细柳，\n留住心尖上断序的秋天。\n风颠是人间的鸡毛掸，\n哔哔剥剥，是天上仙人的床单；\n风儿被团团云朵推搡，\n云朵是天空吐出的白棉。\n风颠是不来回的枝儿，\n石尤急，吹来一双停摆的新燕；\n风儿有心无意地雕琢，\n羽饰他们避犹不及的弓弦。\n风颠是诗人颤抖的诗篇，\n手汗上晶莹的回忆，\u0026ldquo;不过是风颠\u0026rdquo;;\n风儿颠到喧嚣才是最终，\n终于一切都只是风颠。\n背景： \u0026ldquo;风是我为自嘲，风非我为讽喻。\u0026ldquo;写作背景是老师给我们布置的作业。\n日期：24.3.25\n",
   "keywords": [
     "现代诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "风颠 风颠是青年的厚书卷，\n哗哗啦啦，是几楼坠下的三年；\n风儿被六月鹅毛涤净，\n鹅毛是阳春别后的笑颜。\n风颠是听令的星辰，\n流过了，那君王的后宫就叫时间；\n风儿再问问阿多尼斯，\n错爱一片不属于自己的花园。\n风颠是少女的玉铃铛，\n羊车寻不到的腰儿，不过一曲烟；\n风儿为花卿折了细柳，\n留住心尖上断序的秋天。\n风颠是人间的鸡毛掸，\n哔哔剥剥，是天上仙人的床单；\n风儿被团团云朵推搡，\n云朵是天空吐出的白棉。\n风颠是不来回的枝儿，\n石尤急，吹来一双停摆的新燕；\n风儿有心无意地雕琢，\n羽饰他们避犹不及的弓弦。\n风颠是诗人颤抖的诗篇，\n手汗上晶莹的回忆，“不过是风颠”;\n风儿颠到喧嚣才是最终，\n终于一切都只是风颠。\n背景：“风是我为自嘲，风非我为讽喻。“写作背景是老师给我们布置的作业。\n日期：24.3.25\n",
-  "wordCount" : "27",
+  "articleBody": "风颠 风颠是青年的厚书卷，\n哗哗啦啦，是几楼坠下的三年；\n风儿被六月鹅毛涤净，\n鹅毛是阳春别后的笑颜。\n风颠是听令的星辰，\n流过了，那君王的后宫就叫时间；\n风儿再问问阿多尼斯，\n错爱一片不属于自己的花园。\n风颠是少女的玉铃铛，\n羊车寻不到的腰儿，不过一曲烟；\n风儿为花卿折了细柳，\n留住心尖上断序的秋天。\n风颠是人间的鸡毛掸，\n哔哔剥剥，是天上仙人的床单；\n风儿被团团云朵推搡，\n云朵是天空吐出的白棉。\n风颠是不来回的枝儿，\n石尤急，吹来一双停摆的新燕；\n风儿有心无意地雕琢，\n羽饰他们避犹不及的弓弦。\n风颠是诗人颤抖的诗篇，\n手汗上晶莹的回忆，“不过是风颠”;\n风儿颠到喧嚣才是最终，\n终于一切都只是风颠。\n背景： “风是我为自嘲，风非我为讽喻。“写作背景是老师给我们布置的作业。\n日期：24.3.25\n",
+  "wordCount" : "28",
   "inLanguage": "en",
   "datePublished": "2026-02-24T10:30:00+08:00",
   "dateModified": "2026-02-24T10:30:00+08:00",
@@ -1266,7 +1307,8 @@
 风儿颠到喧嚣才是最终，<br>
 终于一切都只是风颠。</p>
 <hr>
-<p><strong>背景</strong>：&ldquo;风是我为自嘲，风非我为讽喻。&ldquo;写作背景是老师给我们布置的作业。</p>
+<p><strong>背景</strong>：
+&ldquo;风是我为自嘲，风非我为讽喻。&ldquo;写作背景是老师给我们布置的作业。</p>
 <p><strong>日期</strong>：24.3.25</p>
 </div><footer class="post-footer">
 <script src="https://giscus.app/client.js"
@@ -1580,6 +1622,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2351,21 +2398,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2374,7 +2434,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2384,11 +2444,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3021,7 +3085,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

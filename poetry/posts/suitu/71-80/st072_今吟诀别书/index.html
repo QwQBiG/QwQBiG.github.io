@@ -5,19 +5,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>QwQBiG&#39;s World</title>
-<meta name="keywords" content="">
+<title>今吟诀别书 | QwQBiG&#39;s World</title>
+<meta name="keywords" content="古体诗, 随吐集, 正篇, 早期作品">
 <meta name="description" content="今吟诀别书
-z
 春消馀寒，冲天香透，桃花无源，菊花空瘦。
 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。
 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别，
 努力加餐勿念妾，时日萱草，春芳尽歇！
-z
 ①《诀别书》：卓文君与司马相如故事。
-②三种花：毕竟“百花杀”。劝君勉力于此之意。
+②三种花：毕竟&quot;百花杀&quot;。劝君勉力于此之意。
 24.5.2">
-<meta name="author" content="map[name:QwQBiG]">
+<meta name="author" content="白告">
 <link rel="canonical" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st072_%E4%BB%8A%E5%90%9F%E8%AF%80%E5%88%AB%E4%B9%A6/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://QwQBiG.github.io/favicon.ico">
@@ -113,6 +111,17 @@ z
     
     const mainElement = document.querySelector('main') || document.body;
     mainElement.classList.add('page-container');
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
     
     
     document.addEventListener('click', handleLinkClick, true);
@@ -604,12 +613,15 @@ z
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -629,16 +641,35 @@ z
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -671,22 +702,26 @@ z
 </script>
 <meta property="og:url" content="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st072_%E4%BB%8A%E5%90%9F%E8%AF%80%E5%88%AB%E4%B9%A6/">
   <meta property="og:site_name" content="QwQBiG&#39;s World">
-  <meta property="og:title" content="QwQBiG&#39;s World">
-  <meta property="og:description" content="今吟诀别书 z 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ z ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟“百花杀”。劝君勉力于此之意。 24.5.2">
+  <meta property="og:title" content="今吟诀别书">
+  <meta property="og:description" content="今吟诀别书 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟&#34;百花杀&#34;。劝君勉力于此之意。 24.5.2">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="poetry">
+    <meta property="article:published_time" content="2026-02-24T10:30:00+08:00">
+    <meta property="article:modified_time" content="2026-02-24T10:30:00+08:00">
+    <meta property="article:tag" content="古体诗">
+    <meta property="article:tag" content="随吐集">
+    <meta property="article:tag" content="正篇">
+    <meta property="article:tag" content="早期作品">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="">
+<meta name="twitter:title" content="今吟诀别书">
 <meta name="twitter:description" content="今吟诀别书
-z
 春消馀寒，冲天香透，桃花无源，菊花空瘦。
 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。
 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别，
 努力加餐勿念妾，时日萱草，春芳尽歇！
-z
 ①《诀别书》：卓文君与司马相如故事。
-②三种花：毕竟“百花杀”。劝君勉力于此之意。
+②三种花：毕竟&quot;百花杀&quot;。劝君勉力于此之意。
 24.5.2">
 
 
@@ -703,6 +738,12 @@ z
     }, 
     {
       "@type": "ListItem",
+      "position":  2 ,
+      "name": "诗歌文章",
+      "item": "https://QwQBiG.github.io/poetry/posts/"
+    }, 
+    {
+      "@type": "ListItem",
       "position":  3 ,
       "name": "《随吐集》",
       "item": "https://QwQBiG.github.io/poetry/posts/suitu/"
@@ -710,7 +751,7 @@ z
     {
       "@type": "ListItem",
       "position":  4 ,
-      "name": "",
+      "name": "今吟诀别书",
       "item": "https://QwQBiG.github.io/poetry/posts/suitu/71-80/st072_%E4%BB%8A%E5%90%9F%E8%AF%80%E5%88%AB%E4%B9%A6/"
     }
   ]
@@ -720,20 +761,20 @@ z
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "",
-  "name": "",
-  "description": "今吟诀别书 z 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ z ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟“百花杀”。劝君勉力于此之意。 24.5.2\n",
+  "headline": "今吟诀别书",
+  "name": "今吟诀别书",
+  "description": "今吟诀别书 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟\u0026quot;百花杀\u0026quot;。劝君勉力于此之意。 24.5.2\n",
   "keywords": [
-    
+    "古体诗", "随吐集", "正篇", "早期作品"
   ],
-  "articleBody": "今吟诀别书 z 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ z ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟“百花杀”。劝君勉力于此之意。 24.5.2\n",
-  "wordCount" : "10",
+  "articleBody": "今吟诀别书 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟\"百花杀\"。劝君勉力于此之意。 24.5.2\n",
+  "wordCount" : "8",
   "inLanguage": "en",
-  "datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "datePublished": "2026-02-24T10:30:00+08:00",
+  "dateModified": "2026-02-24T10:30:00+08:00",
   "author":{
     "@type": "Person",
-    "name": {"name":"QwQBiG"}
+    "name": "白告"
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -1173,15 +1214,13 @@ z
         </ul>
     </nav>
 </header><main class="main"><article class="post-single">
-  <header class="post-header"><h1 class="post-title"></h1></header><div class="post-content"><p>今吟诀别书
-z
-春消馀寒，冲天香透，桃花无源，菊花空瘦。
+  <header class="post-header"><h1 class="post-title">今吟诀别书</h1><div class="post-meta"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></div></header><div class="post-content"><h3 id="今吟诀别书">今吟诀别书</h3>
+<p>春消馀寒，冲天香透，桃花无源，菊花空瘦。
 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。
 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别，
 努力加餐勿念妾，时日萱草，春芳尽歇！
-z
 ①《诀别书》：卓文君与司马相如故事。
-②三种花：毕竟“百花杀”。劝君勉力于此之意。
+②三种花：毕竟&quot;百花杀&quot;。劝君勉力于此之意。
 24.5.2</p>
 </div><footer class="post-footer">
 <script src="https://giscus.app/client.js"
@@ -1495,6 +1534,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2266,21 +2310,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2289,7 +2346,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2299,11 +2356,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -2936,7 +2997,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

@@ -107,6 +107,17 @@
     mainElement.classList.add('page-container');
     
     
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
+    
+    
     document.addEventListener('click', handleLinkClick, true);
     
     
@@ -596,12 +607,15 @@
       const newToggle = themeToggle.cloneNode(true);
       themeToggle.parentNode.replaceChild(newToggle, themeToggle);
       
-      newToggle.addEventListener('click', () => {
+      newToggle.addEventListener('click', (e) => {
         
         const scrollPos = window.pageYOffset;
         setTimeout(() => {
           window.scrollTo(0, scrollPos);
         }, 0);
+        
+        
+        handleThemeToggle();
       });
     }
   }
@@ -621,16 +635,35 @@
     if (themeToggle) {
       themeToggle.addEventListener('click', handleThemeToggle);
     }
+    
+    
+    const html = document.querySelector('html');
+    const body = document.querySelector('body');
+    const currentTheme = html.dataset.theme;
+    
+    if (currentTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
   function handleThemeToggle() {
     const html = document.querySelector('html');
+    const body = document.querySelector('body');
     const currentTheme = html.dataset.theme;
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     html.dataset.theme = newTheme;
     localStorage.setItem('pref-theme', newTheme);
+    
+    
+    if (newTheme === 'dark') {
+      body.classList.add('dark');
+    } else {
+      body.classList.remove('dark');
+    }
   }
   
   
@@ -1111,6 +1144,7 @@
     </nav>
 </header><main class="main">
 
+
 <style>
  
 .poetry-section-header {
@@ -1148,6 +1182,12 @@ body.dark .poetry-section-header p {
     margin-bottom: 50px;
 }
 
+.poetry-series-section .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
 .section-title {
     font-size: 1.5rem;
     margin-bottom: 20px;
@@ -1172,52 +1212,223 @@ body.dark .poetry-section-header p {
 }
 
  
+.poetry-list-section .posts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.poetry-list-section .post-entry {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.08) 0%, rgba(255, 179, 167, 0.08) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.poetry-list-section .post-entry::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ffafcc 0%, #ffb3a7 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.poetry-list-section .post-entry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 175, 204, 0.3);
+    border-color: rgba(255, 175, 204, 0.4);
+}
+
+.poetry-list-section .post-entry:hover::before {
+    opacity: 1;
+}
+
+.poetry-list-section .post-entry .entry-header h2 a {
+    color: #ff9a9e;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.poetry-list-section .post-entry:hover .entry-header h2 a {
+    color: #ff6b8a;
+}
+
+.poetry-list-section .post-entry .entry-content {
+    color: #666;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.poetry-list-section .post-entry .entry-footer {
+    font-size: 0.85rem;
+    color: #999;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.poetry-list-section .post-entry .entry-footer span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.poetry-list-section .post-entry .entry-footer .tag {
+    background: rgba(255, 175, 204, 0.15);
+    color: #ff9a9e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+body.dark .poetry-list-section .post-entry {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
+    border-color: rgba(255, 175, 204, 0.3);
+}
+
+body.dark .poetry-list-section .post-entry .entry-content {
+    color: #aaa;
+}
+
+body.dark .poetry-list-section .post-entry .entry-footer {
+    color: #777;
+}
+
+body.dark .poetry-list-section .post-entry .entry-footer .tag {
+    background: rgba(255, 175, 204, 0.2);
+    color: #ffb3a7;
+}
+
+ 
+@media (max-width: 768px) {
+    .poetry-list-section .posts-list,
+    .poetry-series-section .series-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .poetry-list-section .post-entry,
+    .poetry-series-section .poetry-series-card {
+        padding: 15px;
+    }
+    
+    .poetry-list-section .post-entry .entry-header h2 a {
+        font-size: 1.1rem;
+    }
+}
+
+ 
 .poetry-series-card {
-    background: #fff;
-    border: 1px solid #e9ecef;
+     
+    background: #fff; 
+     
+    border: 1px solid #e9ecef; 
+    
+     
     border-left-width: 5px;
     border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
+
     box-shadow: 0 3px 6px rgba(0,0,0,0.05);
     padding: 25px;
     border-radius: 8px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    position: relative;
+    transition: all 0.3s ease;  
 }
 
+ 
 .poetry-series-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
 }
 
+ 
+.poetry-series-card .entry-title a {
+    color: #8a2be2 !important; 
+    transition: color 0.3s ease;
+}
+
+ 
+.poetry-series-card .entry-title a::before {
+    content: "🎀 合集 · ";
+    color: #8a2be2;
+}
+
+ 
+
+ 
 body.dark .poetry-series-card {
-    background: #2e2e33;
+     
+    background: #2e2e33; 
+     
     border-color: #444;
+     
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
+ 
 body.dark .poetry-series-card:hover {
+     
     background: #36363d;
+     
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
-.poetry-series-card .entry-title a {
-    color: #8a2be2 !important;
-    font-size: 1.3rem;
-    font-weight: 600;
-}
-
+ 
 body.dark .poetry-series-card .entry-title a {
-    color: #d0a9f5 !important;
+    color: #d0a9f5 !important; 
 }
 
-.poetry-series-card .entry-content {
-    color: #666;
-    margin-top: 10px;
+ 
+body.dark .poetry-series-card .entry-title a::before {
+    color: #d0a9f5;
 }
 
+ 
 body.dark .poetry-series-card .entry-content {
-    color: #b0b0b0;
+    color: #b0b0b0;  
+}
+
+ 
+.poetry-series-card .entry-footer {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 15px;
+}
+
+.poetry-series-card .entry-footer ul.post-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.poetry-series-card .entry-footer ul.post-tags li {
+    margin: 0;
+}
+
+.poetry-series-card .entry-footer ul.post-tags li a {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+ 
+body.dark .poetry-series-card .entry-footer {
+    color: #777;
+}
+
+body.dark .poetry-series-card .entry-footer ul.post-tags li a {
+    color: #adb5bd;
 }
 
  
@@ -1245,24 +1456,74 @@ body.dark .poetry-series-card .entry-content {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
 }
+
+ 
+.entry-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    cursor: pointer;
+}
+
+ 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 10px;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pagination a {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.1) 0%, rgba(255, 179, 167, 0.1) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.2);
+    color: #ff9a9e;
+}
+
+.pagination a:hover {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.2) 0%, rgba(255, 179, 167, 0.2) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+}
+
+.pagination span.current {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    font-weight: 600;
+}
+
+body.dark .pagination a {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.2) 0%, rgba(255, 179, 167, 0.2) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.3);
+    color: #ffb3a7;
+}
+
+body.dark .pagination a:hover {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.3) 0%, rgba(255, 179, 167, 0.3) 100%);
+}
+
+body.dark .pagination span.current {
+    background: linear-gradient(135deg, #ff6b8a 0%, #ff9a9e 100%);
+}
 </style>
 
 <div class="poetry-section-header">
     <h1><span class="emoji">🌸</span> 诗歌</h1>
     <p>文字与情感的交织，记录生活中的诗意瞬间</p>
 </div>
-
-<div class="poetry-series-section">
-    <h2 class="section-title">诗歌系列</h2><article class="post-entry poetry-series-card">
-        <header class="entry-header">
-            <h2 class="entry-title">
-                <a href="https://QwQBiG.github.io/poetry/posts/suitu/">《随吐集》</a>
-            </h2>
-        </header><div class="entry-content">
-            <p>说明 时间顺序收录，所以可以去最后一页看看最近的内容~ 所谓背景内容是写序的时候统一整理写成的，就是高中那时候闲爽了。
-</p>
-        </div><a class="entry-link" aria-label="post link to 《随吐集》" href="https://QwQBiG.github.io/poetry/posts/suitu/"></a>
-    </article></div>
 <div class="poetry-list-section">
     <h2 class="section-title">诗歌</h2>
     <div class="posts-list"><article class="post-entry">
@@ -1276,7 +1537,7 @@ body.dark .poetry-series-card .entry-content {
 注释：
 解凤：解开绣着凤凰的锦衣。 阳台：巫山云雨。 解语：解语花。 鬓云：指头发散乱。 齐眉：夫妻相敬如宾之状。 萱草：《诗札》中载：“自后人以谖草为萱草，遂起萱草忘忧之说。“后人有&#34;思君如萱草，一见乃忘忧。” 宿妆：留的隔夜妆。 枕腻：枕上沾留情泪。 金缕：金缕衣 鸂：亦作&#34;鸂鶆”。水鸟名。形大于鸳鸯，而多紫色，好并游。俗称紫鸳鸯。山西祁县方言中特指讨人喜欢的意思。 仙府：府仙人洞府。此句典引&#34;刘阮遇仙&#34;。有怨怼之意。 青骢：毛色青白相杂的骏马。其典故略多，可自拟之。 日期：24.4.6
 </p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">词</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
             
             <a class="entry-link" aria-label="post link to 菩萨蛮" href="https://QwQBiG.github.io/poetry/posts/suitu/61-70/st070_%E8%8F%A9%E8%90%A8%E8%9B%AE/"></a>
         </article><article class="post-entry">
@@ -1310,9 +1571,60 @@ body.dark .poetry-series-card .entry-content {
 唯是&#34;花开易折直须折&#34;…
 日期：24.5.1
 </p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">现代诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
             
             <a class="entry-link" aria-label="post link to 妓传" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st071_%E5%A6%93%E4%BC%A0/"></a>
+        </article><article class="post-entry">
+            <header class="entry-header">
+                <h2>
+                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st072_%E4%BB%8A%E5%90%9F%E8%AF%80%E5%88%AB%E4%B9%A6/">今吟诀别书</a>
+                </h2>
+            </header><div class="entry-content">
+                <p>今吟诀别书 春消馀寒，冲天香透，桃花无源，菊花空瘦。 负心书生，仗义屠狗，恨怒悲苦，嗟世之人兮，践于史而如囿。 参与商，胡与越，山海盟，弃上邪，尺素笺，无诀别， 努力加餐勿念妾，时日萱草，春芳尽歇！ ①《诀别书》：卓文君与司马相如故事。 ②三种花：毕竟&#34;百花杀&#34;。劝君勉力于此之意。 24.5.2
+</p>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
+            
+            <a class="entry-link" aria-label="post link to 今吟诀别书" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st072_%E4%BB%8A%E5%90%9F%E8%AF%80%E5%88%AB%E4%B9%A6/"></a>
+        </article><article class="post-entry">
+            <header class="entry-header">
+                <h2>
+                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st073_%E9%98%B4/">阴</a>
+                </h2>
+            </header><div class="entry-content">
+                <p>阴 终日天阴花暗放，踯躅岂为小香庭。 云归欲雨还无雨，人去等晴未有晴。 ①连廊处确有一小块，仅一小块位置，花香沁人，教人流连。 ②谐音：“雨&#34;与&#34;晴”。 ③&#34;东边日出西边雨，道是无晴却有晴。&#34;《竹枝词二首•其一》刘禹锡。 24.5.5
+</p>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
+            
+            <a class="entry-link" aria-label="post link to 阴" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st073_%E9%98%B4/"></a>
+        </article><article class="post-entry">
+            <header class="entry-header">
+                <h2>
+                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st074_%E7%AD%94%E9%97%B0%E6%B3%BD%E8%BE%9E/">答闰泽辞</a>
+                </h2>
+            </header><div class="entry-content">
+                <p>答闰泽辞 费神之处，三两斟酌。兴言达意，如酒当泼。策光阴以留辙，泅浮生而回波。酹黄尘化渌水，唯造物失清浊。寄千古渔樵唱，拄此生未竟歌，獭祭鱼固文薄，鹿蒙蕉殊非我。
+同游既短，亦和钟期，再祈珍重，言不尽意，昔鹤形轻，今飞无羁，抱琴复来，余韵未息。赋四美以贺路，劝二难而欣松。恨世味总愿违，冀短长亦相逢。甘受和以益美，白受采而方容。卿亦逆旅之客，吾非西域之钟。既诸君以同览，亦万象而盘桓。明知其也无涯，道情其也有言。愿兴感为汗竹，姑推心代树萱。时鸡鹜以争食，今龙凤而游渊。胡为乎傞傞欲何之，意起以天地小，心动而日月乱。
+勉兮愿兮，须乐孟嘉吹帽，勿嗟王粲登楼。快哉也矣，人世今兮晦明无定，唯幸好岁正植，青白流眄人变，江湖濡沫谁惜？醉去且眠云下，琴来聊有风齐。 24.5.25
+</p>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
+            
+            <a class="entry-link" aria-label="post link to 答闰泽辞" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st074_%E7%AD%94%E9%97%B0%E6%B3%BD%E8%BE%9E/"></a>
+        </article><article class="post-entry">
+            <header class="entry-header">
+                <h2>
+                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st075_%E5%8D%81%E4%B8%83%E5%B2%81/">十七岁</a>
+                </h2>
+            </header><div class="entry-content">
+                <p>十七岁 这是一滩 躁动的死水， 就业与婚姻 像是生活的大烟； 这是县城 她的十七岁， 失业与离婚 像是下酒的余餐。
+麦子是几片外婆的海， 孩子 一群群泛红的青涩； 生殖是几根大地的芽， 升职 一次次晕光的绛色； 涩的是口音 裹着土壤， 寒喧 揶揄 回忆 和沉默， 她的是笑容 品着往来， 日月走了 她感觉留不住什么。
+她不习惯吸二手烟， 尤其是茶里的烟， 肺叶里 人情与关系， 她感觉刻意 又存在意义， 可像是窒息 又不知觉， 倒被人玷污被风摧残在地。
+哪有什么小桥流水， 只有她那噎着鱼刺的十七岁。 风鸣云淡 她感觉没一分虚伪， 温存的虫儿 温柔的夜 不如早睡。
+喜 怒 哀 惧， 在黄土里 都开出花。 围城或怪圈， 你的对错又该去问谁。
+这些都是要素 才杂揉出你我， 她感觉 也不必留住什么。 坏坏的东西 更显出你爱的多， 美好的东西 那就天天对你说， 她想说 拜托~ 十七岁以后麻烦请你陪着我。 24.6.9
+</p>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">现代诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
+            
+            <a class="entry-link" aria-label="post link to 十七岁" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st075_%E5%8D%81%E4%B8%83%E5%B2%81/"></a>
         </article><article class="post-entry">
             <header class="entry-header">
                 <h2>
@@ -1321,10 +1633,10 @@ body.dark .poetry-series-card .entry-content {
             </header><div class="entry-content">
                 <p>为文 文章否泰亡国曲，舞醉新人起后妆。
 黔首何闻唐夜宴？千家铁马踏《霓裳》。
-背景：所以这个书名号该不该加呢…
+背景： 所以这个书名号该不该加呢…
 日期：24.7.13
 </p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
             
             <a class="entry-link" aria-label="post link to 为文" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st076_%E4%B8%BA%E6%96%87/"></a>
         </article><article class="post-entry">
@@ -1337,10 +1649,10 @@ body.dark .poetry-series-card .entry-content {
 宿雨疑为泪，滴滴点点流。
 方湿红蓼岸，又打白𬞟洲。
 人事应如月，圆缺不自由。
-注释：偷春格。
+背景：偷春格。
 日期：24.7.20
 </p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
             
             <a class="entry-link" aria-label="post link to 与君语•相思别恨" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st077_%E4%B8%8E%E5%90%9B%E8%AF%AD%E7%9B%B8%E6%80%9D%E5%88%AB%E6%81%A8/"></a>
         </article><article class="post-entry">
@@ -1354,7 +1666,7 @@ body.dark .poetry-series-card .entry-content {
 注释：
 仙舟：典出《后汉书·郭太传》。此典被广泛用于比喻知己或与名人的交往。 日期：24.7.21
 </p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
             
             <a class="entry-link" aria-label="post link to 船女事" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st078_%E8%88%B9%E5%A5%B3%E4%BA%8B/"></a>
         </article><article class="post-entry">
@@ -1368,77 +1680,9 @@ body.dark .poetry-series-card .entry-content {
 注释：
 舌在：纵横家张仪典故。 颂匪徒：《匪徒颂》郭沫若同志作。 日期：24.7.22
 </p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
+            </div><footer class="entry-footer"><span>📅 2026-02-24</span><span class="tag">古体诗</span><span class="tag">随吐集</span><span class="tag">正篇</span></footer>
             
             <a class="entry-link" aria-label="post link to 哭文人" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st079_%E5%93%AD%E6%96%87%E4%BA%BA/"></a>
-        </article><article class="post-entry">
-            <header class="entry-header">
-                <h2>
-                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st080_%E5%8A%9D%E8%80%83%E7%94%9F/">劝考生</a>
-                </h2>
-            </header><div class="entry-content">
-                <p>劝考生 太祖杀鸡科举禁，重来高考恍新身。
-劝君范进浑应羡，伏案叶生九死魂。
-注释：
-太祖禁科举：明初朱元璋停止科举。 杀鸡：杀鸡儆猴，以儆效尤。 叶生：典出《聊斋志异》。姓叶的读书人死了还埋头科举。 日期：24.7.23
-</p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-            
-            <a class="entry-link" aria-label="post link to 劝考生" href="https://QwQBiG.github.io/poetry/posts/suitu/71-80/st080_%E5%8A%9D%E8%80%83%E7%94%9F/"></a>
-        </article><article class="post-entry">
-            <header class="entry-header">
-                <h2>
-                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st081_%E5%8A%9D%E8%87%AA%E5%B7%B1/">劝自己</a>
-                </h2>
-            </header><div class="entry-content">
-                <p>劝自己 今生绝类青楼梦，不是头牌不是人。
-幸赏三文伏案费，为君赎我自由身。
-背景：与上一篇对映为之。
-日期：24.7.24
-</p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-            
-            <a class="entry-link" aria-label="post link to 劝自己" href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st081_%E5%8A%9D%E8%87%AA%E5%B7%B1/"></a>
-        </article><article class="post-entry">
-            <header class="entry-header">
-                <h2>
-                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st082_%E8%B0%92%E9%87%91%E9%97%A8%E4%B8%89%E7%95%AA%E8%A5%BF%E5%8E%A2%E8%AE%B0/">谒金门•三番《西厢记》</a>
-                </h2>
-            </header><div class="entry-content">
-                <p>谒金门•三番《西厢记》 （郎）
-平危难，心系美人书剑。
-近水楼台相见晚，玉足花径短。
-执手长亭相唤，错把状元来盼。
-晚辈姓张不姓阮，有情人眷眷。
-（妻）
-偷铺簟，四顾绿红深浅。
-欢处欲将春弄乱，做莺莺燕燕。
-相见世无足羡，同宿更将郎念。
-玉搅芙蕖飞若涧，映烛红浪卷。
-（吾）
-西厢苑，秾曲净压皇忏。
-双玉读完心点染，恰巫山雨便。
-蝶使蜂媒无倦，才子佳人不厌。
-四韵俱成成爽点，逗得金圣叹。
-注释：
-词一：“阮&#34;为&#34;刘阮遇仙&#34;之典。 词二：词与人争艳。 词三：①皇忏：《梁皇忏》《玉皇忏》之诸佛家法事。②双玉：指林黛玉，贾宝玉偷读《西厢记》。③巫山云雨：点出个元稹的诗句&#34;曾经沧海难为水，除却巫山不是云。“因为王实甫之《西厢记》本为元稹《莺莺传》改编。④爽点：是因为这个小说味很典型。⑤金圣叹：其把《西厢记》评为&#34;六大才子书&#34;之一。 日期：24.7.27
-</p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-            
-            <a class="entry-link" aria-label="post link to 谒金门•三番《西厢记》" href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st082_%E8%B0%92%E9%87%91%E9%97%A8%E4%B8%89%E7%95%AA%E8%A5%BF%E5%8E%A2%E8%AE%B0/"></a>
-        </article><article class="post-entry">
-            <header class="entry-header">
-                <h2>
-                    <a href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st083_%E6%BD%87%E6%B9%98%E5%A4%9C%E9%9B%A8%E5%A9%9A/">潇湘夜雨•婚</a>
-                </h2>
-            </header><div class="entry-content">
-                <p>潇湘夜雨•婚 旧语残羹，新郎陋室，无盐偏有孤独。西窗开闭，何夜效红拂。肥袖诉、世情聚散；白首是、人事沉浮。小娘子，这厢有礼，怎敢复呜呜。
-空床披冷月，天公有念，亦要容哭。雨疑为泪，断线珍珠。思正若、漫长更漏，多少恨、密列如梳。失连理，忍教奴死，肠断也肝枯。
-日期：24.7.28
-</p>
-            </div><footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
-            
-            <a class="entry-link" aria-label="post link to 潇湘夜雨•婚" href="https://QwQBiG.github.io/poetry/posts/suitu/81-90/st083_%E6%BD%87%E6%B9%98%E5%A4%9C%E9%9B%A8%E5%A9%9A/"></a>
         </article></div>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -1466,15 +1710,13 @@ body.dark .poetry-series-card .entry-content {
         <a href="/poetry/page/9/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/poetry/page/16/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/poetry/page/11/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul></div>
 
 <div class="back-home">
     <a href="/">← 返回首页</a>
 </div>
-
-
     </main>
     
 <footer class="footer">
@@ -1770,6 +2012,11 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
 }
 
 .code-fold-toggle.folded svg {
+  transform: rotate(180deg) !important;
+}
+
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
   transform: rotate(180deg) !important;
 }
 
@@ -2541,21 +2788,34 @@ nav[aria-label="pagination"],
   // 向上箭头 SVG
   const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
   
-  // 检查代码块是否需要折叠（超过10行）
+  // 检查代码块是否需要折叠（大于等于6行）
   const shouldEnableFold = function(block) {
     // 获取代码行数 - 通过行号元素计算
     const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length > 10) {
+    if (lineNumbers.length >= 6) {
+      return true;
+    }
+    
+    // 检查 flex span 元素（用户提供的代码块格式）
+    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
+    if (flexSpans.length >= 6) {
       return true;
     }
     
     // 备用方案：通过代码内容计算
     const codeElement = block.querySelector('code');
     if (codeElement) {
+      // 尝试通过子元素数量计算行数
+      const codeLines = codeElement.children;
+      if (codeLines.length >= 6) {
+        return true;
+      }
+      
+      // 通过文本内容计算
       const lines = codeElement.textContent.split('\n');
       // 过滤掉空行后计算
       const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length > 10 || lines.length > 12) {
+      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
         return true;
       }
     }
@@ -2564,7 +2824,7 @@ nav[aria-label="pagination"],
     const tableElement = block.querySelector('table');
     if (tableElement) {
       const rows = tableElement.querySelectorAll('tr');
-      if (rows.length > 10) {
+      if (rows.length >= 6) {
         return true;
       }
     }
@@ -2574,11 +2834,15 @@ nav[aria-label="pagination"],
   
   // 添加折叠功能到代码块
   const addFoldFunctionality = function() {
+    // 选择所有可能包含代码的元素
     const codeBlocks = document.querySelectorAll('.highlight, .chroma');
     
     codeBlocks.forEach(block => {
       // 跳过已经添加过折叠按钮的代码块
       if (block.querySelector('.code-fold-toggle')) return;
+      
+      // 跳过已经有其他折叠功能的代码块
+      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
       
       // 检查是否需要折叠功能
       if (!shouldEnableFold(block)) return;
@@ -3211,7 +3475,7 @@ window.addEventListener('load', () => {
   new NekoEngine();
 });
 /**
- * 自定义分页组件 - 粉红主题
+ * 自定义分页组件 - 粉红
  * 替换 Hugo 默认的分页样式
  */
 

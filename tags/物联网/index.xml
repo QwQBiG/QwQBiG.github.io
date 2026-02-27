@@ -4,15 +4,9 @@
     <title>物联网 on QwQBiG&#39;s World</title>
     <link>https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/</link>
     <description>Recent content in 物联网 on QwQBiG&#39;s World</description>
-    <generator>Hugo -- 0.156.0</generator>
+    <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
+    <lastBuildDate></lastBuildDate>
     <atom:link href="https://QwQBiG.github.io/tags/%E7%89%A9%E8%81%94%E7%BD%91/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>成就-来硬的</title>
-      <link>https://QwQBiG.github.io/cs/series/embedded/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://QwQBiG.github.io/cs/series/embedded/</guid>
-      <description>嵌入式开发学习笔记与项目实践</description>
-    </item>
   </channel>
 </rss>
