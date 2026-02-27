@@ -38,6 +38,11 @@
   transform: rotate(180deg) !important;
 }
 
+/* 确保按钮在代码块折叠时正确显示 */
+.code-folded .code-fold-toggle svg {
+  transform: rotate(180deg) !important;
+}
+
 .highlight:hover .code-fold-toggle,
 .chroma:hover .code-fold-toggle {
   opacity: 1 !important;

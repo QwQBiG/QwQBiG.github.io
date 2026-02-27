@@ -278,6 +278,12 @@ body.dark .poetry-section-header p {
     margin-bottom: 50px;
 }
 
+.poetry-series-section .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
 .section-title {
     font-size: 1.5rem;
     margin-bottom: 20px;
@@ -301,13 +307,18 @@ body.dark .poetry-section-header p {
     content: '📝';
 }
 
-/* 诗歌卡片样式 - 竖向排列 */
+/* 诗歌卡片样式 - 网格布局 */
+.poetry-list-section .posts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
 .poetry-list-section .post-entry {
     background: linear-gradient(135deg, rgba(255, 175, 204, 0.08) 0%, rgba(255, 179, 167, 0.08) 100%);
     border: 1px solid rgba(255, 175, 204, 0.2);
     border-radius: 12px;
     padding: 20px;
-    margin-bottom: 20px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -393,53 +404,127 @@ body.dark .poetry-list-section .post-entry .entry-footer .tag {
     color: #ffb3a7;
 }
 
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .poetry-list-section .posts-list,
+    .poetry-series-section .series-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .poetry-list-section .post-entry,
+    .poetry-series-section .poetry-series-card {
+        padding: 15px;
+    }
+    
+    .poetry-list-section .post-entry .entry-header h2 a {
+        font-size: 1.1rem;
+    }
+}
+
 /* 诗歌系列卡片 */
 .poetry-series-card {
-    background: #fff;
-    border: 1px solid #e9ecef;
+    /* 白天背景：纯白 */
+    background: #fff; 
+    /* 白天边框：浅灰 */
+    border: 1px solid #e9ecef; 
+    
+    /* 核心特征：左侧渐变粉色边框 */
     border-left-width: 5px;
     border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
+
     box-shadow: 0 3px 6px rgba(0,0,0,0.05);
     padding: 25px;
     border-radius: 8px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    position: relative;
+    transition: all 0.3s ease; /* 让颜色切换也有过渡动画 */
 }
 
+/* 悬浮效果 (白天) */
 .poetry-series-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
 }
 
+/* 标题链接颜色 (白天：深紫罗兰) */
+.poetry-series-card .entry-title a {
+    color: #8a2be2 !important; 
+    transition: color 0.3s ease;
+}
+
+/* 图标颜色 (白天) */
+.poetry-series-card .entry-title a::before {
+    content: "🎀 合集 · ";
+    color: #8a2be2;
+}
+
+/* 黑夜模式样式 (当 body 有 dark 类时触发) */
+
+/* 卡片容器变黑 */
 body.dark .poetry-series-card {
-    background: #2e2e33;
+    /* 背景：PaperMod 标准深色背景 (深灰色) */
+    background: #2e2e33; 
+    /* 边框：变暗，防止刺眼 */
     border-color: #444;
+    /* 阴影：黑夜里阴影要淡一点，或者改用深色阴影 */
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 
+/* 悬浮效果 (黑夜) */
 body.dark .poetry-series-card:hover {
+    /* 背景稍微变亮一点点，表示被选中 */
     background: #36363d;
+    /* 阴影加深 */
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
-.poetry-series-card .entry-title a {
-    color: #8a2be2 !important;
-    font-size: 1.3rem;
-    font-weight: 600;
-}
-
+/* 标题链接变色 (黑夜：浅紫罗兰) */
 body.dark .poetry-series-card .entry-title a {
-    color: #d0a9f5 !important;
+    color: #d0a9f5 !important; 
 }
 
-.poetry-series-card .entry-content {
-    color: #666;
-    margin-top: 10px;
+/* 图标颜色也跟着变亮 */
+body.dark .poetry-series-card .entry-title a::before {
+    color: #d0a9f5;
 }
 
+/* 文章摘要文字颜色 (确保黑夜能看清) */
 body.dark .poetry-series-card .entry-content {
-    color: #b0b0b0;
+    color: #b0b0b0; /* 浅灰色文字 */
+}
+
+/* 页脚样式 */
+.poetry-series-card .entry-footer {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 15px;
+}
+
+.poetry-series-card .entry-footer ul.post-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.poetry-series-card .entry-footer ul.post-tags li {
+    margin: 0;
+}
+
+.poetry-series-card .entry-footer ul.post-tags li a {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+/* 黑夜模式页脚样式 */
+body.dark .poetry-series-card .entry-footer {
+    color: #777;
+}
+
+body.dark .poetry-series-card .entry-footer ul.post-tags li a {
+    color: #adb5bd;
 }
 
 /* 返回首页按钮 */
@@ -467,6 +552,68 @@ body.dark .poetry-series-card .entry-content {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
 }
+
+/* 修复 entry-link 样式 */
+.entry-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* 分页样式 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 10px;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pagination a {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.1) 0%, rgba(255, 179, 167, 0.1) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.2);
+    color: #ff9a9e;
+}
+
+.pagination a:hover {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.2) 0%, rgba(255, 179, 167, 0.2) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(255, 175, 204, 0.3);
+}
+
+.pagination span.current {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    font-weight: 600;
+}
+
+body.dark .pagination a {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.2) 0%, rgba(255, 179, 167, 0.2) 100%);
+    border: 1px solid rgba(255, 175, 204, 0.3);
+    color: #ffb3a7;
+}
+
+body.dark .pagination a:hover {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.3) 0%, rgba(255, 179, 167, 0.3) 100%);
+}
+
+body.dark .pagination span.current {
+    background: linear-gradient(135deg, #ff6b8a 0%, #ff9a9e 100%);
+}
 </style>
 
 <div class="poetry-section-header">
@@ -474,29 +621,26 @@ body.dark .poetry-series-card .entry-content {
     <p>{{ .Description }}</p>
 </div>
 
-<!-- 诗歌系列区域 -->
-{{- $seriesPages := where .Site.Pages "Params.type" "series" -}}
-{{- $seriesPages := where $seriesPages "Section" "poetry" -}}
+{{- $allPages := .Site.RegularPages -}}
+{{- $poetryPages := where $allPages "Params.categories" "intersect" (slice "诗歌") -}}
+{{- $poetryPages := where $poetryPages "Params.pin" "ne" true -}}
+{{- $paginator := .Paginate $poetryPages -}}
 
-{{- if or $seriesPages (where .Site.Pages "Title" "《随吐集》") -}}
+<!-- 诗歌系列区域 - 只在第一页显示 -->
+{{- if eq $paginator.PageNumber 1 -}}
+{{- $allPages := .Site.RegularPages -}}
+{{- $allPages := where $allPages "Layout" "ne" "search" -}}
+{{- $allPages := where $allPages "Layout" "ne" "archives" -}}
+{{- $allPages := where $allPages "Params.hidden" "ne" true -}}
+{{- $pinnedPages := where $allPages "Params.pin" true -}}
+{{- $pinnedPages := where $pinnedPages "Section" "poetry" -}}
+
+{{- if or $pinnedPages (where .Site.Pages "Title" "《随吐集》") -}}
 <div class="poetry-series-section">
     <h2 class="section-title">诗歌系列</h2>
-    {{- range $seriesPages -}}
-    <article class="post-entry poetry-series-card">
-        <header class="entry-header">
-            <h2 class="entry-title">
-                <a href="{{ .Permalink }}">
-                    {{- .Title -}}
-                </a>
-            </h2>
-        </header>
-        {{- if .Summary -}}
-        <div class="entry-content">
-            <p>{{ .Summary | plainify | htmlUnescape }}</p>
-        </div>
-        {{- end -}}
-        <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
-    </article>
+    <div class="series-grid">
+    {{- range $pinnedPages -}}
+        {{- partial "components/cards/series-overview.html" . -}}
     {{- end -}}
     
     {{- $suituPage := where .Site.Pages "Title" "《随吐集》" -}}
@@ -515,21 +659,32 @@ body.dark .poetry-series-card .entry-content {
             <p>{{ .Description | plainify | htmlUnescape }}</p>
         </div>
         {{- end -}}
+        <footer class="entry-footer">
+            {{- if .Date -}}
+            <span title='{{ .Date.Format "2006-002-01 15:04:05 -0700 -0700" }}'>{{ .Date.Format "January 2, 2006" }}</span>&nbsp;·&nbsp;{{ .ReadingTime }} min
+            {{- end -}}
+            {{- with .Params.tags -}}
+            &nbsp;·&nbsp;
+            <ul class="post-tags">
+                {{- range . -}}
+                <li><a href="{{ "tags/" | absURL }}{{ . | urlize }}/">{{ . }}</a></li>
+                {{- end -}}
+            </ul>
+            {{- end -}}
+        </footer>
         <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
     </article>
     {{- end -}}
     {{- end -}}
+    </div>
 </div>
+{{- end -}}
 {{- end -}}
 
 <!-- 诗歌列表 -->
 <div class="poetry-list-section">
     <h2 class="section-title">诗歌</h2>
     <div class="posts-list">
-        {{- $allPoetryPages := where .Site.RegularPages "Section" "poetry" -}}
-        {{- $allPoetryPages := where $allPoetryPages "Params.type" "ne" "series" -}}
-        {{- $paginator := .Paginate $allPoetryPages -}}
-
         {{- range $paginator.Pages -}}
         <article class="post-entry">
             <header class="entry-header">

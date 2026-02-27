@@ -1,8 +1,8 @@
 {{ define "main" }}
 
 <style>
-/* CS板块页面样式 */
-.cs-section-header {
+/* Games板块页面样式 */
+.games-section-header {
     text-align: center;
     padding: 40px 20px;
     margin-bottom: 30px;
@@ -11,39 +11,33 @@
     border: 1px solid rgba(255, 154, 158, 0.2);
 }
 
-.cs-section-header h1 {
+.games-section-header h1 {
     font-size: 2.5rem;
     margin-bottom: 15px;
     color: #ff9a9e;
 }
 
-.cs-section-header h1 .emoji {
+.games-section-header h1 .emoji {
     font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 
-.cs-section-header p {
+.games-section-header p {
     font-size: 1.1rem;
     color: #666;
     max-width: 600px;
     margin: 0 auto;
 }
 
-body.dark .cs-section-header p {
+body.dark .games-section-header p {
     color: #aaa;
 }
 
-/* 合集区域 */
-.series-section {
-    margin-bottom: 50px;
+/* 文章列表 */
+.posts-section {
+    margin-top: 50px;
 }
 
-.series-section .series-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.section-title {
+.posts-section .section-title {
     font-size: 1.5rem;
     margin-bottom: 20px;
     padding-bottom: 10px;
@@ -53,17 +47,8 @@ body.dark .cs-section-header p {
     gap: 10px;
 }
 
-.section-title::before {
-    content: '📚';
-}
-
-/* 文章列表 */
-.posts-section {
-    margin-top: 50px;
-}
-
 .posts-section .section-title::before {
-    content: '📝';
+    content: '🎮';
 }
 
 /* 文章卡片样式 - 网格布局 */
@@ -165,19 +150,16 @@ body.dark .posts-section .post-entry .entry-footer .tag {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .posts-section .posts-list,
-    .series-section .series-grid {
+    .posts-section .posts-list {
         grid-template-columns: 1fr;
         gap: 15px;
     }
     
-    .posts-section .post-entry,
-    .series-overview-card-wrapper {
+    .posts-section .post-entry {
         padding: 15px;
     }
     
-    .posts-section .post-entry .entry-header h2 a,
-    .series-overview-card-wrapper .entry-title a {
+    .posts-section .post-entry .entry-header h2 a {
         font-size: 1.1rem;
     }
 }
@@ -209,86 +191,17 @@ body.dark .posts-section .post-entry .entry-footer .tag {
 }
 </style>
 
-<!-- 判断是否为合集详情页 -->
-{{- $isSeriesPage := false -}}
-{{- if .Params.categories -}}
-    {{- range .Params.categories -}}
-        {{- if eq . "合集" -}}
-            {{- $isSeriesPage = true -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-
-{{- if $isSeriesPage -}}
-<!-- 合集详情页头部 -->
-<div class="cs-section-header">
-    <h1><span class="emoji">📚</span> {{ .Title }}</h1>
+<div class="games-section-header">
+    <h1><span class="emoji">🎮</span> {{ .Title }}</h1>
     <p>{{ .Description }}</p>
 </div>
-{{- else -}}
-<!-- 普通列表页头部 -->
-<div class="cs-section-header">
-    <h1><span class="emoji">💻</span> CS</h1>
-    <p>{{ .Description }}</p>
-</div>
-
-<!-- 合集区域 - 只在第一页显示 -->
-{{- if eq .Paginator.PageNumber 1 -}}
-{{- $pinnedPages := slice -}}
-{{- range .Site.Pages -}}
-    {{- if and .Params.pin (eq .Section "cs") -}}
-        {{- $pinnedPages = $pinnedPages | append . -}}
-    {{- end -}}
-{{- end -}}
-
-{{- if $pinnedPages -}}
-<div class="series-section">
-    <h2 class="section-title">合集</h2>
-    <div class="series-grid">
-    {{- range $pinnedPages -}}
-        {{- partial "components/cards/series-overview.html" . -}}
-    {{- end -}}
-    </div>
-</div>
-{{- end -}}
-{{- end -}}
-{{- end -}}
 
 <!-- 文章列表 -->
-
 <div class="posts-section">
-    <h2 class="section-title">
-        {{- if $isSeriesPage -}}本系列文章{{- else -}}文章{{- end -}}
-    </h2>
+    <h2 class="section-title">游戏文章</h2>
     <div class="posts-list">
-        {{- $filteredPages := slice -}}
-        {{- if $isSeriesPage -}}
-            {{- $currentSeries := .Title -}}
-            {{- $allPages := where .Site.RegularPages "Section" "cs" -}}
-            {{- range $allPages -}}
-                {{- if .Params.series -}}
-                    {{- if in .Params.series $currentSeries -}}
-                        {{- $filteredPages = $filteredPages | append . -}}
-                    {{- end -}}
-                {{- end -}}
-            {{- end -}}
-        {{- else -}}
-            {{- $allPages := where .Site.RegularPages "Section" "cs" -}}
-            {{- range $allPages -}}
-                {{- $isSeries := false -}}
-                {{- if .Params.categories -}}
-                    {{- range .Params.categories -}}
-                        {{- if eq . "合集" -}}
-                            {{- $isSeries = true -}}
-                        {{- end -}}
-                    {{- end -}}
-                {{- end -}}
-                {{- if not $isSeries -}}
-                    {{- $filteredPages = $filteredPages | append . -}}
-                {{- end -}}
-            {{- end -}}
-        {{- end -}}
-        {{- $paginator := .Paginate $filteredPages -}}
+        {{- $regularPages := where .Site.RegularPages "Section" "games" -}}
+        {{- $paginator := .Paginate $regularPages -}}
 
         {{- range $paginator.Pages -}}
         <article class="post-entry">

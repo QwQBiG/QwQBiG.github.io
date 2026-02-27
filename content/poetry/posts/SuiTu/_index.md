@@ -1,6 +1,7 @@
 ---
 title: "《随吐集》"
 description: "随吐随吐，恣意吐出，不拾牙慧。"
+tags: ["诗歌", "随吐集", "合集"]
 cascade:
   sort_by: "Weight"
 ---
