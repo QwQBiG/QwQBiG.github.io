@@ -3,16 +3,36 @@
 <article class="post-single">
   <header class="post-header">
     {{- if not .Params.hideTitle -}}
+    <div class="post-header-wrapper">
       <h1 class="post-title">
         {{- .Title -}}
         {{- if .Draft -}}<sup><span class="entry-isdraft">&nbsp;&nbsp;[Draft]</span></sup>{{- end -}}
       </h1>
+      <div class="post-title-decoration"></div>
+    </div>
     {{- end -}}
 
     {{- if not .Date.IsZero -}}
-      <div class="post-meta">
-        {{- partial "post_meta.html" . -}}
+    <div class="post-meta-enhanced">
+      <div class="meta-item">
+        <span class="meta-icon">📅</span>
+        <span class="meta-text">{{ .Date.Format "2006-01-02" }}</span>
       </div>
+      {{- if .Params.tags -}}
+      <div class="meta-item tags-item">
+        <span class="meta-icon">🏷️</span>
+        <div class="meta-tags">
+          {{- range first 3 .Params.tags -}}
+          <span class="meta-tag">{{ . }}</span>
+          {{- end -}}
+        </div>
+      </div>
+      {{- end -}}
+      <div class="meta-item">
+        <span class="meta-icon">⏱️</span>
+        <span class="meta-text">{{ math.Round (div (countwords .Content) 200.0) }} 分钟阅读</span>
+      </div>
+    </div>
     {{- end -}}
   </header>
 
@@ -55,11 +75,13 @@
   {{- end -}}
 
   {{- if .Content -}}
-    <div class="post-content">
+    <div class="post-content-wrapper">
       {{- if or .Params.showToc .Params.Toc -}}
         {{- partial "toc.html" . -}}
       {{- end -}}
-      {{- .Content -}}
+      <div class="post-content">
+        {{- .Content -}}
+      </div>
     </div>
   {{- end -}}
 

@@ -11,6 +11,9 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 [markup]
   [markup.highlight]
     lineNos = true
+    noClasses = false
+    codeFences = true
+    style = "monokai"
     [markup.goldmark.renderer]
       unsafe = true
 

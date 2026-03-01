@@ -1,1 +1,48 @@
-{{- partial "layout/extend_footer.html" . -}}
+<!-- 
+  ========================================================================
+  PROJECT: NEKO-FALL-ENGINE - Modular Version
+  VERSION: 7.0 (Neko Code Block System)
+  STATUS: Production Ready
+  ========================================================================
+  
+  模块化结构：
+  - CSS 样式: assets/extend_footer_modules/css/
+  - JavaScript 功能: assets/extend_footer_modules/js/
+  - HTML 组件: assets/extend_footer_modules/html/
+  
+  自主开发模块：
+  - neko-code-block: 完全独立的代码块系统
+  ========================================================================
+-->
+
+<!-- CSS 样式模块 -->
+<style>
+{{- $cssPath := "assets/extend_footer_modules/css/" -}}
+{{- readFile (printf "%s%s" $cssPath "reading-progress.css") | safeCSS -}}
+{{- readFile (printf "%s%s" $cssPath "back-to-top.css") | safeCSS -}}
+{{- readFile (printf "%s%s" $cssPath "neko-code-block.css") | safeCSS -}}
+{{- readFile (printf "%s%s" $cssPath "neko-piano.css") | safeCSS -}}
+{{- readFile (printf "%s%s" $cssPath "pagination.css") | safeCSS -}}
+</style>
+
+<!-- 代码块功能样式 (code-copy + code-fold) -->
+{{- $codeBlocksCSS := resources.Get "css/code-blocks.css" | resources.Minify -}}
+<link rel="stylesheet" href="{{ $codeBlocksCSS.RelPermalink }}">
+
+<!-- HTML 组件模块 -->
+{{- $htmlPath := "assets/extend_footer_modules/html/" -}}
+{{- readFile (printf "%s%s" $htmlPath "neko-piano.html") | safeHTML -}}
+
+<!-- JavaScript 功能模块 -->
+<script>
+{{- $jsPath := "assets/extend_footer_modules/js/" -}}
+{{- readFile (printf "%s%s" $jsPath "reading-progress.js") | safeJS -}}
+{{- readFile (printf "%s%s" $jsPath "disable-theme-scroll.js") | safeJS -}}
+{{- readFile (printf "%s%s" $jsPath "neko-code-block.js") | safeJS -}}
+{{- readFile (printf "%s%s" $jsPath "neko-piano.js") | safeJS -}}
+{{- readFile (printf "%s%s" $jsPath "pagination.js") | safeJS -}}
+</script>
+
+<!-- 网站功能集成 (back-to-top + code-fold) -->
+{{- $siteFeaturesJS := resources.Get "js/site-features.js" | resources.Minify -}}
+<script src="{{ $siteFeaturesJS.RelPermalink }}"></script>

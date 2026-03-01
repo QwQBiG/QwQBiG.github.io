@@ -320,3 +320,1384 @@ body.dark .neko-close-btn {
     transform: translateY(100px) scale(0.7) !important;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
+
+/*——————————————————————————————————————————————
+                文章页面美化
+——————————————————————————————————————————————*/
+/* 文章头部包装 */
+.post-header-wrapper {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.post-header-wrapper .post-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* 标题装饰线 */
+.post-title-decoration {
+    height: 4px;
+    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.post-title-decoration::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: decoration-shine 3s infinite;
+}
+
+@keyframes decoration-shine {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+}
+
+/* 增强的文章元信息 */
+.post-meta-enhanced {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.08) 0%, rgba(250, 208, 196, 0.08) 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 154, 158, 0.15);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.meta-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.2);
+}
+
+.meta-icon {
+    font-size: 1.1rem;
+}
+
+.meta-text {
+    color: #666;
+}
+
+.meta-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.meta-tag {
+    padding: 3px 10px;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.2) 0%, rgba(250, 208, 196, 0.2) 100%);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: #ff9a9e;
+    transition: all 0.3s ease;
+}
+
+.meta-tag:hover {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+}
+
+/* 内容区域卡片化 */
+.post-content-wrapper {
+    margin-top: 30px;
+}
+
+.post-content {
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 250, 250, 0.9) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 154, 158, 0.1);
+    box-shadow: 0 4px 20px rgba(255, 154, 158, 0.08);
+}
+
+/* 标题装饰 */
+.post-content h2 {
+    position: relative;
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.post-content h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 70%;
+    background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%);
+    border-radius: 3px;
+}
+
+.post-content h3 {
+    position: relative;
+    padding-left: 16px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.post-content h3::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #ff9a9e;
+    font-size: 1rem;
+}
+
+.post-content h4 {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid rgba(255, 154, 158, 0.3);
+    padding-bottom: 8px;
+}
+
+/* 引用块美化 */
+.post-content blockquote {
+    position: relative;
+    margin: 25px 0;
+    padding: 20px 25px;
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.08) 0%, rgba(250, 208, 196, 0.08) 100%);
+    border-left: 4px solid;
+    border-image: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%) 1;
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    color: #555;
+}
+
+.post-content blockquote::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 3rem;
+    color: rgba(255, 154, 158, 0.3);
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+.post-content blockquote p {
+    margin: 0;
+    padding-left: 30px;
+}
+
+/* 图片效果 */
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin: 20px 0;
+}
+
+.post-content img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.3);
+}
+
+/* 表格美化 */
+.post-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.post-content th {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.post-content td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 154, 158, 0.1);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.post-content tr:hover td {
+    background: rgba(255, 154, 158, 0.05);
+}
+
+/* 列表美化 */
+.post-content ul,
+.post-content ol {
+    margin: 15px 0;
+    padding-left: 25px;
+}
+
+.post-content li {
+    margin: 10px 0;
+    line-height: 1.8;
+}
+
+.post-content ul li::marker {
+    color: #ff9a9e;
+}
+
+.post-content ol li::marker {
+    color: #ff9a9e;
+    font-weight: 600;
+}
+
+/* 分隔线 */
+.post-content hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 154, 158, 0.3), transparent);
+    margin: 40px 0;
+}
+
+/*——————————————————————————————————————————————
+                文章页面 - 深色模式
+——————————————————————————————————————————————*/
+html[data-theme="dark"] .post-header-wrapper .post-title {
+    background: linear-gradient(135deg, #ffb3a7 0%, #ffc8c8 50%, #c8b6ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+html[data-theme="dark"] .post-meta-enhanced {
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.12) 0%, rgba(250, 208, 196, 0.12) 100%);
+    border-color: rgba(255, 154, 158, 0.25);
+}
+
+html[data-theme="dark"] .meta-item {
+    background: rgba(40, 40, 50, 0.8);
+}
+
+html[data-theme="dark"] .meta-text {
+    color: #bbb;
+}
+
+html[data-theme="dark"] .meta-tag {
+    background: rgba(255, 154, 158, 0.25);
+    color: #ffb3a7;
+}
+
+html[data-theme="dark"] .post-content {
+    background: linear-gradient(135deg, rgba(30, 30, 40, 0.95) 0%, rgba(35, 35, 45, 0.95) 100%);
+    border-color: rgba(255, 154, 158, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .post-content h2 {
+    color: #e0e0e0;
+}
+
+html[data-theme="dark"] .post-content h3 {
+    color: #d0d0d0;
+}
+
+html[data-theme="dark"] .post-content h4 {
+    color: #c0c0c0;
+    border-bottom-color: rgba(255, 154, 158, 0.4);
+}
+
+html[data-theme="dark"] .post-content blockquote {
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.12) 0%, rgba(250, 208, 196, 0.12) 100%);
+    color: #bbb;
+}
+
+html[data-theme="dark"] .post-content blockquote::before {
+    color: rgba(255, 154, 158, 0.4);
+}
+
+html[data-theme="dark"] .post-content img {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+html[data-theme="dark"] .post-content img:hover {
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+}
+
+html[data-theme="dark"] .post-content table {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .post-content td {
+    background: rgba(40, 40, 50, 0.8);
+    border-bottom-color: rgba(255, 154, 158, 0.15);
+}
+
+html[data-theme="dark"] .post-content tr:hover td {
+    background: rgba(255, 154, 158, 0.1);
+}
+
+html[data-theme="dark"] .post-content hr {
+    background: linear-gradient(90deg, transparent, rgba(255, 154, 158, 0.4), transparent);
+}
+
+/*——————————————————————————————————————————————
+                文章页面 - 移动端适配
+——————————————————————————————————————————————*/
+@media (max-width: 768px) {
+    .post-header-wrapper .post-title {
+        font-size: 1.6rem;
+    }
+    
+    .post-meta-enhanced {
+        padding: 15px;
+        gap: 10px;
+    }
+    
+    .meta-item {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .post-content {
+        padding: 20px;
+    }
+    
+    .post-content h2 {
+        font-size: 1.4rem;
+    }
+    
+    .post-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    .post-content blockquote {
+        padding: 15px 20px;
+    }
+    
+    .post-content blockquote::before {
+        font-size: 2rem;
+    }
+}
+
+/*——————————————————————————————————————————————
+                代码块美化
+——————————————————————————————————————————————*/
+
+/* 代码块折叠提示样式 - 使用更高优先级选择器 */
+.post-content .highlight > .code-fold-hint,
+.highlight > .code-fold-hint,
+.chroma > .code-fold-hint {
+    position: absolute !important;
+    top: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #e84a7a !important;
+    text-align: center !important;
+    z-index: 1000 !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
+    display: none !important;
+}
+
+.post-content .highlight > .code-fold-hint[style*="block"],
+.highlight > .code-fold-hint[style*="block"],
+.chroma > .code-fold-hint[style*="block"] {
+    display: block !important;
+}
+
+/* 浅色模式下的折叠提示 - 与语言标签按钮颜色一致 */
+html[data-theme="light"] .post-content .highlight > .code-fold-hint,
+html[data-theme="light"] .highlight > .code-fold-hint {
+    color: #e84a7a !important;
+}
+
+/* 深色模式下的折叠提示 - 与语言标签按钮颜色一致 */
+html[data-theme="dark"] .post-content .highlight > .code-fold-hint,
+html[data-theme="dark"] .highlight > .code-fold-hint,
+html[data-theme="dark"] .chroma > .code-fold-hint {
+    color: #ff79c6 !important;
+}
+
+/* 自动模式浅色系统下的折叠提示 */
+@media (prefers-color-scheme: light) {
+    html[data-theme="auto"] .post-content .highlight > .code-fold-hint,
+    html[data-theme="auto"] .highlight > .code-fold-hint {
+        color: #e84a7a !important;
+    }
+}
+
+/* 自动模式深色系统下的折叠提示 */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content .highlight > .code-fold-hint,
+    html[data-theme="auto"] .highlight > .code-fold-hint,
+    html[data-theme="auto"] .chroma > .code-fold-hint {
+        color: #ff79c6 !important;
+    }
+}
+
+/* 代码块折叠按钮样式 */
+.post-content .highlight .code-fold-toggle {
+    position: absolute !important;
+    top: 8px !important;
+    right: 90px !important;
+    height: 24px !important;
+    padding: 0 10px !important;
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #e84a7a !important;
+    background: rgba(232, 74, 122, 0.1) !important;
+    border: 1px solid rgba(232, 74, 122, 0.3) !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    z-index: 20 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+.post-content .highlight .code-fold-toggle:hover {
+    background: rgba(232, 74, 122, 0.2) !important;
+    border-color: rgba(232, 74, 122, 0.5) !important;
+}
+
+.post-content .highlight .code-fold-toggle svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: #e84a7a !important;
+    transition: transform 0.3s ease !important;
+}
+
+.post-content .highlight .code-fold-toggle:hover svg {
+    transform: scale(1.15) !important;
+}
+
+.post-content .highlight .code-fold-toggle.folded svg {
+    transform: rotate(180deg) !important;
+}
+
+.post-content .highlight .code-fold-toggle.folded:hover svg {
+    transform: rotate(180deg) scale(1.15) !important;
+}
+
+/* 深色模式下的折叠按钮 */
+html[data-theme="dark"] .post-content .highlight .code-fold-toggle {
+    color: #ff79c6 !important;
+    background: rgba(255, 121, 198, 0.1) !important;
+    border: 1px solid rgba(255, 121, 198, 0.3) !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .code-fold-toggle:hover {
+    background: rgba(255, 121, 198, 0.2) !important;
+    border-color: rgba(255, 121, 198, 0.5) !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .code-fold-toggle svg {
+    fill: #ff79c6 !important;
+}
+
+/* 自动模式下的折叠按钮 */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content .highlight .code-fold-toggle {
+        color: #ff79c6 !important;
+        background: rgba(255, 121, 198, 0.1) !important;
+        border: 1px solid rgba(255, 121, 198, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-fold-toggle:hover {
+        background: rgba(255, 121, 198, 0.2) !important;
+        border-color: rgba(255, 121, 198, 0.5) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-fold-toggle svg {
+        fill: #ff79c6 !important;
+    }
+}
+
+/* 代码块折叠状态样式 */
+.post-content .highlight.code-folded {
+    max-height: 160px !important;
+    overflow: hidden !important;
+}
+
+.post-content .highlight.code-folded::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 80px !important;
+    background: linear-gradient(transparent, #ffeef8) !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight.code-folded::after {
+    background: linear-gradient(transparent, #16213e) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content .highlight.code-folded::after {
+        background: linear-gradient(transparent, #16213e) !important;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    html[data-theme="auto"] .post-content .highlight.code-folded::after {
+        background: linear-gradient(transparent, #ffeef8) !important;
+    }
+}
+
+/* 代码块容器 - 默认浅色背景（淡粉色渐变） */
+.post-content .highlight {
+    position: relative !important;
+    margin: 25px 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
+    background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
+    padding-top: 40px !important;
+}
+
+/* 强制覆盖 chroma/pre/code/span/div 元素背景为透明 */
+.post-content .chroma,
+.post-content pre.chroma,
+.post-content .highlight pre,
+.post-content .highlight pre.chroma,
+.post-content .highlight code,
+.post-content .chroma code,
+.post-content .highlight span,
+.post-content .chroma span,
+.post-content .highlight div,
+.post-content .chroma div {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 代码块内的 pre 元素 - 完全填满 */
+.post-content .highlight > pre.chroma {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    min-height: calc(100% - 40px) !important;
+}
+
+/* 代码块头部背景 - 默认淡粉色 */
+.post-content .highlight::before {
+    content: '';
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 40px !important;
+    background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%) !important;
+    border-bottom: 1px solid rgba(232, 74, 122, 0.15) !important;
+    z-index: 1 !important;
+}
+
+/* 代码块语言标签按钮 */
+.post-content .highlight .code-lang-btn {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 40px !important;
+    padding: 0 16px !important;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #e84a7a !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    z-index: 15 !important;
+    transition: all 0.2s ease !important;
+}
+
+.post-content .highlight .code-lang-btn:hover {
+    color: #c44569 !important;
+}
+
+.post-content .highlight .code-lang-btn.line-numbers-hidden {
+    color: rgba(232, 74, 122, 0.5) !important;
+    text-decoration: line-through !important;
+}
+
+/* 代码块复制按钮样式 */
+.post-content .highlight .custom-copy-code {
+    position: absolute !important;
+    top: 8px !important;
+    right: 12px !important;
+    height: 24px !important;
+    padding: 0 10px !important;
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #e84a7a !important;
+    background: rgba(232, 74, 122, 0.1) !important;
+    border: 1px solid rgba(232, 74, 122, 0.3) !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    z-index: 20 !important;
+    transition: all 0.2s ease !important;
+}
+
+.post-content .highlight .custom-copy-code:hover {
+    background: rgba(232, 74, 122, 0.2) !important;
+    border-color: rgba(232, 74, 122, 0.5) !important;
+}
+
+.post-content .highlight .custom-copy-code.copied {
+    background: #a855f7 !important;
+    border-color: #a855f7 !important;
+    color: white !important;
+}
+
+/* 深色模式下的复制按钮 */
+html[data-theme="dark"] .post-content .highlight .custom-copy-code {
+    color: #ff79c6 !important;
+    background: rgba(255, 121, 198, 0.1) !important;
+    border: 1px solid rgba(255, 121, 198, 0.3) !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .custom-copy-code:hover {
+    background: rgba(255, 121, 198, 0.2) !important;
+    border-color: rgba(255, 121, 198, 0.5) !important;
+}
+
+/* 自动模式下的复制按钮 */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content .highlight .custom-copy-code {
+        color: #ff79c6 !important;
+        background: rgba(255, 121, 198, 0.1) !important;
+        border: 1px solid rgba(255, 121, 198, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .custom-copy-code:hover {
+        background: rgba(255, 121, 198, 0.2) !important;
+        border-color: rgba(255, 121, 198, 0.5) !important;
+    }
+}
+
+/* 代码块内容 */
+.post-content .highlight pre,
+.post-content .chroma pre {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.8 !important;
+    overflow-x: auto !important;
+}
+
+/* 让 code 填满整个 pre */
+.post-content .highlight pre code,
+.post-content .chroma pre code {
+    display: block !important;
+    padding: 20px !important;
+    background: transparent !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    border-radius: 0 !important;
+}
+
+/* 强制代码块内 code 元素为直角 - 使用更强选择器 */
+.post-content .highlight code,
+.post-content .chroma code {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+/* Hugo/PaperMod 生成的内部 div - 扩大填满 */
+.post-content .highlight > div,
+.post-content .chroma > div {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+}
+
+/* 强制覆盖 Hugo 生成的内联样式背景色 */
+.post-content .highlight > div[style*="background-color"],
+.post-content .chroma > div[style*="background-color"] {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 表格样式重置 */
+.post-content .highlight table,
+.post-content .chroma table {
+    margin: 0 !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+}
+
+.post-content .highlight td,
+.post-content .chroma td {
+    padding: 0 !important;
+}
+
+/* 代码块内的 pre 元素 - 扩大填满 */
+.post-content .highlight pre,
+.post-content .chroma pre {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+/* 代码块内的 code 元素 - 扩大填满整个区域 */
+.post-content .highlight code,
+.post-content .chroma code {
+    display: block !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    min-height: 100% !important;
+}
+
+/* 强制覆盖 pre 元素的内联样式背景色 */
+.post-content .highlight pre[style*="background-color"],
+.post-content .chroma pre[style*="background-color"] {
+    background-color: #fafafa !important;
+}
+
+html[data-theme="dark"] .post-content .highlight pre[style*="background-color"],
+html[data-theme="dark"] .post-content .chroma pre[style*="background-color"] {
+    background-color: transparent !important;
+}
+
+/* 代码行号 */
+.post-content .highlight .ln,
+.post-content .chroma .ln {
+    color: rgba(255, 255, 255, 0.3) !important;
+    user-select: none !important;
+    padding-right: 15px !important;
+    margin-right: 15px !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 代码高亮优化 */
+.post-content .highlight .k,
+.post-content .chroma .k {
+    color: #ff9a9e !important;
+}
+
+.post-content .highlight .s,
+.post-content .chroma .s {
+    color: #a18cd1 !important;
+}
+
+.post-content .highlight .n,
+.post-content .chroma .n {
+    color: #fad0c4 !important;
+}
+
+.post-content .highlight .c,
+.post-content .chroma .c {
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-style: italic !important;
+}
+
+.post-content .highlight .o,
+.post-content .chroma .o {
+    color: #ffb3a7 !important;
+}
+
+.post-content .highlight .p,
+.post-content .chroma .p {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.post-content .highlight .m,
+.post-content .chroma .m {
+    color: #fad0c4 !important;
+}
+
+/* 行内代码 - 直角长方形 */
+.post-content code:not(.chroma code) {
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.15) 0%, rgba(250, 208, 196, 0.15) 100%) !important;
+    color: #ff9a9e !important;
+    padding: 2px 6px !important;
+    border-radius: 0 !important;
+    font-size: 0.9em !important;
+    border: 1px solid rgba(255, 154, 158, 0.2) !important;
+}
+
+html[data-theme="dark"] .post-content code:not(.chroma code) {
+    background: linear-gradient(135deg, rgba(255, 154, 158, 0.25) 0%, rgba(250, 208, 196, 0.25) 100%) !important;
+    color: #ffb3a7 !important;
+    border-color: rgba(255, 154, 158, 0.3) !important;
+}
+
+/*——————————————————————————————————————————————
+                代码块 - 白天模式 (浅色主题)
+——————————————————————————————————————————————*/
+/* 白天模式：使用浅色背景 */
+.post-content .highlight {
+    background: #f8f9fa !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 白天模式头部背景 */
+.post-content .highlight::before {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 白天模式语言按钮 */
+.post-content .highlight .code-lang-btn {
+    color: #495057 !important;
+}
+
+.post-content .highlight .code-lang-btn:hover {
+    color: #ff6b6b !important;
+}
+
+.post-content .highlight .code-lang-btn.line-numbers-hidden {
+    color: #adb5bd !important;
+}
+
+/* 白天模式 pre 和 chroma 元素 - 强制透明背景 */
+.post-content .highlight > pre.chroma,
+.post-content .highlight > pre.chroma[style*="background"],
+.post-content .highlight pre.chroma,
+.post-content .highlight pre.chroma[style*="background"],
+.post-content .highlight .chroma {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* 白天模式行号 */
+.post-content .highlight .line-numbers,
+.post-content .highlight .ln {
+    color: rgba(232, 74, 122, 0.35) !important;
+}
+
+/* 白天模式代码高亮 - 少女心配色 */
+/* 关键字 (keyword) - 玫瑰粉 */
+.post-content .highlight .k,
+.post-content .chroma .k,
+.post-content .highlight .kd,
+.post-content .chroma .kd {
+    color: #e84a7a !important;
+    font-weight: 600 !important;
+}
+
+/* 字符串 (string) - 薰衣草紫 */
+.post-content .highlight .s,
+.post-content .chroma .s,
+.post-content .highlight .s2,
+.post-content .chroma .s2,
+.post-content .highlight .s1,
+.post-content .chroma .s1 {
+    color: #9c66cc !important;
+}
+
+/* 变量名/标识符 (name) - 深粉色 */
+.post-content .highlight .n,
+.post-content .chroma .n,
+.post-content .highlight .na,
+.post-content .chroma .na,
+.post-content .highlight .nb,
+.post-content .chroma .nb {
+    color: #c44569 !important;
+}
+
+/* 注释 (comment) - 柔粉色 */
+.post-content .highlight .c,
+.post-content .chroma .c,
+.post-content .highlight .c1,
+.post-content .chroma .c1,
+.post-content .highlight .cm,
+.post-content .chroma .cm {
+    color: #b088f9 !important;
+    font-style: italic !important;
+}
+
+/* 操作符 (operator) - 珊瑚粉 */
+.post-content .highlight .o,
+.post-content .chroma .o,
+.post-content .highlight .ow,
+.post-content .chroma .ow {
+    color: #ff6b81 !important;
+    font-weight: 600 !important;
+}
+
+/* 标点符号 (punctuation) - 灰粉色 */
+.post-content .highlight .p,
+.post-content .chroma .p {
+    color: #a55eea !important;
+}
+
+/* 数字 (number) - 粉蓝色 */
+.post-content .highlight .m,
+.post-content .chroma .m,
+.post-content .highlight .mi,
+.post-content .chroma .mi,
+.post-content .highlight .mf,
+.post-content .chroma .mf {
+    color: #6c5ce7 !important;
+    font-weight: 600 !important;
+}
+
+/* 类名/函数名 - 紫粉色 */
+.post-content .highlight .nc,
+.post-content .chroma .nc,
+.post-content .highlight .nf,
+.post-content .chroma .nf,
+.post-content .highlight .fm,
+.post-content .chroma .fm {
+    color: #fd79a8 !important;
+    font-weight: 700 !important;
+}
+
+/* 类型 - 樱花粉 */
+.post-content .highlight .kt,
+.post-content .chroma .kt {
+    color: #fd79a8 !important;
+    font-weight: 600 !important;
+}
+
+/* 属性 - 藕粉色 */
+.post-content .highlight .na,
+.post-content .chroma .na {
+    color: #d63031 !important;
+}
+
+/* 内置函数 - 玫红色 */
+.post-content .highlight .nv,
+.post-content .chroma .nv {
+    color: #e17055 !important;
+}
+
+/* 装饰器 - 深紫色 */
+.post-content .highlight .nd,
+.post-content .chroma .nd {
+    color: #6c5ce7 !important;
+    font-weight: 700 !important;
+}
+
+/* 预处理指令 */
+.post-content .highlight .cp,
+.post-content .chroma .cp {
+    color: #a29bfe !important;
+    font-weight: 700 !important;
+}
+
+/* 宏/预处理 - 灰色 */
+.post-content .highlight .cp,
+.post-content .chroma .cp,
+.post-content .highlight .cpf,
+.post-content .chroma .cpf {
+    color: #6a737d !important;
+}
+
+/*——————————————————————————————————————————————
+                代码块 - 浅色模式
+——————————————————————————————————————————————*/
+html[data-theme="light"] .post-content .highlight,
+html[data-theme="light"] .post-content .chroma {
+    background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
+    box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
+    border: none !important;
+}
+
+html[data-theme="light"] .post-content .highlight::before,
+html[data-theme="light"] .post-content .chroma::before {
+    background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%) !important;
+    border-bottom-color: rgba(232, 74, 122, 0.15) !important;
+}
+
+html[data-theme="light"] .post-content .highlight pre,
+html[data-theme="light"] .post-content .chroma pre {
+    background: transparent !important;
+}
+
+html[data-theme="light"] .post-content .highlight .code-lang-btn {
+    color: #e84a7a !important;
+}
+
+html[data-theme="light"] .post-content .highlight .code-lang-btn:hover {
+    color: #c44569 !important;
+}
+
+html[data-theme="light"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
+    color: rgba(232, 74, 122, 0.5) !important;
+}
+
+/* 浅色模式行号 */
+html[data-theme="light"] .post-content .highlight .ln,
+html[data-theme="light"] .post-content .chroma .ln {
+    color: rgba(232, 74, 122, 0.35) !important;
+}
+
+/* 浅色模式代码高亮 - 少女心配色 */
+html[data-theme="light"] .post-content .highlight .k,
+html[data-theme="light"] .post-content .chroma .k,
+html[data-theme="light"] .post-content .highlight .kd,
+html[data-theme="light"] .post-content .chroma .kd {
+    color: #e84a7a !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .post-content .highlight .s,
+html[data-theme="light"] .post-content .chroma .s {
+    color: #9c66cc !important;
+}
+
+html[data-theme="light"] .post-content .highlight .n,
+html[data-theme="light"] .post-content .chroma .n {
+    color: #c44569 !important;
+}
+
+html[data-theme="light"] .post-content .highlight .c,
+html[data-theme="light"] .post-content .chroma .c {
+    color: #b088f9 !important;
+    font-style: italic !important;
+}
+
+html[data-theme="light"] .post-content .highlight .o,
+html[data-theme="light"] .post-content .chroma .o {
+    color: #ff6b81 !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .post-content .highlight .p,
+html[data-theme="light"] .post-content .chroma .p {
+    color: #a55eea !important;
+}
+
+html[data-theme="light"] .post-content .highlight .m,
+html[data-theme="light"] .post-content .chroma .m {
+    color: #6c5ce7 !important;
+    font-weight: 600 !important;
+}
+
+/*——————————————————————————————————————————————
+                代码块 - 深色模式
+——————————————————————————————————————————————*/
+html[data-theme="dark"] .post-content .highlight,
+html[data-theme="dark"] .post-content .chroma {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    border: none !important;
+}
+
+html[data-theme="dark"] .post-content .highlight::before,
+html[data-theme="dark"] .post-content .chroma::before {
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+html[data-theme="dark"] .post-content .highlight pre,
+html[data-theme="dark"] .post-content .chroma pre {
+    background: transparent !important;
+}
+
+/* 深色模式行号 */
+html[data-theme="dark"] .post-content .highlight .ln,
+html[data-theme="dark"] .post-content .chroma .ln {
+    color: rgba(255, 255, 255, 0.3) !important;
+    border-right-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 深色模式代码高亮 - 少女心配色 */
+html[data-theme="dark"] .post-content .highlight .k,
+html[data-theme="dark"] .post-content .chroma .k {
+    color: #ff79c6 !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .code-lang-btn {
+    color: #ff79c6 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .code-lang-btn:hover {
+    color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
+    color: rgba(255, 121, 198, 0.5) !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .s,
+html[data-theme="dark"] .post-content .chroma .s {
+    color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .n,
+html[data-theme="dark"] .post-content .chroma .n {
+    color: #f8b195 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .c,
+html[data-theme="dark"] .post-content .chroma .c {
+    color: #a29bfe !important;
+    font-style: italic !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .o,
+html[data-theme="dark"] .post-content .chroma .o {
+    color: #ff6b9d !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .p,
+html[data-theme="dark"] .post-content .chroma .p {
+    color: #dfe6e9 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .m,
+html[data-theme="dark"] .post-content .chroma .m {
+    color: #74b9ff !important;
+    font-weight: 600 !important;
+}
+
+/*——————————————————————————————————————————————
+        代码块 - 自动深色模式 (data-theme="auto" + 系统深色)
+——————————————————————————————————————————————*/
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content .highlight,
+    html[data-theme="auto"] .post-content .chroma {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        border: none !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight::before,
+    html[data-theme="auto"] .post-content .chroma::before {
+        background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%) !important;
+        border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight pre,
+    html[data-theme="auto"] .post-content .chroma pre,
+    html[data-theme="auto"] .post-content .highlight code,
+    html[data-theme="auto"] .post-content .chroma code,
+    html[data-theme="auto"] .post-content .highlight span,
+    html[data-theme="auto"] .post-content .chroma span,
+    html[data-theme="auto"] .post-content .highlight div,
+    html[data-theme="auto"] .post-content .chroma div {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .ln,
+    html[data-theme="auto"] .post-content .chroma .ln {
+        color: rgba(255, 255, 255, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .k,
+    html[data-theme="auto"] .post-content .chroma .k {
+        color: #ff79c6 !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn {
+        color: #ff79c6 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn:hover {
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
+        color: rgba(255, 121, 198, 0.5) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .s,
+    html[data-theme="auto"] .post-content .chroma .s {
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .n,
+    html[data-theme="auto"] .post-content .chroma .n {
+        color: #f8b195 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .c,
+    html[data-theme="auto"] .post-content .chroma .c {
+        color: #a29bfe !important;
+        font-style: italic !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .o,
+    html[data-theme="auto"] .post-content .chroma .o {
+        color: #ff6b9d !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .p,
+    html[data-theme="auto"] .post-content .chroma .p {
+        color: #dfe6e9 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .m,
+    html[data-theme="auto"] .post-content .chroma .m {
+        color: #74b9ff !important;
+        font-weight: 600 !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+        代码块 - 自动浅色模式 (data-theme="auto" + 系统浅色)
+——————————————————————————————————————————————*/
+@media (prefers-color-scheme: light) {
+    html[data-theme="auto"] .post-content .highlight,
+    html[data-theme="auto"] .post-content .chroma {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
+        box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
+        border: none !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight::before,
+    html[data-theme="auto"] .post-content .chroma::before {
+        background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%) !important;
+        border-bottom-color: rgba(232, 74, 122, 0.15) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight pre,
+    html[data-theme="auto"] .post-content .chroma pre,
+    html[data-theme="auto"] .post-content .highlight code,
+    html[data-theme="auto"] .post-content .chroma code,
+    html[data-theme="auto"] .post-content .highlight span,
+    html[data-theme="auto"] .post-content .chroma span,
+    html[data-theme="auto"] .post-content .highlight div,
+    html[data-theme="auto"] .post-content .chroma div {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .ln,
+    html[data-theme="auto"] .post-content .chroma .ln {
+        color: rgba(232, 74, 122, 0.35) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .k,
+    html[data-theme="auto"] .post-content .chroma .k,
+    html[data-theme="auto"] .post-content .highlight .kd,
+    html[data-theme="auto"] .post-content .chroma .kd {
+        color: #e84a7a !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .s,
+    html[data-theme="auto"] .post-content .chroma .s {
+        color: #9c66cc !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .n,
+    html[data-theme="auto"] .post-content .chroma .n {
+        color: #c44569 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .c,
+    html[data-theme="auto"] .post-content .chroma .c {
+        color: #b088f9 !important;
+        font-style: italic !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .o,
+    html[data-theme="auto"] .post-content .chroma .o {
+        color: #ff6b81 !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .p,
+    html[data-theme="auto"] .post-content .chroma .p {
+        color: #a55eea !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .m,
+    html[data-theme="auto"] .post-content .chroma .m {
+        color: #6c5ce7 !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn {
+        color: #e84a7a !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn:hover {
+        color: #c44569 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
+        color: rgba(232, 74, 122, 0.5) !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                代码块 - 移动端适配
+——————————————————————————————————————————————*/
+@media (max-width: 768px) {
+    .post-content .highlight,
+    .post-content .chroma {
+        border-radius: 12px !important;
+        margin: 20px 0 !important;
+    }
+    
+    .post-content .highlight pre,
+    .post-content .chroma pre {
+        padding: 0 !important;
+        font-size: 0.95rem !important;
+    }
+    
+    .post-content .highlight pre code,
+    .post-content .chroma pre code {
+        padding: 15px !important;
+    }
+    
+    .post-content .highlight::before,
+    .post-content .chroma::before {
+        height: 35px !important;
+    }
+    
+    .post-content .highlight::before,
+    .post-content .chroma::before {
+        height: 35px !important;
+        font-size: 12px !important;
+        padding-left: 12px !important;
+    }
+}

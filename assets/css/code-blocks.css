@@ -1,6 +1,64 @@
 /*——————————————————————————————————————————————
-            代码块折叠/展开功能样式
+            代码块功能样式 - 集成版
 ——————————————————————————————————————————————*/
+
+/* ========== 代码复制按钮 ========== */
+.copy-code, button.copy-code {
+  display: none !important;
+}
+
+.custom-copy-code {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(4px) !important;
+  line-height: 1.2 !important;
+}
+
+.highlight:hover .custom-copy-code,
+.chroma:hover .custom-copy-code {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.custom-copy-code:hover {
+  transform: scale(1.05) translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
+}
+
+.custom-copy-code:active {
+  transform: scale(0.95) !important;
+}
+
+.custom-copy-code.copied {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%) !important;
+  box-shadow: 0 2px 8px rgba(161, 140, 209, 0.5) !important;
+}
+
+.highlight, .chroma {
+  position: relative !important;
+}
+
+/* 彩虹画 pre 元素不需要复制按钮 */
+pre.rainbow-miku .custom-copy-code,
+pre:not(.highlight):not(.chroma) .custom-copy-code {
+  display: none !important;
+}
+
+/* ========== 代码折叠按钮 ========== */
 .code-fold-toggle {
   position: absolute !important;
   top: 6px !important;
@@ -58,23 +116,7 @@
   transform: scale(0.95) !important;
 }
 
-/* 折叠提示文字 */
-.code-fold-hint {
-  padding: 8px 12px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 13px !important;
-  color: #888 !important;
-  background: rgba(255, 255, 255, 0.5) !important;
-  border-bottom: 1px dashed rgba(255, 105, 135, 0.3) !important;
-  font-style: italic !important;
-  margin: 0 !important;
-}
 
-body.dark .code-fold-hint {
-  color: #aaa !important;
-  background: rgba(0, 0, 0, 0.3) !important;
-  border-bottom-color: rgba(255, 105, 135, 0.2) !important;
-}
 
 /* 折叠状态 */
 .highlight.code-folded,
@@ -102,7 +144,16 @@ body.dark .chroma.code-folded::after {
   background: linear-gradient(transparent, rgba(30, 30, 30, 0.95)) !important;
 }
 
+/* ========== 移动端适配 ========== */
 @media (max-width: 768px) {
+  .custom-copy-code {
+    opacity: 1 !important;
+    padding: 3px 8px !important;
+    font-size: 10px !important;
+    top: 4px !important;
+    right: 4px !important;
+  }
+
   .code-fold-toggle {
     opacity: 1 !important;
     width: 24px !important;
@@ -110,14 +161,9 @@ body.dark .chroma.code-folded::after {
     top: 4px !important;
     right: 44px !important;
   }
-  
+
   .code-fold-toggle svg {
     width: 10px !important;
     height: 10px !important;
-  }
-  
-  .code-fold-hint {
-    font-size: 11px !important;
-    padding: 6px 10px !important;
   }
 }

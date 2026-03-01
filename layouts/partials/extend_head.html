@@ -2,5 +2,9 @@
 {{- $pageTransitions := resources.Get "css/page-transitions.css" | resources.Minify -}}
 <link rel="stylesheet" href="{{ $pageTransitions.RelPermalink }}">
 
+{{- /* Custom CSS */ -}}
+{{- $customCSS := resources.Get "css/custom.css" | resources.Minify -}}
+<link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
+
 {{- /* Page Transitions JavaScript */ -}}
 {{- partial "page-transitions-js.html" . -}}
