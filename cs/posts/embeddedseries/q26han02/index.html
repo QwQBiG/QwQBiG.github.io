@@ -91,7 +91,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><link rel="stylesheet" href="/css/page-transitions.min.css"><script>
+</script><link rel="stylesheet" href="/css/page-transitions.min.css"><link rel="stylesheet" href="/css/custom.min.css"><script>
 (function() {
   'use strict';
   
@@ -879,7 +879,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         outline: none;
                     }
 
-                    body.dark button#theme-toggle {
+                    html[data-theme="dark"] button#theme-toggle {
                         box-shadow: 
                             0 0 0 1.5px var(--c-border-night),
                             0 5px 15px rgba(0,0,0,0.3),
@@ -907,8 +907,8 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         opacity: 0;
                     }
 
-                    body.dark .layer-bg-day { opacity: 0; }
-                    body.dark .layer-bg-night { opacity: 1; }
+                    html[data-theme="dark"] .layer-bg-day { opacity: 0; }
+                    html[data-theme="dark"] .layer-bg-night { opacity: 1; }
 
                     .star-matrix {
                         position: absolute; width: 100%; height: 100%;
@@ -918,7 +918,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         transition: transform var(--dur-main) var(--ease-damp), opacity 0.5s ease;
                     }
 
-                    body.dark .star-matrix {
+                    html[data-theme="dark"] .star-matrix {
                         transform: translateY(0) scale(1);
                         opacity: 1;
                     }
@@ -952,8 +952,8 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         opacity: 0;
                     }
 
-                    body.dark .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
-                    body.dark .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
+                    html[data-theme="dark"] .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
+                    html[data-theme="dark"] .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
 
                     .cloud-stack {
                         position: absolute; inset: 0;
@@ -961,7 +961,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         transition: transform var(--dur-main) var(--ease-damp), opacity var(--dur-main) ease;
                     }
 
-                    body.dark .cloud-stack {
+                    html[data-theme="dark"] .cloud-stack {
                         transform: translateY(100%);
                         opacity: 0;
                     }
@@ -1024,7 +1024,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         transition: transform var(--dur-main) var(--ease-damp);
                     }
 
-                    body.dark .orb {
+                    html[data-theme="dark"] .orb {
                         transform: translateY(-50%) translateX(calc(var(--sz-gap) + var(--travel))) rotate(360deg);
                     }
 
@@ -1044,7 +1044,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         z-index: 5;
                     }
 
-                    body.dark .face-moon {
+                    html[data-theme="dark"] .face-moon {
                         transform: translateX(0);
                     }
 
@@ -1057,7 +1057,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         transition: opacity 0.4s ease;
                     }
                     
-                    body.dark .crater {
+                    html[data-theme="dark"] .crater {
                         opacity: 1;
                         transition-delay: 0.4s;
                     }
@@ -1075,7 +1075,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                         transition: transform var(--dur-main) var(--ease-damp);
                     }
                     
-                    body.dark .halo-container {
+                    html[data-theme="dark"] .halo-container {
                         transform: translateX(var(--travel));
                     }
 
@@ -1104,7 +1104,7 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
                     .ray:nth-child(3) { transform: translateX(-50%) rotate(90deg); }
                     .ray:nth-child(4) { transform: translateX(-50%) rotate(135deg); }
 
-                    body.dark .sun-halo { opacity: 0; }
+                    html[data-theme="dark"] .sun-halo { opacity: 0; }
 
                     @keyframes float-h {
                         0% { transform: translateX(0); }
@@ -1242,7 +1242,21 @@ ESP32 开发板上自带了一颗蓝灯，通常连接在 GPIO 2。
         </ul>
     </nav>
 </header><main class="main"><article class="post-single">
-  <header class="post-header"><h1 class="post-title">ESP-32 Web 端远控点灯</h1><div class="post-meta"><span title='2026-01-21 14:00:00 +0800 +0800'>January 21, 2026</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div></header><div class="post-content"><blockquote>
+  <header class="post-header"><div class="post-header-wrapper">
+      <h1 class="post-title">ESP-32 Web 端远控点灯</h1>
+      <div class="post-title-decoration"></div>
+    </div><div class="post-meta-enhanced">
+      <div class="meta-item">
+        <span class="meta-icon">📅</span>
+        <span class="meta-text">2026-01-21</span>
+      </div><div class="meta-item tags-item">
+        <span class="meta-icon">🏷️</span>
+        <div class="meta-tags"><span class="meta-tag">嵌入式</span><span class="meta-tag">ESP-32</span></div>
+      </div><div class="meta-item">
+        <span class="meta-icon">⏱️</span>
+        <span class="meta-text">7 分钟阅读</span>
+      </div>
+    </div></header><div class="post-content-wrapper"><div class="post-content"><blockquote>
 <p>2026 寒假 任务02 “我想用 ESP32 做一个 Web 服务器。用 C++ 代码：
 让 ESP32 使用 AP 模式（Access Point）启动一个 Web Server，当手机访问 ESP32 的 IP 地址时，显示两个按钮 &ldquo;ON&rdquo; 和 &ldquo;OFF&rdquo;。点击按钮可以通过 GPIO 控制面包板上外接的 LED 灯（假设接在 GPIO 23）。”</p>
 </blockquote>
@@ -1275,206 +1289,206 @@ GPIO 23 &ndash;&gt; LED 正极 (长脚) &ndash;&gt; LED &ndash;&gt; LED 负极 (
 <p>这样在这个小区域内就形成了一个回路，线尽可能短，看起来会专业很多。</p>
 <h2 id="第二部分ap-模式代码">第二部分：AP 模式代码</h2>
 <p>请将 <code>src/main.cpp</code> 的内容替换为以下代码。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">94
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">95
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">96
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span><span class="lnt">97
+</span><span class="lnt">98
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Arduino.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;WiFi.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;WebServer.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// ================= 配置区域 =================
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 这次我们设置 ESP32 自己发出的 WiFi 名字和密码
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> ap_ssid <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;My_ESP32_Control&#34;</span>;  <span style="color:#75715e">// 手机搜到的 WiFi 名字
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> ap_password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;12345678&#34;</span>;      <span style="color:#75715e">// 连接这个 WiFi 的密码（至少8位）
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 选择 LED 引脚
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// 如果想最整洁，用板载 LED (通常是 2)，如果外接用了 23 就写 23
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define LED_PIN 2
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// ===========================================
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>WebServer <span style="color:#a6e22e">server</span>(<span style="color:#ae81ff">80</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// HTML 页面代码（保持不变）
-</span></span></span><span style="display:flex;"><span>String <span style="color:#a6e22e">getHTML</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  String html <span style="color:#f92672">=</span> R<span style="color:#e6db74">&#34;rawliteral(</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;!</span>DOCTYPE html<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>html<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>head<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>meta charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>meta name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;viewport&#34;</span> content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width=device-width, initial-scale=1&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>title<span style="color:#f92672">&gt;</span>ESP32 <span style="color:#960050;background-color:#1e0010">控制台</span><span style="color:#f92672">&lt;/</span>title<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>style<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>    body { font<span style="color:#f92672">-</span>family: Helvetica; text<span style="color:#f92672">-</span>align: center; margin<span style="color:#f92672">-</span>top: <span style="color:#ae81ff">50</span>px; background<span style="color:#f92672">-</span>color: <span style="color:#960050;background-color:#1e0010">#</span>f0f0f0;}
-</span></span><span style="display:flex;"><span>    h1 { color: <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">333</span>; }
-</span></span><span style="display:flex;"><span>    .btn {
-</span></span><span style="display:flex;"><span>      display: <span style="color:#66d9ef">inline</span><span style="color:#f92672">-</span>block; padding: <span style="color:#ae81ff">20</span>px <span style="color:#ae81ff">40</span>px; font<span style="color:#f92672">-</span>size: <span style="color:#ae81ff">30</span>px;
-</span></span><span style="display:flex;"><span>      color: white; text<span style="color:#f92672">-</span>decoration: none; border<span style="color:#f92672">-</span>radius: <span style="color:#ae81ff">10</span>px; margin: <span style="color:#ae81ff">20</span>px;
-</span></span><span style="display:flex;"><span>      box<span style="color:#f92672">-</span>shadow: <span style="color:#ae81ff">2</span>px <span style="color:#ae81ff">2</span>px <span style="color:#ae81ff">5</span>px rgba(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0.3</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    .on { background<span style="color:#f92672">-</span>color: <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">4</span>CAF50; }
-</span></span><span style="display:flex;"><span>    .off { background<span style="color:#f92672">-</span>color: <span style="color:#960050;background-color:#1e0010">#</span>f44336; }
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/</span>style<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span>head<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>body<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>h1<span style="color:#f92672">&gt;</span><span style="color:#960050;background-color:#1e0010">💡</span> <span style="color:#960050;background-color:#1e0010">灯光控制中心</span><span style="color:#f92672">&lt;/</span>h1<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/on&#34;</span> <span style="color:#66d9ef">class</span><span style="color:#960050;background-color:#1e0010">=&#34;</span><span style="color:#a6e22e">btn</span> on<span style="color:#e6db74">&#34;&gt;开启 ON&lt;/a&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>br<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span>a href<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/off&#34;</span> <span style="color:#66d9ef">class</span><span style="color:#960050;background-color:#1e0010">=&#34;</span><span style="color:#a6e22e">btn</span> off<span style="color:#e6db74">&#34;&gt;关闭 OFF&lt;/a&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span>body<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span>html<span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>)rawliteral<span style="color:#e6db74">&#34;;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> html;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">handleRoot</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  server.send(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;text/html&#34;</span>, getHTML());
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">handleLedOn</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  digitalWrite(LED_PIN, HIGH);
-</span></span><span style="display:flex;"><span>  Serial.println(<span style="color:#e6db74">&#34;LED ON&#34;</span>);
-</span></span><span style="display:flex;"><span>  server.send(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;text/html&#34;</span>, getHTML());
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">handleLedOff</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  digitalWrite(LED_PIN, LOW);
-</span></span><span style="display:flex;"><span>  Serial.println(<span style="color:#e6db74">&#34;LED OFF&#34;</span>);
-</span></span><span style="display:flex;"><span>  server.send(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;text/html&#34;</span>, getHTML());
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setup</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  Serial.begin(<span style="color:#ae81ff">115200</span>);
-</span></span><span style="display:flex;"><span>  pinMode(LED_PIN, OUTPUT);
-</span></span><span style="display:flex;"><span>  digitalWrite(LED_PIN, LOW);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// === 核心变化：启动 AP 模式 ===
-</span></span></span><span style="display:flex;"><span>  Serial.println(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">正在启动 AP 模式...&#34;</span>);
-</span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 设置 ESP32 为 AP 模式
-</span></span></span><span style="display:flex;"><span>  WiFi.softAP(ap_ssid, ap_password);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 获取 ESP32 自己的 IP 地址（AP 模式下通常默认是 192.168.4.1）
-</span></span></span><span style="display:flex;"><span>  IPAddress IP <span style="color:#f92672">=</span> WiFi.softAPIP();
-</span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>  Serial.print(<span style="color:#e6db74">&#34;AP 启动成功! WiFi 名称: &#34;</span>);
-</span></span><span style="display:flex;"><span>  Serial.println(ap_ssid);
-</span></span><span style="display:flex;"><span>  Serial.print(<span style="color:#e6db74">&#34;请手机连接该 WiFi，然后访问: http://&#34;</span>);
-</span></span><span style="display:flex;"><span>  Serial.println(IP);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  server.on(<span style="color:#e6db74">&#34;/&#34;</span>, handleRoot);
-</span></span><span style="display:flex;"><span>  server.on(<span style="color:#e6db74">&#34;/on&#34;</span>, handleLedOn);
-</span></span><span style="display:flex;"><span>  server.on(<span style="color:#e6db74">&#34;/off&#34;</span>, handleLedOff);
-</span></span><span style="display:flex;"><span>  server.begin();
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">loop</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  server.handleClient();
-</span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;Arduino.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;WiFi.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;WebServer.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ================= 配置区域 =================
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 这次我们设置 ESP32 自己发出的 WiFi 名字和密码
+</span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ap_ssid</span> <span class="o">=</span> <span class="s">&#34;My_ESP32_Control&#34;</span><span class="p">;</span>  <span class="c1">// 手机搜到的 WiFi 名字
+</span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ap_password</span> <span class="o">=</span> <span class="s">&#34;12345678&#34;</span><span class="p">;</span>      <span class="c1">// 连接这个 WiFi 的密码（至少8位）
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 选择 LED 引脚
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 如果想最整洁，用板载 LED (通常是 2)，如果外接用了 23 就写 23
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define LED_PIN 2
+</span></span></span><span class="line"><span class="cl"><span class="c1">// ===========================================
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">WebServer</span> <span class="nf">server</span><span class="p">(</span><span class="mi">80</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// HTML 页面代码（保持不变）
+</span></span></span><span class="line"><span class="cl"><span class="n">String</span> <span class="nf">getHTML</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">String</span> <span class="n">html</span> <span class="o">=</span> <span class="n">R</span><span class="s">&#34;rawliteral(</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;!</span><span class="n">DOCTYPE</span> <span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">meta</span> <span class="n">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">meta</span> <span class="n">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="n">content</span><span class="o">=</span><span class="s">&#34;width=device-width, initial-scale=1&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">ESP32</span> <span class="err">控制台</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">style</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">body</span> <span class="p">{</span> <span class="n">font</span><span class="o">-</span><span class="nl">family</span><span class="p">:</span> <span class="n">Helvetica</span><span class="p">;</span> <span class="n">text</span><span class="o">-</span><span class="nl">align</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span> <span class="n">margin</span><span class="o">-</span><span class="nl">top</span><span class="p">:</span> <span class="mi">50</span><span class="n">px</span><span class="p">;</span> <span class="n">background</span><span class="o">-</span><span class="nl">color</span><span class="p">:</span> <span class="err">#</span><span class="n">f0f0f0</span><span class="p">;}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">h1</span> <span class="p">{</span> <span class="nl">color</span><span class="p">:</span> <span class="err">#</span><span class="mi">333</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">btn</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nl">display</span><span class="p">:</span> <span class="kr">inline</span><span class="o">-</span><span class="n">block</span><span class="p">;</span> <span class="nl">padding</span><span class="p">:</span> <span class="mi">20</span><span class="n">px</span> <span class="mi">40</span><span class="n">px</span><span class="p">;</span> <span class="n">font</span><span class="o">-</span><span class="nl">size</span><span class="p">:</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="nl">color</span><span class="p">:</span> <span class="n">white</span><span class="p">;</span> <span class="n">text</span><span class="o">-</span><span class="nl">decoration</span><span class="p">:</span> <span class="n">none</span><span class="p">;</span> <span class="n">border</span><span class="o">-</span><span class="nl">radius</span><span class="p">:</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span> <span class="nl">margin</span><span class="p">:</span> <span class="mi">20</span><span class="n">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">box</span><span class="o">-</span><span class="nl">shadow</span><span class="p">:</span> <span class="mi">2</span><span class="n">px</span> <span class="mi">2</span><span class="n">px</span> <span class="mi">5</span><span class="n">px</span> <span class="n">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">on</span> <span class="p">{</span> <span class="n">background</span><span class="o">-</span><span class="nl">color</span><span class="p">:</span> <span class="err">#</span><span class="mi">4</span><span class="n">CAF50</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">off</span> <span class="p">{</span> <span class="n">background</span><span class="o">-</span><span class="nl">color</span><span class="p">:</span> <span class="err">#</span><span class="n">f44336</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">style</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">💡</span> <span class="err">灯光控制中心</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&#34;/on&#34;</span> <span class="k">class</span><span class="err">=&#34;</span><span class="nc">btn</span> <span class="n">on</span><span class="s">&#34;&gt;开启 ON&lt;/a&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&#34;/off&#34;</span> <span class="k">class</span><span class="err">=&#34;</span><span class="nc">btn</span> <span class="n">off</span><span class="s">&#34;&gt;关闭 OFF&lt;/a&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="n">rawliteral</span><span class="s">&#34;;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">html</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">handleRoot</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s">&#34;text/html&#34;</span><span class="p">,</span> <span class="n">getHTML</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">handleLedOn</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_PIN</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&#34;LED ON&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s">&#34;text/html&#34;</span><span class="p">,</span> <span class="n">getHTML</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">handleLedOff</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_PIN</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&#34;LED OFF&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s">&#34;text/html&#34;</span><span class="p">,</span> <span class="n">getHTML</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_PIN</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_PIN</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// === 核心变化：启动 AP 模式 ===
+</span></span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">正在启动 AP 模式...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// 设置 ESP32 为 AP 模式
+</span></span></span><span class="line"><span class="cl">  <span class="n">WiFi</span><span class="p">.</span><span class="n">softAP</span><span class="p">(</span><span class="n">ap_ssid</span><span class="p">,</span> <span class="n">ap_password</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 获取 ESP32 自己的 IP 地址（AP 模式下通常默认是 192.168.4.1）
+</span></span></span><span class="line"><span class="cl">  <span class="n">IPAddress</span> <span class="n">IP</span> <span class="o">=</span> <span class="n">WiFi</span><span class="p">.</span><span class="n">softAPIP</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&#34;AP 启动成功! WiFi 名称: &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">ap_ssid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&#34;请手机连接该 WiFi，然后访问: http://&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">IP</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="n">handleRoot</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#34;/on&#34;</span><span class="p">,</span> <span class="n">handleLedOn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#34;/off&#34;</span><span class="p">,</span> <span class="n">handleLedOff</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">server</span><span class="p">.</span><span class="n">handleClient</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="第三步如何操作">第三步：如何操作</h2>
@@ -1496,33 +1510,112 @@ GPIO 23 &ndash;&gt; LED 正极 (长脚) &ndash;&gt; LED &ndash;&gt; LED 负极 (
 <li>在地址栏输入 <strong><code>192.168.4.1</code></strong>（这是 ESP32 在 AP 模式下的默认固定地址）。</li>
 <li>你将会看到一个 Web 控制页面，点击页面上的按钮即可远程控制灯光！</li>
 </ol>
-</div><footer class="post-footer">
-<nav class="paginav">
-  <a class="prev" href="https://QwQBiG.github.io/cs/posts/embeddedseries/q26han03/">
-    <span class="title">« Prev</span>
-    <br>
-    <span>三星平板刷机</span>
-  </a>
-  <a class="next" href="https://QwQBiG.github.io/cs/posts/embeddedseries/q26han01/">
-    <span class="title">Next »</span>
-    <br>
-    <span>再一次梦开始的地方——ESP-32点灯</span>
-  </a>
+</div>
+    </div><footer class="post-footer">
+<nav class="custom-post-nav">
+  <div class="nav-container">
+    <a class="nav-card prev-card" href="https://QwQBiG.github.io/cs/posts/embeddedseries/q26han03/">
+      <div class="nav-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </div>
+      <div class="nav-content">
+        <span class="nav-label">上一篇</span>
+        <span class="nav-title">三星平板刷机</span>
+      </div>
+    </a>
+    <a class="nav-card next-card" href="https://QwQBiG.github.io/cs/posts/embeddedseries/q26han01/">
+      <div class="nav-content">
+        <span class="nav-label">下一篇</span>
+        <span class="nav-title">再一次梦开始的地方——ESP-32点灯</span>
+      </div>
+      <div class="nav-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </a>
+  </div>
 </nav>
-<script src="https://giscus.app/client.js"
-        data-repo="QwQBiG/QwQBiG.github.io"
-        data-repo-id="R_kgDOQUrNow"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOQUrNo84Cxx1C"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
+<div class="giscus-container">
+    <script src="https://giscus.app/client.js"
+            data-repo="QwQBiG/QwQBiG.github.io"
+            data-repo-id="R_kgDOQUrNow"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOQUrNo84Cxx1C"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="https://giscus.app/themes/noborder_dark.css"
+            data-lang="zh-CN"
+            crossorigin="anonymous"
+            async>
+    </script>
+</div>
+
+<script>
+    
+    function updateGiscusTheme() {
+        const iframe = document.querySelector('.giscus-frame');
+        if (!iframe) return;
+        
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const theme = currentTheme === 'dark' ? 'dark' : 'light';
+        
+        iframe.contentWindow.postMessage({
+            giscus: {
+                setConfig: {
+                    theme: theme
+                }
+            }
+        }, 'https://giscus.app');
+    }
+    
+    
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'data-theme') {
+                updateGiscusTheme();
+            }
+        });
+    });
+    
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+    
+    
+    function initGiscusTheme() {
+        const iframe = document.querySelector('.giscus-frame');
+        if (iframe) {
+            updateGiscusTheme();
+        } else {
+            
+            setTimeout(initGiscusTheme, 500);
+        }
+    }
+    
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initGiscusTheme, 1000);
+        });
+    } else {
+        setTimeout(initGiscusTheme, 1000);
+    }
+    
+    
+    window.addEventListener('message', (event) => {
+        if (event.origin !== 'https://giscus.app') return;
+        if (event.data && event.data.giscus && event.data.giscus.resizeHeight) {
+            
+            updateGiscusTheme();
+        }
+    });
 </script></footer>
 </article>
     </main>
@@ -1643,12 +1736,12 @@ GPIO 23 &ndash;&gt; LED 正极 (长脚) &ndash;&gt; LED &ndash;&gt; LED 负极 (
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-body.dark .reading-progress-container {
+html[data-theme="dark"] .reading-progress-container {
   background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-body.dark .reading-progress-percent {
+html[data-theme="dark"] .reading-progress-percent {
   color: rgba(200, 200, 200, 0.8);
   background: rgba(30, 30, 30, 0.8);
 }
@@ -1717,196 +1810,6 @@ body.dark .reading-progress-percent {
   }
 }
 /*——————————————————————————————————————————————
-                代码复制按钮样式
-——————————————————————————————————————————————*/
-.copy-code, button.copy-code {
-  display: none !important;
-}
-
-.custom-copy-code {
-  position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
-  padding: 4px 10px !important;
-  font-size: 11px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  opacity: 0 !important;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
-  z-index: 100 !important;
-  pointer-events: auto !important;
-  backdrop-filter: blur(4px) !important;
-  line-height: 1.2 !important;
-}
-
-.highlight:hover .custom-copy-code,
-.chroma:hover .custom-copy-code {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.custom-copy-code:hover {
-  transform: scale(1.05) translateY(-1px) !important;
-  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
-}
-
-.custom-copy-code:active {
-  transform: scale(0.95) !important;
-}
-
-.custom-copy-code.copied {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
-  box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4) !important;
-}
-
-.highlight, .chroma {
-  position: relative !important;
-}
-
-/* 彩虹画 pre 元素不需要复制按钮 */
-pre.rainbow-miku .custom-copy-code,
-pre:not(.highlight):not(.chroma) .custom-copy-code {
-  display: none !important;
-}
-
-@media (max-width: 768px) {
-  .custom-copy-code {
-    opacity: 1 !important;
-    padding: 3px 8px !important;
-    font-size: 10px !important;
-    top: 4px !important;
-    right: 4px !important;
-  }
-}
-/*——————————————————————————————————————————————
-            代码块折叠/展开功能样式
-——————————————————————————————————————————————*/
-.code-fold-toggle {
-  position: absolute !important;
-  top: 6px !important;
-  right: 52px !important;
-  width: 28px !important;
-  height: 24px !important;
-  padding: 0 !important;
-  font-size: 12px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  opacity: 0 !important;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
-  z-index: 100 !important;
-  pointer-events: auto !important;
-  backdrop-filter: blur(4px) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-}
-
-.code-fold-toggle svg {
-  width: 12px !important;
-  height: 12px !important;
-  fill: currentColor !important;
-  transition: transform 0.3s ease !important;
-}
-
-.code-fold-toggle.folded svg {
-  transform: rotate(180deg) !important;
-}
-
-/* 确保按钮在代码块折叠时正确显示 */
-.code-folded .code-fold-toggle svg {
-  transform: rotate(180deg) !important;
-}
-
-.highlight:hover .code-fold-toggle,
-.chroma:hover .code-fold-toggle {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.code-fold-toggle:hover {
-  transform: scale(1.05) translateY(-1px) !important;
-  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
-}
-
-.code-fold-toggle:active {
-  transform: scale(0.95) !important;
-}
-
-/* 折叠提示文字 */
-.code-fold-hint {
-  padding: 8px 12px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 13px !important;
-  color: #888 !important;
-  background: rgba(255, 255, 255, 0.5) !important;
-  border-bottom: 1px dashed rgba(255, 105, 135, 0.3) !important;
-  font-style: italic !important;
-  margin: 0 !important;
-}
-
-body.dark .code-fold-hint {
-  color: #aaa !important;
-  background: rgba(0, 0, 0, 0.3) !important;
-  border-bottom-color: rgba(255, 105, 135, 0.2) !important;
-}
-
-/* 折叠状态 */
-.highlight.code-folded,
-.chroma.code-folded {
-  max-height: 150px !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-.highlight.code-folded::after,
-.chroma.code-folded::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 50px !important;
-  background: linear-gradient(transparent, rgba(255, 255, 255, 0.95)) !important;
-  pointer-events: none !important;
-  z-index: 10 !important;
-}
-
-body.dark .highlight.code-folded::after,
-body.dark .chroma.code-folded::after {
-  background: linear-gradient(transparent, rgba(30, 30, 30, 0.95)) !important;
-}
-
-@media (max-width: 768px) {
-  .code-fold-toggle {
-    opacity: 1 !important;
-    width: 24px !important;
-    height: 20px !important;
-    top: 4px !important;
-    right: 44px !important;
-  }
-  
-  .code-fold-toggle svg {
-    width: 10px !important;
-    height: 10px !important;
-  }
-  
-  .code-fold-hint {
-    font-size: 11px !important;
-    padding: 6px 10px !important;
-  }
-}
-/*——————————————————————————————————————————————
                 猫咪钢琴样式
 ——————————————————————————————————————————————*/
 :root {
@@ -1927,7 +1830,7 @@ body.dark .chroma.code-folded::after {
   }
 }
 
-body.dark {
+html[data-theme="dark"] {
   --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
   --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
   --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
@@ -2085,7 +1988,7 @@ body.dark {
   fill: white;
 }
 
-body.dark .neko-close-btn {
+html[data-theme="dark"] .neko-close-btn {
   background: rgba(220, 53, 69, 0.9);
   border-color: rgba(255, 255, 255, 0.9);
 }
@@ -2296,23 +2199,25 @@ nav.pagination,
   color: #999;
 }
 
-/* 深色模式适配 */
+/* 深色模式适配 - 紫罗兰色主题 */
 body.dark .custom-pagination .page-link {
   background: rgba(46, 46, 51, 0.7);
-  border-color: rgba(255, 154, 158, 0.2);
+  border-color: rgba(189, 147, 249, 0.3);
   color: #ccc;
 }
 
 body.dark .custom-pagination .page-link:hover {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  border-color: rgba(255, 154, 158, 0.8);
+  background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+  border-color: rgba(189, 147, 249, 0.8);
   color: white;
+  box-shadow: 0 8px 25px rgba(189, 147, 249, 0.4);
 }
 
 body.dark .custom-pagination .page-item.active .page-link {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  border-color: rgba(255, 154, 158, 0.8);
+  background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+  border-color: rgba(189, 147, 249, 0.8);
   color: white;
+  box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
 }
 
 body.dark .custom-pagination .page-item.disabled .page-link {
@@ -2355,6 +2260,8 @@ nav[aria-label="pagination"],
   display: none !important;
 }
 </style>
+
+<link rel="stylesheet" href="/css/code-blocks.min.css">
 
 <div id="neko-engine-root">
   <audio id="neko-audio" loop crossorigin="anonymous">
@@ -2454,38 +2361,6 @@ nav[aria-label="pagination"],
   }
 })();
 /**
- * 返回顶部按钮功能
- */
-(function() {
-  // 移除主题自带的返回顶部按钮
-  const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
-  existingTopLinks.forEach(el => el.remove());
-  
-  const backToTop = document.createElement('button');
-  backToTop.className = 'custom-back-to-top';
-  backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
-  backToTop.setAttribute('aria-label', '返回顶部');
-  document.body.appendChild(backToTop);
-
-  function toggleVisibility() {
-    if (window.scrollY > 300) {
-      backToTop.classList.add('visible');
-    } else {
-      backToTop.classList.remove('visible');
-    }
-  }
-
-  backToTop.addEventListener('click', function() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-
-  window.addEventListener('scroll', toggleVisibility, { passive: true });
-  toggleVisibility();
-})();
-/**
  * 禁用主题自带的滚动事件处理
  */
 (function() {
@@ -2520,205 +2395,6 @@ nav[aria-label="pagination"],
       observer.disconnect();
     }, 5000);
   }
-})();
-/**
- * 代码复制按钮功能
- */
-(function() {
-  // 隐藏主题自带的复制按钮
-  const hideDefaultCopyButtons = function() {
-    const defaultButtons = document.querySelectorAll('.copy-code, button.copy-code');
-    defaultButtons.forEach(btn => {
-      btn.style.display = 'none';
-    });
-  };
-  
-  // 添加自定义复制按钮 - 只给 highlight 和 chroma 类添加
-  const addCustomCopyButtons = function() {
-    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
-    
-    codeBlocks.forEach(block => {
-      // 跳过已经添加过按钮的代码块
-      if (block.querySelector('.custom-copy-code')) return;
-      
-      const button = document.createElement('button');
-      button.className = 'custom-copy-code';
-      button.textContent = 'copy';
-      button.setAttribute('aria-label', 'copy code');
-      
-      button.addEventListener('click', function() {
-        const code = block.querySelector('code')?.textContent || block.textContent;
-        navigator.clipboard.writeText(code).then(function() {
-          button.textContent = 'copied';
-          button.classList.add('copied');
-          setTimeout(function() {
-            button.textContent = 'copy';
-            button.classList.remove('copied');
-          }, 2000);
-        }).catch(function() {
-          button.textContent = 'failed';
-          setTimeout(function() {
-            button.textContent = 'copy';
-          }, 2000);
-        });
-      });
-      
-      block.style.position = 'relative';
-      block.appendChild(button);
-    });
-  };
-  
-  // 初始执行
-  hideDefaultCopyButtons();
-  addCustomCopyButtons();
-  
-  // 监听动态添加的代码块
-  const observer = new MutationObserver(function() {
-    hideDefaultCopyButtons();
-    addCustomCopyButtons();
-  });
-  
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-  
-  // 页面加载完成后再次执行
-  window.addEventListener('load', function() {
-    hideDefaultCopyButtons();
-    addCustomCopyButtons();
-  });
-})();
-/**
- * 代码块折叠/展开功能
- */
-(function() {
-  // 向上箭头 SVG
-  const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
-  
-  // 检查代码块是否需要折叠（大于等于6行）
-  const shouldEnableFold = function(block) {
-    // 获取代码行数 - 通过行号元素计算
-    const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length >= 6) {
-      return true;
-    }
-    
-    // 检查 flex span 元素（用户提供的代码块格式）
-    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
-    if (flexSpans.length >= 6) {
-      return true;
-    }
-    
-    // 备用方案：通过代码内容计算
-    const codeElement = block.querySelector('code');
-    if (codeElement) {
-      // 尝试通过子元素数量计算行数
-      const codeLines = codeElement.children;
-      if (codeLines.length >= 6) {
-        return true;
-      }
-      
-      // 通过文本内容计算
-      const lines = codeElement.textContent.split('\n');
-      // 过滤掉空行后计算
-      const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
-        return true;
-      }
-    }
-    
-    // 检查 table 行数（带行号的代码块）
-    const tableElement = block.querySelector('table');
-    if (tableElement) {
-      const rows = tableElement.querySelectorAll('tr');
-      if (rows.length >= 6) {
-        return true;
-      }
-    }
-    
-    return false;
-  };
-  
-  // 添加折叠功能到代码块
-  const addFoldFunctionality = function() {
-    // 选择所有可能包含代码的元素
-    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
-    
-    codeBlocks.forEach(block => {
-      // 跳过已经添加过折叠按钮的代码块
-      if (block.querySelector('.code-fold-toggle')) return;
-      
-      // 跳过已经有其他折叠功能的代码块
-      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
-      
-      // 检查是否需要折叠功能
-      if (!shouldEnableFold(block)) return;
-      
-      // 确保代码块有相对定位
-      block.style.position = 'relative';
-      
-      // 创建折叠按钮
-      const foldButton = document.createElement('button');
-      foldButton.className = 'code-fold-toggle';
-      foldButton.innerHTML = arrowUpSVG;
-      foldButton.setAttribute('aria-label', 'fold code');
-      foldButton.title = '折叠/展开代码';
-      
-      // 插入到代码块中
-      block.appendChild(foldButton);
-      
-      // 创建折叠提示（初始隐藏）
-      const hint = document.createElement('div');
-      hint.className = 'code-fold-hint';
-      hint.textContent = '当前内容已折叠呐~';
-      hint.style.display = 'none';
-      block.insertBefore(hint, block.firstChild);
-      
-      // 折叠状态
-      let isFolded = false;
-      
-      // 点击事件
-      foldButton.addEventListener('click', function(e) {
-        e.stopPropagation();
-        isFolded = !isFolded;
-        
-        if (isFolded) {
-          block.classList.add('code-folded');
-          foldButton.classList.add('folded');
-          hint.style.display = 'block';
-          foldButton.setAttribute('aria-label', 'unfold code');
-        } else {
-          block.classList.remove('code-folded');
-          foldButton.classList.remove('folded');
-          hint.style.display = 'none';
-          foldButton.setAttribute('aria-label', 'fold code');
-        }
-      });
-    });
-  };
-  
-  // 初始执行
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', addFoldFunctionality);
-  } else {
-    addFoldFunctionality();
-  }
-  
-  // 监听动态添加的代码块
-  const observer = new MutationObserver(function() {
-    addFoldFunctionality();
-  });
-  
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-  
-  // 页面加载完成后再次执行
-  window.addEventListener('load', function() {
-    addFoldFunctionality();
-  });
 })();
 /**
  * 🐱 NEKO ENGINE v6.0
@@ -3449,6 +3125,8 @@ window.addEventListener('load', () => {
   window.initCustomPagination = initCustomPagination;
 })();
 </script>
+
+<script src="/js/site-features.min.js"></script>
 
 
 <script>

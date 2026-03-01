@@ -120,7 +120,7 @@ for (int num : nums) {
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><link rel="stylesheet" href="/css/page-transitions.min.css"><script>
+</script><link rel="stylesheet" href="/css/page-transitions.min.css"><link rel="stylesheet" href="/css/custom.min.css"><script>
 (function() {
   'use strict';
   
@@ -938,7 +938,7 @@ for (int num : nums) {
                         outline: none;
                     }
 
-                    body.dark button#theme-toggle {
+                    html[data-theme="dark"] button#theme-toggle {
                         box-shadow: 
                             0 0 0 1.5px var(--c-border-night),
                             0 5px 15px rgba(0,0,0,0.3),
@@ -966,8 +966,8 @@ for (int num : nums) {
                         opacity: 0;
                     }
 
-                    body.dark .layer-bg-day { opacity: 0; }
-                    body.dark .layer-bg-night { opacity: 1; }
+                    html[data-theme="dark"] .layer-bg-day { opacity: 0; }
+                    html[data-theme="dark"] .layer-bg-night { opacity: 1; }
 
                     .star-matrix {
                         position: absolute; width: 100%; height: 100%;
@@ -977,7 +977,7 @@ for (int num : nums) {
                         transition: transform var(--dur-main) var(--ease-damp), opacity 0.5s ease;
                     }
 
-                    body.dark .star-matrix {
+                    html[data-theme="dark"] .star-matrix {
                         transform: translateY(0) scale(1);
                         opacity: 1;
                     }
@@ -1011,8 +1011,8 @@ for (int num : nums) {
                         opacity: 0;
                     }
 
-                    body.dark .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
-                    body.dark .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
+                    html[data-theme="dark"] .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
+                    html[data-theme="dark"] .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
 
                     .cloud-stack {
                         position: absolute; inset: 0;
@@ -1020,7 +1020,7 @@ for (int num : nums) {
                         transition: transform var(--dur-main) var(--ease-damp), opacity var(--dur-main) ease;
                     }
 
-                    body.dark .cloud-stack {
+                    html[data-theme="dark"] .cloud-stack {
                         transform: translateY(100%);
                         opacity: 0;
                     }
@@ -1083,7 +1083,7 @@ for (int num : nums) {
                         transition: transform var(--dur-main) var(--ease-damp);
                     }
 
-                    body.dark .orb {
+                    html[data-theme="dark"] .orb {
                         transform: translateY(-50%) translateX(calc(var(--sz-gap) + var(--travel))) rotate(360deg);
                     }
 
@@ -1103,7 +1103,7 @@ for (int num : nums) {
                         z-index: 5;
                     }
 
-                    body.dark .face-moon {
+                    html[data-theme="dark"] .face-moon {
                         transform: translateX(0);
                     }
 
@@ -1116,7 +1116,7 @@ for (int num : nums) {
                         transition: opacity 0.4s ease;
                     }
                     
-                    body.dark .crater {
+                    html[data-theme="dark"] .crater {
                         opacity: 1;
                         transition-delay: 0.4s;
                     }
@@ -1134,7 +1134,7 @@ for (int num : nums) {
                         transition: transform var(--dur-main) var(--ease-damp);
                     }
                     
-                    body.dark .halo-container {
+                    html[data-theme="dark"] .halo-container {
                         transform: translateX(var(--travel));
                     }
 
@@ -1163,7 +1163,7 @@ for (int num : nums) {
                     .ray:nth-child(3) { transform: translateX(-50%) rotate(90deg); }
                     .ray:nth-child(4) { transform: translateX(-50%) rotate(135deg); }
 
-                    body.dark .sun-halo { opacity: 0; }
+                    html[data-theme="dark"] .sun-halo { opacity: 0; }
 
                     @keyframes float-h {
                         0% { transform: translateX(0); }
@@ -1301,21 +1301,35 @@ for (int num : nums) {
         </ul>
     </nav>
 </header><main class="main"><article class="post-single">
-  <header class="post-header"><h1 class="post-title">范围for循环</h1><div class="post-meta"><span title='2025-12-30 12:00:00 +0800 +0800'>December 30, 2025</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div></header><div class="post-content"><h1 id="c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记">C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记</h1>
+  <header class="post-header"><div class="post-header-wrapper">
+      <h1 class="post-title">范围for循环</h1>
+      <div class="post-title-decoration"></div>
+    </div><div class="post-meta-enhanced">
+      <div class="meta-item">
+        <span class="meta-icon">📅</span>
+        <span class="meta-text">2025-12-30</span>
+      </div><div class="meta-item tags-item">
+        <span class="meta-icon">🏷️</span>
+        <div class="meta-tags"><span class="meta-tag">C&#43;&#43;</span><span class="meta-tag">STL</span><span class="meta-tag">cpp</span></div>
+      </div><div class="meta-item">
+        <span class="meta-icon">⏱️</span>
+        <span class="meta-text">9 分钟阅读</span>
+      </div>
+    </div></header><div class="post-content-wrapper"><div class="post-content"><h1 id="c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记">C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记</h1>
 <h2 id="一-核心概念告别索引拥抱元素">一、 核心概念：告别索引，拥抱元素</h2>
 <p>基于范围的 for 循环（C++11 引入）是为了解决一个最常见的编程任务：遍历一个序列（如 vector, string）中的每一个元素。
 它的核心思想是让你直接关注元素本身，而不用手动管理索引 i。</p>
 <p><strong>基础语法:</strong></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> ( declaration : range ) {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 循环体
-</span></span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span> <span class="nl">declaration</span> <span class="p">:</span> <span class="n">range</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 循环体
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -1323,32 +1337,32 @@ for (int num : nums) {
 <li><strong><code>declaration</code></strong>: 一个变量声明，在每次循环时，<code>range</code> 中的一个元素会被赋值（或引用）给这个变量。</li>
 </ul>
 <p><strong>示例：告别传统 <code>for</code> 循环</strong></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> nums <span style="color:#f92672">=</span> {<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">30</span>};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 传统写法 (命令式：告诉计算机&#34;如何做&#34;)
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (size_t i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> nums.size(); i<span style="color:#f92672">++</span>) {
-</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> nums[i] <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; &#34;</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 范围 for 写法 (声明式：告诉计算机&#34;想要什么&#34;)
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> num : nums) {
-</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> num <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; &#34;</span>;
-</span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 传统写法 (命令式：告诉计算机&#34;如何做&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 范围 for 写法 (声明式：告诉计算机&#34;想要什么&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">num</span> <span class="p">:</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>优点:</strong></p>
@@ -1400,32 +1414,32 @@ for (int num : nums) {
 <h2 id="三-结构化绑定-c17优雅地解包">三、 结构化绑定 (C++17)：优雅地解包</h2>
 <p>当你的容器元素是 <code>std::pair</code>, <code>std::tuple</code> 或 <code>struct</code> 时，结构化绑定可以让你的范围 for 循环瞬间变得优雅。</p>
 <p><strong>示例：遍历 <code>std::map</code></strong></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>std<span style="color:#f92672">::</span>map<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string, <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> scores <span style="color:#f92672">=</span> {{<span style="color:#e6db74">&#34;Alice&#34;</span>, <span style="color:#ae81ff">95</span>}, {<span style="color:#e6db74">&#34;Bob&#34;</span>, <span style="color:#ae81ff">88</span>}};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// C++17 之前
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">auto</span><span style="color:#f92672">&amp;</span> pair : scores) {
-</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> pair.first <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> pair.second <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// C++17 及之后：一步解包！
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">auto</span><span style="color:#f92672">&amp;</span> [name, score] <span style="color:#f92672">:</span> scores) {
-</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> name <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> score <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
-</span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">scores</span> <span class="o">=</span> <span class="p">{{</span><span class="s">&#34;Alice&#34;</span><span class="p">,</span> <span class="mi">95</span><span class="p">},</span> <span class="p">{</span><span class="s">&#34;Bob&#34;</span><span class="p">,</span> <span class="mi">88</span><span class="p">}};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// C++17 之前
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">pair</span> <span class="p">:</span> <span class="n">scores</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">pair</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">pair</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// C++17 及之后：一步解包！
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">score</span><span class="p">]</span> <span class="o">:</span> <span class="n">scores</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">score</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>优势</strong>: 直接在循环变量声明中为元素的各个成员命名，代码更扁平、更具可读性。</p>
@@ -1436,22 +1450,22 @@ for (int num : nums) {
 <blockquote>
 <p>(py是最好的语言.cpp)</p>
 </blockquote>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;ranges&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 模拟 for (int i = 0; i &lt; 10; i++)
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i : std<span style="color:#f92672">::</span>views<span style="color:#f92672">::</span>iota(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>)) {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ...
-</span></span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ranges&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 模拟 for (int i = 0; i &lt; 10; i++)
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">iota</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-视图懒惰的数据处理流水线">4.2 视图：懒惰的数据处理流水线</h3>
@@ -1487,74 +1501,74 @@ for (int num : nums) {
   </tbody>
 </table>
 <p><strong>示例：组合的力量</strong></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;ranges&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> data <span style="color:#f92672">=</span> {<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">10</span>};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 需求：打印 data 中所有偶数的平方，并按倒序输出
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">auto</span> pipeline <span style="color:#f92672">=</span> data
-</span></span><span style="display:flex;"><span>              <span style="color:#f92672">|</span> std<span style="color:#f92672">::</span>views<span style="color:#f92672">::</span>filter([](<span style="color:#66d9ef">int</span> n){ <span style="color:#66d9ef">return</span> n <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>; }) <span style="color:#75715e">// 筛选偶数
-</span></span></span><span style="display:flex;"><span>              <span style="color:#f92672">|</span> std<span style="color:#f92672">::</span>views<span style="color:#f92672">::</span>transform([](<span style="color:#66d9ef">int</span> n){ <span style="color:#66d9ef">return</span> n <span style="color:#f92672">*</span> n; })   <span style="color:#75715e">// 计算平方
-</span></span></span><span style="display:flex;"><span>              <span style="color:#f92672">|</span> std<span style="color:#f92672">::</span>views<span style="color:#f92672">::</span>reverse;                               <span style="color:#75715e">// 反转结果
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 此时，pipeline 只是一个&#34;配方&#34;，没有任何计算发生
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> result : pipeline) { <span style="color:#75715e">// 遍历时，流水线才启动
-</span></span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> result <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; &#34;</span>; <span style="color:#75715e">// 输出: 100 64 36 16 4
-</span></span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ranges&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 需求：打印 data 中所有偶数的平方，并按倒序输出
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">pipeline</span> <span class="o">=</span> <span class="n">data</span>
+</span></span><span class="line"><span class="cl">              <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">filter</span><span class="p">([](</span><span class="kt">int</span> <span class="n">n</span><span class="p">){</span> <span class="k">return</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">})</span> <span class="c1">// 筛选偶数
+</span></span></span><span class="line"><span class="cl">              <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">transform</span><span class="p">([](</span><span class="kt">int</span> <span class="n">n</span><span class="p">){</span> <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">;</span> <span class="p">})</span>   <span class="c1">// 计算平方
+</span></span></span><span class="line"><span class="cl">              <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">reverse</span><span class="p">;</span>                               <span class="c1">// 反转结果
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 此时，pipeline 只是一个&#34;配方&#34;，没有任何计算发生
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">result</span> <span class="p">:</span> <span class="n">pipeline</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 遍历时，流水线才启动
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span> <span class="c1">// 输出: 100 64 36 16 4
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="43-enumerate最优雅的索引循环">4.3 <code>enumerate</code>：最优雅的索引循环</h3>
 <p>这是范围 for 循环的终极梦想，完美解决了&quot;无法直接获取索引&quot;的痛点。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
-<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;ranges&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>string<span style="color:#f92672">&gt;</span> names <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;Alice&#34;</span>, <span style="color:#e6db74">&#34;Bob&#34;</span>, <span style="color:#e6db74">&#34;Charlie&#34;</span>};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// 结合结构化绑定，同时获取索引和值
-</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">auto</span><span style="color:#f92672">&amp;</span> [index, name] <span style="color:#f92672">:</span> std<span style="color:#f92672">::</span>views<span style="color:#f92672">::</span>enumerate(names)) {
-</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Index &#34;</span> <span style="color:#f92672">&lt;&lt;</span> index <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> name <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
-</span></span><span style="display:flex;"><span>}
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ranges&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#34;Alice&#34;</span><span class="p">,</span> <span class="s">&#34;Bob&#34;</span><span class="p">,</span> <span class="s">&#34;Charlie&#34;</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 结合结构化绑定，同时获取索引和值
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">]</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">views</span><span class="o">::</span><span class="n">enumerate</span><span class="p">(</span><span class="n">names</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Index &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">index</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="最终总结">最终总结</h2>
@@ -1585,33 +1599,112 @@ for (int num : nums) {
   </tbody>
 </table>
 <p>现代 C++ 的范围 for 循环，已经从一个简单的语法糖，进化成了一个能够承载复杂、声明式数据处理逻辑的强大框架。掌握它的不同形态，是写出高效、优雅、现代 C++ 代码的关键。</p>
-</div><footer class="post-footer">
-<nav class="paginav">
-  <a class="prev" href="https://QwQBiG.github.io/cs/posts/embeddedseries/q26han01/">
-    <span class="title">« Prev</span>
-    <br>
-    <span>再一次梦开始的地方——ESP-32点灯</span>
-  </a>
-  <a class="next" href="https://QwQBiG.github.io/cs/posts/getwsl/">
-    <span class="title">Next »</span>
-    <br>
-    <span>搞搞WSL</span>
-  </a>
+</div>
+    </div><footer class="post-footer">
+<nav class="custom-post-nav">
+  <div class="nav-container">
+    <a class="nav-card prev-card" href="https://QwQBiG.github.io/cs/posts/embeddedseries/q26han01/">
+      <div class="nav-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </div>
+      <div class="nav-content">
+        <span class="nav-label">上一篇</span>
+        <span class="nav-title">再一次梦开始的地方——ESP-32点灯</span>
+      </div>
+    </a>
+    <a class="nav-card next-card" href="https://QwQBiG.github.io/cs/posts/getwsl/">
+      <div class="nav-content">
+        <span class="nav-label">下一篇</span>
+        <span class="nav-title">搞搞WSL</span>
+      </div>
+      <div class="nav-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </a>
+  </div>
 </nav>
-<script src="https://giscus.app/client.js"
-        data-repo="QwQBiG/QwQBiG.github.io"
-        data-repo-id="R_kgDOQUrNow"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOQUrNo84Cxx1C"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
+<div class="giscus-container">
+    <script src="https://giscus.app/client.js"
+            data-repo="QwQBiG/QwQBiG.github.io"
+            data-repo-id="R_kgDOQUrNow"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOQUrNo84Cxx1C"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="https://giscus.app/themes/noborder_dark.css"
+            data-lang="zh-CN"
+            crossorigin="anonymous"
+            async>
+    </script>
+</div>
+
+<script>
+    
+    function updateGiscusTheme() {
+        const iframe = document.querySelector('.giscus-frame');
+        if (!iframe) return;
+        
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const theme = currentTheme === 'dark' ? 'dark' : 'light';
+        
+        iframe.contentWindow.postMessage({
+            giscus: {
+                setConfig: {
+                    theme: theme
+                }
+            }
+        }, 'https://giscus.app');
+    }
+    
+    
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'data-theme') {
+                updateGiscusTheme();
+            }
+        });
+    });
+    
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+    
+    
+    function initGiscusTheme() {
+        const iframe = document.querySelector('.giscus-frame');
+        if (iframe) {
+            updateGiscusTheme();
+        } else {
+            
+            setTimeout(initGiscusTheme, 500);
+        }
+    }
+    
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initGiscusTheme, 1000);
+        });
+    } else {
+        setTimeout(initGiscusTheme, 1000);
+    }
+    
+    
+    window.addEventListener('message', (event) => {
+        if (event.origin !== 'https://giscus.app') return;
+        if (event.data && event.data.giscus && event.data.giscus.resizeHeight) {
+            
+            updateGiscusTheme();
+        }
+    });
 </script></footer>
 </article>
     </main>
@@ -1732,12 +1825,12 @@ for (int num : nums) {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-body.dark .reading-progress-container {
+html[data-theme="dark"] .reading-progress-container {
   background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-body.dark .reading-progress-percent {
+html[data-theme="dark"] .reading-progress-percent {
   color: rgba(200, 200, 200, 0.8);
   background: rgba(30, 30, 30, 0.8);
 }
@@ -1806,196 +1899,6 @@ body.dark .reading-progress-percent {
   }
 }
 /*——————————————————————————————————————————————
-                代码复制按钮样式
-——————————————————————————————————————————————*/
-.copy-code, button.copy-code {
-  display: none !important;
-}
-
-.custom-copy-code {
-  position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
-  padding: 4px 10px !important;
-  font-size: 11px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  opacity: 0 !important;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
-  z-index: 100 !important;
-  pointer-events: auto !important;
-  backdrop-filter: blur(4px) !important;
-  line-height: 1.2 !important;
-}
-
-.highlight:hover .custom-copy-code,
-.chroma:hover .custom-copy-code {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.custom-copy-code:hover {
-  transform: scale(1.05) translateY(-1px) !important;
-  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
-}
-
-.custom-copy-code:active {
-  transform: scale(0.95) !important;
-}
-
-.custom-copy-code.copied {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
-  box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4) !important;
-}
-
-.highlight, .chroma {
-  position: relative !important;
-}
-
-/* 彩虹画 pre 元素不需要复制按钮 */
-pre.rainbow-miku .custom-copy-code,
-pre:not(.highlight):not(.chroma) .custom-copy-code {
-  display: none !important;
-}
-
-@media (max-width: 768px) {
-  .custom-copy-code {
-    opacity: 1 !important;
-    padding: 3px 8px !important;
-    font-size: 10px !important;
-    top: 4px !important;
-    right: 4px !important;
-  }
-}
-/*——————————————————————————————————————————————
-            代码块折叠/展开功能样式
-——————————————————————————————————————————————*/
-.code-fold-toggle {
-  position: absolute !important;
-  top: 6px !important;
-  right: 52px !important;
-  width: 28px !important;
-  height: 24px !important;
-  padding: 0 !important;
-  font-size: 12px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  opacity: 0 !important;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  box-shadow: 0 2px 6px rgba(255, 105, 135, 0.3) !important;
-  z-index: 100 !important;
-  pointer-events: auto !important;
-  backdrop-filter: blur(4px) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-}
-
-.code-fold-toggle svg {
-  width: 12px !important;
-  height: 12px !important;
-  fill: currentColor !important;
-  transition: transform 0.3s ease !important;
-}
-
-.code-fold-toggle.folded svg {
-  transform: rotate(180deg) !important;
-}
-
-/* 确保按钮在代码块折叠时正确显示 */
-.code-folded .code-fold-toggle svg {
-  transform: rotate(180deg) !important;
-}
-
-.highlight:hover .code-fold-toggle,
-.chroma:hover .code-fold-toggle {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
-.code-fold-toggle:hover {
-  transform: scale(1.05) translateY(-1px) !important;
-  box-shadow: 0 4px 15px rgba(255, 105, 135, 0.5) !important;
-}
-
-.code-fold-toggle:active {
-  transform: scale(0.95) !important;
-}
-
-/* 折叠提示文字 */
-.code-fold-hint {
-  padding: 8px 12px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 13px !important;
-  color: #888 !important;
-  background: rgba(255, 255, 255, 0.5) !important;
-  border-bottom: 1px dashed rgba(255, 105, 135, 0.3) !important;
-  font-style: italic !important;
-  margin: 0 !important;
-}
-
-body.dark .code-fold-hint {
-  color: #aaa !important;
-  background: rgba(0, 0, 0, 0.3) !important;
-  border-bottom-color: rgba(255, 105, 135, 0.2) !important;
-}
-
-/* 折叠状态 */
-.highlight.code-folded,
-.chroma.code-folded {
-  max-height: 150px !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-.highlight.code-folded::after,
-.chroma.code-folded::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 50px !important;
-  background: linear-gradient(transparent, rgba(255, 255, 255, 0.95)) !important;
-  pointer-events: none !important;
-  z-index: 10 !important;
-}
-
-body.dark .highlight.code-folded::after,
-body.dark .chroma.code-folded::after {
-  background: linear-gradient(transparent, rgba(30, 30, 30, 0.95)) !important;
-}
-
-@media (max-width: 768px) {
-  .code-fold-toggle {
-    opacity: 1 !important;
-    width: 24px !important;
-    height: 20px !important;
-    top: 4px !important;
-    right: 44px !important;
-  }
-  
-  .code-fold-toggle svg {
-    width: 10px !important;
-    height: 10px !important;
-  }
-  
-  .code-fold-hint {
-    font-size: 11px !important;
-    padding: 6px 10px !important;
-  }
-}
-/*——————————————————————————————————————————————
                 猫咪钢琴样式
 ——————————————————————————————————————————————*/
 :root {
@@ -2016,7 +1919,7 @@ body.dark .chroma.code-folded::after {
   }
 }
 
-body.dark {
+html[data-theme="dark"] {
   --neko-glass-bg: rgba(0, 0, 0, 0.4) !important;
   --neko-glass-border: rgba(255, 255, 255, 0.1) !important;
   --neko-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
@@ -2174,7 +2077,7 @@ body.dark {
   fill: white;
 }
 
-body.dark .neko-close-btn {
+html[data-theme="dark"] .neko-close-btn {
   background: rgba(220, 53, 69, 0.9);
   border-color: rgba(255, 255, 255, 0.9);
 }
@@ -2385,23 +2288,25 @@ nav.pagination,
   color: #999;
 }
 
-/* 深色模式适配 */
+/* 深色模式适配 - 紫罗兰色主题 */
 body.dark .custom-pagination .page-link {
   background: rgba(46, 46, 51, 0.7);
-  border-color: rgba(255, 154, 158, 0.2);
+  border-color: rgba(189, 147, 249, 0.3);
   color: #ccc;
 }
 
 body.dark .custom-pagination .page-link:hover {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  border-color: rgba(255, 154, 158, 0.8);
+  background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+  border-color: rgba(189, 147, 249, 0.8);
   color: white;
+  box-shadow: 0 8px 25px rgba(189, 147, 249, 0.4);
 }
 
 body.dark .custom-pagination .page-item.active .page-link {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  border-color: rgba(255, 154, 158, 0.8);
+  background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+  border-color: rgba(189, 147, 249, 0.8);
   color: white;
+  box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
 }
 
 body.dark .custom-pagination .page-item.disabled .page-link {
@@ -2444,6 +2349,8 @@ nav[aria-label="pagination"],
   display: none !important;
 }
 </style>
+
+<link rel="stylesheet" href="/css/code-blocks.min.css">
 
 <div id="neko-engine-root">
   <audio id="neko-audio" loop crossorigin="anonymous">
@@ -2543,38 +2450,6 @@ nav[aria-label="pagination"],
   }
 })();
 /**
- * 返回顶部按钮功能
- */
-(function() {
-  // 移除主题自带的返回顶部按钮
-  const existingTopLinks = document.querySelectorAll('.top-link, #top-link');
-  existingTopLinks.forEach(el => el.remove());
-  
-  const backToTop = document.createElement('button');
-  backToTop.className = 'custom-back-to-top';
-  backToTop.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>';
-  backToTop.setAttribute('aria-label', '返回顶部');
-  document.body.appendChild(backToTop);
-
-  function toggleVisibility() {
-    if (window.scrollY > 300) {
-      backToTop.classList.add('visible');
-    } else {
-      backToTop.classList.remove('visible');
-    }
-  }
-
-  backToTop.addEventListener('click', function() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-
-  window.addEventListener('scroll', toggleVisibility, { passive: true });
-  toggleVisibility();
-})();
-/**
  * 禁用主题自带的滚动事件处理
  */
 (function() {
@@ -2609,205 +2484,6 @@ nav[aria-label="pagination"],
       observer.disconnect();
     }, 5000);
   }
-})();
-/**
- * 代码复制按钮功能
- */
-(function() {
-  // 隐藏主题自带的复制按钮
-  const hideDefaultCopyButtons = function() {
-    const defaultButtons = document.querySelectorAll('.copy-code, button.copy-code');
-    defaultButtons.forEach(btn => {
-      btn.style.display = 'none';
-    });
-  };
-  
-  // 添加自定义复制按钮 - 只给 highlight 和 chroma 类添加
-  const addCustomCopyButtons = function() {
-    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
-    
-    codeBlocks.forEach(block => {
-      // 跳过已经添加过按钮的代码块
-      if (block.querySelector('.custom-copy-code')) return;
-      
-      const button = document.createElement('button');
-      button.className = 'custom-copy-code';
-      button.textContent = 'copy';
-      button.setAttribute('aria-label', 'copy code');
-      
-      button.addEventListener('click', function() {
-        const code = block.querySelector('code')?.textContent || block.textContent;
-        navigator.clipboard.writeText(code).then(function() {
-          button.textContent = 'copied';
-          button.classList.add('copied');
-          setTimeout(function() {
-            button.textContent = 'copy';
-            button.classList.remove('copied');
-          }, 2000);
-        }).catch(function() {
-          button.textContent = 'failed';
-          setTimeout(function() {
-            button.textContent = 'copy';
-          }, 2000);
-        });
-      });
-      
-      block.style.position = 'relative';
-      block.appendChild(button);
-    });
-  };
-  
-  // 初始执行
-  hideDefaultCopyButtons();
-  addCustomCopyButtons();
-  
-  // 监听动态添加的代码块
-  const observer = new MutationObserver(function() {
-    hideDefaultCopyButtons();
-    addCustomCopyButtons();
-  });
-  
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-  
-  // 页面加载完成后再次执行
-  window.addEventListener('load', function() {
-    hideDefaultCopyButtons();
-    addCustomCopyButtons();
-  });
-})();
-/**
- * 代码块折叠/展开功能
- */
-(function() {
-  // 向上箭头 SVG
-  const arrowUpSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 14l5-5 5 5H7z"/></svg>`;
-  
-  // 检查代码块是否需要折叠（大于等于6行）
-  const shouldEnableFold = function(block) {
-    // 获取代码行数 - 通过行号元素计算
-    const lineNumbers = block.querySelectorAll('.ln, .line-number');
-    if (lineNumbers.length >= 6) {
-      return true;
-    }
-    
-    // 检查 flex span 元素（用户提供的代码块格式）
-    const flexSpans = block.querySelectorAll('span[style*="display:flex"]');
-    if (flexSpans.length >= 6) {
-      return true;
-    }
-    
-    // 备用方案：通过代码内容计算
-    const codeElement = block.querySelector('code');
-    if (codeElement) {
-      // 尝试通过子元素数量计算行数
-      const codeLines = codeElement.children;
-      if (codeLines.length >= 6) {
-        return true;
-      }
-      
-      // 通过文本内容计算
-      const lines = codeElement.textContent.split('\n');
-      // 过滤掉空行后计算
-      const nonEmptyLines = lines.filter(line => line.trim() !== '');
-      if (nonEmptyLines.length >= 6 || lines.length >= 6) {
-        return true;
-      }
-    }
-    
-    // 检查 table 行数（带行号的代码块）
-    const tableElement = block.querySelector('table');
-    if (tableElement) {
-      const rows = tableElement.querySelectorAll('tr');
-      if (rows.length >= 6) {
-        return true;
-      }
-    }
-    
-    return false;
-  };
-  
-  // 添加折叠功能到代码块
-  const addFoldFunctionality = function() {
-    // 选择所有可能包含代码的元素
-    const codeBlocks = document.querySelectorAll('.highlight, .chroma');
-    
-    codeBlocks.forEach(block => {
-      // 跳过已经添加过折叠按钮的代码块
-      if (block.querySelector('.code-fold-toggle')) return;
-      
-      // 跳过已经有其他折叠功能的代码块
-      if (block.querySelector('.fold, .unfold, .toggle-fold')) return;
-      
-      // 检查是否需要折叠功能
-      if (!shouldEnableFold(block)) return;
-      
-      // 确保代码块有相对定位
-      block.style.position = 'relative';
-      
-      // 创建折叠按钮
-      const foldButton = document.createElement('button');
-      foldButton.className = 'code-fold-toggle';
-      foldButton.innerHTML = arrowUpSVG;
-      foldButton.setAttribute('aria-label', 'fold code');
-      foldButton.title = '折叠/展开代码';
-      
-      // 插入到代码块中
-      block.appendChild(foldButton);
-      
-      // 创建折叠提示（初始隐藏）
-      const hint = document.createElement('div');
-      hint.className = 'code-fold-hint';
-      hint.textContent = '当前内容已折叠呐~';
-      hint.style.display = 'none';
-      block.insertBefore(hint, block.firstChild);
-      
-      // 折叠状态
-      let isFolded = false;
-      
-      // 点击事件
-      foldButton.addEventListener('click', function(e) {
-        e.stopPropagation();
-        isFolded = !isFolded;
-        
-        if (isFolded) {
-          block.classList.add('code-folded');
-          foldButton.classList.add('folded');
-          hint.style.display = 'block';
-          foldButton.setAttribute('aria-label', 'unfold code');
-        } else {
-          block.classList.remove('code-folded');
-          foldButton.classList.remove('folded');
-          hint.style.display = 'none';
-          foldButton.setAttribute('aria-label', 'fold code');
-        }
-      });
-    });
-  };
-  
-  // 初始执行
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', addFoldFunctionality);
-  } else {
-    addFoldFunctionality();
-  }
-  
-  // 监听动态添加的代码块
-  const observer = new MutationObserver(function() {
-    addFoldFunctionality();
-  });
-  
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-  
-  // 页面加载完成后再次执行
-  window.addEventListener('load', function() {
-    addFoldFunctionality();
-  });
 })();
 /**
  * 🐱 NEKO ENGINE v6.0
@@ -3538,6 +3214,8 @@ window.addEventListener('load', () => {
   window.initCustomPagination = initCustomPagination;
 })();
 </script>
+
+<script src="/js/site-features.min.js"></script>
 
 
 <script>
