@@ -182,15 +182,42 @@
     background: linear-gradient(135deg, #ccc 0%, #999 100%);
 }
 
-/* 深色模式适配 */
+/* 深色模式适配 - 紫罗兰色主题 */
 body.dark .typewriter-text {
-    color: #ff8fab;
+    color: #bd93f9;
+}
+
+body.dark .typewriter-cursor {
+    background: linear-gradient(180deg, #bd93f9 0%, #d4b5ff 100%);
 }
 
 body.dark .not-found-code {
-    background: linear-gradient(135deg, #ff8fab 0%, #ffb3c6 50%, #ff6b9d 100%);
+    background: linear-gradient(135deg, #bd93f9 0%, #d4b5ff 50%, #9a6de0 100%);
     -webkit-background-clip: text;
     background-clip: text;
+}
+
+body.dark .back-home-btn {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
+    border-color: rgba(189, 147, 249, 0.3);
+}
+
+body.dark .back-home-btn:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.5);
+}
+
+body.dark .floating-shape {
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.1) 0%, rgba(154, 109, 224, 0.1) 100%);
+}
+
+body.dark .sound-toggle {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
+}
+
+body.dark .sound-toggle:hover {
+    box-shadow: 0 6px 20px rgba(189, 147, 249, 0.5);
 }
 
 /* 响应式优化 */

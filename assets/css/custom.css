@@ -1,4 +1,73 @@
 /*——————————————————————————————————————————————
+                CSS 变量定义
+——————————————————————————————————————————————*/
+:root {
+    /* 浅色模式颜色 */
+    --color-primary: #e84a7a;
+    --color-primary-light: #ff6b9d;
+    --color-primary-dark: #c44569;
+    --color-secondary: #a18cd1;
+    --color-accent: #fad0c4;
+    
+    /* 紫罗兰色 - 深色模式主色 */
+    --color-violet: #bd93f9;
+    --color-violet-light: #d4b5ff;
+    --color-violet-dark: #9a6de0;
+    
+    /* 文本颜色 */
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-muted: #b2bec3;
+    
+    /* 背景颜色 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #fff5f7;
+    --bg-code: #fff0f5;
+    
+    /* 边框颜色 */
+    --border-color: rgba(232, 74, 122, 0.2);
+}
+
+/* 深色模式 */
+html[data-theme="dark"] {
+    --color-primary: #bd93f9;
+    --color-primary-light: #d4b5ff;
+    --color-primary-dark: #9a6de0;
+    --color-secondary: #ff79c6;
+    --color-accent: #a18cd1;
+    
+    --text-primary: #f8f9fa;
+    --text-secondary: #dee2e6;
+    --text-muted: #adb5bd;
+    
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-code: #0f0f1a;
+    
+    --border-color: rgba(189, 147, 249, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --color-primary: #bd93f9;
+        --color-primary-light: #d4b5ff;
+        --color-primary-dark: #9a6de0;
+        --color-secondary: #ff79c6;
+        --color-accent: #a18cd1;
+        
+        --text-primary: #f8f9fa;
+        --text-secondary: #dee2e6;
+        --text-muted: #adb5bd;
+        
+        --bg-primary: #1a1a2e;
+        --bg-secondary: #16213e;
+        --bg-code: #0f0f1a;
+        
+        --border-color: rgba(189, 147, 249, 0.3);
+    }
+}
+
+/*——————————————————————————————————————————————
                     字体
 ——————————————————————————————————————————————*/
 /* 1. 从 Google Fonts 导入 JetBrains Mono 字体 */
@@ -9,9 +78,22 @@ body {
     font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
 }
 
-/* 3. 确保代码块也使用这个字体 */
-code, pre {
-    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+/* 3. 确保代码块也使用这个字体 - 强制覆盖所有情况 */
+code, pre,
+.post-content code,
+.post-content pre,
+.post-content .highlight code,
+.post-content .chroma code,
+.post-content .highlight pre,
+.post-content .chroma pre,
+.highlight code,
+.chroma code,
+.highlight pre,
+.chroma pre,
+pre code,
+.highlight pre code,
+.chroma pre code {
+    font-family: 'JetBrains Mono', 'Courier New', Courier, monospace !important;
 }
 
 /*——————————————————————————————————————————————
@@ -48,662 +130,681 @@ body.dark .reading-progress-container {
 }
 
 /*——————————————————————————————————————————————
-                返回顶部按钮 - 覆盖主题默认
+                文章元信息样式
 ——————————————————————————————————————————————*/
-/* 隐藏主题自带的返回顶部按钮 */
-.top-link,
-#top-link,
-.scroll-to-top,
-.back-to-top {
-    display: none !important;
-}
-
-/* 我们的自定义返回顶部按钮 */
-.custom-back-to-top {
-    position: fixed !important;
-    bottom: 30px !important;
-    right: 30px !important;
-    width: 50px !important;
-    height: 50px !important;
-    border-radius: 50% !important;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
-    border: none !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    transform: translateY(20px) !important;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4) !important;
-    z-index: 2147483646 !important;
-    pointer-events: auto !important;
-}
-
-.custom-back-to-top.visible {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-}
-
-.custom-back-to-top:hover {
-    transform: translateY(-5px) scale(1.1) !important;
-    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.6) !important;
-}
-
-.custom-back-to-top:active {
-    transform: translateY(-2px) scale(0.95) !important;
-}
-
-.custom-back-to-top svg {
-    width: 24px !important;
-    height: 24px !important;
-    fill: white !important;
-    transition: transform 0.3s ease !important;
-}
-
-.custom-back-to-top:hover svg {
-    transform: translateY(-2px) !important;
-}
-
-/*——————————————————————————————————————————————
-                代码复制按钮 - 覆盖主题默认
-——————————————————————————————————————————————*/
-/* 隐藏主题自带的复制按钮 */
-.copy-code,
-button.copy-code {
-    display: none !important;
-}
-
-/* 我们的自定义复制按钮 */
-.custom-copy-code {
-    position: absolute !important;
-    top: 8px !important;
-    right: 8px !important;
-    padding: 6px 12px !important;
-    font-size: 12px !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    color: #fff !important;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    border: none !important;
-    border-radius: 6px !important;
-    cursor: pointer !important;
-    opacity: 0 !important;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4) !important;
-    z-index: 100 !important;
-    pointer-events: auto !important;
-}
-
-.highlight:hover .custom-copy-code,
-.chroma:hover .custom-copy-code,
-pre:hover .custom-copy-code {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-}
-
-.custom-copy-code:hover {
-    transform: scale(1.05) translateY(-1px) !important;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.6) !important;
-}
-
-.custom-copy-code:active {
-    transform: scale(0.95) !important;
-}
-
-.custom-copy-code.copied {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
-    box-shadow: 0 2px 8px rgba(17, 153, 142, 0.4) !important;
-}
-
-/* 代码块容器 */
-.highlight,
-.chroma {
-    position: relative !important;
-}
-
-/*——————————————————————————————————————————————
-                移动端优化
-——————————————————————————————————————————————*/
-@media (max-width: 768px) {
-    /* 调整文章列表 */
-    .post-entry {
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    
-    .entry-header h2 {
-        font-size: 1.1em;
-    }
-    
-    /* 调整代码块 */
-    .highlight pre,
-    .chroma pre {
-        padding: 0.8em;
-        font-size: 0.85em;
-    }
-    
-    .custom-copy-code {
-        opacity: 1 !important;
-        padding: 4px 8px;
-        font-size: 11px;
-    }
-    
-    /* 调整返回顶部按钮 */
-    .custom-back-to-top {
-        width: 44px !important;
-        height: 44px !important;
-        bottom: 20px !important;
-        right: 20px !important;
-    }
-    
-    .custom-back-to-top svg {
-        width: 20px !important;
-        height: 20px !important;
-    }
-    
-    /* 调整导航栏 */
-    .nav {
-        padding: 0 15px;
-    }
-    
-    /* 调整主内容区域 */
-    .main {
-        padding: 15px;
-    }
-    
-    /* 调整标题 */
-    .post-title {
-        font-size: 1.5em;
-    }
-    
-    /* 优化触摸区域 */
-    .post-entry a {
-        padding: 5px 0;
-    }
-    
-    /* 调整分页 */
-    .pagination {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    /* 优化表格显示 */
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    
-    /* 优化图片 */
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-    
-    /* 阅读进度条在移动端 */
-    .reading-progress-container {
-        height: 2px !important;
-    }
-}
-
-/* 更小的屏幕 */
-@media (max-width: 480px) {
-    .entry-header h2 {
-        font-size: 1em;
-    }
-    
-    .post-content {
-        font-size: 0.95em;
-    }
-    
-    .nav {
-        flex-wrap: wrap;
-    }
-}
-
-/*——————————————————————————————————————————————
-                猫咪钢琴关闭按钮
-——————————————————————————————————————————————*/
-.neko-close-btn {
-    position: absolute;
-    right: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(255, 107, 107, 0.9);
-    border: 2px solid white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
-    pointer-events: auto;
-    z-index: 100;
-}
-
-.neko-info-container:hover .neko-close-btn {
-    opacity: 1;
-    right: -28px;
-}
-
-.neko-close-btn:hover {
-    transform: translateY(-50%) scale(1.15);
-    background: rgba(255, 71, 87, 1);
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.6);
-}
-
-.neko-close-btn:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-.neko-close-btn svg {
-    width: 12px;
-    height: 12px;
-    fill: white;
-}
-
-body.dark .neko-close-btn {
-    background: rgba(220, 53, 69, 0.9);
-    border-color: rgba(255, 255, 255, 0.9);
-}
-
-/* 猫咪钢琴隐藏状态 */
-#neko-engine-root.neko-hidden {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transform: translateY(100px) scale(0.7) !important;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-}
-
-/*——————————————————————————————————————————————
-                文章页面美化
-——————————————————————————————————————————————*/
-/* 文章头部包装 */
-.post-header-wrapper {
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.post-header-wrapper .post-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 15px;
-    line-height: 1.4;
-}
-
-/* 标题装饰线 */
-.post-title-decoration {
-    height: 4px;
-    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
-    border-radius: 2px;
-    position: relative;
-    overflow: hidden;
-}
-
-.post-title-decoration::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    animation: decoration-shine 3s infinite;
-}
-
-@keyframes decoration-shine {
-    0% { left: -100%; }
-    50%, 100% { left: 100%; }
-}
-
-/* 增强的文章元信息 */
 .post-meta-enhanced {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 25px;
-    padding: 20px;
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.08) 0%, rgba(250, 208, 196, 0.08) 100%);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 154, 158, 0.15);
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+    padding: 20px 0 !important;
+    margin: 30px 0 !important;
+    border-top: 1px solid rgba(232, 74, 122, 0.15) !important;
+    border-bottom: 1px solid rgba(232, 74, 122, 0.15) !important;
+    align-items: center !important;
 }
 
 .meta-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.meta-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.2);
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 0.9rem !important;
+    color: #636e72 !important;
 }
 
 .meta-icon {
-    font-size: 1.1rem;
+    font-size: 1.1rem !important;
+    filter: grayscale(0.3) !important;
 }
 
 .meta-text {
-    color: #666;
+    font-weight: 500 !important;
 }
 
 .meta-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
 }
 
 .meta-tag {
-    padding: 3px 10px;
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.2) 0%, rgba(250, 208, 196, 0.2) 100%);
-    border-radius: 12px;
-    font-size: 0.85rem;
-    color: #ff9a9e;
-    transition: all 0.3s ease;
+    display: inline-block !important;
+    padding: 4px 12px !important;
+    background: rgba(232, 74, 122, 0.1) !important;
+    border: 1px solid rgba(232, 74, 122, 0.2) !important;
+    border-radius: 20px !important;
+    font-size: 0.85rem !important;
+    color: #e84a7a !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
 }
 
 .meta-tag:hover {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-    color: white;
+    background: rgba(232, 74, 122, 0.2) !important;
+    border-color: rgba(232, 74, 122, 0.4) !important;
+    transform: translateY(-1px) !important;
 }
 
-/* 内容区域卡片化 */
-.post-content-wrapper {
-    margin-top: 30px;
+.tags-item {
+    flex: 1 !important;
+    min-width: 200px !important;
 }
 
-.post-content {
-    padding: 30px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 250, 250, 0.9) 100%);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 154, 158, 0.1);
-    box-shadow: 0 4px 20px rgba(255, 154, 158, 0.08);
-}
-
-/* 标题装饰 */
-.post-content h2 {
-    position: relative;
-    padding-left: 20px;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.post-content h2::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 5px;
-    height: 70%;
-    background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%);
-    border-radius: 3px;
-}
-
-.post-content h3 {
-    position: relative;
-    padding-left: 16px;
-    margin-top: 30px;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #444;
-}
-
-.post-content h3::before {
-    content: '▸';
-    position: absolute;
-    left: 0;
-    color: #ff9a9e;
-    font-size: 1rem;
-}
-
-.post-content h4 {
-    margin-top: 25px;
-    margin-bottom: 12px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #555;
-    border-bottom: 2px solid rgba(255, 154, 158, 0.3);
-    padding-bottom: 8px;
-}
-
-/* 引用块美化 */
-.post-content blockquote {
-    position: relative;
-    margin: 25px 0;
-    padding: 20px 25px;
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.08) 0%, rgba(250, 208, 196, 0.08) 100%);
-    border-left: 4px solid;
-    border-image: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%) 1;
-    border-radius: 0 12px 12px 0;
-    font-style: italic;
-    color: #555;
-}
-
-.post-content blockquote::before {
-    content: '"';
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    font-size: 3rem;
-    color: rgba(255, 154, 158, 0.3);
-    font-family: Georgia, serif;
-    line-height: 1;
-}
-
-.post-content blockquote p {
-    margin: 0;
-    padding-left: 30px;
-}
-
-/* 图片效果 */
-.post-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    margin: 20px 0;
-}
-
-.post-content img:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.3);
-}
-
-/* 表格美化 */
-.post-content table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 25px 0;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.post-content th {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-    color: white;
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-}
-
-.post-content td {
-    padding: 12px 15px;
-    border-bottom: 1px solid rgba(255, 154, 158, 0.1);
-    background: rgba(255, 255, 255, 0.7);
-}
-
-.post-content tr:hover td {
-    background: rgba(255, 154, 158, 0.05);
-}
-
-/* 列表美化 */
-.post-content ul,
-.post-content ol {
-    margin: 15px 0;
-    padding-left: 25px;
-}
-
-.post-content li {
-    margin: 10px 0;
-    line-height: 1.8;
-}
-
-.post-content ul li::marker {
-    color: #ff9a9e;
-}
-
-.post-content ol li::marker {
-    color: #ff9a9e;
-    font-weight: 600;
-}
-
-/* 分隔线 */
-.post-content hr {
-    border: none;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255, 154, 158, 0.3), transparent);
-    margin: 40px 0;
-}
-
-/*——————————————————————————————————————————————
-                文章页面 - 深色模式
-——————————————————————————————————————————————*/
-html[data-theme="dark"] .post-header-wrapper .post-title {
-    background: linear-gradient(135deg, #ffb3a7 0%, #ffc8c8 50%, #c8b6ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
+/* 深色模式下的元信息 */
 html[data-theme="dark"] .post-meta-enhanced {
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.12) 0%, rgba(250, 208, 196, 0.12) 100%);
-    border-color: rgba(255, 154, 158, 0.25);
+    border-top-color: rgba(189, 147, 249, 0.2) !important;
+    border-bottom-color: rgba(189, 147, 249, 0.2) !important;
 }
 
 html[data-theme="dark"] .meta-item {
-    background: rgba(40, 40, 50, 0.8);
-}
-
-html[data-theme="dark"] .meta-text {
-    color: #bbb;
+    color: #adb5bd !important;
 }
 
 html[data-theme="dark"] .meta-tag {
-    background: rgba(255, 154, 158, 0.25);
-    color: #ffb3a7;
+    background: rgba(189, 147, 249, 0.15) !important;
+    border-color: rgba(189, 147, 249, 0.3) !important;
+    color: #bd93f9 !important;
 }
 
-html[data-theme="dark"] .post-content {
-    background: linear-gradient(135deg, rgba(30, 30, 40, 0.95) 0%, rgba(35, 35, 45, 0.95) 100%);
-    border-color: rgba(255, 154, 158, 0.15);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+html[data-theme="dark"] .meta-tag:hover {
+    background: rgba(189, 147, 249, 0.25) !important;
+    border-color: rgba(189, 147, 249, 0.5) !important;
 }
 
-html[data-theme="dark"] .post-content h2 {
-    color: #e0e0e0;
-}
-
-html[data-theme="dark"] .post-content h3 {
-    color: #d0d0d0;
-}
-
-html[data-theme="dark"] .post-content h4 {
-    color: #c0c0c0;
-    border-bottom-color: rgba(255, 154, 158, 0.4);
-}
-
-html[data-theme="dark"] .post-content blockquote {
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.12) 0%, rgba(250, 208, 196, 0.12) 100%);
-    color: #bbb;
-}
-
-html[data-theme="dark"] .post-content blockquote::before {
-    color: rgba(255, 154, 158, 0.4);
-}
-
-html[data-theme="dark"] .post-content img {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-html[data-theme="dark"] .post-content img:hover {
-    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
-}
-
-html[data-theme="dark"] .post-content table {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-html[data-theme="dark"] .post-content td {
-    background: rgba(40, 40, 50, 0.8);
-    border-bottom-color: rgba(255, 154, 158, 0.15);
-}
-
-html[data-theme="dark"] .post-content tr:hover td {
-    background: rgba(255, 154, 158, 0.1);
-}
-
-html[data-theme="dark"] .post-content hr {
-    background: linear-gradient(90deg, transparent, rgba(255, 154, 158, 0.4), transparent);
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-meta-enhanced {
+        border-top-color: rgba(189, 147, 249, 0.2) !important;
+        border-bottom-color: rgba(189, 147, 249, 0.2) !important;
+    }
+    
+    html[data-theme="auto"] .meta-item {
+        color: #adb5bd !important;
+    }
+    
+    html[data-theme="auto"] .meta-tag {
+        background: rgba(189, 147, 249, 0.15) !important;
+        border-color: rgba(189, 147, 249, 0.3) !important;
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .meta-tag:hover {
+        background: rgba(189, 147, 249, 0.25) !important;
+        border-color: rgba(189, 147, 249, 0.5) !important;
+    }
 }
 
 /*——————————————————————————————————————————————
-                文章页面 - 移动端适配
+                文章标题样式
 ——————————————————————————————————————————————*/
-@media (max-width: 768px) {
-    .post-header-wrapper .post-title {
-        font-size: 1.6rem;
+.post-title {
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    color: #e84a7a !important;
+    margin: 0 0 20px 0 !important;
+    line-height: 1.3 !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* 深色模式标题 */
+html[data-theme="dark"] .post-title {
+    color: #bd93f9 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-title {
+        color: #bd93f9 !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                文章副标题/小标题样式
+——————————————————————————————————————————————*/
+.post-content h2 {
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 1.8rem !important;
+    font-weight: 600 !important;
+    color: #2d3436 !important;
+    margin: 40px 0 20px 0 !important;
+    padding-left: 15px !important;
+    border-left: 4px solid #ff9a9e !important;
+    line-height: 1.4 !important;
+}
+
+.post-content h3 {
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    color: #2d3436 !important;
+    margin: 30px 0 15px 0 !important;
+    padding-left: 12px !important;
+    position: relative !important;
+}
+
+.post-content h3::before {
+    content: '▸' !important;
+    position: absolute !important;
+    left: -5px !important;
+    color: #e84a7a !important;
+    font-size: 1.2rem !important;
+}
+
+/* 深色模式小标题 */
+html[data-theme="dark"] .post-content h2 {
+    color: #f8f9fa !important;
+    border-left-color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-content h3 {
+    color: #f8f9fa !important;
+}
+
+html[data-theme="dark"] .post-content h3::before {
+    color: #bd93f9 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content h2 {
+        color: #f8f9fa !important;
+        border-left-color: #bd93f9 !important;
     }
     
-    .post-meta-enhanced {
-        padding: 15px;
-        gap: 10px;
+    html[data-theme="auto"] .post-content h3 {
+        color: #f8f9fa !important;
     }
     
-    .meta-item {
-        padding: 6px 12px;
-        font-size: 0.85rem;
+    html[data-theme="auto"] .post-content h3::before {
+        color: #bd93f9 !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                段落和文本样式
+——————————————————————————————————————————————*/
+.post-content p {
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+    color: #2d3436 !important;
+    margin: 0 0 20px 0 !important;
+    text-align: justify !important;
+}
+
+/* 深色模式段落 */
+html[data-theme="dark"] .post-content p {
+    color: #dee2e6 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content p {
+        color: #dee2e6 !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                引用块样式
+——————————————————————————————————————————————*/
+.post-content blockquote {
+    margin: 25px 0 !important;
+    padding: 20px 25px !important;
+    background: linear-gradient(135deg, #fff5f7 0%, #ffeef8 100%) !important;
+    border-left: 4px solid #e84a7a !important;
+    border-radius: 0 12px 12px 0 !important;
+    font-style: italic !important;
+}
+
+.post-content blockquote p {
+    margin: 0 !important;
+    color: #636e72 !important;
+    font-size: 1rem !important;
+}
+
+/* 深色模式引用块 */
+html[data-theme="dark"] .post-content blockquote {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+    border-left-color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-content blockquote p {
+    color: #adb5bd !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content blockquote {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+        border-left-color: #bd93f9 !important;
     }
     
-    .post-content {
-        padding: 20px;
+    html[data-theme="auto"] .post-content blockquote p {
+        color: #adb5bd !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                表格样式
+——————————————————————————————————————————————*/
+/* 基础表格样式 - 智能自动换行，无滚动条 */
+.post-content table {
+    width: 100% !important;
+    min-width: 100%;
+    max-width: 100%;
+    border-collapse: collapse !important;
+    font-size: 0.95rem !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    table-layout: fixed !important;
+    display: table;
+}
+
+/* 表格滚动包装器样式 - 禁用滚动 */
+.table-scroll-wrapper {
+    width: 100%;
+    overflow-x: visible;
+    overflow-y: visible;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(232, 74, 122, 0.08);
+    margin: 25px 0;
+}
+
+.post-content th {
+    background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%) !important;
+    color: #e84a7a !important;
+    font-weight: 600 !important;
+    padding: 15px 20px !important;
+    text-align: left !important;
+    border-bottom: 2px solid rgba(232, 74, 122, 0.2) !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    min-width: 80px;
+}
+
+.post-content td {
+    padding: 12px 20px !important;
+    border-bottom: 1px solid rgba(232, 74, 122, 0.1) !important;
+    color: #2d3436 !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    vertical-align: top !important;
+    min-width: 80px;
+}
+
+/* 代码在表格中的样式 */
+.post-content td code {
+    white-space: nowrap !important;
+    font-size: 0.85em !important;
+}
+
+.post-content tr:hover {
+    background: rgba(232, 74, 122, 0.03) !important;
+}
+
+/* 深色模式表格 */
+html[data-theme="dark"] .table-scroll-wrapper {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .table-scroll-wrapper::-webkit-scrollbar-track {
+    background: rgba(189, 147, 249, 0.1);
+}
+
+html[data-theme="dark"] .table-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(189, 147, 249, 0.4);
+}
+
+html[data-theme="dark"] .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(189, 147, 249, 0.6);
+}
+
+html[data-theme="dark"] .post-content th {
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%) !important;
+    color: #bd93f9 !important;
+    border-bottom-color: rgba(189, 147, 249, 0.3) !important;
+}
+
+html[data-theme="dark"] .post-content td {
+    color: #dee2e6 !important;
+    border-bottom-color: rgba(189, 147, 249, 0.15) !important;
+}
+
+html[data-theme="dark"] .post-content tr:hover {
+    background: rgba(189, 147, 249, 0.05) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .table-scroll-wrapper {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
     
-    .post-content h2 {
-        font-size: 1.4rem;
+    html[data-theme="auto"] .table-scroll-wrapper::-webkit-scrollbar-track {
+        background: rgba(189, 147, 249, 0.1);
     }
     
-    .post-content h3 {
-        font-size: 1.2rem;
+    html[data-theme="auto"] .table-scroll-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(189, 147, 249, 0.4);
     }
     
-    .post-content blockquote {
-        padding: 15px 20px;
+    html[data-theme="auto"] .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+        background: rgba(189, 147, 249, 0.6);
     }
     
-    .post-content blockquote::before {
-        font-size: 2rem;
+    html[data-theme="auto"] .post-content th {
+        background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%) !important;
+        color: #bd93f9 !important;
+        border-bottom-color: rgba(189, 147, 249, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .post-content td {
+        color: #dee2e6 !important;
+        border-bottom-color: rgba(189, 147, 249, 0.15) !important;
+    }
+    
+    html[data-theme="auto"] .post-content tr:hover {
+        background: rgba(189, 147, 249, 0.05) !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                链接样式
+——————————————————————————————————————————————*/
+.post-content a {
+    color: #e84a7a !important;
+    text-decoration: none !important;
+    border-bottom: 1px dashed rgba(232, 74, 122, 0.4) !important;
+    transition: all 0.2s ease !important;
+}
+
+.post-content a:hover {
+    color: #c44569 !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: #c44569 !important;
+}
+
+/* 深色模式链接 */
+html[data-theme="dark"] .post-content a {
+    color: #bd93f9 !important;
+    border-bottom-color: rgba(189, 147, 249, 0.4) !important;
+}
+
+html[data-theme="dark"] .post-content a:hover {
+    color: #d4b5ff !important;
+    border-bottom-color: #d4b5ff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content a {
+        color: #bd93f9 !important;
+        border-bottom-color: rgba(189, 147, 249, 0.4) !important;
+    }
+    
+    html[data-theme="auto"] .post-content a:hover {
+        color: #d4b5ff !important;
+        border-bottom-color: #d4b5ff !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                行内代码样式
+——————————————————————————————————————————————*/
+.post-content code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    font-size: 0.9em !important;
+    padding: 2px 6px !important;
+    background: rgba(232, 74, 122, 0.1) !important;
+    color: #e84a7a !important;
+    border-radius: 4px !important;
+    border: 1px solid rgba(232, 74, 122, 0.2) !important;
+}
+
+.post-content strong code {
+    font-weight: 700 !important;
+    background: rgba(232, 74, 122, 0.15) !important;
+}
+
+/* 深色模式行内代码 */
+html[data-theme="dark"] .post-content code {
+    background: rgba(189, 147, 249, 0.15) !important;
+    color: #bd93f9 !important;
+    border-color: rgba(189, 147, 249, 0.3) !important;
+}
+
+html[data-theme="dark"] .post-content strong code {
+    background: rgba(189, 147, 249, 0.2) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content code {
+        background: rgba(189, 147, 249, 0.15) !important;
+        color: #bd93f9 !important;
+        border-color: rgba(189, 147, 249, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .post-content strong code {
+        background: rgba(189, 147, 249, 0.2) !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                代码块横向滚动条
+——————————————————————————————————————————————*/
+/* 浅色模式 - 粉色主题 */
+.post-content .highlight pre::-webkit-scrollbar,
+.post-content .chroma pre::-webkit-scrollbar,
+.post-content .highlight .chroma::-webkit-scrollbar,
+.post-content .highlight > pre::-webkit-scrollbar {
+    height: 10px !important;
+}
+
+.post-content .highlight pre::-webkit-scrollbar-track,
+.post-content .chroma pre::-webkit-scrollbar-track,
+.post-content .highlight .chroma::-webkit-scrollbar-track,
+.post-content .highlight > pre::-webkit-scrollbar-track {
+    background: rgba(232, 74, 122, 0.08) !important;
+    border-radius: 5px !important;
+}
+
+.post-content .highlight pre::-webkit-scrollbar-thumb,
+.post-content .chroma pre::-webkit-scrollbar-thumb,
+.post-content .highlight .chroma::-webkit-scrollbar-thumb,
+.post-content .highlight > pre::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(232, 74, 122, 0.5) 0%, rgba(255, 107, 157, 0.5) 100%) !important;
+    border-radius: 5px !important;
+    border: 2px solid transparent !important;
+    background-clip: padding-box !important;
+}
+
+.post-content .highlight pre::-webkit-scrollbar-thumb:hover,
+.post-content .chroma pre::-webkit-scrollbar-thumb:hover,
+.post-content .highlight .chroma::-webkit-scrollbar-thumb:hover,
+.post-content .highlight > pre::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(232, 74, 122, 0.7) 0%, rgba(255, 107, 157, 0.7) 100%) !important;
+}
+
+/* Firefox 支持 */
+.post-content .highlight pre,
+.post-content .chroma pre,
+.post-content .highlight .chroma,
+.post-content .highlight > pre {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(232, 74, 122, 0.5) rgba(232, 74, 122, 0.08) !important;
+}
+
+/* 深色模式滚动条 - 紫罗兰色主题 */
+html[data-theme="dark"] .post-content .highlight pre::-webkit-scrollbar-track,
+html[data-theme="dark"] .post-content .chroma pre::-webkit-scrollbar-track,
+html[data-theme="dark"] .post-content .highlight .chroma::-webkit-scrollbar-track,
+html[data-theme="dark"] .post-content .highlight > pre::-webkit-scrollbar-track {
+    background: rgba(189, 147, 249, 0.15) !important;
+}
+
+html[data-theme="dark"] .post-content .highlight pre::-webkit-scrollbar-thumb,
+html[data-theme="dark"] .post-content .chroma pre::-webkit-scrollbar-thumb,
+html[data-theme="dark"] .post-content .highlight .chroma::-webkit-scrollbar-thumb,
+html[data-theme="dark"] .post-content .highlight > pre::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.6) 0%, rgba(139, 92, 246, 0.6) 100%) !important;
+    border: 2px solid transparent !important;
+    background-clip: padding-box !important;
+}
+
+html[data-theme="dark"] .post-content .highlight pre::-webkit-scrollbar-thumb:hover,
+html[data-theme="dark"] .post-content .chroma pre::-webkit-scrollbar-thumb:hover,
+html[data-theme="dark"] .post-content .highlight .chroma::-webkit-scrollbar-thumb:hover,
+html[data-theme="dark"] .post-content .highlight > pre::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%) !important;
+}
+
+/* 深色模式 Firefox */
+html[data-theme="dark"] .post-content .highlight pre,
+html[data-theme="dark"] .post-content .chroma pre,
+html[data-theme="dark"] .post-content .highlight .chroma,
+html[data-theme="dark"] .post-content .highlight > pre {
+    scrollbar-color: rgba(189, 147, 249, 0.6) rgba(189, 147, 249, 0.15) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content .highlight pre::-webkit-scrollbar-track,
+    html[data-theme="auto"] .post-content .chroma pre::-webkit-scrollbar-track,
+    html[data-theme="auto"] .post-content .highlight .chroma::-webkit-scrollbar-track,
+    html[data-theme="auto"] .post-content .highlight > pre::-webkit-scrollbar-track {
+        background: rgba(189, 147, 249, 0.15) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight pre::-webkit-scrollbar-thumb,
+    html[data-theme="auto"] .post-content .chroma pre::-webkit-scrollbar-thumb,
+    html[data-theme="auto"] .post-content .highlight .chroma::-webkit-scrollbar-thumb,
+    html[data-theme="auto"] .post-content .highlight > pre::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, rgba(189, 147, 249, 0.6) 0%, rgba(139, 92, 246, 0.6) 100%) !important;
+        border: 2px solid transparent !important;
+        background-clip: padding-box !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight pre::-webkit-scrollbar-thumb:hover,
+    html[data-theme="auto"] .post-content .chroma pre::-webkit-scrollbar-thumb:hover,
+    html[data-theme="auto"] .post-content .highlight .chroma::-webkit-scrollbar-thumb:hover,
+    html[data-theme="auto"] .post-content .highlight > pre::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, rgba(189, 147, 249, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%) !important;
+    }
+    
+    /* Auto 模式 Firefox */
+    html[data-theme="auto"] .post-content .highlight pre,
+    html[data-theme="auto"] .post-content .chroma pre,
+    html[data-theme="auto"] .post-content .highlight .chroma,
+    html[data-theme="auto"] .post-content .highlight > pre {
+        scrollbar-color: rgba(189, 147, 249, 0.6) rgba(189, 147, 249, 0.15) !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                上一篇/下一篇导航
+——————————————————————————————————————————————*/
+.post-nav-links {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 50px !important;
+    padding-top: 30px !important;
+    border-top: 1px solid rgba(232, 74, 122, 0.15) !important;
+}
+
+.post-nav-links a {
+    display: block !important;
+    padding: 15px 20px !important;
+    background: rgba(232, 74, 122, 0.05) !important;
+    border: 1px solid rgba(232, 74, 122, 0.15) !important;
+    border-radius: 12px !important;
+    color: #e84a7a !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    max-width: 45% !important;
+}
+
+.post-nav-links a:hover {
+    background: rgba(232, 74, 122, 0.1) !important;
+    border-color: rgba(232, 74, 122, 0.3) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(232, 74, 122, 0.1) !important;
+}
+
+.post-nav-links a .title {
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    color: #e84a7a !important;
+    margin-bottom: 5px !important;
+}
+
+.post-nav-links a span:last-child {
+    font-size: 0.95rem !important;
+    color: #636e72 !important;
+    display: block !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.post-nav-links a:hover span:last-child {
+    color: #c44569 !important;
+}
+
+/* 深色模式导航 */
+html[data-theme="dark"] .post-nav-links {
+    border-top-color: rgba(189, 147, 249, 0.2) !important;
+}
+
+html[data-theme="dark"] .post-nav-links a {
+    background: rgba(189, 147, 249, 0.1) !important;
+    border-color: rgba(189, 147, 249, 0.25) !important;
+    color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-nav-links a:hover {
+    background: rgba(189, 147, 249, 0.15) !important;
+    border-color: rgba(189, 147, 249, 0.4) !important;
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.15) !important;
+}
+
+html[data-theme="dark"] .post-nav-links a .title {
+    color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-nav-links a span:last-child {
+    color: #adb5bd !important;
+}
+
+html[data-theme="dark"] .post-nav-links a:hover span:last-child {
+    color: #d4b5ff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-nav-links {
+        border-top-color: rgba(189, 147, 249, 0.2) !important;
+    }
+    
+    html[data-theme="auto"] .post-nav-links a {
+        background: rgba(189, 147, 249, 0.1) !important;
+        border-color: rgba(189, 147, 249, 0.25) !important;
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .post-nav-links a:hover {
+        background: rgba(189, 147, 249, 0.15) !important;
+        border-color: rgba(189, 147, 249, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(189, 147, 249, 0.15) !important;
+    }
+    
+    html[data-theme="auto"] .post-nav-links a .title {
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .post-nav-links a span:last-child {
+        color: #adb5bd !important;
+    }
+    
+    html[data-theme="auto"] .post-nav-links a:hover span:last-child {
+        color: #d4b5ff !important;
     }
 }
 
@@ -891,28 +992,14 @@ html[data-theme="dark"] .post-content .highlight.code-folded::after {
     padding-top: 40px !important;
 }
 
-/* 强制覆盖 chroma/pre/code/span/div 元素背景为透明 */
-.post-content .chroma,
-.post-content pre.chroma,
-.post-content .highlight pre,
-.post-content .highlight pre.chroma,
-.post-content .highlight code,
-.post-content .chroma code,
-.post-content .highlight span,
-.post-content .chroma span,
-.post-content .highlight div,
-.post-content .chroma div {
-    background-color: transparent !important;
-    background: transparent !important;
-}
-
-/* 代码块内的 pre 元素 - 完全填满 */
-.post-content .highlight > pre.chroma {
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    min-height: calc(100% - 40px) !important;
+.post-content .chroma {
+    position: relative !important;
+    margin: 25px 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
+    background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
+    padding-top: 40px !important;
 }
 
 /* 代码块头部背景 - 默认淡粉色 */
@@ -1054,196 +1141,39 @@ html[data-theme="dark"] .post-content .highlight .custom-copy-code:hover {
     background: transparent !important;
 }
 
-/* 强制覆盖 Hugo 生成的内联样式背景色 */
-.post-content .highlight > div[style*="background-color"],
-.post-content .chroma > div[style*="background-color"] {
-    background-color: transparent !important;
-    background: transparent !important;
-}
-
-/* 表格样式重置 */
-.post-content .highlight table,
-.post-content .chroma table {
-    margin: 0 !important;
-    border-spacing: 0 !important;
-    width: 100% !important;
-}
-
-.post-content .highlight td,
-.post-content .chroma td {
-    padding: 0 !important;
-}
-
-/* 代码块内的 pre 元素 - 扩大填满 */
-.post-content .highlight pre,
-.post-content .chroma pre {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-}
-
-/* 代码块内的 code 元素 - 扩大填满整个区域 */
-.post-content .highlight code,
-.post-content .chroma code {
-    display: block !important;
-    padding: 20px !important;
-    margin: 0 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    min-height: 100% !important;
-}
-
-/* 强制覆盖 pre 元素的内联样式背景色 */
-.post-content .highlight pre[style*="background-color"],
-.post-content .chroma pre[style*="background-color"] {
-    background-color: #fafafa !important;
-}
-
-html[data-theme="dark"] .post-content .highlight pre[style*="background-color"],
-html[data-theme="dark"] .post-content .chroma pre[style*="background-color"] {
-    background-color: transparent !important;
-}
-
-/* 代码行号 */
+/* 行号样式 */
 .post-content .highlight .ln,
 .post-content .chroma .ln {
-    color: rgba(255, 255, 255, 0.3) !important;
+    color: rgba(232, 74, 122, 0.35) !important;
+    border-right: 1px solid rgba(232, 74, 122, 0.15) !important;
+    padding-right: 10px !important;
+    margin-right: 10px !important;
     user-select: none !important;
-    padding-right: 15px !important;
-    margin-right: 15px !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 代码高亮优化 */
+/* 代码高亮 - 少女心配色 */
 .post-content .highlight .k,
 .post-content .chroma .k {
-    color: #ff9a9e !important;
+    color: #e84a7a !important;
+    font-weight: 600 !important;
 }
 
-.post-content .highlight .s,
-.post-content .chroma .s {
-    color: #a18cd1 !important;
-}
-
-.post-content .highlight .n,
-.post-content .chroma .n {
-    color: #fad0c4 !important;
-}
-
-.post-content .highlight .c,
-.post-content .chroma .c {
-    color: rgba(255, 255, 255, 0.4) !important;
-    font-style: italic !important;
-}
-
-.post-content .highlight .o,
-.post-content .chroma .o {
-    color: #ffb3a7 !important;
-}
-
-.post-content .highlight .p,
-.post-content .chroma .p {
-    color: rgba(255, 255, 255, 0.7) !important;
-}
-
-.post-content .highlight .m,
-.post-content .chroma .m {
-    color: #fad0c4 !important;
-}
-
-/* 行内代码 - 直角长方形 */
-.post-content code:not(.chroma code) {
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.15) 0%, rgba(250, 208, 196, 0.15) 100%) !important;
-    color: #ff9a9e !important;
-    padding: 2px 6px !important;
-    border-radius: 0 !important;
-    font-size: 0.9em !important;
-    border: 1px solid rgba(255, 154, 158, 0.2) !important;
-}
-
-html[data-theme="dark"] .post-content code:not(.chroma code) {
-    background: linear-gradient(135deg, rgba(255, 154, 158, 0.25) 0%, rgba(250, 208, 196, 0.25) 100%) !important;
-    color: #ffb3a7 !important;
-    border-color: rgba(255, 154, 158, 0.3) !important;
-}
-
-/*——————————————————————————————————————————————
-                代码块 - 白天模式 (浅色主题)
-——————————————————————————————————————————————*/
-/* 白天模式：使用浅色背景 */
-.post-content .highlight {
-    background: #f8f9fa !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
-}
-
-/* 白天模式头部背景 */
-.post-content .highlight::before {
-    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-}
-
-/* 白天模式语言按钮 */
-.post-content .highlight .code-lang-btn {
-    color: #495057 !important;
-}
-
-.post-content .highlight .code-lang-btn:hover {
-    color: #ff6b6b !important;
-}
-
-.post-content .highlight .code-lang-btn.line-numbers-hidden {
-    color: #adb5bd !important;
-}
-
-/* 白天模式 pre 和 chroma 元素 - 强制透明背景 */
-.post-content .highlight > pre.chroma,
-.post-content .highlight > pre.chroma[style*="background"],
-.post-content .highlight pre.chroma,
-.post-content .highlight pre.chroma[style*="background"],
-.post-content .highlight .chroma {
-    background: transparent !important;
-    background-color: transparent !important;
-}
-
-/* 白天模式行号 */
-.post-content .highlight .line-numbers,
-.post-content .highlight .ln {
-    color: rgba(232, 74, 122, 0.35) !important;
-}
-
-/* 白天模式代码高亮 - 少女心配色 */
-/* 关键字 (keyword) - 玫瑰粉 */
-.post-content .highlight .k,
-.post-content .chroma .k,
 .post-content .highlight .kd,
 .post-content .chroma .kd {
     color: #e84a7a !important;
     font-weight: 600 !important;
 }
 
-/* 字符串 (string) - 薰衣草紫 */
 .post-content .highlight .s,
-.post-content .chroma .s,
-.post-content .highlight .s2,
-.post-content .chroma .s2,
-.post-content .highlight .s1,
-.post-content .chroma .s1 {
+.post-content .chroma .s {
     color: #9c66cc !important;
 }
 
-/* 变量名/标识符 (name) - 深粉色 */
 .post-content .highlight .n,
-.post-content .chroma .n,
-.post-content .highlight .na,
-.post-content .chroma .na,
-.post-content .highlight .nb,
-.post-content .chroma .nb {
+.post-content .chroma .n {
     color: #c44569 !important;
 }
 
-/* 注释 (comment) - 柔粉色 */
 .post-content .highlight .c,
 .post-content .chroma .c,
 .post-content .highlight .c1,
@@ -1254,7 +1184,6 @@ html[data-theme="dark"] .post-content code:not(.chroma code) {
     font-style: italic !important;
 }
 
-/* 操作符 (operator) - 珊瑚粉 */
 .post-content .highlight .o,
 .post-content .chroma .o,
 .post-content .highlight .ow,
@@ -1263,13 +1192,11 @@ html[data-theme="dark"] .post-content code:not(.chroma code) {
     font-weight: 600 !important;
 }
 
-/* 标点符号 (punctuation) - 灰粉色 */
 .post-content .highlight .p,
 .post-content .chroma .p {
     color: #a55eea !important;
 }
 
-/* 数字 (number) - 粉蓝色 */
 .post-content .highlight .m,
 .post-content .chroma .m,
 .post-content .highlight .mi,
@@ -1280,7 +1207,6 @@ html[data-theme="dark"] .post-content code:not(.chroma code) {
     font-weight: 600 !important;
 }
 
-/* 类名/函数名 - 紫粉色 */
 .post-content .highlight .nc,
 .post-content .chroma .nc,
 .post-content .highlight .nf,
@@ -1291,45 +1217,20 @@ html[data-theme="dark"] .post-content code:not(.chroma code) {
     font-weight: 700 !important;
 }
 
-/* 类型 - 樱花粉 */
 .post-content .highlight .kt,
 .post-content .chroma .kt {
     color: #fd79a8 !important;
     font-weight: 600 !important;
 }
 
-/* 属性 - 藕粉色 */
 .post-content .highlight .na,
 .post-content .chroma .na {
     color: #d63031 !important;
 }
 
-/* 内置函数 - 玫红色 */
 .post-content .highlight .nv,
 .post-content .chroma .nv {
-    color: #e17055 !important;
-}
-
-/* 装饰器 - 深紫色 */
-.post-content .highlight .nd,
-.post-content .chroma .nd {
-    color: #6c5ce7 !important;
-    font-weight: 700 !important;
-}
-
-/* 预处理指令 */
-.post-content .highlight .cp,
-.post-content .chroma .cp {
-    color: #a29bfe !important;
-    font-weight: 700 !important;
-}
-
-/* 宏/预处理 - 灰色 */
-.post-content .highlight .cp,
-.post-content .chroma .cp,
-.post-content .highlight .cpf,
-.post-content .chroma .cpf {
-    color: #6a737d !important;
+    color: #e84393 !important;
 }
 
 /*——————————————————————————————————————————————
@@ -1353,27 +1254,20 @@ html[data-theme="light"] .post-content .chroma pre {
     background: transparent !important;
 }
 
-html[data-theme="light"] .post-content .highlight .code-lang-btn {
-    color: #e84a7a !important;
-}
-
-html[data-theme="light"] .post-content .highlight .code-lang-btn:hover {
-    color: #c44569 !important;
-}
-
-html[data-theme="light"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
-    color: rgba(232, 74, 122, 0.5) !important;
-}
-
 /* 浅色模式行号 */
 html[data-theme="light"] .post-content .highlight .ln,
 html[data-theme="light"] .post-content .chroma .ln {
     color: rgba(232, 74, 122, 0.35) !important;
+    border-right-color: rgba(232, 74, 122, 0.15) !important;
 }
 
 /* 浅色模式代码高亮 - 少女心配色 */
 html[data-theme="light"] .post-content .highlight .k,
-html[data-theme="light"] .post-content .chroma .k,
+html[data-theme="light"] .post-content .chroma .k {
+    color: #e84a7a !important;
+    font-weight: 600 !important;
+}
+
 html[data-theme="light"] .post-content .highlight .kd,
 html[data-theme="light"] .post-content .chroma .kd {
     color: #e84a7a !important;
@@ -1411,6 +1305,18 @@ html[data-theme="light"] .post-content .highlight .m,
 html[data-theme="light"] .post-content .chroma .m {
     color: #6c5ce7 !important;
     font-weight: 600 !important;
+}
+
+html[data-theme="light"] .post-content .highlight .code-lang-btn {
+    color: #e84a7a !important;
+}
+
+html[data-theme="light"] .post-content .highlight .code-lang-btn:hover {
+    color: #c44569 !important;
+}
+
+html[data-theme="light"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
+    color: rgba(232, 74, 122, 0.5) !important;
 }
 
 /*——————————————————————————————————————————————
@@ -1494,9 +1400,118 @@ html[data-theme="dark"] .post-content .chroma .m {
     font-weight: 600 !important;
 }
 
+html[data-theme="dark"] .post-content .highlight .nc,
+html[data-theme="dark"] .post-content .chroma .nc,
+html[data-theme="dark"] .post-content .highlight .nf,
+html[data-theme="dark"] .post-content .chroma .nf,
+html[data-theme="dark"] .post-content .highlight .fm,
+html[data-theme="dark"] .post-content .chroma .fm {
+    color: #fd79a8 !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .kt,
+html[data-theme="dark"] .post-content .chroma .kt {
+    color: #ff79c6 !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .na,
+html[data-theme="dark"] .post-content .chroma .na {
+    color: #ff6b6b !important;
+}
+
+html[data-theme="dark"] .post-content .highlight .nv,
+html[data-theme="dark"] .post-content .chroma .nv {
+    color: #ff9ff3 !important;
+}
+
 /*——————————————————————————————————————————————
-        代码块 - 自动深色模式 (data-theme="auto" + 系统深色)
+                代码块 - 自动模式
 ——————————————————————————————————————————————*/
+@media (prefers-color-scheme: light) {
+    html[data-theme="auto"] .post-content .highlight,
+    html[data-theme="auto"] .post-content .chroma {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
+        box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
+        border: none !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight::before,
+    html[data-theme="auto"] .post-content .chroma::before {
+        background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%) !important;
+        border-bottom-color: rgba(232, 74, 122, 0.15) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight pre,
+    html[data-theme="auto"] .post-content .chroma pre,
+    html[data-theme="auto"] .post-content .highlight code,
+    html[data-theme="auto"] .post-content .chroma code,
+    html[data-theme="auto"] .post-content .highlight span,
+    html[data-theme="auto"] .post-content .chroma span,
+    html[data-theme="auto"] .post-content .highlight div,
+    html[data-theme="auto"] .post-content .chroma div {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .ln,
+    html[data-theme="auto"] .post-content .chroma .ln {
+        color: rgba(232, 74, 122, 0.35) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .k,
+    html[data-theme="auto"] .post-content .chroma .k {
+        color: #e84a7a !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn {
+        color: #e84a7a !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn:hover {
+        color: #c44569 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
+        color: rgba(232, 74, 122, 0.5) !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .s,
+    html[data-theme="auto"] .post-content .chroma .s {
+        color: #9c66cc !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .n,
+    html[data-theme="auto"] .post-content .chroma .n {
+        color: #c44569 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .c,
+    html[data-theme="auto"] .post-content .chroma .c {
+        color: #b088f9 !important;
+        font-style: italic !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .o,
+    html[data-theme="auto"] .post-content .chroma .o {
+        color: #ff6b81 !important;
+        font-weight: 600 !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .p,
+    html[data-theme="auto"] .post-content .chroma .p {
+        color: #a55eea !important;
+    }
+    
+    html[data-theme="auto"] .post-content .highlight .m,
+    html[data-theme="auto"] .post-content .chroma .m {
+        color: #6c5ce7 !important;
+        font-weight: 600 !important;
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     html[data-theme="auto"] .post-content .highlight,
     html[data-theme="auto"] .post-content .chroma {
@@ -1553,82 +1568,6 @@ html[data-theme="dark"] .post-content .chroma .m {
     
     html[data-theme="auto"] .post-content .highlight .n,
     html[data-theme="auto"] .post-content .chroma .n {
-        color: #f8b195 !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .c,
-    html[data-theme="auto"] .post-content .chroma .c {
-        color: #a29bfe !important;
-        font-style: italic !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .o,
-    html[data-theme="auto"] .post-content .chroma .o {
-        color: #ff6b9d !important;
-        font-weight: 600 !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .p,
-    html[data-theme="auto"] .post-content .chroma .p {
-        color: #dfe6e9 !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .m,
-    html[data-theme="auto"] .post-content .chroma .m {
-        color: #74b9ff !important;
-        font-weight: 600 !important;
-    }
-}
-
-/*——————————————————————————————————————————————
-        代码块 - 自动浅色模式 (data-theme="auto" + 系统浅色)
-——————————————————————————————————————————————*/
-@media (prefers-color-scheme: light) {
-    html[data-theme="auto"] .post-content .highlight,
-    html[data-theme="auto"] .post-content .chroma {
-        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
-        box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
-        border: none !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight::before,
-    html[data-theme="auto"] .post-content .chroma::before {
-        background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%) !important;
-        border-bottom-color: rgba(232, 74, 122, 0.15) !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight pre,
-    html[data-theme="auto"] .post-content .chroma pre,
-    html[data-theme="auto"] .post-content .highlight code,
-    html[data-theme="auto"] .post-content .chroma code,
-    html[data-theme="auto"] .post-content .highlight span,
-    html[data-theme="auto"] .post-content .chroma span,
-    html[data-theme="auto"] .post-content .highlight div,
-    html[data-theme="auto"] .post-content .chroma div {
-        background: transparent !important;
-        background-color: transparent !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .ln,
-    html[data-theme="auto"] .post-content .chroma .ln {
-        color: rgba(232, 74, 122, 0.35) !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .k,
-    html[data-theme="auto"] .post-content .chroma .k,
-    html[data-theme="auto"] .post-content .highlight .kd,
-    html[data-theme="auto"] .post-content .chroma .kd {
-        color: #e84a7a !important;
-        font-weight: 600 !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .s,
-    html[data-theme="auto"] .post-content .chroma .s {
-        color: #9c66cc !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .n,
-    html[data-theme="auto"] .post-content .chroma .n {
         color: #c44569 !important;
     }
     
@@ -1653,18 +1592,6 @@ html[data-theme="dark"] .post-content .chroma .m {
     html[data-theme="auto"] .post-content .chroma .m {
         color: #6c5ce7 !important;
         font-weight: 600 !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .code-lang-btn {
-        color: #e84a7a !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .code-lang-btn:hover {
-        color: #c44569 !important;
-    }
-    
-    html[data-theme="auto"] .post-content .highlight .code-lang-btn.line-numbers-hidden {
-        color: rgba(232, 74, 122, 0.5) !important;
     }
 }
 
@@ -1699,5 +1626,370 @@ html[data-theme="dark"] .post-content .chroma .m {
         height: 35px !important;
         font-size: 12px !important;
         padding-left: 12px !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                返回顶部按钮 - 深色模式
+——————————————————————————————————————————————*/
+html[data-theme="dark"] .custom-back-to-top {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%) !important;
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3) !important;
+}
+
+html[data-theme="dark"] .custom-back-to-top:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.5) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .custom-back-to-top {
+        background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%) !important;
+        box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .custom-back-to-top:hover {
+        box-shadow: 0 8px 25px rgba(189, 147, 249, 0.5) !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                列表样式
+——————————————————————————————————————————————*/
+.post-content ul {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 20px 0 !important;
+}
+
+.post-content ul li {
+    position: relative !important;
+    padding-left: 20px !important;
+    margin: 10px 0 !important;
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+    color: #2d3436 !important;
+}
+
+.post-content ul li::before {
+    content: '•' !important;
+    position: absolute !important;
+    left: 0 !important;
+    color: #ff9a9e !important;
+    font-size: 1.2rem !important;
+    line-height: 1.6 !important;
+}
+
+/* 有序列表样式 */
+.post-content ol {
+    padding-left: 25px !important;
+    margin: 20px 0 !important;
+}
+
+.post-content ol li {
+    margin: 10px 0 !important;
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+    color: #2d3436 !important;
+    padding-left: 8px !important;
+}
+
+/* 有序列表数字标记样式 */
+.post-content ol li::marker {
+    color: #e84a7a !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+}
+
+/* 深色模式列表 */
+html[data-theme="dark"] .post-content ul li {
+    color: #dee2e6 !important;
+}
+
+html[data-theme="dark"] .post-content ul li::before {
+    color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .post-content ol li {
+    color: #dee2e6 !important;
+}
+
+html[data-theme="dark"] .post-content ol li::marker {
+    color: #bd93f9 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content ul li {
+        color: #dee2e6 !important;
+    }
+    
+    html[data-theme="auto"] .post-content ul li::before {
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .post-content ol li {
+        color: #dee2e6 !important;
+    }
+    
+    html[data-theme="auto"] .post-content ol li::marker {
+        color: #bd93f9 !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+            自定义文章导航 - 新设计
+——————————————————————————————————————————————*/
+/* 隐藏 Hugo 自带的导航 */
+.paginav {
+    display: none !important;
+}
+
+.custom-post-nav {
+    margin-top: 50px !important;
+    padding-top: 30px !important;
+    border-top: 1px solid rgba(255, 154, 158, 0.2) !important;
+}
+
+.nav-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+}
+
+.nav-card {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 20px !important;
+    background: linear-gradient(135deg, #fff5f7 0%, #ffeef8 100%) !important;
+    border: 2px solid rgba(255, 154, 158, 0.3) !important;
+    border-radius: 16px !important;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.1) !important;
+}
+
+.nav-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(255, 154, 158, 0.2) !important;
+    border-color: rgba(255, 154, 158, 0.5) !important;
+}
+
+.nav-card.prev-card {
+    flex-direction: row !important;
+}
+
+.nav-card.next-card {
+    flex-direction: row-reverse !important;
+    text-align: right !important;
+}
+
+.nav-card.next-card .nav-content {
+    align-items: flex-end !important;
+}
+
+.nav-card.placeholder {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.nav-icon {
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 4px 10px rgba(255, 154, 158, 0.3) !important;
+}
+
+.nav-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: white !important;
+}
+
+.nav-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    min-width: 0 !important;
+}
+
+.nav-label {
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    color: #ff9a9e !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+.nav-title {
+    font-family: 'Noto Sans SC', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #e84a7a !important;
+    line-height: 1.4 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: block !important;
+    max-width: 100% !important;
+}
+
+/* 深色模式导航 */
+html[data-theme="dark"] .custom-post-nav {
+    border-top-color: rgba(189, 147, 249, 0.2) !important;
+}
+
+html[data-theme="dark"] .nav-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+    border-color: rgba(189, 147, 249, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark"] .nav-card:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.2) !important;
+    border-color: rgba(189, 147, 249, 0.5) !important;
+}
+
+html[data-theme="dark"] .nav-icon {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%) !important;
+    box-shadow: 0 4px 10px rgba(189, 147, 249, 0.3) !important;
+}
+
+html[data-theme="dark"] .nav-label {
+    color: #bd93f9 !important;
+}
+
+html[data-theme="dark"] .nav-title {
+    color: #d4b5ff !important;
+}
+
+/* 自动模式 */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .custom-post-nav {
+        border-top-color: rgba(189, 147, 249, 0.2) !important;
+    }
+    
+    html[data-theme="auto"] .nav-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+        border-color: rgba(189, 147, 249, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .nav-card:hover {
+        box-shadow: 0 8px 25px rgba(189, 147, 249, 0.2) !important;
+        border-color: rgba(189, 147, 249, 0.5) !important;
+    }
+    
+    html[data-theme="auto"] .nav-icon {
+        background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%) !important;
+        box-shadow: 0 4px 10px rgba(189, 147, 249, 0.3) !important;
+    }
+    
+    html[data-theme="auto"] .nav-label {
+        color: #bd93f9 !important;
+    }
+    
+    html[data-theme="auto"] .nav-title {
+        color: #d4b5ff !important;
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .nav-container {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+    
+    .nav-card {
+        padding: 15px !important;
+    }
+    
+    .nav-icon {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    .nav-title {
+        font-size: 0.9rem !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+                猫咪钢琴 - 深色模式
+——————————————————————————————————————————————*/
+html[data-theme="dark"] {
+    --neko-primary: #bd93f9;
+    --neko-secondary: #9a6de0;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --neko-primary: #bd93f9;
+        --neko-secondary: #9a6de0;
+    }
+}
+
+/*——————————————————————————————————————————————
+                Giscus 评论区样式
+——————————————————————————————————————————————*/
+/* 评论区容器样式 */
+.giscus-container {
+    margin-top: 40px !important;
+    padding: 25px !important;
+    background: linear-gradient(135deg, #fff5f7 0%, #ffeef8 100%) !important;
+    border: 2px solid rgba(255, 154, 158, 0.3) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(232, 74, 122, 0.1) !important;
+}
+
+/* 评论区标题 */
+.giscus-container::before {
+    content: '💬 留言板';
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #e84a7a;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed rgba(232, 74, 122, 0.2);
+}
+
+/* iframe 样式 */
+.giscus-container iframe {
+    width: 100% !important;
+    border: none !important;
+    border-radius: 12px !important;
+}
+
+/* 深色模式评论区 */
+html[data-theme="dark"] .giscus-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+    border: 2px solid rgba(189, 147, 249, 0.3) !important;
+    box-shadow: 0 4px 20px rgba(189, 147, 249, 0.15) !important;
+}
+
+html[data-theme="dark"] .giscus-container::before {
+    color: #bd93f9;
+    border-bottom-color: rgba(189, 147, 249, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .giscus-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+        border: 2px solid rgba(189, 147, 249, 0.3) !important;
+        box-shadow: 0 4px 20px rgba(189, 147, 249, 0.15) !important;
+    }
+    
+    html[data-theme="auto"] .giscus-container::before {
+        color: #bd93f9;
+        border-bottom-color: rgba(189, 147, 249, 0.3);
     }
 }

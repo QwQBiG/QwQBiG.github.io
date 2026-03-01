@@ -116,23 +116,25 @@ nav.pagination,
   color: #999;
 }
 
-/* 深色模式适配 */
+/* 深色模式适配 - 紫罗兰色主题 */
 body.dark .custom-pagination .page-link {
   background: rgba(46, 46, 51, 0.7);
-  border-color: rgba(255, 154, 158, 0.2);
+  border-color: rgba(189, 147, 249, 0.3);
   color: #ccc;
 }
 
 body.dark .custom-pagination .page-link:hover {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  border-color: rgba(255, 154, 158, 0.8);
+  background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+  border-color: rgba(189, 147, 249, 0.8);
   color: white;
+  box-shadow: 0 8px 25px rgba(189, 147, 249, 0.4);
 }
 
 body.dark .custom-pagination .page-item.active .page-link {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-  border-color: rgba(255, 154, 158, 0.8);
+  background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+  border-color: rgba(189, 147, 249, 0.8);
   color: white;
+  box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
 }
 
 body.dark .custom-pagination .page-item.disabled .page-link {

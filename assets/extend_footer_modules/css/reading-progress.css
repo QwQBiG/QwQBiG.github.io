@@ -98,12 +98,12 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-body.dark .reading-progress-container {
+html[data-theme="dark"] .reading-progress-container {
   background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-body.dark .reading-progress-percent {
+html[data-theme="dark"] .reading-progress-percent {
   color: rgba(200, 200, 200, 0.8);
   background: rgba(30, 30, 30, 0.8);
 }

@@ -1,8 +1,6 @@
 <!-- 
   ========================================================================
-  PROJECT: NEKO-FALL-ENGINE - Modular Version
-  VERSION: 7.0 (Neko Code Block System)
-  STATUS: Production Ready
+  PROJECT: NEKO-FALL-ENGINE
   ========================================================================
   
   模块化结构：
@@ -20,7 +18,6 @@
 {{- $cssPath := "assets/extend_footer_modules/css/" -}}
 {{- readFile (printf "%s%s" $cssPath "reading-progress.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "back-to-top.css") | safeCSS -}}
-{{- readFile (printf "%s%s" $cssPath "neko-code-block.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "neko-piano.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "pagination.css") | safeCSS -}}
 </style>
@@ -38,7 +35,6 @@
 {{- $jsPath := "assets/extend_footer_modules/js/" -}}
 {{- readFile (printf "%s%s" $jsPath "reading-progress.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "disable-theme-scroll.js") | safeJS -}}
-{{- readFile (printf "%s%s" $jsPath "neko-code-block.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "neko-piano.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "pagination.js") | safeJS -}}
 </script>

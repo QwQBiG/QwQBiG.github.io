@@ -17,6 +17,15 @@
     color: #ff9a9e;
 }
 
+body.dark .cs-section-header {
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.1) 0%, rgba(154, 109, 224, 0.1) 100%);
+    border-color: rgba(189, 147, 249, 0.2);
+}
+
+body.dark .cs-section-header h1 {
+    color: #bd93f9;
+}
+
 .cs-section-header h1 .emoji {
     font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
@@ -51,6 +60,11 @@ body.dark .cs-section-header p {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+body.dark .section-title {
+    border-bottom-color: rgba(189, 147, 249, 0.3);
+    color: #bd93f9;
 }
 
 .section-title::before {
@@ -146,8 +160,25 @@ body.dark .cs-section-header p {
 }
 
 body.dark .posts-section .post-entry {
-    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
-    border-color: rgba(255, 175, 204, 0.3);
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.08) 0%, rgba(154, 109, 224, 0.08) 100%);
+    border-color: rgba(189, 147, 249, 0.2);
+}
+
+body.dark .posts-section .post-entry::before {
+    background: linear-gradient(180deg, #bd93f9 0%, #9a6de0 100%);
+}
+
+body.dark .posts-section .post-entry:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.3);
+    border-color: rgba(189, 147, 249, 0.4);
+}
+
+body.dark .posts-section .post-entry .entry-header h2 a {
+    color: #bd93f9;
+}
+
+body.dark .posts-section .post-entry:hover .entry-header h2 a {
+    color: #d4b5ff;
 }
 
 body.dark .posts-section .post-entry .entry-content {
@@ -159,8 +190,8 @@ body.dark .posts-section .post-entry .entry-footer {
 }
 
 body.dark .posts-section .post-entry .entry-footer .tag {
-    background: rgba(255, 175, 204, 0.2);
-    color: #ffb3a7;
+    background: rgba(189, 147, 249, 0.15);
+    color: #bd93f9;
 }
 
 /* 响应式设计 */
@@ -206,6 +237,15 @@ body.dark .posts-section .post-entry .entry-footer .tag {
 .back-home a:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
+}
+
+body.dark .back-home a {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
+}
+
+body.dark .back-home a:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.5);
 }
 </style>
 

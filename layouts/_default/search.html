@@ -246,10 +246,47 @@
     transform: translateY(-2px);
 }
 
-/* 深色模式适配 */
+/* 深色模式适配 - 紫罗兰色主题 */
+body.dark .search-title h1 {
+    color: #bd93f9;
+}
+
+body.dark .search-input:focus {
+    border-color: #bd93f9;
+    box-shadow: 0 0 0 4px rgba(189, 147, 249, 0.15);
+}
+
+body.dark .search-input:focus + .search-icon {
+    fill: #bd93f9;
+}
+
+body.dark .search-stats.has-results {
+    color: #bd93f9;
+}
+
+body.dark .search-result-item:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.15);
+    border-color: #bd93f9;
+}
+
+body.dark .search-result-title a {
+    background: linear-gradient(90deg, #bd93f9 0%, #9a6de0 100%);
+    background-size: 0% 2px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+}
+
 body.dark .search-highlight {
-    background: linear-gradient(120deg, rgba(255, 143, 171, 0.3) 0%, rgba(255, 179, 198, 0.3) 100%);
-    color: #ff8fab;
+    background: linear-gradient(120deg, rgba(189, 147, 249, 0.3) 0%, rgba(154, 109, 224, 0.3) 100%);
+    color: #bd93f9;
+}
+
+body.dark .search-spinner {
+    border-top-color: #bd93f9;
+}
+
+body.dark .quick-tag:hover {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
 }
 
 /* 响应式 */

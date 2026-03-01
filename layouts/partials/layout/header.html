@@ -74,7 +74,7 @@
                         outline: none;
                     }
 
-                    body.dark button#theme-toggle {
+                    html[data-theme="dark"] button#theme-toggle {
                         box-shadow: 
                             0 0 0 1.5px var(--c-border-night),
                             0 5px 15px rgba(0,0,0,0.3),
@@ -102,8 +102,8 @@
                         opacity: 0;
                     }
 
-                    body.dark .layer-bg-day { opacity: 0; }
-                    body.dark .layer-bg-night { opacity: 1; }
+                    html[data-theme="dark"] .layer-bg-day { opacity: 0; }
+                    html[data-theme="dark"] .layer-bg-night { opacity: 1; }
 
                     .star-matrix {
                         position: absolute; width: 100%; height: 100%;
@@ -113,7 +113,7 @@
                         transition: transform var(--dur-main) var(--ease-damp), opacity 0.5s ease;
                     }
 
-                    body.dark .star-matrix {
+                    html[data-theme="dark"] .star-matrix {
                         transform: translateY(0) scale(1);
                         opacity: 1;
                     }
@@ -147,8 +147,8 @@
                         opacity: 0;
                     }
 
-                    body.dark .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
-                    body.dark .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
+                    html[data-theme="dark"] .sm-1 { animation: meteor 4s infinite linear 2s; top: 5px; right: 15px; width: 15px; }
+                    html[data-theme="dark"] .sm-2 { animation: meteor 7s infinite linear 4.5s; top: -2px; right: 25px; width: 22px; }
 
                     .cloud-stack {
                         position: absolute; inset: 0;
@@ -156,7 +156,7 @@
                         transition: transform var(--dur-main) var(--ease-damp), opacity var(--dur-main) ease;
                     }
 
-                    body.dark .cloud-stack {
+                    html[data-theme="dark"] .cloud-stack {
                         transform: translateY(100%);
                         opacity: 0;
                     }
@@ -219,7 +219,7 @@
                         transition: transform var(--dur-main) var(--ease-damp);
                     }
 
-                    body.dark .orb {
+                    html[data-theme="dark"] .orb {
                         transform: translateY(-50%) translateX(calc(var(--sz-gap) + var(--travel))) rotate(360deg);
                     }
 
@@ -239,7 +239,7 @@
                         z-index: 5;
                     }
 
-                    body.dark .face-moon {
+                    html[data-theme="dark"] .face-moon {
                         transform: translateX(0);
                     }
 
@@ -252,7 +252,7 @@
                         transition: opacity 0.4s ease;
                     }
                     
-                    body.dark .crater {
+                    html[data-theme="dark"] .crater {
                         opacity: 1;
                         transition-delay: 0.4s;
                     }
@@ -270,7 +270,7 @@
                         transition: transform var(--dur-main) var(--ease-damp);
                     }
                     
-                    body.dark .halo-container {
+                    html[data-theme="dark"] .halo-container {
                         transform: translateX(var(--travel));
                     }
 
@@ -299,7 +299,7 @@
                     .ray:nth-child(3) { transform: translateX(-50%) rotate(90deg); }
                     .ray:nth-child(4) { transform: translateX(-50%) rotate(135deg); }
 
-                    body.dark .sun-halo { opacity: 0; }
+                    html[data-theme="dark"] .sun-halo { opacity: 0; }
 
                     @keyframes float-h {
                         0% { transform: translateX(0); }

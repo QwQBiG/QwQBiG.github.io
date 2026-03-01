@@ -47,6 +47,8 @@
         background: #2e2e33; 
         /* 边框：变暗，防止刺眼 */
         border-color: #444;
+        /* 左侧边框使用紫罗兰色渐变 */
+        border-image: linear-gradient(to bottom, #bd93f9, #9a6de0) 1;
         /* 阴影：黑夜里阴影要淡一点，或者改用深色阴影 */
         box-shadow: 0 3px 6px rgba(0,0,0,0.2);
     }
@@ -55,19 +57,18 @@
     body.dark .series-overview-card-wrapper:hover {
         /* 背景稍微变亮一点点，表示被选中 */
         background: #36363d;
-        /* 阴影加深 */
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        /* 阴影使用紫罗兰色 */
+        box-shadow: 0 6px 18px rgba(189, 147, 249, 0.25);
     }
 
-    /* 标题链接变色 (黑夜：浅紫罗兰)
-       原因：深色背景上，原来的深紫色看不清，要换成亮一点的粉紫色 */
+    /* 标题链接变色 (黑夜：紫罗兰色) */
     body.dark .series-overview-card-wrapper .entry-title a {
-        color: #d0a9f5 !important; 
+        color: #bd93f9 !important; 
     }
 
     /* 图标颜色也跟着变亮 */
     body.dark .series-overview-card-wrapper .entry-title a::before {
-        color: #d0a9f5;
+        color: #bd93f9;
     }
     
     /* 文章摘要文字颜色 (确保黑夜能看清) */

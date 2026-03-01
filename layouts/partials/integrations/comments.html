@@ -1,15 +1,79 @@
-<script src="https://giscus.app/client.js"
-        data-repo="QwQBiG/QwQBiG.github.io"
-        data-repo-id="R_kgDOQUrNow"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOQUrNo84Cxx1C"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
+<div class="giscus-container">
+    <script src="https://giscus.app/client.js"
+            data-repo="QwQBiG/QwQBiG.github.io"
+            data-repo-id="R_kgDOQUrNow"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOQUrNo84Cxx1C"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="https://giscus.app/themes/noborder_dark.css"
+            data-lang="zh-CN"
+            crossorigin="anonymous"
+            async>
+    </script>
+</div>
+
+<script>
+    // Giscus 主题切换
+    function updateGiscusTheme() {
+        const iframe = document.querySelector('.giscus-frame');
+        if (!iframe) return;
+        
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const theme = currentTheme === 'dark' ? 'dark' : 'light';
+        
+        iframe.contentWindow.postMessage({
+            giscus: {
+                setConfig: {
+                    theme: theme
+                }
+            }
+        }, 'https://giscus.app');
+    }
+    
+    // 监听主题变化
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'data-theme') {
+                updateGiscusTheme();
+            }
+        });
+    });
+    
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+    
+    // 初始化主题 - 使用 setTimeout 确保 iframe 已加载
+    function initGiscusTheme() {
+        const iframe = document.querySelector('.giscus-frame');
+        if (iframe) {
+            updateGiscusTheme();
+        } else {
+            // 如果 iframe 还没加载，继续等待
+            setTimeout(initGiscusTheme, 500);
+        }
+    }
+    
+    // 页面加载完成后开始检查
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initGiscusTheme, 1000);
+        });
+    } else {
+        setTimeout(initGiscusTheme, 1000);
+    }
+    
+    // 同时监听 giscus 加载完成事件
+    window.addEventListener('message', (event) => {
+        if (event.origin !== 'https://giscus.app') return;
+        if (event.data && event.data.giscus && event.data.giscus.resizeHeight) {
+            // giscus 已加载，更新主题
+            updateGiscusTheme();
+        }
+    });
 </script>

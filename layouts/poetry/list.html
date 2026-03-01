@@ -99,8 +99,25 @@
 }
 
 body.dark .suitu-poetry-list ul li {
-    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
-    border-color: rgba(255, 175, 204, 0.3);
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.08) 0%, rgba(154, 109, 224, 0.08) 100%);
+    border-color: rgba(189, 147, 249, 0.2);
+}
+
+body.dark .suitu-poetry-list ul li::before {
+    background: linear-gradient(180deg, #bd93f9 0%, #9a6de0 100%);
+}
+
+body.dark .suitu-poetry-list ul li:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.3);
+    border-color: rgba(189, 147, 249, 0.4);
+}
+
+body.dark .suitu-poetry-list ul li .poetry-title {
+    color: #bd93f9;
+}
+
+body.dark .suitu-poetry-list ul li:hover .poetry-title {
+    color: #d4b5ff;
 }
 
 body.dark .suitu-poetry-list ul li .poetry-summary {
@@ -112,8 +129,8 @@ body.dark .suitu-poetry-list ul li .poetry-meta {
 }
 
 body.dark .suitu-poetry-list ul li .poetry-meta .tag {
-    background: rgba(255, 175, 204, 0.2);
-    color: #ffb3a7;
+    background: rgba(189, 147, 249, 0.15);
+    color: #bd93f9;
 }
 
 @media (max-width: 768px) {
@@ -144,6 +161,15 @@ body.dark .suitu-poetry-list ul li .poetry-meta .tag {
     font-size: 2.5rem;
     margin-bottom: 15px;
     color: #ff9a9e;
+}
+
+body.dark .suitu-section-header {
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.1) 0%, rgba(154, 109, 224, 0.1) 100%);
+    border-color: rgba(189, 147, 249, 0.2);
+}
+
+body.dark .suitu-section-header h1 {
+    color: #bd93f9;
 }
 
 .suitu-section-header h1 .emoji {
@@ -188,6 +214,15 @@ body.dark .suitu-section-header p {
 .back-to-poetry a:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255, 175, 204, 0.5);
+}
+
+body.dark .back-to-poetry a {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
+}
+
+body.dark .back-to-poetry a:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.5);
 }
 </style>
 
@@ -258,6 +293,15 @@ body.dark .suitu-section-header p {
     color: #ff9a9e;
 }
 
+body.dark .poetry-section-header {
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.1) 0%, rgba(154, 109, 224, 0.1) 100%);
+    border-color: rgba(189, 147, 249, 0.2);
+}
+
+body.dark .poetry-section-header h1 {
+    color: #bd93f9;
+}
+
 .poetry-section-header h1 .emoji {
     font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
@@ -292,6 +336,11 @@ body.dark .poetry-section-header p {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+body.dark .section-title {
+    border-bottom-color: rgba(189, 147, 249, 0.3);
+    color: #bd93f9;
 }
 
 .section-title::before {
@@ -387,8 +436,25 @@ body.dark .poetry-section-header p {
 }
 
 body.dark .poetry-list-section .post-entry {
-    background: linear-gradient(135deg, rgba(255, 175, 204, 0.12) 0%, rgba(255, 179, 167, 0.12) 100%);
-    border-color: rgba(255, 175, 204, 0.3);
+    background: linear-gradient(135deg, rgba(189, 147, 249, 0.08) 0%, rgba(154, 109, 224, 0.08) 100%);
+    border-color: rgba(189, 147, 249, 0.2);
+}
+
+body.dark .poetry-list-section .post-entry::before {
+    background: linear-gradient(180deg, #bd93f9 0%, #9a6de0 100%);
+}
+
+body.dark .poetry-list-section .post-entry:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.3);
+    border-color: rgba(189, 147, 249, 0.4);
+}
+
+body.dark .poetry-list-section .post-entry .entry-header h2 a {
+    color: #bd93f9;
+}
+
+body.dark .poetry-list-section .post-entry:hover .entry-header h2 a {
+    color: #d4b5ff;
 }
 
 body.dark .poetry-list-section .post-entry .entry-content {
@@ -400,8 +466,8 @@ body.dark .poetry-list-section .post-entry .entry-footer {
 }
 
 body.dark .poetry-list-section .post-entry .entry-footer .tag {
-    background: rgba(255, 175, 204, 0.2);
-    color: #ffb3a7;
+    background: rgba(189, 147, 249, 0.15);
+    color: #bd93f9;
 }
 
 /* 响应式设计 */
@@ -465,6 +531,8 @@ body.dark .poetry-series-card {
     background: #2e2e33; 
     /* 边框：变暗，防止刺眼 */
     border-color: #444;
+    /* 左侧边框使用紫罗兰色渐变 */
+    border-image: linear-gradient(to bottom, #bd93f9, #9a6de0) 1;
     /* 阴影：黑夜里阴影要淡一点，或者改用深色阴影 */
     box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
@@ -473,18 +541,18 @@ body.dark .poetry-series-card {
 body.dark .poetry-series-card:hover {
     /* 背景稍微变亮一点点，表示被选中 */
     background: #36363d;
-    /* 阴影加深 */
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    /* 阴影使用紫罗兰色 */
+    box-shadow: 0 6px 18px rgba(189, 147, 249, 0.25);
 }
 
-/* 标题链接变色 (黑夜：浅紫罗兰) */
+/* 标题链接变色 (黑夜：紫罗兰色) */
 body.dark .poetry-series-card .entry-title a {
-    color: #d0a9f5 !important; 
+    color: #bd93f9 !important; 
 }
 
 /* 图标颜色也跟着变亮 */
 body.dark .poetry-series-card .entry-title a::before {
-    color: #d0a9f5;
+    color: #bd93f9;
 }
 
 /* 文章摘要文字颜色 (确保黑夜能看清) */
@@ -551,6 +619,15 @@ body.dark .poetry-series-card .entry-footer ul.post-tags li a {
 .back-home a:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255, 154, 158, 0.5);
+}
+
+body.dark .back-home a {
+    background: linear-gradient(135deg, #bd93f9 0%, #9a6de0 100%);
+    box-shadow: 0 4px 15px rgba(189, 147, 249, 0.3);
+}
+
+body.dark .back-home a:hover {
+    box-shadow: 0 8px 25px rgba(189, 147, 249, 0.5);
 }
 
 /* 修复 entry-link 样式 */
