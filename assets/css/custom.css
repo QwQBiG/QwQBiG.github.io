@@ -110,20 +110,7 @@ pre code,
     pointer-events: none !important;
 }
 
-.reading-progress-bar {
-    height: 100% !important;
-    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%) !important;
-    background-size: 200% 100% !important;
-    width: 0% !important;
-    transition: width 0.1s ease-out !important;
-    box-shadow: 0 0 10px rgba(255, 154, 158, 0.5) !important;
-    animation: progress-shimmer 2s linear infinite !important;
-}
-
-@keyframes progress-shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
+/* 进度条样式在 reading-progress.css 中定义 */
 
 body.dark .reading-progress-container {
     background: rgba(255, 255, 255, 0.05) !important;

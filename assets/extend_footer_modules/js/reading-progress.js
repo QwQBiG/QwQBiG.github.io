@@ -2,68 +2,78 @@
  * 阅读进度条功能
  */
 (function() {
-  // 确保在 DOM 加载完成后执行
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProgressBar);
-  } else {
-    initProgressBar();
-  }
-  
+  'use strict';
+
   function initProgressBar() {
     // 检查是否已存在
     if (document.querySelector('.reading-progress-container')) {
-      console.log('Progress bar already exists');
       return;
     }
-    
-    const progressContainer = document.createElement('div');
+
+    // 创建进度条容器
+    var progressContainer = document.createElement('div');
     progressContainer.className = 'reading-progress-container';
     progressContainer.innerHTML = '<div class="reading-progress-bar"></div>';
-    
-    // 确保 body 元素存在
-    if (!document.body) {
-      console.error('Body element not found');
+
+    // 插入到 body 开头
+    if (document.body && document.body.firstChild) {
+      document.body.insertBefore(progressContainer, document.body.firstChild);
+    } else if (document.body) {
+      document.body.appendChild(progressContainer);
+    } else {
       return;
     }
-    
-    // 插入到 body 元素的最前面，确保它在所有内容之上
-    if (document.body) {
-      if (document.body.firstChild) {
-        document.body.insertBefore(progressContainer, document.body.firstChild);
-      } else {
-        document.body.appendChild(progressContainer);
-      }
-    } else {
-      // 如果 body 不存在，插入到 html 元素
-      if (document.documentElement.firstChild) {
-        document.documentElement.insertBefore(progressContainer, document.documentElement.firstChild);
-      } else {
-        document.documentElement.appendChild(progressContainer);
-      }
-    }
-    
-    console.log('Progress bar inserted');
 
-    const progressBar = progressContainer.querySelector('.reading-progress-bar');
-    
-    // 创建百分比显示元素
-    const percentDisplay = document.createElement('div');
+    var progressBar = progressContainer.querySelector('.reading-progress-bar');
+
+    // 创建百分比显示
+    var percentDisplay = document.createElement('div');
     percentDisplay.className = 'reading-progress-percent';
     percentDisplay.textContent = '0%';
     document.body.appendChild(percentDisplay);
 
-    function updateProgress() {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      progressBar.style.width = progress + '%';
-      percentDisplay.textContent = Math.round(progress) + '%';
+    // 计算进度
+    function getProgress() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+      if (docHeight <= 0) {
+        return 0;
+      }
+
+      var progress = (scrollTop / docHeight) * 100;
+      return Math.min(100, Math.max(0, progress));
     }
 
-    window.addEventListener('scroll', updateProgress, { passive: true });
-    window.addEventListener('resize', updateProgress, { passive: true });
+    // 更新进度条 - 使用 !important 确保覆盖
+    function updateProgress() {
+      var progress = getProgress();
+
+      if (progressBar) {
+        progressBar.style.setProperty('width', progress + '%', 'important');
+      }
+
+      if (percentDisplay) {
+        percentDisplay.textContent = Math.round(progress) + '%';
+      }
+    }
+
+    // 绑定滚动事件
+    window.addEventListener('scroll', updateProgress, false);
+    window.addEventListener('resize', updateProgress, false);
+
+    // 初始化
     updateProgress();
-    
-    console.log('Reading progress bar initialized with percent display');
+
+    // 延迟更新（等待页面完全加载）
+    setTimeout(updateProgress, 100);
+    setTimeout(updateProgress, 500);
+  }
+
+  // 启动
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgressBar);
+  } else {
+    initProgressBar();
   }
 })();
