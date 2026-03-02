@@ -1,21 +1,24 @@
 <!-- 
   ========================================================================
-  PROJECT: NEKO-FALL-ENGINE
+  项目: MyBlog - 模块化页脚扩展
   ========================================================================
   
   模块化结构：
-  - CSS 样式: assets/extend_footer_modules/css/
-  - JavaScript 功能: assets/extend_footer_modules/js/
-  - HTML 组件: assets/extend_footer_modules/html/
+  - CSS 样式: assets/modules/css/
+  - JavaScript 功能: assets/modules/js/
+  - HTML 组件: assets/modules/html/
   
-  自主开发模块：
-  - neko-code-block: 完全独立的代码块系统
+  模块列表：
+  - reading-progress: 阅读进度条
+  - back-to-top: 返回顶部
+  - neko-piano: 猫咪钢琴
+  - pagination: 分页样式
   ========================================================================
 -->
 
 <!-- CSS 样式模块 -->
 <style>
-{{- $cssPath := "assets/extend_footer_modules/css/" -}}
+{{- $cssPath := "assets/modules/css/" -}}
 {{- readFile (printf "%s%s" $cssPath "reading-progress.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "back-to-top.css") | safeCSS -}}
 {{- readFile (printf "%s%s" $cssPath "neko-piano.css") | safeCSS -}}
@@ -27,12 +30,12 @@
 <link rel="stylesheet" href="{{ $codeBlocksCSS.RelPermalink }}">
 
 <!-- HTML 组件模块 -->
-{{- $htmlPath := "assets/extend_footer_modules/html/" -}}
+{{- $htmlPath := "assets/modules/html/" -}}
 {{- readFile (printf "%s%s" $htmlPath "neko-piano.html") | safeHTML -}}
 
 <!-- JavaScript 功能模块 -->
 <script>
-{{- $jsPath := "assets/extend_footer_modules/js/" -}}
+{{- $jsPath := "assets/modules/js/" -}}
 {{- readFile (printf "%s%s" $jsPath "reading-progress.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "disable-theme-scroll.js") | safeJS -}}
 {{- readFile (printf "%s%s" $jsPath "neko-piano.js") | safeJS -}}
