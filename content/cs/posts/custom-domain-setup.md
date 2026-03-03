@@ -1,16 +1,14 @@
 ---
 title: "Hugo + GitHub Pages 绑定自定义域名完整指南"
-date: 2026-03-03T14:00:00+08:00
+date: 2026-03-03T12:00:00+08:00
 draft: false
-description: "详细记录如何将 Cloudflare 购买的域名绑定到 Hugo + GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。"
 tags: ["hugo", "github-pages", "cloudflare", "domain", "运维"]
 categories: ["运维"]
-series: ["运维"]
 ---
 
 ## 前言
 
-之前一直使用 GitHub Pages 默认的域名 `QwQBiG.github.io`，虽然免费但不够专业。最近在 Cloudflare 购买了 `iqwqi.win` 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。
+之前一直使用 GitHub Pages 默认的域名 `QwQBiG.github.io`，虽然免费但不够专业。毕竟在 Cloudflare 买了 `iqwqi.win` 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。
 
 ## 准备工作
 
@@ -47,14 +45,14 @@ baseURL = "https://iqwqi.win/"
 
 在 `static/` 目录下创建 `CNAME` 文件（无后缀）：
 
-```
+```text
 static/
 └── CNAME          # 新建此文件
 ```
 
 文件内容：
 
-```
+```text
 iqwqi.win
 ```
 
@@ -66,14 +64,16 @@ iqwqi.win
 
 #### 添加 A 记录
 
-GitHub Pages 的 IP 地址（2025年有效）：
+GitHub Pages 的 IP 地址（请查询官方文档获取最新地址）：
 
 | 类型 | 名称 | IPv4 地址 | 代理状态 |
 |------|------|-----------|----------|
-| A | @ | 185.199.108.153 | 仅 DNS |
-| A | @ | 185.199.109.153 | 仅 DNS |
-| A | @ | 185.199.110.153 | 仅 DNS |
-| A | @ | 185.199.111.153 | 仅 DNS |
+| A | @ | 185.199.108.xxx | 仅 DNS |
+| A | @ | 185.199.109.xxx | 仅 DNS |
+| A | @ | 185.199.110.xxx | 仅 DNS |
+| A | @ | 185.199.111.xxx | 仅 DNS |
+
+> **获取最新 IP**: 访问 [GitHub Pages 文档](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site) 获取当前有效 IP
 
 #### 添加 CNAME 记录
 

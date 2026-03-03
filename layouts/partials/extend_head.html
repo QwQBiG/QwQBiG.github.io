@@ -6,5 +6,9 @@
 {{- $customCSS := resources.Get "css/custom.css" | resources.Minify -}}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}">
 
+{{- /* Pages CSS for archive, tags, about, search pages */ -}}
+{{- $pagesCSS := resources.Get "css/pages.css" | resources.Minify -}}
+<link rel="stylesheet" href="{{ $pagesCSS.RelPermalink }}">
+
 {{- /* Page Transitions JavaScript */ -}}
 {{- partial "page-transitions-js.html" . -}}

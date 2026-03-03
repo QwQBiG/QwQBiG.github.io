@@ -514,10 +514,17 @@
     document.head.appendChild(styleEl);
   }
 
-  // 2. 移除内联黑色背景
+  // 2. 移除内联黑色背景（但保留按钮的样式）
   const forceRemoveBlackBg = function() {
     const allElements = document.querySelectorAll('.post-content .highlight *');
     allElements.forEach(el => {
+      // 跳过按钮元素，保留它们的样式
+      if (el.classList.contains('custom-copy-code') ||
+          el.classList.contains('code-fold-toggle') ||
+          el.classList.contains('code-fold-hint') ||
+          el.classList.contains('code-lang-btn')) {
+        return;
+      }
       el.style.removeProperty('background');
       el.style.removeProperty('background-color');
       el.style.backgroundColor = 'transparent';

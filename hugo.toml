@@ -89,7 +89,7 @@ theme = "github.com/adityatelange/hugo-PaperMod"
         autoEnable = true
 
     [params.assets]
-        customCSS = ["css/custom.css"]
+        customCSS = ["css/custom.css", "css/pages.css"]
         disableHLJS = true
         [params.assets.math]
             enable = true

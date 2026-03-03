@@ -538,7 +538,16 @@ html[data-theme="dark"] .post-content a:hover {
 /*——————————————————————————————————————————————
                 行内代码样式
 ——————————————————————————————————————————————*/
-.post-content code {
+.post-content code,
+.post-content p code,
+.post-content li code,
+.post-content td code,
+.post-content h1 code,
+.post-content h2 code,
+.post-content h3 code,
+.post-content h4 code,
+.post-content h5 code,
+.post-content h6 code {
     font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
     font-size: 0.9em !important;
     padding: 2px 6px !important;
@@ -548,13 +557,25 @@ html[data-theme="dark"] .post-content a:hover {
     border: 1px solid rgba(232, 74, 122, 0.2) !important;
 }
 
-.post-content strong code {
+.post-content strong code,
+.post-content p strong code,
+.post-content li strong code {
     font-weight: 700 !important;
     background: rgba(232, 74, 122, 0.15) !important;
+    color: #e84a7a !important;
 }
 
 /* 深色模式行内代码 */
-html[data-theme="dark"] .post-content code {
+html[data-theme="dark"] .post-content code,
+html[data-theme="dark"] .post-content p code,
+html[data-theme="dark"] .post-content li code,
+html[data-theme="dark"] .post-content td code,
+html[data-theme="dark"] .post-content h1 code,
+html[data-theme="dark"] .post-content h2 code,
+html[data-theme="dark"] .post-content h3 code,
+html[data-theme="dark"] .post-content h4 code,
+html[data-theme="dark"] .post-content h5 code,
+html[data-theme="dark"] .post-content h6 code {
     background: rgba(189, 147, 249, 0.15) !important;
     color: #bd93f9 !important;
     border-color: rgba(189, 147, 249, 0.3) !important;
@@ -565,7 +586,16 @@ html[data-theme="dark"] .post-content strong code {
 }
 
 @media (prefers-color-scheme: dark) {
-    html[data-theme="auto"] .post-content code {
+    html[data-theme="auto"] .post-content code,
+    html[data-theme="auto"] .post-content p code,
+    html[data-theme="auto"] .post-content li code,
+    html[data-theme="auto"] .post-content td code,
+    html[data-theme="auto"] .post-content h1 code,
+    html[data-theme="auto"] .post-content h2 code,
+    html[data-theme="auto"] .post-content h3 code,
+    html[data-theme="auto"] .post-content h4 code,
+    html[data-theme="auto"] .post-content h5 code,
+    html[data-theme="auto"] .post-content h6 code {
         background: rgba(189, 147, 249, 0.15) !important;
         color: #bd93f9 !important;
         border-color: rgba(189, 147, 249, 0.3) !important;
@@ -573,6 +603,55 @@ html[data-theme="dark"] .post-content strong code {
     
     html[data-theme="auto"] .post-content strong code {
         background: rgba(189, 147, 249, 0.2) !important;
+    }
+}
+
+/*——————————————————————————————————————————————
+            普通代码块样式 (pre > code)
+——————————————————————————————————————————————*/
+/* 浅色模式 - 普通代码块 */
+.post-content pre {
+    background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    overflow-x: auto !important;
+    margin: 20px 0 !important;
+    box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08) !important;
+}
+
+.post-content pre code {
+    display: block !important;
+    background: transparent !important;
+    color: #e84a7a !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    font-size: 1.1rem !important;
+    line-height: 1.8 !important;
+}
+
+/* 深色模式 - 普通代码块 */
+html[data-theme="dark"] .post-content pre {
+    background: #1a1a2e !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark"] .post-content pre code {
+    color: #ff79c6 !important;
+    background: transparent !important;
+}
+
+/* 自动模式 - 普通代码块 */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .post-content pre {
+        background: #1a1a2e !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    html[data-theme="auto"] .post-content pre code {
+        color: #ff79c6 !important;
+        background: transparent !important;
     }
 }
 
@@ -881,9 +960,14 @@ html[data-theme="dark"] .chroma > .code-fold-hint {
     border-color: rgba(232, 74, 122, 0.5) !important;
 }
 
-.post-content .highlight .code-fold-toggle svg {
-    width: 16px !important;
-    height: 16px !important;
+/* 代码折叠按钮图标大小 - 使用多重选择器确保优先级 */
+.post-content .highlight .code-fold-toggle svg,
+.post-content .chroma .code-fold-toggle svg,
+.highlight .code-fold-toggle svg,
+.chroma .code-fold-toggle svg,
+.code-fold-toggle svg {
+    width: 22px !important;
+    height: 22px !important;
     fill: #e84a7a !important;
     transition: transform 0.3s ease !important;
 }
@@ -912,7 +996,14 @@ html[data-theme="dark"] .post-content .highlight .code-fold-toggle:hover {
     border-color: rgba(255, 121, 198, 0.5) !important;
 }
 
-html[data-theme="dark"] .post-content .highlight .code-fold-toggle svg {
+/* 深色模式代码折叠按钮图标 */
+html[data-theme="dark"] .post-content .highlight .code-fold-toggle svg,
+html[data-theme="dark"] .post-content .chroma .code-fold-toggle svg,
+html[data-theme="dark"] .highlight .code-fold-toggle svg,
+html[data-theme="dark"] .chroma .code-fold-toggle svg,
+html[data-theme="dark"] .code-fold-toggle svg {
+    width: 22px !important;
+    height: 22px !important;
     fill: #ff79c6 !important;
 }
 
@@ -929,7 +1020,14 @@ html[data-theme="dark"] .post-content .highlight .code-fold-toggle svg {
         border-color: rgba(255, 121, 198, 0.5) !important;
     }
     
-    html[data-theme="auto"] .post-content .highlight .code-fold-toggle svg {
+    /* 自动模式代码折叠按钮图标 */
+    html[data-theme="auto"] .post-content .highlight .code-fold-toggle svg,
+    html[data-theme="auto"] .post-content .chroma .code-fold-toggle svg,
+    html[data-theme="auto"] .highlight .code-fold-toggle svg,
+    html[data-theme="auto"] .chroma .code-fold-toggle svg,
+    html[data-theme="auto"] .code-fold-toggle svg {
+        width: 22px !important;
+        height: 22px !important;
         fill: #ff79c6 !important;
     }
 }

@@ -70,6 +70,7 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
   font-family: 'JetBrains Mono', monospace !important;
   color: #fff !important;
   background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%) !important;
+  background-color: #ff9a9e !important;
   border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
   border-radius: 4px !important;
   cursor: pointer !important;
@@ -85,9 +86,12 @@ pre:not(.highlight):not(.chroma) .custom-copy-code {
   line-height: 1 !important;
 }
 
+/* 代码折叠按钮图标 - 使用 !important 确保优先级 */
 .code-fold-toggle svg {
-  width: 12px !important;
-  height: 12px !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
   fill: currentColor !important;
   transition: transform 0.3s ease !important;
 }
@@ -163,7 +167,7 @@ body.dark .chroma.code-folded::after {
   }
 
   .code-fold-toggle svg {
-    width: 10px !important;
-    height: 10px !important;
+    width: 16px !important;
+    height: 16px !important;
   }
 }
