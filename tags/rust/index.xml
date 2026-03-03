@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Rust on QwQBiG&#39;s World</title>
-    <link>https://QwQBiG.github.io/tags/rust/</link>
+    <link>https://iqwqi.win/tags/rust/</link>
     <description>Recent content in Rust on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate>
-    <atom:link href="https://QwQBiG.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://iqwqi.win/tags/rust/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>C/C&#43;&#43;速通Java?JS?Rust?</title>
-      <link>https://QwQBiG.github.io/cs/posts/taokeseries/siguoyuyan/</link>
+      <link>https://iqwqi.win/cs/posts/taokeseries/siguoyuyan/</link>
       <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/taokeseries/siguoyuyan/</guid>
+      <guid>https://iqwqi.win/cs/posts/taokeseries/siguoyuyan/</guid>
       <description>&lt;h1 id=&#34;-编程语言速通指南cc-选手的多宇宙生存手册&#34;&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用人群&lt;/strong&gt;：已掌握 C，进修 C++ 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。&lt;br&gt;
 &lt;strong&gt;核心心法&lt;/strong&gt;：语言只是工具，设计哲学才是灵魂。不要背语法，要懂“为什么这么设计”。&lt;/p&gt;

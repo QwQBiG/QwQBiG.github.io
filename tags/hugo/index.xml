@@ -2,17 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Hugo on QwQBiG&#39;s World</title>
-    <link>https://QwQBiG.github.io/tags/hugo/</link>
+    <link>https://iqwqi.win/tags/hugo/</link>
     <description>Recent content in Hugo on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 13 Nov 2025 21:00:00 +0800</lastBuildDate>
-    <atom:link href="https://QwQBiG.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 03 Mar 2026 14:00:00 +0800</lastBuildDate>
+    <atom:link href="https://iqwqi.win/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo &#43; GitHub Pages 绑定自定义域名完整指南</title>
+      <link>https://iqwqi.win/cs/posts/custom-domain-setup/</link>
+      <pubDate>Tue, 03 Mar 2026 14:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/cs/posts/custom-domain-setup/</guid>
+      <description>详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。</description>
+    </item>
     <item>
       <title>史诗级 ”Hello World“：如何从0到1（划掉）搭建个人技博（技术博客）</title>
-      <link>https://QwQBiG.github.io/cs/posts/hello-world/</link>
+      <link>https://iqwqi.win/cs/posts/hello-world/</link>
       <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/hello-world/</guid>
+      <guid>https://iqwqi.win/cs/posts/hello-world/</guid>
       <description>从零开始搭建个人技术博客的完整指南</description>
     </item>
   </channel>

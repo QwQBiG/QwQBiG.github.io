@@ -2,17 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>CS on QwQBiG&#39;s World</title>
-    <link>https://QwQBiG.github.io/cs/</link>
+    <link>https://iqwqi.win/cs/</link>
     <description>Recent content in CS on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 18 Dec 2025 12:00:00 +0800</lastBuildDate>
-    <atom:link href="https://QwQBiG.github.io/cs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 03 Mar 2026 14:00:00 +0800</lastBuildDate>
+    <atom:link href="https://iqwqi.win/cs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo &#43; GitHub Pages 绑定自定义域名完整指南</title>
+      <link>https://iqwqi.win/cs/posts/custom-domain-setup/</link>
+      <pubDate>Tue, 03 Mar 2026 14:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/cs/posts/custom-domain-setup/</guid>
+      <description>详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。</description>
+    </item>
     <item>
       <title>搞搞WSL</title>
-      <link>https://QwQBiG.github.io/cs/posts/getwsl/</link>
+      <link>https://iqwqi.win/cs/posts/getwsl/</link>
       <pubDate>Thu, 18 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/getwsl/</guid>
+      <guid>https://iqwqi.win/cs/posts/getwsl/</guid>
       <description>&lt;h1 id=&#34;我要玩臭企鹅linux&#34;&gt;我要玩臭企鹅（Linux）&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;咕咕嘎嘎&lt;/p&gt;
@@ -75,9 +82,9 @@
     </item>
     <item>
       <title>Windows家庭版激活成专业版 </title>
-      <link>https://QwQBiG.github.io/cs/posts/professionaleditionwindows/</link>
+      <link>https://iqwqi.win/cs/posts/professionaleditionwindows/</link>
       <pubDate>Tue, 16 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/professionaleditionwindows/</guid>
+      <guid>https://iqwqi.win/cs/posts/professionaleditionwindows/</guid>
       <description>&lt;h1 id=&#34;windows-激活成专业版&#34;&gt;Windows 激活成专业版&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; 断开网络（拔网线或关 &lt;code&gt;WiFi&lt;/code&gt;）。&lt;/p&gt;
 &lt;blockquote&gt;
@@ -117,9 +124,9 @@ HWID 是永久数字权利激活，最稳的一种。
     </item>
     <item>
       <title>我の周报</title>
-      <link>https://QwQBiG.github.io/cs/posts/zhouji/</link>
+      <link>https://iqwqi.win/cs/posts/zhouji/</link>
       <pubDate>Sat, 22 Nov 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/zhouji/</guid>
+      <guid>https://iqwqi.win/cs/posts/zhouji/</guid>
       <description>&lt;h2 id=&#34;以下是20251120第一次搞得周报&#34;&gt;以下是2025.11.20第一次搞得周报&lt;/h2&gt;
 &lt;p&gt;C已完。C++已学完STL容器和算法（和一些好玩的特性）。
 数据结构在学STL都涉及了，纯学数据结构的话停留在串。
@@ -145,9 +152,9 @@ openCV -&amp;gt; 机器视觉；
     </item>
     <item>
       <title>史诗级 ”Hello World“：如何从0到1（划掉）搭建个人技博（技术博客）</title>
-      <link>https://QwQBiG.github.io/cs/posts/hello-world/</link>
+      <link>https://iqwqi.win/cs/posts/hello-world/</link>
       <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/hello-world/</guid>
+      <guid>https://iqwqi.win/cs/posts/hello-world/</guid>
       <description>从零开始搭建个人技术博客的完整指南</description>
     </item>
   </channel>

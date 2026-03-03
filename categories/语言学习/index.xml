@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>语言学习 on QwQBiG&#39;s World</title>
-    <link>https://QwQBiG.github.io/categories/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/</link>
+    <link>https://iqwqi.win/categories/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/</link>
     <description>Recent content in 语言学习 on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 01 Feb 2026 20:00:00 +0800</lastBuildDate>
-    <atom:link href="https://QwQBiG.github.io/categories/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://iqwqi.win/categories/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>C/C&#43;&#43;速通Java?JS?Rust?</title>
-      <link>https://QwQBiG.github.io/cs/posts/taokeseries/siguoyuyan/</link>
+      <link>https://iqwqi.win/cs/posts/taokeseries/siguoyuyan/</link>
       <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/taokeseries/siguoyuyan/</guid>
+      <guid>https://iqwqi.win/cs/posts/taokeseries/siguoyuyan/</guid>
       <description>&lt;h1 id=&#34;-编程语言速通指南cc-选手的多宇宙生存手册&#34;&gt;🚀 编程语言速通指南：C/C++ 选手的多宇宙生存手册&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用人群&lt;/strong&gt;：已掌握 C，进修 C++ 辅修 Py，被迫学 Java/JS，想搞 Rust 的大一/大二学生。&lt;br&gt;
 &lt;strong&gt;核心心法&lt;/strong&gt;：语言只是工具，设计哲学才是灵魂。不要背语法，要懂“为什么这么设计”。&lt;/p&gt;
@@ -64,9 +64,9 @@
     </item>
     <item>
       <title>范围for循环</title>
-      <link>https://QwQBiG.github.io/cs/posts/cppseries/fanweiforxunhuan/</link>
+      <link>https://iqwqi.win/cs/posts/cppseries/fanweiforxunhuan/</link>
       <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/cppseries/fanweiforxunhuan/</guid>
+      <guid>https://iqwqi.win/cs/posts/cppseries/fanweiforxunhuan/</guid>
       <description>&lt;h1 id=&#34;c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记&#34;&gt;C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记&lt;/h1&gt;
 &lt;h2 id=&#34;一-核心概念告别索引拥抱元素&#34;&gt;一、 核心概念：告别索引，拥抱元素&lt;/h2&gt;
 &lt;p&gt;基于范围的 for 循环（C++11 引入）是为了解决一个最常见的编程任务：遍历一个序列（如 vector, string）中的每一个元素。
@@ -121,9 +121,9 @@
     </item>
     <item>
       <title>远程失灵了</title>
-      <link>https://QwQBiG.github.io/cs/posts/yunweiseries/yuancheng/</link>
+      <link>https://iqwqi.win/cs/posts/yunweiseries/yuancheng/</link>
       <pubDate>Sat, 29 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/yunweiseries/yuancheng/</guid>
+      <guid>https://iqwqi.win/cs/posts/yunweiseries/yuancheng/</guid>
       <description>&lt;h1 id=&#34;docker-部署-frp-客户端避坑指南&#34;&gt;Docker 部署 FRP 客户端避坑指南&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;适用于：&lt;/strong&gt; Linux (Ubuntu/CentOS) + Docker 环境，目标是穿透本地 SSH 或其他服务。&lt;/p&gt;
 &lt;h2 id=&#34;核心结论&#34;&gt;核心结论&lt;/h2&gt;
@@ -163,16 +163,16 @@
     </item>
     <item>
       <title>STL 容器</title>
-      <link>https://QwQBiG.github.io/cs/posts/cppseries/stlcontainer/</link>
+      <link>https://iqwqi.win/cs/posts/cppseries/stlcontainer/</link>
       <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/cppseries/stlcontainer/</guid>
+      <guid>https://iqwqi.win/cs/posts/cppseries/stlcontainer/</guid>
       <description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description>
     </item>
     <item>
       <title>STL 算法</title>
-      <link>https://QwQBiG.github.io/cs/posts/cppseries/stlalgorithm/</link>
+      <link>https://iqwqi.win/cs/posts/cppseries/stlalgorithm/</link>
       <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/cppseries/stlalgorithm/</guid>
+      <guid>https://iqwqi.win/cs/posts/cppseries/stlalgorithm/</guid>
       <description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description>
     </item>
   </channel>

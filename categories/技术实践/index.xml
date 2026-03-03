@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>技术实践 on QwQBiG&#39;s World</title>
-    <link>https://QwQBiG.github.io/categories/%E6%8A%80%E6%9C%AF%E5%AE%9E%E8%B7%B5/</link>
+    <link>https://iqwqi.win/categories/%E6%8A%80%E6%9C%AF%E5%AE%9E%E8%B7%B5/</link>
     <description>Recent content in 技术实践 on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 18 Dec 2025 12:00:00 +0800</lastBuildDate>
-    <atom:link href="https://QwQBiG.github.io/categories/%E6%8A%80%E6%9C%AF%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://iqwqi.win/categories/%E6%8A%80%E6%9C%AF%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>搞搞WSL</title>
-      <link>https://QwQBiG.github.io/cs/posts/getwsl/</link>
+      <link>https://iqwqi.win/cs/posts/getwsl/</link>
       <pubDate>Thu, 18 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/getwsl/</guid>
+      <guid>https://iqwqi.win/cs/posts/getwsl/</guid>
       <description>&lt;h1 id=&#34;我要玩臭企鹅linux&#34;&gt;我要玩臭企鹅（Linux）&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;咕咕嘎嘎&lt;/p&gt;
@@ -75,9 +75,9 @@
     </item>
     <item>
       <title>Windows家庭版激活成专业版 </title>
-      <link>https://QwQBiG.github.io/cs/posts/professionaleditionwindows/</link>
+      <link>https://iqwqi.win/cs/posts/professionaleditionwindows/</link>
       <pubDate>Tue, 16 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/professionaleditionwindows/</guid>
+      <guid>https://iqwqi.win/cs/posts/professionaleditionwindows/</guid>
       <description>&lt;h1 id=&#34;windows-激活成专业版&#34;&gt;Windows 激活成专业版&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; 断开网络（拔网线或关 &lt;code&gt;WiFi&lt;/code&gt;）。&lt;/p&gt;
 &lt;blockquote&gt;
@@ -117,9 +117,9 @@ HWID 是永久数字权利激活，最稳的一种。
     </item>
     <item>
       <title>史诗级 ”Hello World“：如何从0到1（划掉）搭建个人技博（技术博客）</title>
-      <link>https://QwQBiG.github.io/cs/posts/hello-world/</link>
+      <link>https://iqwqi.win/cs/posts/hello-world/</link>
       <pubDate>Thu, 13 Nov 2025 21:00:00 +0800</pubDate>
-      <guid>https://QwQBiG.github.io/cs/posts/hello-world/</guid>
+      <guid>https://iqwqi.win/cs/posts/hello-world/</guid>
       <description>从零开始搭建个人技术博客的完整指南</description>
     </item>
   </channel>
