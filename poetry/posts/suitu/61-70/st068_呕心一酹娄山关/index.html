@@ -88,7 +88,7 @@
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><link rel="stylesheet" href="/css/page-transitions.min.css"><link rel="stylesheet" href="/css/custom.min.css"><script>
+</script><link rel="stylesheet" href="/css/page-transitions.min.css"><link rel="stylesheet" href="/css/custom.min.css"><link rel="stylesheet" href="/css/pages.min.css"><script>
 (function() {
   'use strict';
   
@@ -272,6 +272,9 @@
     document.body.innerHTML = newBody.innerHTML;
     
     
+    executeScripts(document.body);
+    
+    
     if (!document.querySelector('.page-transition-overlay')) {
       createTransitionOverlay();
       transitionOverlay.classList.add('active');
@@ -340,6 +343,51 @@
   }
   
   
+  function executeScripts(element) {
+    const scripts = element.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      
+      if (oldScript.src) return;
+      
+      
+      const scriptContent = oldScript.textContent || '';
+      const skipKeywords = [
+        'code-fold-toggle',
+        'code-fold-hint', 
+        'addFoldButtons',
+        'site-features.js',
+        'custom-back-to-top',
+        'backToTop',
+        'initCodeCopy',
+        'initCodeFold',
+        'initReadingProgress',
+        'initBackToTop',
+        'initNekoPiano'
+      ];
+      
+      const shouldSkip = skipKeywords.some(keyword => scriptContent.includes(keyword));
+      if (shouldSkip) {
+        
+        oldScript.remove();
+        return;
+      }
+      
+      const newScript = document.createElement('script');
+      
+      
+      Array.from(oldScript.attributes).forEach(attr => {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      
+      
+      newScript.textContent = oldScript.textContent;
+      
+      
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }
+
+  
   function handleScroll() {
     const hash = window.location.hash;
     if (hash) {
@@ -396,6 +444,300 @@
     if (typeof initCustomPagination === 'function') {
       initCustomPagination();
     }
+    
+    
+    initSearchPage();
+  }
+  
+  
+  function initSearchPage() {
+    const searchInput = document.getElementById('search-input');
+    if (!searchInput) return; 
+    
+    
+    if (searchInput.dataset.initialized === 'true') return;
+    searchInput.dataset.initialized = 'true';
+    
+    const searchResults = document.getElementById('search-results');
+    const searchStats = document.getElementById('search-stats');
+    const searchLoading = document.getElementById('search-loading');
+    const searchEmpty = document.getElementById('search-empty');
+    
+    let searchData = [];
+    let searchIndex = [];
+    
+    
+    async function loadSearchData() {
+      try {
+        searchLoading.style.display = 'block';
+        searchEmpty.style.display = 'none';
+        
+        const indexUrl = window.location.origin + '/index.json';
+        const response = await fetch(indexUrl);
+        const data = await response.json();
+        
+        searchData = data.items || data;
+        
+        
+        searchIndex = searchData.map(item => {
+          const cleanSummary = stripHtml(item.summary || '');
+          const cleanContent = stripHtml(item.content || '');
+          
+          return {
+            ...item,
+            cleanSummary: cleanSummary,
+            cleanContent: cleanContent,
+            searchText: `${item.title} ${cleanSummary} ${cleanContent} ${(item.tags || []).join(' ')} ${(item.categories || []).join(' ')}`.toLowerCase()
+          };
+        });
+        
+        searchLoading.style.display = 'none';
+        searchEmpty.style.display = 'block';
+        
+      } catch (error) {
+        console.error('Failed to load search data:', error);
+        searchLoading.style.display = 'none';
+        searchStats.textContent = '加载失败，请刷新页面重试';
+      }
+    }
+    
+    
+    function performSearch(query) {
+      if (!query.trim()) {
+        searchResults.innerHTML = '';
+        searchStats.textContent = '';
+        searchStats.classList.remove('has-results');
+        searchEmpty.style.display = 'block';
+        return;
+      }
+      
+      searchEmpty.style.display = 'none';
+      
+      const lowerQuery = query.toLowerCase();
+      const keywords = lowerQuery.split(/\s+/).filter(k => k.length > 0);
+      
+      const results = searchIndex.map(item => {
+        let score = 0;
+        let matches = [];
+        
+        keywords.forEach(keyword => {
+          if (item.title.toLowerCase().includes(keyword)) {
+            score += 10;
+            matches.push({ field: 'title', text: keyword });
+          }
+          if (item.tags && item.tags.some(tag => tag.toLowerCase().includes(keyword))) {
+            score += 5;
+            matches.push({ field: 'tag', text: keyword });
+          }
+          if (item.categories && item.categories.some(cat => cat.toLowerCase().includes(keyword))) {
+            score += 3;
+            matches.push({ field: 'category', text: keyword });
+          }
+          if (item.searchText.includes(keyword)) {
+            score += 1;
+            matches.push({ field: 'content', text: keyword });
+          }
+        });
+        
+        return { ...item, score, matches };
+      }).filter(item => item.score > 0);
+      
+      results.sort((a, b) => b.score - a.score);
+      
+      displayResults(results, query);
+    }
+    
+    
+    function displayResults(results, query) {
+      if (results.length === 0) {
+        searchResults.innerHTML = `
+          <div class="search-empty">
+            <div class="search-empty-icon">😕</div>
+            <p class="search-empty-text">未找到与 "${escapeHtml(query)}" 相关的内容</p>
+          </div>
+        `;
+        searchStats.textContent = '无搜索结果';
+        searchStats.classList.remove('has-results');
+        return;
+      }
+      
+      searchStats.textContent = `找到 ${results.length} 个结果`;
+      searchStats.classList.add('has-results');
+      
+      const html = results.map(item => {
+        const keywords = query.split(/\s+/).filter(k => k.length > 0);
+        const content = item.cleanContent || item.cleanSummary || stripHtml(item.summary || '');
+        const contextFragment = extractContext(content, keywords, 200);
+        
+        const summary = highlightText(contextFragment || '暂无摘要', query);
+        const title = highlightText(item.title, query);
+        
+        return `
+          <li class="search-result-item" onclick="window.location.href='${item.permalink}'">
+            <h3 class="search-result-title">
+              <a href="${item.permalink}">${title}</a>
+            </h3>
+            <p class="search-result-summary">${summary}</p>
+            <div class="search-result-meta">
+              ${item.date ? `
+              <span>
+                <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+                ${formatDate(item.date)}
+              </span>
+              ` : ''}
+              ${item.tags && item.tags.length > 0 ? `
+              <span>
+                <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                ${item.tags.slice(0, 3).join(', ')}
+              </span>
+              ` : ''}
+            </div>
+          </li>
+        `;
+      }).join('');
+      
+      searchResults.innerHTML = html;
+    }
+    
+    
+    function highlightText(text, query) {
+      if (!text || !query) return text;
+      
+      const keywords = query.split(/\s+/).filter(k => k.length > 0);
+      let result = text;
+      
+      keywords.forEach(keyword => {
+        const regex = new RegExp(`(${escapeRegex(keyword)})`, 'gi');
+        result = result.replace(regex, '<span class="search-highlight">$1</span>');
+      });
+      
+      return result;
+    }
+    
+    
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    
+    function stripHtml(html) {
+      if (!html) return '';
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      let text = tmp.textContent || tmp.innerText || '';
+      return text.replace(/\s+/g, ' ').trim();
+    }
+    
+    
+    function extractContext(content, keywords, maxLength = 200) {
+      if (!content || !keywords || keywords.length === 0) {
+        return content ? content.substring(0, maxLength) : '';
+      }
+      
+      const lowerContent = content.toLowerCase();
+      let bestMatch = null;
+      let bestScore = -1;
+      
+      for (const keyword of keywords) {
+        const lowerKeyword = keyword.toLowerCase();
+        let index = lowerContent.indexOf(lowerKeyword);
+        
+        while (index !== -1) {
+          const contextStart = Math.max(0, index - 60);
+          const contextEnd = Math.min(content.length, index + keyword.length + 60);
+          
+          let score = 0;
+          const fragment = content.substring(contextStart, contextEnd);
+          const lowerFragment = fragment.toLowerCase();
+          
+          for (const k of keywords) {
+            if (lowerFragment.includes(k.toLowerCase())) {
+              score++;
+            }
+          }
+          
+          score -= index / content.length;
+          
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = { start: contextStart, end: contextEnd, fragment: fragment };
+          }
+          
+          index = lowerContent.indexOf(lowerKeyword, index + 1);
+        }
+      }
+      
+      if (!bestMatch) {
+        return content.substring(0, maxLength);
+      }
+      
+      let result = bestMatch.fragment;
+      
+      if (bestMatch.start > 0) {
+        result = '...' + result;
+      }
+      if (bestMatch.end < content.length) {
+        result = result + '...';
+      }
+      
+      return result;
+    }
+    
+    
+    function escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+    
+    
+    window.searchByTag = function(tag) {
+      searchInput.value = tag;
+      performSearch(tag);
+      searchInput.focus();
+    };
+    
+    
+    const debouncedSearch = debounce(performSearch, 300);
+    
+    searchInput.addEventListener('input', (e) => {
+      debouncedSearch(e.target.value);
+    });
+    
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        performSearch(e.target.value);
+      }
+    });
+    
+    
+    loadSearchData();
+    
+    
+    searchInput.focus();
   }
   
   
@@ -589,10 +931,18 @@
   
   function initCodeFold() {
     
+    if (document.querySelector('.code-fold-toggle')) {
+      return;
+    }
+    
+    
     document.querySelectorAll('.code-fold-btn').forEach(btn => btn.remove());
     
     
     document.querySelectorAll('pre').forEach(pre => {
+      
+      if (pre.closest('.highlight')?.querySelector('.code-fold-toggle')) return;
+      
       const codeBlock = pre.querySelector('code');
       if (!codeBlock) return;
       
@@ -678,9 +1028,14 @@
     
     if (newTheme === 'dark') {
       body.classList.add('dark');
+      document.documentElement.classList.add('dark');
     } else {
       body.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
     }
+    
+    
+    window.dispatchEvent(new Event('theme-change'));
   }
   
   

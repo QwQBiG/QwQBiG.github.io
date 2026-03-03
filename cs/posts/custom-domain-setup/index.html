@@ -7,7 +7,57 @@
 <meta name="robots" content="index, follow">
 <title>Hugo &#43; GitHub Pages 绑定自定义域名完整指南 | QwQBiG&#39;s World</title>
 <meta name="keywords" content="hugo, github-pages, cloudflare, domain, 运维">
-<meta name="description" content="详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。">
+<meta name="description" content="前言
+之前一直使用 GitHub Pages 默认的域名 QwQBiG.github.io，虽然免费但不够专业。毕竟在 Cloudflare 买了 iqwqi.win 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。
+准备工作
+现有环境
+
+博客框架: Hugo
+托管平台: GitHub Pages
+域名注册: Cloudflare
+原域名: QwQBiG.github.io
+新域名: iqwqi.win
+
+配置目标
+
+主域名 iqwqi.win 访问博客
+www.iqwqi.win 自动跳转到主域名
+QwQBiG.github.io 自动跳转到新域名
+启用 HTTPS
+
+配置步骤
+第一步：修改 Hugo 配置
+编辑 hugo.toml 文件，修改 baseURL：
+
+
+1
+2
+3
+4
+5
+
+
+# 修改前
+baseURL = &#34;https://QwQBiG.github.io/&#34;
+
+# 修改后
+baseURL = &#34;https://iqwqi.win/&#34;
+
+
+作用: 确保生成的所有链接都使用新域名。
+第二步：创建 CNAME 文件
+在 static/ 目录下创建 CNAME 文件（无后缀）：
+
+
+1
+2
+
+
+static/
+└── CNAME          # 新建此文件
+
+
+文件内容：">
 <meta name="author" content="map[name:QwQBiG]">
 <link rel="canonical" href="https://iqwqi.win/cs/posts/custom-domain-setup/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
@@ -70,7 +120,7 @@
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><link rel="stylesheet" href="/css/page-transitions.min.css"><link rel="stylesheet" href="/css/custom.min.css"><script>
+</script><link rel="stylesheet" href="/css/page-transitions.min.css"><link rel="stylesheet" href="/css/custom.min.css"><link rel="stylesheet" href="/css/pages.min.css"><script>
 (function() {
   'use strict';
   
@@ -254,6 +304,9 @@
     document.body.innerHTML = newBody.innerHTML;
     
     
+    executeScripts(document.body);
+    
+    
     if (!document.querySelector('.page-transition-overlay')) {
       createTransitionOverlay();
       transitionOverlay.classList.add('active');
@@ -322,6 +375,51 @@
   }
   
   
+  function executeScripts(element) {
+    const scripts = element.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      
+      if (oldScript.src) return;
+      
+      
+      const scriptContent = oldScript.textContent || '';
+      const skipKeywords = [
+        'code-fold-toggle',
+        'code-fold-hint', 
+        'addFoldButtons',
+        'site-features.js',
+        'custom-back-to-top',
+        'backToTop',
+        'initCodeCopy',
+        'initCodeFold',
+        'initReadingProgress',
+        'initBackToTop',
+        'initNekoPiano'
+      ];
+      
+      const shouldSkip = skipKeywords.some(keyword => scriptContent.includes(keyword));
+      if (shouldSkip) {
+        
+        oldScript.remove();
+        return;
+      }
+      
+      const newScript = document.createElement('script');
+      
+      
+      Array.from(oldScript.attributes).forEach(attr => {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      
+      
+      newScript.textContent = oldScript.textContent;
+      
+      
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }
+
+  
   function handleScroll() {
     const hash = window.location.hash;
     if (hash) {
@@ -378,6 +476,300 @@
     if (typeof initCustomPagination === 'function') {
       initCustomPagination();
     }
+    
+    
+    initSearchPage();
+  }
+  
+  
+  function initSearchPage() {
+    const searchInput = document.getElementById('search-input');
+    if (!searchInput) return; 
+    
+    
+    if (searchInput.dataset.initialized === 'true') return;
+    searchInput.dataset.initialized = 'true';
+    
+    const searchResults = document.getElementById('search-results');
+    const searchStats = document.getElementById('search-stats');
+    const searchLoading = document.getElementById('search-loading');
+    const searchEmpty = document.getElementById('search-empty');
+    
+    let searchData = [];
+    let searchIndex = [];
+    
+    
+    async function loadSearchData() {
+      try {
+        searchLoading.style.display = 'block';
+        searchEmpty.style.display = 'none';
+        
+        const indexUrl = window.location.origin + '/index.json';
+        const response = await fetch(indexUrl);
+        const data = await response.json();
+        
+        searchData = data.items || data;
+        
+        
+        searchIndex = searchData.map(item => {
+          const cleanSummary = stripHtml(item.summary || '');
+          const cleanContent = stripHtml(item.content || '');
+          
+          return {
+            ...item,
+            cleanSummary: cleanSummary,
+            cleanContent: cleanContent,
+            searchText: `${item.title} ${cleanSummary} ${cleanContent} ${(item.tags || []).join(' ')} ${(item.categories || []).join(' ')}`.toLowerCase()
+          };
+        });
+        
+        searchLoading.style.display = 'none';
+        searchEmpty.style.display = 'block';
+        
+      } catch (error) {
+        console.error('Failed to load search data:', error);
+        searchLoading.style.display = 'none';
+        searchStats.textContent = '加载失败，请刷新页面重试';
+      }
+    }
+    
+    
+    function performSearch(query) {
+      if (!query.trim()) {
+        searchResults.innerHTML = '';
+        searchStats.textContent = '';
+        searchStats.classList.remove('has-results');
+        searchEmpty.style.display = 'block';
+        return;
+      }
+      
+      searchEmpty.style.display = 'none';
+      
+      const lowerQuery = query.toLowerCase();
+      const keywords = lowerQuery.split(/\s+/).filter(k => k.length > 0);
+      
+      const results = searchIndex.map(item => {
+        let score = 0;
+        let matches = [];
+        
+        keywords.forEach(keyword => {
+          if (item.title.toLowerCase().includes(keyword)) {
+            score += 10;
+            matches.push({ field: 'title', text: keyword });
+          }
+          if (item.tags && item.tags.some(tag => tag.toLowerCase().includes(keyword))) {
+            score += 5;
+            matches.push({ field: 'tag', text: keyword });
+          }
+          if (item.categories && item.categories.some(cat => cat.toLowerCase().includes(keyword))) {
+            score += 3;
+            matches.push({ field: 'category', text: keyword });
+          }
+          if (item.searchText.includes(keyword)) {
+            score += 1;
+            matches.push({ field: 'content', text: keyword });
+          }
+        });
+        
+        return { ...item, score, matches };
+      }).filter(item => item.score > 0);
+      
+      results.sort((a, b) => b.score - a.score);
+      
+      displayResults(results, query);
+    }
+    
+    
+    function displayResults(results, query) {
+      if (results.length === 0) {
+        searchResults.innerHTML = `
+          <div class="search-empty">
+            <div class="search-empty-icon">😕</div>
+            <p class="search-empty-text">未找到与 "${escapeHtml(query)}" 相关的内容</p>
+          </div>
+        `;
+        searchStats.textContent = '无搜索结果';
+        searchStats.classList.remove('has-results');
+        return;
+      }
+      
+      searchStats.textContent = `找到 ${results.length} 个结果`;
+      searchStats.classList.add('has-results');
+      
+      const html = results.map(item => {
+        const keywords = query.split(/\s+/).filter(k => k.length > 0);
+        const content = item.cleanContent || item.cleanSummary || stripHtml(item.summary || '');
+        const contextFragment = extractContext(content, keywords, 200);
+        
+        const summary = highlightText(contextFragment || '暂无摘要', query);
+        const title = highlightText(item.title, query);
+        
+        return `
+          <li class="search-result-item" onclick="window.location.href='${item.permalink}'">
+            <h3 class="search-result-title">
+              <a href="${item.permalink}">${title}</a>
+            </h3>
+            <p class="search-result-summary">${summary}</p>
+            <div class="search-result-meta">
+              ${item.date ? `
+              <span>
+                <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+                ${formatDate(item.date)}
+              </span>
+              ` : ''}
+              ${item.tags && item.tags.length > 0 ? `
+              <span>
+                <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                ${item.tags.slice(0, 3).join(', ')}
+              </span>
+              ` : ''}
+            </div>
+          </li>
+        `;
+      }).join('');
+      
+      searchResults.innerHTML = html;
+    }
+    
+    
+    function highlightText(text, query) {
+      if (!text || !query) return text;
+      
+      const keywords = query.split(/\s+/).filter(k => k.length > 0);
+      let result = text;
+      
+      keywords.forEach(keyword => {
+        const regex = new RegExp(`(${escapeRegex(keyword)})`, 'gi');
+        result = result.replace(regex, '<span class="search-highlight">$1</span>');
+      });
+      
+      return result;
+    }
+    
+    
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    
+    function stripHtml(html) {
+      if (!html) return '';
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      let text = tmp.textContent || tmp.innerText || '';
+      return text.replace(/\s+/g, ' ').trim();
+    }
+    
+    
+    function extractContext(content, keywords, maxLength = 200) {
+      if (!content || !keywords || keywords.length === 0) {
+        return content ? content.substring(0, maxLength) : '';
+      }
+      
+      const lowerContent = content.toLowerCase();
+      let bestMatch = null;
+      let bestScore = -1;
+      
+      for (const keyword of keywords) {
+        const lowerKeyword = keyword.toLowerCase();
+        let index = lowerContent.indexOf(lowerKeyword);
+        
+        while (index !== -1) {
+          const contextStart = Math.max(0, index - 60);
+          const contextEnd = Math.min(content.length, index + keyword.length + 60);
+          
+          let score = 0;
+          const fragment = content.substring(contextStart, contextEnd);
+          const lowerFragment = fragment.toLowerCase();
+          
+          for (const k of keywords) {
+            if (lowerFragment.includes(k.toLowerCase())) {
+              score++;
+            }
+          }
+          
+          score -= index / content.length;
+          
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = { start: contextStart, end: contextEnd, fragment: fragment };
+          }
+          
+          index = lowerContent.indexOf(lowerKeyword, index + 1);
+        }
+      }
+      
+      if (!bestMatch) {
+        return content.substring(0, maxLength);
+      }
+      
+      let result = bestMatch.fragment;
+      
+      if (bestMatch.start > 0) {
+        result = '...' + result;
+      }
+      if (bestMatch.end < content.length) {
+        result = result + '...';
+      }
+      
+      return result;
+    }
+    
+    
+    function escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+    
+    
+    window.searchByTag = function(tag) {
+      searchInput.value = tag;
+      performSearch(tag);
+      searchInput.focus();
+    };
+    
+    
+    const debouncedSearch = debounce(performSearch, 300);
+    
+    searchInput.addEventListener('input', (e) => {
+      debouncedSearch(e.target.value);
+    });
+    
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        performSearch(e.target.value);
+      }
+    });
+    
+    
+    loadSearchData();
+    
+    
+    searchInput.focus();
   }
   
   
@@ -571,10 +963,18 @@
   
   function initCodeFold() {
     
+    if (document.querySelector('.code-fold-toggle')) {
+      return;
+    }
+    
+    
     document.querySelectorAll('.code-fold-btn').forEach(btn => btn.remove());
     
     
     document.querySelectorAll('pre').forEach(pre => {
+      
+      if (pre.closest('.highlight')?.querySelector('.code-fold-toggle')) return;
+      
       const codeBlock = pre.querySelector('code');
       if (!codeBlock) return;
       
@@ -660,9 +1060,14 @@
     
     if (newTheme === 'dark') {
       body.classList.add('dark');
+      document.documentElement.classList.add('dark');
     } else {
       body.classList.remove('dark');
+      document.documentElement.classList.remove('dark');
     }
+    
+    
+    window.dispatchEvent(new Event('theme-change'));
   }
   
   
@@ -696,23 +1101,74 @@
 <meta property="og:url" content="https://iqwqi.win/cs/posts/custom-domain-setup/">
   <meta property="og:site_name" content="QwQBiG&#39;s World">
   <meta property="og:title" content="Hugo &#43; GitHub Pages 绑定自定义域名完整指南">
-  <meta property="og:description" content="详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。">
+  <meta property="og:description" content="前言 之前一直使用 GitHub Pages 默认的域名 QwQBiG.github.io，虽然免费但不够专业。毕竟在 Cloudflare 买了 iqwqi.win 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。
+准备工作 现有环境 博客框架: Hugo 托管平台: GitHub Pages 域名注册: Cloudflare 原域名: QwQBiG.github.io 新域名: iqwqi.win 配置目标 主域名 iqwqi.win 访问博客 www.iqwqi.win 自动跳转到主域名 QwQBiG.github.io 自动跳转到新域名 启用 HTTPS 配置步骤 第一步：修改 Hugo 配置 编辑 hugo.toml 文件，修改 baseURL：
+1 2 3 4 5 # 修改前 baseURL = &#34;https://QwQBiG.github.io/&#34; # 修改后 baseURL = &#34;https://iqwqi.win/&#34; 作用: 确保生成的所有链接都使用新域名。
+第二步：创建 CNAME 文件 在 static/ 目录下创建 CNAME 文件（无后缀）：
+1 2 static/ └── CNAME # 新建此文件 文件内容：">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="cs">
-    <meta property="article:published_time" content="2026-03-03T14:00:00+08:00">
-    <meta property="article:modified_time" content="2026-03-03T14:00:00+08:00">
+    <meta property="article:published_time" content="2026-03-03T12:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-03T12:00:00+08:00">
     <meta property="article:tag" content="Hugo">
     <meta property="article:tag" content="GitHub Pages">
     <meta property="article:tag" content="Cloudflare">
     <meta property="article:tag" content="Domain">
     <meta property="article:tag" content="运维">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/yunweiseries/yuancheng/">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/yunweiseries/yunweistudy/">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/yunweiseries/zuhui/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hugo &#43; GitHub Pages 绑定自定义域名完整指南">
-<meta name="twitter:description" content="详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。">
+<meta name="twitter:description" content="前言
+之前一直使用 GitHub Pages 默认的域名 QwQBiG.github.io，虽然免费但不够专业。毕竟在 Cloudflare 买了 iqwqi.win 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。
+准备工作
+现有环境
+
+博客框架: Hugo
+托管平台: GitHub Pages
+域名注册: Cloudflare
+原域名: QwQBiG.github.io
+新域名: iqwqi.win
+
+配置目标
+
+主域名 iqwqi.win 访问博客
+www.iqwqi.win 自动跳转到主域名
+QwQBiG.github.io 自动跳转到新域名
+启用 HTTPS
+
+配置步骤
+第一步：修改 Hugo 配置
+编辑 hugo.toml 文件，修改 baseURL：
+
+
+1
+2
+3
+4
+5
+
+
+# 修改前
+baseURL = &#34;https://QwQBiG.github.io/&#34;
+
+# 修改后
+baseURL = &#34;https://iqwqi.win/&#34;
+
+
+作用: 确保生成的所有链接都使用新域名。
+第二步：创建 CNAME 文件
+在 static/ 目录下创建 CNAME 文件（无后缀）：
+
+
+1
+2
+
+
+static/
+└── CNAME          # 新建此文件
+
+
+文件内容：">
 
 
 <script type="application/ld+json">
@@ -741,15 +1197,15 @@
   "@type": "BlogPosting",
   "headline": "Hugo + GitHub Pages 绑定自定义域名完整指南",
   "name": "Hugo \u002b GitHub Pages 绑定自定义域名完整指南",
-  "description": "详细记录如何将 Cloudflare 购买的域名绑定到 Hugo + GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。",
+  "description": "前言 之前一直使用 GitHub Pages 默认的域名 QwQBiG.github.io，虽然免费但不够专业。毕竟在 Cloudflare 买了 iqwqi.win 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。\n准备工作 现有环境 博客框架: Hugo 托管平台: GitHub Pages 域名注册: Cloudflare 原域名: QwQBiG.github.io 新域名: iqwqi.win 配置目标 主域名 iqwqi.win 访问博客 www.iqwqi.win 自动跳转到主域名 QwQBiG.github.io 自动跳转到新域名 启用 HTTPS 配置步骤 第一步：修改 Hugo 配置 编辑 hugo.toml 文件，修改 baseURL：\n1 2 3 4 5 # 修改前 baseURL = \u0026#34;https://QwQBiG.github.io/\u0026#34; # 修改后 baseURL = \u0026#34;https://iqwqi.win/\u0026#34; 作用: 确保生成的所有链接都使用新域名。\n第二步：创建 CNAME 文件 在 static/ 目录下创建 CNAME 文件（无后缀）：\n1 2 static/ └── CNAME # 新建此文件 文件内容：\n",
   "keywords": [
     "hugo", "github-pages", "cloudflare", "domain", "运维"
   ],
-  "articleBody": "前言 之前一直使用 GitHub Pages 默认的域名 QwQBiG.github.io，虽然免费但不够专业。最近在 Cloudflare 购买了 iqwqi.win 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。\n准备工作 现有环境 博客框架: Hugo 托管平台: GitHub Pages 域名注册: Cloudflare 原域名: QwQBiG.github.io 新域名: iqwqi.win 配置目标 主域名 iqwqi.win 访问博客 www.iqwqi.win 自动跳转到主域名 QwQBiG.github.io 自动跳转到新域名 启用 HTTPS 配置步骤 第一步：修改 Hugo 配置 编辑 hugo.toml 文件，修改 baseURL：\n1 2 3 4 5 # 修改前 baseURL = \"https://QwQBiG.github.io/\" # 修改后 baseURL = \"https://iqwqi.win/\" 作用: 确保生成的所有链接都使用新域名。\n第二步：创建 CNAME 文件 在 static/ 目录下创建 CNAME 文件（无后缀）：\nstatic/ └── CNAME # 新建此文件 文件内容：\niqwqi.win 作用: GitHub Pages 通过此文件识别自定义域名。\n第三步：配置 Cloudflare DNS 登录 Cloudflare Dashboard，选择域名后进入 DNS 设置：\n添加 A 记录 GitHub Pages 的 IP 地址（2025年有效）：\n类型 名称 IPv4 地址 代理状态 A @ 185.199.108.153 仅 DNS A @ 185.199.109.153 仅 DNS A @ 185.199.110.153 仅 DNS A @ 185.199.111.153 仅 DNS 添加 CNAME 记录 类型 名称 目标 代理状态 CNAME www @ 仅 DNS 重要提示:\n代理状态选择\"仅 DNS\"（灰色云），不要开启代理 如果开启 Cloudflare 代理，GitHub 无法自动签发 HTTPS 证书 第四步：GitHub Pages 设置 打开仓库的 Settings → Pages 在 Custom domain 处输入：iqwqi.win 点击 Save 等待 DNS 检查通过（显示绿色勾选） 勾选 Enforce HTTPS 注意: HTTPS 证书签发可能需要几分钟到几小时。\n第五步：部署网站 1 2 3 4 5 6 7 8 9 10 11 12 # 构建网站 hugo # 进入 public 目录 cd public # 提交更改 git add -A git commit -m \"chore: configure custom domain iqwqi.win\" # 推送到 GitHub git push 验证配置 1. 检查 DNS 解析 1 nslookup iqwqi.win 应返回 GitHub 的 IP 地址。\n2. 检查 CNAME 文件 1 curl -I https://iqwqi.win/CNAME 3. 浏览器访问 访问 https://iqwqi.win 应正常显示博客 地址栏应显示 HTTPS 安全锁 常见问题 Q1: DNS 检查一直失败？ 等待 DNS 传播（通常 10-30 分钟） 检查 Cloudflare 代理是否关闭 确认 A 记录 IP 地址正确 Q2: HTTPS 证书无法签发？ 确保 DNS 检查已通过 确保 Cloudflare 代理处于关闭状态 等待 24 小时后重试 Q3: 旧域名无法跳转？ GitHub Pages 会自动将旧域名 301 跳转到新域名，无需额外配置。\nQ4: 如何同时使用子域名？ 可以在 Cloudflare 添加其他子域名记录：\napi.iqwqi.win → 其他服务器 IP blog.iqwqi.win → CNAME 到主域名 总结 绑定自定义域名的关键步骤：\n✅ 修改 Hugo baseURL ✅ 创建 static/CNAME 文件 ✅ Cloudflare 添加 DNS 记录 ✅ GitHub Pages 设置自定义域名 ✅ 启用 HTTPS ✅ 部署网站 现在博客可以通过 https://iqwqi.win 访问了！🎉\n参考链接 GitHub Pages 自定义域名文档 Hugo 部署到 GitHub Pages Cloudflare DNS 设置 ",
-  "wordCount" : "317",
+  "articleBody": "前言 之前一直使用 GitHub Pages 默认的域名 QwQBiG.github.io，虽然免费但不够专业。毕竟在 Cloudflare 买了 iqwqi.win 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。\n准备工作 现有环境 博客框架: Hugo 托管平台: GitHub Pages 域名注册: Cloudflare 原域名: QwQBiG.github.io 新域名: iqwqi.win 配置目标 主域名 iqwqi.win 访问博客 www.iqwqi.win 自动跳转到主域名 QwQBiG.github.io 自动跳转到新域名 启用 HTTPS 配置步骤 第一步：修改 Hugo 配置 编辑 hugo.toml 文件，修改 baseURL：\n1 2 3 4 5 # 修改前 baseURL = \"https://QwQBiG.github.io/\" # 修改后 baseURL = \"https://iqwqi.win/\" 作用: 确保生成的所有链接都使用新域名。\n第二步：创建 CNAME 文件 在 static/ 目录下创建 CNAME 文件（无后缀）：\n1 2 static/ └── CNAME # 新建此文件 文件内容：\n1 iqwqi.win 作用: GitHub Pages 通过此文件识别自定义域名。\n第三步：配置 Cloudflare DNS 登录 Cloudflare Dashboard，选择域名后进入 DNS 设置：\n添加 A 记录 GitHub Pages 的 IP 地址（请查询官方文档获取最新地址）：\n类型 名称 IPv4 地址 代理状态 A @ 185.199.108.xxx 仅 DNS A @ 185.199.109.xxx 仅 DNS A @ 185.199.110.xxx 仅 DNS A @ 185.199.111.xxx 仅 DNS 获取最新 IP: 访问 GitHub Pages 文档 获取当前有效 IP\n添加 CNAME 记录 类型 名称 目标 代理状态 CNAME www @ 仅 DNS 重要提示:\n代理状态选择\"仅 DNS\"（灰色云），不要开启代理 如果开启 Cloudflare 代理，GitHub 无法自动签发 HTTPS 证书 第四步：GitHub Pages 设置 打开仓库的 Settings → Pages 在 Custom domain 处输入：iqwqi.win 点击 Save 等待 DNS 检查通过（显示绿色勾选） 勾选 Enforce HTTPS 注意: HTTPS 证书签发可能需要几分钟到几小时。\n第五步：部署网站 1 2 3 4 5 6 7 8 9 10 11 12 # 构建网站 hugo # 进入 public 目录 cd public # 提交更改 git add -A git commit -m \"chore: configure custom domain iqwqi.win\" # 推送到 GitHub git push 验证配置 1. 检查 DNS 解析 1 nslookup iqwqi.win 应返回 GitHub 的 IP 地址。\n2. 检查 CNAME 文件 1 curl -I https://iqwqi.win/CNAME 3. 浏览器访问 访问 https://iqwqi.win 应正常显示博客 地址栏应显示 HTTPS 安全锁 常见问题 Q1: DNS 检查一直失败？ 等待 DNS 传播（通常 10-30 分钟） 检查 Cloudflare 代理是否关闭 确认 A 记录 IP 地址正确 Q2: HTTPS 证书无法签发？ 确保 DNS 检查已通过 确保 Cloudflare 代理处于关闭状态 等待 24 小时后重试 Q3: 旧域名无法跳转？ GitHub Pages 会自动将旧域名 301 跳转到新域名，无需额外配置。\nQ4: 如何同时使用子域名？ 可以在 Cloudflare 添加其他子域名记录：\napi.iqwqi.win → 其他服务器 IP blog.iqwqi.win → CNAME 到主域名 总结 绑定自定义域名的关键步骤：\n✅ 修改 Hugo baseURL ✅ 创建 static/CNAME 文件 ✅ Cloudflare 添加 DNS 记录 ✅ GitHub Pages 设置自定义域名 ✅ 启用 HTTPS ✅ 部署网站 现在博客可以通过 https://iqwqi.win 访问了！🎉\n参考链接 GitHub Pages 自定义域名文档 Hugo 部署到 GitHub Pages Cloudflare DNS 设置 ",
+  "wordCount" : "328",
   "inLanguage": "en",
-  "datePublished": "2026-03-03T14:00:00+08:00",
-  "dateModified": "2026-03-03T14:00:00+08:00",
+  "datePublished": "2026-03-03T12:00:00+08:00",
+  "dateModified": "2026-03-03T12:00:00+08:00",
   "author":{
     "@type": "Person",
     "name": {"name":"QwQBiG"}
@@ -1204,10 +1660,10 @@
         <div class="meta-tags"><span class="meta-tag">hugo</span><span class="meta-tag">github-pages</span><span class="meta-tag">cloudflare</span></div>
       </div><div class="meta-item">
         <span class="meta-icon">⏱️</span>
-        <span class="meta-text">4 分钟阅读</span>
+        <span class="meta-text">5 分钟阅读</span>
       </div>
     </div></header><div class="post-content-wrapper"><div class="post-content"><h2 id="前言">前言</h2>
-<p>之前一直使用 GitHub Pages 默认的域名 <code>QwQBiG.github.io</code>，虽然免费但不够专业。最近在 Cloudflare 购买了 <code>iqwqi.win</code> 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。</p>
+<p>之前一直使用 GitHub Pages 默认的域名 <code>QwQBiG.github.io</code>，虽然免费但不够专业。毕竟在 Cloudflare 买了 <code>iqwqi.win</code> 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。</p>
 <h2 id="准备工作">准备工作</h2>
 <h3 id="现有环境">现有环境</h3>
 <ul>
@@ -1246,15 +1702,30 @@
 </div><p><strong>作用</strong>: 确保生成的所有链接都使用新域名。</p>
 <h3 id="第二步创建-cname-文件">第二步：创建 CNAME 文件</h3>
 <p>在 <code>static/</code> 目录下创建 <code>CNAME</code> 文件（无后缀）：</p>
-<pre tabindex="0"><code>static/
-└── CNAME          # 新建此文件
-</code></pre><p>文件内容：</p>
-<pre tabindex="0"><code>iqwqi.win
-</code></pre><p><strong>作用</strong>: GitHub Pages 通过此文件识别自定义域名。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">static/
+</span></span><span class="line"><span class="cl">└── CNAME          # 新建此文件
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文件内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">iqwqi.win
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>作用</strong>: GitHub Pages 通过此文件识别自定义域名。</p>
 <h3 id="第三步配置-cloudflare-dns">第三步：配置 Cloudflare DNS</h3>
 <p>登录 <a href="https://dash.cloudflare.com">Cloudflare Dashboard</a>，选择域名后进入 DNS 设置：</p>
 <h4 id="添加-a-记录">添加 A 记录</h4>
-<p>GitHub Pages 的 IP 地址（2025年有效）：</p>
+<p>GitHub Pages 的 IP 地址（请查询官方文档获取最新地址）：</p>
 <table>
   <thead>
       <tr>
@@ -1268,29 +1739,32 @@
       <tr>
           <td>A</td>
           <td>@</td>
-          <td>185.199.108.153</td>
+          <td>185.199.108.xxx</td>
           <td>仅 DNS</td>
       </tr>
       <tr>
           <td>A</td>
           <td>@</td>
-          <td>185.199.109.153</td>
+          <td>185.199.109.xxx</td>
           <td>仅 DNS</td>
       </tr>
       <tr>
           <td>A</td>
           <td>@</td>
-          <td>185.199.110.153</td>
+          <td>185.199.110.xxx</td>
           <td>仅 DNS</td>
       </tr>
       <tr>
           <td>A</td>
           <td>@</td>
-          <td>185.199.111.153</td>
+          <td>185.199.111.xxx</td>
           <td>仅 DNS</td>
       </tr>
   </tbody>
 </table>
+<blockquote>
+<p><strong>获取最新 IP</strong>: 访问 <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">GitHub Pages 文档</a> 获取当前有效 IP</p>
+</blockquote>
 <h4 id="添加-cname-记录">添加 CNAME 记录</h4>
 <table>
   <thead>
@@ -1420,7 +1894,7 @@ blog.iqwqi.win    → CNAME 到主域名
     </div><footer class="post-footer">
 <nav class="custom-post-nav">
   <div class="nav-container">
-    <div class="nav-card placeholder">
+    <a class="nav-card prev-card" href="https://iqwqi.win/cs/posts/windows-sandbox-deep-dive/">
       <div class="nav-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -1428,9 +1902,9 @@ blog.iqwqi.win    → CNAME 到主域名
       </div>
       <div class="nav-content">
         <span class="nav-label">上一篇</span>
-        <span class="nav-title">没有了</span>
+        <span class="nav-title">Windows Sandbox 解析：不是虚拟机，胜似虚拟机</span>
       </div>
-    </div>
+    </a>
     <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/taokeseries/siguoyuyan/">
       <div class="nav-content">
         <span class="nav-label">下一篇</span>

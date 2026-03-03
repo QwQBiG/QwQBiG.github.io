@@ -6,15 +6,8 @@
     <description>Recent content in 运维 on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 03 Mar 2026 14:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 Nov 2025 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://iqwqi.win/series/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Hugo &#43; GitHub Pages 绑定自定义域名完整指南</title>
-      <link>https://iqwqi.win/cs/posts/custom-domain-setup/</link>
-      <pubDate>Tue, 03 Mar 2026 14:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/cs/posts/custom-domain-setup/</guid>
-      <description>详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。</description>
-    </item>
     <item>
       <title>远程失灵了</title>
       <link>https://iqwqi.win/cs/posts/yunweiseries/yuancheng/</link>

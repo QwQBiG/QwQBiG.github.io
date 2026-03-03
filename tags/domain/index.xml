@@ -6,14 +6,64 @@
     <description>Recent content in Domain on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 03 Mar 2026 14:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 03 Mar 2026 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://iqwqi.win/tags/domain/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hugo &#43; GitHub Pages 绑定自定义域名完整指南</title>
       <link>https://iqwqi.win/cs/posts/custom-domain-setup/</link>
-      <pubDate>Tue, 03 Mar 2026 14:00:00 +0800</pubDate>
+      <pubDate>Tue, 03 Mar 2026 12:00:00 +0800</pubDate>
       <guid>https://iqwqi.win/cs/posts/custom-domain-setup/</guid>
-      <description>详细记录如何将 Cloudflare 购买的域名绑定到 Hugo &#43; GitHub Pages 静态博客，包括 DNS 配置、GitHub Pages 设置和常见问题解决。</description>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;之前一直使用 GitHub Pages 默认的域名 &lt;code&gt;QwQBiG.github.io&lt;/code&gt;，虽然免费但不够专业。毕竟在 Cloudflare 买了 &lt;code&gt;iqwqi.win&lt;/code&gt; 域名，决定将博客绑定到这个自定义域名上。本文详细记录整个配置流程。&lt;/p&gt;
+&lt;h2 id=&#34;准备工作&#34;&gt;准备工作&lt;/h2&gt;
+&lt;h3 id=&#34;现有环境&#34;&gt;现有环境&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;博客框架&lt;/strong&gt;: Hugo&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;托管平台&lt;/strong&gt;: GitHub Pages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;域名注册&lt;/strong&gt;: Cloudflare&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原域名&lt;/strong&gt;: &lt;code&gt;QwQBiG.github.io&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;新域名&lt;/strong&gt;: &lt;code&gt;iqwqi.win&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;配置目标&#34;&gt;配置目标&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;主域名 &lt;code&gt;iqwqi.win&lt;/code&gt; 访问博客&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;www.iqwqi.win&lt;/code&gt; 自动跳转到主域名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;QwQBiG.github.io&lt;/code&gt; 自动跳转到新域名&lt;/li&gt;
+&lt;li&gt;启用 HTTPS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;配置步骤&#34;&gt;配置步骤&lt;/h2&gt;
+&lt;h3 id=&#34;第一步修改-hugo-配置&#34;&gt;第一步：修改 Hugo 配置&lt;/h3&gt;
+&lt;p&gt;编辑 &lt;code&gt;hugo.toml&lt;/code&gt; 文件，修改 &lt;code&gt;baseURL&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# 修改前&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;baseURL&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;https://QwQBiG.github.io/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# 修改后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;baseURL&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;https://iqwqi.win/&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;作用&lt;/strong&gt;: 确保生成的所有链接都使用新域名。&lt;/p&gt;
+&lt;h3 id=&#34;第二步创建-cname-文件&#34;&gt;第二步：创建 CNAME 文件&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;static/&lt;/code&gt; 目录下创建 &lt;code&gt;CNAME&lt;/code&gt; 文件（无后缀）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;static/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;└── CNAME          # 新建此文件
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;文件内容：&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

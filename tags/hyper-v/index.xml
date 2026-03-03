@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Hyper-V on QwQBiG&#39;s World</title>
+    <link>https://iqwqi.win/tags/hyper-v/</link>
+    <description>Recent content in Hyper-V on QwQBiG&#39;s World</description>
+    <generator>Hugo -- 0.157.0</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 03 Mar 2026 14:00:00 +0800</lastBuildDate>
+    <atom:link href="https://iqwqi.win/tags/hyper-v/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows Sandbox 解析：不是虚拟机，胜似虚拟机</title>
+      <link>https://iqwqi.win/cs/posts/windows-sandbox-deep-dive/</link>
+      <pubDate>Tue, 03 Mar 2026 14:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/cs/posts/windows-sandbox-deep-dive/</guid>
+      <description>&lt;h1 id=&#34;windows-sandbox-硬核解析不是虚拟机胜似虚拟机&#34;&gt;Windows Sandbox 硬核解析：不是虚拟机，胜似虚拟机&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;当你点击那个蓝色图标时，你启动的不仅仅是一个&amp;quot;干净的环境&amp;quot;，而是微软 Hyper-V 技术栈的集大成之作。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Windows Sandbox（Windows 沙盒）并非传统的虚拟机（如 VMware 或 VirtualBox），它采用了更轻量、更底层的架构。下面我将从技术实现、安全机制和隐私问题三个维度为你硬核拆解 Windows Sandbox。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;一核心技术实现-how-it-works&#34;&gt;一、核心技术实现 (How it works)&lt;/h2&gt;
+&lt;p&gt;Windows Sandbox 的本质是基于 &lt;strong&gt;Hyper-V 容器技术 (Hyper-V Containers)&lt;/strong&gt; 的轻量级微型虚拟机。它与传统 VM 最大的区别在于资源共享和动态映像。&lt;/p&gt;
+&lt;h3 id=&#34;1-为什么账户叫-wdagutilityaccount&#34;&gt;1. 为什么账户叫 WDAGUtilityAccount？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;前身与技术栈&lt;/strong&gt;：&lt;code&gt;WDAG&lt;/code&gt; 代表 &lt;strong&gt;Windows Defender Application Guard&lt;/strong&gt;。微软最初开发这项技术是为了在隔离的硬件环境中运行 Edge 浏览器（防止恶意网页攻击宿主机）。后来，微软将这项底层隔离技术开放出来，做成了完整的桌面环境，也就是 Windows Sandbox。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;账户权限&lt;/strong&gt;：这是一个内置的、动态生成的本地管理员账户。虽然它在沙盒内部有管理员权限（方便你安装测试软件），但它的权限被严格限制在虚拟化边界内。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-为什么显示有近-80gb-空间但启动却很快&#34;&gt;2. 为什么显示有近 80GB 空间，但启动却很快？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;动态基础映像 (Dynamic Base Image)&lt;/strong&gt;：如果你用 VMware 装 Windows，你需要一个完整的 ISO 文件并占用几十 GB 硬盘。但 Sandbox 不需要下载或复制独立的 Windows 映像。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文件系统重定向 (NTFS 链接)&lt;/strong&gt;：它直接利用你宿主机 (Host) 现有的 &lt;code&gt;C:\Windows&lt;/code&gt; 系统文件。它通过操作系统层面的特殊文件链接技术，将宿主机上未被修改的系统文件&amp;quot;映射&amp;quot;到沙盒中，沙盒只对自己修改过的文件进行 &lt;strong&gt;写时复制 (Copy-on-Write)&lt;/strong&gt; 存储。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;显示的空间&lt;/strong&gt;：这 80GB 并不是真正在你硬盘上划走了一块空间，而是分配给沙盒的一个虚拟磁盘上限 (VHDX)，实际占用的物理空间极小（通常只有几十 MB 到一百多 MB 的差异文件）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-内存与调度的黑科技&#34;&gt;3. 内存与调度的黑科技&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;智能内存管理 (Smart Memory Management)&lt;/strong&gt;：宿主机和沙盒会共享相同的物理内存页。例如，宿主机和沙盒都在运行 &lt;code&gt;ntdll.dll&lt;/code&gt;，内存中只会保留一份该文件的只读副本，双方共享。这极大地减少了内存开销。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;集成调度器 (Integrated Scheduler)&lt;/strong&gt;：传统虚拟机由 Hypervisor 进行粗粒度的 CPU 时间片分配。而 Sandbox 允许宿主机的内核调度器直接将沙盒中的虚拟处理器当作宿主机的线程来调度。这意味着沙盒能极其高效地抢占和释放 CPU 资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二安全隔离机制-security&#34;&gt;二、安全隔离机制 (Security)&lt;/h2&gt;
+&lt;p&gt;作为 CS 学生，如果你想用它来做恶意软件分析 (Malware Analysis) 或测试不安全代码，你需要了解它的安全边界：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
