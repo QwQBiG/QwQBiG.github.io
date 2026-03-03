@@ -200,22 +200,35 @@
         let codeText = '';
 
         // 检查是否是表格结构（行号 + 代码）
-        const table = block.querySelector('table');
+        const table = block.querySelector('table.lntable');
         if (table) {
-          // 表格结构 - 获取代码列
-          const codeCell = table.querySelector('td:last-child pre, td:last-child code');
-          if (codeCell) {
-            const clone = codeCell.cloneNode(true);
-            const lineNumbers = clone.querySelectorAll('.ln, .line-number');
-            lineNumbers.forEach(el => el.remove());
-            codeText = clone.textContent;
+          // 表格结构 - 直接获取第二个 td 中的代码文本
+          const codeTd = table.querySelector('td.lntd:last-child');
+          if (codeTd) {
+            const codeElement = codeTd.querySelector('code');
+            if (codeElement) {
+              // 获取所有行内容，排除行号
+              const lines = codeElement.querySelectorAll('.line');
+              if (lines.length > 0) {
+                codeText = Array.from(lines).map(line => {
+                  // 克隆行并移除行号元素
+                  const clone = line.cloneNode(true);
+                  const lineNumbers = clone.querySelectorAll('.ln, .line-number, [class*="lnt"]');
+                  lineNumbers.forEach(el => el.remove());
+                  return clone.textContent;
+                }).join('\n');
+              } else {
+                // 如果没有 .line 元素，直接获取文本
+                codeText = codeElement.textContent;
+              }
+            }
           }
         } else {
           // 非表格结构
           const codeElement = block.querySelector('code');
           if (codeElement) {
             const clone = codeElement.cloneNode(true);
-            const lineNumbers = clone.querySelectorAll('.ln, .line-number, [style*="user-select:none"]');
+            const lineNumbers = clone.querySelectorAll('.ln, .line-number, [style*="user-select:none"], [class*="lnt"]');
             lineNumbers.forEach(el => el.remove());
             codeText = clone.textContent;
           } else {
@@ -223,7 +236,7 @@
           }
         }
 
-        // 清理多余的空行
+        // 清理多余的空行和首尾空白
         codeText = codeText.replace(/\n\s*\n/g, '\n').trim();
 
         navigator.clipboard.writeText(codeText).then(function() {

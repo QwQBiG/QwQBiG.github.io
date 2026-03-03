@@ -128,4 +128,4 @@ description: "文章描述"
 
 ## 许可证
 
-MIT License © 2024 QwQBiG
+MIT License © 2026 QwQBiG

@@ -1,6 +1,6 @@
 # hugo.toml (精简配置)
 
-baseURL = "https://QwQBiG.github.io/"
+baseURL = "https://iqwqi.win/"
 languageCode = "zh-cn"
 title = "QwQBiG's World"
 theme = "github.com/adityatelange/hugo-PaperMod"
@@ -56,7 +56,7 @@ theme = "github.com/adityatelange/hugo-PaperMod"
 
     mainSections = ["cs", "series"]
 
-    ShowCodeCopyButtons = true
+    ShowCodeCopyButtons = false
     ShowReadingTime = true
 
     [params.profileMode]

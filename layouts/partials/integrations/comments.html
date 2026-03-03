@@ -9,7 +9,7 @@
             data-reactions-enabled="1"
             data-emit-metadata="0"
             data-input-position="top"
-            data-theme="https://giscus.app/themes/noborder_dark.css"
+            data-theme="preferred_color_scheme"
             data-lang="zh-CN"
             crossorigin="anonymous"
             async>
@@ -25,17 +25,21 @@
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const theme = currentTheme === 'dark' ? 'dark' : 'light';
         
-        iframe.contentWindow.postMessage({
-            giscus: {
-                setConfig: {
-                    theme: theme
+        try {
+            iframe.contentWindow.postMessage({
+                giscus: {
+                    setConfig: {
+                        theme: theme
+                    }
                 }
-            }
-        }, 'https://giscus.app');
+            }, 'https://giscus.app');
+        } catch (e) {
+            console.log('Giscus theme update failed:', e);
+        }
     }
     
     // 监听主题变化
-    const observer = new MutationObserver((mutations) => {
+    const themeObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.attributeName === 'data-theme') {
                 updateGiscusTheme();
@@ -43,37 +47,39 @@
         });
     });
     
-    observer.observe(document.documentElement, {
+    themeObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['data-theme']
     });
     
-    // 初始化主题 - 使用 setTimeout 确保 iframe 已加载
-    function initGiscusTheme() {
+    // 初始化 Giscus
+    function initGiscus() {
         const iframe = document.querySelector('.giscus-frame');
         if (iframe) {
+            // iframe 已存在，更新主题
             updateGiscusTheme();
         } else {
-            // 如果 iframe 还没加载，继续等待
-            setTimeout(initGiscusTheme, 500);
+            // iframe 还没加载，继续等待
+            setTimeout(initGiscus, 300);
         }
     }
     
     // 页面加载完成后开始检查
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initGiscusTheme, 1000);
-        });
+        document.addEventListener('DOMContentLoaded', initGiscus);
     } else {
-        setTimeout(initGiscusTheme, 1000);
+        initGiscus();
     }
     
-    // 同时监听 giscus 加载完成事件
+    // 监听 giscus 加载完成事件
     window.addEventListener('message', (event) => {
         if (event.origin !== 'https://giscus.app') return;
-        if (event.data && event.data.giscus && event.data.giscus.resizeHeight) {
-            // giscus 已加载，更新主题
-            updateGiscusTheme();
+        
+        if (event.data && event.data.giscus) {
+            // giscus 已加载或调整大小，更新主题
+            if (event.data.giscus.resizeHeight || event.data.giscus.discussion) {
+                updateGiscusTheme();
+            }
         }
     });
 </script>
