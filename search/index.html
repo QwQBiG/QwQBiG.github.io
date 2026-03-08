@@ -430,6 +430,20 @@
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1951,9 +1965,9 @@ html[data-theme="dark"] .quick-tag:hover {
             
             <span class="quick-tag" onclick="searchByTag('编程语言')">编程语言</span>
             
-            <span class="quick-tag" onclick="searchByTag('古文')">古文</span>
+            <span class="quick-tag" onclick="searchByTag('stl')">stl</span>
             
-            <span class="quick-tag" onclick="searchByTag('运维')">运维</span>
+            <span class="quick-tag" onclick="searchByTag('c\u002b\u002b11')">c&#43;&#43;11</span>
             
         </div>
     </div>

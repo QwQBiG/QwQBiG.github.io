@@ -450,6 +450,20 @@ openCV -&gt; 机器视觉；
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1639,10 +1653,10 @@ openCV -&gt; 机器视觉；
         <span class="nav-title">远程失灵了</span>
       </div>
     </a>
-    <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/cppseries/stlcontainer/">
+    <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/yunweiseries/yunweistudy/">
       <div class="nav-content">
         <span class="nav-label">下一篇</span>
-        <span class="nav-title">STL 容器</span>
+        <span class="nav-title">K8s学习笔记</span>
       </div>
       <div class="nav-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

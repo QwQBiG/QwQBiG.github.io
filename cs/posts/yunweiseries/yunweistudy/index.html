@@ -464,6 +464,20 @@ sudo apt-get update &amp;&amp; sudo apt-get install -y kubectl
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -2787,7 +2801,7 @@ sudo apt-get update &amp;&amp; sudo apt-get install -y kubectl
     </div><footer class="post-footer">
 <nav class="custom-post-nav">
   <div class="nav-container">
-    <a class="nav-card prev-card" href="https://iqwqi.win/cs/posts/cppseries/stlalgorithm/">
+    <a class="nav-card prev-card" href="https://iqwqi.win/cs/posts/zhouji/">
       <div class="nav-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -2795,7 +2809,7 @@ sudo apt-get update &amp;&amp; sudo apt-get install -y kubectl
       </div>
       <div class="nav-content">
         <span class="nav-label">上一篇</span>
-        <span class="nav-title">STL 算法</span>
+        <span class="nav-title">我の周报</span>
       </div>
     </a>
     <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/yunweiseries/zuhui/">

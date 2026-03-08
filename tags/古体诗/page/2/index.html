@@ -430,6 +430,20 @@
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1669,13 +1683,10 @@
   </header>
   <div class="entry-content">
     <p>赠乌纱子滩涂先生诗 惟愿孩儿愚且鲁，柳精生子汝和孺。
-北山风月羞移罢，云壑碧霄流滩涂。
+北山风月羞移罢，云壑碧霄[流滩涂]{音为&#34;留贪图&#34;。}。
 序： 本住滩涂，黔首相助；
 乌纱骨重，余生滩涂。
-注释：
-首句语引苏轼《洗儿诗》 柳精句：柳精为柳树妖，“柳精生&#34;音为&#34;刘景升&#34;典出《三国志》“生子当如孙仲谋，刘景升儿子若豚犬尔” 北山句：《北山移文》为孔稚珪所作骈文，对假隐士周颙作此檄（移）文。 流滩涂：音为&#34;留贪图”。 注释： 适时有黄口小儿自吹自擂，损耗他人，便记之。
-日期：23.5.8
-</p>
+首句语引苏轼《洗儿诗》 </p>
   </div>
   <footer class="entry-footer"><span title='2026-02-24 10:30:00 +0800 +0800'>February 24, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>白告</span></footer>
   <a class="entry-link" aria-label="post link to 赠乌纱子滩涂先生诗" href="https://iqwqi.win/poetry/posts/suitu/31-40/st034_%E8%B5%A0%E4%B9%8C%E7%BA%B1%E5%AD%90%E6%BB%A9%E6%B6%82%E5%85%88%E7%94%9F%E8%AF%97/"></a>

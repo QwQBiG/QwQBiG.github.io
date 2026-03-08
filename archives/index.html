@@ -429,6 +429,20 @@
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1539,14 +1553,74 @@
 <div class="archive-year">
   <h2 class="archive-year-header" id="2026">
     <a class="archive-header-link" href="#2026">2026</a>
-    <sup class="archive-count">&nbsp;7</sup>
+    <sup class="archive-count">&nbsp;17</sup>
   </h2>
   <div class="archive-month">
     <h3 class="archive-month-header" id="2026-March">
       <a class="archive-header-link" href="#2026-March">March</a>
-      <sup class="archive-count">&nbsp;2</sup>
+      <sup class="archive-count">&nbsp;12</sup>
     </h3>
     <div class="archive-posts">
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">C++ 基础知识与常用库函数
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 19:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to C&#43;&#43; 基础知识与常用库函数" href="https://iqwqi.win/cs/posts/cppseries/cppbasics/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">蓝桥杯 C++ 基础与常用内容
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 18:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to 蓝桥杯 C&#43;&#43; 基础与常用内容" href="https://iqwqi.win/cs/posts/cppseries/lanqiaocupbasic/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL bitset - 位运算优化
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 17:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>11 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL bitset - 位运算优化" href="https://iqwqi.win/cs/posts/cppseries/stlbitset/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL stack - 栈与 DFS
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 16:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>11 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL stack - 栈与 DFS" href="https://iqwqi.win/cs/posts/cppseries/stlstack/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL deque - 双端队列与滑动窗口
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 15:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>9 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL deque - 双端队列与滑动窗口" href="https://iqwqi.win/cs/posts/cppseries/stldeque/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL queue - 队列与 BFS
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 14:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>11 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL queue - 队列与 BFS" href="https://iqwqi.win/cs/posts/cppseries/stlqueue/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL string - 字符串处理
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 13:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>12 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL string - 字符串处理" href="https://iqwqi.win/cs/posts/cppseries/stlstring/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL priority_queue - 优先队列
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 12:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>9 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL priority_queue - 优先队列" href="https://iqwqi.win/cs/posts/cppseries/stlpriorityqueue/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL unordered_map/unordered_set - 哈希容器
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 11:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>7 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL unordered_map/unordered_set - 哈希容器" href="https://iqwqi.win/cs/posts/cppseries/stlunordered/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">STL map/set - 有序容器
+        </h3>
+        <div class="archive-meta"><span title='2026-03-05 10:00:00 +0800 +0800'>March 5, 2026</span>&nbsp;·&nbsp;<span>8 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL map/set - 有序容器" href="https://iqwqi.win/cs/posts/cppseries/stlmapset/"></a>
+      </div>
       <div class="archive-entry">
         <h3 class="archive-entry-title entry-hint-parent">Windows Sandbox 解析：不是虚拟机，胜似虚拟机
         </h3>
@@ -1611,7 +1685,7 @@
 <div class="archive-year">
   <h2 class="archive-year-header" id="2025">
     <a class="archive-header-link" href="#2025">2025</a>
-    <sup class="archive-count">&nbsp;10</sup>
+    <sup class="archive-count">&nbsp;9</sup>
   </h2>
   <div class="archive-month">
     <h3 class="archive-month-header" id="2025-December">
@@ -1642,7 +1716,7 @@
   <div class="archive-month">
     <h3 class="archive-month-header" id="2025-November">
       <a class="archive-header-link" href="#2025-November">November</a>
-      <sup class="archive-count">&nbsp;7</sup>
+      <sup class="archive-count">&nbsp;6</sup>
     </h3>
     <div class="archive-posts">
       <div class="archive-entry">
@@ -1658,16 +1732,10 @@
         <a class="entry-link" aria-label="post link to 我の周报" href="https://iqwqi.win/cs/posts/zhouji/"></a>
       </div>
       <div class="archive-entry">
-        <h3 class="archive-entry-title entry-hint-parent">STL 容器
+        <h3 class="archive-entry-title entry-hint-parent">STL vector
         </h3>
-        <div class="archive-meta"><span title='2025-11-21 10:00:00 +0800 +0800'>November 21, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
-        <a class="entry-link" aria-label="post link to STL 容器" href="https://iqwqi.win/cs/posts/cppseries/stlcontainer/"></a>
-      </div>
-      <div class="archive-entry">
-        <h3 class="archive-entry-title entry-hint-parent">STL 算法
-        </h3>
-        <div class="archive-meta"><span title='2025-11-21 10:00:00 +0800 +0800'>November 21, 2025</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
-        <a class="entry-link" aria-label="post link to STL 算法" href="https://iqwqi.win/cs/posts/cppseries/stlalgorithm/"></a>
+        <div class="archive-meta"><span title='2025-11-21 10:00:00 +0800 +0800'>November 21, 2025</span>&nbsp;·&nbsp;<span>9 min</span>&nbsp;·&nbsp;<span>map[name:QwQBiG]</span></div>
+        <a class="entry-link" aria-label="post link to STL vector" href="https://iqwqi.win/cs/posts/cppseries/stlvector/"></a>
       </div>
       <div class="archive-entry">
         <h3 class="archive-entry-title entry-hint-parent">K8s学习笔记

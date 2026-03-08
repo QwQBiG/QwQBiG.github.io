@@ -5,11 +5,93 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>STL 容器 | QwQBiG&#39;s World</title>
-<meta name="keywords" content="C&#43;&#43;, STL, cpp, 编程语言, C艹, 算法">
-<meta name="description" content="容器就是数据结构啦~">
+<title>C&#43;&#43; 基础知识与常用库函数 | QwQBiG&#39;s World</title>
+<meta name="keywords" content="C&#43;&#43;, 蓝桥杯, 算法竞赛, C&#43;&#43;11, 基础">
+<meta name="description" content="C&#43;&#43; 基础知识与常用库函数
+一、输入输出
+1.1 cin 与 cout
+cin 和 cout 是 C&#43;&#43; 标准库提供的输入输出流对象。
+cin 读取字符串：遇到空格或回车停止，只读取一个单词。
+
+
+1
+2
+
+
+string s;
+cin &gt;&gt; s;  // 输入 &#34;hello world&#34;，s = &#34;hello&#34;
+
+
+读取整行字符串：使用 getline(cin, s)。
+
+
+1
+2
+
+
+string s;
+getline(cin, s);  // 输入 &#34;hello world&#34;，s = &#34;hello world&#34;
+
+
+混合输入：cin &gt;&gt; n 后使用 getline 需要清除缓冲区。
+
+
+1
+2
+3
+4
+5
+
+
+int n;
+cin &gt;&gt; n;
+cin.ignore();    // 清除换行符
+string s;
+getline(cin, s);
+
+
+1.2 输出精度控制
+使用 &lt;iomanip&gt; 库的 fixed 和 setprecision 控制浮点数输出精度。
+
+
+1
+2
+3
+
+
+#include &lt;iomanip&gt;
+double res = 3.1415926;
+cout &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; res &lt;&lt; endl;  // 3.14（四舍五入）
+
+
+
+二、常见基础知识
+2.1 ASCII 码
+
+  
+      
+          字符
+          ASCII 值
+      
+  
+  
+      
+          &lsquo;0&rsquo;
+          48
+      
+      
+          &lsquo;A&rsquo;
+          65
+      
+      
+          &lsquo;a&rsquo;
+          97
+      
+  
+
+大小写转换：大小写字母 ASCII 值相差 32。">
 <meta name="author" content="map[name:QwQBiG]">
-<link rel="canonical" href="https://iqwqi.win/cs/posts/cppseries/stlcontainer/">
+<link rel="canonical" href="https://iqwqi.win/cs/posts/cppseries/cppbasics/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://iqwqi.win/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://iqwqi.win/favicon-16x16.png">
@@ -18,7 +100,7 @@
 <link rel="mask-icon" href="https://iqwqi.win/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://iqwqi.win/cs/posts/cppseries/stlcontainer/">
+<link rel="alternate" hreflang="en" href="https://iqwqi.win/cs/posts/cppseries/cppbasics/">
 <noscript>
     <style>
         #theme-toggle,
@@ -429,6 +511,20 @@
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1048,26 +1144,116 @@
   };
 })();
 </script>
-<meta property="og:url" content="https://iqwqi.win/cs/posts/cppseries/stlcontainer/">
+<meta property="og:url" content="https://iqwqi.win/cs/posts/cppseries/cppbasics/">
   <meta property="og:site_name" content="QwQBiG&#39;s World">
-  <meta property="og:title" content="STL 容器">
-  <meta property="og:description" content="容器就是数据结构啦~">
+  <meta property="og:title" content="C&#43;&#43; 基础知识与常用库函数">
+  <meta property="og:description" content="C&#43;&#43; 基础知识与常用库函数 一、输入输出 1.1 cin 与 cout cin 和 cout 是 C&#43;&#43; 标准库提供的输入输出流对象。
+cin 读取字符串：遇到空格或回车停止，只读取一个单词。
+1 2 string s; cin &gt;&gt; s; // 输入 &#34;hello world&#34;，s = &#34;hello&#34; 读取整行字符串：使用 getline(cin, s)。
+1 2 string s; getline(cin, s); // 输入 &#34;hello world&#34;，s = &#34;hello world&#34; 混合输入：cin &gt;&gt; n 后使用 getline 需要清除缓冲区。
+1 2 3 4 5 int n; cin &gt;&gt; n; cin.ignore(); // 清除换行符 string s; getline(cin, s); 1.2 输出精度控制 使用 &lt;iomanip&gt; 库的 fixed 和 setprecision 控制浮点数输出精度。
+1 2 3 #include &lt;iomanip&gt; double res = 3.1415926; cout &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; res &lt;&lt; endl; // 3.14（四舍五入） 二、常见基础知识 2.1 ASCII 码 字符 ASCII 值 ‘0’ 48 ‘A’ 65 ‘a’ 97 大小写转换：大小写字母 ASCII 值相差 32。">
   <meta property="og:locale" content="zh-cn">
   <meta property="og:type" content="article">
     <meta property="article:section" content="cs">
-    <meta property="article:published_time" content="2025-11-21T10:00:00+08:00">
-    <meta property="article:modified_time" content="2025-11-21T10:00:00+08:00">
+    <meta property="article:published_time" content="2026-03-05T19:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-05T19:00:00+08:00">
     <meta property="article:tag" content="C&#43;&#43;">
-    <meta property="article:tag" content="STL">
-    <meta property="article:tag" content="Cpp">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="C艹">
-    <meta property="article:tag" content="算法">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/fanweiforxunhuan/">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlalgorithm/">
+    <meta property="article:tag" content="蓝桥杯">
+    <meta property="article:tag" content="算法竞赛">
+    <meta property="article:tag" content="C&#43;&#43;11">
+    <meta property="article:tag" content="基础">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlvector/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlmapset/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlunordered/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlpriorityqueue/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlstring/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlqueue/">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="STL 容器">
-<meta name="twitter:description" content="容器就是数据结构啦~">
+<meta name="twitter:title" content="C&#43;&#43; 基础知识与常用库函数">
+<meta name="twitter:description" content="C&#43;&#43; 基础知识与常用库函数
+一、输入输出
+1.1 cin 与 cout
+cin 和 cout 是 C&#43;&#43; 标准库提供的输入输出流对象。
+cin 读取字符串：遇到空格或回车停止，只读取一个单词。
+
+
+1
+2
+
+
+string s;
+cin &gt;&gt; s;  // 输入 &#34;hello world&#34;，s = &#34;hello&#34;
+
+
+读取整行字符串：使用 getline(cin, s)。
+
+
+1
+2
+
+
+string s;
+getline(cin, s);  // 输入 &#34;hello world&#34;，s = &#34;hello world&#34;
+
+
+混合输入：cin &gt;&gt; n 后使用 getline 需要清除缓冲区。
+
+
+1
+2
+3
+4
+5
+
+
+int n;
+cin &gt;&gt; n;
+cin.ignore();    // 清除换行符
+string s;
+getline(cin, s);
+
+
+1.2 输出精度控制
+使用 &lt;iomanip&gt; 库的 fixed 和 setprecision 控制浮点数输出精度。
+
+
+1
+2
+3
+
+
+#include &lt;iomanip&gt;
+double res = 3.1415926;
+cout &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; res &lt;&lt; endl;  // 3.14（四舍五入）
+
+
+
+二、常见基础知识
+2.1 ASCII 码
+
+  
+      
+          字符
+          ASCII 值
+      
+  
+  
+      
+          &lsquo;0&rsquo;
+          48
+      
+      
+          &lsquo;A&rsquo;
+          65
+      
+      
+          &lsquo;a&rsquo;
+          97
+      
+  
+
+大小写转换：大小写字母 ASCII 值相差 32。">
 
 
 <script type="application/ld+json">
@@ -1090,8 +1276,8 @@
     {
       "@type": "ListItem",
       "position":  4 ,
-      "name": "STL 容器",
-      "item": "https://iqwqi.win/cs/posts/cppseries/stlcontainer/"
+      "name": "C++ 基础知识与常用库函数",
+      "item": "https://iqwqi.win/cs/posts/cppseries/cppbasics/"
     }
   ]
 }
@@ -1100,24 +1286,24 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "STL 容器",
-  "name": "STL 容器",
-  "description": "容器就是数据结构啦~\n",
+  "headline": "C++ 基础知识与常用库函数",
+  "name": "C\u002b\u002b 基础知识与常用库函数",
+  "description": "C++ 基础知识与常用库函数 一、输入输出 1.1 cin 与 cout cin 和 cout 是 C++ 标准库提供的输入输出流对象。\ncin 读取字符串：遇到空格或回车停止，只读取一个单词。\n1 2 string s; cin \u0026gt;\u0026gt; s; // 输入 \u0026#34;hello world\u0026#34;，s = \u0026#34;hello\u0026#34; 读取整行字符串：使用 getline(cin, s)。\n1 2 string s; getline(cin, s); // 输入 \u0026#34;hello world\u0026#34;，s = \u0026#34;hello world\u0026#34; 混合输入：cin \u0026gt;\u0026gt; n 后使用 getline 需要清除缓冲区。\n1 2 3 4 5 int n; cin \u0026gt;\u0026gt; n; cin.ignore(); // 清除换行符 string s; getline(cin, s); 1.2 输出精度控制 使用 \u0026lt;iomanip\u0026gt; 库的 fixed 和 setprecision 控制浮点数输出精度。\n1 2 3 #include \u0026lt;iomanip\u0026gt; double res = 3.1415926; cout \u0026lt;\u0026lt; fixed \u0026lt;\u0026lt; setprecision(2) \u0026lt;\u0026lt; res \u0026lt;\u0026lt; endl; // 3.14（四舍五入） 二、常见基础知识 2.1 ASCII 码 字符 ASCII 值 \u0026lsquo;0\u0026rsquo; 48 \u0026lsquo;A\u0026rsquo; 65 \u0026lsquo;a\u0026rsquo; 97 大小写转换：大小写字母 ASCII 值相差 32。\n",
   "keywords": [
-    "C++", "STL", "cpp", "编程语言", "C艹", "算法"
+    "C++", "蓝桥杯", "算法竞赛", "C++11", "基础"
   ],
-  "articleBody": "容器就是数据结构啦~\n",
-  "wordCount" : "1",
+  "articleBody": "C++ 基础知识与常用库函数 一、输入输出 1.1 cin 与 cout cin 和 cout 是 C++ 标准库提供的输入输出流对象。\ncin 读取字符串：遇到空格或回车停止，只读取一个单词。\n1 2 string s; cin \u003e\u003e s; // 输入 \"hello world\"，s = \"hello\" 读取整行字符串：使用 getline(cin, s)。\n1 2 string s; getline(cin, s); // 输入 \"hello world\"，s = \"hello world\" 混合输入：cin \u003e\u003e n 后使用 getline 需要清除缓冲区。\n1 2 3 4 5 int n; cin \u003e\u003e n; cin.ignore(); // 清除换行符 string s; getline(cin, s); 1.2 输出精度控制 使用 库的 fixed 和 setprecision 控制浮点数输出精度。\n1 2 3 #include double res = 3.1415926; cout \u003c\u003c fixed \u003c\u003c setprecision(2) \u003c\u003c res \u003c\u003c endl; // 3.14（四舍五入） 二、常见基础知识 2.1 ASCII 码 字符 ASCII 值 ‘0’ 48 ‘A’ 65 ‘a’ 97 大小写转换：大小写字母 ASCII 值相差 32。\n1 2 3 4 5 char upper = 'A'; char lower = upper + 32; // 'a' char lower2 = 'z'; char upper2 = lower2 - 32; // 'Z' 判断与转换函数：\n1 2 3 4 islower('a'); // true，判断是否小写 isupper('A'); // true，判断是否大写 tolower('A'); // 'a'，转小写 toupper('a'); // 'A'，转大写 2.2 类型转换 字符串转数字：\n1 2 3 4 string s = \"12345\"; int i = stoi(s); // 12345 long long ll = stoll(s); // 12345 double d = stod(\"3.14\"); // 3.14 数字转字符串：\n1 2 3 4 int n = 123; string s = to_string(n); // \"123\" double d = 3.14; string s2 = to_string(d); // \"3.140000\" 2.3 进制转换 1 2 3 4 5 6 7 8 9 10 11 // 十进制转其他进制 int n = 255; cout \u003c\u003c oct \u003c\u003c n \u003c\u003c endl; // 377（八进制） cout \u003c\u003c dec \u003c\u003c n \u003c\u003c endl; // 255（十进制） cout \u003c\u003c hex \u003c\u003c n \u003c\u003c endl; // ff（十六进制） // 其他进制转十进制 string bin = \"1111\"; int val = stoi(bin, nullptr, 2); // 15（二进制转十进制） string hex_str = \"ff\"; int val2 = stoi(hex_str, nullptr, 16); // 255（十六进制转十进制） 2.4 位运算 运算符 含义 示例 \u0026 按位与 a \u0026 b | 按位或 a | b ^ 按位异或 a ^ b ~ 按位取反 ~a \u003c\u003c 左移 a \u003c\u003c n \u003e\u003e 右移 a \u003e\u003e n 常用技巧：\n1 2 3 4 5 6 7 8 9 10 11 // 判断奇偶 bool is_odd = n \u0026 1; // 交换两数 a ^= b; b ^= a; a ^= b; // 取最低位 1 int lowbit = n \u0026 (-n); // 判断是否是 2 的幂 bool is_power = n \u003e 0 \u0026\u0026 (n \u0026 (n - 1)) == 0; 三、常用库函数 3.1 二分查找 lower_bound 和 upper_bound 用于有序序列的二分查找，返回迭代器，区间为左闭右开 [lower, upper)。\n1 2 3 4 5 6 7 8 9 10 vector\u003cint\u003e v = {1, 2, 2, 2, 3, 4, 5}; // lower_bound: 第一个 \u003e= target 的位置 auto lb = lower_bound(v.begin(), v.end(), 2); // 指向第1个2 // upper_bound: 第一个 \u003e target 的位置 auto ub = upper_bound(v.begin(), v.end(), 2); // 指向3 // 计算 target 出现的次数 int cnt = ub - lb; // 3 3.2 排序 sort 1 2 3 4 5 6 7 8 9 10 11 sort(v.begin(), v.end()); // 升序 sort(v.begin(), v.end(), greater\u003cint\u003e()); // 降序 // 自定义比较函数 bool cmp(int a, int b) { return a \u003e b; } sort(v.begin(), v.end(), cmp); // Lambda 表达式 sort(v.begin(), v.end(), [](int a, int b) { return a \u003e b; }); 3.3 数组初始化 memset memset 按字节填充，只能用于初始化 0 或 -1。\n1 2 3 int arr[100]; memset(arr, 0, sizeof(arr)); // 初始化为 0 memset(arr, -1, sizeof(arr)); // 初始化为 -1 3.4 交换 swap 1 2 3 4 5 int a = 1, b = 2; swap(a, b); // a = 2, b = 1 vector\u003cint\u003e v1 = {1, 2}, v2 = {3, 4}; swap(v1, v2); // 交换容器内容 3.5 反转 reverse 反转指定区间 [first, last)。\n1 2 3 4 5 vector\u003cint\u003e v = {1, 2, 3, 4, 5}; reverse(v.begin(), v.end()); // {5, 4, 3, 2, 1} string s = \"hello\"; reverse(s.begin(), s.end()); // \"olleh\" 3.6 删除元素 erase 1 2 3 4 5 6 7 vector\u003cint\u003e v = {1, 2, 3, 4, 5}; // 删除单个元素 v.erase(v.begin() + 2); // 删除第3个元素，{1, 2, 4, 5} // 删除区间 v.erase(v.begin(), v.begin() + 2); // 删除前两个，{4, 5} 3.7 去重 unique unique 将相邻重复元素移到末尾，返回去重后的末尾迭代器。需要先排序。\n1 2 3 4 vector\u003cint\u003e v = {1, 2, 2, 3, 3, 3, 4}; sort(v.begin(), v.end()); auto last = unique(v.begin(), v.end()); v.erase(last, v.end()); // {1, 2, 3, 4} 3.8 全排列 next_permutation 生成下一个字典序排列，返回 bool 表示是否成功。\n1 2 3 4 5 6 vector\u003cint\u003e v = {1, 2, 3}; do { for (int x : v) cout \u003c\u003c x \u003c\u003c \" \"; cout \u003c\u003c endl; } while (next_permutation(v.begin(), v.end())); // 输出所有 6 种排列 prev_permutation 生成上一个排列。\n3.9 最值 min / max 1 2 3 4 5 6 int a = min(3, 5); // 3 int b = max(3, 5); // 5 // 初始化列表（C++11） int c = min({1, 2, 3, 4, 5}); // 1 int d = max({1, 2, 3, 4, 5}); // 5 3.10 最值迭代器 min_element / max_element 返回区间 [first, last) 中最小/最大元素的迭代器。\n1 2 3 4 5 6 7 8 9 10 11 vector\u003cint\u003e v = {3, 1, 4, 1, 5, 9, 2, 6}; auto min_it = min_element(v.begin(), v.end()); auto max_it = max_element(v.begin(), v.end()); cout \u003c\u003c *min_it \u003c\u003c endl; // 1 cout \u003c\u003c *max_it \u003c\u003c endl; // 9 // 获取索引 int min_idx = min_it - v.begin(); // 1 int max_idx = max_it - v.begin(); // 5 3.11 第 n 小元素 nth_element 将第 n 小的元素放到正确位置，左边都比它小，右边都比它大。\n1 2 3 4 vector\u003cint\u003e v = {5, 3, 1, 4, 2}; nth_element(v.begin(), v.begin() + 2, v.end()); // v[2] = 3（第3小的元素） // v[0..1] \u003c= 3, v[3..4] \u003e= 3 四、常用技巧速查 需求 方法 读取整行 getline(cin, s) 数字+字符串混合输入 cin \u003e\u003e n; cin.ignore(); getline(cin, s); 保留小数 cout \u003c\u003c fixed \u003c\u003c setprecision(2) \u003c\u003c x; 字符串转数字 stoi(), stoll(), stod() 数字转字符串 to_string() 二分查找边界 lower_bound(), upper_bound() 排序 sort() 数组初始化 memset(arr, 0, sizeof(arr)) 反转 reverse() 去重 sort() + unique() + erase() 全排列 next_permutation() 最值 min(), max(), min_element(), max_element() 总结 本文总结了蓝桥杯竞赛中常用的 C++ 基础知识和库函数。掌握这些内容能够显著提高编码效率和正确率。建议在刷题中反复练习，形成肌肉记忆。\n",
+  "wordCount" : "922",
   "inLanguage": "en",
-  "datePublished": "2025-11-21T10:00:00+08:00",
-  "dateModified": "2025-11-21T10:00:00+08:00",
+  "datePublished": "2026-03-05T19:00:00+08:00",
+  "dateModified": "2026-03-05T19:00:00+08:00",
   "author":{
     "@type": "Person",
     "name": {"name":"QwQBiG"}
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://iqwqi.win/cs/posts/cppseries/stlcontainer/"
+    "@id": "https://iqwqi.win/cs/posts/cppseries/cppbasics/"
   },
   "publisher": {
     "@type": "Organization",
@@ -1554,25 +1740,563 @@
     </nav>
 </header><main class="main"><article class="post-single">
   <header class="post-header"><div class="post-header-wrapper">
-      <h1 class="post-title">STL 容器</h1>
+      <h1 class="post-title">C&#43;&#43; 基础知识与常用库函数</h1>
       <div class="post-title-decoration"></div>
     </div><div class="post-meta-enhanced">
       <div class="meta-item">
         <span class="meta-icon">📅</span>
-        <span class="meta-text">2025-11-21</span>
+        <span class="meta-text">2026-03-05</span>
       </div><div class="meta-item tags-item">
         <span class="meta-icon">🏷️</span>
-        <div class="meta-tags"><span class="meta-tag">C&#43;&#43;</span><span class="meta-tag">STL</span><span class="meta-tag">cpp</span></div>
+        <div class="meta-tags"><span class="meta-tag">C&#43;&#43;</span><span class="meta-tag">蓝桥杯</span><span class="meta-tag">算法竞赛</span></div>
       </div><div class="meta-item">
         <span class="meta-icon">⏱️</span>
-        <span class="meta-text">0 分钟阅读</span>
+        <span class="meta-text">8 分钟阅读</span>
       </div>
-    </div></header><div class="post-content-wrapper"><div class="post-content"><p>容器就是数据结构啦~</p>
+    </div></header><div class="post-content-wrapper"><div class="post-content"><h1 id="c-基础知识与常用库函数">C++ 基础知识与常用库函数</h1>
+<h2 id="一输入输出">一、输入输出</h2>
+<h3 id="11-cin-与-cout">1.1 cin 与 cout</h3>
+<p><code>cin</code> 和 <code>cout</code> 是 C++ 标准库提供的输入输出流对象。</p>
+<p><strong>cin 读取字符串</strong>：遇到空格或回车停止，只读取一个单词。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>  <span class="c1">// 输入 &#34;hello world&#34;，s = &#34;hello&#34;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>读取整行字符串</strong>：使用 <code>getline(cin, s)</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>  <span class="c1">// 输入 &#34;hello world&#34;，s = &#34;hello world&#34;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>混合输入</strong>：<code>cin &gt;&gt; n</code> 后使用 <code>getline</code> 需要清除缓冲区。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>    <span class="c1">// 清除换行符
+</span></span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="12-输出精度控制">1.2 输出精度控制</h3>
+<p>使用 <code>&lt;iomanip&gt;</code> 库的 <code>fixed</code> 和 <code>setprecision</code> 控制浮点数输出精度。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">res</span> <span class="o">=</span> <span class="mf">3.1415926</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">fixed</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">res</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 3.14（四舍五入）
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="二常见基础知识">二、常见基础知识</h2>
+<h3 id="21-ascii-码">2.1 ASCII 码</h3>
+<table>
+  <thead>
+      <tr>
+          <th>字符</th>
+          <th>ASCII 值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>&lsquo;0&rsquo;</td>
+          <td>48</td>
+      </tr>
+      <tr>
+          <td>&lsquo;A&rsquo;</td>
+          <td>65</td>
+      </tr>
+      <tr>
+          <td>&lsquo;a&rsquo;</td>
+          <td>97</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>大小写转换</strong>：大小写字母 ASCII 值相差 32。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">upper</span> <span class="o">=</span> <span class="sc">&#39;A&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">lower</span> <span class="o">=</span> <span class="n">upper</span> <span class="o">+</span> <span class="mi">32</span><span class="p">;</span>  <span class="c1">// &#39;a&#39;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">lower2</span> <span class="o">=</span> <span class="sc">&#39;z&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">upper2</span> <span class="o">=</span> <span class="n">lower2</span> <span class="o">-</span> <span class="mi">32</span><span class="p">;</span>  <span class="c1">// &#39;Z&#39;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>判断与转换函数</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">islower</span><span class="p">(</span><span class="sc">&#39;a&#39;</span><span class="p">);</span>   <span class="c1">// true，判断是否小写
+</span></span></span><span class="line"><span class="cl"><span class="n">isupper</span><span class="p">(</span><span class="sc">&#39;A&#39;</span><span class="p">);</span>   <span class="c1">// true，判断是否大写
+</span></span></span><span class="line"><span class="cl"><span class="n">tolower</span><span class="p">(</span><span class="sc">&#39;A&#39;</span><span class="p">);</span>   <span class="c1">// &#39;a&#39;，转小写
+</span></span></span><span class="line"><span class="cl"><span class="n">toupper</span><span class="p">(</span><span class="sc">&#39;a&#39;</span><span class="p">);</span>   <span class="c1">// &#39;A&#39;，转大写
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-类型转换">2.2 类型转换</h3>
+<p><strong>字符串转数字</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&#34;12345&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">stoi</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>           <span class="c1">// 12345
+</span></span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="kt">long</span> <span class="n">ll</span> <span class="o">=</span> <span class="n">stoll</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>   <span class="c1">// 12345
+</span></span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="n">stod</span><span class="p">(</span><span class="s">&#34;3.14&#34;</span><span class="p">);</span>   <span class="c1">// 3.14
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>数字转字符串</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>     <span class="c1">// &#34;123&#34;
+</span></span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">to_string</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>    <span class="c1">// &#34;3.140000&#34;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="23-进制转换">2.3 进制转换</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 十进制转其他进制
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">255</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">oct</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 377（八进制）
+</span></span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dec</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// 255（十进制）
+</span></span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">hex</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>   <span class="c1">// ff（十六进制）
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 其他进制转十进制
+</span></span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">bin</span> <span class="o">=</span> <span class="s">&#34;1111&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">stoi</span><span class="p">(</span><span class="n">bin</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>   <span class="c1">// 15（二进制转十进制）
+</span></span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">hex_str</span> <span class="o">=</span> <span class="s">&#34;ff&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">val2</span> <span class="o">=</span> <span class="n">stoi</span><span class="p">(</span><span class="n">hex_str</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="mi">16</span><span class="p">);</span>  <span class="c1">// 255（十六进制转十进制）
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-位运算">2.4 位运算</h3>
+<table>
+  <thead>
+      <tr>
+          <th>运算符</th>
+          <th>含义</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>&amp;</code></td>
+          <td>按位与</td>
+          <td><code>a &amp; b</code></td>
+      </tr>
+      <tr>
+          <td><code>|</code></td>
+          <td>按位或</td>
+          <td><code>a | b</code></td>
+      </tr>
+      <tr>
+          <td><code>^</code></td>
+          <td>按位异或</td>
+          <td><code>a ^ b</code></td>
+      </tr>
+      <tr>
+          <td><code>~</code></td>
+          <td>按位取反</td>
+          <td><code>~a</code></td>
+      </tr>
+      <tr>
+          <td><code>&lt;&lt;</code></td>
+          <td>左移</td>
+          <td><code>a &lt;&lt; n</code></td>
+      </tr>
+      <tr>
+          <td><code>&gt;&gt;</code></td>
+          <td>右移</td>
+          <td><code>a &gt;&gt; n</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>常用技巧</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 判断奇偶
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">is_odd</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 交换两数
+</span></span></span><span class="line"><span class="cl"><span class="n">a</span> <span class="o">^=</span> <span class="n">b</span><span class="p">;</span> <span class="n">b</span> <span class="o">^=</span> <span class="n">a</span><span class="p">;</span> <span class="n">a</span> <span class="o">^=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 取最低位 1
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">lowbit</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 判断是否是 2 的幂
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">is_power</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="三常用库函数">三、常用库函数</h2>
+<h3 id="31-二分查找">3.1 二分查找</h3>
+<p><code>lower_bound</code> 和 <code>upper_bound</code> 用于有序序列的二分查找，返回迭代器，区间为左闭右开 <code>[lower, upper)</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// lower_bound: 第一个 &gt;= target 的位置
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">lb</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>  <span class="c1">// 指向第1个2
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// upper_bound: 第一个 &gt; target 的位置
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">ub</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>  <span class="c1">// 指向3
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 计算 target 出现的次数
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="n">ub</span> <span class="o">-</span> <span class="n">lb</span><span class="p">;</span>  <span class="c1">// 3
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="32-排序-sort">3.2 排序 sort</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>                      <span class="c1">// 升序
+</span></span></span><span class="line"><span class="cl"><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">greater</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">());</span>      <span class="c1">// 降序
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 自定义比较函数
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Lambda 表达式
+</span></span></span><span class="line"><span class="cl"><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="33-数组初始化-memset">3.3 数组初始化 memset</h3>
+<p><code>memset</code> 按字节填充，<strong>只能用于初始化 0 或 -1</strong>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">memset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">arr</span><span class="p">));</span>   <span class="c1">// 初始化为 0
+</span></span></span><span class="line"><span class="cl"><span class="n">memset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">arr</span><span class="p">));</span>  <span class="c1">// 初始化为 -1
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="34-交换-swap">3.4 交换 swap</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">swap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>  <span class="c1">// a = 2, b = 1
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v1</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="n">v2</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">swap</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">);</span>  <span class="c1">// 交换容器内容
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="35-反转-reverse">3.5 反转 reverse</h3>
+<p>反转指定区间 <code>[first, last)</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">reverse</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>  <span class="c1">// {5, 4, 3, 2, 1}
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&#34;hello&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">reverse</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>  <span class="c1">// &#34;olleh&#34;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="36-删除元素-erase">3.6 删除元素 erase</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 删除单个元素
+</span></span></span><span class="line"><span class="cl"><span class="n">v</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>  <span class="c1">// 删除第3个元素，{1, 2, 4, 5}
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 删除区间
+</span></span></span><span class="line"><span class="cl"><span class="n">v</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>  <span class="c1">// 删除前两个，{4, 5}
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="37-去重-unique">3.7 去重 unique</h3>
+<p><code>unique</code> 将相邻重复元素移到末尾，返回去重后的末尾迭代器。<strong>需要先排序</strong>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">sort</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">last</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="n">v</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>  <span class="c1">// {1, 2, 3, 4}
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="38-全排列-next_permutation">3.8 全排列 next_permutation</h3>
+<p>生成下一个字典序排列，返回 <code>bool</code> 表示是否成功。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">x</span> <span class="p">:</span> <span class="n">v</span><span class="p">)</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">next_permutation</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 输出所有 6 种排列
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>prev_permutation</code> 生成上一个排列。</p>
+<h3 id="39-最值-min--max">3.9 最值 min / max</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>      <span class="c1">// 3
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>      <span class="c1">// 5
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 初始化列表（C++11）
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">min</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">});</span>  <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">max</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">});</span>  <span class="c1">// 5
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="310-最值迭代器-min_element--max_element">3.10 最值迭代器 min_element / max_element</h3>
+<p>返回区间 <code>[first, last)</code> 中最小/最大元素的迭代器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">min_it</span> <span class="o">=</span> <span class="n">min_element</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">max_it</span> <span class="o">=</span> <span class="n">max_element</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">min_it</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">max_it</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 9
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取索引
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">min_idx</span> <span class="o">=</span> <span class="n">min_it</span> <span class="o">-</span> <span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>  <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">max_idx</span> <span class="o">=</span> <span class="n">max_it</span> <span class="o">-</span> <span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>  <span class="c1">// 5
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="311-第-n-小元素-nth_element">3.11 第 n 小元素 nth_element</h3>
+<p>将第 n 小的元素放到正确位置，左边都比它小，右边都比它大。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">nth_element</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// v[2] = 3（第3小的元素）
+</span></span></span><span class="line"><span class="cl"><span class="c1">// v[0..1] &lt;= 3, v[3..4] &gt;= 3
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="四常用技巧速查">四、常用技巧速查</h2>
+<table>
+  <thead>
+      <tr>
+          <th>需求</th>
+          <th>方法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>读取整行</td>
+          <td><code>getline(cin, s)</code></td>
+      </tr>
+      <tr>
+          <td>数字+字符串混合输入</td>
+          <td><code>cin &gt;&gt; n; cin.ignore(); getline(cin, s);</code></td>
+      </tr>
+      <tr>
+          <td>保留小数</td>
+          <td><code>cout &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; x;</code></td>
+      </tr>
+      <tr>
+          <td>字符串转数字</td>
+          <td><code>stoi()</code>, <code>stoll()</code>, <code>stod()</code></td>
+      </tr>
+      <tr>
+          <td>数字转字符串</td>
+          <td><code>to_string()</code></td>
+      </tr>
+      <tr>
+          <td>二分查找边界</td>
+          <td><code>lower_bound()</code>, <code>upper_bound()</code></td>
+      </tr>
+      <tr>
+          <td>排序</td>
+          <td><code>sort()</code></td>
+      </tr>
+      <tr>
+          <td>数组初始化</td>
+          <td><code>memset(arr, 0, sizeof(arr))</code></td>
+      </tr>
+      <tr>
+          <td>反转</td>
+          <td><code>reverse()</code></td>
+      </tr>
+      <tr>
+          <td>去重</td>
+          <td><code>sort()</code> + <code>unique()</code> + <code>erase()</code></td>
+      </tr>
+      <tr>
+          <td>全排列</td>
+          <td><code>next_permutation()</code></td>
+      </tr>
+      <tr>
+          <td>最值</td>
+          <td><code>min()</code>, <code>max()</code>, <code>min_element()</code>, <code>max_element()</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="总结">总结</h2>
+<p>本文总结了蓝桥杯竞赛中常用的 C++ 基础知识和库函数。掌握这些内容能够显著提高编码效率和正确率。建议在刷题中反复练习，形成肌肉记忆。</p>
 </div>
     </div><footer class="post-footer">
 <nav class="custom-post-nav">
   <div class="nav-container">
-    <a class="nav-card prev-card" href="https://iqwqi.win/cs/posts/zhouji/">
+    <div class="nav-card placeholder">
       <div class="nav-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -1580,13 +2304,13 @@
       </div>
       <div class="nav-content">
         <span class="nav-label">上一篇</span>
-        <span class="nav-title">我の周报</span>
+        <span class="nav-title">没有了</span>
       </div>
-    </a>
-    <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/cppseries/stlalgorithm/">
+    </div>
+    <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/cppseries/stlvector/">
       <div class="nav-content">
         <span class="nav-label">下一篇</span>
-        <span class="nav-title">STL 算法</span>
+        <span class="nav-title">STL vector</span>
       </div>
       <div class="nav-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -455,6 +455,20 @@ Windows Sandbox 的本质是基于 Hyper-V 容器技术 (Hyper-V Containers) 的
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1813,7 +1827,7 @@ Windows Sandbox 的本质是基于 Hyper-V 容器技术 (Hyper-V Containers) 的
     </div><footer class="post-footer">
 <nav class="custom-post-nav">
   <div class="nav-container">
-    <div class="nav-card placeholder">
+    <a class="nav-card prev-card" href="https://iqwqi.win/cs/posts/cppseries/lanqiaocupbasic/">
       <div class="nav-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -1821,9 +1835,9 @@ Windows Sandbox 的本质是基于 Hyper-V 容器技术 (Hyper-V Containers) 的
       </div>
       <div class="nav-content">
         <span class="nav-label">上一篇</span>
-        <span class="nav-title">没有了</span>
+        <span class="nav-title">蓝桥杯 C&#43;&#43; 基础与常用内容</span>
       </div>
-    </div>
+    </a>
     <a class="nav-card next-card" href="https://iqwqi.win/cs/posts/custom-domain-setup/">
       <div class="nav-content">
         <span class="nav-label">下一篇</span>

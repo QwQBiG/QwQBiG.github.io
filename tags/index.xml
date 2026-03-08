@@ -6,8 +6,71 @@
     <description>Recent content in Tags on QwQBiG&#39;s World</description>
     <generator>Hugo -- 0.157.0</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 03 Mar 2026 14:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 05 Mar 2026 19:00:00 +0800</lastBuildDate>
     <atom:link href="https://iqwqi.win/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://iqwqi.win/tags/c&#43;&#43;/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>C&#43;&#43;11</title>
+      <link>https://iqwqi.win/tags/c&#43;&#43;11/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/c&#43;&#43;11/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>STL</title>
+      <link>https://iqwqi.win/tags/stl/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/stl/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>基础</title>
+      <link>https://iqwqi.win/tags/%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/%E5%9F%BA%E7%A1%80/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>算法</title>
+      <link>https://iqwqi.win/tags/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>算法竞赛</title>
+      <link>https://iqwqi.win/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>编程语言</title>
+      <link>https://iqwqi.win/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>蓝桥杯</title>
+      <link>https://iqwqi.win/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/</link>
+      <pubDate>Thu, 05 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cpp</title>
+      <link>https://iqwqi.win/tags/cpp/</link>
+      <pubDate>Thu, 05 Mar 2026 17:00:00 +0800</pubDate>
+      <guid>https://iqwqi.win/tags/cpp/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Hyper-V</title>
       <link>https://iqwqi.win/tags/hyper-v/</link>
@@ -170,20 +233,6 @@
       <description></description>
     </item>
     <item>
-      <title>C&#43;&#43;</title>
-      <link>https://iqwqi.win/tags/c&#43;&#43;/</link>
-      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/tags/c&#43;&#43;/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Cpp</title>
-      <link>https://iqwqi.win/tags/cpp/</link>
-      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/tags/cpp/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Java</title>
       <link>https://iqwqi.win/tags/java/</link>
       <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
@@ -230,13 +279,6 @@
       <link>https://iqwqi.win/tags/%E7%AB%9E%E8%B5%9B/</link>
       <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
       <guid>https://iqwqi.win/tags/%E7%AB%9E%E8%B5%9B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>编程语言</title>
-      <link>https://iqwqi.win/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</link>
-      <pubDate>Sun, 01 Feb 2026 20:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</guid>
       <description></description>
     </item>
     <item>
@@ -349,20 +391,6 @@
       <link>https://iqwqi.win/tags/c%E8%89%B9/</link>
       <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
       <guid>https://iqwqi.win/tags/c%E8%89%B9/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>STL</title>
-      <link>https://iqwqi.win/tags/stl/</link>
-      <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/tags/stl/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>算法</title>
-      <link>https://iqwqi.win/tags/%E7%AE%97%E6%B3%95/</link>
-      <pubDate>Tue, 30 Dec 2025 12:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/tags/%E7%AE%97%E6%B3%95/</guid>
       <description></description>
     </item>
     <item>

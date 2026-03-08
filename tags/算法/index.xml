@@ -65,19 +65,5 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;优点:&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-    <item>
-      <title>STL 容器</title>
-      <link>https://iqwqi.win/cs/posts/cppseries/stlcontainer/</link>
-      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/cs/posts/cppseries/stlcontainer/</guid>
-      <description>&lt;p&gt;容器就是数据结构啦~&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>STL 算法</title>
-      <link>https://iqwqi.win/cs/posts/cppseries/stlalgorithm/</link>
-      <pubDate>Fri, 21 Nov 2025 10:00:00 +0800</pubDate>
-      <guid>https://iqwqi.win/cs/posts/cppseries/stlalgorithm/</guid>
-      <description>&lt;p&gt;算法最爽了~&lt;/p&gt;</description>
-    </item>
   </channel>
 </rss>

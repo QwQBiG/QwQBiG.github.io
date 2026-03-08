@@ -430,6 +430,20 @@
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1488,7 +1502,7 @@
 
 <ul class="terms-tags">
     <li>
-        <a href="https://iqwqi.win/series/c&#43;&#43;%E7%9A%84%E4%B8%96%E7%95%8C/">C&#43;&#43;的世界 <sup><strong><sup>3</sup></strong></sup> </a>
+        <a href="https://iqwqi.win/series/c&#43;&#43;%E7%9A%84%E4%B8%96%E7%95%8C/">C&#43;&#43;的世界 <sup><strong><sup>12</sup></strong></sup> </a>
     </li>
     <li>
         <a href="https://iqwqi.win/series/%E6%88%90%E5%B0%B1-%E6%9D%A5%E7%A1%AC%E7%9A%84/">成就-来硬的 <sup><strong><sup>4</sup></strong></sup> </a>

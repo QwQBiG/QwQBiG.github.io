@@ -430,6 +430,20 @@
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1836,6 +1850,96 @@ body.dark .back-home a:hover {
 <article class="post-entry series-overview-card-wrapper">
     <header class="entry-header">
         <h2 class="entry-hint-parent entry-title">
+            <a href="https://iqwqi.win/cs/posts/cppseries/">C&#43;&#43;的世界</a>
+        </h2>
+    </header>
+    <div class="entry-content">
+        <p>一直没有写STL内容主要是已经学过了，而且有点懒~
+文章列表 STL容器详解 STL算法速查 C++11/14/17新特性 ...</p>
+    </div>
+    <footer class="entry-footer">
+        <span title='2026-064-03 19:00:00 &#43;0800 &#43;0800'>March 5, 2026</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;
+        <ul class="post-tags"><li><a href="https://iqwqi.win/tags/c&#43;&#43;/">C&#43;&#43;</a></li><li><a href="https://iqwqi.win/tags/stl/">STL</a></li><li><a href="https://iqwqi.win/tags/%E7%AE%97%E6%B3%95/">算法</a></li><li><a href="https://iqwqi.win/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></li></ul></footer>
+    <a class="entry-link" aria-label="post link to C&#43;&#43;的世界" href="https://iqwqi.win/cs/posts/cppseries/"></a>
+</article><style>
+     
+    .series-overview-card-wrapper {
+         
+        background: #fff; 
+         
+        border: 1px solid #e9ecef; 
+        
+         
+        border-left-width: 5px;
+        border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
+
+        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        padding: 25px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;  
+    }
+
+     
+    .series-overview-card-wrapper:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
+    }
+
+     
+    .series-overview-card-wrapper .entry-title a {
+        color: #8a2be2 !important; 
+        transition: color 0.3s ease;
+    }
+
+     
+    .series-overview-card-wrapper .entry-title a::before {
+        content: "🎀 合集 · ";
+        color: #8a2be2;
+    }
+
+     
+    
+     
+    body.dark .series-overview-card-wrapper {
+         
+        background: #2e2e33; 
+         
+        border-color: #444;
+         
+        border-image: linear-gradient(to bottom, #bd93f9, #9a6de0) 1;
+         
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+     
+    body.dark .series-overview-card-wrapper:hover {
+         
+        background: #36363d;
+         
+        box-shadow: 0 6px 18px rgba(189, 147, 249, 0.25);
+    }
+
+     
+    body.dark .series-overview-card-wrapper .entry-title a {
+        color: #bd93f9 !important; 
+    }
+
+     
+    body.dark .series-overview-card-wrapper .entry-title a::before {
+        color: #bd93f9;
+    }
+    
+     
+    body.dark .series-overview-card-wrapper .entry-content {
+        color: #b0b0b0;  
+    }
+</style>
+
+
+<article class="post-entry series-overview-card-wrapper">
+    <header class="entry-header">
+        <h2 class="entry-hint-parent entry-title">
             <a href="https://iqwqi.win/cs/posts/taokeseries/">逃课-速通</a>
         </h2>
     </header>
@@ -1937,96 +2041,6 @@ body.dark .back-home a:hover {
         <span title='2026-027-01 12:00:00 &#43;0800 &#43;0800'>January 27, 2026</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;
         <ul class="post-tags"><li><a href="https://iqwqi.win/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a></li><li><a href="https://iqwqi.win/tags/%E8%BD%AF%E7%A1%AC%E7%BB%93%E5%90%88/">软硬结合</a></li><li><a href="https://iqwqi.win/tags/%E5%B7%A5%E7%A8%8B/">工程</a></li><li><a href="https://iqwqi.win/tags/%E7%89%A9%E8%81%94%E7%BD%91/">物联网</a></li><li><a href="https://iqwqi.win/tags/c&#43;&#43;/">C&#43;&#43;</a></li></ul></footer>
     <a class="entry-link" aria-label="post link to 成就-来硬的" href="https://iqwqi.win/cs/posts/embeddedseries/"></a>
-</article><style>
-     
-    .series-overview-card-wrapper {
-         
-        background: #fff; 
-         
-        border: 1px solid #e9ecef; 
-        
-         
-        border-left-width: 5px;
-        border-image: linear-gradient(to bottom, #ffafcc, #ffb3a7) 1;
-
-        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-        padding: 25px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        transition: all 0.3s ease;  
-    }
-
-     
-    .series-overview-card-wrapper:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 18px rgba(255, 175, 204, 0.3);
-    }
-
-     
-    .series-overview-card-wrapper .entry-title a {
-        color: #8a2be2 !important; 
-        transition: color 0.3s ease;
-    }
-
-     
-    .series-overview-card-wrapper .entry-title a::before {
-        content: "🎀 合集 · ";
-        color: #8a2be2;
-    }
-
-     
-    
-     
-    body.dark .series-overview-card-wrapper {
-         
-        background: #2e2e33; 
-         
-        border-color: #444;
-         
-        border-image: linear-gradient(to bottom, #bd93f9, #9a6de0) 1;
-         
-        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    }
-
-     
-    body.dark .series-overview-card-wrapper:hover {
-         
-        background: #36363d;
-         
-        box-shadow: 0 6px 18px rgba(189, 147, 249, 0.25);
-    }
-
-     
-    body.dark .series-overview-card-wrapper .entry-title a {
-        color: #bd93f9 !important; 
-    }
-
-     
-    body.dark .series-overview-card-wrapper .entry-title a::before {
-        color: #bd93f9;
-    }
-    
-     
-    body.dark .series-overview-card-wrapper .entry-content {
-        color: #b0b0b0;  
-    }
-</style>
-
-
-<article class="post-entry series-overview-card-wrapper">
-    <header class="entry-header">
-        <h2 class="entry-hint-parent entry-title">
-            <a href="https://iqwqi.win/cs/posts/cppseries/">C&#43;&#43;的世界</a>
-        </h2>
-    </header>
-    <div class="entry-content">
-        <p>一直没有写STL内容主要是已经学过了，而且有点懒~
-文章列表 STL容器详解 STL算法速查 C++11/14/17新特性 ...</p>
-    </div>
-    <footer class="entry-footer">
-        <span title='2025-364-12 12:00:00 &#43;0800 &#43;0800'>December 30, 2025</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;
-        <ul class="post-tags"><li><a href="https://iqwqi.win/tags/c&#43;&#43;/">C&#43;&#43;</a></li><li><a href="https://iqwqi.win/tags/stl/">STL</a></li><li><a href="https://iqwqi.win/tags/%E7%AE%97%E6%B3%95/">算法</a></li><li><a href="https://iqwqi.win/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></li></ul></footer>
-    <a class="entry-link" aria-label="post link to C&#43;&#43;的世界" href="https://iqwqi.win/cs/posts/cppseries/"></a>
 </article><style>
      
     .series-overview-card-wrapper {

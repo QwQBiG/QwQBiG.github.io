@@ -479,6 +479,20 @@ for (int num : nums) {
     
     
     initSearchPage();
+    
+    
+    initPoetryNotes();
+  }
+  
+  
+  function initPoetryNotes() {
+    
+    if (window.PoetryNotes && typeof window.PoetryNotes.init === 'function') {
+      
+      setTimeout(() => {
+        window.PoetryNotes.init();
+      }, 100);
+    }
   }
   
   
@@ -1116,8 +1130,13 @@ for (int num : nums) {
     <meta property="article:tag" content="编程语言">
     <meta property="article:tag" content="C艹">
     <meta property="article:tag" content="算法">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlcontainer/">
-      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlalgorithm/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/cppbasics/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlvector/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlmapset/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlunordered/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlpriorityqueue/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlstring/">
+      <meta property="og:see_also" content="https://iqwqi.win/cs/posts/cppseries/stlqueue/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="范围for循环">
 <meta name="twitter:description" content="C&#43;&#43; 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记
