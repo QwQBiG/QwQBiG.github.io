@@ -1,0 +1,612 @@
+<!DOCTYPE html><html lang="zh-cn" data-theme="auto" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>K8s学习笔记 - QwQBiG&#39;s World</title><meta name="description" content="QwQBiG's World - 计算机科学学习笔记"><link rel="canonical" href="https://iqwqi.win/cs/posts/yunweiseries/yunweistudy/"><!-- Open Graph --><meta property="og:title" content="K8s学习笔记 - QwQBiG's World"><meta property="og:description" content="QwQBiG's World - 计算机科学学习笔记"><meta property="og:type" content="article"><meta property="og:url" content="https://iqwqi.win/cs/posts/yunweiseries/yunweistudy/"><meta property="og:image" content="https://iqwqi.win/avatar.png"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="K8s学习笔记 - QwQBiG's World"><meta name="twitter:description" content="QwQBiG's World - 计算机科学学习笔记"><meta name="twitter:image" content="https://iqwqi.win/avatar.png"><!-- No index for drafts --><!-- Favicon --><link rel="icon" type="image/png" href="/avatar.png"><!-- Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"><!-- Styles --><link rel="stylesheet" href="/styles/global.css"><link rel="stylesheet" href="/_astro/about.BRswpMxs.css"></head> <body class="bg-bg-primary text-text-primary min-h-screen flex flex-col transition-colors duration-300">  <header class="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex items-center justify-between h-16"> <!-- Logo --> <a href="/" class="flex items-center gap-3 group"> <img src="/avatar.png" alt="QwQBiG" class="w-10 h-10 rounded-full border-2 border-primary/30 group-hover:border-primary transition-colors"> <span class="font-sans font-bold text-xl text-primary hidden sm:block">QwQBiG's World</span> </a> <!-- Desktop Navigation --> <nav class="hidden md:flex items-center gap-1"> <a href="/archives/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> <!-- Right Side --> <div class="flex items-center gap-2"> <!-- Theme Toggle --> <button id="theme-toggle" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="切换主题"> <svg class="w-5 h-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path> </svg> <svg class="w-5 h-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path> </svg> </button> <!-- Mobile Menu Button --> <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="打开菜单"> <svg class="w-6 h-6 menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> </div> </div> <!-- Mobile Navigation --> <div id="mobile-menu" class="md:hidden hidden border-t border-border-color bg-bg-primary"> <nav class="px-4 py-3 space-y-1"> <a href="/archives/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> </div> </header> <script type="module">const c=document.getElementById("theme-toggle"),n=c?.querySelector(".sun-icon"),o=c?.querySelector(".moon-icon");function i(e){e==="dark"?(n?.classList.add("hidden"),o?.classList.remove("hidden")):e==="light"?(n?.classList.remove("hidden"),o?.classList.add("hidden")):window.matchMedia("(prefers-color-scheme: dark)").matches?(n?.classList.add("hidden"),o?.classList.remove("hidden")):(n?.classList.remove("hidden"),o?.classList.add("hidden"))}c?.addEventListener("click",()=>{const e=document.documentElement.getAttribute("data-theme")||"auto",t=["auto","light","dark"],l=t.indexOf(e),s=t[(l+1)%t.length];document.documentElement.setAttribute("data-theme",s),localStorage.setItem("theme",s),i(s)});const m=localStorage.getItem("theme")||"auto";i(m);const d=document.getElementById("mobile-menu-toggle"),a=document.getElementById("mobile-menu"),r=d?.querySelector(".menu-icon"),u=d?.querySelector(".close-icon");d?.addEventListener("click",()=>{a?.classList.toggle("hidden"),r?.classList.toggle("hidden"),u?.classList.toggle("hidden")});</script> <main class="flex-1 py-12"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="grid grid-cols-1 lg:grid-cols-4 gap-8"> <!-- Main Content --> <article class="lg:col-span-3"> <!-- Post Header --> <header class="mb-8"> <div class="flex flex-wrap gap-2 mb-4"> <a href="/cs/series/运维/" class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path> </svg> 运维 </a> </div> <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 leading-tight"> K8s学习笔记 </h1> <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary"> <span class="flex items-center gap-1.5"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> 2025-11-18 </span> <div class="flex flex-wrap gap-2"> <a href="/tags/运维/" class="text-primary hover:text-primary-dark transition-colors">
+#运维 </a><a href="/tags/k8s/" class="text-primary hover:text-primary-dark transition-colors">
+#k8s </a> </div> </div> </header> <!-- Post Content --> <div class="prose prose-lg max-w-none"> <h1 id="kubernetes-学习笔记-1">Kubernetes 学习笔记 1</h1>
+<h2 id="核心思想篇两大基石">核心思想篇：两大基石</h2>
+<h3 id="1-为何选择-kubernetes">1. 为何选择 Kubernetes？</h3>
+<p>单个 Docker 容器是孤立的。当容器数量增多，我们会面临一系列棘手的问题：</p>
+<ul>
+<li><strong>故障恢复</strong>：一个容器挂了怎么办？</li>
+<li><strong>服务发现</strong>：容器 B 如何找到容器 A 的 IP 地址？</li>
+<li><strong>负载均衡</strong>：如何将流量平均分配给多个相同的容器？</li>
+<li><strong>扩缩容</strong>：如何根据负载自动增加或减少容器数量？</li>
+</ul>
+<p>Kubernetes (K8s) 就是一个<strong>容器编排平台</strong>，它以标准化的方式完美地解决了以上所有问题。</p>
+<h3 id="2-命令式-vs-声明式-转变">2. 命令式 vs. 声明式 (转变)</h3>
+<ul>
+<li><strong>命令式 (Imperative)</strong>：你一步步告诉 K8s <strong>“做什么”</strong> (<code>kubectl create</code>, <code>kubectl scale</code>)。这就像手动驾驶，直观但难以追踪和重复。</li>
+<li><strong>声明式 (Declarative)</strong>：你向 K8s 提交一个 YAML 文件，告诉它你**“想要什么状态”**。这就像设定导航目的地，K8s 会自己想办法开车到达，并且如果偏离了航线（比如有 Pod 挂了），它会自动修正。<strong>这是 K8s 的精髓，也是现代化的管理方式。</strong></li>
+</ul>
+<hr>
+<h2 id="环境搭建篇kind-kubernetes-in-docker">环境搭建篇：Kind (Kubernetes in Docker)</h2>
+<p>在复杂的网络环境下，使用 Kind 搭建本地集群是最可靠、轻量且快速的方式。</p>
+<h3 id="1-安装核心工具">1. 安装核心工具</h3>
+<ol>
+<li>
+<p><strong>安装 <code>kubectl</code> (K8s 命令行客户端)</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># (根据官方文档，使用 apt 或其他包管理器安装)</span></span>
+<span class="line"><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> apt-get</span><span style="color:#E6DB74"> update</span><span style="color:#F8F8F2"> &#x26;&#x26; </span><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> apt-get</span><span style="color:#E6DB74"> install</span><span style="color:#AE81FF"> -y</span><span style="color:#E6DB74"> kubectl</span></span></code></pre>
+</li>
+<li>
+<p><strong>安装 Go 语言环境 (用于安装 Kind)</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> apt-get</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> golang-go</span><span style="color:#AE81FF"> -y</span></span></code></pre>
+</li>
+<li>
+<p><strong>设置 Go 国内代理并安装 <code>kind</code></strong></p>
+<blockquote>
+<p>这是解决网络问题的关键，<code>goproxy.cn</code> 会加速模块下载。</p>
+</blockquote>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F92672">export</span><span style="color:#F8F8F2"> GOPROXY</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">https://goproxy.cn,direct</span></span>
+<span class="line"><span style="color:#A6E22E">go</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> sigs.k8s.io/kind@v0.22.0</span></span>
+<span class="line"><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> mv</span><span style="color:#E6DB74"> ~/go/bin/kind</span><span style="color:#E6DB74"> /usr/local/bin/</span></span></code></pre>
+</li>
+<li>
+<p><strong>验证安装</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> version</span><span style="color:#AE81FF"> --client</span></span>
+<span class="line"><span style="color:#A6E22E">kind</span><span style="color:#E6DB74"> version</span></span></code></pre>
+</li>
+</ol>
+<h3 id="2-编写-kind-集群配置文件">2. 编写 Kind 集群配置文件</h3>
+<p>这份文件解决了两个关键问题：<strong>① K8s 核心组件镜像的拉取问题</strong>；<strong>② 虚拟机端口冲突问题</strong>。</p>
+<ul>
+<li>创建 <code>kind-config.yaml</code> 文件：
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">nano</span><span style="color:#E6DB74"> kind-config.yaml</span></span></code></pre>
+</li>
+<li>粘贴以下内容：
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Cluster</span></span>
+<span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">kind.x-k8s.io/v1alpha4</span></span>
+<span class="line"><span style="color:#88846F"># 解决 K8s 核心组件镜像拉取问题</span></span>
+<span class="line"><span style="color:#F92672">kubeadmConfigPatches</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">- </span><span style="color:#F92672">|</span></span>
+<span class="line"><span style="color:#E6DB74">  apiVersion: kubeadm.k8s.io/v1beta3</span></span>
+<span class="line"><span style="color:#E6DB74">  kind: ClusterConfiguration</span></span>
+<span class="line"><span style="color:#E6DB74">  imageRepository: registry.aliyuncs.com/google_containers</span></span>
+<span class="line"><span style="color:#F92672">nodes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">- </span><span style="color:#F92672">role</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">control-plane</span></span>
+<span class="line"><span style="color:#F92672">  kubeadmConfigPatches</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">|</span></span>
+<span class="line"><span style="color:#E6DB74">    kind: InitConfiguration</span></span>
+<span class="line"><span style="color:#E6DB74">    nodeRegistration:</span></span>
+<span class="line"><span style="color:#E6DB74">      kubeletExtraArgs:</span></span>
+<span class="line"><span style="color:#E6DB74">        node-labels: "ingress-ready=true"</span></span>
+<span class="line"><span style="color:#88846F">  # 解决宿主机端口占用问题，将 80/443 映射到高位端口</span></span>
+<span class="line"><span style="color:#F92672">  extraPortMappings</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span>
+<span class="line"><span style="color:#F92672">    hostPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">52014</span></span>
+<span class="line"><span style="color:#F92672">    protocol</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">TCP</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">443</span></span>
+<span class="line"><span style="color:#F92672">    hostPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">52015</span></span>
+<span class="line"><span style="color:#F92672">    protocol</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">TCP</span></span></code></pre>
+</li>
+</ul>
+<h3 id="3-启动与销毁集群">3. 启动与销毁集群</h3>
+<ul>
+<li><strong>启动集群</strong>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kind</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> cluster</span><span style="color:#AE81FF"> --config=kind-config.yaml</span></span></code></pre>
+</li>
+<li><strong>验证集群就绪</strong>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> get</span><span style="color:#E6DB74"> nodes</span></span>
+<span class="line"><span style="color:#88846F"># 预期输出一个名为 kind-control-plane 的节点，状态为 Ready</span></span></code></pre>
+</li>
+<li><strong>销毁集群 (学习结束时)</strong>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kind</span><span style="color:#E6DB74"> delete</span><span style="color:#E6DB74"> cluster</span></span></code></pre>
+</li>
+</ul>
+<hr>
+<h2 id="yaml-核心篇pod-的蓝图">YAML 核心篇：Pod 的“蓝图”</h2>
+<h3 id="1-yaml-四段式结构">1. YAML 四段式结构</h3>
+<ul>
+<li><code>apiVersion</code>: API 版本，如 <code>v1</code></li>
+<li><code>kind</code>: 资源类型，如 <code>Pod</code></li>
+<li><code>metadata</code>: 元数据，包括 <code>name</code>, <code>namespace</code>, <code>labels</code></li>
+<li><code>spec</code>: <strong>期望状态</strong>，定义了资源的核心属性</li>
+</ul>
+<h3 id="2-单容器-pod-示例">2. 单容器 Pod 示例</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-nginx-pod</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx-container</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx:1.22</span></span>
+<span class="line"><span style="color:#F92672">    ports</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span></code></pre>
+<h3 id="3-多容器-pod-sidecar-模式-与数据共享">3. 多容器 Pod (Sidecar 模式) 与数据共享</h3>
+<p>通过 <code>volumes</code> 和 <code>volumeMounts</code> 实现一个 Pod 内多个容器间的文件共享。</p>
+<ul>
+<li><code>spec.volumes</code>: 在 Pod 层面定义一个共享存储卷（“储藏室”）。</li>
+<li><code>spec.containers[].volumeMounts</code>: 在容器层面将共享卷挂载到容器内的特定路径（“开一扇门到储藏室”）。</li>
+</ul>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">multi-container-demo</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#88846F">  # 1. 定义一个名为 "shared-html" 的共享卷</span></span>
+<span class="line"><span style="color:#F92672">  volumes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">shared-html</span></span>
+<span class="line"><span style="color:#F92672">    emptyDir</span><span style="color:#F8F8F2">: {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#88846F">    # 容器一：Nginx</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx-container</span></span>
+<span class="line"><span style="color:#F92672">      image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx:1.22</span></span>
+<span class="line"><span style="color:#88846F">      # 2. 将共享卷挂载到 Nginx 的网站根目录</span></span>
+<span class="line"><span style="color:#F92672">      volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">      - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">shared-html</span></span>
+<span class="line"><span style="color:#F92672">        mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/usr/share/nginx/html</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    # 容器二：Busybox (Sidecar)</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">sidecar-container</span></span>
+<span class="line"><span style="color:#F92672">      image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">busybox:1.35</span></span>
+<span class="line"><span style="color:#F92672">      command</span><span style="color:#F8F8F2">: [</span><span style="color:#E6DB74">"/bin/sh"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"-c"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"while true; do date >> /var/log/index.html; sleep 5; done"</span><span style="color:#F8F8F2">]</span></span>
+<span class="line"><span style="color:#88846F">      # 3. 将同一个共享卷挂载到 Busybox 的日志目录</span></span>
+<span class="line"><span style="color:#F92672">      volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">      - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">shared-html</span></span>
+<span class="line"><span style="color:#F92672">        mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/var/log</span></span></code></pre>
+<h2 id="日常操作与调试篇-kubectl">日常操作与调试篇 (<code>kubectl</code>)</h2>
+<h3 id="1-核心管理命令">1. 核心管理命令</h3>
+<ul>
+<li><strong>应用配置</strong>: <code>kubectl apply -f [文件名.yaml]</code></li>
+<li><strong>删除资源</strong>: <code>kubectl delete -f [文件名.yaml]</code> 或 <code>kubectl delete pod [pod名]</code></li>
+</ul>
+<h3 id="2-状态检查三板斧">2. 状态检查“三板斧”</h3>
+<ol>
+<li>
+<ul>
+<li><code>kubectl get</code> : 快速查看资源列表和状态。</li>
+<li><code>kubectl get pods</code>: 查看当前命名空间的 Pod。</li>
+<li><code>kubectl get pods -n &#x3C;命名空间></code>: 查看指定命名空间的 Pod。</li>
+<li><code>kubectl get pods -A</code>: 查看所有命名空间的 Pod。</li>
+<li><code>kubectl get pods -o wide</code>: 查看更多信息（IP, 所在节点）。</li>
+</ul>
+</li>
+<li>
+<ul>
+<li><code>kubectl describe</code> : 查看资源的详细信息和事件日志。</li>
+<li><code>kubectl describe pod &#x3C;pod名></code></li>
+</ul>
+<blockquote>
+<p><strong>排错关键</strong>：永远第一时间查看最下方的 <code>Events</code> 部分，它记录了 Pod 创建过程中的所有成功和失败信息。</p>
+</blockquote>
+</li>
+<li>
+<ul>
+<li><code>kubectl logs</code> : 查看容器内部的标准输出日志。</li>
+<li><code>kubectl logs &#x3C;pod名></code></li>
+<li><code>kubectl logs &#x3C;pod名> -c &#x3C;容器名></code>: 查看多容器 Pod 中特定容器的日志。</li>
+<li><code>kubectl logs &#x3C;pod名> --previous</code>: 查看上一次崩溃退出的容器的日志。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-交互命令">3. 交互命令</h3>
+<ul>
+<li><code>kubectl exec</code> : 进入一个正在运行的容器内部。
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> exec</span><span style="color:#AE81FF"> -it</span><span style="color:#F92672"> &#x3C;</span><span style="color:#E6DB74">pod</span><span style="color:#F8F8F2">名</span><span style="color:#F92672">></span><span style="color:#AE81FF"> -c</span><span style="color:#F92672"> &#x3C;</span><span style="color:#E6DB74">容器</span><span style="color:#F8F8F2">名</span><span style="color:#F92672">></span><span style="color:#AE81FF"> --</span><span style="color:#E6DB74"> /bin/bash</span></span></code></pre>
+</li>
+</ul>
+<h3 id="4-资源组织">4. 资源组织</h3>
+<ul>
+<li>
+<p><strong>Namespace (文件夹)</strong>: 用于逻辑隔离。</p>
+<ul>
+<li>创建: <code>kubectl create namespace &#x3C;命名空间名></code></li>
+<li>删除: <code>kubectl delete namespace &#x3C;命名空间名></code> (会删除其内部所有资源)</li>
+</ul>
+</li>
+<li>
+<p><strong>Labels &#x26; Selectors (标签与筛选器)</strong>: 用于对资源进行分组和筛选。</p>
+<ul>
+<li>在 <code>metadata.labels</code> 中定义键值对。</li>
+<li>使用 <code>-l</code> 参数进行筛选: <code>kubectl get pods -l app=my-app,env=prod</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="实战排错篇网络问题终极方案">实战排错篇：网络问题终极方案</h2>
+<h3 id="问题现象-imagepullbackoff--errimagepull">问题现象: <code>ImagePullBackOff</code> / <code>ErrImagePull</code></h3>
+<p>Pod 状态显示拉取镜像失败，<code>describe</code> 事件中提示 <code>i/o timeout</code> 或 <code>not found</code>。</p>
+<h3 id="方案一推荐-修改-yaml使用国内镜像源">方案一：(推荐) 修改 YAML，使用国内镜像源</h3>
+<p>直接在 YAML 的 <code>image</code> 字段中使用国内的、可访问的镜像地址。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">redis-container</span></span>
+<span class="line"><span style="color:#88846F">    # 原镜像: image: redis:7.0</span></span>
+<span class="line"><span style="color:#88846F">    # 修改后:</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">m.daocloud.io/docker.io/library/redis:7.0</span></span></code></pre>
+<h3 id="方案二极端网络环境-本地加载">方案二：(极端网络环境) 本地加载</h3>
+<p>当所有镜像源都无法从 Kind 节点内部访问时，采用“主机下载，加载进集群”的策略。</p>
+<ol>
+<li>
+<p><strong>在主机 (Ubuntu VM) 上拉取镜像</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">docker</span><span style="color:#E6DB74"> pull</span><span style="color:#E6DB74"> m.daocloud.io/docker.io/library/redis:7.0</span></span></code></pre>
+</li>
+<li>
+<p><strong>为镜像打上官方标签 (关键)</strong></p>
+<blockquote>
+<p>K8s Pod 的 YAML 里使用的是官方短名称，所以必须打这个标签。</p>
+</blockquote>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">docker</span><span style="color:#E6DB74"> tag</span><span style="color:#E6DB74"> m.daocloud.io/docker.io/library/redis:7.0</span><span style="color:#E6DB74"> redis:7.0</span></span></code></pre>
+</li>
+<li>
+<p><strong>将打好标签的镜像加载进 Kind 集群</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kind</span><span style="color:#E6DB74"> load</span><span style="color:#E6DB74"> docker-image</span><span style="color:#E6DB74"> redis:7.0</span></span></code></pre>
+</li>
+<li>
+<p><strong>最后，使用包含官方短名称 (<code>image: redis:7.0</code>) 的 YAML 文件进行部署。</strong> K8s 会直接使用节点上的本地镜像，不再进行网络拉取。</p>
+</li>
+</ol>
+<hr>
+<h1 id="kubernetes-学习周报-2">Kubernetes 学习周报 2</h1>
+<h2 id="核心主题从裸砖到自动化建筑---pod-的高级管理">核心主题：从”裸砖”到”自动化建筑” - Pod 的高级管理</h2>
+<p>从管理单个、脆弱的 Pod，过渡到使用 Deployment 和 Service 来部署、管理和暴露真正健壮、高可用的应用。</p>
+<h2 id="第一部分环境搭建与镜像管理基础">第一部分：环境搭建与镜像管理（基础）</h2>
+<h3 id="1-搭建本地-kubernetes-kind-环境">1. 搭建本地 Kubernetes (Kind) 环境</h3>
+<p><strong>目标：</strong> 在本地快速搭建一个功能完整的 K8s 集群用于学习和实验。</p>
+<p><strong>工具：</strong> Kind (Kubernetes in Docker)，它将 K8s 节点作为 Docker 容器运行，启动快，资源占用少。</p>
+<p><strong>关键步骤：</strong></p>
+<p><strong>安装 kind CLI：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 推荐：为 Go 语言设置国内代理，然后通过 go install 安装</span></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#F8F8F2"> GOPROXY</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">https://goproxy.cn,direct</span></span>
+<span class="line"><span style="color:#A6E22E">go</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> sigs.k8s.io/kind@v0.22.0</span></span>
+<span class="line"><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> mv</span><span style="color:#E6DB74"> ~/go/bin/kind</span><span style="color:#E6DB74"> /usr/local/bin/</span></span></code></pre>
+<blockquote>
+<p><strong>备注：</strong> 这是解决国内网络环境下 kind 程序下载困难的最佳实践。GOPROXY 环境变量是关键。</p>
+</blockquote>
+<p><strong>编写 kind-config.yaml 配置文件：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Cluster</span></span>
+<span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">kind.x-k8s.io/v1alpha4</span></span>
+<span class="line"><span style="color:#F92672">nodes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">- </span><span style="color:#F92672">role</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">control-plane</span></span>
+<span class="line"><span style="color:#88846F">  # 关键配置1: 端口映射，用于后续从主机访问 NodePort 服务</span></span>
+<span class="line"><span style="color:#F92672">  extraPortMappings</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">30007</span><span style="color:#88846F"> # Kind 节点(容器)内部的端口</span></span>
+<span class="line"><span style="color:#F92672">    hostPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">8080</span><span style="color:#88846F">      # 映射到宿主机(VM或物理机)的端口</span></span>
+<span class="line"><span style="color:#F92672">    protocol</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">TCP</span></span>
+<span class="line"><span style="color:#88846F"># 关键配置2: 指定 K8s 核心组件的镜像仓库</span></span>
+<span class="line"><span style="color:#F92672">kubeadmConfigPatches</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">- </span><span style="color:#F92672">|</span></span>
+<span class="line"><span style="color:#E6DB74">  apiVersion: kubeadm.k8s.io/v1beta3</span></span>
+<span class="line"><span style="color:#E6DB74">  kind: ClusterConfiguration</span></span>
+<span class="line"><span style="color:#E6DB74">  imageRepository: registry.aliyuncs.com/google_containers</span></span></code></pre>
+<p><strong>解释：</strong></p>
+<ul>
+<li><code>extraPortMappings</code>：提前规划端口，解决 NodePort 服务在复杂网络环境下（如VM、远程服务器）难以直接访问的问题。</li>
+<li><code>imageRepository</code>：将 K8s 核心组件的镜像源指向国内的阿里云，从根本上解决了因网络问题导致的集群创建失败。</li>
+</ul>
+<p><strong>创建集群：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kind</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> cluster</span><span style="color:#AE81FF"> --config=kind-config.yaml</span></span></code></pre>
+<h2 id="2-镜像管理一劳永逸的镜像预加载sop">2. 镜像管理：一劳永逸的”镜像预加载”SOP</h2>
+<p><strong>问题背景：</strong> 在受限的网络环境中，K8s 节点（Kubelet）无法直接从 Docker Hub 等官方源拉取应用镜像，导致 Pod 状态卡在 ImagePullBackOff 或 ErrImagePull。</p>
+<p><strong>核心思想：</strong> 既然 K8s 节点自己”出不去”，我们就在网络通畅的主机上把镜像准备好，然后强行”塞”给它。</p>
+<p><strong>标准操作流程 (SOP)：</strong></p>
+<p><strong>【拉取】</strong> 在主机终端，从可靠的国内镜像源（如 m.daocloud.io）拉取镜像。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">docker</span><span style="color:#E6DB74"> pull</span><span style="color:#E6DB74"> m.daocloud.io/docker.io/library/nginx:1.22</span></span></code></pre>
+<p><strong>【标记】</strong> 为拉取下来的镜像打上官方的”短名称”标签。这是为了让镜像名与 YAML 文件中的 image 字段完全匹配。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">docker</span><span style="color:#E6DB74"> tag</span><span style="color:#E6DB74"> m.daocloud.io/docker.io/library/nginx:1.22</span><span style="color:#E6DB74"> nginx:1.22</span></span></code></pre>
+<p><strong>【加载】</strong> 使用 kind load 命令，将主机上的镜像复制到 Kind 集群的内部镜像仓库中。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kind</span><span style="color:#E6DB74"> load</span><span style="color:#E6DB74"> docker-image</span><span style="color:#E6DB74"> nginx:1.22</span></span></code></pre>
+<blockquote>
+<p><strong>备注：</strong> 养成习惯，在部署任何包含新镜像的应用前，都先执行此”三部曲”。这能 100% 避免因镜像拉取失败导致的部署问题，极大提高学习和实验效率。</p>
+</blockquote>
+<h2 id="第二部分核心控制器---deployment">第二部分：核心控制器 - Deployment</h2>
+<h3 id="1-为何需要-deployment告别裸pod">1. 为何需要 Deployment：告别”裸Pod”</h3>
+<p><strong>“裸Pod”的脆弱性：</strong> 直接创建的 Pod，在被删除、所在节点宕机或自身进程崩溃后，会永久消失，导致服务中断。</p>
+<p><strong>Deployment 的价值：</strong></p>
+<ul>
+<li><strong>高可用性 (自愈能力):</strong> Deployment 通过管理 ReplicaSet，确保始终有预定数量的 Pod 副本在运行。当有 Pod 意外消失时，它会自动创建一个新的来替代。</li>
+<li><strong>可伸缩性:</strong> 可以轻松地增加或减少 Pod 的副本数量，以应对流量变化。</li>
+<li><strong>声明式更新:</strong> 提供强大的滚动更新和回滚机制，实现应用的平滑发布和快速修复。</li>
+</ul>
+<h3 id="2-编写-deployment-yaml">2. 编写 Deployment YAML</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">apps/v1</span><span style="color:#88846F"> # Deployment 属于 apps API 组</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Deployment</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app</span><span style="color:#88846F"> # Deployment 的名字</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  replicas</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">3</span><span style="color:#88846F">   # 期望状态：需要 3 个 Pod 副本</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">  # selector: 定义了 Deployment 如何"识别"它应该管理的孩子(Pod)</span></span>
+<span class="line"><span style="color:#F92672">  selector</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">    matchLabels</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      app</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app</span><span style="color:#88846F"> # 匹配所有带有 "app: my-app" 标签的 Pod</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">  # template: Pod 的"出生模板"</span></span>
+<span class="line"><span style="color:#F92672">  template</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">    metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#88846F">      # 关键：模板中的 Pod 必须带有能与 selector 匹配的标签</span></span>
+<span class="line"><span style="color:#F92672">      labels</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">        app</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app</span></span>
+<span class="line"><span style="color:#F92672">    spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#88846F">      # 这里是标准的 Pod.spec 定义</span></span>
+<span class="line"><span style="color:#F92672">      containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">      - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx</span></span>
+<span class="line"><span style="color:#F92672">        image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx:1.22</span></span>
+<span class="line"><span style="color:#F92672">        ports</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">        - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span></code></pre>
+<blockquote>
+<p><strong>核心关系解释：</strong> Deployment 通过 spec.selector 来找到并管理 Pods。ReplicaSet (由 Deployment 自动创建) 则根据 spec.template 来创建新的 Pod。template.metadata.labels 和 selector.matchLabels 之间的匹配是它们能协同工作的关键。</p>
+</blockquote>
+<h3 id="3-核心运维操作">3. 核心运维操作</h3>
+<p><strong>部署与查看：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> apply</span><span style="color:#AE81FF"> -f</span><span style="color:#F92672"> &#x3C;</span><span style="color:#E6DB74">deployment.yam</span><span style="color:#F8F8F2">l</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> get</span><span style="color:#E6DB74"> deployment</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> get</span><span style="color:#E6DB74"> replicaset</span><span style="color:#88846F"> # 查看 Deployment 创建的 rs</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> get</span><span style="color:#E6DB74"> pods</span><span style="color:#88846F">       # 查看 rs 创建的 pods</span></span></code></pre>
+<p><strong>伸缩 (Scaling)：</strong></p>
+<ul>
+<li><strong>命令式 (快速):</strong> <code>kubectl scale deployment my-app --replicas=5</code></li>
+<li><strong>声明式 (推荐):</strong> 修改 YAML 文件中的 <code>replicas</code> 字段，然后重新 <code>kubectl apply</code></li>
+</ul>
+<p><strong>滚动更新 (Rolling Update)：</strong></p>
+<ol>
+<li>修改 YAML 文件中的 <code>template.spec.containers[0].image</code> 字段为新版本</li>
+<li>执行 <code>kubectl apply -f &#x3C;deployment.yaml></code></li>
+<li>监控更新过程：</li>
+</ol>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 实时观察 Pod 的增删交替过程</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> get</span><span style="color:#E6DB74"> pods</span><span style="color:#AE81FF"> -w</span></span>
+<span class="line"><span style="color:#88846F"># 查看官方的滚动更新状态报告</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> rollout</span><span style="color:#E6DB74"> status</span><span style="color:#E6DB74"> deployment/my-app</span></span></code></pre>
+<p><strong>回滚 (Rollback)：</strong></p>
+<ul>
+<li>查看历史版本：<code>kubectl rollout history deployment/my-app</code></li>
+<li>一键回滚到上一个版本：<code>kubectl rollout undo deployment/my-app</code></li>
+<li>回滚到指定版本：<code>kubectl rollout undo deployment/my-app --to-revision=&#x3C;NUMBER></code></li>
+</ul>
+<h2 id="第三部分服务发现---service">第三部分：服务发现 - Service</h2>
+<h3 id="1-为何需要-service解决-pod-的动态问题">1. 为何需要 Service：解决 Pod 的”动态”问题</h3>
+<p><strong>问题背景：</strong> Deployment 管理的 Pod IP 地址是动态的、不固定的，且 Pod 会随时被销毁和重建。应用之间无法直接通过 Pod IP 进行可靠通信。</p>
+<p><strong>Service 的价值：</strong> 为一组功能相同的 Pod 提供一个稳定、统一的访问入口。它有固定的虚拟 IP (ClusterIP) 和 DNS 名称，并能自动对后端的健康 Pod 进行负载均衡。</p>
+<h3 id="2-service-类型与实践">2. Service 类型与实践</h3>
+<h4 id="clusterip-默认类型---对内交通">ClusterIP (默认类型 - 对内交通)</h4>
+<p><strong>用途：</strong> 用于集群内部服务之间的通信，是构建微服务架构的基础。</p>
+<p><strong>YAML 示例：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Service</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app-svc</span><span style="color:#88846F"> # Service 的名字，也是内部的 DNS 名</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">ClusterIP</span><span style="color:#88846F"> # 可省略</span></span>
+<span class="line"><span style="color:#88846F">  # selector: Service 如何找到它要代理的 Pod</span></span>
+<span class="line"><span style="color:#F92672">  selector</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">    app</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app</span><span style="color:#88846F"> # 匹配所有带 "app: my-app" 标签的 Pod</span></span>
+<span class="line"><span style="color:#F92672">  ports</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">port</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span><span style="color:#88846F">         # Service 自身监听的端口</span></span>
+<span class="line"><span style="color:#F92672">    targetPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span><span style="color:#88846F">   # 转发到后端 Pod 容器的目标端口</span></span></code></pre>
+<p><strong>测试方法：</strong> 启动一个临时的调试 Pod，通过 Service 的 DNS 名称访问。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 启动临时 Pod 并进入 shell</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> run</span><span style="color:#E6DB74"> tester</span><span style="color:#AE81FF"> --rm</span><span style="color:#AE81FF"> -it</span><span style="color:#AE81FF"> --image=busybox:1.35</span><span style="color:#AE81FF"> --</span><span style="color:#E6DB74"> /bin/sh</span></span>
+<span class="line"><span style="color:#88846F"># 在临时 Pod 内部访问</span></span>
+<span class="line"><span style="color:#A6E22E">/</span><span style="color:#88846F"> # wget -O- http://my-app-svc</span></span></code></pre>
+<h4 id="nodeport-对外暴露---开发测试用">NodePort (对外暴露 - 开发/测试用)</h4>
+<p><strong>用途：</strong> 在 ClusterIP 的基础上，在集群的每个节点上都暴露一个相同的静态端口（30000-32767），从而允许从集群外部访问。</p>
+<p><strong>YAML 示例 (在 ClusterIP 基础上修改)：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">NodePort</span><span style="color:#88846F"> # 明确指定类型</span></span>
+<span class="line"><span style="color:#F92672">  selector</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">    app</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app</span></span>
+<span class="line"><span style="color:#F92672">  ports</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">port</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span>
+<span class="line"><span style="color:#F92672">    targetPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span>
+<span class="line"><span style="color:#F92672">    nodePort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">30007</span><span style="color:#88846F"> # 可选，手动指定一个端口方便访问</span></span></code></pre>
+<p><strong>测试方法：</strong></p>
+<ol>
+<li>获取节点的 IP 地址 (对于 Kind in VM，是 VM 的 IP)</li>
+<li>在本地浏览器中访问 <code>http://&#x3C;Node-IP>:&#x3C;NodePort></code></li>
+</ol>
+<h4 id="kubectl-port-forward-终极调试工具">kubectl port-forward (终极调试工具)</h4>
+<p><strong>用途：</strong> 当 NodePort 因复杂的网络环境（防火墙、云安全组）无法访问时，这是最可靠的本地调试方法。</p>
+<p><strong>原理：</strong> 在本地机器和指定的 Pod/Service 之间建立一个安全的流量转发隧道。</p>
+<p><strong>使用方法：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 在一个终端中运行，它会阻塞</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> port-forward</span><span style="color:#E6DB74"> svc/my-app-svc</span><span style="color:#E6DB74"> 8888:80</span></span>
+<span class="line"><span style="color:#88846F"># 在另一个终端中，访问本地的 8888 端口</span></span>
+<span class="line"><span style="color:#A6E22E">curl</span><span style="color:#E6DB74"> http://localhost:8888</span></span></code></pre>
+<hr>
+<h1 id="kubernetes-学习周报-3">Kubernetes 学习周报 3</h1>
+<h2 id="核心思想十二因子应用-the-twelve-factor-app">核心思想：十二因子应用 (The Twelve-Factor App)</h2>
+<p>本周所有学习内容的理论基石，源于云原生开发的最佳实践，特别是第三条：<strong>在环境中存储配置</strong>。</p>
+<p><strong>目标：</strong> 将配置 (Config) 与代码/镜像彻底分离。</p>
+<p><strong>优势：</strong></p>
+<ul>
+<li><strong>高效：</strong> 修改配置无需重新构建镜像。</li>
+<li><strong>灵活：</strong> 同一个镜像可以无缝部署到不同环境（开发、测试、生产）。</li>
+<li><strong>安全：</strong> 敏感信息（如密码）不会被硬编码到镜像中。</li>
+</ul>
+<p><strong>Kubernetes 解决方案：</strong></p>
+<ul>
+<li>非敏感配置：<strong>ConfigMap</strong></li>
+<li>敏感配置：<strong>Secret</strong></li>
+<li>运行时数据/文件：<strong>Volume</strong></li>
+</ul>
+<h2 id="一configmap非敏感配置管理">一、ConfigMap：非敏感配置管理</h2>
+<p>ConfigMap 以键值对（key-value）的形式存储非敏感的配置数据。</p>
+<h3 id="1-创建-configmap">1. 创建 ConfigMap</h3>
+<p><strong>方式A：从字面值创建</strong> (适用于少量、简单的键值对)</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 格式: kubectl create configmap &#x3C;NAME> --from-literal=&#x3C;KEY1>=&#x3C;VALUE1> ...</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> configmap</span><span style="color:#E6DB74"> my-app-config</span><span style="color:#AE81FF"> --from-literal=APP_COLOR=blue</span><span style="color:#AE81FF"> --from-literal=APP_GREETING=</span><span style="color:#E6DB74">"Hello World"</span></span></code></pre>
+<p><strong>方式B：从文件创建</strong> (适用于已有的配置文件)</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 1. 先创建本地文件</span></span>
+<span class="line"><span style="color:#66D9EF">echo</span><span style="color:#E6DB74"> "APP_MODE=production"</span><span style="color:#F92672"> ></span><span style="color:#E6DB74"> app.properties</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 2. 从文件创建ConfigMap (文件名将作为key，文件内容作为value)</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> configmap</span><span style="color:#E6DB74"> my-app-config-from-file</span><span style="color:#AE81FF"> --from-file=app.properties</span></span></code></pre>
+<h2 id="2-使用-configmap">2. 使用 ConfigMap</h2>
+<h3 id="方式一作为环境变量注入-pod">方式一：作为环境变量注入 Pod</h3>
+<p>这是最符合”十二因子”理念的方式。Kubelet 在启动容器前，会将指定的 ConfigMap 值设置为容器的环境变量。</p>
+<p><strong>pod-with-cm-env.yaml 示例：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">pod-cm-env</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">test-container</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">busybox:1.35</span></span>
+<span class="line"><span style="color:#88846F">    # 严谨的 echo 命令，用 \"...\" 包围变量以处理空格</span></span>
+<span class="line"><span style="color:#F92672">    command</span><span style="color:#F8F8F2">: [ </span><span style="color:#E6DB74">"/bin/sh"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"-c"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"echo The app color is $APP_COLOR and the greeting is </span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">$APP_GREETING</span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">; sleep 3600"</span><span style="color:#F8F8F2"> ]</span></span>
+<span class="line"><span style="color:#F92672">    env</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">APP_COLOR</span><span style="color:#88846F">      # 在容器中定义的环境变量名</span></span>
+<span class="line"><span style="color:#F92672">      valueFrom</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">        configMapKeyRef</span><span style="color:#F8F8F2">:   </span><span style="color:#88846F"># 引用一个ConfigMap的key</span></span>
+<span class="line"><span style="color:#F92672">          name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app-config</span><span style="color:#88846F"> # ConfigMap的名字</span></span>
+<span class="line"><span style="color:#F92672">          key</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">APP_COLOR</span><span style="color:#88846F">    # ConfigMap中的key</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">APP_GREETING</span></span>
+<span class="line"><span style="color:#F92672">      valueFrom</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">        configMapKeyRef</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">          name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app-config</span></span>
+<span class="line"><span style="color:#F92672">          key</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">APP_GREETING</span></span></code></pre>
+<p><strong>部署与验证：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 部署前，必须先创建依赖的ConfigMap</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> configmap</span><span style="color:#E6DB74"> my-app-config</span><span style="color:#AE81FF"> --from-literal=APP_COLOR=blue</span><span style="color:#AE81FF"> --from-literal=APP_GREETING=</span><span style="color:#E6DB74">"Hello World"</span></span>
+<span class="line"><span style="color:#88846F"># 部署Pod</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> apply</span><span style="color:#AE81FF"> -f</span><span style="color:#E6DB74"> pod-with-cm-env.yaml</span></span>
+<span class="line"><span style="color:#88846F"># 查看日志验证</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> logs</span><span style="color:#E6DB74"> pod-cm-env</span></span></code></pre>
+<h3 id="方式二作为文件挂载到-pod">方式二：作为文件挂载到 Pod</h3>
+<p>适用于需要读取传统配置文件的应用。</p>
+<p><strong>pod-with-cm-volume.yaml 示例：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">pod-cm-volume</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">test-container</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">busybox:1.35</span></span>
+<span class="line"><span style="color:#F92672">    command</span><span style="color:#F8F8F2">: [ </span><span style="color:#E6DB74">"/bin/sh"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"-c"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"cat /etc/config/app.properties; sleep 3600"</span><span style="color:#F8F8F2"> ]</span></span>
+<span class="line"><span style="color:#88846F">    # 步骤2: 把下面定义的Volume挂载到容器的指定路径</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">config-volume</span></span>
+<span class="line"><span style="color:#F92672">      mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/etc/config</span></span>
+<span class="line"><span style="color:#88846F">  # 步骤1: 在Pod层面定义一个Volume，数据来源是ConfigMap</span></span>
+<span class="line"><span style="color:#F92672">  volumes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">config-volume</span></span>
+<span class="line"><span style="color:#F92672">    configMap</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">my-app-config-from-file</span></span></code></pre>
+<h2 id="二secret敏感信息管理">二、Secret：敏感信息管理</h2>
+<p>Secret 专用于存储密码、API密钥等敏感数据。其使用方式与 ConfigMap 几乎完全一样，但有关键区别。</p>
+<p><strong>核心区别：</strong></p>
+<ul>
+<li><strong>用途：</strong> 专用于敏感数据。</li>
+<li><strong>编码：</strong> 值默认进行 Base64 编码（注意：不是加密！）。</li>
+<li><strong>安全：</strong> K8s 会对其提供更强的安全机制（如静态加密、访问控制、内存存储等）。</li>
+</ul>
+<h3 id="1-创建-secret">1. 创建 Secret</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 格式: kubectl create secret generic &#x3C;NAME> --from-literal=&#x3C;KEY1>=&#x3C;VALUE1> ...</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> secret</span><span style="color:#E6DB74"> generic</span><span style="color:#E6DB74"> db-credentials</span><span style="color:#AE81FF"> --from-literal=username=admin</span><span style="color:#AE81FF"> --from-literal=password=</span><span style="color:#E6DB74">'S3cr3tP@ssw0rd!'</span></span></code></pre>
+<h2 id="2-使用-secret">2. 使用 Secret</h2>
+<p>与 ConfigMap 类似，仅需将 <code>configMapKeyRef</code> 替换为 <code>secretKeyRef</code>，或将 <code>configMap:</code> 替换为 <code>secret:</code>。</p>
+<p><strong>pod-with-secret.yaml (环境变量注入) 示例：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">pod-with-secret</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">test-container</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">busybox:1.35</span></span>
+<span class="line"><span style="color:#F92672">    command</span><span style="color:#F8F8F2">: [ </span><span style="color:#E6DB74">"/bin/sh"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"-c"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"echo User is $DB_USER and Password is </span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">$DB_PASS</span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">; sleep 3600"</span><span style="color:#F8F8F2"> ]</span></span>
+<span class="line"><span style="color:#F92672">    env</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">DB_USER</span></span>
+<span class="line"><span style="color:#F92672">      valueFrom</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">        secretKeyRef</span><span style="color:#F8F8F2">: </span><span style="color:#88846F"># &#x3C;-- 关键区别</span></span>
+<span class="line"><span style="color:#F92672">          name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">db-credentials</span></span>
+<span class="line"><span style="color:#F92672">          key</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">username</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">DB_PASS</span></span>
+<span class="line"><span style="color:#F92672">      valueFrom</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">        secretKeyRef</span><span style="color:#F8F8F2">: </span><span style="color:#88846F"># &#x3C;-- 关键区别</span></span>
+<span class="line"><span style="color:#F92672">          name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">db-credentials</span></span>
+<span class="line"><span style="color:#F92672">          key</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">password</span></span></code></pre>
+<p><strong>部署与验证：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 部署前，必须先创建依赖的Secret</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> create</span><span style="color:#E6DB74"> secret</span><span style="color:#E6DB74"> generic</span><span style="color:#E6DB74"> db-credentials</span><span style="color:#AE81FF"> --from-literal=username=admin</span><span style="color:#AE81FF"> --from-literal=password=</span><span style="color:#E6DB74">'S3cr3tP@ssw0rd!'</span></span>
+<span class="line"><span style="color:#88846F"># 部署Pod</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> apply</span><span style="color:#AE81FF"> -f</span><span style="color:#E6DB74"> pod-with-secret.yaml</span></span>
+<span class="line"><span style="color:#88846F"># 查看日志验证 (仅用于学习，生产环境严禁打印密码)</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> logs</span><span style="color:#E6DB74"> pod-with-secret</span></span></code></pre>
+<h2 id="三volumepod-的存储卷">三、Volume：Pod 的存储卷</h2>
+<p>Volume 是连接外部存储和 Pod 的桥梁，其生命周期与 Pod 绑定（Pod 在，Volume 在）。</p>
+<h3 id="1-emptydirpod-内的临时共享存储">1. emptyDir：Pod 内的临时共享存储</h3>
+<p><strong>特性：</strong></p>
+<ul>
+<li>Pod 创建时，K8s 在节点上为其分配一个空目录。</li>
+<li>Pod 删除时，该目录及其内容被永久删除。</li>
+<li>容器崩溃重启，数据不丢失。</li>
+</ul>
+<p><strong>核心用途：</strong> 同一个 Pod 内多个容器之间共享文件（Sidecar 模式）。</p>
+<p><strong>Sidecar 示例 pod-with-emptydir.yaml:</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">web-server-pod</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  volumes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">shared-html</span></span>
+<span class="line"><span style="color:#F92672">    emptyDir</span><span style="color:#F8F8F2">: {} </span><span style="color:#88846F"># 定义一个emptyDir类型的Volume</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">web-server</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">nginx</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">: </span><span style="color:#88846F"># 挂载Volume</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">shared-html</span></span>
+<span class="line"><span style="color:#F92672">      mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/usr/share/nginx/html</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">content-generator</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">busybox</span></span>
+<span class="line"><span style="color:#F92672">    command</span><span style="color:#F8F8F2">: [</span><span style="color:#E6DB74">"/bin/sh"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"-c"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"while true; do echo </span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">Generated at $(date)</span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74"> > /html/index.html; sleep 5; done"</span><span style="color:#F8F8F2">]</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">: </span><span style="color:#88846F"># 挂载同一个Volume</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">shared-html</span></span>
+<span class="line"><span style="color:#F92672">      mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/html</span></span></code></pre>
+<p><strong>验证方法 (端口转发):</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 在一个终端运行</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> port-forward</span><span style="color:#E6DB74"> pod/web-server-pod</span><span style="color:#E6DB74"> 8080:80</span></span>
+<span class="line"><span style="color:#88846F"># 在另一个终端验证</span></span>
+<span class="line"><span style="color:#A6E22E">curl</span><span style="color:#E6DB74"> http://localhost:8080</span></span></code></pre>
+<h2 id="2-hostpath与节点主机的存储交互">2. hostPath：与节点主机的存储交互</h2>
+<p><strong>特性：</strong></p>
+<ul>
+<li>将 Node 主机上的文件或目录直接挂载到 Pod 中。</li>
+<li>数据不会随 Pod 删除而消失。</li>
+<li><strong>重大风险：</strong> 破坏 Pod 可移植性，带来严重安全风险。应极力避免在常规应用中使用。</li>
+</ul>
+<p><strong>核心用途：</strong> 日志收集、监控代理等需要访问节点底层资源的系统级应用。</p>
+<p><strong>pod-with-hostpath.yaml 示例：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">pod-hostpath</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">test-container</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">busybox:1.35</span></span>
+<span class="line"><span style="color:#F92672">    command</span><span style="color:#F8F8F2">: [ </span><span style="color:#E6DB74">"/bin/sh"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"-c"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"cat /host-data/host-file.txt; sleep 3600"</span><span style="color:#F8F8F2"> ]</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">host-storage</span></span>
+<span class="line"><span style="color:#F92672">      mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/host-data</span></span>
+<span class="line"><span style="color:#F92672">  volumes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">host-storage</span></span>
+<span class="line"><span style="color:#F92672">    hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/mnt/data</span><span style="color:#88846F"> # 指定要挂载的主机路径</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Directory</span></span></code></pre>
+<p><strong>验证方法：</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#88846F"># 1. 进入Kind节点容器，创建文件</span></span>
+<span class="line"><span style="color:#A6E22E">docker</span><span style="color:#E6DB74"> exec</span><span style="color:#AE81FF"> -it</span><span style="color:#E6DB74"> kind-control-plane</span><span style="color:#E6DB74"> /bin/bash</span></span>
+<span class="line"><span style="color:#88846F"># root@kind-control-plane:/# mkdir /mnt/data</span></span>
+<span class="line"><span style="color:#88846F"># root@kind-control-plane:/# echo "Hello from Host" > /mnt/data/host-file.txt</span></span>
+<span class="line"><span style="color:#88846F"># root@kind-control-plane:/# exit</span></span>
+<span class="line"><span style="color:#88846F"># 2. 部署Pod</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> apply</span><span style="color:#AE81FF"> -f</span><span style="color:#E6DB74"> pod-with-hostpath.yaml</span></span>
+<span class="line"><span style="color:#88846F"># 3. 查看日志</span></span>
+<span class="line"><span style="color:#A6E22E">kubectl</span><span style="color:#E6DB74"> logs</span><span style="color:#E6DB74"> pod-hostpath</span></span></code></pre>
+<hr>
+<h2 id="突发状况远程失效了">突发状况：远程失效了</h2>
+<p>总结下来就是：Docker 跑 FRP，认准 <code>--network host</code> 和 <code>--dns</code>，内网 IP 填 <code>127.0.0.1</code>，永远不掉线。</p>
+<hr> </div> <!-- Post Navigation --> <nav class="mt-12 pt-8 border-t border-border-color"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> <div></div> <a href="/cs/posts/yunweiseries/zuhui/" class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"> <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span> <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1"> 我の组会 </div> </a> </div> </nav> </article> <!-- Sidebar --> <aside class="lg:col-span-1"> <div class="sticky top-24 space-y-6"> <!-- TOC --> <div class="toc"> <div class="toc-title">目录</div> <ul> <li> <a href="#kubernetes-学习笔记-1" class="h1"> Kubernetes 学习笔记 1 </a> </li><li> <a href="#核心思想篇两大基石" class="h2"> 核心思想篇：两大基石 </a> </li><li> <a href="#1-为何选择-kubernetes" class="h3"> 1. 为何选择 Kubernetes？ </a> </li><li> <a href="#2-命令式-vs-声明式-转变" class="h3"> 2. 命令式 vs. 声明式 (转变) </a> </li><li> <a href="#环境搭建篇kind-kubernetes-in-docker" class="h2"> 环境搭建篇：Kind (Kubernetes in Docker) </a> </li><li> <a href="#1-安装核心工具" class="h3"> 1. 安装核心工具 </a> </li><li> <a href="#2-编写-kind-集群配置文件" class="h3"> 2. 编写 Kind 集群配置文件 </a> </li><li> <a href="#3-启动与销毁集群" class="h3"> 3. 启动与销毁集群 </a> </li><li> <a href="#yaml-核心篇pod-的蓝图" class="h2"> YAML 核心篇：Pod 的“蓝图” </a> </li><li> <a href="#1-yaml-四段式结构" class="h3"> 1. YAML 四段式结构 </a> </li><li> <a href="#2-单容器-pod-示例" class="h3"> 2. 单容器 Pod 示例 </a> </li><li> <a href="#3-多容器-pod-sidecar-模式-与数据共享" class="h3"> 3. 多容器 Pod (Sidecar 模式) 与数据共享 </a> </li><li> <a href="#日常操作与调试篇-kubectl" class="h2"> 日常操作与调试篇 (kubectl) </a> </li><li> <a href="#1-核心管理命令" class="h3"> 1. 核心管理命令 </a> </li><li> <a href="#2-状态检查三板斧" class="h3"> 2. 状态检查“三板斧” </a> </li><li> <a href="#3-交互命令" class="h3"> 3. 交互命令 </a> </li><li> <a href="#4-资源组织" class="h3"> 4. 资源组织 </a> </li><li> <a href="#实战排错篇网络问题终极方案" class="h2"> 实战排错篇：网络问题终极方案 </a> </li><li> <a href="#问题现象-imagepullbackoff--errimagepull" class="h3"> 问题现象: ImagePullBackOff / ErrImagePull </a> </li><li> <a href="#方案一推荐-修改-yaml使用国内镜像源" class="h3"> 方案一：(推荐) 修改 YAML，使用国内镜像源 </a> </li><li> <a href="#方案二极端网络环境-本地加载" class="h3"> 方案二：(极端网络环境) 本地加载 </a> </li><li> <a href="#kubernetes-学习周报-2" class="h1"> Kubernetes 学习周报 2 </a> </li><li> <a href="#核心主题从裸砖到自动化建筑---pod-的高级管理" class="h2"> 核心主题：从”裸砖”到”自动化建筑” - Pod 的高级管理 </a> </li><li> <a href="#第一部分环境搭建与镜像管理基础" class="h2"> 第一部分：环境搭建与镜像管理（基础） </a> </li><li> <a href="#1-搭建本地-kubernetes-kind-环境" class="h3"> 1. 搭建本地 Kubernetes (Kind) 环境 </a> </li><li> <a href="#2-镜像管理一劳永逸的镜像预加载sop" class="h2"> 2. 镜像管理：一劳永逸的”镜像预加载”SOP </a> </li><li> <a href="#第二部分核心控制器---deployment" class="h2"> 第二部分：核心控制器 - Deployment </a> </li><li> <a href="#1-为何需要-deployment告别裸pod" class="h3"> 1. 为何需要 Deployment：告别”裸Pod” </a> </li><li> <a href="#2-编写-deployment-yaml" class="h3"> 2. 编写 Deployment YAML </a> </li><li> <a href="#3-核心运维操作" class="h3"> 3. 核心运维操作 </a> </li><li> <a href="#第三部分服务发现---service" class="h2"> 第三部分：服务发现 - Service </a> </li><li> <a href="#1-为何需要-service解决-pod-的动态问题" class="h3"> 1. 为何需要 Service：解决 Pod 的”动态”问题 </a> </li><li> <a href="#2-service-类型与实践" class="h3"> 2. Service 类型与实践 </a> </li><li> <a href="#kubernetes-学习周报-3" class="h1"> Kubernetes 学习周报 3 </a> </li><li> <a href="#核心思想十二因子应用-the-twelve-factor-app" class="h2"> 核心思想：十二因子应用 (The Twelve-Factor App) </a> </li><li> <a href="#一configmap非敏感配置管理" class="h2"> 一、ConfigMap：非敏感配置管理 </a> </li><li> <a href="#1-创建-configmap" class="h3"> 1. 创建 ConfigMap </a> </li><li> <a href="#2-使用-configmap" class="h2"> 2. 使用 ConfigMap </a> </li><li> <a href="#方式一作为环境变量注入-pod" class="h3"> 方式一：作为环境变量注入 Pod </a> </li><li> <a href="#方式二作为文件挂载到-pod" class="h3"> 方式二：作为文件挂载到 Pod </a> </li><li> <a href="#二secret敏感信息管理" class="h2"> 二、Secret：敏感信息管理 </a> </li><li> <a href="#1-创建-secret" class="h3"> 1. 创建 Secret </a> </li><li> <a href="#2-使用-secret" class="h2"> 2. 使用 Secret </a> </li><li> <a href="#三volumepod-的存储卷" class="h2"> 三、Volume：Pod 的存储卷 </a> </li><li> <a href="#1-emptydirpod-内的临时共享存储" class="h3"> 1. emptyDir：Pod 内的临时共享存储 </a> </li><li> <a href="#2-hostpath与节点主机的存储交互" class="h2"> 2. hostPath：与节点主机的存储交互 </a> </li><li> <a href="#突发状况远程失效了" class="h2"> 突发状况：远程失效了 </a> </li> </ul> </div> <!-- Series Navigation --> <div class="toc"> <div class="toc-title">系列文章</div> <ul> <li> <a href="/cs/posts/yunweiseries/zuhui/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary">  我の组会 </a> </li><li> <a href="/cs/posts/yunweiseries/yuancheng/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary">  远程失灵了 </a> </li> </ul> </div> </div> </aside> </div> </div> </main> <footer class="mt-auto bg-bg-secondary border-t border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="flex flex-col md:flex-row items-center justify-between gap-4"> <!-- Copyright --> <div class="text-center md:text-left"> <p class="font-sans text-sm text-text-secondary">
+© 2026 <span class="text-primary font-medium">QwQBiG</span>. All rights reserved.
+</p> <p class="font-sans text-xs text-text-muted mt-1">
+Built with <span class="text-primary">Astro</span> & <span class="text-primary">Tailwind CSS</span> </p> </div> <!-- Social Links --> <div class="flex items-center gap-3"> <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="GitHub"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path> </svg>   </a><a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="Bilibili">  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906l-1.174 1.12zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"></path> </svg>  </a><a href="https://leetcode.cn/u/heuristic-agnesipjp/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="LeetCode">   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.622 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.028c.95-.895 2.542-.878 3.472.038l4.296 4.214c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951.003l-2.476-2.433a.455.455 0 0 0-.642.642l2.476 2.433c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955l-4.296-4.214c-1.67-1.638-4.346-1.642-6.02-.008l-3.867 4.147a4.054 4.054 0 0 0-.925 1.615 4.107 4.107 0 0 0-.096.4 4.213 4.213 0 0 0 .048 2.001 4.436 4.436 0 0 0 .267.773 4.545 4.545 0 0 0 .973 1.391l4.277 4.193c1.336 1.335 3.109 2.069 4.989 2.069 1.879 0 3.653-.734 4.989-2.069l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a6.825 6.825 0 0 1-9.486-.074l-.039-.038-4.277-4.193a3.042 3.042 0 0 1-.653-.936 3.11 3.11 0 0 1-.075-.31 3.216 3.216 0 0 1-.037-1.528 3.061 3.061 0 0 1 .466-1.015l3.854-4.126 4.853-5.192c.179-.192.418-.295.667-.295.249 0 .488.103.667.295l.039.042 5.486 5.682c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951-.003l-4.82-4.996a.455.455 0 0 0-.642.642l4.82 4.996c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955L14.444.438a1.374 1.374 0 0 0-.961-.438z"></path> </svg> </a> </div> </div> </div> <!-- Back to Top Button --> <button id="back-to-top" class="fixed bottom-8 right-8 p-3 rounded-full bg-primary text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-1 z-50" aria-label="返回顶部"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path> </svg> </button> </footer> <script type="module">const o=document.getElementById("back-to-top");function i(){window.scrollY>300?(o?.classList.remove("opacity-0","invisible"),o?.classList.add("opacity-100","visible")):(o?.classList.add("opacity-0","invisible"),o?.classList.remove("opacity-100","visible"))}window.addEventListener("scroll",i);o?.addEventListener("click",()=>{window.scrollTo({top:0,behavior:"smooth"})});i();</script>  <!-- Theme Script --> <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script> </body> </html> <script type="module">const c=document.querySelectorAll('.toc a[href^="#"]'),l=document.querySelectorAll("h2[id], h3[id]");function r(){const t=window.scrollY+100;l.forEach((e,s)=>{const o=e.offsetTop,i=o+e.offsetHeight;t>=o&&t<i&&(c.forEach(n=>n.classList.remove("active")),document.querySelector(`.toc a[href="#${e.id}"]`)?.classList.add("active"))})}window.addEventListener("scroll",r);r();c.forEach(t=>{t.addEventListener("click",e=>{e.preventDefault(),document.querySelector(t.getAttribute("href"))?.scrollIntoView({behavior:"smooth"})})});</script>

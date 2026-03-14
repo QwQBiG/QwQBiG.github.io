@@ -1,0 +1,735 @@
+<!DOCTYPE html><html lang="zh-cn" data-theme="auto" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>STL bitset - 位运算优化 - QwQBiG&#39;s World</title><meta name="description" content="QwQBiG's World - 计算机科学学习笔记"><link rel="canonical" href="https://iqwqi.win/cs/posts/cppseries/stlbitset/"><!-- Open Graph --><meta property="og:title" content="STL bitset - 位运算优化 - QwQBiG's World"><meta property="og:description" content="QwQBiG's World - 计算机科学学习笔记"><meta property="og:type" content="article"><meta property="og:url" content="https://iqwqi.win/cs/posts/cppseries/stlbitset/"><meta property="og:image" content="https://iqwqi.win/avatar.png"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="STL bitset - 位运算优化 - QwQBiG's World"><meta name="twitter:description" content="QwQBiG's World - 计算机科学学习笔记"><meta name="twitter:image" content="https://iqwqi.win/avatar.png"><!-- No index for drafts --><!-- Favicon --><link rel="icon" type="image/png" href="/avatar.png"><!-- Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"><!-- Styles --><link rel="stylesheet" href="/styles/global.css"><link rel="stylesheet" href="/_astro/about.BRswpMxs.css"></head> <body class="bg-bg-primary text-text-primary min-h-screen flex flex-col transition-colors duration-300">  <header class="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex items-center justify-between h-16"> <!-- Logo --> <a href="/" class="flex items-center gap-3 group"> <img src="/avatar.png" alt="QwQBiG" class="w-10 h-10 rounded-full border-2 border-primary/30 group-hover:border-primary transition-colors"> <span class="font-sans font-bold text-xl text-primary hidden sm:block">QwQBiG's World</span> </a> <!-- Desktop Navigation --> <nav class="hidden md:flex items-center gap-1"> <a href="/archives/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> <!-- Right Side --> <div class="flex items-center gap-2"> <!-- Theme Toggle --> <button id="theme-toggle" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="切换主题"> <svg class="w-5 h-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path> </svg> <svg class="w-5 h-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path> </svg> </button> <!-- Mobile Menu Button --> <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="打开菜单"> <svg class="w-6 h-6 menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> </div> </div> <!-- Mobile Navigation --> <div id="mobile-menu" class="md:hidden hidden border-t border-border-color bg-bg-primary"> <nav class="px-4 py-3 space-y-1"> <a href="/archives/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> </div> </header> <script type="module">const c=document.getElementById("theme-toggle"),n=c?.querySelector(".sun-icon"),o=c?.querySelector(".moon-icon");function i(e){e==="dark"?(n?.classList.add("hidden"),o?.classList.remove("hidden")):e==="light"?(n?.classList.remove("hidden"),o?.classList.add("hidden")):window.matchMedia("(prefers-color-scheme: dark)").matches?(n?.classList.add("hidden"),o?.classList.remove("hidden")):(n?.classList.remove("hidden"),o?.classList.add("hidden"))}c?.addEventListener("click",()=>{const e=document.documentElement.getAttribute("data-theme")||"auto",t=["auto","light","dark"],l=t.indexOf(e),s=t[(l+1)%t.length];document.documentElement.setAttribute("data-theme",s),localStorage.setItem("theme",s),i(s)});const m=localStorage.getItem("theme")||"auto";i(m);const d=document.getElementById("mobile-menu-toggle"),a=document.getElementById("mobile-menu"),r=d?.querySelector(".menu-icon"),u=d?.querySelector(".close-icon");d?.addEventListener("click",()=>{a?.classList.toggle("hidden"),r?.classList.toggle("hidden"),u?.classList.toggle("hidden")});</script> <main class="flex-1 py-12"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="grid grid-cols-1 lg:grid-cols-4 gap-8"> <!-- Main Content --> <article class="lg:col-span-3"> <!-- Post Header --> <header class="mb-8"> <div class="flex flex-wrap gap-2 mb-4"> <a href="/cs/series/c++的世界/" class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path> </svg> C++的世界 </a> </div> <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 leading-tight"> STL bitset - 位运算优化 </h1> <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary"> <span class="flex items-center gap-1.5"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> 2026-03-05 </span> <div class="flex flex-wrap gap-2"> <a href="/tags/C++/" class="text-primary hover:text-primary-dark transition-colors">
+#C++ </a><a href="/tags/STL/" class="text-primary hover:text-primary-dark transition-colors">
+#STL </a><a href="/tags/cpp/" class="text-primary hover:text-primary-dark transition-colors">
+#cpp </a><a href="/tags/编程语言/" class="text-primary hover:text-primary-dark transition-colors">
+#编程语言 </a><a href="/tags/算法竞赛/" class="text-primary hover:text-primary-dark transition-colors">
+#算法竞赛 </a><a href="/tags/C++11/" class="text-primary hover:text-primary-dark transition-colors">
+#C++11 </a> </div> </div> </header> <!-- Post Content --> <div class="prose prose-lg max-w-none"> <h2 id="bitset---位运算优化">bitset - 位运算优化</h2>
+<p><code>std::bitset</code> 是一个固定大小的位集合，提供了高效的位操作功能。在算法竞赛中，bitset 是进行<strong>位运算优化</strong>的强大工具，特别适合处理<strong>状态压缩</strong>和<strong>位掩码</strong>等问题。</p>
+<h3 id="竞赛中的核心考点">竞赛中的核心考点</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>操作</th><th>时间复杂度</th><th>竞赛要点</th></tr></thead><tbody><tr><td>位设置 (set)</td><td>O(1)</td><td>设置特定位为 1</td></tr><tr><td>位清除 (reset)</td><td>O(1)</td><td>设置特定位为 0</td></tr><tr><td>位翻转 (flip)</td><td>O(1)</td><td>翻转特定位</td></tr><tr><td>位测试 (test)</td><td>O(1)</td><td>测试特定位是否为 1</td></tr><tr><td>位运算 (&#x26;, , ^, ~)</td><td>O(n/w)</td><td>按位运算，n 是位数，w 是机器字长</td></tr><tr><td>计数 (count)</td><td>O(n/w)</td><td>统计置位的位数</td></tr><tr><td>查找 (find_first, find_next)</td><td>O(n/w)</td><td>查找置位的位</td></tr></tbody></table>
+<hr>
+<h2 id="一基本用法">一、基本用法</h2>
+<h3 id="11-初始化">1.1 初始化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    // 默认构造（全 0）</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> b1;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 整数构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#A6E22E"> b2</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">42</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 00101010</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 字符串构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#A6E22E"> b3</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"10101010"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 拷贝构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#A6E22E"> b4</span><span style="color:#F8F8F2">(b2);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 移动构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#A6E22E"> b5</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E">move</span><span style="color:#F8F8F2">(b4));</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="12-基本操作">1.2 基本操作</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> b;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 设置位</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">     // 第0位设为1</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">2</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 第2位设为1</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">      // 所有位设为1</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 清除位</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">reset</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">   // 第0位设为0</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">reset</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">    // 所有位设为0</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 翻转位</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">flip</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">    // 翻转第1位</span></span>
+<span class="line"><span style="color:#F8F8F2">    b.</span><span style="color:#A6E22E">flip</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">     // 翻转所有位</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 测试位</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#F8F8F2"> is_set </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#F8F8F2"> any_set </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">any</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">    // 是否有位为1</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#F8F8F2"> all_set </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">all</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">    // 是否所有位为1</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#F8F8F2"> none_set </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">none</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">  // 是否所有位为0</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 计数</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> count </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">  // 置位的位数</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 大小</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    size_t</span><span style="color:#F8F8F2"> size </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">  // 总位数</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 转换</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    unsigned</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#F8F8F2"> ul </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">to_ulong</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    unsigned</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#F8F8F2"> ull </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">to_ullong</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    string s </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">to_string</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="二位运算">二、位运算</h2>
+<h3 id="21-基本位运算">2.1 基本位运算</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#A6E22E"> a</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"1010"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 10</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#A6E22E"> b</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"1100"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 12</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 按位与</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> c </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> b;</span><span style="color:#88846F">  // 1000 (8)</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 按位或</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> d </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">|</span><span style="color:#F8F8F2"> b;</span><span style="color:#88846F">  // 1110 (14)</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 按位异或</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> e </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">^</span><span style="color:#F8F8F2"> b;</span><span style="color:#88846F">  // 0110 (6)</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 按位取反</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> f </span><span style="color:#F92672">=</span><span style="color:#F92672"> ~</span><span style="color:#F8F8F2">a;</span><span style="color:#88846F">     // 0101 (5)</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 左移</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> g </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span><span style="color:#88846F">  // 0100 (4)</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 右移</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">4</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> h </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">>></span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span><span style="color:#88846F">  // 0101 (5)</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "a: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "b: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> b </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "a &#x26; b: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> c </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "a | b: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> d </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "a ^ b: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> e </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "~a: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> f </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "a &#x3C;&#x3C; 1: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> g </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "a >> 1: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> h </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="22-复合赋值运算">2.2 复合赋值运算</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">a</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"10101010"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">b</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"11001100"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 复合赋值</span></span>
+<span class="line"><span style="color:#F8F8F2">a </span><span style="color:#F92672">&#x26;=</span><span style="color:#F8F8F2"> b;</span><span style="color:#88846F">  // 等价于 a = a &#x26; b</span></span>
+<span class="line"><span style="color:#F8F8F2">a </span><span style="color:#F92672">|=</span><span style="color:#F8F8F2"> b;</span><span style="color:#88846F">  // 等价于 a = a | b</span></span>
+<span class="line"><span style="color:#F8F8F2">a </span><span style="color:#F92672">^=</span><span style="color:#F8F8F2"> b;</span><span style="color:#88846F">  // 等价于 a = a ^ b</span></span>
+<span class="line"><span style="color:#F8F8F2">a </span><span style="color:#F92672">&#x3C;&#x3C;=</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">;</span><span style="color:#88846F"> // 等价于 a = a &#x3C;&#x3C; 2</span></span>
+<span class="line"><span style="color:#F8F8F2">a </span><span style="color:#F92672">>>=</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">;</span><span style="color:#88846F"> // 等价于 a = a >> 2</span></span></code></pre>
+<hr>
+<h2 id="三竞赛实战应用">三、竞赛实战应用</h2>
+<h3 id="31-状态压缩">3.1 状态压缩</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 子集枚举</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">void</span><span style="color:#A6E22E"> enumerate_subsets</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> n</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; mask </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n); mask</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(mask);</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Mask "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> ": "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">        for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (bits.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(i))</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F8F8F2">                cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 集合操作</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">set_union</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> a</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">|</span><span style="color:#F8F8F2"> b;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">set_intersection</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> a</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> b;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">set_difference</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> a</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> a </span><span style="color:#F92672">&#x26;</span><span style="color:#F92672"> ~</span><span style="color:#F8F8F2">b;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="32-位掩码优化">3.2 位掩码优化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 位掩码表示方向</span></span>
+<span class="line"><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2"> UP </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2"> DOWN </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2"> LEFT </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2"> RIGHT </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 3</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 检查是否可以移动</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> can_move</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> directions</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> dir</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> (directions </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> dir) </span><span style="color:#F92672">!=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 添加方向</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> add_direction</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> directions</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> dir</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> directions </span><span style="color:#F92672">|</span><span style="color:#F8F8F2"> dir;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 移除方向</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> remove_direction</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> directions</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> dir</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> directions </span><span style="color:#F92672">&#x26;</span><span style="color:#F92672"> ~</span><span style="color:#F8F8F2">dir;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="33-快速统计">3.3 快速统计</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 统计二进制中 1 的个数</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> count_ones</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 检查是否是 2 的幂</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> is_power_of_two</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (x </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找最低位的 1</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> find_lowest_set_bit</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">_Find_first</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找最高位的 1</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> find_highest_set_bit</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> pos </span><span style="color:#F92672">=</span><span style="color:#F92672"> -</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 31</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">>=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">--</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (bits.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(i))</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> i;</span></span>
+<span class="line"><span style="color:#F92672">            break</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> pos;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="34-动态规划优化">3.4 动态规划优化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 旅行商问题 (TSP) 状态压缩 DP</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> tsp</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">>></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> dist</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> dist.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> full_mask </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n) </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">>></span><span style="color:#A6E22E"> dp</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n, </span><span style="color:#A6E22E">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">>(n, INT_MAX));</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 初始化：从各个城市出发</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        dp[</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> i][i] </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 状态转移</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; mask </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n); mask</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> u </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; u </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; u</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">(mask </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> u)) </span><span style="color:#F92672">||</span><span style="color:#F8F8F2"> dp[mask][u] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> INT_MAX)</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F92672">                continue</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F92672">            for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> v </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; v </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; v</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F92672">                if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">(mask </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> v)) </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> dist[u][v] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> INT_MAX)</span></span>
+<span class="line"><span style="color:#F8F8F2">                {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">                    int</span><span style="color:#F8F8F2"> new_mask </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">|</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> v);</span></span>
+<span class="line"><span style="color:#F92672">                    if</span><span style="color:#F8F8F2"> (dp[new_mask][v] </span><span style="color:#F92672">></span><span style="color:#F8F8F2"> dp[mask][u] </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> dist[u][v])</span></span>
+<span class="line"><span style="color:#F8F8F2">                    {</span></span>
+<span class="line"><span style="color:#F8F8F2">                        dp[new_mask][v] </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> dp[mask][u] </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> dist[u][v];</span></span>
+<span class="line"><span style="color:#F8F8F2">                    }</span></span>
+<span class="line"><span style="color:#F8F8F2">                }</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 找最小路径</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> result </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> INT_MAX;</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (dp[full_mask][i] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> INT_MAX)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            result </span><span style="color:#F92672">=</span><span style="color:#A6E22E"> min</span><span style="color:#F8F8F2">(result, dp[full_mask][i] </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> dist[i][</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">]);</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="35-位图">3.5 位图</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 位图实现</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">BitMap</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">private:</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">1000000</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> bits;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">public:</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    void</span><span style="color:#A6E22E"> set</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        bits.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    void</span><span style="color:#A6E22E"> clear</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        bits.</span><span style="color:#A6E22E">reset</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#A6E22E"> test</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#A6E22E"> count</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 用于快速去重和存在性检查</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">void</span><span style="color:#A6E22E"> deduplicate</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> nums</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">1000000</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> seen;</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> x : nums)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">seen.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(x))</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            seen.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">            result.</span><span style="color:#A6E22E">push_back</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F8F8F2">    nums.</span><span style="color:#A6E22E">swap</span><span style="color:#F8F8F2">(result);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="四c11-现代特性">四、C++11 现代特性</h2>
+<h3 id="41-位操作函数">4.1 位操作函数</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F92672">></span><span style="color:#A6E22E"> b</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"10101010"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 查找第一个置位的位</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    size_t</span><span style="color:#F8F8F2"> first </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">_Find_first</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "第一个置位的位: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> first </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 查找下一个置位的位</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    size_t</span><span style="color:#F8F8F2"> next </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> b.</span><span style="color:#A6E22E">_Find_next</span><span style="color:#F8F8F2">(first);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "下一个置位的位: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> next </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="42-位掩码与枚举">4.2 位掩码与枚举</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11 强类型枚举</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">enum</span><span style="color:#66D9EF;font-style:italic"> class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#F8F8F2"> : </span><span style="color:#66D9EF;font-style:italic">int</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    UP </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    DOWN </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    LEFT </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    RIGHT </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#AE81FF"> 3</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 重载位运算符</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#F92672"> operator</span><span style="color:#F8F8F2">|(</span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#FD971F;font-style:italic"> a</span><span style="color:#F8F8F2">, </span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#FD971F;font-style:italic"> b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F92672"> static_cast&#x3C;</span><span style="color:#F8F8F2">Direction</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(</span><span style="color:#F92672">static_cast&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(a) </span><span style="color:#F92672">|</span><span style="color:#F92672"> static_cast&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(b));</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#F92672"> operator</span><span style="color:#F8F8F2">&#x26;(</span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#FD971F;font-style:italic"> a</span><span style="color:#F8F8F2">, </span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#FD971F;font-style:italic"> b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F92672"> static_cast&#x3C;</span><span style="color:#F8F8F2">Direction</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(</span><span style="color:#F92672">static_cast&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(a) </span><span style="color:#F92672">&#x26;</span><span style="color:#F92672"> static_cast&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(b));</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    Direction dir </span><span style="color:#F92672">=</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#F8F8F2">::UP </span><span style="color:#F92672">|</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#F8F8F2">::RIGHT;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#F8F8F2"> can_go_up </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> (dir </span><span style="color:#F92672">&#x26;</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Direction</span><span style="color:#F8F8F2">::UP) </span><span style="color:#F92672">!=</span><span style="color:#F92672"> static_cast&#x3C;</span><span style="color:#F8F8F2">Direction</span><span style="color:#F92672">></span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Can go up: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> can_go_up </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="五性能优化">五、性能优化</h2>
+<h3 id="51-位操作优化">5.1 位操作优化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 错误示范：使用循环进行位操作</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> count_ones_slow</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> count </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    while</span><span style="color:#F8F8F2"> (x)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        count </span><span style="color:#F92672">+=</span><span style="color:#F8F8F2"> x </span><span style="color:#F92672">&#x26;</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        x </span><span style="color:#F92672">>>=</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> count;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 正确做法：使用 bitset</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> count_ones_fast</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F8F8F2">>(x).</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 更高效：使用内置函数</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> count_ones_builtin</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> __builtin_popcount</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="52-内存优化">5.2 内存优化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 错误示范：使用 vector&#x3C;bool></span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">flags</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1000000</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 虽然节省空间，但访问慢</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 正确做法：使用 bitset</span></span>
+<span class="line"><span style="color:#F8F8F2">bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">1000000</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> flags;</span><span style="color:#88846F">  // 更高效的位操作</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 或者使用 bitset 数组处理更大的范围</span></span>
+<span class="line"><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2"> MAX_SIZE </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 10000000</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2"> BITSET_SIZE </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1000000</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">BITSET_SIZE</span><span style="color:#F8F8F2">>> </span><span style="color:#A6E22E">flags</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">MAX_SIZE</span><span style="color:#F92672"> /</span><span> </span><span style="color:#A6E22E;text-decoration:underline">BITSET_SIZE</span><span style="color:#F92672"> +</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">void</span><span style="color:#A6E22E"> set_bit</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> idx </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> x </span><span style="color:#F92672">/</span><span style="color:#F8F8F2"> BITSET_SIZE;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> offset </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> x </span><span style="color:#F92672">%</span><span style="color:#F8F8F2"> BITSET_SIZE;</span></span>
+<span class="line"><span style="color:#F8F8F2">    flags[idx].</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(offset);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> test_bit</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> idx </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> x </span><span style="color:#F92672">/</span><span style="color:#F8F8F2"> BITSET_SIZE;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> offset </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> x </span><span style="color:#F92672">%</span><span style="color:#F8F8F2"> BITSET_SIZE;</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> flags[idx].</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(offset);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="53-运算优化">5.3 运算优化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 利用位运算的短路特性</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> is_subset</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F8F8F2">> </span><span style="color:#FD971F;font-style:italic">a</span><span style="color:#F8F8F2">, </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F8F8F2">> </span><span style="color:#FD971F;font-style:italic">b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#88846F">    // 检查 a 是否是 b 的子集</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> (a </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> b) </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> a;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 快速计算交集大小</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> intersection_size</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#FD971F;font-style:italic">a</span><span style="color:#F8F8F2">, </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#FD971F;font-style:italic">b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> (a </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> b).</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 快速计算并集大小</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> union_size</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#FD971F;font-style:italic">a</span><span style="color:#F8F8F2">, </span><span style="color:#A6E22E;text-decoration:underline">bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">> </span><span style="color:#FD971F;font-style:italic">b</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> (a </span><span style="color:#F92672">|</span><span style="color:#F8F8F2"> b).</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="六常见错误与注意事项">六、常见错误与注意事项</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>错误</th><th>说明</th><th>解决方案</th></tr></thead><tbody><tr><td>越界访问</td><td>访问超出 bitset 大小的位</td><td>确保位索引在有效范围内</td></tr><tr><td>位序理解错误</td><td>低位在前还是高位在前</td><td>注意 bitset 的位序（从右到左）</td></tr><tr><td>性能瓶颈</td><td>对于大位数的 bitset 操作</td><td>考虑分块处理或使用其他数据结构</td></tr><tr><td>内存使用</td><td>过大的 bitset 导致栈溢出</td><td>使用动态分配或分块处理</td></tr><tr><td>类型转换错误</td><td>转换为整数时溢出</td><td>确保 bitset 大小不超过目标类型</td></tr><tr><td>位运算优先级</td><td>位运算优先级低于比较运算符</td><td>使用括号确保运算顺序</td></tr></tbody></table>
+<hr>
+<h2 id="七c11-完整竞赛模板">七、C++11 完整竞赛模板</h2>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 子集枚举</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">void</span><span style="color:#A6E22E"> enumerate_subsets</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> n</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; mask </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n); mask</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(mask);</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Mask "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> ": "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">        for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (bits.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(i))</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F8F8F2">                cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 快速统计二进制中 1 的个数</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> count_ones</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F8F8F2">>(x).</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 检查是否是 2 的幂</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> is_power_of_two</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (x </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F8F8F2">>(x).</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找最低位的 1</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> find_lowest_set_bit</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (x </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F92672"> -</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">32</span><span style="color:#F92672">></span><span style="color:#A6E22E"> bits</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">_Find_first</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 位图类</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">BitMap</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">private:</span></span>
+<span class="line"><span style="color:#F8F8F2">    bitset</span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">1000000</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> bits;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">public:</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    void</span><span style="color:#A6E22E"> set</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        bits.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    void</span><span style="color:#A6E22E"> clear</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        bits.</span><span style="color:#A6E22E">reset</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#A6E22E"> test</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> x</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(x);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#A6E22E"> count</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F8F8F2"> bits.</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 旅行商问题 (TSP) 状态压缩 DP</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> tsp</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">>></span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> dist</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> dist.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> full_mask </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n) </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">>></span><span style="color:#A6E22E"> dp</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n, </span><span style="color:#A6E22E">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">>(n, INT_MAX));</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        dp[</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> i][i] </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; mask </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> n); mask</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> u </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; u </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; u</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">(mask </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> u)) </span><span style="color:#F92672">||</span><span style="color:#F8F8F2"> dp[mask][u] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> INT_MAX)</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F92672">                continue</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F92672">            for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> v </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; v </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; v</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F92672">                if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">(mask </span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> v)) </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> dist[u][v] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> INT_MAX)</span></span>
+<span class="line"><span style="color:#F8F8F2">                {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">                    int</span><span style="color:#F8F8F2"> new_mask </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> mask </span><span style="color:#F92672">|</span><span style="color:#F8F8F2"> (</span><span style="color:#AE81FF">1</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> v);</span></span>
+<span class="line"><span style="color:#F92672">                    if</span><span style="color:#F8F8F2"> (dp[new_mask][v] </span><span style="color:#F92672">></span><span style="color:#F8F8F2"> dp[mask][u] </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> dist[u][v])</span></span>
+<span class="line"><span style="color:#F8F8F2">                    {</span></span>
+<span class="line"><span style="color:#F8F8F2">                        dp[new_mask][v] </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> dp[mask][u] </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> dist[u][v];</span></span>
+<span class="line"><span style="color:#F8F8F2">                    }</span></span>
+<span class="line"><span style="color:#F8F8F2">                }</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> result </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> INT_MAX;</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (dp[full_mask][i] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> INT_MAX)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            result </span><span style="color:#F92672">=</span><span style="color:#A6E22E"> min</span><span style="color:#F8F8F2">(result, dp[full_mask][i] </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> dist[i][</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">]);</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 测试子集枚举</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "子集枚举 (n=3): "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#A6E22E">    enumerate_subsets</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">3</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 测试位统计</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> x </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 42</span><span style="color:#F8F8F2">;</span><span style="color:#88846F">  // 101010</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">二进制 "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#A6E22E"> bitset</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#AE81FF">8</span><span style="color:#F8F8F2">>(x) </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " 中 1 的个数: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#A6E22E"> count_ones</span><span style="color:#F8F8F2">(x) </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "是否是 2 的幂: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#A6E22E"> is_power_of_two</span><span style="color:#F8F8F2">(x) </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "最低位的 1 的位置: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#A6E22E"> find_lowest_set_bit</span><span style="color:#F8F8F2">(x) </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 测试位图</span></span>
+<span class="line"><span style="color:#F8F8F2">    BitMap bm;</span></span>
+<span class="line"><span style="color:#F8F8F2">    bm.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    bm.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">20</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    bm.</span><span style="color:#A6E22E">set</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">30</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">位图中 1 的个数: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> bm.</span><span style="color:#A6E22E">count</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "测试位 10: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> bm.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "测试位 15: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> bm.</span><span style="color:#A6E22E">test</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">15</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 测试 TSP</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">>></span><span style="color:#F8F8F2"> dist </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">15</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">20</span><span style="color:#F8F8F2">},</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">35</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">25</span><span style="color:#F8F8F2">},</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span><span style="color:#AE81FF">15</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">35</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">30</span><span style="color:#F8F8F2">},</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span><span style="color:#AE81FF">20</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">25</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">30</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#F8F8F2">    };</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> tsp_result </span><span style="color:#F92672">=</span><span style="color:#A6E22E"> tsp</span><span style="color:#F8F8F2">(dist);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">TSP 最短路径: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> tsp_result </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="总结竞赛要点">总结：竞赛要点</h2>
+<ol>
+<li><strong>位操作效率</strong>：bitset 提供高效的位操作，比手动位运算更简洁</li>
+<li><strong>状态压缩</strong>：适用于处理子集、掩码等状态压缩问题</li>
+<li><strong>内存节省</strong>：bitset 比 bool 数组更节省内存</li>
+<li><strong>位运算优化</strong>：利用位运算的并行性提高计算效率</li>
+<li><strong>集合操作</strong>：快速进行集合的并、交、差运算</li>
+<li><strong>动态规划</strong>：在 TSP 等问题中用于状态表示</li>
+<li><strong>位图应用</strong>：用于快速去重和存在性检查</li>
+<li><strong>现代 C++</strong>：使用 C++11 强类型枚举和位运算符重载</li>
+<li><strong>性能优化</strong>：结合内置函数和分块处理提高性能</li>
+<li><strong>实战应用</strong>：子集枚举、位掩码、状态压缩 DP 等</li>
+</ol>
+<p>bitset 是算法竞赛中进行位运算优化的强大工具，掌握它的使用技巧能让你在处理状态压缩和位操作问题时更加得心应手。</p> </div> <!-- Post Navigation --> <nav class="mt-12 pt-8 border-t border-border-color"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> <div></div> <a href="/cs/posts/cppseries/fanweiforxunhuan/" class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"> <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span> <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1"> 范围for循环 </div> </a> </div> </nav> </article> <!-- Sidebar --> <aside class="lg:col-span-1"> <div class="sticky top-24 space-y-6"> <!-- TOC --> <div class="toc"> <div class="toc-title">目录</div> <ul> <li> <a href="#bitset---位运算优化" class="h2"> bitset - 位运算优化 </a> </li><li> <a href="#竞赛中的核心考点" class="h3"> 竞赛中的核心考点 </a> </li><li> <a href="#一基本用法" class="h2"> 一、基本用法 </a> </li><li> <a href="#11-初始化" class="h3"> 1.1 初始化 </a> </li><li> <a href="#12-基本操作" class="h3"> 1.2 基本操作 </a> </li><li> <a href="#二位运算" class="h2"> 二、位运算 </a> </li><li> <a href="#21-基本位运算" class="h3"> 2.1 基本位运算 </a> </li><li> <a href="#22-复合赋值运算" class="h3"> 2.2 复合赋值运算 </a> </li><li> <a href="#三竞赛实战应用" class="h2"> 三、竞赛实战应用 </a> </li><li> <a href="#31-状态压缩" class="h3"> 3.1 状态压缩 </a> </li><li> <a href="#32-位掩码优化" class="h3"> 3.2 位掩码优化 </a> </li><li> <a href="#33-快速统计" class="h3"> 3.3 快速统计 </a> </li><li> <a href="#34-动态规划优化" class="h3"> 3.4 动态规划优化 </a> </li><li> <a href="#35-位图" class="h3"> 3.5 位图 </a> </li><li> <a href="#四c11-现代特性" class="h2"> 四、C++11 现代特性 </a> </li><li> <a href="#41-位操作函数" class="h3"> 4.1 位操作函数 </a> </li><li> <a href="#42-位掩码与枚举" class="h3"> 4.2 位掩码与枚举 </a> </li><li> <a href="#五性能优化" class="h2"> 五、性能优化 </a> </li><li> <a href="#51-位操作优化" class="h3"> 5.1 位操作优化 </a> </li><li> <a href="#52-内存优化" class="h3"> 5.2 内存优化 </a> </li><li> <a href="#53-运算优化" class="h3"> 5.3 运算优化 </a> </li><li> <a href="#六常见错误与注意事项" class="h2"> 六、常见错误与注意事项 </a> </li><li> <a href="#七c11-完整竞赛模板" class="h2"> 七、C++11 完整竞赛模板 </a> </li><li> <a href="#总结竞赛要点" class="h2"> 总结：竞赛要点 </a> </li> </ul> </div> <!-- Series Navigation --> <div class="toc"> <div class="toc-title">系列文章</div> <ul> <li> <a href="/cs/posts/cppseries/fanweiforxunhuan/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary">  范围for循环 </a> </li><li> <a href="/cs/posts/cppseries/stlvector/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 1.  STL vector </a> </li><li> <a href="/cs/posts/cppseries/cppbasics/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 1.  C++ 基础知识与常用库函数 </a> </li><li> <a href="/cs/posts/cppseries/stlmapset/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 2.  STL map/set - 有序容器 </a> </li><li> <a href="/cs/posts/cppseries/stlunordered/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 3.  STL unordered_map/unordered_set - 哈希容器 </a> </li><li> <a href="/cs/posts/cppseries/stlpriorityqueue/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 4.  STL priority_queue - 优先队列 </a> </li><li> <a href="/cs/posts/cppseries/stlstring/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 5.  STL string - 字符串处理 </a> </li><li> <a href="/cs/posts/cppseries/stlqueue/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 6.  STL queue - 队列与 BFS </a> </li><li> <a href="/cs/posts/cppseries/stldeque/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 7.  STL deque - 双端队列与滑动窗口 </a> </li><li> <a href="/cs/posts/cppseries/stlstack/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 8.  STL stack - 栈与 DFS </a> </li><li> <a href="/cs/posts/cppseries/lanqiaocupbasic/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 10.  蓝桥杯 C++ 基础与常用内容 </a> </li> </ul> </div> </div> </aside> </div> </div> </main> <footer class="mt-auto bg-bg-secondary border-t border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="flex flex-col md:flex-row items-center justify-between gap-4"> <!-- Copyright --> <div class="text-center md:text-left"> <p class="font-sans text-sm text-text-secondary">
+© 2026 <span class="text-primary font-medium">QwQBiG</span>. All rights reserved.
+</p> <p class="font-sans text-xs text-text-muted mt-1">
+Built with <span class="text-primary">Astro</span> & <span class="text-primary">Tailwind CSS</span> </p> </div> <!-- Social Links --> <div class="flex items-center gap-3"> <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="GitHub"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path> </svg>   </a><a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="Bilibili">  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906l-1.174 1.12zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"></path> </svg>  </a><a href="https://leetcode.cn/u/heuristic-agnesipjp/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="LeetCode">   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.622 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.028c.95-.895 2.542-.878 3.472.038l4.296 4.214c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951.003l-2.476-2.433a.455.455 0 0 0-.642.642l2.476 2.433c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955l-4.296-4.214c-1.67-1.638-4.346-1.642-6.02-.008l-3.867 4.147a4.054 4.054 0 0 0-.925 1.615 4.107 4.107 0 0 0-.096.4 4.213 4.213 0 0 0 .048 2.001 4.436 4.436 0 0 0 .267.773 4.545 4.545 0 0 0 .973 1.391l4.277 4.193c1.336 1.335 3.109 2.069 4.989 2.069 1.879 0 3.653-.734 4.989-2.069l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a6.825 6.825 0 0 1-9.486-.074l-.039-.038-4.277-4.193a3.042 3.042 0 0 1-.653-.936 3.11 3.11 0 0 1-.075-.31 3.216 3.216 0 0 1-.037-1.528 3.061 3.061 0 0 1 .466-1.015l3.854-4.126 4.853-5.192c.179-.192.418-.295.667-.295.249 0 .488.103.667.295l.039.042 5.486 5.682c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951-.003l-4.82-4.996a.455.455 0 0 0-.642.642l4.82 4.996c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955L14.444.438a1.374 1.374 0 0 0-.961-.438z"></path> </svg> </a> </div> </div> </div> <!-- Back to Top Button --> <button id="back-to-top" class="fixed bottom-8 right-8 p-3 rounded-full bg-primary text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-1 z-50" aria-label="返回顶部"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path> </svg> </button> </footer> <script type="module">const o=document.getElementById("back-to-top");function i(){window.scrollY>300?(o?.classList.remove("opacity-0","invisible"),o?.classList.add("opacity-100","visible")):(o?.classList.add("opacity-0","invisible"),o?.classList.remove("opacity-100","visible"))}window.addEventListener("scroll",i);o?.addEventListener("click",()=>{window.scrollTo({top:0,behavior:"smooth"})});i();</script>  <!-- Theme Script --> <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script> </body> </html> <script type="module">const c=document.querySelectorAll('.toc a[href^="#"]'),l=document.querySelectorAll("h2[id], h3[id]");function r(){const t=window.scrollY+100;l.forEach((e,s)=>{const o=e.offsetTop,i=o+e.offsetHeight;t>=o&&t<i&&(c.forEach(n=>n.classList.remove("active")),document.querySelector(`.toc a[href="#${e.id}"]`)?.classList.add("active"))})}window.addEventListener("scroll",r);r();c.forEach(t=>{t.addEventListener("click",e=>{e.preventDefault(),document.querySelector(t.getAttribute("href"))?.scrollIntoView({behavior:"smooth"})})});</script>

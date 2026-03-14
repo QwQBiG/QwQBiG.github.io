@@ -1,0 +1,228 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+import { formatDate } from '../../utils/date';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('cs');
+  
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const { title, description, date, tags, series, draft } = post.data;
+
+// Get related posts (same series or similar tags)
+const allPosts = await getCollection('cs', ({ data }) => !data.draft);
+const currentSlug = post.slug;
+
+// Find prev/next posts in the same series
+let seriesPosts: typeof allPosts = [];
+if (series && series.length > 0) {
+  seriesPosts = allPosts.filter(p => 
+    p.data.series?.some(s => series.includes(s)) && 
+    p.slug !== currentSlug &&
+    !p.slug.endsWith('_index')
+  ).sort((a, b) => a.data.weight - b.data.weight || a.data.date.getTime() - b.data.date.getTime());
+}
+
+const currentIndex = seriesPosts.findIndex(p => p.slug === currentSlug);
+const prevPost = currentIndex > 0 ? seriesPosts[currentIndex - 1] : null;
+const nextPost = currentIndex < seriesPosts.length - 1 ? seriesPosts[currentIndex + 1] : null;
+
+const pageTitle = `${title} - QwQBiG's World`;
+---
+
+<Layout 
+  title={pageTitle} 
+  description={description}
+  type="article"
+  noIndex={draft}
+>
+  <Header />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Main Content -->
+        <article class="lg:col-span-3">
+          <!-- Post Header -->
+          <header class="mb-8">
+            {series && series.length > 0 && (
+              <div class="flex flex-wrap gap-2 mb-4">
+                {series.map((s) => (
+                  <a 
+                    href={`/cs/series/${s.toLowerCase().replace(/\s+/g, '-')}/`}
+                    class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    </svg>
+                    {s}
+                  </a>
+                ))}
+              </div>
+            )}
+            
+            <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 leading-tight">
+              {title}
+            </h1>
+            
+            <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                {formatDate(date)}
+              </span>
+              
+              {tags && tags.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <a 
+                      href={`/tags/${tag}/`}
+                      class="text-primary hover:text-primary-dark transition-colors"
+                    >
+                      #{tag}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </header>
+          
+          <!-- Post Content -->
+          <div class="prose prose-lg max-w-none">
+            <Content />
+          </div>
+          
+          <!-- Post Navigation -->
+          {(prevPost || nextPost) && (
+            <nav class="mt-12 pt-8 border-t border-border-color">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {prevPost ? (
+                  <a 
+                    href={`/cs/${prevPost.slug}/`}
+                    class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
+                  >
+                    <span class="text-xs text-text-muted uppercase tracking-wide">上一篇</span>
+                    <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1">
+                      {prevPost.data.title}
+                    </div>
+                  </a>
+                ) : (
+                  <div></div>
+                )}
+                
+                {nextPost ? (
+                  <a 
+                    href={`/cs/${nextPost.slug}/`}
+                    class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"
+                  >
+                    <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span>
+                    <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1">
+                      {nextPost.data.title}
+                    </div>
+                  </a>
+                ) : (
+                  <div></div>
+                )}
+              </div>
+            </nav>
+          )}
+        </article>
+        
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1">
+          <div class="sticky top-24 space-y-6">
+            <!-- TOC -->
+            {headings.length > 0 && (
+              <div class="toc">
+                <div class="toc-title">目录</div>
+                <ul>
+                  {headings.filter(h => h.depth <= 3).map((heading) => (
+                    <li>
+                      <a 
+                        href={`#${heading.slug}`}
+                        class={`h${heading.depth}`}
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            <!-- Series Navigation -->
+            {seriesPosts.length > 0 && (
+              <div class="toc">
+                <div class="toc-title">系列文章</div>
+                <ul>
+                  {seriesPosts.map((seriesPost) => (
+                    <li>
+                      <a 
+                        href={`/cs/${seriesPost.slug}/`}
+                        class:list={[
+                          'block py-1 text-sm transition-colors',
+                          seriesPost.slug === currentSlug 
+                            ? 'text-primary font-medium' 
+                            : 'text-text-secondary hover:text-primary'
+                        ]}
+                      >
+                        {seriesPost.data.weight > 0 && `${seriesPost.data.weight}. `}
+                        {seriesPost.data.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<script>
+  // Highlight current TOC item on scroll
+  const tocLinks = document.querySelectorAll('.toc a[href^="#"]');
+  const headings = document.querySelectorAll('h2[id], h3[id]');
+  
+  function highlightTOC() {
+    const scrollPos = window.scrollY + 100;
+    
+    headings.forEach((heading, index) => {
+      const top = heading.offsetTop;
+      const bottom = top + heading.offsetHeight;
+      
+      if (scrollPos >= top && scrollPos < bottom) {
+        tocLinks.forEach(link => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.toc a[href="#${heading.id}"]`);
+        activeLink?.classList.add('active');
+      }
+    });
+  }
+  
+  window.addEventListener('scroll', highlightTOC);
+  highlightTOC();
+  
+  // Smooth scroll for TOC links
+  tocLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      target?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>

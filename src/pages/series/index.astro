@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SeriesCard from '../../components/SeriesCard.astro';
+import { getCollection } from 'astro:content';
+
+// Get all CS posts
+const csPosts = await getCollection('cs', ({ data }) => !data.draft);
+
+// Get series entries (_index.md files)
+const seriesEntries = csPosts.filter(post => 
+  post.slug.endsWith('/_index') || post.slug.endsWith('_index')
+);
+
+// Get regular posts
+const regularPosts = csPosts.filter(post => 
+  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
+);
+
+// Build series info
+const allSeries = seriesEntries.map(entry => {
+  const seriesName = entry.data.title;
+  const seriesSlug = entry.slug.replace('/_index', '').replace('_index', '');
+  const seriesPosts = regularPosts.filter(post => 
+    post.data.series?.includes(seriesName)
+  );
+  
+  return {
+    title: entry.data.title,
+    description: entry.data.description,
+    slug: seriesSlug,
+    postCount: seriesPosts.length,
+    pin: entry.data.pin,
+  };
+}).sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0));
+
+const pageTitle = "合集 - QwQBiG's World";
+const pageDescription = "按合集浏览文章";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Header />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+          📚 合集
+        </h1>
+        <p class="font-sans text-lg text-text-secondary">
+          共 {allSeries.length} 个合集
+        </p>
+      </div>
+
+      <!-- Series Grid -->
+      {allSeries.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {allSeries.map((series) => (
+            <SeriesCard
+              title={series.title}
+              description={series.description}
+              slug={series.slug}
+              postCount={series.postCount}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-text-secondary">暂无合集</p>
+        </div>
+      )}
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

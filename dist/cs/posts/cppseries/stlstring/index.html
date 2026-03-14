@@ -1,0 +1,810 @@
+<!DOCTYPE html><html lang="zh-cn" data-theme="auto" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>STL string - 字符串处理 - QwQBiG&#39;s World</title><meta name="description" content="QwQBiG's World - 计算机科学学习笔记"><link rel="canonical" href="https://iqwqi.win/cs/posts/cppseries/stlstring/"><!-- Open Graph --><meta property="og:title" content="STL string - 字符串处理 - QwQBiG's World"><meta property="og:description" content="QwQBiG's World - 计算机科学学习笔记"><meta property="og:type" content="article"><meta property="og:url" content="https://iqwqi.win/cs/posts/cppseries/stlstring/"><meta property="og:image" content="https://iqwqi.win/avatar.png"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="STL string - 字符串处理 - QwQBiG's World"><meta name="twitter:description" content="QwQBiG's World - 计算机科学学习笔记"><meta name="twitter:image" content="https://iqwqi.win/avatar.png"><!-- No index for drafts --><!-- Favicon --><link rel="icon" type="image/png" href="/avatar.png"><!-- Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"><!-- Styles --><link rel="stylesheet" href="/styles/global.css"><link rel="stylesheet" href="/_astro/about.BRswpMxs.css"></head> <body class="bg-bg-primary text-text-primary min-h-screen flex flex-col transition-colors duration-300">  <header class="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex items-center justify-between h-16"> <!-- Logo --> <a href="/" class="flex items-center gap-3 group"> <img src="/avatar.png" alt="QwQBiG" class="w-10 h-10 rounded-full border-2 border-primary/30 group-hover:border-primary transition-colors"> <span class="font-sans font-bold text-xl text-primary hidden sm:block">QwQBiG's World</span> </a> <!-- Desktop Navigation --> <nav class="hidden md:flex items-center gap-1"> <a href="/archives/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> <!-- Right Side --> <div class="flex items-center gap-2"> <!-- Theme Toggle --> <button id="theme-toggle" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="切换主题"> <svg class="w-5 h-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path> </svg> <svg class="w-5 h-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path> </svg> </button> <!-- Mobile Menu Button --> <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="打开菜单"> <svg class="w-6 h-6 menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> </div> </div> <!-- Mobile Navigation --> <div id="mobile-menu" class="md:hidden hidden border-t border-border-color bg-bg-primary"> <nav class="px-4 py-3 space-y-1"> <a href="/archives/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> </div> </header> <script type="module">const c=document.getElementById("theme-toggle"),n=c?.querySelector(".sun-icon"),o=c?.querySelector(".moon-icon");function i(e){e==="dark"?(n?.classList.add("hidden"),o?.classList.remove("hidden")):e==="light"?(n?.classList.remove("hidden"),o?.classList.add("hidden")):window.matchMedia("(prefers-color-scheme: dark)").matches?(n?.classList.add("hidden"),o?.classList.remove("hidden")):(n?.classList.remove("hidden"),o?.classList.add("hidden"))}c?.addEventListener("click",()=>{const e=document.documentElement.getAttribute("data-theme")||"auto",t=["auto","light","dark"],l=t.indexOf(e),s=t[(l+1)%t.length];document.documentElement.setAttribute("data-theme",s),localStorage.setItem("theme",s),i(s)});const m=localStorage.getItem("theme")||"auto";i(m);const d=document.getElementById("mobile-menu-toggle"),a=document.getElementById("mobile-menu"),r=d?.querySelector(".menu-icon"),u=d?.querySelector(".close-icon");d?.addEventListener("click",()=>{a?.classList.toggle("hidden"),r?.classList.toggle("hidden"),u?.classList.toggle("hidden")});</script> <main class="flex-1 py-12"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="grid grid-cols-1 lg:grid-cols-4 gap-8"> <!-- Main Content --> <article class="lg:col-span-3"> <!-- Post Header --> <header class="mb-8"> <div class="flex flex-wrap gap-2 mb-4"> <a href="/cs/series/c++的世界/" class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path> </svg> C++的世界 </a> </div> <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 leading-tight"> STL string - 字符串处理 </h1> <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary"> <span class="flex items-center gap-1.5"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> 2026-03-05 </span> <div class="flex flex-wrap gap-2"> <a href="/tags/C++/" class="text-primary hover:text-primary-dark transition-colors">
+#C++ </a><a href="/tags/STL/" class="text-primary hover:text-primary-dark transition-colors">
+#STL </a><a href="/tags/cpp/" class="text-primary hover:text-primary-dark transition-colors">
+#cpp </a><a href="/tags/编程语言/" class="text-primary hover:text-primary-dark transition-colors">
+#编程语言 </a><a href="/tags/算法竞赛/" class="text-primary hover:text-primary-dark transition-colors">
+#算法竞赛 </a><a href="/tags/C++11/" class="text-primary hover:text-primary-dark transition-colors">
+#C++11 </a> </div> </div> </header> <!-- Post Content --> <div class="prose prose-lg max-w-none"> <h2 id="string---字符串处理">string - 字符串处理</h2>
+<p><code>std::string</code> 是 C++ 中最常用的字符串类，提供了丰富的字符串操作方法。在算法竞赛中，字符串处理是一个常见的考点，掌握 string 的使用技巧能大大提升解题效率。</p>
+<h3 id="竞赛中的核心考点">竞赛中的核心考点</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>操作</th><th>时间复杂度</th><th>竞赛要点</th></tr></thead><tbody><tr><td>访问单个字符</td><td>O(1)</td><td>随机访问</td></tr><tr><td>字符串拼接</td><td>O(n)</td><td>注意内存分配</td></tr><tr><td>子串提取</td><td>O(n)</td><td>提取子字符串</td></tr><tr><td>查找</td><td>O(n)</td><td>查找子串或字符</td></tr><tr><td>替换</td><td>O(n)</td><td>替换子串</td></tr><tr><td>插入/删除</td><td>O(n)</td><td>注意性能影响</td></tr><tr><td>比较</td><td>O(n)</td><td>字典序比较</td></tr></tbody></table>
+<hr>
+<h2 id="一基本用法">一、基本用法</h2>
+<h3 id="11-初始化">1.1 初始化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    // 默认构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    string s1;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 字符串字面量构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    string s2 </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "hello"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s3</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"world"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 重复构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s4</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'a'</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // "aaaaa"</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 从 C 风格字符串构造</span></span>
+<span class="line"><span style="color:#F92672">    const</span><span style="color:#66D9EF;font-style:italic"> char</span><span style="color:#F92672">*</span><span style="color:#F8F8F2"> c_str </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "test"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s5</span><span style="color:#F8F8F2">(c_str);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 从其他 string 构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s6</span><span style="color:#F8F8F2">(s2);</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s7</span><span style="color:#F8F8F2">(s2, </span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">3</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 从索引1开始，长度3: "ell"</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 从迭代器构造</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s8</span><span style="color:#F8F8F2">(s2.</span><span style="color:#A6E22E">begin</span><span style="color:#F8F8F2">(), s2.</span><span style="color:#A6E22E">end</span><span style="color:#F8F8F2">());</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="12-基本操作">1.2 基本操作</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "hello"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 访问字符</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    char</span><span style="color:#F8F8F2"> c </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s[</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">];</span><span style="color:#88846F">  // 'h'</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    char</span><span style="color:#F8F8F2"> d </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">at</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 'e'（带边界检查）</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 修改字符</span></span>
+<span class="line"><span style="color:#F8F8F2">    s[</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> 'H'</span><span style="color:#F8F8F2">;</span><span style="color:#88846F">  // "Hello"</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 长度</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> len </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">  // 5</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> length </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">length</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">  // 5</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 判空</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    bool</span><span style="color:#F8F8F2"> is_empty </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">empty</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">  // false</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 清空</span></span>
+<span class="line"><span style="color:#F8F8F2">    s.</span><span style="color:#A6E22E">clear</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 容量</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> cap </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">capacity</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    s.</span><span style="color:#A6E22E">reserve</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 预分配空间</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="二常用方法">二、常用方法</h2>
+<h3 id="21-字符串拼接">2.1 字符串拼接</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F8F8F2">string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "hello"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 方法1: 使用 +=</span></span>
+<span class="line"><span style="color:#F8F8F2">s </span><span style="color:#F92672">+=</span><span style="color:#E6DB74"> " world"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 方法2: 使用 append</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">append</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"!"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">append</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">3</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'?'</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 添加3个问号</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 方法3: 使用 + 运算符</span></span>
+<span class="line"><span style="color:#F8F8F2">string s1 </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "hello"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">string s2 </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "world"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">string s3 </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s1 </span><span style="color:#F92672">+</span><span style="color:#E6DB74"> " "</span><span style="color:#F92672"> +</span><span style="color:#F8F8F2"> s2;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 方法4: 使用 insert</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">insert</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">end</span><span style="color:#F8F8F2">(), </span><span style="color:#E6DB74">'!'</span><span style="color:#F8F8F2">);</span></span></code></pre>
+<h3 id="22-子串操作">2.2 子串操作</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F8F8F2">string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "Hello, world!"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// substr(pos, length)</span></span>
+<span class="line"><span style="color:#F8F8F2">string sub1 </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">substr</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">7</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // "world"</span></span>
+<span class="line"><span style="color:#F8F8F2">string sub2 </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">substr</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">7</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">     // "world!"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找子串</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">size_t</span><span style="color:#F8F8F2"> pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"world"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 7</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> (pos </span><span style="color:#F92672">!=</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">::npos)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Found at position: "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> pos </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找字符</span></span>
+<span class="line"><span style="color:#F8F8F2">pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'o'</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 4</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 从指定位置开始查找</span></span>
+<span class="line"><span style="color:#F8F8F2">pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'o'</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 8</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 反向查找</span></span>
+<span class="line"><span style="color:#F8F8F2">pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">rfind</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'o'</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 8</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找第一个符合条件的字符</span></span>
+<span class="line"><span style="color:#F8F8F2">pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find_first_of</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"aeiou"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 1 ('e')</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 查找第一个不符合条件的字符</span></span>
+<span class="line"><span style="color:#F8F8F2">pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find_first_not_of</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"Helo "</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 5 (',')</span></span></code></pre>
+<h3 id="23-替换操作">2.3 替换操作</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F8F8F2">string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "Hello, world!"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// replace(pos, length, replacement)</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">replace</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">7</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"C++"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // "Hello, C++!"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 使用迭代器范围替换</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">replace</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">begin</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">+</span><span style="color:#AE81FF"> 7</span><span style="color:#F8F8F2">, s.</span><span style="color:#A6E22E">end</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"programming"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 替换所有匹配的子串</span></span>
+<span class="line"><span style="color:#F8F8F2">string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "ababab"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">size_t</span><span style="color:#F8F8F2"> pos </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">while</span><span style="color:#F8F8F2"> ((pos </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"ab"</span><span style="color:#F8F8F2">, pos)) </span><span style="color:#F92672">!=</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">::npos)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    s.</span><span style="color:#A6E22E">replace</span><span style="color:#F8F8F2">(pos, </span><span style="color:#AE81FF">2</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"CD"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    pos </span><span style="color:#F92672">+=</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#88846F">// s 变为 "CDCDCD"</span></span></code></pre>
+<h3 id="24-插入和删除">2.4 插入和删除</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F8F8F2">string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "Hello"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 插入字符串</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">insert</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">" world"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // "Hello world"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 插入字符</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">insert</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">begin</span><span style="color:#F8F8F2">(), </span><span style="color:#E6DB74">'!'</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // "!Hello world"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 删除字符</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">erase</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">begin</span><span style="color:#F8F8F2">());</span><span style="color:#88846F">  // "Hello world"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 删除子串</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">erase</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">6</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // "Hello"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 删除迭代器范围</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">erase</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">begin</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">+</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">, s.</span><span style="color:#A6E22E">end</span><span style="color:#F8F8F2">());</span><span style="color:#88846F">  // "He"</span></span></code></pre>
+<hr>
+<h2 id="三字符串比较">三、字符串比较</h2>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F8F8F2">string s1 </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "apple"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">string s2 </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "banana"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 运算符比较</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> (s1 </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> s2)</span><span style="color:#88846F">  // 字典序比较</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "s1 comes before s2"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// compare 方法</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> result </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s1.</span><span style="color:#A6E22E">compare</span><span style="color:#F8F8F2">(s2);</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> (result </span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">) cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "s1 &#x3C; s2"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F92672">else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> (result </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">) cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "s1 == s2"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F92672">else</span><span style="color:#F8F8F2"> cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "s1 > s2"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 比较子串</span></span>
+<span class="line"><span style="color:#F8F8F2">result </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s1.</span><span style="color:#A6E22E">compare</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">3</span><span style="color:#F8F8F2">, s2, </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">3</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">  // 比较前3个字符</span></span></code></pre>
+<hr>
+<h2 id="四c11-现代特性">四、C++11 现代特性</h2>
+<h3 id="41-字符串前缀和后缀检查">4.1 字符串前缀和后缀检查</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11: 检查字符串前缀</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> starts_with</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> prefix</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">>=</span><span style="color:#F8F8F2"> prefix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">compare</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, prefix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), prefix) </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11: 检查字符前缀</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> starts_with</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">char</span><span style="color:#FD971F;font-style:italic"> c</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F92672"> !</span><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">empty</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> s[</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> c;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11: 检查字符串后缀</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> ends_with</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> suffix</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">>=</span><span style="color:#F8F8F2"> suffix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">compare</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">-</span><span style="color:#F8F8F2"> suffix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), suffix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), suffix) </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11: 检查字符后缀</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> ends_with</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">char</span><span style="color:#FD971F;font-style:italic"> c</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F92672"> !</span><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">empty</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">back</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> c;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "Hello, world!"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">starts_with</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">"Hello"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Starts with Hello"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">starts_with</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">'H'</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Starts with H"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">ends_with</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">"!"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Ends with !"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">ends_with</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">"world!"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Ends with world!"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="42-字符串包含检查">4.2 字符串包含检查</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11: 检查字符串包含</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> contains</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> substr</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(substr) </span><span style="color:#F92672">!=</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">::npos;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++11: 检查字符包含</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> contains</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">char</span><span style="color:#FD971F;font-style:italic"> c</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(c) </span><span style="color:#F92672">!=</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">::npos;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    string s </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "Hello, world!"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">contains</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">"world"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Contains 'world'"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">contains</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">'o'</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Contains 'o'"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="五字符串输入读取">五、字符串输入读取</h2>
+<h3 id="核心要点">核心要点</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>场景</th><th>方法</th><th>关键代码</th></tr></thead><tbody><tr><td>单个单词</td><td><code>cin >> s</code></td><td>遇空格停止</td></tr><tr><td>整行读取</td><td><code>getline(cin, s)</code></td><td>包含空格</td></tr><tr><td>数字+字符串</td><td>先 <code>cin >> n</code> 再 <code>getline</code></td><td><strong>必须</strong> <code>cin.ignore()</code></td></tr></tbody></table>
+<h3 id="关键代码示例">关键代码示例</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 混合输入：数字 + 字符串（重点！）</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> n;</span></span>
+<span class="line"><span style="color:#F8F8F2">cin </span><span style="color:#F92672">>></span><span style="color:#F8F8F2"> n;</span></span>
+<span class="line"><span style="color:#F8F8F2">cin.</span><span style="color:#A6E22E">ignore</span><span style="color:#F8F8F2">();</span><span style="color:#88846F">        // 清除换行符，否则 getline 会读空行</span></span>
+<span class="line"><span style="color:#F8F8F2">string s;</span></span>
+<span class="line"><span style="color:#A6E22E">getline</span><span style="color:#F8F8F2">(cin, s);</span><span style="color:#88846F">     // 正确读取整行</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 读取多行</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> n; cin </span><span style="color:#F92672">>></span><span style="color:#F8F8F2"> n; cin.</span><span style="color:#A6E22E">ignore</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F92672">while</span><span style="color:#F8F8F2"> (n</span><span style="color:#F92672">--</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    string line;</span></span>
+<span class="line"><span style="color:#A6E22E">    getline</span><span style="color:#F8F8F2">(cin, line);</span></span>
+<span class="line"><span style="color:#88846F">    // 处理 line</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 读取到文件结束</span></span>
+<span class="line"><span style="color:#F8F8F2">string line;</span></span>
+<span class="line"><span style="color:#F92672">while</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">getline</span><span style="color:#F8F8F2">(cin, line))</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#88846F">    // 处理 line</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="六竞赛实战技巧">六、竞赛实战技巧</h2>
+<h3 id="51-字符串反转">5.1 字符串反转</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#A6E22E"> reverse_string</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#A6E22E">    reverse</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">begin</span><span style="color:#F8F8F2">(), s.</span><span style="color:#A6E22E">end</span><span style="color:#F8F8F2">());</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 原地反转</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">void</span><span style="color:#A6E22E"> reverse_inplace</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">/</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#A6E22E">        swap</span><span style="color:#F8F8F2">(s[i], s[n </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> -</span><span style="color:#F8F8F2"> i]);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="52-字符串分割">5.2 字符串分割</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">split</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">char</span><span style="color:#FD971F;font-style:italic"> delimiter</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">string</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> tokens;</span></span>
+<span class="line"><span style="color:#F8F8F2">    string token;</span></span>
+<span class="line"><span style="color:#F8F8F2">    istringstream </span><span style="color:#A6E22E">tokenStream</span><span style="color:#F8F8F2">(s);</span></span>
+<span class="line"><span style="color:#F92672">    while</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">getline</span><span style="color:#F8F8F2">(tokenStream, token, delimiter))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        tokens.</span><span style="color:#A6E22E">push_back</span><span style="color:#F8F8F2">(token);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> tokens;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 分割多个空格</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">split_whitespace</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">string</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> tokens;</span></span>
+<span class="line"><span style="color:#F8F8F2">    string token;</span></span>
+<span class="line"><span style="color:#F8F8F2">    istringstream </span><span style="color:#A6E22E">tokenStream</span><span style="color:#F8F8F2">(s);</span></span>
+<span class="line"><span style="color:#F92672">    while</span><span style="color:#F8F8F2"> (tokenStream </span><span style="color:#F92672">>></span><span style="color:#F8F8F2"> token)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        tokens.</span><span style="color:#A6E22E">push_back</span><span style="color:#F8F8F2">(token);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> tokens;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="53-字符串转数字">5.3 字符串转数字</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 字符串转整数</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#A6E22E"> str_to_int</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> stoi</span><span style="color:#F8F8F2">(s);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 字符串转长整型</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">long</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#A6E22E"> str_to_ll</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> stoll</span><span style="color:#F8F8F2">(s);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 字符串转浮点数</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">double</span><span style="color:#A6E22E"> str_to_double</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> stod</span><span style="color:#F8F8F2">(s);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 数字转字符串</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#A6E22E"> int_to_str</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> n</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> to_string</span><span style="color:#F8F8F2">(n);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#A6E22E"> ll_to_str</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">long</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#FD971F;font-style:italic"> n</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> to_string</span><span style="color:#F8F8F2">(n);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="54-回文串判断">5.4 回文串判断</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> is_palindrome</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">/</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (s[i] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> s[n </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672"> -</span><span style="color:#F8F8F2"> i])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 使用双指针</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> is_palindrome2</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> left </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">, right </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    while</span><span style="color:#F8F8F2"> (left </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> right)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (s[left] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> s[right])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">        left</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        right</span><span style="color:#F92672">--</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="55-子串查找">5.5 子串查找</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// KMP 算法（高效查找子串）</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">compute_lps</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> pattern</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> pattern.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#A6E22E"> lps</span><span style="color:#F8F8F2">(n, </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">, len </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; )</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (pattern[i] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> pattern[len])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            lps[i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#F92672"> ++</span><span style="color:#F8F8F2">len;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> (len </span><span style="color:#F92672">></span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            len </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> lps[len </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            lps[i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> lps;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">kmp_search</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> text</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> pattern</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> text.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), m </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> pattern.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (m </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> lps </span><span style="color:#F92672">=</span><span style="color:#A6E22E"> compute_lps</span><span style="color:#F8F8F2">(pattern);</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">, j </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; )</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (pattern[j] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> text[i])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            j</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (j </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> m)</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F8F8F2">                result.</span><span style="color:#A6E22E">push_back</span><span style="color:#F8F8F2">(i </span><span style="color:#F92672">-</span><span style="color:#F8F8F2"> j);</span></span>
+<span class="line"><span style="color:#F8F8F2">                j </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> lps[j </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> (j </span><span style="color:#F92672">></span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            j </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> lps[j </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="六性能优化">六、性能优化</h2>
+<h3 id="61-预分配空间">6.1 预分配空间</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 错误示范：频繁扩容</span></span>
+<span class="line"><span style="color:#F8F8F2">string s;</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672">e</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    s </span><span style="color:#F92672">+=</span><span style="color:#E6DB74"> 'a'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 正确做法：预分配空间</span></span>
+<span class="line"><span style="color:#F8F8F2">string s;</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">reserve</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F92672">e</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672">e</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    s </span><span style="color:#F92672">+=</span><span style="color:#E6DB74"> 'a'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="62-避免不必要的拷贝">6.2 避免不必要的拷贝</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 错误示范：不必要的拷贝</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#A6E22E"> process_string</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span><span style="color:#88846F">  // 值传递，会拷贝</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#88846F">    // 处理 s</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 正确做法：使用引用</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#A6E22E"> process_string</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span><span style="color:#88846F">  // 常量引用，无拷贝</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    string result </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s;</span></span>
+<span class="line"><span style="color:#88846F">    // 处理 result</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 使用移动语义</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#A6E22E"> create_large_string</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    string </span><span style="color:#A6E22E">s</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F92672">e</span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'a'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s;</span><span style="color:#88846F">  // 移动语义，无拷贝</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="63-字符串拼接优化">6.3 字符串拼接优化</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#88846F">// 错误示范：多次拼接导致多次拷贝</span></span>
+<span class="line"><span style="color:#F8F8F2">string s;</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF"> 1000</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    s </span><span style="color:#F92672">+=</span><span style="color:#A6E22E"> to_string</span><span style="color:#F8F8F2">(i);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 正确做法：使用 ostringstream</span></span>
+<span class="line"><span style="color:#F8F8F2">ostringstream oss;</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF"> 1000</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    oss </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> i;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#F8F8F2">string s </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> oss.</span><span style="color:#A6E22E">str</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 或者使用 reserve</span></span>
+<span class="line"><span style="color:#F8F8F2">string s;</span></span>
+<span class="line"><span style="color:#F8F8F2">s.</span><span style="color:#A6E22E">reserve</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">10000</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF"> 1000</span><span style="color:#F8F8F2">; i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    s </span><span style="color:#F92672">+=</span><span style="color:#A6E22E"> to_string</span><span style="color:#F8F8F2">(i);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="七常见错误与注意事项">七、常见错误与注意事项</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>错误</th><th>说明</th><th>解决方案</th></tr></thead><tbody><tr><td>越界访问</td><td>访问超出字符串长度的索引</td><td>使用 <code>at()</code> 或先检查长度</td></tr><tr><td>字符串拼接性能</td><td>频繁拼接导致多次内存分配</td><td>使用 <code>reserve()</code> 或 <code>ostringstream</code></td></tr><tr><td>比较字符串和字面量</td><td>直接比较可能导致意外结果</td><td>确保类型匹配</td></tr><tr><td>字符编码问题</td><td>处理非 ASCII 字符时出错</td><td>注意编码格式，使用 wstring 处理宽字符</td></tr><tr><td>内存使用过高</td><td>存储过长的字符串</td><td>考虑使用 string_view 或流式处理</td></tr><tr><td>查找返回值处理</td><td>未检查 <code>string::npos</code></td><td>总是检查查找结果</td></tr></tbody></table>
+<hr>
+<h2 id="八c11-完整竞赛模板">八、C++11 完整竞赛模板</h2>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;bits/stdc++.h></span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> endl</span><span style="color:#E6DB74"> '</span><span style="color:#AE81FF">\n</span><span style="color:#E6DB74">'</span></span>
+<span class="line"><span style="color:#F92672">#define</span><span style="color:#A6E22E"> int</span><span style="color:#66D9EF;font-style:italic"> long</span><span style="color:#66D9EF;font-style:italic"> long</span></span>
+<span class="line"><span style="color:#F92672">using</span><span style="color:#66D9EF;font-style:italic"> namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 字符串分割</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">split</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">char</span><span style="color:#FD971F;font-style:italic"> delimiter</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">string</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> tokens;</span></span>
+<span class="line"><span style="color:#F8F8F2">    string token;</span></span>
+<span class="line"><span style="color:#F8F8F2">    istringstream </span><span style="color:#A6E22E">tokenStream</span><span style="color:#F8F8F2">(s);</span></span>
+<span class="line"><span style="color:#F92672">    while</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">getline</span><span style="color:#F8F8F2">(tokenStream, token, delimiter))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        tokens.</span><span style="color:#A6E22E">push_back</span><span style="color:#F8F8F2">(token);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> tokens;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 检查字符串前缀</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> starts_with</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> prefix</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">>=</span><span style="color:#F8F8F2"> prefix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">compare</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, prefix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), prefix) </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 检查字符串后缀</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> ends_with</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> suffix</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">>=</span><span style="color:#F8F8F2"> suffix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">compare</span><span style="color:#F8F8F2">(s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">-</span><span style="color:#F8F8F2"> suffix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), suffix.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), suffix) </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 检查字符串包含</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> contains</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> substr</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">(substr) </span><span style="color:#F92672">!=</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F8F8F2">::npos;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 回文串判断</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">bool</span><span style="color:#A6E22E"> is_palindrome</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> s</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> left </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">, right </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> s.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    while</span><span style="color:#F8F8F2"> (left </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> right)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (s[left] </span><span style="color:#F92672">!=</span><span style="color:#F8F8F2"> s[right])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">        left</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        right</span><span style="color:#F92672">--</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// KMP 算法</span></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">vector</span><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2">> </span><span style="color:#A6E22E">kmp_search</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> text</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">const</span><span> </span><span style="color:#A6E22E;text-decoration:underline">string</span><span style="color:#F92672">&#x26;</span><span style="color:#FD971F;font-style:italic"> pattern</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    int</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> text.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(), m </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> pattern.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (m </span><span style="color:#F92672">==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#A6E22E"> lps</span><span style="color:#F8F8F2">(m, </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">, len </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> m; )</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (pattern[i] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> pattern[len])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            lps[i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#F92672"> ++</span><span style="color:#F8F8F2">len;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> (len </span><span style="color:#F92672">></span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            len </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> lps[len </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            lps[i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">, j </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> n; )</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (pattern[j] </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> text[i])</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            j</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (j </span><span style="color:#F92672">==</span><span style="color:#F8F8F2"> m)</span></span>
+<span class="line"><span style="color:#F8F8F2">            {</span></span>
+<span class="line"><span style="color:#F8F8F2">                result.</span><span style="color:#A6E22E">push_back</span><span style="color:#F8F8F2">(i </span><span style="color:#F92672">-</span><span style="color:#F8F8F2"> j);</span></span>
+<span class="line"><span style="color:#F8F8F2">                j </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> lps[j </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> (j </span><span style="color:#F92672">></span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            j </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> lps[j </span><span style="color:#F92672">-</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">];</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        else</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> result;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">signed</span><span style="color:#A6E22E"> main</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">ios</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">sync_with_stdio</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cin.</span><span style="color:#A6E22E">tie</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">nullptr</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 读取字符串</span></span>
+<span class="line"><span style="color:#F8F8F2">    string s;</span></span>
+<span class="line"><span style="color:#A6E22E">    getline</span><span style="color:#F8F8F2">(cin, s);</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 分割</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2">string</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> tokens </span><span style="color:#F92672">=</span><span style="color:#A6E22E"> split</span><span style="color:#F8F8F2">(s, </span><span style="color:#E6DB74">' '</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">const</span><span style="color:#F8F8F2"> string</span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> token : tokens)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> token </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // 检查回文</span></span>
+<span class="line"><span style="color:#F8F8F2">    string palindrome_candidate </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "racecar"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">is_palindrome</span><span style="color:#F8F8F2">(palindrome_candidate))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> palindrome_candidate </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " is a palindrome"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // KMP 查找</span></span>
+<span class="line"><span style="color:#F8F8F2">    string text </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "ABABDABACDABABCABAB"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    string pattern </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "ABABCABAB"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> positions </span><span style="color:#F92672">=</span><span style="color:#A6E22E"> kmp_search</span><span style="color:#F8F8F2">(text, pattern);</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Pattern found at positions: "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> pos : positions)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> pos </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#88846F">    // C++11 字符串检查</span></span>
+<span class="line"><span style="color:#F8F8F2">    string test </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "Hello, C++11!"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">starts_with</span><span style="color:#F8F8F2">(test, </span><span style="color:#E6DB74">"Hello"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Starts with Hello"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">ends_with</span><span style="color:#F8F8F2">(test, </span><span style="color:#E6DB74">"!"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Ends with !"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">contains</span><span style="color:#F8F8F2">(test, </span><span style="color:#E6DB74">"C++"</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Contains 'C++'"</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">    </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<hr>
+<h2 id="总结竞赛要点">总结：竞赛要点</h2>
+<ol>
+<li><strong>基本操作</strong>：掌握字符串的基本操作，如访问、修改、拼接、查找等</li>
+<li><strong>性能优化</strong>：使用 <code>reserve()</code> 预分配空间，避免频繁拼接</li>
+<li><strong>现代 C++11</strong>：使用 auto 类型推导、范围 for 循环、lambda 表达式和自定义字符串检查函数</li>
+<li><strong>实战技巧</strong>：字符串分割、反转、回文判断、KMP 算法等</li>
+<li><strong>类型转换</strong>：字符串与数字之间的转换</li>
+<li><strong>内存管理</strong>：避免不必要的拷贝，使用引用和移动语义</li>
+<li><strong>边界处理</strong>：注意字符串索引的边界检查</li>
+<li><strong>编码问题</strong>：处理特殊字符和编码格式</li>
+</ol>
+<p>string 是算法竞赛中最基础的工具之一，掌握它的使用技巧能让你在处理字符串相关问题时更加得心应手。</p> </div> <!-- Post Navigation --> <nav class="mt-12 pt-8 border-t border-border-color"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> <div></div> <a href="/cs/posts/cppseries/fanweiforxunhuan/" class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"> <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span> <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1"> 范围for循环 </div> </a> </div> </nav> </article> <!-- Sidebar --> <aside class="lg:col-span-1"> <div class="sticky top-24 space-y-6"> <!-- TOC --> <div class="toc"> <div class="toc-title">目录</div> <ul> <li> <a href="#string---字符串处理" class="h2"> string - 字符串处理 </a> </li><li> <a href="#竞赛中的核心考点" class="h3"> 竞赛中的核心考点 </a> </li><li> <a href="#一基本用法" class="h2"> 一、基本用法 </a> </li><li> <a href="#11-初始化" class="h3"> 1.1 初始化 </a> </li><li> <a href="#12-基本操作" class="h3"> 1.2 基本操作 </a> </li><li> <a href="#二常用方法" class="h2"> 二、常用方法 </a> </li><li> <a href="#21-字符串拼接" class="h3"> 2.1 字符串拼接 </a> </li><li> <a href="#22-子串操作" class="h3"> 2.2 子串操作 </a> </li><li> <a href="#23-替换操作" class="h3"> 2.3 替换操作 </a> </li><li> <a href="#24-插入和删除" class="h3"> 2.4 插入和删除 </a> </li><li> <a href="#三字符串比较" class="h2"> 三、字符串比较 </a> </li><li> <a href="#四c11-现代特性" class="h2"> 四、C++11 现代特性 </a> </li><li> <a href="#41-字符串前缀和后缀检查" class="h3"> 4.1 字符串前缀和后缀检查 </a> </li><li> <a href="#42-字符串包含检查" class="h3"> 4.2 字符串包含检查 </a> </li><li> <a href="#五字符串输入读取" class="h2"> 五、字符串输入读取 </a> </li><li> <a href="#核心要点" class="h3"> 核心要点 </a> </li><li> <a href="#关键代码示例" class="h3"> 关键代码示例 </a> </li><li> <a href="#六竞赛实战技巧" class="h2"> 六、竞赛实战技巧 </a> </li><li> <a href="#51-字符串反转" class="h3"> 5.1 字符串反转 </a> </li><li> <a href="#52-字符串分割" class="h3"> 5.2 字符串分割 </a> </li><li> <a href="#53-字符串转数字" class="h3"> 5.3 字符串转数字 </a> </li><li> <a href="#54-回文串判断" class="h3"> 5.4 回文串判断 </a> </li><li> <a href="#55-子串查找" class="h3"> 5.5 子串查找 </a> </li><li> <a href="#六性能优化" class="h2"> 六、性能优化 </a> </li><li> <a href="#61-预分配空间" class="h3"> 6.1 预分配空间 </a> </li><li> <a href="#62-避免不必要的拷贝" class="h3"> 6.2 避免不必要的拷贝 </a> </li><li> <a href="#63-字符串拼接优化" class="h3"> 6.3 字符串拼接优化 </a> </li><li> <a href="#七常见错误与注意事项" class="h2"> 七、常见错误与注意事项 </a> </li><li> <a href="#八c11-完整竞赛模板" class="h2"> 八、C++11 完整竞赛模板 </a> </li><li> <a href="#总结竞赛要点" class="h2"> 总结：竞赛要点 </a> </li> </ul> </div> <!-- Series Navigation --> <div class="toc"> <div class="toc-title">系列文章</div> <ul> <li> <a href="/cs/posts/cppseries/fanweiforxunhuan/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary">  范围for循环 </a> </li><li> <a href="/cs/posts/cppseries/stlvector/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 1.  STL vector </a> </li><li> <a href="/cs/posts/cppseries/cppbasics/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 1.  C++ 基础知识与常用库函数 </a> </li><li> <a href="/cs/posts/cppseries/stlmapset/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 2.  STL map/set - 有序容器 </a> </li><li> <a href="/cs/posts/cppseries/stlunordered/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 3.  STL unordered_map/unordered_set - 哈希容器 </a> </li><li> <a href="/cs/posts/cppseries/stlpriorityqueue/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 4.  STL priority_queue - 优先队列 </a> </li><li> <a href="/cs/posts/cppseries/stlqueue/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 6.  STL queue - 队列与 BFS </a> </li><li> <a href="/cs/posts/cppseries/stldeque/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 7.  STL deque - 双端队列与滑动窗口 </a> </li><li> <a href="/cs/posts/cppseries/stlstack/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 8.  STL stack - 栈与 DFS </a> </li><li> <a href="/cs/posts/cppseries/stlbitset/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 9.  STL bitset - 位运算优化 </a> </li><li> <a href="/cs/posts/cppseries/lanqiaocupbasic/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 10.  蓝桥杯 C++ 基础与常用内容 </a> </li> </ul> </div> </div> </aside> </div> </div> </main> <footer class="mt-auto bg-bg-secondary border-t border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="flex flex-col md:flex-row items-center justify-between gap-4"> <!-- Copyright --> <div class="text-center md:text-left"> <p class="font-sans text-sm text-text-secondary">
+© 2026 <span class="text-primary font-medium">QwQBiG</span>. All rights reserved.
+</p> <p class="font-sans text-xs text-text-muted mt-1">
+Built with <span class="text-primary">Astro</span> & <span class="text-primary">Tailwind CSS</span> </p> </div> <!-- Social Links --> <div class="flex items-center gap-3"> <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="GitHub"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path> </svg>   </a><a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="Bilibili">  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906l-1.174 1.12zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"></path> </svg>  </a><a href="https://leetcode.cn/u/heuristic-agnesipjp/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="LeetCode">   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.622 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.028c.95-.895 2.542-.878 3.472.038l4.296 4.214c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951.003l-2.476-2.433a.455.455 0 0 0-.642.642l2.476 2.433c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955l-4.296-4.214c-1.67-1.638-4.346-1.642-6.02-.008l-3.867 4.147a4.054 4.054 0 0 0-.925 1.615 4.107 4.107 0 0 0-.096.4 4.213 4.213 0 0 0 .048 2.001 4.436 4.436 0 0 0 .267.773 4.545 4.545 0 0 0 .973 1.391l4.277 4.193c1.336 1.335 3.109 2.069 4.989 2.069 1.879 0 3.653-.734 4.989-2.069l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a6.825 6.825 0 0 1-9.486-.074l-.039-.038-4.277-4.193a3.042 3.042 0 0 1-.653-.936 3.11 3.11 0 0 1-.075-.31 3.216 3.216 0 0 1-.037-1.528 3.061 3.061 0 0 1 .466-1.015l3.854-4.126 4.853-5.192c.179-.192.418-.295.667-.295.249 0 .488.103.667.295l.039.042 5.486 5.682c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951-.003l-4.82-4.996a.455.455 0 0 0-.642.642l4.82 4.996c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955L14.444.438a1.374 1.374 0 0 0-.961-.438z"></path> </svg> </a> </div> </div> </div> <!-- Back to Top Button --> <button id="back-to-top" class="fixed bottom-8 right-8 p-3 rounded-full bg-primary text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-1 z-50" aria-label="返回顶部"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path> </svg> </button> </footer> <script type="module">const o=document.getElementById("back-to-top");function i(){window.scrollY>300?(o?.classList.remove("opacity-0","invisible"),o?.classList.add("opacity-100","visible")):(o?.classList.add("opacity-0","invisible"),o?.classList.remove("opacity-100","visible"))}window.addEventListener("scroll",i);o?.addEventListener("click",()=>{window.scrollTo({top:0,behavior:"smooth"})});i();</script>  <!-- Theme Script --> <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script> </body> </html> <script type="module">const c=document.querySelectorAll('.toc a[href^="#"]'),l=document.querySelectorAll("h2[id], h3[id]");function r(){const t=window.scrollY+100;l.forEach((e,s)=>{const o=e.offsetTop,i=o+e.offsetHeight;t>=o&&t<i&&(c.forEach(n=>n.classList.remove("active")),document.querySelector(`.toc a[href="#${e.id}"]`)?.classList.add("active"))})}window.addEventListener("scroll",r);r();c.forEach(t=>{t.addEventListener("click",e=>{e.preventDefault(),document.querySelector(t.getAttribute("href"))?.scrollIntoView({behavior:"smooth"})})});</script>

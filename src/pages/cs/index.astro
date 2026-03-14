@@ -1,0 +1,109 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import SeriesCard from '../../components/SeriesCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('cs', ({ data }) => !data.draft);
+
+// Get series (index pages)
+const seriesEntries = posts.filter(post => 
+  post.slug.endsWith('/_index') || post.slug.endsWith('_index')
+);
+
+// Get regular posts
+const regularPosts = posts.filter(post => 
+  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
+);
+
+// Sort posts by date
+const sortedPosts = regularPosts.sort((a, b) => 
+  b.data.date.getTime() - a.data.date.getTime()
+);
+
+// Get all series info
+const allSeries = seriesEntries.map(entry => {
+  const seriesName = entry.data.title;
+  const seriesSlug = entry.slug.replace('/_index', '').replace('_index', '');
+  const seriesPosts = regularPosts.filter(post => 
+    post.data.series?.includes(seriesName)
+  );
+  
+  return {
+    title: entry.data.title,
+    description: entry.data.description,
+    slug: seriesSlug,
+    postCount: seriesPosts.length,
+    pin: entry.data.pin,
+  };
+}).sort((a, b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0));
+
+// Get standalone posts (not in any series)
+const standalonePosts = sortedPosts.filter(post => 
+  !post.data.series || post.data.series.length === 0
+);
+
+const pageTitle = "CS - 计算机科学学习笔记";
+const pageDescription = "计算机科学相关文章，包括算法、编程语言、系统运维等主题";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Header />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+          💻 计算机科学
+        </h1>
+        <p class="font-sans text-lg text-text-secondary max-w-2xl mx-auto">
+          {pageDescription}
+        </p>
+      </div>
+
+      <!-- Series Section -->
+      {allSeries.length > 0 && (
+        <section class="mb-16">
+          <h2 class="font-sans font-bold text-2xl text-text-primary mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            合集
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allSeries.map((series) => (
+              <SeriesCard
+                title={series.title}
+                description={series.description}
+                slug={series.slug}
+                postCount={series.postCount}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Standalone Posts Section -->
+      {standalonePosts.length > 0 && (
+        <section>
+          <h2 class="font-sans font-bold text-2xl text-text-primary mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            独立文章
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {standalonePosts.map((post) => (
+              <PostCard post={post} collection="cs" />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

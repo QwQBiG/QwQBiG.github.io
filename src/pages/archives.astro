@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { formatDate, groupByYear } from '../utils/date';
+
+// Get all posts from CS collection
+const csPosts = await getCollection('cs', ({ data }) => !data.draft);
+
+// Filter out index pages
+const allPosts = csPosts.filter(post => 
+  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
+);
+
+// Sort by date (newest first)
+const sortedPosts = allPosts.sort((a, b) => 
+  b.data.date.getTime() - a.data.date.getTime()
+);
+
+// Group by year
+const postsByYear = groupByYear(sortedPosts);
+
+const pageTitle = "归档 - QwQBiG's World";
+const pageDescription = "按时间顺序浏览所有文章";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Header />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+          📚 归档
+        </h1>
+        <p class="font-sans text-lg text-text-secondary">
+          共 {sortedPosts.length} 篇文章
+        </p>
+      </div>
+
+      <!-- Archives by Year -->
+      <div class="space-y-12">
+        {Array.from(postsByYear.entries()).map(([year, posts]) => (
+          <section class="archive-year">
+            <h2 class="archive-year-title">
+              {year}
+              <span class="text-sm font-normal text-text-muted ml-2">({posts.length} 篇)</span>
+            </h2>
+            
+            <div class="archive-list">
+              {posts.map((post) => {
+                const collection = post.collection;
+                const url = `/${collection}/${post.slug}/`;
+                
+                return (
+                  <a href={url} class="archive-item group">
+                    <span class="archive-date font-mono">
+                      {formatDate(post.data.date).slice(5)}
+                    </span>
+                    <span class="archive-title group-hover:text-primary transition-colors">
+                      {post.data.title}
+                    </span>
+                    {post.data.series && post.data.series.length > 0 && (
+                      <span class="ml-auto text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
+                        {post.data.series[0]}
+                      </span>
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

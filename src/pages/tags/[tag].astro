@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const csPosts = await getCollection('cs');
+  
+  // Get all unique tags
+  const allTags = new Set<string>();
+  csPosts.forEach(post => {
+    post.data.tags?.forEach(tag => allTags.add(tag));
+  });
+  
+  return Array.from(allTags).map(tag => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+
+// Get posts with this tag
+const csPosts = await getCollection('cs', ({ data }) => 
+  !data.draft && data.tags?.includes(tag)
+);
+
+const allPosts = csPosts.filter(post => 
+  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
+);
+
+// Sort by date
+const sortedPosts = allPosts.sort((a, b) => 
+  b.data.date.getTime() - a.data.date.getTime()
+);
+
+const pageTitle = `标签: ${tag} - QwQBiG's World`;
+const pageDescription = `包含标签 "${tag}" 的所有文章`;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Header />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+          </svg>
+          标签
+        </div>
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+          #{tag}
+        </h1>
+        <p class="font-sans text-lg text-text-secondary">
+          共 {sortedPosts.length} 篇文章
+        </p>
+      </div>
+
+      <!-- Posts Grid -->
+      {sortedPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedPosts.map((post) => (
+            <PostCard post={post} collection={post.collection} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-text-secondary">暂无文章</p>
+        </div>
+      )}
+      
+      <!-- Back to Tags -->
+      <div class="text-center mt-12">
+        <a 
+          href="/tags/"
+          class="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-medium"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          返回标签列表
+        </a>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

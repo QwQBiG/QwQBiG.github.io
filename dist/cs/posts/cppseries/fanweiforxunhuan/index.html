@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="zh-cn" data-theme="auto" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>范围for循环 - QwQBiG&#39;s World</title><meta name="description" content="QwQBiG's World - 计算机科学学习笔记"><link rel="canonical" href="https://iqwqi.win/cs/posts/cppseries/fanweiforxunhuan/"><!-- Open Graph --><meta property="og:title" content="范围for循环 - QwQBiG's World"><meta property="og:description" content="QwQBiG's World - 计算机科学学习笔记"><meta property="og:type" content="article"><meta property="og:url" content="https://iqwqi.win/cs/posts/cppseries/fanweiforxunhuan/"><meta property="og:image" content="https://iqwqi.win/avatar.png"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="范围for循环 - QwQBiG's World"><meta name="twitter:description" content="QwQBiG's World - 计算机科学学习笔记"><meta name="twitter:image" content="https://iqwqi.win/avatar.png"><!-- No index for drafts --><!-- Favicon --><link rel="icon" type="image/png" href="/avatar.png"><!-- Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet"><!-- Styles --><link rel="stylesheet" href="/styles/global.css"><link rel="stylesheet" href="/_astro/about.BRswpMxs.css"></head> <body class="bg-bg-primary text-text-primary min-h-screen flex flex-col transition-colors duration-300">  <header class="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex items-center justify-between h-16"> <!-- Logo --> <a href="/" class="flex items-center gap-3 group"> <img src="/avatar.png" alt="QwQBiG" class="w-10 h-10 rounded-full border-2 border-primary/30 group-hover:border-primary transition-colors"> <span class="font-sans font-bold text-xl text-primary hidden sm:block">QwQBiG's World</span> </a> <!-- Desktop Navigation --> <nav class="hidden md:flex items-center gap-1"> <a href="/archives/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> <!-- Right Side --> <div class="flex items-center gap-2"> <!-- Theme Toggle --> <button id="theme-toggle" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="切换主题"> <svg class="w-5 h-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path> </svg> <svg class="w-5 h-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path> </svg> </button> <!-- Mobile Menu Button --> <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="打开菜单"> <svg class="w-6 h-6 menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> </div> </div> <!-- Mobile Navigation --> <div id="mobile-menu" class="md:hidden hidden border-t border-border-color bg-bg-primary"> <nav class="px-4 py-3 space-y-1"> <a href="/archives/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 归档 </a><a href="/series/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 合集 </a><a href="/tags/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 标签 </a><a href="/about/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 关于 </a><a href="/search/" class="block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200 text-text-secondary hover:text-primary hover:bg-primary/5"> 搜索 </a> </nav> </div> </header> <script type="module">const c=document.getElementById("theme-toggle"),n=c?.querySelector(".sun-icon"),o=c?.querySelector(".moon-icon");function i(e){e==="dark"?(n?.classList.add("hidden"),o?.classList.remove("hidden")):e==="light"?(n?.classList.remove("hidden"),o?.classList.add("hidden")):window.matchMedia("(prefers-color-scheme: dark)").matches?(n?.classList.add("hidden"),o?.classList.remove("hidden")):(n?.classList.remove("hidden"),o?.classList.add("hidden"))}c?.addEventListener("click",()=>{const e=document.documentElement.getAttribute("data-theme")||"auto",t=["auto","light","dark"],l=t.indexOf(e),s=t[(l+1)%t.length];document.documentElement.setAttribute("data-theme",s),localStorage.setItem("theme",s),i(s)});const m=localStorage.getItem("theme")||"auto";i(m);const d=document.getElementById("mobile-menu-toggle"),a=document.getElementById("mobile-menu"),r=d?.querySelector(".menu-icon"),u=d?.querySelector(".close-icon");d?.addEventListener("click",()=>{a?.classList.toggle("hidden"),r?.classList.toggle("hidden"),u?.classList.toggle("hidden")});</script> <main class="flex-1 py-12"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="grid grid-cols-1 lg:grid-cols-4 gap-8"> <!-- Main Content --> <article class="lg:col-span-3"> <!-- Post Header --> <header class="mb-8"> <div class="flex flex-wrap gap-2 mb-4"> <a href="/cs/series/c++的世界/" class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path> </svg> C++的世界 </a> </div> <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 leading-tight"> 范围for循环 </h1> <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary"> <span class="flex items-center gap-1.5"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> 2025-12-30 </span> <div class="flex flex-wrap gap-2"> <a href="/tags/C++/" class="text-primary hover:text-primary-dark transition-colors">
+#C++ </a><a href="/tags/STL/" class="text-primary hover:text-primary-dark transition-colors">
+#STL </a><a href="/tags/cpp/" class="text-primary hover:text-primary-dark transition-colors">
+#cpp </a><a href="/tags/编程语言/" class="text-primary hover:text-primary-dark transition-colors">
+#编程语言 </a><a href="/tags/C艹/" class="text-primary hover:text-primary-dark transition-colors">
+#C艹 </a><a href="/tags/算法/" class="text-primary hover:text-primary-dark transition-colors">
+#算法 </a> </div> </div> </header> <!-- Post Content --> <div class="prose prose-lg max-w-none"> <h1 id="c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记">C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记</h1>
+<h2 id="一-核心概念告别索引拥抱元素">一、 核心概念：告别索引，拥抱元素</h2>
+<p>基于范围的 for 循环（C++11 引入）是为了解决一个最常见的编程任务：遍历一个序列（如 vector, string）中的每一个元素。
+它的核心思想是让你直接关注元素本身，而不用手动管理索引 i。</p>
+<p><strong>基础语法:</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> ( declaration : range ) {</span></span>
+<span class="line"><span style="color:#88846F">    // 循环体</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<ul>
+<li><strong><code>range</code></strong>: 你想要遍历的东西，比如一个 <code>vector</code> 或 <code>string</code>。</li>
+<li><strong><code>declaration</code></strong>: 一个变量声明，在每次循环时，<code>range</code> 中的一个元素会被赋值（或引用）给这个变量。</li>
+</ul>
+<p><strong>示例：告别传统 <code>for</code> 循环</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> nums </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">20</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">30</span><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 传统写法 (命令式：告诉计算机"如何做")</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">size_t</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; i </span><span style="color:#F92672">&#x3C;</span><span style="color:#F8F8F2"> nums.</span><span style="color:#A6E22E">size</span><span style="color:#F8F8F2">(); i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">) {</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> nums[i] </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 范围 for 写法 (声明式：告诉计算机"想要什么")</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> num : nums) {</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> num </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " "</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p><strong>优点:</strong></p>
+<ul>
+<li><strong>简洁</strong>: 代码更短。</li>
+<li><strong>安全</strong>: 杜绝了因索引计算错误导致的越界 bug。</li>
+<li><strong>易读</strong>: <code>for (int num : nums)</code> 读起来就像自然语言：“对于 nums 中的每一个 num…”</li>
+</ul>
+<h2 id="二-精准控制auto--const-的威力">二、 精准控制：auto, &#x26;, const 的威力</h2>
+<p>for 循环声明部分的写法，直接决定了循环的效率和安全性。<code>auto</code> 关键字和引用修饰符是这里的关键。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>声明</th><th>行为</th><th>解释与最佳用途</th></tr></thead><tbody><tr><td><code>for (auto item : ...)</code></td><td><strong>拷贝 (Copy)</strong></td><td>每次循环都会创建一个元素的副本。仅适用于 <code>int</code> 等基本类型，或你需要在循环内修改副本而不影响原容器时。<strong>大多数情况应避免</strong>。</td></tr><tr><td><code>for (auto&#x26; item : ...)</code></td><td><strong>引用 (Reference)</strong></td><td><code>item</code> 成为容器中原始元素的别名，无拷贝开销。用于需要修改原始容器元素的情况。</td></tr><tr><td><code>for (const auto&#x26; item : ...)</code></td><td><strong>常量引用</strong></td><td><code>item</code> 成为原始元素的只读别名，无拷贝开销。这是最常用、最推荐的<strong>只读</strong>遍历方式，兼具高效与安全。</td></tr><tr><td><code>for (auto&#x26;&#x26; item : ...)</code></td><td><strong>转发/通用引用</strong></td><td>(高级) 能完美处理各种情况，是泛型编程中的最稳妥选择。日常使用中，<code>const auto&#x26;</code> 已足够好。</td></tr></tbody></table>
+<p><strong>记忆法则:</strong></p>
+<ul>
+<li>要修改？用 <code>auto&#x26;</code>。</li>
+<li>只读取？用 <code>const auto&#x26;</code>。</li>
+<li>不确定/写模板？用 <code>auto&#x26;&#x26;</code>。</li>
+<li>元素是 <code>int</code> 这种小东西且不修改？直接 <code>auto</code> 也无妨。</li>
+</ul>
+<h2 id="三-结构化绑定-c17优雅地解包">三、 结构化绑定 (C++17)：优雅地解包</h2>
+<p>当你的容器元素是 <code>std::pair</code>, <code>std::tuple</code> 或 <code>struct</code> 时，结构化绑定可以让你的范围 for 循环瞬间变得优雅。</p>
+<p><strong>示例：遍历 <code>std::map</code></strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::map</span><span style="color:#F92672">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::string, </span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> scores </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {{</span><span style="color:#E6DB74">"Alice"</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">95</span><span style="color:#F8F8F2">}, {</span><span style="color:#E6DB74">"Bob"</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">88</span><span style="color:#F8F8F2">}};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++17 之前</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> auto</span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> pair : scores) {</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> pair.first </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> ": "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> pair.second </span><span style="color:#F92672">&#x3C;&#x3C;</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// C++17 及之后：一步解包！</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> auto</span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> [name, score] : scores) {</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> name </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> ": "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> score </span><span style="color:#F92672">&#x3C;&#x3C;</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p><strong>优势</strong>: 直接在循环变量声明中为元素的各个成员命名，代码更扁平、更具可读性。</p>
+<h2 id="四-stdranges-c2023让范围-for-成为完全体">四、 std::ranges (C++20/23)：让范围 for 成为”完全体”</h2>
+<p><code>std::ranges</code> 库通过<strong>视图 (Views)</strong> 和<strong>管道操作符 <code>|</code></strong>，彻底释放了范围 for 循环的潜力，补全了它所有的功能短板。</p>
+<h3 id="41-iota你的数字生成器">4.1 <code>iota</code>：你的数字生成器</h3>
+<p><code>iota</code> 是一个数字序列生成器，是 C++ 版本的 <code>range()</code>。</p>
+<blockquote>
+<p>(py是最好的语言.cpp)</p>
+</blockquote>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;ranges></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 模拟 for (int i = 0; i &#x3C; 10; i++)</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> i : </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E;text-decoration:underline">views</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">iota</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">)) {</span></span>
+<span class="line"><span style="color:#88846F">    // ...</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="42-视图懒惰的数据处理流水线">4.2 视图：懒惰的数据处理流水线</h3>
+<p><strong>视图</strong>是”懒惰”的、不存储数据的”操作指令”。你可以用 <code>|</code> 把它们串联起来，形成一条数据处理流水线。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>视图</th><th>功能</th></tr></thead><tbody><tr><td><code>views::reverse</code></td><td>反转序列</td></tr><tr><td><code>views::filter</code></td><td>按条件筛选元素</td></tr><tr><td><code>views::transform</code></td><td>对每个元素进行转换</td></tr><tr><td><code>views::take(n)</code></td><td>只取前 n 个元素</td></tr><tr><td><code>views::drop(n)</code></td><td>跳过前 n 个元素</td></tr></tbody></table>
+<p><strong>示例：组合的力量</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;vector></span></span>
+<span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;ranges></span></span>
+<span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;iostream></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> data </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">2</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">3</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">4</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">5</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">6</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">7</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">8</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">9</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 需求：打印 data 中所有偶数的平方，并按倒序输出</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">auto</span><span style="color:#F8F8F2"> pipeline </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> data</span></span>
+<span class="line"><span style="color:#F92672">              |</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E;text-decoration:underline">views</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">filter</span><span style="color:#F8F8F2">([](</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> n</span><span style="color:#F8F8F2">){ </span><span style="color:#F92672">return</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">%</span><span style="color:#AE81FF"> 2</span><span style="color:#F92672"> ==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">; })</span><span style="color:#88846F"> // 筛选偶数</span></span>
+<span class="line"><span style="color:#F92672">              |</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E;text-decoration:underline">views</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">transform</span><span style="color:#F8F8F2">([](</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#FD971F;font-style:italic"> n</span><span style="color:#F8F8F2">){ </span><span style="color:#F92672">return</span><span style="color:#F8F8F2"> n </span><span style="color:#F92672">*</span><span style="color:#F8F8F2"> n; })</span><span style="color:#88846F">   // 计算平方</span></span>
+<span class="line"><span style="color:#F92672">              |</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E;text-decoration:underline">views</span><span style="color:#F8F8F2">::reverse;</span><span style="color:#88846F">                               // 反转结果</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 此时，pipeline 只是一个"配方"，没有任何计算发生</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">int</span><span style="color:#F8F8F2"> result : pipeline) {</span><span style="color:#88846F"> // 遍历时，流水线才启动</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#F8F8F2"> result </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> " "</span><span style="color:#F8F8F2">;</span><span style="color:#88846F"> // 输出: 100 64 36 16 4</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="43-enumerate最优雅的索引循环">4.3 <code>enumerate</code>：最优雅的索引循环</h3>
+<p>这是范围 for 循环的终极梦想，完美解决了”无法直接获取索引”的痛点。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="cpp"><code><span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;vector></span></span>
+<span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;string></span></span>
+<span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;ranges></span></span>
+<span class="line"><span style="color:#F92672">#include</span><span style="color:#E6DB74"> &#x3C;iostream></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::vector</span><span style="color:#F92672">&#x3C;</span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::string</span><span style="color:#F92672">></span><span style="color:#F8F8F2"> names </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span><span style="color:#E6DB74">"Alice"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"Bob"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"Charlie"</span><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 结合结构化绑定，同时获取索引和值</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">const</span><span style="color:#66D9EF;font-style:italic"> auto</span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2"> [index, name] : </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E;text-decoration:underline">views</span><span style="color:#F8F8F2">::</span><span style="color:#A6E22E">enumerate</span><span style="color:#F8F8F2">(names)) {</span></span>
+<span class="line"><span>    </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::cout </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> "Index "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> index </span><span style="color:#F92672">&#x3C;&#x3C;</span><span style="color:#E6DB74"> ": "</span><span style="color:#F92672"> &#x3C;&#x3C;</span><span style="color:#F8F8F2"> name </span><span style="color:#F92672">&#x3C;&#x3C;</span><span> </span><span style="color:#A6E22E;text-decoration:underline">std</span><span style="color:#F8F8F2">::endl;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h2 id="最终总结">最终总结</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>C++ 版本</th><th>for 循环的演进</th><th>核心能力</th></tr></thead><tbody><tr><td><strong>C++11</strong></td><td><code>for (auto&#x26; item : container)</code></td><td><strong>基础遍历</strong>：告别手动索引，更安全、简洁。</td></tr><tr><td><strong>C++17</strong></td><td><code>for (const auto&#x26; [k, v] : map)</code></td><td><strong>结构化绑定</strong>：优雅地处理 <code>pair</code>, <code>tuple</code> 等复合类型。</td></tr><tr><td><strong>C++20/23</strong></td><td><code>for (item : container | views::filter(…))</code></td><td><strong>ranges 视图</strong>：实现完全可定制的遍历，如索引循环、筛选、转换、反向、组合等。</td></tr></tbody></table>
+<p>现代 C++ 的范围 for 循环，已经从一个简单的语法糖，进化成了一个能够承载复杂、声明式数据处理逻辑的强大框架。掌握它的不同形态，是写出高效、优雅、现代 C++ 代码的关键。</p> </div> <!-- Post Navigation --> <nav class="mt-12 pt-8 border-t border-border-color"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> <div></div> <a href="/cs/posts/cppseries/stlvector/" class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"> <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span> <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1"> STL vector </div> </a> </div> </nav> </article> <!-- Sidebar --> <aside class="lg:col-span-1"> <div class="sticky top-24 space-y-6"> <!-- TOC --> <div class="toc"> <div class="toc-title">目录</div> <ul> <li> <a href="#c-范围-for-循环从入门到精通的究极无敌炸裂雷霆笔记" class="h1"> C++ 范围 for 循环：从入门到精通的究极无敌炸裂雷霆笔记 </a> </li><li> <a href="#一-核心概念告别索引拥抱元素" class="h2"> 一、 核心概念：告别索引，拥抱元素 </a> </li><li> <a href="#二-精准控制auto--const-的威力" class="h2"> 二、 精准控制：auto, &amp;, const 的威力 </a> </li><li> <a href="#三-结构化绑定-c17优雅地解包" class="h2"> 三、 结构化绑定 (C++17)：优雅地解包 </a> </li><li> <a href="#四-stdranges-c2023让范围-for-成为完全体" class="h2"> 四、 std::ranges (C++20/23)：让范围 for 成为”完全体” </a> </li><li> <a href="#41-iota你的数字生成器" class="h3"> 4.1 iota：你的数字生成器 </a> </li><li> <a href="#42-视图懒惰的数据处理流水线" class="h3"> 4.2 视图：懒惰的数据处理流水线 </a> </li><li> <a href="#43-enumerate最优雅的索引循环" class="h3"> 4.3 enumerate：最优雅的索引循环 </a> </li><li> <a href="#最终总结" class="h2"> 最终总结 </a> </li> </ul> </div> <!-- Series Navigation --> <div class="toc"> <div class="toc-title">系列文章</div> <ul> <li> <a href="/cs/posts/cppseries/stlvector/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 1.  STL vector </a> </li><li> <a href="/cs/posts/cppseries/cppbasics/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 1.  C++ 基础知识与常用库函数 </a> </li><li> <a href="/cs/posts/cppseries/stlmapset/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 2.  STL map/set - 有序容器 </a> </li><li> <a href="/cs/posts/cppseries/stlunordered/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 3.  STL unordered_map/unordered_set - 哈希容器 </a> </li><li> <a href="/cs/posts/cppseries/stlpriorityqueue/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 4.  STL priority_queue - 优先队列 </a> </li><li> <a href="/cs/posts/cppseries/stlstring/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 5.  STL string - 字符串处理 </a> </li><li> <a href="/cs/posts/cppseries/stlqueue/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 6.  STL queue - 队列与 BFS </a> </li><li> <a href="/cs/posts/cppseries/stldeque/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 7.  STL deque - 双端队列与滑动窗口 </a> </li><li> <a href="/cs/posts/cppseries/stlstack/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 8.  STL stack - 栈与 DFS </a> </li><li> <a href="/cs/posts/cppseries/stlbitset/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 9.  STL bitset - 位运算优化 </a> </li><li> <a href="/cs/posts/cppseries/lanqiaocupbasic/" class="block py-1 text-sm transition-colors text-text-secondary hover:text-primary"> 10.  蓝桥杯 C++ 基础与常用内容 </a> </li> </ul> </div> </div> </aside> </div> </div> </main> <footer class="mt-auto bg-bg-secondary border-t border-border-color transition-colors duration-300"> <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> <div class="flex flex-col md:flex-row items-center justify-between gap-4"> <!-- Copyright --> <div class="text-center md:text-left"> <p class="font-sans text-sm text-text-secondary">
+© 2026 <span class="text-primary font-medium">QwQBiG</span>. All rights reserved.
+</p> <p class="font-sans text-xs text-text-muted mt-1">
+Built with <span class="text-primary">Astro</span> & <span class="text-primary">Tailwind CSS</span> </p> </div> <!-- Social Links --> <div class="flex items-center gap-3"> <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="GitHub"> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path> </svg>   </a><a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="Bilibili">  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906l-1.174 1.12zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"></path> </svg>  </a><a href="https://leetcode.cn/u/heuristic-agnesipjp/" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200" aria-label="LeetCode">   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"> <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.622 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.028c.95-.895 2.542-.878 3.472.038l4.296 4.214c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951.003l-2.476-2.433a.455.455 0 0 0-.642.642l2.476 2.433c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955l-4.296-4.214c-1.67-1.638-4.346-1.642-6.02-.008l-3.867 4.147a4.054 4.054 0 0 0-.925 1.615 4.107 4.107 0 0 0-.096.4 4.213 4.213 0 0 0 .048 2.001 4.436 4.436 0 0 0 .267.773 4.545 4.545 0 0 0 .973 1.391l4.277 4.193c1.336 1.335 3.109 2.069 4.989 2.069 1.879 0 3.653-.734 4.989-2.069l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a6.825 6.825 0 0 1-9.486-.074l-.039-.038-4.277-4.193a3.042 3.042 0 0 1-.653-.936 3.11 3.11 0 0 1-.075-.31 3.216 3.216 0 0 1-.037-1.528 3.061 3.061 0 0 1 .466-1.015l3.854-4.126 4.853-5.192c.179-.192.418-.295.667-.295.249 0 .488.103.667.295l.039.042 5.486 5.682c.54.54.54 1.414.003 1.955a1.378 1.378 0 0 1-1.951-.003l-4.82-4.996a.455.455 0 0 0-.642.642l4.82 4.996c1.075 1.075 2.819 1.075 3.894 0 .54-.54.54-1.414.003-1.955L14.444.438a1.374 1.374 0 0 0-.961-.438z"></path> </svg> </a> </div> </div> </div> <!-- Back to Top Button --> <button id="back-to-top" class="fixed bottom-8 right-8 p-3 rounded-full bg-primary text-white shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary-dark hover:shadow-xl hover:-translate-y-1 z-50" aria-label="返回顶部"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path> </svg> </button> </footer> <script type="module">const o=document.getElementById("back-to-top");function i(){window.scrollY>300?(o?.classList.remove("opacity-0","invisible"),o?.classList.add("opacity-100","visible")):(o?.classList.add("opacity-0","invisible"),o?.classList.remove("opacity-100","visible"))}window.addEventListener("scroll",i);o?.addEventListener("click",()=>{window.scrollTo({top:0,behavior:"smooth"})});i();</script>  <!-- Theme Script --> <script>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script> </body> </html> <script type="module">const c=document.querySelectorAll('.toc a[href^="#"]'),l=document.querySelectorAll("h2[id], h3[id]");function r(){const t=window.scrollY+100;l.forEach((e,s)=>{const o=e.offsetTop,i=o+e.offsetHeight;t>=o&&t<i&&(c.forEach(n=>n.classList.remove("active")),document.querySelector(`.toc a[href="#${e.id}"]`)?.classList.add("active"))})}window.addEventListener("scroll",r);r();c.forEach(t=>{t.addEventListener("click",e=>{e.preventDefault(),document.querySelector(t.getAttribute("href"))?.scrollIntoView({behavior:"smooth"})})});</script>

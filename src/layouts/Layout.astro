@@ -1,0 +1,71 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noIndex?: boolean;
+  canonicalURL?: string;
+}
+
+const { 
+  title, 
+  description = "QwQBiG's World - 计算机科学学习笔记",
+  image = '/ZhenXun.png',
+  type = 'website',
+  noIndex = false,
+  canonicalURL = Astro.url.pathname
+} = Astro.props;
+
+const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
+const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
+---
+
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="auto" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={siteURL} />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={siteURL} />
+    <meta property="og:image" content={ogImage} />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    
+    <!-- No index for drafts -->
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/ZhenXun.png" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body class="bg-bg-primary text-text-primary min-h-screen flex flex-col transition-colors duration-300">
+    <slot />
+    
+    <!-- Theme Script -->
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme') || 'auto';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+</body>
+</html>

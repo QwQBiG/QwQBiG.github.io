@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// Get all posts
+const csPosts = await getCollection('cs', ({ data }) => !data.draft);
+
+const allPosts = csPosts.filter(post => 
+  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
+);
+
+// Count tags
+const tagCounts = new Map<string, number>();
+allPosts.forEach(post => {
+  post.data.tags?.forEach(tag => {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  });
+});
+
+// Sort by count (descending)
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
+
+const pageTitle = "标签 - QwQBiG's World";
+const pageDescription = "按标签浏览文章";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Header />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+          🏷️ 标签
+        </h1>
+        <p class="font-sans text-lg text-text-secondary">
+          共 {sortedTags.length} 个标签
+        </p>
+      </div>
+
+      <!-- Tag Cloud -->
+      <div class="tag-cloud">
+        {sortedTags.map(([tag, count]) => (
+          <a 
+            href={`/tags/${tag}/`}
+            class="tag-cloud-item"
+            style={`font-size: ${Math.max(0.875, Math.min(1.5, 0.875 + count * 0.05))}rem;`}
+          >
+            {tag}
+            <span class="tag-cloud-count">{count}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>
