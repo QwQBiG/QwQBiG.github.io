@@ -84,6 +84,16 @@ const yearsActive = new Date().getFullYear() - 2024;
       );
       background-size: 400% 400%;
       animation: gradientShift 15s ease infinite;
+      min-height: 100vh;
+      min-height: 100dvh; /* 移动端视口高度 */
+      width: 100%;
+    }
+    
+    /* 确保移动端背景显示 */
+    @supports (-webkit-touch-callout: none) {
+      .gradient-bg {
+        min-height: -webkit-fill-available;
+      }
     }
     
     @keyframes gradientShift {

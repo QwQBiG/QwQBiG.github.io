@@ -375,8 +375,100 @@ function Scene() {
   );
 }
 
+// 检测是否为移动设备
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// 简化的粒子效果（移动端降级）
+function SimpleParticleEmoji() {
+  const pointsRef = useRef();
+  const [emojiIndex, setEmojiIndex] = useState(0);
+  const lastSwitchTime = useRef(0);
+  
+  // 提取像素（简化版）
+  const pixels = useMemo(() => {
+    return extractPixelsForParticles(EMOJIS[emojiIndex], 60);
+  }, [emojiIndex]);
+  
+  // 创建几何体
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    const positions = new Float32Array(pixels.length * 3);
+    const colors = new Float32Array(pixels.length * 3);
+    
+    pixels.forEach((pixel, i) => {
+      positions[i * 3] = pixel.x;
+      positions[i * 3 + 1] = pixel.y;
+      positions[i * 3 + 2] = pixel.z;
+      
+      // 粉紫色
+      colors[i * 3] = 0.7;
+      colors[i * 3 + 1] = 0.4;
+      colors[i * 3 + 2] = 0.8;
+    });
+    
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    return geo;
+  }, [pixels]);
+  
+  // 简化材质
+  const material = useMemo(() => {
+    return new THREE.PointsMaterial({
+      size: 0.15,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending
+    });
+  }, []);
+  
+  useFrame((state) => {
+    // 缓慢旋转
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y += 0.005;
+    }
+    
+    // 切换表情
+    if (state.clock.elapsedTime - lastSwitchTime.current > 4) {
+      setEmojiIndex((prev) => (prev + 1) % EMOJIS.length);
+      lastSwitchTime.current = state.clock.elapsedTime;
+    }
+  });
+  
+  return <points ref={pointsRef} geometry={geometry} material={material} />;
+}
+
 // 主组件
 export default function ParticleLifeCore() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
+  
+  // 移动端使用降级方案
+  if (isMobile) {
+    return (
+      <div className="w-full h-full">
+        <Canvas
+          camera={{ position: [0, 0, 8], fov: 50 }}
+          gl={{ 
+            antialias: false,
+            alpha: true,
+            powerPreference: "low-power"
+          }}
+          style={{ background: 'transparent' }}
+        >
+          <ambientLight intensity={0.6} />
+          <SimpleParticleEmoji />
+        </Canvas>
+      </div>
+    );
+  }
+  
   return (
     <div className="w-full h-full">
       <Canvas
