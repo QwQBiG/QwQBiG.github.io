@@ -6,15 +6,17 @@ export interface Props {
   type?: 'website' | 'article';
   noIndex?: boolean;
   canonicalURL?: string;
+  gradientBg?: boolean;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "QwQBiG's World - 计算机科学学习笔记",
   image = '/ZhenXun.png',
   type = 'website',
   noIndex = false,
-  canonicalURL = Astro.url.pathname
+  canonicalURL = Astro.url.pathname,
+  gradientBg = true
 } = Astro.props;
 
 const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
@@ -57,7 +59,7 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <!-- Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
 </head>
-<body class="bg-bg-primary text-text-primary min-h-screen flex flex-col transition-colors duration-300">
+<body class={`min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <slot />
     
     <!-- Theme Script -->

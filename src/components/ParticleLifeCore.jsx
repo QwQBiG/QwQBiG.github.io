@@ -7,6 +7,12 @@ import * as THREE from 'three';
 const EMOJIS = ["ᗜ ᴗ ᗜ", "ᗜ ⩊ ᗜ", "ᗜ ⌓ ᗜ", "ᗜ ▵ ᗜ"];
 const PARTICLE_COUNT = 800;
 
+// 检测是否为移动端
+function isMobile() {
+  if (typeof window === 'undefined') return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+}
+
 // 简化的 Perlin Noise 实现
 function noise(x, y, z) {
   return Math.sin(x * 0.5) * Math.cos(y * 0.5) * Math.sin(z * 0.5 + x * 0.3);
@@ -50,11 +56,10 @@ function extractPixelsForParticles(text, fontSize = 80) {
     }
   }
   
-  // 如果像素不足，随机填充到 2000 个
+  // 如果像素不足，随机填充
   const result = [...validPixels];
   while (result.length < PARTICLE_COUNT) {
     if (validPixels.length > 0) {
-      // 在已有像素附近随机分布
       const base = validPixels[Math.floor(Math.random() * validPixels.length)];
       result.push({
         x: base.x + (Math.random() - 0.5) * 0.5,
@@ -70,7 +75,6 @@ function extractPixelsForParticles(text, fontSize = 80) {
     }
   }
   
-  // 如果像素过多，随机采样
   if (result.length > PARTICLE_COUNT) {
     const shuffled = result.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, PARTICLE_COUNT);
@@ -79,8 +83,8 @@ function extractPixelsForParticles(text, fontSize = 80) {
   return result;
 }
 
-// 粒子生命体组件
-function ParticleLife({ emojiIndex }) {
+// 共享的粒子系统逻辑
+function useParticleSystem(emojiIndex, isMobileDevice) {
   const pointsRef = useRef();
   const { viewport, mouse } = useThree();
   const [targetPositions, setTargetPositions] = useState([]);
@@ -91,14 +95,12 @@ function ParticleLife({ emojiIndex }) {
   const timeRef = useRef(0);
   const mouseInfluence = useRef(new THREE.Vector3(0, 0, 0));
   
-  // 初始化位置
   useEffect(() => {
     const pixels = extractPixelsForParticles(EMOJIS[emojiIndex]);
     setTargetPositions(pixels);
     setCurrentPositions(pixels);
   }, []);
   
-  // 表情切换时的过渡
   useEffect(() => {
     if (emojiIndex !== prevEmojiIndex.current) {
       const newPixels = extractPixelsForParticles(EMOJIS[emojiIndex]);
@@ -109,7 +111,15 @@ function ParticleLife({ emojiIndex }) {
     }
   }, [emojiIndex]);
   
-  // 创建 BufferGeometry
+  // 页面背景渐变色（与 CSS 同步）- 更柔和的蓝紫粉过渡
+  const gradientColors = useMemo(() => [
+    new THREE.Color(0.70, 0.50, 0.85),   // 柔和紫罗兰
+    new THREE.Color(0.85, 0.55, 0.75),   // 紫粉色
+    new THREE.Color(0.90, 0.60, 0.70),   // 柔和粉红
+    new THREE.Color(0.65, 0.70, 0.90),   // 淡紫蓝
+    new THREE.Color(0.55, 0.75, 0.95)    // 柔和天蓝
+  ], []);
+  
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(PARTICLE_COUNT * 3);
@@ -122,14 +132,13 @@ function ParticleLife({ emojiIndex }) {
       positions[i * 3 + 1] = 0;
       positions[i * 3 + 2] = 0;
       
-      // 深紫色/紫罗兰色，不使用白色
       const t = Math.random();
-      colors[i * 3] = 0.4 + t * 0.25;      // R: 0.4-0.65 (降低红色)
-      colors[i * 3 + 1] = 0.2 + t * 0.2;   // G: 0.2-0.4 (降低绿色)
-      colors[i * 3 + 2] = 0.7 + t * 0.25;  // B: 0.7-0.95 (保持蓝色)
+      colors[i * 3] = 0.55 + t * 0.25;
+      colors[i * 3 + 1] = 0.30 + t * 0.25;
+      colors[i * 3 + 2] = 0.65 + t * 0.25;
       
-      sizes[i] = 0.18 + Math.random() * 0.12;
-      indices[i] = i / PARTICLE_COUNT; // 0-1 的粒子索引
+      sizes[i] = isMobileDevice ? 0.16 + Math.random() * 0.09 : 0.19 + Math.random() * 0.12;
+      indices[i] = i / PARTICLE_COUNT;
     }
     
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -138,18 +147,8 @@ function ParticleLife({ emojiIndex }) {
     geo.setAttribute('particleIndex', new THREE.BufferAttribute(indices, 1));
     
     return geo;
-  }, []);
+  }, [isMobileDevice]);
   
-  // 页面背景渐变色（与 CSS 同步）- 增强饱和度
-  const gradientColors = useMemo(() => [
-    new THREE.Color(0.65, 0.45, 0.75),   // 深紫罗兰
-    new THREE.Color(0.85, 0.50, 0.70),   // 玫红粉
-    new THREE.Color(0.90, 0.45, 0.65),   // 桃红
-    new THREE.Color(0.50, 0.65, 0.90),   // 紫蓝
-    new THREE.Color(0.45, 0.60, 0.85)    // 深天蓝
-  ], []);
-
-  // 自定义 ShaderMaterial
   const material = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
@@ -174,48 +173,37 @@ function ParticleLife({ emojiIndex }) {
         uniform vec3 uColor4;
         uniform vec3 uColor5;
         
-        // 与页面背景同步的 15 秒呼吸周期
         vec3 getGradientColor(float t) {
-          // t 在 0-1 之间循环，对应 background-position 的变化
-          float phase = t * 4.0; // 0-4 对应 5 个色段的过渡
+          // 使用平滑的连续渐变，避免分段造成的硬边
+          vec3 c1 = mix(uColor1, uColor2, smoothstep(0.0, 0.25, t));
+          vec3 c2 = mix(uColor2, uColor3, smoothstep(0.25, 0.5, t));
+          vec3 c3 = mix(uColor3, uColor4, smoothstep(0.5, 0.75, t));
+          vec3 c4 = mix(uColor4, uColor5, smoothstep(0.75, 1.0, t));
           
-          vec3 c;
-          if (phase < 1.0) {
-            c = mix(uColor1, uColor2, phase);
-          } else if (phase < 2.0) {
-            c = mix(uColor2, uColor3, phase - 1.0);
-          } else if (phase < 3.0) {
-            c = mix(uColor3, uColor4, phase - 2.0);
-          } else {
-            c = mix(uColor4, uColor5, phase - 3.0);
-          }
-          
-          // 降低亮度，避免发白，但保持饱和度
-           return c * 0.85;
+          // 混合所有阶段
+          vec3 c = mix(mix(c1, c2, step(0.25, t)), mix(c3, c4, step(0.75, t)), step(0.5, t));
+          return c * 0.85;
         }
         
         void main() {
-          // 15 秒呼吸周期，与页面 CSS animation 同步
-          float breathCycle = sin(uTime * 0.419) * 0.5 + 0.5; // 0-1 循环
-          
-          // 根据粒子索引和呼吸周期计算颜色
-          float colorT = fract(particleIndex * 0.1 + breathCycle);
+          // 使用更平滑的呼吸周期，增加噪声让颜色分布更随机
+          float breathCycle = sin(uTime * 0.3) * 0.5 + 0.5;
+          float noise = fract(sin(particleIndex * 12.9898) * 43758.5453);
+          float colorT = fract(noise * 0.3 + breathCycle + particleIndex * 0.02);
           vColor = getGradientColor(colorT);
           
           vec3 pos = position;
           
-          // 添加呼吸波动效果
-          float breathe = sin(uTime * 2.0 + pos.x * 3.0 + pos.y * 2.0) * 0.08;
+          float breathe = sin(uTime * ${isMobileDevice ? '1.5' : '2.0'} + pos.x * ${isMobileDevice ? '2.0' : '3.0'} + pos.y * ${isMobileDevice ? '1.5' : '2.0'}) * ${isMobileDevice ? '0.06' : '0.08'};
           pos.z += breathe;
           
-          // 鼠标吸引力场
           float dist = distance(pos.xy, uMouse.xy);
-          float attractStrength = smoothstep(5.0, 0.0, dist) * 0.5;
+          float attractStrength = smoothstep(${isMobileDevice ? '4.0' : '5.0'}, 0.0, dist) * ${isMobileDevice ? '0.3' : '0.5'};
           vec3 attractDir = normalize(uMouse - pos);
           pos += attractDir * attractStrength;
           
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          gl_PointSize = size * (300.0 / -mvPosition.z);
+          gl_PointSize = size * (${isMobileDevice ? '250.0' : '330.0'} / -mvPosition.z);
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -223,25 +211,24 @@ function ParticleLife({ emojiIndex }) {
         varying vec3 vColor;
         
         void main() {
-          // 创建圆形粒子
           vec2 center = gl_PointCoord - vec2(0.5);
           float dist = length(center);
           if (dist > 0.5) discard;
           
-          // 柔和的边缘，减少发光
-          float alpha = 1.0 - smoothstep(0.2, 0.5, dist);
+          // 移动端使用更柔和的渲染，避免过曝
+          float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
+          alpha = pow(alpha, ${isMobileDevice ? '3.0' : '1.0'});
           
-          // 不使用额外的白色发光，保持原始颜色
-           // 稍微降低亮度避免发白，但保持饱和度
-           vec3 finalColor = vColor * 0.9;
-           gl_FragColor = vec4(finalColor, alpha * 0.85);
+          // 移动端大幅降低亮度
+          vec3 finalColor = vColor * ${isMobileDevice ? '1.43' : '(0.7 + 0.3 * (1.0 - dist))'};
+          gl_FragColor = vec4(finalColor, alpha * ${isMobileDevice ? '0.8' : '0.85'});
         }
       `,
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
-  }, [gradientColors]);
+  }, [gradientColors, isMobileDevice]);
   
   useFrame((state) => {
     if (!pointsRef.current) return;
@@ -249,45 +236,31 @@ function ParticleLife({ emojiIndex }) {
     timeRef.current = state.clock.elapsedTime;
     material.uniforms.uTime.value = timeRef.current;
     
-    // 鼠标位置转换到 3D 空间
     const mouseX = mouse.x * viewport.width * 0.5;
     const mouseY = mouse.y * viewport.height * 0.5;
     
-    // 平滑插值鼠标影响
-    mouseInfluence.current.x += (mouseX - mouseInfluence.current.x) * 0.05;
-    mouseInfluence.current.y += (mouseY - mouseInfluence.current.y) * 0.05;
-    material.uniforms.uMouse.value.set(
-      mouseInfluence.current.x,
-      mouseInfluence.current.y,
-      0
-    );
+    mouseInfluence.current.x += (mouseX - mouseInfluence.current.x) * (isMobileDevice ? 0.03 : 0.05);
+    mouseInfluence.current.y += (mouseY - mouseInfluence.current.y) * (isMobileDevice ? 0.03 : 0.05);
+    material.uniforms.uMouse.value.set(mouseInfluence.current.x, mouseInfluence.current.y, 0);
     
     const positions = pointsRef.current.geometry.attributes.position.array;
     
-    // 处理表情切换过渡
     if (isTransitioning) {
-      transitionProgress.current += 0.02;
+      transitionProgress.current += isMobileDevice ? 0.025 : 0.016;
       const t = Math.min(transitionProgress.current, 1);
       const easeT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      
-      // 爆炸效果 - Z轴散开
       const explodePhase = Math.sin(t * Math.PI);
       
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const current = currentPositions[i] || { x: 0, y: 0, z: 0 };
         const target = targetPositions[i] || { x: 0, y: 0, z: 0 };
         
-        // 基础插值
-        const baseX = current.x + (target.x - current.x) * easeT;
-        const baseY = current.y + (target.y - current.y) * easeT;
-        const baseZ = current.z + (target.z - current.z) * easeT;
+        const randomOffsetX = (Math.random() - 0.5) * explodePhase * (isMobileDevice ? 2 : 3);
+        const randomOffsetZ = (Math.random() - 0.5) * explodePhase * (isMobileDevice ? 4 : 6);
         
-        // 添加爆炸散开
-        const randomOffset = (Math.random() - 0.5) * explodePhase * 3;
-        
-        positions[i * 3] = baseX;
-        positions[i * 3 + 1] = baseY;
-        positions[i * 3 + 2] = baseZ + randomOffset;
+        positions[i * 3] = current.x + (target.x - current.x) * easeT + randomOffsetX * 0.5;
+        positions[i * 3 + 1] = current.y + (target.y - current.y) * easeT + (Math.random() - 0.5) * explodePhase * (isMobileDevice ? 2 : 3) * 0.5;
+        positions[i * 3 + 2] = current.z + (target.z - current.z) * easeT + randomOffsetZ;
       }
       
       if (t >= 1) {
@@ -295,17 +268,13 @@ function ParticleLife({ emojiIndex }) {
         setCurrentPositions(targetPositions);
       }
     } else {
-      // 正常状态 - Perlin Noise 流动
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const target = targetPositions[i] || { x: 0, y: 0, z: 0 };
         
-        // Perlin Noise 扰动
-        const noiseX = noise(target.x * 0.5, target.y * 0.5, timeRef.current * 0.5) * 0.15;
-        const noiseY = noise(target.y * 0.5, target.x * 0.5, timeRef.current * 0.3 + 100) * 0.15;
-        const noiseZ = noise(timeRef.current * 0.2, target.x * 0.3, target.y * 0.3) * 0.2;
-        
-        // 呼吸效果
-        const breathe = Math.sin(timeRef.current * 1.5 + target.x * 2) * 0.05;
+        const noiseX = noise(target.x * 0.5, target.y * 0.5, timeRef.current * (isMobileDevice ? 0.4 : 0.5)) * (isMobileDevice ? 0.1 : 0.15);
+        const noiseY = noise(target.y * 0.5, target.x * 0.5, timeRef.current * (isMobileDevice ? 0.25 : 0.3) + 100) * (isMobileDevice ? 0.1 : 0.15);
+        const noiseZ = noise(target.z * 0.5, target.x * 0.5, timeRef.current * (isMobileDevice ? 0.2 : 0.25) + 200) * (isMobileDevice ? 0.05 : 0.08);
+        const breathe = Math.sin(timeRef.current * (isMobileDevice ? 1.5 : 2.0) + target.x * (isMobileDevice ? 2 : 3)) * (isMobileDevice ? 0.04 : 0.05);
         
         positions[i * 3] = target.x + noiseX;
         positions[i * 3 + 1] = target.y + noiseY;
@@ -316,18 +285,50 @@ function ParticleLife({ emojiIndex }) {
     pointsRef.current.geometry.attributes.position.needsUpdate = true;
   });
   
+  return { pointsRef, geometry, material, isTransitioning };
+}
+
+// 粒子组件
+function ParticleSystem({ emojiIndex, isMobileDevice }) {
+  const { pointsRef, geometry, material } = useParticleSystem(emojiIndex, isMobileDevice);
+  return <points ref={pointsRef} geometry={geometry} material={material} />;
+}
+
+// 自适应 Bloom 组件 - 使用 mipmap 模糊来模拟光晕
+function AdaptiveBloom() {
+  const { camera } = useThree();
+  const [bloomIntensity, setBloomIntensity] = useState(0.6);
+  
+  useFrame(() => {
+    // 根据相机距离动态调整 Bloom 强度
+    // 相机距离越近（放大），Bloom 强度越低，防止过曝
+    // 相机距离越远（缩小），Bloom 强度越高，保持可见性
+    const distance = camera.position.z;
+    const baseIntensity = 0.6;
+    const adaptiveIntensity = baseIntensity * (distance / 8); // 8 是默认相机距离
+    const clampedIntensity = Math.max(0.25, Math.min(0.8, adaptiveIntensity));
+    
+    if (Math.abs(bloomIntensity - clampedIntensity) > 0.01) {
+      setBloomIntensity(clampedIntensity);
+    }
+  });
+  
   return (
-    <points ref={pointsRef} geometry={geometry} material={material} />
+    <Bloom
+      intensity={bloomIntensity}
+      luminanceThreshold={0.45}
+      luminanceSmoothing={0.85}
+      height={300}
+    />
   );
 }
 
-// 场景组件
-function Scene() {
+// 桌面端场景
+function DesktopScene() {
   const [currentEmojiIndex, setCurrentEmojiIndex] = useState(0);
   const lastSwitchTime = useRef(0);
   
   useFrame((state) => {
-    // 每 4 秒切换一次表情
     if (state.clock.elapsedTime - lastSwitchTime.current > 4) {
       setCurrentEmojiIndex((prev) => (prev + 1) % EMOJIS.length);
       lastSwitchTime.current = state.clock.elapsedTime;
@@ -336,30 +337,19 @@ function Scene() {
   
   return (
     <>
-      {/* 环境光 */}
       <ambientLight intensity={0.4} />
-      
-      {/* 主光源 */}
       <pointLight position={[10, 10, 10]} intensity={1} color="#f0abfc" />
       <pointLight position={[-10, -10, 5]} intensity={0.6} color="#7dd3fc" />
+      <pointLight position={[0, 5, -10]} intensity={0.6} color="#f9a8d4" />
       
-      {/* 环境反射 */}
       <Environment preset="city" />
       
-      {/* 粒子生命体 */}
-      <ParticleLife emojiIndex={currentEmojiIndex} />
+      <ParticleSystem emojiIndex={currentEmojiIndex} isMobileDevice={false} />
       
-      {/* 后处理辉光 - 降低强度 */}
       <EffectComposer>
-        <Bloom
-          intensity={0.6}
-          luminanceThreshold={0.4}
-          luminanceSmoothing={0.8}
-          height={300}
-        />
+        <AdaptiveBloom />
       </EffectComposer>
       
-      {/* 受限的轨道控制器 */}
       <OrbitControls
         enableZoom={false}
         enablePan={false}
@@ -375,112 +365,77 @@ function Scene() {
   );
 }
 
-// 检测是否为移动设备
-function isMobileDevice() {
-  if (typeof window === 'undefined') return false;
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
-// 简化的粒子效果（移动端降级）
-function SimpleParticleEmoji() {
-  const pointsRef = useRef();
-  const [emojiIndex, setEmojiIndex] = useState(0);
+// 移动端场景 - 保留核心效果，移除后处理
+function MobileScene() {
+  const [currentEmojiIndex, setCurrentEmojiIndex] = useState(0);
   const lastSwitchTime = useRef(0);
   
-  // 提取像素（简化版）
-  const pixels = useMemo(() => {
-    return extractPixelsForParticles(EMOJIS[emojiIndex], 60);
-  }, [emojiIndex]);
-  
-  // 创建几何体
-  const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry();
-    const positions = new Float32Array(pixels.length * 3);
-    const colors = new Float32Array(pixels.length * 3);
-    
-    pixels.forEach((pixel, i) => {
-      positions[i * 3] = pixel.x;
-      positions[i * 3 + 1] = pixel.y;
-      positions[i * 3 + 2] = pixel.z;
-      
-      // 粉紫色
-      colors[i * 3] = 0.7;
-      colors[i * 3 + 1] = 0.4;
-      colors[i * 3 + 2] = 0.8;
-    });
-    
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    return geo;
-  }, [pixels]);
-  
-  // 简化材质
-  const material = useMemo(() => {
-    return new THREE.PointsMaterial({
-      size: 0.15,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.9,
-      blending: THREE.AdditiveBlending
-    });
-  }, []);
-  
   useFrame((state) => {
-    // 缓慢旋转
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += 0.005;
-    }
-    
-    // 切换表情
     if (state.clock.elapsedTime - lastSwitchTime.current > 4) {
-      setEmojiIndex((prev) => (prev + 1) % EMOJIS.length);
+      setCurrentEmojiIndex((prev) => (prev + 1) % EMOJIS.length);
       lastSwitchTime.current = state.clock.elapsedTime;
     }
   });
   
-  return <points ref={pointsRef} geometry={geometry} material={material} />;
+  return (
+    <>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[5, 5, 5]} intensity={0.8} color="#f0abfc" />
+      <pointLight position={[-5, -5, 3]} intensity={0.5} color="#7dd3fc" />
+      
+      {/* 移动端不使用 Environment 和 EffectComposer，但保留核心粒子效果 */}
+      <ParticleSystem emojiIndex={currentEmojiIndex} isMobileDevice={true} />
+      
+      <OrbitControls
+        enableZoom={false}
+        enablePan={false}
+        enableDamping={true}
+        dampingFactor={0.05}
+        rotateSpeed={0.3}
+        minAzimuthAngle={-Math.PI / 6}
+        maxAzimuthAngle={Math.PI / 6}
+        minPolarAngle={Math.PI / 2.2}
+        maxPolarAngle={Math.PI / 1.8}
+      />
+    </>
+  );
 }
 
 // 主组件
 export default function ParticleLifeCore() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
-    setIsMobile(isMobileDevice());
+    setMounted(true);
+    setMobile(isMobile());
+    
+    const handleResize = () => {
+      setMobile(isMobile());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
   
-  // 移动端使用降级方案
-  if (isMobile) {
-    return (
-      <div className="w-full h-full">
-        <Canvas
-          camera={{ position: [0, 0, 8], fov: 50 }}
-          gl={{ 
-            antialias: false,
-            alpha: true,
-            powerPreference: "low-power"
-          }}
-          style={{ background: 'transparent' }}
-        >
-          <ambientLight intensity={0.6} />
-          <SimpleParticleEmoji />
-        </Canvas>
-      </div>
-    );
+  // 服务端渲染时不渲染 Canvas
+  if (!mounted) {
+    return <div className="w-full h-full bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full" />;
   }
   
   return (
     <div className="w-full h-full">
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 60 }}
+        camera={{ position: [0, 0, mobile ? 12 : 8], fov: mobile ? 65 : 60 }}
         gl={{ 
-          antialias: true, 
+          antialias: !mobile, 
           alpha: true,
-          powerPreference: "high-performance"
+          powerPreference: mobile ? "low-power" : "high-performance"
         }}
         style={{ background: 'transparent' }}
+        dpr={mobile ? 1 : (typeof window !== 'undefined' ? window.devicePixelRatio : 1)}
       >
-        <Scene />
+        {mobile ? <MobileScene /> : <DesktopScene />}
       </Canvas>
     </div>
   );

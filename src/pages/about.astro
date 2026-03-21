@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FloatingNavCard from '../components/FloatingNavCard.astro';
 
 const pageTitle = "关于 - QwQBiG's World";
 const pageDescription = "关于 QwQBiG 和他的博客";
@@ -14,7 +14,7 @@ const socialLinks = [
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <Header />
+  <FloatingNavCard />
   
   <main class="flex-1 py-12">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

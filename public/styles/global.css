@@ -89,6 +89,161 @@ body {
 }
 
 /*——————————————————————————————————————————————
+                主页渐变背景样式
+——————————————————————————————————————————————*/
+.gradient-bg {
+  background: linear-gradient(
+    135deg,
+    rgb(205, 180, 219) 0%,
+    rgb(255, 200, 221) 25%,
+    rgb(255, 175, 204) 50%,
+    rgb(189, 224, 254) 75%,
+    rgb(162, 210, 255) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 呼吸感 3D 球体样式 */
+.breathing-sphere {
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 20%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(192, 132, 252, 0.4) 0%, rgba(236, 72, 153, 0.2) 40%, transparent 70%),
+    linear-gradient(135deg, rgba(219, 180, 255, 0.3) 0%, rgba(255, 180, 220, 0.3) 50%, rgba(180, 220, 255, 0.3) 100%);
+  box-shadow: 
+    0 20px 60px -10px rgba(147, 51, 234, 0.3),
+    0 30px 80px -15px rgba(236, 72, 153, 0.25),
+    0 40px 100px -20px rgba(59, 130, 246, 0.2),
+    inset -10px -10px 30px rgba(147, 51, 234, 0.15),
+    inset 10px 10px 30px rgba(255, 255, 255, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    0 0 30px rgba(192, 132, 252, 0.2);
+  animation: breathe 4s ease-in-out infinite;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1) translateZ(0);
+    box-shadow: 
+      0 20px 60px -10px rgba(147, 51, 234, 0.3),
+      0 30px 80px -15px rgba(236, 72, 153, 0.25),
+      0 40px 100px -20px rgba(59, 130, 246, 0.2),
+      inset -10px -10px 30px rgba(147, 51, 234, 0.15),
+      inset 10px 10px 30px rgba(255, 255, 255, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.4),
+      0 0 30px rgba(192, 132, 252, 0.2);
+  }
+  50% {
+    transform: scale(1.03) translateZ(10px);
+    box-shadow: 
+      0 25px 70px -8px rgba(147, 51, 234, 0.35),
+      0 35px 90px -12px rgba(236, 72, 153, 0.3),
+      0 45px 110px -18px rgba(59, 130, 246, 0.25),
+      inset -12px -12px 35px rgba(147, 51, 234, 0.2),
+      inset 12px 12px 35px rgba(255, 255, 255, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.5),
+      0 0 40px rgba(192, 132, 252, 0.3);
+  }
+}
+
+/* 标签样式 */
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 9999px;
+  font-size: clamp(0.625rem, 1.2vw, 0.75rem);
+  color: #4a5568;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tag:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-1px);
+}
+
+/* 文章卡片 */
+.post-item {
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.625rem;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s;
+}
+
+.post-item:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 导航链接样式 - 与主界面一致 */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.75rem;
+  color: #4a5568 !important;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: #2d3748 !important;
+}
+
+/* 统计数字 */
+.stat-number {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: clamp(0.625rem, 1.2vw, 0.75rem);
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+/* GlassCard 样式 */
+.glass-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.glass-card .glare {
+  mix-blend-mode: soft-light;
+}
+
+.glass-card > * {
+  transform-style: preserve-3d;
+}
+
+/* 环形文字动画 */
+.ring-text-rotate {
+  animation: ringRotate 20s linear infinite;
+}
+
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ring-text-rotate:hover {
+  animation-play-state: paused;
+}
+
+/*——————————————————————————————————————————————
                 文章正文样式
 ——————————————————————————————————————————————*/
 .prose {
@@ -98,99 +253,64 @@ body {
 .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
   font-family: 'Noto Sans SC', system-ui, sans-serif;
   font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
   color: var(--text-primary);
-  margin-top: 2em;
-  margin-bottom: 1em;
-  line-height: 1.4;
 }
 
 .prose h1 {
-  font-size: 2.25rem;
+  font-size: 2rem;
   border-bottom: 2px solid var(--border-color);
-  padding-bottom: 0.5em;
+  padding-bottom: 0.5rem;
 }
 
 .prose h2 {
-  font-size: 1.75rem;
-  padding-left: 0.75rem;
-  border-left: 4px solid var(--color-primary);
+  font-size: 1.5rem;
 }
 
 .prose h3 {
-  font-size: 1.375rem;
+  font-size: 1.25rem;
 }
 
 .prose p {
-  margin-bottom: 1.25em;
-  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
 }
 
 .prose a {
   color: var(--color-primary);
   text-decoration: none;
-  border-bottom: 1px dashed var(--color-primary);
-  transition: all 0.2s ease;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
 }
 
 .prose a:hover {
-  border-bottom-style: solid;
+  border-bottom-color: var(--color-primary);
 }
 
 .prose ul, .prose ol {
-  margin-bottom: 1.25em;
-  padding-left: 1.5em;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
 }
 
 .prose li {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 
 .prose blockquote {
-  margin: 1.5em 0;
-  padding: 1em 1.5em;
-  background: var(--bg-secondary);
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
   border-left: 4px solid var(--color-primary);
-  border-radius: 0 0.75rem 0.75rem 0;
+  background: var(--bg-secondary);
+  border-radius: 0 0.5rem 0.5rem 0;
   font-style: italic;
 }
 
-.prose blockquote p:last-child {
-  margin-bottom: 0;
+.prose blockquote p {
+  margin: 0;
+  color: var(--text-secondary);
 }
 
-.prose img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 0.75rem;
-  margin: 1.5em 0;
-}
-
-.prose table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5em 0;
-  font-size: 0.875rem;
-}
-
-.prose th, .prose td {
-  padding: 0.75em 1em;
-  border: 1px solid var(--border-color);
-  text-align: left;
-}
-
-.prose th {
-  background: var(--bg-secondary);
-  font-weight: 600;
-  color: var(--color-primary);
-}
-
-.prose tr:nth-child(even) {
-  background: var(--bg-secondary);
-}
-
-/*——————————————————————————————————————————————
-                代码块样式
-——————————————————————————————————————————————*/
 .prose code {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.875em;

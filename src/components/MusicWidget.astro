@@ -2,9 +2,9 @@
 // MusicWidget.astro - 横向条形音乐播放器（适配毛玻璃风格）
 ---
 
-<div class="music-bar w-full h-full flex items-center gap-3 md:gap-4 px-1">
-  <!-- 播放/暂停按钮 -->
-  <button id="play-btn" class="play-btn flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center">
+<div class="music-bar w-full h-full flex items-center gap-3 md:gap-4 px-1" style="position: relative; z-index: 200; pointer-events: auto;">
+  <!-- 播放/暂停按钮 - 使用最高z-index确保在最上层 -->
+  <button id="play-btn" class="play-btn flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center" style="position: relative; z-index: 9999; pointer-events: auto; cursor: pointer;">
     <svg id="play-icon" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
       <path d="M8 5v14l11-7z"/>
     </svg>
@@ -12,27 +12,27 @@
       <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
     </svg>
   </button>
-  
+
   <!-- 歌曲信息 + 进度条区域 -->
   <div class="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
     <!-- 歌曲信息 -->
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2 min-w-0">
+    <div class="flex items-center justify-between min-w-0">
+      <div class="flex items-center gap-2 min-w-0 overflow-hidden">
         <!-- 频谱动画 -->
-        <div id="playing-indicator" class="flex gap-0.5 items-end h-3 opacity-0 transition-opacity">
+        <div id="playing-indicator" class="flex gap-0.5 items-end h-3 opacity-0 transition-opacity flex-shrink-0">
           <span class="w-0.5 bg-gradient-to-t from-purple-500 to-pink-400 rounded-full animate-bar-1"></span>
           <span class="w-0.5 bg-gradient-to-t from-purple-500 to-pink-400 rounded-full animate-bar-2"></span>
           <span class="w-0.5 bg-gradient-to-t from-purple-500 to-pink-400 rounded-full animate-bar-3"></span>
         </div>
-        <h4 id="track-name" class="track-name text-xs md:text-sm font-semibold truncate">Midnight City</h4>
-        <span class="text-gray-400/50 hidden sm:inline">·</span>
-        <p id="artist-name" class="artist-name text-[10px] md:text-xs truncate hidden sm:block">M83</p>
+        <h4 id="track-name" class="track-name text-xs md:text-sm font-semibold whitespace-nowrap">Oblivious</h4>
+        <span class="text-gray-400/50 hidden sm:inline flex-shrink-0">·</span>
+        <p id="artist-name" class="artist-name text-[10px] md:text-xs whitespace-nowrap hidden sm:block">Kalafina</p>
       </div>
-      <span id="time-display" class="time-display text-[10px] md:text-xs font-mono flex-shrink-0">0:00 / 4:03</span>
+      <span id="time-display" class="time-display text-[10px] md:text-xs font-mono flex-shrink-0 ml-2">0:00 / 0:00</span>
     </div>
-    
+
     <!-- 进度条 -->
-    <div class="progress-wrapper relative h-5 flex items-center cursor-pointer" id="progress-container">
+    <div class="progress-wrapper relative h-5 flex items-center cursor-pointer" id="progress-container" style="pointer-events: auto; z-index: 101;">
       <div class="progress-track w-full h-1.5 md:h-2 rounded-full overflow-hidden">
         <div id="progress-fill" class="progress-fill h-full rounded-full" style="width: 0%"></div>
       </div>
@@ -40,7 +40,7 @@
       <div id="progress-thumb" class="progress-thumb absolute w-3 h-3 md:w-3.5 md:h-3.5 rounded-full shadow-md" style="left: 0%"></div>
     </div>
   </div>
-  
+
   <!-- 音量控制 -->
   <div class="volume-control flex items-center gap-1.5 flex-shrink-0">
     <button id="volume-btn" class="volume-btn p-1.5 rounded-full hover:bg-white/50 transition-colors">
@@ -52,7 +52,7 @@
       <div class="volume-fill h-full rounded-full" style="width: 70%"></div>
     </div>
   </div>
-  
+
   <!-- 切歌按钮 -->
   <div class="flex items-center gap-1 flex-shrink-0">
     <button id="prev-btn" class="nav-btn p-1.5 rounded-full hover:bg-white/50 transition-colors">
@@ -68,31 +68,36 @@
   </div>
 </div>
 
+<audio id="audio-player" preload="auto" class="hidden" crossorigin="anonymous">
+  <source src="/music/oblivious.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
 <style>
   .music-bar {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
-  
-  /* 播放按钮 - 紫粉渐变，适配毛玻璃 */
+
+  /* 播放按钮 - 很浅的紫粉渐变 */
   .play-btn {
-    background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
-    box-shadow: 
-      0 4px 12px rgba(167, 139, 250, 0.35),
-      inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    background: linear-gradient(135deg, #ddd6fe 0%, #fbcfe8 100%);
+    box-shadow:
+      0 4px 12px rgba(221, 214, 254, 0.35),
+      inset 0 1px 2px rgba(255, 255, 255, 0.6);
     transition: all 0.2s ease;
   }
-  
+
   .play-btn:hover {
     transform: scale(1.08);
-    box-shadow: 
-      0 6px 16px rgba(167, 139, 250, 0.45),
-      inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 6px 16px rgba(221, 214, 254, 0.45),
+      inset 0 1px 2px rgba(255, 255, 255, 0.6);
   }
-  
+
   .play-btn:active {
     transform: scale(0.96);
   }
-  
+
   /* 歌曲名称 - 深紫灰色，与毛玻璃协调 */
   .track-name {
     color: rgba(88, 28, 135, 0.9);
@@ -101,99 +106,99 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   /* 艺术家名称 - 柔和的灰色 */
   .artist-name {
     color: rgba(107, 114, 128, 0.75);
   }
-  
+
   /* 时间显示 - 紫色调 */
   .time-display {
     color: rgba(139, 92, 246, 0.7);
     letter-spacing: 0.02em;
   }
-  
+
   /* 频谱动画 */
   @keyframes bar1 {
     0%, 100% { height: 4px; }
     50% { height: 12px; }
   }
-  
+
   @keyframes bar2 {
     0%, 100% { height: 10px; }
     50% { height: 4px; }
   }
-  
+
   @keyframes bar3 {
     0%, 100% { height: 6px; }
     50% { height: 12px; }
   }
-  
+
   .animate-bar-1 {
     animation: bar1 0.6s ease-in-out infinite;
     height: 4px;
   }
-  
+
   .animate-bar-2 {
     animation: bar2 0.5s ease-in-out infinite;
     height: 10px;
   }
-  
+
   .animate-bar-3 {
     animation: bar3 0.7s ease-in-out infinite;
     height: 6px;
   }
-  
+
   /* 进度条轨道 - 更柔和的灰色 */
   .progress-track {
     background: rgba(0, 0, 0, 0.06);
     box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.08);
   }
-  
+
   .progress-fill {
-    background: linear-gradient(90deg, #a78bfa 0%, #f472b6 50%, #fb7185 100%);
+    background: linear-gradient(90deg, #c4b5fd 0%, #ddd6fe 30%, #f9a8d4 70%, #fbcfe8 100%);
     transition: width 0.1s linear;
   }
-  
+
   .progress-thumb {
     transform: translateX(-50%);
     transition: left 0.1s linear, transform 0.2s ease;
-    box-shadow: 
-      0 2px 6px rgba(0, 0, 0, 0.15),
-      0 0 0 2px rgba(255, 255, 255, 0.8);
-    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-    border: 2px solid rgba(167, 139, 250, 0.3);
+    box-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.1),
+      0 0 0 2px rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+    border: 2px solid rgba(221, 214, 254, 0.5);
   }
-  
+
   .progress-wrapper:hover .progress-thumb {
     transform: translateX(-50%) scale(1.15);
-    border-color: rgba(167, 139, 250, 0.5);
+    border-color: rgba(221, 214, 254, 0.8);
   }
-  
+
   /* 导航按钮 */
   .nav-btn {
     transition: all 0.2s ease;
   }
-  
+
   .nav-btn:hover {
     background: rgba(255, 255, 255, 0.6);
     transform: scale(1.05);
   }
-  
+
   .nav-btn:active {
     transform: scale(0.95);
   }
-  
+
   /* 音量滑块 */
   .volume-slider {
     background: rgba(0, 0, 0, 0.06);
     box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.08);
   }
-  
+
   .volume-fill {
     background: linear-gradient(90deg, #a78bfa 0%, #f472b6 100%);
   }
-  
+
   /* 深色模式适配 */
   @media (prefers-color-scheme: dark) {
     .track-name {
@@ -202,27 +207,27 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    
+
     .artist-name {
       color: rgba(156, 163, 175, 0.7);
     }
-    
+
     .time-display {
       color: rgba(167, 139, 250, 0.8);
     }
-    
+
     .progress-track {
       background: rgba(255, 255, 255, 0.1);
     }
-    
+
     .progress-thumb {
       background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
       border-color: rgba(167, 139, 250, 0.5);
-      box-shadow: 
+      box-shadow:
         0 2px 6px rgba(0, 0, 0, 0.3),
         0 0 0 2px rgba(55, 65, 81, 0.8);
     }
-    
+
     .volume-slider {
       background: rgba(255, 255, 255, 0.1);
     }
@@ -230,202 +235,160 @@
 </style>
 
 <script>
-  class MusicBar {
-    constructor() {
-      this.isPlaying = false;
-      this.currentProgress = 0;
-      this.duration = 243; // 4:03 in seconds
-      this.currentTime = 0;
-      this.animationId = null;
-      this.volume = 70;
-      this.isMuted = false;
-      
-      // 播放列表
-      this.playlist = [
-        { name: 'Midnight City', artist: 'M83', duration: 243 },
-        { name: 'Starboy', artist: 'The Weeknd', duration: 230 },
-        { name: 'Blinding Lights', artist: 'The Weeknd', duration: 200 },
-        { name: 'Levitating', artist: 'Dua Lipa', duration: 203 },
-      ];
-      this.currentTrack = 0;
-      
-      this.init();
+  (function() {
+    'use strict';
+
+    var isInitialized = false;
+    var isPlaying = false;
+    var volume = 70;
+    var isMuted = false;
+
+    var audio, playBtn, progressFill, progressThumb;
+    var progressContainer, timeDisplay;
+    var volumeBtn, volumeSlider, volumeFill, prevBtn, nextBtn;
+
+    function getElements() {
+      audio = document.getElementById('audio-player');
+      playBtn = document.getElementById('play-btn');
+      progressFill = document.getElementById('progress-fill');
+      progressThumb = document.getElementById('progress-thumb');
+      progressContainer = document.getElementById('progress-container');
+      timeDisplay = document.getElementById('time-display');
+      volumeBtn = document.getElementById('volume-btn');
+      volumeSlider = document.querySelector('.volume-slider');
+      volumeFill = document.querySelector('.volume-fill');
+      prevBtn = document.getElementById('prev-btn');
+      nextBtn = document.getElementById('next-btn');
+
+      return !!(audio && playBtn);
     }
-    
-    init() {
-      this.playBtn = document.getElementById('play-btn');
-      this.prevBtn = document.getElementById('prev-btn');
-      this.nextBtn = document.getElementById('next-btn');
-      this.volumeBtn = document.getElementById('volume-btn');
-      this.playIcon = document.getElementById('play-icon');
-      this.pauseIcon = document.getElementById('pause-icon');
-      this.progressFill = document.getElementById('progress-fill');
-      this.progressThumb = document.getElementById('progress-thumb');
-      this.progressContainer = document.getElementById('progress-container');
-      this.timeDisplay = document.getElementById('time-display');
-      this.trackNameEl = document.getElementById('track-name');
-      this.artistNameEl = document.getElementById('artist-name');
-      this.playingIndicator = document.getElementById('playing-indicator');
-      this.volumeSlider = document.querySelector('.volume-slider');
-      this.volumeFill = document.querySelector('.volume-fill');
-      
-      this.bindEvents();
-      this.loadTrack(0);
+
+    function updateIcons() {
+      var playIcon = document.getElementById('play-icon');
+      var pauseIcon = document.getElementById('pause-icon');
+      var indicator = document.getElementById('playing-indicator');
+
+      if (isPlaying) {
+        if (playIcon) playIcon.classList.add('hidden');
+        if (pauseIcon) pauseIcon.classList.remove('hidden');
+        if (indicator) indicator.classList.remove('opacity-0');
+      } else {
+        if (playIcon) playIcon.classList.remove('hidden');
+        if (pauseIcon) pauseIcon.classList.add('hidden');
+        if (indicator) indicator.classList.add('opacity-0');
+      }
     }
-    
-    bindEvents() {
-      if (this.playBtn) {
-        this.playBtn.addEventListener('click', () => this.togglePlay());
+
+    function formatTime(seconds) {
+      if (!seconds || isNaN(seconds)) return '0:00';
+      var mins = Math.floor(seconds / 60);
+      var secs = Math.floor(seconds % 60);
+      return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+
+    function updateProgress() {
+      if (!audio || !audio.duration || !progressFill || !progressThumb || !timeDisplay) return;
+
+      var percent = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = percent + '%';
+      progressThumb.style.left = percent + '%';
+      timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+    }
+
+    function togglePlay(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
       }
-      
-      if (this.prevBtn) {
-        this.prevBtn.addEventListener('click', () => this.prevTrack());
+
+      if (!audio) return;
+
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        updateIcons();
+      } else {
+        var playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(function() {
+            isPlaying = true;
+            updateIcons();
+          });
+        }
       }
-      
-      if (this.nextBtn) {
-        this.nextBtn.addEventListener('click', () => this.nextTrack());
-      }
-      
-      if (this.volumeBtn) {
-        this.volumeBtn.addEventListener('click', () => this.toggleMute());
-      }
-      
-      if (this.progressContainer) {
-        this.progressContainer.addEventListener('click', (e) => this.seek(e));
-        
-        // 拖拽支持
-        let isDragging = false;
-        this.progressContainer.addEventListener('mousedown', () => isDragging = true);
-        document.addEventListener('mouseup', () => isDragging = false);
-        document.addEventListener('mousemove', (e) => {
-          if (isDragging) this.seek(e);
+    }
+
+    function init() {
+      if (isInitialized) return true;
+      if (!getElements()) return false;
+
+      audio.volume = 0.7;
+
+      playBtn.addEventListener('click', togglePlay);
+
+      audio.addEventListener('loadedmetadata', updateProgress);
+      audio.addEventListener('timeupdate', updateProgress);
+      audio.addEventListener('ended', function() {
+        isPlaying = false;
+        updateIcons();
+      });
+
+      if (progressContainer) {
+        progressContainer.addEventListener('click', function(e) {
+          if (!audio || !audio.duration) return;
+          var rect = progressContainer.getBoundingClientRect();
+          var percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+          audio.currentTime = percent * audio.duration;
         });
       }
-      
-      if (this.volumeSlider) {
-        this.volumeSlider.addEventListener('click', (e) => this.setVolume(e));
+
+      if (volumeBtn) {
+        volumeBtn.addEventListener('click', function() {
+          isMuted = !isMuted;
+          audio.muted = isMuted;
+          if (volumeFill) volumeFill.style.width = isMuted ? '0%' : volume + '%';
+        });
       }
-    }
-    
-    loadTrack(index) {
-      this.currentTrack = index;
-      const track = this.playlist[index];
-      this.duration = track.duration;
-      
-      if (this.trackNameEl) this.trackNameEl.textContent = track.name;
-      if (this.artistNameEl) this.artistNameEl.textContent = track.artist;
-      
-      this.currentTime = 0;
-      this.updateProgress();
-    }
-    
-    togglePlay() {
-      this.isPlaying = !this.isPlaying;
-      
-      if (this.isPlaying) {
-        this.playIcon?.classList.add('hidden');
-        this.pauseIcon?.classList.remove('hidden');
-        this.playingIndicator?.classList.remove('opacity-0');
-        this.startProgress();
-      } else {
-        this.playIcon?.classList.remove('hidden');
-        this.pauseIcon?.classList.add('hidden');
-        this.playingIndicator?.classList.add('opacity-0');
-        this.stopProgress();
+
+      if (volumeSlider) {
+        volumeSlider.addEventListener('click', function(e) {
+          var rect = volumeSlider.getBoundingClientRect();
+          var percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+          volume = Math.round(percent * 100);
+          audio.volume = percent;
+          audio.muted = volume === 0;
+          if (volumeFill) volumeFill.style.width = volume + '%';
+        });
       }
-    }
-    
-    startProgress() {
-      const update = () => {
-        if (!this.isPlaying) return;
-        
-        this.currentTime += 0.1;
-        if (this.currentTime >= this.duration) {
-          this.nextTrack();
-          return;
-        }
-        
-        this.updateProgress();
-        this.animationId = requestAnimationFrame(update);
-      };
-      
-      this.animationId = requestAnimationFrame(update);
-    }
-    
-    stopProgress() {
-      if (this.animationId) {
-        cancelAnimationFrame(this.animationId);
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+          audio.currentTime = 0;
+          if (isPlaying) audio.play();
+        });
       }
-    }
-    
-    updateProgress() {
-      const percent = (this.currentTime / this.duration) * 100;
-      
-      if (this.progressFill) this.progressFill.style.width = `${percent}%`;
-      if (this.progressThumb) this.progressThumb.style.left = `${percent}%`;
-      if (this.timeDisplay) {
-        this.timeDisplay.textContent = `${this.formatTime(this.currentTime)} / ${this.formatTime(this.duration)}`;
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+          audio.currentTime = 0;
+          if (isPlaying) audio.play();
+        });
       }
+
+      isInitialized = true;
+      return true;
     }
-    
-    seek(e) {
-      const rect = this.progressContainer.getBoundingClientRect();
-      const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      this.currentTime = percent * this.duration;
-      this.updateProgress();
+
+    init();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
     }
-    
-    setVolume(e) {
-      const rect = this.volumeSlider.getBoundingClientRect();
-      const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      this.volume = Math.round(percent * 100);
-      if (this.volumeFill) this.volumeFill.style.width = `${this.volume}%`;
-    }
-    
-    toggleMute() {
-      this.isMuted = !this.isMuted;
-      if (this.volumeFill) {
-        this.volumeFill.style.width = this.isMuted ? '0%' : `${this.volume}%`;
-      }
-    }
-    
-    prevTrack() {
-      const newIndex = this.currentTrack === 0 ? this.playlist.length - 1 : this.currentTrack - 1;
-      this.loadTrack(newIndex);
-      if (this.isPlaying) {
-        this.stopProgress();
-        this.startProgress();
-      }
-    }
-    
-    nextTrack() {
-      const newIndex = (this.currentTrack + 1) % this.playlist.length;
-      this.loadTrack(newIndex);
-      if (this.isPlaying) {
-        this.stopProgress();
-        this.startProgress();
-      }
-    }
-    
-    formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${String(secs).padStart(2, '0')}`;
-    }
-  }
-  
-  // 初始化音乐播放器
-  function initMusicBar() {
-    new MusicBar();
-  }
-  
-  // 页面加载时初始化
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMusicBar);
-  } else {
-    initMusicBar();
-  }
-  
-  // Astro ViewTransitions 兼容
-  document.addEventListener('astro:page-load', initMusicBar);
+
+    document.addEventListener('astro:page-load', function() {
+      isInitialized = false;
+      init();
+    });
+
+  })();
 </script>

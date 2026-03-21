@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import FloatingNavCard from '../../components/FloatingNavCard.astro';
 import { getCollection } from 'astro:content';
 
 // Get all posts
@@ -27,7 +27,7 @@ const pageDescription = "按标签浏览文章";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <Header />
+  <FloatingNavCard />
   
   <main class="flex-1 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

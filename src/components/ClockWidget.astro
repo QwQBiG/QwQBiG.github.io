@@ -17,7 +17,7 @@
   
   <!-- 日期显示 -->
   <div id="clock-date" class="clock-date mt-2 md:mt-3 text-center px-2 z-10">
-    加载中...
+    Loading...
   </div>
   
   <!-- 装饰性指示点 -->
@@ -150,11 +150,12 @@
     if (secondsEl) secondsEl.textContent = `:${seconds}`;
     
     if (dateEl) {
-      const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const weekday = weekdays[now.getDay()];
-      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const month = months[now.getMonth()];
       const day = String(now.getDate()).padStart(2, '0');
-      dateEl.textContent = `${now.getFullYear()}.${month}.${day} ${weekday}`;
+      dateEl.textContent = `${weekday}, ${month} ${day}`;
     }
   }
   

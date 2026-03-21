@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import FloatingNavCard from '../../components/FloatingNavCard.astro';
 import { getCollection, render } from 'astro:content';
 import { formatDate } from '../../utils/date';
 
@@ -46,7 +46,7 @@ const pageTitle = `${title} - QwQBiG's World`;
   type="article"
   noIndex={draft}
 >
-  <Header />
+  <FloatingNavCard />
   
   <main class="flex-1 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FloatingNavCard from '../components/FloatingNavCard.astro';
 
 const pageTitle = "搜索 - QwQBiG's World";
 const pageDescription = "搜索博客文章";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <Header />
+  <FloatingNavCard />
   
   <main class="flex-1 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

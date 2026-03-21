@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PostCard from '../../components/PostCard.astro';
 import SeriesCard from '../../components/SeriesCard.astro';
+import FloatingNavCard from '../../components/FloatingNavCard.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('cs', ({ data }) => !data.draft);
@@ -50,7 +50,8 @@ const pageDescription = "计算机科学相关文章，包括算法、编程语�
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <Header />
+  <!-- 浮动导航卡片 - 从左上角飞入 -->
+  <FloatingNavCard />
   
   <main class="flex-1 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
