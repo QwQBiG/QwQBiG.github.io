@@ -1,6 +1,7 @@
 ---
 import GlassCard from '../components/GlassCard.astro';
 import ParticleLifeCore from '../components/ParticleLifeCore.jsx';
+import AnimeCore from '../components/AnimeCore.tsx';
 import ClockWidget from '../components/ClockWidget.astro';
 import CalendarWidget from '../components/CalendarWidget.astro';
 import MusicWidget from '../components/MusicWidget.astro';
@@ -225,21 +226,7 @@ const yearsActive = new Date().getFullYear() - 2024;
       }
     }
     
-    /* 环形文字3D悬浮动效 */
-    @keyframes ringFloat {
-      0%, 100% {
-        transform: rotateX(0deg) rotateY(0deg) translateZ(0px);
-      }
-      25% {
-        transform: rotateX(2deg) rotateY(3deg) translateZ(10px);
-      }
-      50% {
-        transform: rotateX(0deg) rotateY(0deg) translateZ(20px);
-      }
-      75% {
-        transform: rotateX(-2deg) rotateY(-3deg) translateZ(10px);
-      }
-    }
+
     
     @keyframes pulseRing {
       0%, 100% {
@@ -253,12 +240,7 @@ const yearsActive = new Date().getFullYear() - 2024;
     }
     
     .floating-ring {
-      animation: ringFloat 8s ease-in-out infinite;
       transition: transform 0.3s ease-out;
-    }
-    
-    .floating-ring:hover {
-      animation-play-state: paused;
     }
     
     /* 环形文字交互3D倾斜效果 */
@@ -269,9 +251,7 @@ const yearsActive = new Date().getFullYear() - 2024;
       transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY)) translateZ(var(--translateZ));
     }
     
-    .floating-ring.interacting {
-      animation: none;
-    }
+
     
     /* 环形文字内层旋转 */
     @keyframes textRotate {
@@ -729,18 +709,18 @@ const yearsActive = new Date().getFullYear() - 2024;
               style="box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.15), 0 50px 100px -30px rgba(0, 0, 0, 0.1), 0 80px 140px -40px rgba(0, 0, 0, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);">
             </div>
             
-            <!-- 中心 3D 粒子生命体颜文字 - 呼吸感球体样式 -->
-            <div class="absolute w-44 h-44 md:w-52 md:h-52 [@media(min-width:924px)]:w-64 [@media(min-width:924px)]:h-64 rounded-full overflow-hidden z-10 breathing-sphere">
-              <ParticleLifeCore
+            <!-- 中心 3D 动漫角色展示 - 呼吸感球体样式 -->
+            <div class="absolute w-52 h-52 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
+              <AnimeCore
                 client:load
               />
             </div>
 
             <!-- 环形文字 - 优雅的3D悬浮动效 + 交互 -->
-            <div id="interactiveRing" class="absolute w-[280px] h-[280px] md:w-[340px] md:h-[340px] [@media(min-width:924px)]:w-[440px] [@media(min-width:924px)]:h-[440px] floating-ring cursor-pointer" style="perspective: 1000px; transform-style: preserve-3d;">
+            <div id="interactiveRing" class="absolute w-[300px] h-[300px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[480px] [@media(min-width:924px)]:h-[480px] floating-ring cursor-pointer" style="perspective: 1000px; transform-style: preserve-3d;">
               <svg viewBox="0 0 300 300" class="w-full h-full ring-text-rotate" style="transform-style: preserve-3d;">
                 <defs>
-                  <path id="textCircle" d="M 150, 150 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0" fill="none"/>
+                  <path id="textCircle" d="M 150, 150 m -110, 0 a 110,110 0 1,1 220,0 a 110,110 0 1,1 -220,0" fill="none"/>
                   <!-- 渐变定义 -->
                   <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
@@ -756,11 +736,8 @@ const yearsActive = new Date().getFullYear() - 2024;
                     </feMerge>
                   </filter>
                 </defs>
-                <!-- 外圈装饰光环 -->
-                <circle cx="150" cy="150" r="118" fill="none" stroke="url(#textGradient)" stroke-width="0.5" opacity="0.3" style="animation: pulseRing 4s ease-in-out infinite;"/>
-                <circle cx="150" cy="150" r="122" fill="none" stroke="url(#textGradient)" stroke-width="0.3" opacity="0.2" style="animation: pulseRing 4s ease-in-out infinite 1s;"/>
-                <!-- 交互光点 -->
-                <circle id="ringCursor" cx="150" cy="50" r="3" fill="rgba(255,255,255,0.8)" filter="url(#glow)" opacity="0" style="transition: opacity 0.3s;"/>
+
+
                 <!-- 文字 -->
                 <text class="text-[11px] md:text-[12px] font-medium tracking-[0.12em] font-['Cormorant_Garamond'] italic" fill="url(#textGradient)" style="filter: drop-shadow(0 1px 2px rgba(139, 92, 246, 0.3));">
                   <textPath href="#textCircle" startOffset="15%">
@@ -883,7 +860,6 @@ const yearsActive = new Date().getFullYear() - 2024;
   <script is:inline>
     (function() {
       const ring = document.getElementById('interactiveRing');
-      const ringCursor = document.getElementById('ringCursor');
       
       if (!ring) return;
       
@@ -931,23 +907,12 @@ const yearsActive = new Date().getFullYear() - 2024;
         // 设置目标旋转角度 (最大 ±15度)
         targetRotateY = clampedX * 15;
         targetRotateX = -clampedY * 15;
-        
-        // 更新光点位置
-        if (ringCursor) {
-          const angle = Math.atan2(clampedY, clampedX);
-          const distance = Math.min(100, Math.sqrt(clampedX * clampedX + clampedY * clampedY) * 100);
-          const cursorX = 150 + Math.cos(angle) * distance;
-          const cursorY = 150 + Math.sin(angle) * distance;
-          ringCursor.setAttribute('cx', cursorX);
-          ringCursor.setAttribute('cy', cursorY);
-        }
       }
       
       // 鼠标进入
       ring.addEventListener('mouseenter', function() {
         isInteracting = true;
         ring.classList.add('interacting');
-        if (ringCursor) ringCursor.style.opacity = '1';
       });
       
       // 鼠标移动
@@ -961,14 +926,12 @@ const yearsActive = new Date().getFullYear() - 2024;
         ring.classList.remove('interacting');
         targetRotateX = 0;
         targetRotateY = 0;
-        if (ringCursor) ringCursor.style.opacity = '0';
       });
       
       // 触摸事件支持
       ring.addEventListener('touchstart', function(e) {
         isInteracting = true;
         ring.classList.add('interacting');
-        if (ringCursor) ringCursor.style.opacity = '1';
         e.preventDefault();
       }, { passive: false });
       
@@ -984,7 +947,6 @@ const yearsActive = new Date().getFullYear() - 2024;
         ring.classList.remove('interacting');
         targetRotateX = 0;
         targetRotateY = 0;
-        if (ringCursor) ringCursor.style.opacity = '0';
       });
       
       // 设备方向支持 (移动端)

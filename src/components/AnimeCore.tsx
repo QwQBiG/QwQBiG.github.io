@@ -114,8 +114,8 @@ function CharacterPlane() {
   
   // 根据宽高比计算平面尺寸，保持图片比例
   // 使用 cover 策略：填满圆形区域，可能裁剪部分图片
-  const planeWidth = imageAspect >= 1 ? 3.5 : 3.5 * imageAspect;
-  const planeHeight = imageAspect >= 1 ? 3.5 / imageAspect : 3.5;
+  const planeWidth = imageAspect >= 1 ? 4.2 : 4.2 * imageAspect;
+  const planeHeight = imageAspect >= 1 ? 4.2 / imageAspect : 4.2;
   
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
@@ -128,7 +128,7 @@ function CharacterPlane() {
   );
 }
 
-// 背景光晕效果
+// 背景光晕效果 - 圆形
 function AmbientGlow() {
   const glowRef = useRef<THREE.Mesh>(null);
   
@@ -147,7 +147,7 @@ function AmbientGlow() {
   
   return (
     <mesh ref={glowRef} position={[0, 0, -0.3]}>
-      <planeGeometry args={[4, 4]} />
+      <circleGeometry args={[2.8, 64]} />
       <meshBasicMaterial
         color={0xe9d5ff}
         transparent
