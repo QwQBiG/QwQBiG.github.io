@@ -8,7 +8,7 @@ series: ["逃课-速通"]
 ---
 
 ```java
-mport java.util.*;
+import java.util.*;
 import java.io.*;
 import java.math.*;  
 
