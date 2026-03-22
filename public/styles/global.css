@@ -86,6 +86,32 @@ body {
   color: var(--text-primary);
   background-color: var(--bg-primary);
   transition: color 0.3s ease, background-color 0.3s ease;
+  /* 全局禁用文本选择 */
+  user-select: none;
+  /* 全局禁用光标 */
+  caret-color: transparent;
+}
+
+/* 文章内容允许选择和光标 */
+.prose, .prose *,
+article, article *,
+.post-content, .post-content * {
+  user-select: text;
+  caret-color: auto;
+}
+
+/* 代码块内容允许选择和光标 */
+pre, pre *,
+code, code *,
+.code-content, .code-content * {
+  user-select: text;
+  caret-color: auto;
+}
+
+/* 输入框和文本域允许光标 */
+input, textarea, [contenteditable="true"] {
+  user-select: text;
+  caret-color: auto;
 }
 
 /*——————————————————————————————————————————————
