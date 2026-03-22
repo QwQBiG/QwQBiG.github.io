@@ -1,13 +1,26 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-// 角色平面组件 - 带呼吸和视差效果
+// 抑制 THREE.Clock 弃用警告
+const originalWarn = console.warn;
+console.warn = function(...args: any[]) {
+  if (args[0] && typeof args[0] === 'string' && args[0].includes('THREE.THREE.Clock')) {
+    return;
+  }
+  originalWarn.apply(console, args);
+};
+
+// 检测是否为触摸设备
+const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
+// 角色平面组件 - 带呼吸和视差效果 - 优化版本
 function CharacterPlane() {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { mouse } = useThree();
+  const frameCount = useRef(0);
   
   // 加载角色贴图
   const texture = useTexture('/images/character.png');
@@ -22,19 +35,27 @@ function CharacterPlane() {
   useFrame((state) => {
     if (!meshRef.current || !materialRef.current) return;
     
+    // 触摸设备降低帧率以节省性能
+    frameCount.current++;
+    const skipFrames = isTouchDevice ? 2 : 1;
+    if (frameCount.current % skipFrames !== 0) return;
+    
     const time = state.clock.elapsedTime;
     
-    // 平滑鼠标跟随
-    mousePosition.x += (mouse.x * 0.5 - mousePosition.x) * 0.05;
-    mousePosition.y += (mouse.y * 0.5 - mousePosition.y) * 0.05;
+    // 平滑鼠标跟随 - 触摸设备使用更快的响应
+    const lerpFactor = isTouchDevice ? 0.08 : 0.05;
+    mousePosition.x += (mouse.x * 0.5 - mousePosition.x) * lerpFactor;
+    mousePosition.y += (mouse.y * 0.5 - mousePosition.y) * lerpFactor;
     
-    // 计算目标旋转（视差效果）
-    targetRotation.x = mousePosition.y * 0.12;
-    targetRotation.y = -mousePosition.x * 0.12;
+    // 计算目标旋转（视差效果）- 触摸设备降低幅度
+    const rotationScale = isTouchDevice ? 0.08 : 0.12;
+    targetRotation.x = mousePosition.y * rotationScale;
+    targetRotation.y = -mousePosition.x * rotationScale;
     
     // 应用旋转（平滑过渡）
-    meshRef.current.rotation.x += (targetRotation.x - meshRef.current.rotation.x) * 0.08;
-    meshRef.current.rotation.y += (targetRotation.y - meshRef.current.rotation.y) * 0.08;
+    const rotationLerp = isTouchDevice ? 0.12 : 0.08;
+    meshRef.current.rotation.x += (targetRotation.x - meshRef.current.rotation.x) * rotationLerp;
+    meshRef.current.rotation.y += (targetRotation.y - meshRef.current.rotation.y) * rotationLerp;
     
     // 位置偏移（增强视差）
     meshRef.current.position.x = mousePosition.x * 0.2;
@@ -180,19 +201,26 @@ function Scene() {
   );
 }
 
-// 主组件
+// 主组件 - 优化版本
 export default function AnimeCore() {
+  // 根据设备类型调整 DPR
+  const dpr = typeof window !== 'undefined' 
+    ? Math.min(window.devicePixelRatio, isTouchDevice ? 1.5 : 2) 
+    : 1;
+  
   return (
     <div className="w-full h-full relative">
       <Canvas
         camera={{ position: [0, 0, 4.5], fov: 50 }}
         gl={{ 
-          antialias: true, 
+          antialias: !isTouchDevice, // 触摸设备禁用抗锯齿
           alpha: true,
           powerPreference: "high-performance"
         }}
         style={{ background: 'transparent' }}
-        dpr={typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1}
+        dpr={dpr}
+        frameloop="always"
+        performance={{ min: 0.5 }} // 允许帧率下降以保持流畅
       >
         <Scene />
       </Canvas>

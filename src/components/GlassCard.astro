@@ -47,6 +47,9 @@ const hoverClasses = hover
       0 40px 60px -20px rgba(0, 0, 0, 0.05),
       inset 0 1px 1px 0 rgba(255, 255, 255, 0.7),
       inset 0 -1px 1px 0 rgba(255, 255, 255, 0.3);
+    /* GPU 加速 */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   "
 >
   <!-- 顶部边缘高光 - 模拟玻璃反光 -->
@@ -97,7 +100,7 @@ const hoverClasses = hover
 </div>
 
 <script>
-  // 3D Tilt 效果实现
+  // 3D Tilt 效果实现 - 优化版本
   class VanillaTilt {
     constructor(element, settings = {}) {
       this.element = element;
@@ -112,15 +115,28 @@ const hoverClasses = hover
         ...settings
       };
       
+      // 检测是否为触摸设备
+      this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+      
+      // 触摸设备降低效果强度
+      if (this.isTouchDevice) {
+        this.settings.max = 6;
+        this.settings.scale = 1.01;
+        this.settings.speed = 400;
+      }
+      
       this.init();
     }
     
     init() {
       this.element.style.transform = `perspective(${this.settings.perspective}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
       
-      this.element.addEventListener('mouseenter', (e) => this.onMouseEnter(e));
-      this.element.addEventListener('mousemove', (e) => this.onMouseMove(e));
-      this.element.addEventListener('mouseleave', (e) => this.onMouseLeave(e));
+      // 只在非触摸设备上启用鼠标效果
+      if (!this.isTouchDevice) {
+        this.element.addEventListener('mouseenter', (e) => this.onMouseEnter(e));
+        this.element.addEventListener('mousemove', (e) => this.onMouseMove(e));
+        this.element.addEventListener('mouseleave', (e) => this.onMouseLeave(e));
+      }
       
       // 确保内部链接可以点击 - 阻止事件冒泡到卡片
       const links = this.element.querySelectorAll('a, button');
@@ -138,7 +154,13 @@ const hoverClasses = hover
     }
     
     onMouseMove(e) {
-      requestAnimationFrame(() => this.update(e));
+      // 使用 requestAnimationFrame 但添加节流
+      if (!this.rafId) {
+        this.rafId = requestAnimationFrame(() => {
+          this.update(e);
+          this.rafId = null;
+        });
+      }
     }
     
     onMouseLeave(e) {
@@ -164,6 +186,8 @@ const hoverClasses = hover
       const rotateX = ((y - centerY) / centerY) * -this.settings.max;
       const rotateY = ((x - centerX) / centerX) * this.settings.max;
       
+      // 使用 will-change 优化
+      this.element.style.willChange = 'transform';
       this.element.style.transform = `
         perspective(${this.settings.perspective}px) 
         rotateX(${rotateX}deg) 

@@ -323,16 +323,26 @@
       var scrollContent = document.querySelector('.track-scroll-content');
       if (!scrollContainer || !scrollContent) return;
 
-      // 比较内容宽度和容器宽度
-      // 由于内容复制了一份，实际内容宽度是 scrollWidth 的一半
+      // 获取原始内容（不包含 duplicate 部分）
+      var originalContent = scrollContent.cloneNode(true);
+      var duplicates = originalContent.querySelectorAll('.duplicate');
+      duplicates.forEach(function(d) { d.remove(); });
+      
+      // 创建一个临时元素来计算原始内容的实际宽度
+      var tempDiv = document.createElement('div');
+      tempDiv.style.cssText = 'position: absolute; visibility: hidden; white-space: nowrap; display: inline-flex; align-items: center;';
+      tempDiv.innerHTML = originalContent.innerHTML;
+      document.body.appendChild(tempDiv);
+      var originalWidth = tempDiv.scrollWidth;
+      document.body.removeChild(tempDiv);
+      
       var containerWidth = scrollContainer.clientWidth;
-      var contentWidth = scrollContent.scrollWidth / 2; // 只取一半（原始内容）
 
-      if (contentWidth > containerWidth + 5) {
+      if (originalWidth > containerWidth + 5) {
         // 文字溢出，启用滚动
         scrollContainer.classList.add('can-scroll');
-        // 设置 CSS 变量用于动画 - 只滚动原始内容的宽度
-        var scrollDistance = -(contentWidth + 10);
+        // 设置 CSS 变量用于动画
+        var scrollDistance = -(originalWidth + 32); // 32px 是 ml-8 的间距
         scrollContainer.style.setProperty('--scroll-distance', scrollDistance + 'px');
       } else {
         // 文字未溢出，禁用滚动
