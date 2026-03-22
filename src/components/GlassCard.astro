@@ -214,6 +214,12 @@ const hoverClasses = hover
   .glass-card {
     transform-style: preserve-3d;
     backface-visibility: hidden;
+    /* 禁用光标和选择 */
+    caret-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
   
   .glass-card .glare {

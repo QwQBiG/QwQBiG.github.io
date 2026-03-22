@@ -30,9 +30,15 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap');
-  
+
   .clock-widget {
     font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    /* 禁用光标和选择 */
+    caret-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
   
   .time-display {
@@ -90,36 +96,8 @@
     max-width: 100%;
   }
   
-  /* 深色模式适配 */
-  @media (prefers-color-scheme: dark) {
-    .clock-digits {
-      background: linear-gradient(
-        135deg,
-        #A78BFA 0%,
-        #F472B6 50%,
-        #FBB6CE 100%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 2px 4px rgba(167, 139, 250, 0.3));
-    }
-    
-    .clock-seconds {
-      background: linear-gradient(
-        135deg,
-        #60A5FA 0%,
-        #22D3EE 100%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .clock-date {
-      color: rgba(156, 163, 175, 0.9);
-    }
-  }
+  /* 深色模式适配 - 已禁用 */
+  /* @media (prefers-color-scheme: dark) { ... } */
   
   /* 秒数闪烁动画 */
   @keyframes pulse-soft {

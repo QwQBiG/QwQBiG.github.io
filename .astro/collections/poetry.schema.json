@@ -33,22 +33,30 @@
           },
           "default": []
         },
-        "categories": {
+        "genre": {
+          "type": "string",
+          "enum": [
+            "古诗",
+            "现代诗",
+            "散文诗",
+            "词",
+            "辞",
+            "赋",
+            "歌",
+            "行",
+            "序",
+            "古文",
+            "英文诗",
+            "其他"
+          ],
+          "default": "其他"
+        },
+        "mood": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": []
-        },
-        "series": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "weight": {
-          "type": "number",
-          "default": 0
         },
         "draft": {
           "type": "boolean",
@@ -61,25 +69,6 @@
         "pin": {
           "type": "boolean",
           "default": false
-        },
-        "cover": {
-          "type": "object",
-          "properties": {
-            "image": {
-              "type": "string"
-            },
-            "alt": {
-              "type": "string"
-            },
-            "caption": {
-              "type": "string"
-            },
-            "hidden": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "additionalProperties": false
         },
         "$schema": {
           "type": "string"

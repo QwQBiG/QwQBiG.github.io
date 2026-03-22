@@ -8,20 +8,22 @@ import { getCollection } from 'astro:content';
 // Get all CS posts
 const csPosts = await getCollection('cs', ({ data }) => !data.draft);
 
-// Get series entries (_index.md files)
-const seriesEntries = csPosts.filter(post => 
-  post.slug.endsWith('/_index') || post.slug.endsWith('_index')
-);
+// 识别合集：slug 只包含一个斜杠（格式为 posts/xxx）且 id 包含 index.md
+const seriesEntries = csPosts.filter(post => {
+  const slashCount = (post.slug.match(/\//g) || []).length;
+  return slashCount === 1 && post.id.includes('index.md');
+});
 
-// Get regular posts
-const regularPosts = csPosts.filter(post => 
-  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
-);
+// Get regular posts（包含两个斜杠的文章，即子目录中的文章）
+const regularPosts = csPosts.filter(post => {
+  const slashCount = (post.slug.match(/\//g) || []).length;
+  return slashCount >= 2;
+});
 
 // Build series info
 const allSeries = seriesEntries.map(entry => {
   const seriesName = entry.data.title;
-  const seriesSlug = entry.slug.replace('/_index', '').replace('_index', '');
+  const seriesSlug = entry.slug;
   const seriesPosts = regularPosts.filter(post => 
     post.data.series?.includes(seriesName)
   );

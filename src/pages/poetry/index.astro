@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+import FloatingNavCard from '../../components/FloatingNavCard.astro';
+import { getCollection } from 'astro:content';
+
+// Get all poetry posts
+const poetryPosts = await getCollection('poetry', ({ data }) => !data.draft);
+
+// Sort by date (newest first)
+const sortedPosts = poetryPosts.sort((a, b) => 
+  b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+// Get unique genres and moods for filtering
+const allGenres = [...new Set(poetryPosts.map(p => p.data.genre))];
+const allMoods = [...new Set(poetryPosts.flatMap(p => p.data.mood))];
+
+const pageTitle = "诗歌 - QwQBiG's World";
+const pageDescription = "我的诗歌创作空间";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <FloatingNavCard />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+          📝 诗歌
+        </h1>
+        <p class="font-sans text-lg text-text-secondary">
+          共 {sortedPosts.length} 首诗歌
+        </p>
+      </div>
+
+      <!-- Filters -->
+      {(allGenres.length > 0 || allMoods.length > 0) && (
+        <div class="mb-8 flex flex-wrap gap-4 justify-center">
+          {allGenres.length > 0 && (
+            <div class="flex flex-wrap gap-2 items-center">
+              <span class="text-sm text-text-secondary">体裁：</span>
+              {allGenres.map(genre => (
+                <span class="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">
+                  {genre}
+                </span>
+              ))}
+            </div>
+          )}
+          {allMoods.length > 0 && (
+            <div class="flex flex-wrap gap-2 items-center">
+              <span class="text-sm text-text-secondary">主题：</span>
+              {allMoods.map(mood => (
+                <span class="px-3 py-1 text-sm bg-secondary/10 text-secondary rounded-full">
+                  {mood}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <!-- Poetry Grid -->
+      {sortedPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedPosts.map((post) => (
+            <a 
+              href={`/poetry/${post.slug}/`}
+              class="group block p-6 bg-white/30 backdrop-blur-sm rounded-2xl border border-white/50 hover:bg-white/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div class="flex items-start justify-between mb-3">
+                <h2 class="font-sans font-bold text-xl text-text-primary group-hover:text-primary transition-colors">
+                  {post.data.title}
+                </h2>
+                {post.data.genre && (
+                  <span class="px-2 py-0.5 text-xs bg-primary/10 text-primary rounded-full">
+                    {post.data.genre}
+                  </span>
+                )}
+              </div>
+              
+              {post.data.description && (
+                <p class="text-text-secondary text-sm mb-4 line-clamp-2">
+                  {post.data.description}
+                </p>
+              )}
+              
+              <div class="flex items-center justify-between text-xs text-text-muted">
+                <time datetime={post.data.date.toISOString()}>
+                  {post.data.date.toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+                
+                {post.data.mood && post.data.mood.length > 0 && (
+                  <div class="flex gap-1">
+                    {post.data.mood.slice(0, 2).map(m => (
+                      <span class="px-1.5 py-0.5 bg-secondary/10 text-secondary rounded">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-text-secondary mb-4">暂无诗歌</p>
+          <p class="text-text-muted text-sm">
+            在 <code>src/content/poetry/posts/</code> 目录下创建 Markdown 文件来添加诗歌
+          </p>
+        </div>
+      )}
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

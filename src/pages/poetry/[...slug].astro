@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+import FloatingNavCard from '../../components/FloatingNavCard.astro';
+import { getCollection } from 'astro:content';
+
+// Generate static paths for all poetry posts
+export async function getStaticPaths() {
+  const poetryPosts = await getCollection('poetry', ({ data }) => !data.draft);
+  
+  return poetryPosts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
+---
+
+<Layout title={pageTitle} description={post.data.description}>
+  <FloatingNavCard />
+  
+  <main class="flex-1 py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Back Link -->
+      <a 
+        href="/poetry/" 
+        class="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-8"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        返回诗歌列表
+      </a>
+
+      <!-- Article Header -->
+      <article class="prose prose-lg max-w-none">
+        <header class="mb-8 text-center">
+          <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+            {post.data.title}
+          </h1>
+          
+          {post.data.description && (
+            <p class="text-text-secondary text-lg">
+              {post.data.description}
+            </p>
+          )}
+          
+          <div class="flex flex-wrap items-center justify-center gap-3 mt-4 text-sm text-text-muted">
+            <time datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+            
+            {post.data.genre && (
+              <>
+                <span>·</span>
+                <span class="px-2 py-0.5 bg-primary/10 text-primary rounded-full">
+                  {post.data.genre}
+                </span>
+              </>
+            )}
+          </div>
+          
+          {post.data.mood && post.data.mood.length > 0 && (
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
+              {post.data.mood.map(m => (
+                <span class="px-2 py-1 text-xs bg-secondary/10 text-secondary rounded-full">
+                  {m}
+                </span>
+              ))}
+            </div>
+          )}
+          
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
+              {post.data.tags.map(tag => (
+                <a 
+                  href={`/tags/${tag}/`}
+                  class="px-2 py-1 text-xs bg-bg-secondary text-text-secondary rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <!-- Content -->
+        <div class="prose-content">
+          <Content />
+        </div>
+      </article>
+
+      <!-- Navigation -->
+      <div class="mt-12 pt-8 border-t border-border-color">
+        <a 
+          href="/poetry/" 
+          class="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          返回诗歌列表
+        </a>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style>
+  .prose-content {
+    line-height: 2;
+  }
+  
+  .prose-content :global(p) {
+    margin-bottom: 1.5em;
+  }
+  
+  .prose-content :global(h1),
+  .prose-content :global(h2),
+  .prose-content :global(h3) {
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+</style>

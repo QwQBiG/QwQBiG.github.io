@@ -10,13 +10,17 @@ import { getCollection } from 'astro:content';
 // Get all posts from CS collection
 const csPosts = await getCollection('cs', ({ data }) => !data.draft);
 
-// Get all series from _index.md files
-const seriesEntries = csPosts.filter(post => post.slug.endsWith('/_index') || post.slug.endsWith('_index'));
+// 识别合集：slug 只包含一个斜杠（格式为 posts/xxx）且 id 包含 index.md
+const seriesEntries = csPosts.filter(post => {
+  const slashCount = (post.slug.match(/\//g) || []).length;
+  return slashCount === 1 && post.id.includes('index.md');
+});
 
-// Get regular posts (not series index pages)
-const regularPosts = csPosts.filter(post => 
-  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
-);
+// Get regular posts（包含两个斜杠的文章，即子目录中的文章）
+const regularPosts = csPosts.filter(post => {
+  const slashCount = (post.slug.match(/\//g) || []).length;
+  return slashCount >= 2;
+});
 
 // Sort posts by date (newest first)
 const sortedPosts = regularPosts.sort((a, b) => 
@@ -28,7 +32,7 @@ const pinnedSeries = seriesEntries
   .filter(entry => entry.data.pin)
   .map(entry => {
     const seriesName = entry.data.title;
-    const seriesSlug = entry.slug.replace('/_index', '').replace('_index', '');
+    const seriesSlug = entry.slug;
     const postCount = regularPosts.filter(post => 
       post.data.series?.includes(seriesName)
     ).length;
@@ -46,7 +50,7 @@ const latestPosts = sortedPosts.slice(0, 3);
 
 // Stats
 const totalPosts = regularPosts.length;
-const totalSeries = pinnedSeries.length;
+const totalSeries = seriesEntries.length;
 const totalTags = new Set(regularPosts.flatMap(p => p.data.tags || [])).size;
 const yearsActive = new Date().getFullYear() - 2024;
 ---
@@ -72,6 +76,12 @@ const yearsActive = new Date().getFullYear() - 2024;
       font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      /* 全局禁用文本光标和选择 */
+      caret-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
     
     .gradient-bg {
@@ -157,25 +167,37 @@ const yearsActive = new Date().getFullYear() - 2024;
       color: #4a5568;
       transition: all 0.2s;
       white-space: nowrap;
+      /* 禁用光标和选择 */
+      caret-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
-    
+
     .tag:hover {
       background: rgba(255, 255, 255, 0.8);
       transform: translateY(-1px);
     }
-    
+
     /* 文章卡片 */
     .post-item {
       padding: 0.5rem 0.625rem;
       border-radius: 0.625rem;
       background: rgba(255, 255, 255, 0.3);
       transition: all 0.2s;
+      /* 禁用光标和选择 */
+      caret-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
-    
+
     .post-item:hover {
       background: rgba(255, 255, 255, 0.5);
     }
-    
+
     /* 链接样式 */
     .nav-link {
       display: flex;
@@ -187,17 +209,29 @@ const yearsActive = new Date().getFullYear() - 2024;
       text-decoration: none;
       transition: all 0.2s;
       font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      /* 禁用光标和选择 */
+      caret-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
-    
+
     .nav-link:hover {
       background: rgba(255, 255, 255, 0.5);
       color: #2d3748;
     }
-    
+
     /* 统计数字 */
     .stat-number {
       font-size: clamp(1.25rem, 3vw, 1.75rem);
       font-weight: 700;
+      /* 禁用光标和选择 */
+      caret-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -683,6 +717,12 @@ const yearsActive = new Date().getFullYear() - 2024;
                     </svg>
                     <span>archives</span>
                   </a>
+                  <a href="/poetry/" class="nav-link font-['Quicksand']">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <span>poetry</span>
+                  </a>
                   <a href="/about/" class="nav-link font-['Quicksand']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -766,7 +806,7 @@ const yearsActive = new Date().getFullYear() - 2024;
                 </svg>
               </a>
               <!-- LeetCode -->
-              <a href="https://leetcode.cn/u/heuristic-agnesipjp/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-white/40 hover:bg-white/60 border border-white/50 hover:border-yellow-500/50 transition-all hover:-translate-y-1 hover:shadow-lg group" aria-label="LeetCode">
+              <a href="https://leetcode.cn/u/iqwqi/" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-white/40 hover:bg-white/60 border border-white/50 hover:border-yellow-500/50 transition-all hover:-translate-y-1 hover:shadow-lg group" aria-label="LeetCode">
                 <svg class="w-6 h-6 text-gray-700 group-hover:text-yellow-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M22,14.355c0-0.742-0.564-1.346-1.26-1.346H10.676c-0.696,0-1.26,0.604-1.26,1.346s0.563,1.346,1.26,1.346H20.74C21.436,15.702,22,15.098,22,14.355z"/>
                   <path d="M3.482,18.187l4.313,4.361C8.768,23.527,10.113,24,11.598,24c1.485,0,2.83-0.512,3.805-1.494l2.588-2.637c0.51-0.514,0.492-1.365-0.039-1.9c-0.531-0.535-1.375-0.553-1.884-0.039l-2.676,2.607c-0.462,0.467-1.102,0.662-1.809,0.662s-1.346-0.195-1.81-0.662l-4.298-4.363c-0.463-0.467-0.696-1.15-0.696-1.863c0-0.713,0.233-1.357,0.696-1.824l4.285-4.38c0.463-0.467,1.116-0.645,1.822-0.645s1.346,0.195,1.809,0.662l2.676,2.606c0.51,0.515,1.354,0.497,1.885-0.038c0.531-0.536,0.549-1.387,0.039-1.901l-2.588-2.636c-0.649-0.646-1.471-1.116-2.392-1.33l-0.034-0.007l2.447-2.503c0.512-0.514,0.494-1.366-0.037-1.901c-0.531-0.535-1.376-0.552-1.887-0.038L3.482,10.476C2.509,11.458,2,12.813,2,14.311C2,15.809,2.509,17.207,3.482,18.187z"/>

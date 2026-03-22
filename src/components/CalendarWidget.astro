@@ -37,6 +37,12 @@
   /* 日历组件样式 - 使用 is:global 确保动态生成的元素也能应用样式 */
   .calendar-widget {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* 禁用光标和选择 */
+    caret-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
   
   .calendar-nav-btn {

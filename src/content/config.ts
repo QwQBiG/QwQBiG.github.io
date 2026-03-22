@@ -22,22 +22,25 @@ const postsCollection = defineCollection({
   }),
 });
 
-const seriesCollection = defineCollection({
+// 诗歌内容集合
+const poetryCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    pin: z.boolean().default(false),
-    categories: z.array(z.string()).default([]),
+    date: z.date(),
     tags: z.array(z.string()).default([]),
-    cover: z.object({
-      image: z.string().optional(),
-      alt: z.string().optional(),
-      caption: z.string().optional(),
-    }).optional(),
+    // 诗歌类型/体裁
+    genre: z.enum(['古诗', '现代诗', '散文诗', '词', '辞', '赋', '歌', '行', '序', '古文', '英文诗', '其他']).default('其他'),
+    // 情感/主题
+    mood: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    hidden: z.boolean().default(false),
+    pin: z.boolean().default(false),
   }),
 });
 
 export const collections = {
   cs: postsCollection,
+  poetry: poetryCollection,
 };

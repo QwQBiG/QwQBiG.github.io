@@ -24,7 +24,7 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 ---
 
 <!DOCTYPE html>
-<html lang="zh-cn" data-theme="auto" class="scroll-smooth">
+<html lang="zh-cn" data-theme="light" class="scroll-smooth">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -62,11 +62,12 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 <body class={`min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <slot />
     
-    <!-- Theme Script -->
+    <!-- Theme Script - 强制使用浅色模式 -->
     <script is:inline>
       (function() {
-        const theme = localStorage.getItem('theme') || 'auto';
-        document.documentElement.setAttribute('data-theme', theme);
+        // 强制使用浅色模式，禁用深色模式
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
       })();
     </script>
     

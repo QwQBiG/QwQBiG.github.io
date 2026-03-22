@@ -491,3 +491,101 @@
 
   window.addEventListener('load', addLanguageLabels);
 })();
+
+// ========== 代码块键盘导航功能 ==========
+(function() {
+  let focusedCodeBlock = null;
+
+  const initKeyboardNavigation = function() {
+    const codeBlocks = document.querySelectorAll('.prose pre.astro-code');
+
+    codeBlocks.forEach(block => {
+      // 如果已经初始化过，跳过
+      if (block.dataset.keyboardNav === 'true') return;
+
+      const content = block.querySelector('.code-content');
+      if (!content) return;
+
+      // 使代码块可以聚焦
+      block.setAttribute('tabindex', '0');
+      block.style.outline = 'none';
+
+      // 点击时聚焦
+      block.addEventListener('click', function(e) {
+        // 如果点击的是按钮，不聚焦
+        if (e.target.closest('button')) return;
+
+        focusedCodeBlock = block;
+        block.focus();
+        block.style.boxShadow = '0 0 0 2px rgba(232, 74, 122, 0.5)';
+      });
+
+      // 失去焦点时移除高亮
+      block.addEventListener('blur', function() {
+        if (focusedCodeBlock === block) {
+          focusedCodeBlock = null;
+        }
+        block.style.boxShadow = '';
+      });
+
+      // 键盘事件 - 左右箭头控制水平滚动，上下箭头滚动页面
+      block.addEventListener('keydown', function(e) {
+        // 确保是当前聚焦的代码块
+        if (focusedCodeBlock !== block) return;
+
+        const scrollAmount = 30; // 水平滚动距离
+        const pageScrollAmount = 50; // 页面滚动距离
+
+        switch(e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            content.scrollLeft -= scrollAmount;
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            content.scrollLeft += scrollAmount;
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            e.stopPropagation();
+            // 使用 document.documentElement 滚动，支持平滑滚动
+            document.documentElement.scrollBy({
+              top: -pageScrollAmount,
+              behavior: 'smooth'
+            });
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            e.stopPropagation();
+            // 使用 document.documentElement 滚动，支持平滑滚动
+            document.documentElement.scrollBy({
+              top: pageScrollAmount,
+              behavior: 'smooth'
+            });
+            break;
+        }
+      });
+
+      block.dataset.keyboardNav = 'true';
+    });
+  };
+
+  // 初始执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initKeyboardNavigation, false);
+  } else {
+    initKeyboardNavigation();
+  }
+
+  // 监听动态添加的代码块
+  const keyboardObserver = new MutationObserver(function() {
+    initKeyboardNavigation();
+  });
+
+  keyboardObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  window.addEventListener('load', initKeyboardNavigation);
+})();
