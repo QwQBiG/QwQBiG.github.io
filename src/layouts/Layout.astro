@@ -63,7 +63,7 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <!-- Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
 </head>
-<body class={`min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
+<body class={`min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <slot />
     
     <!-- Theme Script - 强制使用浅色模式 -->

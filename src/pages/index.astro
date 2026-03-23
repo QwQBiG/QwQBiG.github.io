@@ -74,7 +74,9 @@ const yearsActive = new Date().getFullYear() - 2024;
     
     body {
       font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
+      /* 使用 dvh 单位避免移动端地址栏影响 */
+      min-height: 100dvh;
+      min-height: 100vh; /* 回退 */
       overflow-x: hidden;
       /* 全局禁用文本光标和选择 */
       caret-color: transparent;
@@ -104,6 +106,7 @@ const yearsActive = new Date().getFullYear() - 2024;
       /* 移动端优化滚动 */
       .min-h-screen {
         -webkit-overflow-scrolling: touch;
+        min-height: 100dvh;
       }
     }
     
@@ -606,10 +609,10 @@ const yearsActive = new Date().getFullYear() - 2024;
   </style>
 </head>
 <body class="gradient-bg">
-  <!-- 外层包装器 - 确保内容在屏幕绝对正中心 -->
-  <div class="min-h-screen w-full flex items-center justify-center overflow-hidden py-6 [@media(min-width:924px)]:py-8 px-4 sm:px-6 [@media(min-width:924px)]:px-12 xl:px-12">
+  <!-- 外层包装器 - 移动端允许滚动，桌面端居中 -->
+  <div class="min-h-[100dvh] min-h-screen w-full flex items-start [@media(min-width:924px)]:items-center justify-center overflow-y-auto [@media(min-width:924px)]:overflow-hidden py-4 [@media(min-width:924px)]:py-8 px-4 sm:px-6 [@media(min-width:924px)]:px-12 xl:px-12">
     <!-- 网格容器 - 由外层 flex 推到屏幕中心 -->
-    <div class="flex flex-col [@media(min-width:924px)]:grid [@media(min-width:924px)]:grid-cols-3 gap-6 [@media(min-width:924px)]:gap-10 relative">
+    <div class="flex flex-col [@media(min-width:924px)]:grid [@media(min-width:924px)]:grid-cols-3 gap-4 [@media(min-width:924px)]:gap-10 relative w-full max-w-md [@media(min-width:924px)]:max-w-none">
 
         <!-- ========== 移动端第1个 / 桌面端左上 ========== -->
 
@@ -799,21 +802,21 @@ const yearsActive = new Date().getFullYear() - 2024;
         
         <!-- 3D 移动端第2，桌面端中心绝对C位 -->
         <div class="order-2 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-center flex justify-center items-center">
-          <div class="relative w-[320px] h-[320px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[500px] [@media(min-width:924px)]:h-[500px] flex items-center justify-center">
+          <div class="relative w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[500px] [@media(min-width:924px)]:h-[500px] flex items-center justify-center">
             <!-- 大圆形背景 - 只有圆形，没有方形背景，更深的弥散阴影 -->
-            <div class="absolute w-[280px] h-[280px] md:w-[340px] md:h-[340px] [@media(min-width:924px)]:w-[440px] [@media(min-width:924px)]:h-[440px] rounded-full bg-white/30 backdrop-blur-xl border border-white/60"
+            <div class="absolute w-[230px] h-[230px] sm:w-[260px] sm:h-[260px] md:w-[340px] md:h-[340px] [@media(min-width:924px)]:w-[440px] [@media(min-width:924px)]:h-[440px] rounded-full bg-white/30 backdrop-blur-xl border border-white/60"
               style="box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.15), 0 50px 100px -30px rgba(0, 0, 0, 0.1), 0 80px 140px -40px rgba(0, 0, 0, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);">
             </div>
-            
+
             <!-- 中心 3D 动漫角色展示 - 呼吸感球体样式 -->
-            <div class="absolute w-52 h-52 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
+            <div class="absolute w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
               <AnimeCore
                 client:load
               />
             </div>
 
             <!-- 环形文字 - 优雅的3D悬浮动效 + 交互 -->
-            <div id="interactiveRing" class="absolute w-[300px] h-[300px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[480px] [@media(min-width:924px)]:h-[480px] floating-ring cursor-pointer" style="perspective: 1000px; transform-style: preserve-3d;">
+            <div id="interactiveRing" class="absolute w-[250px] h-[250px] sm:w-[280px] sm:h-[280px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[480px] [@media(min-width:924px)]:h-[480px] floating-ring cursor-pointer" style="perspective: 1000px; transform-style: preserve-3d;">
               <svg viewBox="0 0 300 300" class="w-full h-full ring-text-rotate" style="transform-style: preserve-3d;">
                 <defs>
                   <path id="textCircle" d="M 150, 150 m -110, 0 a 110,110 0 1,1 220,0 a 110,110 0 1,1 -220,0" fill="none"/>
@@ -951,6 +954,26 @@ const yearsActive = new Date().getFullYear() - 2024;
       
     </div>
   </div>
+
+  <!-- 视口高度修复 - 解决移动端地址栏导致的布局问题 -->
+  <script is:inline>
+    (function() {
+      // 设置视口高度 CSS 变量
+      function setVH() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', vh + 'px');
+      }
+      
+      // 初始化并监听 resize
+      setVH();
+      window.addEventListener('resize', setVH);
+      
+      // 监听方向变化
+      window.addEventListener('orientationchange', function() {
+        setTimeout(setVH, 100);
+      });
+    })();
+  </script>
 
   <!-- 环形文字交互脚本 -->
   <script is:inline>

@@ -222,7 +222,7 @@ export default function FloatingIslandHome({ onBack }: { onBack: () => void }) {
   ]
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-[100dvh] h-screen overflow-hidden">
       <BackButton onBack={onBack} />
       
       <Canvas
