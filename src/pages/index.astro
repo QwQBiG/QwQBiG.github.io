@@ -609,10 +609,10 @@ const yearsActive = new Date().getFullYear() - 2024;
   </style>
 </head>
 <body class="gradient-bg">
-  <!-- 外层包装器 - 移动端允许滚动，桌面端居中 -->
-  <div class="min-h-[100dvh] min-h-screen w-full flex items-start [@media(min-width:924px)]:items-center justify-center overflow-y-auto [@media(min-width:924px)]:overflow-hidden py-4 [@media(min-width:924px)]:py-8 px-4 sm:px-6 [@media(min-width:924px)]:px-12 xl:px-12">
+  <!-- 外层包装器 - 始终居中 -->
+  <div class="min-h-screen w-full flex items-center justify-center overflow-hidden py-6 [@media(min-width:924px)]:py-8 px-4 sm:px-6 [@media(min-width:924px)]:px-12 xl:px-12">
     <!-- 网格容器 - 由外层 flex 推到屏幕中心 -->
-    <div class="flex flex-col [@media(min-width:924px)]:grid [@media(min-width:924px)]:grid-cols-3 gap-4 [@media(min-width:924px)]:gap-10 relative w-full max-w-md [@media(min-width:924px)]:max-w-none">
+    <div class="flex flex-col [@media(min-width:924px)]:grid [@media(min-width:924px)]:grid-cols-3 gap-6 [@media(min-width:924px)]:gap-10 relative">
 
         <!-- ========== 移动端第1个 / 桌面端左上 ========== -->
 
