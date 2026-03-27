@@ -24,10 +24,10 @@ const regularPosts = csPosts.filter(post => {
 const allSeries = seriesEntries.map(entry => {
   const seriesName = entry.data.title;
   const seriesSlug = entry.slug;
-  const seriesPosts = regularPosts.filter(post => 
+  const seriesPosts = regularPosts.filter(post =>
     post.data.series?.includes(seriesName)
   );
-  
+
   return {
     title: entry.data.title,
     description: entry.data.description,

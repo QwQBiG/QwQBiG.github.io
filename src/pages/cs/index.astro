@@ -13,10 +13,18 @@ const seriesEntries = posts.filter(post =>
   post.slug.endsWith('/_index') || post.slug.endsWith('_index')
 );
 
-// Get regular posts
-const regularPosts = posts.filter(post => 
-  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
-);
+// Get regular posts (exclude index pages and 合集)
+const regularPosts = posts.filter(post => {
+  // 排除 index 页面
+  if (post.slug.endsWith('/_index') || post.slug.endsWith('_index')) {
+    return false;
+  }
+  // 排除合集（categories 包含 "合集" 的）
+  if (post.data.categories?.includes('合集')) {
+    return false;
+  }
+  return true;
+});
 
 // Sort posts by date
 const sortedPosts = regularPosts.sort((a, b) => 

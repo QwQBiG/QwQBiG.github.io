@@ -8,10 +8,18 @@ import { formatDate, groupByYear } from '../utils/date';
 // Get all posts from CS collection
 const csPosts = await getCollection('cs', ({ data }) => !data.draft);
 
-// Filter out index pages
-const allPosts = csPosts.filter(post => 
-  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
-);
+// Filter out index pages and 合集 (series collections)
+const allPosts = csPosts.filter(post => {
+  // 排除 index 页面
+  if (post.slug.endsWith('/_index') || post.slug.endsWith('_index')) {
+    return false;
+  }
+  // 排除合集（categories 包含 "合集" 的）
+  if (post.data.categories && post.data.categories.includes('合集')) {
+    return false;
+  }
+  return true;
+});
 
 // Sort by date (newest first)
 const sortedPosts = allPosts.sort((a, b) => 

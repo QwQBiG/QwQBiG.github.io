@@ -1,0 +1,143 @@
+/**
+ * Shoujo Aesthetic Syntax Highlighting Tokens
+ * High-End IDE meets Girlhood Aesthetic
+ * Soft pastel palette with professional legibility
+ */
+
+/* ====================
+   Base text color
+   ==================== */
+.prose pre code[class*="language-"],
+.prose pre code {
+  color: #5a5a5a;
+}
+
+/* ====================
+   Keywords: Vivid Strawberry Pink
+   ==================== */
+.prose pre code .token.keyword {
+  color: #e84a7a !important;
+  font-weight: 600;
+}
+
+/* ====================
+   Functions & Methods: Soft Lavender/Violet
+   ==================== */
+.prose pre code .token.function {
+  color: #9b7edc !important;
+  font-weight: 500;
+}
+
+/* ====================
+   Strings: Matcha Green / Soft Mint
+   ==================== */
+.prose pre code .token.string {
+  color: #7cb87c !important;
+}
+
+/* ====================
+   Numbers & Booleans: Warm Peach / Coral
+   ==================== */
+.prose pre code .token.number,
+.prose pre code .token.boolean {
+  color: #f4a261 !important;
+  font-weight: 500;
+}
+
+/* ====================
+   Comments: Muted Dusty Rose (Italicized)
+   ==================== */
+.prose pre code .token.comment {
+  color: #c9a6a6 !important;
+  font-style: italic;
+}
+
+/* ====================
+   Classes & Types: Sky Blue / Periwinkle
+   ==================== */
+.prose pre code .token.class-name {
+  color: #6fa8dc !important;
+  font-weight: 500;
+}
+
+/* ====================
+   Operators: Soft Greyish-Purple
+   ==================== */
+.prose pre code .token.operator {
+  color: #9b8aa5 !important;
+}
+
+/* ====================
+   Punctuation: Soft Greyish-Purple
+   ==================== */
+.prose pre code .token.punctuation {
+  color: #9b8aa5 !important;
+}
+
+/* ====================
+   Variables: Soft Mauve
+   ==================== */
+.prose pre code .token.variable {
+  color: #b5838d !important;
+}
+
+/* ====================
+   Built-ins: Soft Teal
+   ==================== */
+.prose pre code .token.builtin {
+  color: #5fb3b3 !important;
+}
+
+/* ====================
+   Tags (HTML/XML): Soft Coral Pink
+   ==================== */
+.prose pre code .token.tag {
+  color: #ff8fa3 !important;
+}
+
+/* ====================
+   Attributes: Soft Lavender
+   ==================== */
+.prose pre code .token.attr-name {
+  color: #b4a7d6 !important;
+}
+
+/* ====================
+   Rainbow Brackets
+   5 levels of nesting
+   ==================== */
+
+/* Level 1: Deep Pink */
+.prose pre code .token.punctuation.bracket,
+.prose pre code .token.punctuation.brace,
+.prose pre code .token.punctuation.parenthesis {
+  color: #e84a7a !important;
+}
+
+/* Level 2: Purple */
+.prose pre code .token.punctuation ~ .token.punctuation.bracket,
+.prose pre code .token.punctuation ~ .token.punctuation.brace,
+.prose pre code .token.punctuation ~ .token.punctuation.parenthesis {
+  color: #9b7edc !important;
+}
+
+/* Level 3: Blue */
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation.bracket,
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation.brace,
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation.parenthesis {
+  color: #6fa8dc !important;
+}
+
+/* Level 4: Green */
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation.bracket,
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation.brace,
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation.parenthesis {
+  color: #7cb87c !important;
+}
+
+/* Level 5: Peach */
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation.bracket,
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation.brace,
+.prose pre code .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation ~ .token.punctuation.parenthesis {
+  color: #f4a261 !important;
+}

@@ -485,6 +485,59 @@ public class Main
 }
 ```
 
+**或者是数组和Lambda表达式**
+```java
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+public class Main
+{
+    // st
+    static StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+    static int ni() throws Exception { st.nextToken(); return (int) st.nval; }
+    static String ns() throws Exception { st.nextToken(); return st.sval; }
+
+    public static void main(String[] args) throws Exception
+    {
+        int n = ni();
+        // 我要数组
+        Student[]  students = new Student[n];
+        for (int i = 0; i < n; i++)
+        {
+            students[i] = new Student(ns(), ni(), ni());  // 读入
+        }
+
+        // 我要Lamada
+        Arrays.sort(students, (a, b) -> {
+            if (a.total !=  b.total) return b.total - a.total;  // 降序后减前
+            if (a.math != b.math) return b.math - a.math;
+            else return a.name.compareTo(b.name);
+        });
+
+        // 输出
+        Arrays.stream(students).forEach(s -> System.out.println(s.name + " " + s.total + " " + s.math));
+    }
+
+    public static class Student
+    {
+        String name;
+        int chinese;
+        int math;
+        int total;
+
+        // 构造方式
+        Student(String n, int c, int m)
+        {
+            this.name = n;
+            this.chinese  = c;
+            this.math = m;
+            this.total = c + m;
+        }
+    }
+}
+```
+
 ---
 
 ### 预测题二：哈希表计票系统

@@ -1,0 +1,269 @@
+/**
+ * 代码块交互样式
+ * 行高亮、搜索匹配、提示等
+ */
+
+/* ==================== 行交互 ==================== */
+
+/* 代码行基础样式 */
+pre[class*="language-"] .line {
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+/* 鼠标悬停高亮 - 柔和的粉色 */
+pre[class*="language-"] .line.line-current {
+  background: rgba(234, 118, 203, 0.1);
+}
+
+/* 点击后的持久高亮 - 柔和的薰衣草紫色 */
+pre[class*="language-"] .line.line-highlight {
+  background: rgba(180, 160, 220, 0.15);
+  border-left: 3px solid #b4a0dc;
+  margin-left: -3px;
+  border-radius: 0 4px 4px 0;
+  /* 禁用光标闪烁 */
+  caret-color: transparent;
+}
+
+/* 行号样式 */
+pre[class*="language-"] .line-number {
+  color: #8c8fa1;
+  transition: color 0.2s ease;
+}
+
+pre[class*="language-"] .line:hover .line-number {
+  color: #ea76cb;
+}
+
+pre[class*="language-"] .line.line-highlight .line-number {
+  color: #b4a0dc;
+  font-weight: 600;
+}
+
+/* ==================== 搜索功能 - 浏览器查找栏样式 ==================== */
+
+/* 搜索栏 - 固定在右上角，类似浏览器查找栏 */
+.code-search-overlay {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  left: auto;
+  bottom: auto;
+  background: transparent;
+  backdrop-filter: none;
+  z-index: 10000;
+  display: none;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 搜索栏主体 - 紧凑的卡片样式 */
+.code-search-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  min-width: 320px;
+  border: none;
+  overflow: hidden;
+}
+
+/* 搜索头部 - 更紧凑 */
+.code-search-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  border-bottom: 1px solid rgba(234, 118, 203, 0.15);
+}
+
+.code-search-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4c4f69;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.code-search-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  color: #8c8fa1;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.code-search-close:hover {
+  background: #ea76cb;
+  color: #fff;
+}
+
+/* 搜索主体 - 更紧凑 */
+.code-search-body {
+  padding: 12px;
+}
+
+/* 输入框包装 */
+.code-search-input-wrapper {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+/* 搜索输入框 - 更紧凑 */
+.code-search-input {
+  width: 100%;
+  border: 1.5px solid #e6e6f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #4c4f69;
+  background: #fafafa;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.code-search-input:focus {
+  border-color: #ea76cb;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(234, 118, 203, 0.1);
+  caret-color: #ea76cb;
+}
+
+.code-search-input::placeholder {
+  color: #9ca0b0;
+}
+
+/* 搜索控制区 */
+.code-search-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 搜索计数 */
+.code-search-count {
+  font-size: 12px;
+  color: #8c8fa1;
+  font-family: 'JetBrains Mono', monospace;
+  background: #f0f0f5;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* 搜索按钮组 */
+.code-search-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.code-search-prev,
+.code-search-next {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  color: #ea76cb;
+}
+
+.code-search-prev:hover,
+.code-search-next:hover {
+  background: linear-gradient(135deg, #ea76cb 0%, #d46bb8 100%);
+  color: #fff;
+}
+
+.code-search-prev:active,
+.code-search-next:active {
+  transform: scale(0.95);
+}
+
+/* ==================== 搜索匹配高亮 ==================== */
+
+/* 匹配项 */
+.token.search-match {
+  background: rgba(234, 118, 203, 0.35) !important;
+  border-radius: 3px;
+  padding: 1px 2px;
+  margin: -1px -2px;
+}
+
+/* 当前匹配项 */
+.token.search-match.current {
+  background: rgba(234, 118, 203, 0.6) !important;
+  box-shadow: 0 0 0 2px #ea76cb;
+  animation: search-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes search-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px #ea76cb;
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(234, 118, 203, 0.4);
+  }
+}
+
+/* ==================== 文本选择 ==================== */
+
+/* 选中文本高亮 */
+pre[class*="language-"] ::selection,
+code[class*="language-"] ::selection {
+  background: rgba(234, 118, 203, 0.3);
+  color: inherit;
+}
+
+/* 选中时代码块样式 */
+body.has-selection pre[class*="language-"]:hover {
+  box-shadow: 0 4px 20px rgba(234, 118, 203, 0.2);
+}
+
+/* ==================== 代码块焦点 ==================== */
+
+pre[class*="language-"]:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(234, 118, 203, 0.3);
+}
+
+/* ==================== 响应式 ==================== */
+
+@media (max-width: 768px) {
+  .code-search-overlay {
+    top: 8px;
+    right: 8px;
+    left: 8px;
+  }
+
+  .code-search-card {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .code-search-input {
+    font-size: 16px;
+  }
+}

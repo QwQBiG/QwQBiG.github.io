@@ -13,10 +13,8 @@ export default defineConfig({
     configFile: './tailwind.config.mjs',
   }), react()],
   markdown: {
-    shikiConfig: {
-      theme: 'monokai',
-      wrap: true,
-    },
+    // 禁用 Shiki，使用 Prism
+    syntaxHighlight: 'prism',
     remarkPlugins: [],
     rehypePlugins: [],
   },

@@ -1,0 +1,313 @@
+/**
+ * Prism.js 自定义主题 - 粉色系少女风格
+ * 仅包含结构样式，语法高亮颜色使用 Prism.js 核心库默认样式
+ */
+
+/* 代码块容器 */
+.prose pre[class*="language-"] {
+  position: relative;
+  margin: 1.5em 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+  box-shadow:
+    0 4px 20px rgba(232, 74, 122, 0.08),
+    0 8px 32px rgba(232, 74, 122, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  border: 1px solid rgba(232, 74, 122, 0.1);
+  padding: 0;
+}
+
+/* 代码块头部 */
+.prose pre[class*="language-"] .code-header {
+  position: relative;
+  height: 40px;
+  background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%);
+  border-bottom: 1px solid rgba(232, 74, 122, 0.15);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+/* 代码块内容区域 */
+.prose pre[class*="language-"] .code-content {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+/* 滚动条样式 */
+.prose pre[class*="language-"] .code-content::-webkit-scrollbar {
+  height: 10px;
+}
+
+.prose pre[class*="language-"] .code-content::-webkit-scrollbar-track {
+  background: rgba(232, 74, 122, 0.08);
+  border-radius: 5px;
+}
+
+.prose pre[class*="language-"] .code-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(232, 74, 122, 0.5) 0%, rgba(255, 107, 157, 0.5) 100%);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.prose pre[class*="language-"] .code-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(232, 74, 122, 0.7) 0%, rgba(255, 107, 157, 0.7) 100%);
+}
+
+/* Firefox 滚动条 */
+.prose pre[class*="language-"] .code-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 74, 122, 0.5) rgba(232, 74, 122, 0.08);
+}
+
+/* 代码块主体 */
+.prose pre[class*="language-"] code {
+  display: block;
+  padding: 16px 20px;
+  background: transparent;
+  min-width: 100%;
+  width: max-content;
+  min-height: 100%;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: #2d3436;
+  text-shadow: none;
+}
+
+/* 代码行 */
+.prose pre[class*="language-"] .line {
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.7;
+  padding: 0;
+  margin: 0;
+  white-space: pre;
+  min-height: 1.7em;
+}
+
+/* 行号 */
+.prose pre[class*="language-"] .line-number {
+  display: inline-block;
+  width: 2.5em;
+  text-align: right;
+  padding-right: 0.75em;
+  margin: 0;
+  color: rgba(232, 74, 122, 0.5);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.prose pre[class*="language-"] .line-number.hidden {
+  display: none;
+}
+
+/* 代码内容 */
+.prose pre[class*="language-"] .line-content {
+  flex: 1;
+  display: inline-block;
+}
+
+/* 当行号隐藏时，代码内容区域的左边距 */
+.prose pre[class*="language-"].line-numbers-hidden .line-content {
+  margin-left: 0;
+}
+
+/* 头部按钮容器 */
+.prose pre[class*="language-"] .code-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 语言标签容器 */
+.prose pre[class*="language-"] .code-lang-container {
+  display: flex;
+  align-items: center;
+}
+
+/* 复制按钮 */
+.prose pre[class*="language-"] .custom-copy-code {
+  height: 24px;
+  padding: 0 10px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e84a7a;
+  background: rgba(232, 74, 122, 0.1);
+  border: 1px solid rgba(232, 74, 122, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prose pre[class*="language-"] .custom-copy-code:hover {
+  background: rgba(232, 74, 122, 0.2);
+  border-color: rgba(232, 74, 122, 0.5);
+}
+
+.prose pre[class*="language-"] .custom-copy-code.copied {
+  background: #a855f7;
+  border-color: #a855f7;
+  color: white;
+}
+
+/* 搜索按钮 */
+.prose pre[class*="language-"] .code-search-btn {
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e84a7a;
+  background: rgba(232, 74, 122, 0.1);
+  border: 1px solid rgba(232, 74, 122, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.prose pre[class*="language-"] .code-search-btn:hover {
+  background: rgba(232, 74, 122, 0.2);
+  border-color: rgba(232, 74, 122, 0.5);
+}
+
+.prose pre[class*="language-"] .code-search-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* 折叠按钮 */
+.prose pre[class*="language-"] .code-fold-toggle {
+  height: 24px;
+  padding: 0 10px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e84a7a;
+  background: rgba(232, 74, 122, 0.1);
+  border: 1px solid rgba(232, 74, 122, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.prose pre[class*="language-"] .code-fold-toggle:hover {
+  background: rgba(232, 74, 122, 0.2);
+  border-color: rgba(232, 74, 122, 0.5);
+}
+
+.prose pre[class*="language-"] .code-fold-toggle svg {
+  width: 22px;
+  height: 22px;
+  fill: #e84a7a;
+  transition: transform 0.3s ease;
+}
+
+.prose pre[class*="language-"] .code-fold-toggle.folded svg {
+  transform: rotate(180deg);
+}
+
+/* 折叠提示 */
+.prose pre[class*="language-"] .code-fold-hint {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e84a7a;
+  text-align: center;
+  z-index: 1000;
+  pointer-events: none;
+  white-space: nowrap;
+  display: none;
+}
+
+/* 语言标签按钮 */
+.prose pre[class*="language-"] .code-lang-btn {
+  height: 40px;
+  padding: 0 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e84a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  pointer-events: auto;
+}
+
+.prose pre[class*="language-"] .code-lang-btn:hover {
+  color: #ff6b9d;
+  background: rgba(232, 74, 122, 0.08);
+}
+
+/* 折叠状态 */
+.prose pre[class*="language-"].folded .code-content {
+  max-height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.prose pre[class*="language-"].folded .code-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 240, 245, 0.9));
+  pointer-events: none;
+}
+
+.prose pre[class*="language-"].folded .code-fold-hint {
+  display: block;
+}
+
+/* 代码折叠后的内容区域 */
+.prose pre[class*="language-"] .code-content.folded {
+  max-height: 200px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .prose pre[class*="language-"] {
+    border-radius: 12px;
+    margin: 20px 0;
+  }
+
+  .prose pre[class*="language-"] code {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+
+  .prose pre[class*="language-"] .code-header {
+    height: 35px;
+  }
+
+  .prose pre[class*="language-"] .code-lang-btn {
+    height: 35px;
+    font-size: 12px;
+    padding: 0 12px;
+  }
+}

@@ -27,6 +27,18 @@ export default {
         mono: ['JetBrains Mono', 'Courier New', 'monospace'],
         sans: ['Noto Sans SC', 'system-ui', 'sans-serif'],
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+          },
+        },
+      },
     },
   },
   plugins: [

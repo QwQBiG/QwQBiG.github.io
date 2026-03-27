@@ -7,7 +7,7 @@ import { formatDate } from '../../utils/date';
 
 export async function getStaticPaths() {
   const posts = await getCollection('cs');
-  
+
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -17,20 +17,33 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 
-const { title, description, date, tags, series, draft } = post.data;
+const { title, description, date, tags, series, draft, categories } = post.data;
 
 // Get related posts (same series or similar tags)
 const allPosts = await getCollection('cs', ({ data }) => !data.draft);
 const currentSlug = post.slug;
 
+// 判断是否是合集页面（categories 包含 "合集"）
+const isSeriesCollection = categories?.includes('合集');
+
+// 如果是合集页面，获取该合集下的所有文章
+let collectionPosts: typeof allPosts = [];
+if (isSeriesCollection) {
+  collectionPosts = allPosts.filter(p =>
+    p.data.series?.includes(title) &&
+    !p.slug.endsWith('_index') &&
+    p.slug !== currentSlug
+  ).sort((a, b) => (a.data.weight || 0) - (b.data.weight || 0) || a.data.date.getTime() - b.data.date.getTime());
+}
+
 // Find prev/next posts in the same series
 let seriesPosts: typeof allPosts = [];
 if (series && series.length > 0) {
-  seriesPosts = allPosts.filter(p => 
-    p.data.series?.some(s => series.includes(s)) && 
+  seriesPosts = allPosts.filter(p =>
+    p.data.series?.some(s => series.includes(s)) &&
     p.slug !== currentSlug &&
     !p.slug.endsWith('_index')
-  ).sort((a, b) => a.data.weight - b.data.weight || a.data.date.getTime() - b.data.date.getTime());
+  ).sort((a, b) => (a.data.weight || 0) - (b.data.weight || 0) || a.data.date.getTime() - b.data.date.getTime());
 }
 
 const currentIndex = seriesPosts.findIndex(p => p.slug === currentSlug);
@@ -40,14 +53,14 @@ const nextPost = currentIndex < seriesPosts.length - 1 ? seriesPosts[currentInde
 const pageTitle = `${title} - QwQBiG's World`;
 ---
 
-<Layout 
-  title={pageTitle} 
+<Layout
+  title={pageTitle}
   description={description}
   type="article"
   noIndex={draft}
 >
   <FloatingNavCard />
-  
+
   <main class="flex-1 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -55,10 +68,10 @@ const pageTitle = `${title} - QwQBiG's World`;
         <article class="lg:col-span-3">
           <!-- Post Header -->
           <header class="mb-8">
-            {series && series.length > 0 && (
+            {series && series.length > 0 && !isSeriesCollection && (
               <div class="flex flex-wrap gap-2 mb-4">
                 {series.map((s) => (
-                  <a 
+                  <a
                     href={`/cs/series/${s.toLowerCase().replace(/\s+/g, '-')}/`}
                     class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"
                   >
@@ -70,11 +83,11 @@ const pageTitle = `${title} - QwQBiG's World`;
                 ))}
               </div>
             )}
-            
+
             <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 leading-tight">
               {title}
             </h1>
-            
+
             <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary">
               <span class="flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,11 +95,11 @@ const pageTitle = `${title} - QwQBiG's World`;
                 </svg>
                 {formatDate(date)}
               </span>
-              
+
               {tags && tags.length > 0 && (
                 <div class="flex flex-wrap gap-2">
                   {tags.map((tag) => (
-                    <a 
+                    <a
                       href={`/tags/${tag}/`}
                       class="text-primary hover:text-primary-dark transition-colors"
                     >
@@ -97,18 +110,50 @@ const pageTitle = `${title} - QwQBiG's World`;
               )}
             </div>
           </header>
-          
+
           <!-- Post Content -->
           <div class="prose prose-lg max-w-none">
             <Content />
           </div>
-          
+
+          <!-- 合集文章列表 -->
+          {isSeriesCollection && collectionPosts.length > 0 && (
+            <div class="mt-12 pt-8 border-t border-border-color">
+              <h2 class="text-2xl font-bold text-text-primary mb-6">合集文章</h2>
+              <div class="space-y-4">
+                {collectionPosts.map((collectionPost, index) => (
+                  <a
+                    href={`/cs/${collectionPost.slug}/`}
+                    class="group flex items-center gap-4 p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
+                  >
+                    <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                      {collectionPost.data.weight > 0 ? collectionPost.data.weight : index + 1}
+                    </span>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-1">
+                        {collectionPost.data.title}
+                      </h3>
+                      {collectionPost.data.description && (
+                        <p class="text-sm text-text-secondary line-clamp-1 mt-1">
+                          {collectionPost.data.description}
+                        </p>
+                      )}
+                    </div>
+                    <svg class="w-5 h-5 text-text-muted group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
           <!-- Post Navigation -->
-          {(prevPost || nextPost) && (
+          {(prevPost || nextPost) && !isSeriesCollection && (
             <nav class="mt-12 pt-8 border-t border-border-color">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {prevPost ? (
-                  <a 
+                  <a
                     href={`/cs/${prevPost.slug}/`}
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
                   >
@@ -120,9 +165,9 @@ const pageTitle = `${title} - QwQBiG's World`;
                 ) : (
                   <div></div>
                 )}
-                
+
                 {nextPost ? (
-                  <a 
+                  <a
                     href={`/cs/${nextPost.slug}/`}
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"
                   >
@@ -138,7 +183,7 @@ const pageTitle = `${title} - QwQBiG's World`;
             </nav>
           )}
         </article>
-        
+
         <!-- Sidebar -->
         <aside class="lg:col-span-1">
           <div class="sticky top-24 space-y-6">
@@ -149,7 +194,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                 <ul>
                   {headings.filter(h => h.depth <= 3).map((heading) => (
                     <li>
-                      <a 
+                      <a
                         href={`#${heading.slug}`}
                         class={`h${heading.depth}`}
                       >
@@ -160,20 +205,20 @@ const pageTitle = `${title} - QwQBiG's World`;
                 </ul>
               </div>
             )}
-            
+
             <!-- Series Navigation -->
-            {seriesPosts.length > 0 && (
+            {seriesPosts.length > 0 && !isSeriesCollection && (
               <div class="toc">
                 <div class="toc-title">系列文章</div>
                 <ul>
                   {seriesPosts.map((seriesPost) => (
                     <li>
-                      <a 
+                      <a
                         href={`/cs/${seriesPost.slug}/`}
                         class:list={[
                           'block py-1 text-sm transition-colors',
-                          seriesPost.slug === currentSlug 
-                            ? 'text-primary font-medium' 
+                          seriesPost.slug === currentSlug
+                            ? 'text-primary font-medium'
                             : 'text-text-secondary hover:text-primary'
                         ]}
                       >
@@ -190,7 +235,7 @@ const pageTitle = `${title} - QwQBiG's World`;
       </div>
     </div>
   </main>
-  
+
   <Footer />
 </Layout>
 
@@ -198,14 +243,14 @@ const pageTitle = `${title} - QwQBiG's World`;
   // Highlight current TOC item on scroll
   const tocLinks = document.querySelectorAll('.toc a[href^="#"]');
   const headings = document.querySelectorAll('h2[id], h3[id]');
-  
+
   function highlightTOC() {
     const scrollPos = window.scrollY + 100;
-    
+
     headings.forEach((heading, index) => {
       const top = heading.offsetTop;
       const bottom = top + heading.offsetHeight;
-      
+
       if (scrollPos >= top && scrollPos < bottom) {
         tocLinks.forEach(link => link.classList.remove('active'));
         const activeLink = document.querySelector(`.toc a[href="#${heading.id}"]`);
@@ -213,10 +258,10 @@ const pageTitle = `${title} - QwQBiG's World`;
       }
     });
   }
-  
+
   window.addEventListener('scroll', highlightTOC);
   highlightTOC();
-  
+
   // Smooth scroll for TOC links
   tocLinks.forEach(link => {
     link.addEventListener('click', (e) => {

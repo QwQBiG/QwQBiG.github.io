@@ -1,0 +1,79 @@
+/**
+ * 彩虹括号样式 - VSCode 风格
+ * 为匹配的括号对提供不同颜色
+ */
+
+/* 第1层括号 - 红色 */
+.rainbow-bracket-level-1 {
+  color: #e06c75 !important;
+}
+
+/* 第2层括号 - 黄色 */
+.rainbow-bracket-level-2 {
+  color: #d19a66 !important;
+}
+
+/* 第3层括号 - 蓝色 */
+.rainbow-bracket-level-3 {
+  color: #61afef !important;
+}
+
+/* 第4层括号 - 紫色 */
+.rainbow-bracket-level-4 {
+  color: #c678dd !important;
+}
+
+/* 第5层括号 - 绿色 */
+.rainbow-bracket-level-5 {
+  color: #98c379 !important;
+}
+
+/* 第6层括号 - 青色 */
+.rainbow-bracket-level-6 {
+  color: #56b6c2 !important;
+}
+
+/* 未匹配的括号 - 红色高亮 */
+.rainbow-bracket-unmatched {
+  color: #ff0000 !important;
+  text-decoration: wavy underline;
+}
+
+/* 括号悬停效果 */
+.rainbow-bracket:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* 点击匹配的括号高亮 */
+.bracket-match-highlight {
+  background: rgba(234, 118, 203, 0.25) !important;
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px rgba(234, 118, 203, 0.5);
+  animation: bracket-pulse 1.5s ease-in-out infinite;
+}
+
+/* 未匹配括号的高亮 */
+.bracket-match-highlight.bracket-unmatched {
+  background: rgba(255, 100, 100, 0.25) !important;
+  box-shadow: 0 0 0 2px rgba(255, 100, 100, 0.5);
+  animation: bracket-unmatched-pulse 1s ease-in-out infinite;
+}
+
+@keyframes bracket-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(234, 118, 203, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(234, 118, 203, 0.3);
+  }
+}
+
+@keyframes bracket-unmatched-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(255, 100, 100, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 100, 100, 0.3);
+  }
+}
