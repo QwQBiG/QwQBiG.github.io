@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FloatingNavCard from '../components/FloatingNavCard.astro';
+import PhotoWall from '../components/PhotoWall.tsx';
+import type { PhotoItem } from '../types/photo';
+
+const pageTitle = "画廊 - QwQBiG's World";
+const pageDescription = "3D 散落照片墙 - 拖拽探索，点击查看大图";
+
+// 图片数据 - 自动从 public/images 目录加载（排除 character.png 和 banner.png）
+const photos: PhotoItem[] = [
+  {
+    id: '1',
+    src: '/images/2025-08.png',
+    alt: '2025-08',
+  },
+  {
+    id: '2',
+    src: '/images/Kafka.png',
+    alt: 'Kafka',
+  },
+  {
+    id: '3',
+    src: '/images/hahaha.png',
+    alt: 'Hahaha',
+  },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <FloatingNavCard />
+
+  <main class="flex-1 h-screen relative overflow-hidden">
+    {/* 渐变背景 */}
+    <div class="absolute inset-0 gradient-bg -z-10"></div>
+
+    {/* 3D 照片墙组件 - 全屏显示 */}
+    <div class="h-full">
+      <PhotoWall photos={photos} client:load />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* 手写体字体 */
+  .font-handwriting {
+    font-family: 'Caveat', 'Dancing Script', cursive;
+  }
+
+  /* 确保照片墙容器正确显示 */
+  :global(.photo-wall-container) {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 响应式调整 */
+  @media (max-width: 768px) {
+    :global(.photo-card) {
+      width: 150px !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    :global(.photo-card) {
+      width: 120px !important;
+    }
+  }
+</style>

@@ -618,7 +618,7 @@ const yearsActive = new Date().getFullYear() - 2024;
 
         <!-- 欢迎卡片 - 移动端第1，桌面端左上向右下偏移 -->
         <div class="order-1 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:translate-y-4 welcome-card-offset">
-          <GlassCard padding="medium" tilt={true} class="w-full [@media(min-width:924px)]:max-w-sm">
+          <GlassCard padding="medium" tilt={true} class="w-full max-w-[92vw] [@media(min-width:924px)]:max-w-sm">
             <div class="flex flex-col">
               <span class="inline-block px-3 py-1.5 bg-gradient-to-r from-purple-100/80 to-pink-100/80 rounded-full text-xs font-medium text-purple-700 mb-3 w-fit border border-purple-200/50 font-['Quicksand']">
                 ✨ welcome to my world
@@ -647,7 +647,7 @@ const yearsActive = new Date().getFullYear() - 2024;
 
         <!-- 统计卡片 - 移动端第4，桌面端左中靠右 -->
         <div class="order-4 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-16 [@media(min-width:924px)]:-translate-y-4">
-          <GlassCard padding="small" tilt={true} class="w-full [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-95">
+          <GlassCard padding="small" tilt={true} class="w-full max-w-[85vw] [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-95">
             <div class="grid grid-cols-2 gap-x-6 gap-y-3">
               <div class="text-center flex flex-col items-center">
                 <div class="stat-number font-['Cormorant_Garamond'] font-semibold">{totalPosts}</div>
@@ -671,18 +671,36 @@ const yearsActive = new Date().getFullYear() - 2024;
         
         <!-- 时钟 - 移动端第6，桌面端右上靠左下 -->
         <div class="order-6 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-end [@media(min-width:924px)]:self-start [@media(min-width:924px)]:-translate-x-64 [@media(min-width:924px)]:translate-y-20">
-          <GlassCard padding="small" tilt={true} class="w-full [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-90">
+          <GlassCard padding="small" tilt={true} class="w-full max-w-[70vw] [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-90">
             <ClockWidget />
           </GlassCard>
         </div>
-        
+
+        <!-- ========== 第1行中间 - 上方图片卡片 ========== -->
+
+        <!-- 图片卡片 - 移动端第8，桌面端中上 -->
+        <div class="order-8 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-center [@media(min-width:924px)]:self-start [@media(min-width:924px)]:translate-y-4">
+          <a href="/gallery/" class="block">
+            <GlassCard padding="small" tilt={true} class="w-full max-w-[60vw] [@media(min-width:924px)]:w-64 rounded-2xl">
+              <div class="relative overflow-hidden rounded-2xl">
+                <img
+                  src="/images/hahaha.png"
+                  alt="Gallery Cover"
+                  class="w-full h-32 object-cover rounded-2xl hover:scale-105 transition-transform duration-500"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+              </div>
+            </GlassCard>
+          </a>
+        </div>
+
         <!-- ========== 第2行 - 中心C位 ========== -->
-        
+
         <!-- 导航菜单 - 移动端第7，桌面端左中，点击后固定到左上角 -->
         <div id="navCard" class="order-7 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-64 [@media(min-width:924px)]:-translate-y-0 transition-all duration-500">
           <!-- 内联 GlassCard 结构，初始状态更宽松，转换后与 FloatingNavCard 一致 -->
           <div
-            class="glass-card relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/60 rounded-[2rem] p-5 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out cursor-pointer"
+            class="glass-card relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/60 rounded-[2rem] p-5 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out cursor-pointer w-full max-w-[85vw] [@media(min-width:924px)]:w-auto"
             data-tilt="true"
             style="
               transform-style: preserve-3d;
@@ -850,7 +868,7 @@ const yearsActive = new Date().getFullYear() - 2024;
 
         <!-- 社交链接 - 移动端第5，桌面端右中靠左（日历左边） -->
         <div class="order-5 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-4 [@media(min-width:924px)]:translate-y-2">
-          <GlassCard padding="small" tilt={true} class="w-full [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-90">
+          <GlassCard padding="small" tilt={true} class="w-auto [@media(min-width:924px)]:scale-90">
             <div class="flex flex-col items-center gap-3">
               <!-- GitHub -->
               <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-white/40 hover:bg-white/60 border border-white/50 hover:border-purple-400/50 transition-all hover:-translate-y-1 hover:shadow-lg group" aria-label="GitHub">
@@ -877,7 +895,7 @@ const yearsActive = new Date().getFullYear() - 2024;
         
         <!-- 日历 - 移动端第10，桌面端右中靠右 -->
         <div class="order-10 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-end [@media(min-width:924px)]:self-center [@media(min-width:924px)]:-translate-x-24 [@media(min-width:924px)]:translate-y-0">
-          <GlassCard padding="small" tilt={true} class="w-full [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-95">
+          <GlassCard padding="small" tilt={true} class="w-full max-w-[90vw] [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-95">
             <CalendarWidget />
           </GlassCard>
         </div>
@@ -886,7 +904,7 @@ const yearsActive = new Date().getFullYear() - 2024;
         
         <!-- 常用标签 - 移动端第8，桌面端左下靠右上 -->
         <div class="order-8 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-end [@media(min-width:924px)]:translate-x-32 [@media(min-width:924px)]:-translate-y-32">
-          <GlassCard padding="small" tilt={true} class="w-full [@media(min-width:924px)]:max-w-xs [@media(min-width:924px)]:scale-90">
+          <GlassCard padding="small" tilt={true} class="w-full max-w-[92vw] [@media(min-width:924px)]:max-w-xs [@media(min-width:924px)]:scale-90">
             <div class="flex flex-col">
               <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2 font-['Cormorant_Garamond'] italic">
                 <svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -907,14 +925,14 @@ const yearsActive = new Date().getFullYear() - 2024;
         
         <!-- 音乐播放器 - 移动端第3，桌面端中下靠上偏右 -->
         <div class="order-3 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-0 [@media(min-width:924px)]:-translate-y-8" style="position: relative; z-index: 50;">
-          <GlassCard padding="small" tilt={true} class="w-full [@media(min-width:924px)]:max-w-md [@media(min-width:924px)]:scale-95">
+          <GlassCard padding="small" tilt={true} class="w-full max-w-[95vw] [@media(min-width:924px)]:max-w-md [@media(min-width:924px)]:scale-95">
             <MusicWidget />
           </GlassCard>
         </div>
         
         <!-- 最新文章 - 移动端第9，桌面端右下靠左上 -->
         <div class="order-9 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-start [@media(min-width:924px)]:-translate-x-8 [@media(min-width:924px)]:-translate-y-32">
-          <GlassCard padding="medium" tilt={true} class="w-full [@media(min-width:924px)]:max-w-xs [@media(min-width:924px)]:scale-95">
+          <GlassCard padding="medium" tilt={true} class="w-full max-w-[92vw] [@media(min-width:924px)]:max-w-xs [@media(min-width:924px)]:scale-95">
             <div class="flex flex-col h-full">
               <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-semibold text-gray-700 flex items-center gap-2 font-['Cormorant_Garamond'] italic">
