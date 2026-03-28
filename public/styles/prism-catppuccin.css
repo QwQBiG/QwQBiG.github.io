@@ -413,10 +413,17 @@ pre[class*="language-"] {
 
 /* ==================== 标签/标记类 ==================== */
 
-/* HTML/XML 标签名 */
+/* HTML/XML 标签名 - 修复嵌套问题 */
 .token.tag {
   color: #8839ef;
   font-weight: 500;
+  background: transparent !important;
+}
+
+/* 标签内的标签（Prism 嵌套结构） */
+.token.tag .token.tag {
+  color: #8839ef;
+  background: transparent !important;
 }
 
 /* 自闭合标签 */
@@ -425,9 +432,25 @@ pre[class*="language-"] {
   font-style: italic;
 }
 
-/* 属性名 */
-.token.attr-name {
-  color: #df8e1d;
+/* 属性名 - 增强选择器确保生效 */
+.token.attr-name,
+.token.tag .token.attr-name,
+.token.tag .token.attr-name .token.namespace {
+  color: #df8e1d !important;
+  font-weight: 500;
+}
+
+/* 属性值 - 增强选择器 */
+.token.attr-value,
+.token.tag .token.attr-value,
+.token.tag .token.attr-value .token.punctuation {
+  color: #40a02b !important;
+}
+
+/* 属性值内部的等号 */
+.token.attr-value .token.attr-equals,
+.token.tag .token.attr-value .token.attr-equals {
+  color: #04a5e5 !important;
 }
 
 /* 对象键名 */
@@ -442,9 +465,19 @@ pre[class*="language-"] {
 
 /* ==================== 特殊符号类 ==================== */
 
-/* 标点符号 */
-.token.punctuation {
-  color: #6c6f85;
+/* 标点符号 - 增强选择器 */
+.token.punctuation,
+.token.tag .token.punctuation,
+.token.tag > .token.punctuation {
+  color: #6c6f85 !important;
+}
+
+/* XML/HTML 标签括号 < > </> */
+.token.tag > .token.punctuation:first-child,
+.token.tag > .token.punctuation:last-child,
+.token.punctuation.tag-bracket {
+  color: #6c6f85 !important;
+  font-weight: 400;
 }
 
 /* 括号 () */
@@ -877,6 +910,47 @@ pre[class*="language-"] {
 /* XML 命名空间前缀 */
 .token.namespace-prefix {
   color: #179299;
+}
+
+/* ==================== XML 特定修复 ==================== */
+
+/* XML 标签名 - 确保正确显示 */
+.language-xml .token.tag,
+.language-xml .token.tag .token.tag {
+  color: #8839ef !important;
+  background: transparent !important;
+}
+
+/* XML 标签名（由 prism-xml-fix.js 添加） */
+.token.tag-name {
+  color: #8839ef !important;
+  font-weight: 600;
+  background: transparent !important;
+}
+
+/* 修复后的 XML 标签容器 */
+.token.tag[data-xml-fixed="true"] {
+  background: transparent !important;
+}
+
+/* XML 属性名 */
+.language-xml .token.attr-name {
+  color: #df8e1d !important;
+}
+
+/* XML 属性值 */
+.language-xml .token.attr-value {
+  color: #40a02b !important;
+}
+
+/* XML 标点符号 < > / */
+.language-xml .token.punctuation {
+  color: #6c6f85 !important;
+}
+
+/* 修复嵌套标签的背景问题 */
+.token.tag * {
+  background: transparent !important;
 }
 
 /* ==================== 交互/效果类 ==================== */

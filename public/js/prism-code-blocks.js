@@ -241,6 +241,12 @@
    */
   function addLineNumbers(pre, code) {
     const lines = code.innerHTML.split('\n');
+    
+    // 移除最后一个空行（如果存在）
+    if (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+      lines.pop();
+    }
+    
     const wrappedLines = lines.map((line, index) => {
       const lineNum = index + 1;
       return `<span class="line-number">${lineNum}</span><span class="line-content">${line}</span>`;
