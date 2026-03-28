@@ -1,0 +1,1069 @@
+/**
+ * Catppuccin Latte 主题 - 少女心配色 (多彩版)
+ * 柔和的 pastel 色调，粉色系代码高亮
+ * 基于 Catppuccin 配色方案 (https://github.com/catppuccin/catppuccin)
+ */
+
+/* ==================== 基础设置 ==================== */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #4c4f69;
+  background: none;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.7;
+  tab-size: 4;
+  hyphens: none;
+}
+
+/* ==================== 注释类 ==================== */
+
+/* 单行/多行注释 */
+.token.comment {
+  color: #8c8fa1;
+  font-style: italic;
+}
+
+/* 文档注释 (如 JSDoc, JavaDoc) */
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #9ca0b0;
+  font-style: italic;
+}
+
+/* 注释中的标签 (如 @param, @return) */
+.token.comment .token.tag {
+  color: #7287fd;
+  font-weight: 600;
+}
+
+/* ==================== 关键字类 ==================== */
+
+/* 控制流关键字 (if, else, for, while, switch, case, break, continue, return) */
+.token.keyword.control {
+  color: #8839ef;
+  font-weight: 600;
+}
+
+/* 声明关键字 (var, let, const, function, class, interface, enum, struct) */
+.token.keyword.declaration {
+  color: #d20f39;
+  font-weight: 600;
+}
+
+/* 模块关键字 (import, export, from, module, require, package) */
+.token.keyword.module {
+  color: #179299;
+  font-weight: 600;
+}
+
+/* 异步关键字 (async, await, yield) */
+.token.keyword.async {
+  color: #ea76cb;
+  font-weight: 600;
+}
+
+/* 访问控制关键字 (public, private, protected, internal) */
+.token.keyword.access {
+  color: #e64553;
+  font-weight: 600;
+}
+
+/* 修饰符关键字 (static, readonly, const, final, abstract, virtual, override, sealed) */
+.token.keyword.modifier {
+  color: #dd7878;
+  font-weight: 600;
+}
+
+/* 异常处理关键字 (try, catch, finally, throw, throws) */
+.token.keyword.exception {
+  color: #df8e1d;
+  font-weight: 600;
+}
+
+/* 类型关键字 (typeof, instanceof, in, of, as, is, new, this, super) */
+.token.keyword.type-check {
+  color: #04a5e5;
+  font-weight: 600;
+}
+
+/* 其他关键字 */
+.token.keyword {
+  color: #8839ef;
+  font-weight: 500;
+}
+
+/* ==================== 运算符类 ==================== */
+
+/* 算术运算符 (+, -, *, /, %) */
+.token.operator.arithmetic {
+  color: #04a5e5;
+}
+
+/* 比较运算符 (==, !=, <, >, <=, >=, ===, !==) */
+.token.operator.comparison {
+  color: #1e66f5;
+}
+
+/* 逻辑运算符 (&&, ||, !) */
+.token.operator.logical {
+  color: #8839ef;
+}
+
+/* 位运算符 (&, |, ^, ~, <<, >>, >>>) */
+.token.operator.bitwise {
+  color: #179299;
+}
+
+/* 赋值运算符 (=, +=, -=, *=, /=, %=, &=, |=, ^=, <<=, >>=) */
+.token.operator.assignment {
+  color: #04a5e5;
+}
+
+/* 三元运算符 (? :) */
+.token.operator.ternary {
+  color: #ea76cb;
+}
+
+/* 展开/剩余运算符 (...)
+ */
+.token.operator.spread {
+  color: #df8e1d;
+}
+
+/* 递增递减运算符 (++, --) */
+.token.operator.increment {
+  color: #fe640b;
+}
+
+/* 一般运算符 */
+.token.operator {
+  color: #04a5e5;
+}
+
+/* ==================== 字符串类 ==================== */
+
+/* 双引号字符串 */
+.token.string {
+  color: #40a02b;
+}
+
+/* 单引号字符 */
+.token.char {
+  color: #40a02b;
+}
+
+/* 模板字符串 */
+.token.string.template {
+  color: #179299;
+}
+
+/* 字符串中的转义序列 (\n, \t, \\) */
+.token.string .token.escape {
+  color: #ea76cb;
+  font-weight: 600;
+}
+
+/* 字符串中的插值变量 */
+.token.string .token.interpolation {
+  color: #e64553;
+}
+
+/* 属性值 */
+.token.attr-value {
+  color: #40a02b;
+}
+
+/* 多行字符串 */
+.token.string.multiline {
+  color: #179299;
+}
+
+/* ==================== 数字类 ==================== */
+
+/* 整数 */
+.token.number.integer {
+  color: #fe640b;
+}
+
+/* 浮点数 */
+.token.number.float {
+  color: #fe640b;
+  font-style: italic;
+}
+
+/* 十六进制数 (0xFF) */
+.token.number.hex {
+  color: #8839ef;
+}
+
+/* 二进制数 (0b1010) */
+.token.number.binary {
+  color: #04a5e5;
+}
+
+/* 八进制数 (0o777) */
+.token.number.octal {
+  color: #df8e1d;
+}
+
+/* 科学计数法 (1e10) */
+.token.number.scientific {
+  color: #e64553;
+}
+
+/* 一般数字 */
+.token.number {
+  color: #fe640b;
+}
+
+/* 布尔值 (true, false) */
+.token.boolean {
+  color: #fe640b;
+  font-weight: 600;
+}
+
+/* 空值 (null, undefined, nil, None) */
+.token.null {
+  color: #8c8fa1;
+  font-style: italic;
+}
+
+/* ==================== 函数类 ==================== */
+
+/* 函数定义 */
+.token.function.definition {
+  color: #1e66f5;
+  font-weight: 600;
+}
+
+/* 函数调用 */
+.token.function.call {
+  color: #1e66f5;
+}
+
+/* 方法定义 */
+.token.method.definition {
+  color: #209fb5;
+  font-weight: 600;
+}
+
+/* 方法调用 */
+.token.method.call {
+  color: #209fb5;
+}
+
+/* 箭头函数 (=>) */
+.token.function.arrow {
+  color: #ea76cb;
+}
+
+/* 构造函数 */
+.token.function.constructor {
+  color: #d20f39;
+  font-weight: 600;
+}
+
+/* 回调函数 */
+.token.function.callback {
+  color: #8839ef;
+}
+
+/* 一般函数 */
+.token.function {
+  color: #1e66f5;
+  font-weight: 500;
+}
+
+/* ==================== 类/类型类 ==================== */
+
+/* 类名 */
+.token.class-name {
+  color: #e64553;
+  font-weight: 600;
+}
+
+/* 接口名 */
+.token.interface {
+  color: #179299;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* 枚举名 */
+.token.enum {
+  color: #ea76cb;
+  font-weight: 600;
+}
+
+/* 结构体名 */
+.token.struct {
+  color: #04a5e5;
+  font-weight: 600;
+}
+
+/* 类型别名 */
+.token.type-alias {
+  color: #8839ef;
+  font-weight: 500;
+}
+
+/* 泛型参数 <T> */
+.token.generic {
+  color: #e64553;
+  font-style: italic;
+}
+
+/* 类型约束 (extends, implements) */
+.token.constraint {
+  color: #d20f39;
+}
+
+/* 内置类型 (string, number, boolean, array, object) */
+.token.builtin {
+  color: #04a5e5;
+  font-style: italic;
+}
+
+/* 类型定义 */
+.token.type {
+  color: #179299;
+  font-weight: 500;
+}
+
+/* 命名空间 */
+.token.namespace {
+  color: #7287fd;
+  font-weight: 500;
+}
+
+/* ==================== 变量类 ==================== */
+
+/* 变量声明 */
+.token.variable.declaration {
+  color: #e64553;
+  font-weight: 500;
+}
+
+/* 常量 (const, final) */
+.token.constant {
+  color: #fe640b;
+  font-weight: 600;
+}
+
+/* 只读变量 (readonly) */
+.token.readonly {
+  color: #d20f39;
+  font-style: italic;
+}
+
+/* 全局变量 */
+.token.variable.global {
+  color: #8839ef;
+}
+
+/* 局部变量 */
+.token.variable.local {
+  color: #e64553;
+}
+
+/* 成员变量 */
+.token.variable.member {
+  color: #04a5e5;
+}
+
+/* 参数 */
+.token.parameter {
+  color: #ea76cb;
+  font-style: italic;
+}
+
+/* 剩余参数 (...args) */
+.token.parameter.rest {
+  color: #df8e1d;
+}
+
+/* 可选参数 (param?) */
+.token.parameter.optional {
+  color: #8c8fa1;
+  font-style: italic;
+}
+
+/* 属性 */
+.token.property {
+  color: #209fb5;
+}
+
+/* 计算属性 [key] */
+.token.property.computed {
+  color: #8839ef;
+}
+
+/* 一般变量 */
+.token.variable {
+  color: #e64553;
+}
+
+/* ==================== 标签/标记类 ==================== */
+
+/* HTML/XML 标签名 - 修复嵌套问题 */
+.token.tag {
+  color: #8839ef;
+  font-weight: 500;
+  background: transparent !important;
+}
+
+/* 标签内的标签（Prism 嵌套结构） */
+.token.tag .token.tag {
+  color: #8839ef;
+  background: transparent !important;
+}
+
+/* 自闭合标签 */
+.token.tag.self-closing {
+  color: #8839ef;
+  font-style: italic;
+}
+
+/* 属性名 - 增强选择器确保生效 */
+.token.attr-name,
+.token.tag .token.attr-name,
+.token.tag .token.attr-name .token.namespace {
+  color: #df8e1d !important;
+  font-weight: 500;
+}
+
+/* 属性值 - 增强选择器 */
+.token.attr-value,
+.token.tag .token.attr-value,
+.token.tag .token.attr-value .token.punctuation {
+  color: #40a02b !important;
+}
+
+/* 属性值内部的等号 */
+.token.attr-value .token.attr-equals,
+.token.tag .token.attr-value .token.attr-equals {
+  color: #04a5e5 !important;
+}
+
+/* 对象键名 */
+.token.key {
+  color: #04a5e5;
+}
+
+/* 计算属性键 */
+.token.key.computed {
+  color: #8839ef;
+}
+
+/* ==================== 特殊符号类 ==================== */
+
+/* 标点符号 - 增强选择器 */
+.token.punctuation,
+.token.tag .token.punctuation,
+.token.tag > .token.punctuation {
+  color: #6c6f85 !important;
+}
+
+/* XML/HTML 标签括号 < > </> */
+.token.tag > .token.punctuation:first-child,
+.token.tag > .token.punctuation:last-child,
+.token.punctuation.tag-bracket {
+  color: #6c6f85 !important;
+  font-weight: 400;
+}
+
+/* 括号 () */
+.token.punctuation.bracket.round {
+  color: #6c6f85;
+}
+
+/* 方括号 [] */
+.token.punctuation.bracket.square {
+  color: #6c6f85;
+}
+
+/* 花括号 {} */
+.token.punctuation.bracket.curly {
+  color: #6c6f85;
+}
+
+/* 分隔符 (逗号、分号) */
+.token.punctuation.delimiter {
+  color: #6c6f85;
+}
+
+/* 点号 (.) */
+.token.punctuation.dot {
+  color: #6c6f85;
+}
+
+/* 冒号 (:) */
+.token.punctuation.colon {
+  color: #6c6f85;
+}
+
+/* 分号 (;) */
+.token.punctuation.semicolon {
+  color: #6c6f85;
+}
+
+/* 逗号 (,) */
+.token.punctuation.comma {
+  color: #6c6f85;
+}
+
+/* 符号 */
+.token.symbol {
+  color: #ea76cb;
+}
+
+/* ==================== 正则表达式类 ==================== */
+
+/* 正则表达式 */
+.token.regex {
+  color: #ea76cb;
+}
+
+/* 正则表达式标志 (g, i, m, u, y) */
+.token.regex-flags {
+  color: #8839ef;
+  font-style: italic;
+}
+
+/* 正则表达式字符类 [] */
+.token.regex-char-class {
+  color: #df8e1d;
+}
+
+/* 正则表达式分组 () */
+.token.regex-group {
+  color: #04a5e5;
+}
+
+/* 正则表达式量词 (*, +, ?, {n}) */
+.token.regex-quantifier {
+  color: #fe640b;
+}
+
+/* 正则表达式锚点 (^, $) */
+.token.regex-anchor {
+  color: #d20f39;
+}
+
+/* ==================== 装饰器/注解类 ==================== */
+
+/* 装饰器 (@decorator) */
+.token.decorator {
+  color: #7287fd;
+  font-style: italic;
+}
+
+/* 注解 (@Annotation) */
+.token.annotation {
+  color: #7287fd;
+  font-weight: 600;
+}
+
+/* 元数据 */
+.token.metadata {
+  color: #8c8fa1;
+  font-style: italic;
+}
+
+/* ==================== 模板/插值类 ==================== */
+
+/* 模板字符串插值 (${}) */
+.token.interpolation {
+  color: #e64553;
+}
+
+/* 插值标点 (${, }) */
+.token.interpolation-punctuation {
+  color: #8839ef;
+}
+
+/* ==================== 标记/高亮类 ==================== */
+
+/* 插入的内容 */
+.token.inserted {
+  color: #40a02b;
+  background: rgba(64, 160, 43, 0.1);
+}
+
+/* 删除的内容 */
+.token.deleted {
+  color: #d20f39;
+  background: rgba(210, 15, 57, 0.1);
+}
+
+/* 修改的内容 */
+.token.changed {
+  color: #df8e1d;
+  background: rgba(223, 142, 29, 0.1);
+}
+
+/* 重要标记 */
+.token.important {
+  color: #d20f39;
+  font-weight: bold;
+}
+
+/* 强调 */
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+/* 实体 */
+.token.entity {
+  cursor: help;
+}
+
+/* ==================== 文档/文本类 ==================== */
+
+/* URL/链接 */
+.token.url {
+  color: #1e66f5;
+  text-decoration: underline;
+}
+
+/* 邮箱 */
+.token.email {
+  color: #179299;
+  text-decoration: underline;
+}
+
+/* 标题 */
+.token.title {
+  color: #1e66f5;
+  font-weight: bold;
+}
+
+/* 章节 */
+.token.section {
+  color: #8839ef;
+  font-weight: bold;
+}
+
+/* 列表项 */
+.token.list {
+  color: #8839ef;
+}
+
+/* 引用 */
+.token.quote {
+  color: #8c8fa1;
+  font-style: italic;
+}
+
+/* 代码片段 (在文档中) */
+.token.code {
+  color: #ea76cb;
+  background: rgba(234, 118, 203, 0.1);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+/* 强调文本 */
+.token.emphasis {
+  color: #e64553;
+  font-style: italic;
+}
+
+/* 加粗文本 */
+.token.strong {
+  color: #d20f39;
+  font-weight: bold;
+}
+
+/* ==================== CSS 特定类 ==================== */
+
+/* CSS 选择器 */
+.token.selector {
+  color: #8839ef;
+}
+
+/* CSS 属性 */
+.token.property.css {
+  color: #04a5e5;
+}
+
+/* CSS 值 */
+.token.value {
+  color: #40a02b;
+}
+
+/* CSS 单位 (px, em, rem, %) */
+.token.unit {
+  color: #fe640b;
+}
+
+/* CSS @规则 (@media, @import, @keyframes) */
+.token.atrule {
+  color: #8839ef;
+  font-weight: 600;
+}
+
+/* CSS 变量 (--variable) */
+.token.variable.css {
+  color: #e64553;
+}
+
+/* 伪类 (:hover, :focus) */
+.token.pseudo-class {
+  color: #ea76cb;
+  font-style: italic;
+}
+
+/* 伪元素 (::before, ::after) */
+.token.pseudo-element {
+  color: #ea76cb;
+  font-style: italic;
+}
+
+/* ID 选择器 (#id) */
+.token.id {
+  color: #d20f39;
+  font-weight: 600;
+}
+
+/* 类选择器 (.class) */
+.token.class {
+  color: #df8e1d;
+}
+
+/* 属性选择器 ([attr]) */
+.token.attribute-selector {
+  color: #179299;
+}
+
+/* 组合器 (> , + , ~) */
+.token.combinator {
+  color: #04a5e5;
+}
+
+/* ==================== Shell/命令类 ==================== */
+
+/* 命令/指令 */
+.token.command {
+  color: #1e66f5;
+  font-weight: 600;
+}
+
+/* 参数/选项 (-flag, --option) */
+.token.parameter.option {
+  color: #179299;
+}
+
+/* 环境变量 ($VAR) */
+.token.environment {
+  color: #ea76cb;
+}
+
+/* 路径 (/home/user) */
+.token.path {
+  color: #40a02b;
+  text-decoration: underline;
+}
+
+/* 权限 (rwx) */
+.token.permission {
+  color: #df8e1d;
+}
+
+/* 用户/组 */
+.token.user {
+  color: #04a5e5;
+}
+
+/* 进程 ID */
+.token.pid {
+  color: #fe640b;
+}
+
+/* 信号 (SIGTERM, SIGKILL) */
+.token.signal {
+  color: #d20f39;
+}
+
+/* ==================== 数据格式类 ==================== */
+
+/* 键 (JSON/YAML key) */
+.token.key.json {
+  color: #04a5e5;
+}
+
+/* 字符串值 */
+.token.value.string {
+  color: #40a02b;
+}
+
+/* 数字值 */
+.token.value.number {
+  color: #fe640b;
+}
+
+/* 布尔值 */
+.token.value.boolean {
+  color: #8839ef;
+}
+
+/* 日期/时间 */
+.token.datetime {
+  color: #179299;
+}
+
+/* 时间戳 */
+.token.timestamp {
+  color: #04a5e5;
+}
+
+/* UUID */
+.token.uuid {
+  color: #8839ef;
+}
+
+/* 版本号 */
+.token.version {
+  color: #df8e1d;
+}
+
+/* IP 地址 */
+.token.ip-address {
+  color: #1e66f5;
+}
+
+/* MAC 地址 */
+.token.mac-address {
+  color: #209fb5;
+}
+
+/* 哈希/校验和 */
+.token.hash {
+  color: #8839ef;
+  font-family: monospace;
+}
+
+/* ==================== 标记语言类 ==================== */
+
+/* Markdown 标题 */
+.token.heading {
+  color: #8839ef;
+  font-weight: bold;
+}
+
+/* Markdown 列表标记 */
+.token.list-bullet {
+  color: #8839ef;
+}
+
+/* Markdown 代码块标记 ``` */
+.token.code-block-marker {
+  color: #8c8fa1;
+}
+
+/* Markdown 链接文本 */
+.token.link-text {
+  color: #1e66f5;
+}
+
+/* Markdown 链接 URL */
+.token.link-url {
+  color: #179299;
+  text-decoration: underline;
+}
+
+/* Markdown 强调 (*text*) */
+.token.emphasis.md {
+  color: #e64553;
+  font-style: italic;
+}
+
+/* Markdown 加粗 (**text**) */
+.token.strong.md {
+  color: #d20f39;
+  font-weight: bold;
+}
+
+/* Markdown 删除线 (~~text~~) */
+.token.strikethrough {
+  color: #8c8fa1;
+  text-decoration: line-through;
+}
+
+/* HTML 实体 (&amp;) */
+.token.entity.html {
+  color: #fe640b;
+}
+
+/* XML 命名空间前缀 */
+.token.namespace-prefix {
+  color: #179299;
+}
+
+/* ==================== XML 特定修复 ==================== */
+
+/* XML 标签名 - 确保正确显示 */
+.language-xml .token.tag,
+.language-xml .token.tag .token.tag {
+  color: #8839ef !important;
+  background: transparent !important;
+}
+
+/* XML 标签名（由 prism-xml-fix.js 添加） */
+.token.tag-name {
+  color: #8839ef !important;
+  font-weight: 600;
+  background: transparent !important;
+}
+
+/* 修复后的 XML 标签容器 */
+.token.tag[data-xml-fixed="true"] {
+  background: transparent !important;
+}
+
+/* XML 属性名 */
+.language-xml .token.attr-name {
+  color: #df8e1d !important;
+}
+
+/* XML 属性值 */
+.language-xml .token.attr-value {
+  color: #40a02b !important;
+}
+
+/* XML 标点符号 < > / */
+.language-xml .token.punctuation {
+  color: #6c6f85 !important;
+}
+
+/* 修复嵌套标签的背景问题 */
+.token.tag * {
+  background: transparent !important;
+}
+
+/* ==================== 交互/效果类 ==================== */
+
+/* 选择高亮 */
+pre[class*="language-"] ::selection,
+code[class*="language-"] ::selection {
+  background: rgba(223, 142, 29, 0.2);
+}
+
+/* 聚焦 */
+pre[class*="language-"]:focus,
+code[class*="language-"]:focus {
+  outline: none;
+}
+
+/* 行高亮 */
+.line-highlight {
+  background: rgba(223, 142, 29, 0.1);
+  border-left: 3px solid #df8e1d;
+}
+
+/* 行号 */
+.line-number {
+  color: #8c8fa1;
+}
+
+/* 当前行 */
+.line-current {
+  background: rgba(136, 57, 239, 0.05);
+}
+
+/* 搜索匹配 */
+.token.search-match {
+  background: rgba(234, 118, 203, 0.3);
+  border-radius: 2px;
+}
+
+/* 当前搜索匹配 */
+.token.search-match.current {
+  background: rgba(234, 118, 203, 0.5);
+}
+
+/* ==================== 语言特定关键字类 ==================== */
+
+/* Rust 特定关键字 (mut, ref, box, move, unsafe, trait) */
+.token.keyword.rust-specific {
+  color: #de6b5c;
+  font-weight: 600;
+}
+
+/* C++ 特定关键字 (auto, constexpr, noexcept, static_cast 等) */
+.token.keyword.cpp-specific {
+  color: #5c8ae6;
+  font-weight: 600;
+}
+
+/* Java 特定关键字 (extends, implements, assert 等) */
+.token.keyword.java-specific {
+  color: #6b8e23;
+  font-weight: 600;
+}
+
+/* Python 特定关键字 (lambda, with, pass, global 等) */
+.token.keyword.python-specific {
+  color: #4682b4;
+  font-weight: 600;
+}
+
+/* ==================== 运算符增强类 ==================== */
+
+/* 箭头运算符 (=>, ->, <-) */
+.token.operator.arrow {
+  color: #ea76cb;
+  font-weight: 600;
+}
+
+/* 范围运算符 (.., ..., ..=) */
+.token.operator.range {
+  color: #df8e1d;
+}
+
+/* 路径/作用域运算符 (::) */
+.token.operator.scope {
+  color: #6c6f85;
+}
+
+/* ==================== 类型/标识符增强类 ==================== */
+
+/* Rust 泛型类型 (Result, Option, Vec, String 等) */
+.token.class-name.rust-generic {
+  color: #d20f39;
+  font-weight: 600;
+}
+
+/* C++ 标准库类型 (std, vector, string, map 等) */
+.token.class-name.cpp-std {
+  color: #5c8ae6;
+}
+
+/* Java 标准库类型 (System, String, Integer 等) */
+.token.class-name.java-std {
+  color: #6b8e23;
+}
+
+/* 布尔值增强 */
+.token.boolean.boolean-value {
+  color: #fe640b;
+  font-weight: 700;
+}
+
+/* 空值增强 */
+.token.null.null-value {
+  color: #8c8fa1;
+  font-style: italic;
+}
