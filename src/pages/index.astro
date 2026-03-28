@@ -820,21 +820,21 @@ const yearsActive = new Date().getFullYear() - 2024;
         
         <!-- 3D 移动端第2，桌面端中心绝对C位 -->
         <div class="order-2 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-center flex justify-center items-center">
-          <div class="relative w-[260px] h-[260px] sm:w-[300px] sm:h-[300px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[500px] [@media(min-width:924px)]:h-[500px] flex items-center justify-center">
+          <div class="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[500px] [@media(min-width:924px)]:h-[500px] flex items-center justify-center">
             <!-- 大圆形背景 - 只有圆形，没有方形背景，更深的弥散阴影 -->
-            <div class="absolute w-[230px] h-[230px] sm:w-[260px] sm:h-[260px] md:w-[340px] md:h-[340px] [@media(min-width:924px)]:w-[440px] [@media(min-width:924px)]:h-[440px] rounded-full bg-white/30 backdrop-blur-xl border border-white/60"
+            <div class="absolute w-[250px] h-[250px] sm:w-[280px] sm:h-[280px] md:w-[340px] md:h-[340px] [@media(min-width:924px)]:w-[440px] [@media(min-width:924px)]:h-[440px] rounded-full bg-white/30 backdrop-blur-xl border border-white/60"
               style="box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.15), 0 50px 100px -30px rgba(0, 0, 0, 0.1), 0 80px 140px -40px rgba(0, 0, 0, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);">
             </div>
 
             <!-- 中心 3D 动漫角色展示 - 呼吸感球体样式 -->
-            <div class="absolute w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
+            <div class="absolute w-44 h-44 sm:w-52 sm:h-52 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
               <AnimeCore
                 client:load
               />
             </div>
 
             <!-- 环形文字 - 优雅的3D悬浮动效 + 交互 -->
-            <div id="interactiveRing" class="absolute w-[250px] h-[250px] sm:w-[280px] sm:h-[280px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[480px] [@media(min-width:924px)]:h-[480px] floating-ring cursor-pointer" style="perspective: 1000px; transform-style: preserve-3d;">
+            <div id="interactiveRing" class="absolute w-[270px] h-[270px] sm:w-[300px] sm:h-[300px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[480px] [@media(min-width:924px)]:h-[480px] floating-ring cursor-pointer" style="perspective: 1000px; transform-style: preserve-3d;">
               <svg viewBox="0 0 300 300" class="w-full h-full ring-text-rotate" style="transform-style: preserve-3d;">
                 <defs>
                   <path id="textCircle" d="M 150, 150 m -110, 0 a 110,110 0 1,1 220,0 a 110,110 0 1,1 -220,0" fill="none"/>
@@ -1120,6 +1120,51 @@ const yearsActive = new Date().getFullYear() - 2024;
       
       // 检测是否为触摸设备
       const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+      
+      // 重置导航栏到卡片状态的函数
+      function resetNavCardToCardState() {
+        // 移除固定定位样式
+        navCard.style.position = '';
+        navCard.style.top = '';
+        navCard.style.left = '';
+        navCard.style.zIndex = '';
+        
+        // 恢复桌面端位移类
+        navCard.classList.add('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
+        
+        // 移除 GPU 加速和布局转换类
+        navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change');
+        
+        // 恢复其他元素的显示
+        if (gridContainer) {
+          const children = gridContainer.children;
+          for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            if (child.id !== 'navCard') {
+              child.style.willChange = '';
+              child.style.transition = '';
+              child.style.opacity = '';
+              child.style.transform = '';
+            }
+          }
+        }
+      }
+      
+      // 页面可见性变化时重置导航栏（处理从其他页面返回的情况）
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+          // 页面重新可见时，重置导航栏状态
+          resetNavCardToCardState();
+        }
+      });
+      
+      // 页面加载时确保导航栏在正确位置
+      window.addEventListener('pageshow', function(e) {
+        // 如果是从缓存加载的页面（如浏览器返回），重置导航栏
+        if (e.persisted) {
+          resetNavCardToCardState();
+        }
+      });
       
       // 获取所有会跳转的链接
       const allLinks = document.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"]');

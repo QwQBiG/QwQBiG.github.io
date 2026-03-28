@@ -22,8 +22,12 @@ function CharacterPlane() {
   const { mouse } = useThree();
   const frameCount = useRef(0);
   
-  // 加载角色贴图
-  const texture = useTexture('/images/character.png');
+  // 加载角色贴图 - 使用高质量设置
+  const texture = useTexture('/images/character.png', (loader) => {
+    loader.minFilter = THREE.LinearFilter;
+    loader.magFilter = THREE.LinearFilter;
+    loader.anisotropy = 16; // 各向异性过滤提高斜向清晰度
+  });
   
   // 获取图片原始宽高比
   const imageAspect = texture.image ? texture.image.width / texture.image.height : 1;
@@ -123,8 +127,18 @@ function CharacterPlane() {
         float mouseInfluence = 1.0 - length(uMouse) * 0.2;
         edgeGlow *= mouseInfluence;
         
+        // 轻微锐化滤镜
+        float sharpen = 0.08;
+        vec2 texel = vec2(0.002);
+        vec3 colorCenter = texColor.rgb;
+        vec3 colorLeft = texture2D(uTexture, vUv - vec2(texel.x, 0.0)).rgb;
+        vec3 colorRight = texture2D(uTexture, vUv + vec2(texel.x, 0.0)).rgb;
+        vec3 colorUp = texture2D(uTexture, vUv - vec2(0.0, texel.y)).rgb;
+        vec3 colorDown = texture2D(uTexture, vUv + vec2(0.0, texel.y)).rgb;
+        vec3 sharpened = colorCenter * (1.0 + 4.0 * sharpen) - (colorLeft + colorRight + colorUp + colorDown) * sharpen;
+        
         // 混合贴图和发光
-        vec3 finalColor = texColor.rgb + uGlowColor * edgeGlow;
+        vec3 finalColor = sharpened + uGlowColor * edgeGlow;
         
         gl_FragColor = vec4(finalColor, texColor.a);
       }
@@ -134,9 +148,10 @@ function CharacterPlane() {
   }), [texture]);
   
   // 根据宽高比计算平面尺寸，保持图片比例
-  // 使用 cover 策略：填满圆形区域，可能裁剪部分图片
-  const planeWidth = imageAspect >= 1 ? 4.2 : 4.2 * imageAspect;
-  const planeHeight = imageAspect >= 1 ? 4.2 / imageAspect : 4.2;
+  // 使用 contain 策略：确保图片完整显示，可能有留白
+  const baseSize = 3.8; // 稍微减小基础尺寸，避免边缘被裁剪
+  const planeWidth = imageAspect >= 1 ? baseSize : baseSize * imageAspect;
+  const planeHeight = imageAspect >= 1 ? baseSize / imageAspect : baseSize;
   
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
@@ -203,9 +218,9 @@ function Scene() {
 
 // 主组件 - 优化版本
 export default function AnimeCore() {
-  // 根据设备类型调整 DPR
+  // DPR 设置：使用设备原生 DPR 保证最高清晰度
   const dpr = typeof window !== 'undefined' 
-    ? Math.min(window.devicePixelRatio, isTouchDevice ? 1.5 : 2) 
+    ? window.devicePixelRatio 
     : 1;
   
   return (
@@ -213,14 +228,17 @@ export default function AnimeCore() {
       <Canvas
         camera={{ position: [0, 0, 4.5], fov: 50 }}
         gl={{ 
-          antialias: !isTouchDevice, // 触摸设备禁用抗锯齿
+          antialias: true, // 所有设备启用抗锯齿
           alpha: true,
           powerPreference: "high-performance"
         }}
-        style={{ background: 'transparent' }}
+        style={{ 
+          background: 'transparent',
+          imageRendering: 'high-quality' // 高质量图像渲染
+        }}
         dpr={dpr}
         frameloop="always"
-        performance={{ min: 0.5 }} // 允许帧率下降以保持流畅
+        performance={{ min: 0.5 }}
       >
         <Scene />
       </Canvas>

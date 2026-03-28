@@ -19,13 +19,16 @@ const generateRandomPosition = (index: number, total: number, containerWidth: nu
   const radiusX = maxRadiusX * (0.3 + Math.random() * 0.7);
   
   // Y轴范围：窄屏时限制更小，确保图片在可视区域内
-  const yScale = isNarrowScreen ? 0.25 : (isMobile ? 0.35 : 0.4);
-  const maxRadiusY = Math.min(containerHeight * yScale, isMobile ? 250 : 400);
+  const yScale = isNarrowScreen ? 0.2 : (isMobile ? 0.3 : 0.4);
+  const maxRadiusY = Math.min(containerHeight * yScale, isMobile ? 200 : 400);
   const radiusY = maxRadiusY * (0.3 + Math.random() * 0.7);
+  
+  // 移动端添加向下偏移，确保图片在屏幕中间偏下位置显示
+  const yOffset = isMobile ? containerHeight * 0.05 : 0;
 
   return {
     x: Math.cos(angle) * radiusX,
-    y: Math.sin(angle) * radiusY,
+    y: Math.sin(angle) * radiusY + yOffset,
     rotation: (Math.random() - 0.5) * 20, // 减小旋转角度
     zIndex: index,
   };
@@ -278,8 +281,8 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   }, [state.x, state.y]);
 
   // 计算实际像素位置（相对于容器左上角）
-  // 移动端垂直居中偏移量更小，防止长屏时图片偏上
-  const verticalOffset = cardWidth < 250 ? cardWidth * 0.3 : 100;
+  // 移动端垂直居中调整：小卡片（移动端）向下偏移更多，确保图片在可视区域内
+  const verticalOffset = cardWidth < 250 ? cardWidth * 0.6 : 100;
   const pixelX = containerCenterX + position.x - cardWidth / 2;
   const pixelY = containerCenterY + position.y - verticalOffset;
 
