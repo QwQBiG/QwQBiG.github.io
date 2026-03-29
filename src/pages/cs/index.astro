@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Footer from '../../components/Footer.astro';
-import PostCard from '../../components/PostCard.astro';
-import SeriesCard from '../../components/SeriesCard.astro';
-import FloatingNavCard from '../../components/FloatingNavCard.astro';
+import Footer from '../../components/layout/Footer.astro';
+import PostCard from '../../components/content/PostCard.astro';
+import SeriesCard from '../../components/content/SeriesCard.astro';
+import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('cs', ({ data }) => !data.draft);
