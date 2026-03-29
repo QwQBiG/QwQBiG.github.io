@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
+import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { getCollection, render } from 'astro:content';
 import { formatDate } from '../../utils/date';
 
@@ -63,9 +64,10 @@ const pageTitle = `${title} - QwQBiG's World`;
 
   <main class="flex-1 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <!-- Main Content -->
-        <article class="lg:col-span-3">
+        <article class="lg:col-span-9">
+          <GlassContainer>
           <!-- Post Header -->
           <header class="mb-8">
             {series && series.length > 0 && !isSeriesCollection && (
@@ -182,10 +184,11 @@ const pageTitle = `${title} - QwQBiG's World`;
               </div>
             </nav>
           )}
+          </GlassContainer>
         </article>
 
         <!-- Sidebar -->
-        <aside class="lg:col-span-1">
+        <aside class="lg:col-span-3">
           <div class="sticky top-24 space-y-6">
             <!-- TOC -->
             {headings.length > 0 && (

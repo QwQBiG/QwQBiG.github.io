@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
+import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { getCollection } from 'astro:content';
 
 // Generate static paths for all poetry posts
@@ -22,12 +23,12 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
 
 <Layout title={pageTitle} description={post.data.description}>
   <FloatingNavCard />
-  
+
   <main class="flex-1 py-12">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Back Link -->
-      <a 
-        href="/poetry/" 
+      <a
+        href="/poetry/"
         class="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-8"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,6 +38,7 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
       </a>
 
       <!-- Article Header -->
+      <GlassContainer>
       <article class="prose prose-lg max-w-none">
         <header class="mb-8 text-center">
           <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
@@ -97,6 +99,7 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
           <Content />
         </div>
       </article>
+      </GlassContainer>
 
       <!-- Navigation -->
       <div class="mt-12 pt-8 border-t border-border-color">

@@ -1,0 +1,48 @@
+---
+export interface Props {
+  class?: string;
+  padding?: 'none' | 'small' | 'medium' | 'large';
+}
+
+const { 
+  class: className = '', 
+  padding = 'large'
+} = Astro.props;
+
+const paddingClasses = {
+  none: '',
+  small: 'p-4 md:p-5',
+  medium: 'p-6 md:p-8',
+  large: 'p-8 md:p-12'
+};
+---
+
+<div 
+  class={`
+    glass-container
+    relative overflow-hidden
+    bg-white/40 
+    backdrop-blur-xl 
+    border border-white/60 
+    rounded-[2rem]
+    ${paddingClasses[padding]}
+    ${className}
+  `}
+  style="
+    box-shadow: 
+      0 20px 40px -15px rgba(0, 0, 0, 0.1),
+      0 40px 60px -20px rgba(0, 0, 0, 0.08),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 1px 0 rgba(255, 255, 255, 0.4);
+  "
+>
+  <slot />
+</div>
+
+<style>
+  .glass-container {
+    /* 确保毛玻璃效果 */
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+</style>
