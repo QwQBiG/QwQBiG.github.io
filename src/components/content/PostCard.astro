@@ -3,12 +3,14 @@ import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '../../utils/date';
 
 interface Props {
-  post: CollectionEntry<'cs'> | CollectionEntry<'games'> | CollectionEntry<'poetry'>;
+  post: CollectionEntry<'cs'> | CollectionEntry<'poetry'>;
   collection?: string;
 }
 
 const { post, collection = 'cs' } = Astro.props;
-const { title, date, tags, description, series } = post.data;
+const { title, date, tags, description } = post.data;
+// series 只在 cs collection 中存在
+const series = collection === 'cs' ? (post.data as CollectionEntry<'cs'>['data']).series : undefined;
 
 // Determine the correct URL based on collection
 const postUrl = `/${collection}/${post.slug}/`;

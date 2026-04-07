@@ -70,6 +70,8 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <link rel="stylesheet" href="/styles/prism-rainbow-brackets.css" />
     <!-- 代码交互样式 -->
     <link rel="stylesheet" href="/styles/prism-code-interactions.css" />
+    <!-- KaTeX 数学公式样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
 </head>
 <body class={`min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <slot />

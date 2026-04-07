@@ -2,8 +2,9 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
-
 import react from '@astrojs/react';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
   site: 'https://iqwqi.win',
@@ -15,8 +16,8 @@ export default defineConfig({
   markdown: {
     // 禁用 Shiki，使用 Prism
     syntaxHighlight: 'prism',
-    remarkPlugins: [],
-    rehypePlugins: [],
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
   },
   build: {
     format: 'directory',
