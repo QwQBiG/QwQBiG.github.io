@@ -95,5 +95,558 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <script src="/js/prism-code-interactions.js" defer></script>
     <!-- XML 高亮修复 -->
     <script src="/js/prism-xml-fix.js" defer></script>
+    
+    <!-- Mermaid 图表支持 -->
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      
+      // 初始化 Mermaid - 禁用自动宽度限制，确保完整显示
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          background: 'transparent',
+          primaryColor: '#fce4ec',
+          primaryTextColor: '#333',
+          primaryBorderColor: '#ec4899',
+          lineColor: '#9c27b0',
+          secondaryColor: '#f8bbd9',
+          tertiaryColor: '#f3e5f5'
+        },
+        flowchart: {
+          useMaxWidth: false,
+          htmlLabels: true,
+          curve: 'basis',
+          padding: 20
+        },
+        sequence: {
+          useMaxWidth: false,
+          diagramMarginX: 50,
+          diagramMarginY: 20
+        }
+      });
+      
+      // 手动渲染所有 Mermaid 代码块
+      function renderMermaidDiagrams() {
+        const mermaidBlocks = document.querySelectorAll('pre.language-mermaid, pre[class*="mermaid"]');
+        
+        mermaidBlocks.forEach((block, index) => {
+          const code = block.querySelector('code');
+          if (!code) return;
+          
+          const graphDefinition = code.textContent;
+          const id = 'mermaid-' + index;
+          
+          // 创建外层容器 - 模仿代码块样式
+          const wrapper = document.createElement('div');
+          wrapper.className = 'mermaid-wrapper';
+          wrapper.style.cssText = 'position: relative; margin: 1.5em 0; border-radius: 16px; background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%); box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08), 0 8px 32px rgba(232, 74, 122, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6); overflow: hidden; border: 1px solid rgba(232, 74, 122, 0.1);';
+          
+          // 创建头部 - 模仿代码块头部样式
+          const header = document.createElement('div');
+          header.className = 'code-header';
+          header.style.cssText = 'position: relative; height: 40px; background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%); border-bottom: 1px solid rgba(232, 74, 122, 0.15); z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 0 12px;';
+          
+          // 左侧：Mermaid 标签
+          const langContainer = document.createElement('div');
+          langContainer.style.cssText = 'display: flex; align-items: center;';
+          const langLabel = document.createElement('span');
+          langLabel.textContent = 'Mermaid';
+          langLabel.style.cssText = 'height: 40px; padding: 0 16px; font-family: "JetBrains Mono", "Fira Code", monospace; font-size: 13px; font-weight: 600; color: #e84a7a; display: flex; align-items: center;';
+          langContainer.appendChild(langLabel);
+          
+          // 右侧：按钮组 - 模仿代码块按钮样式
+          const buttonsContainer = document.createElement('div');
+          buttonsContainer.style.cssText = 'display: flex; align-items: center; gap: 8px;';
+          
+          // 创建按钮 - 使用与代码块相同的样式
+          const createBtn = (className, title) => {
+            const btn = document.createElement('button');
+            btn.className = className;
+            btn.title = title;
+            btn.style.cssText = 'height: 24px; padding: 0 10px; font-family: "Noto Sans SC", sans-serif; font-size: 12px; font-weight: 600; color: #e84a7a; background: rgba(232, 74, 122, 0.1); border: 1px solid rgba(232, 74, 122, 0.3); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
+            return btn;
+          };
+          
+          const zoomOutBtn = createBtn('mermaid-zoom-out', '缩小');
+          zoomOutBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M19 13H5v-2h14v2z"/></svg>';
+          
+          const resetBtn = createBtn('mermaid-reset', '重置');
+          resetBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>';
+          
+          const zoomInBtn = createBtn('mermaid-zoom-in', '放大');
+          zoomInBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>';
+          
+          const fullscreenBtn = createBtn('mermaid-fullscreen', '全屏');
+          fullscreenBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
+          
+          buttonsContainer.appendChild(zoomOutBtn);
+          buttonsContainer.appendChild(resetBtn);
+          buttonsContainer.appendChild(zoomInBtn);
+          buttonsContainer.appendChild(fullscreenBtn);
+          
+          header.appendChild(langContainer);
+          header.appendChild(buttonsContainer);
+          
+          // 创建图表内容区域 - 使用 auto height 确保完整显示
+          const contentWrapper = document.createElement('div');
+          contentWrapper.className = 'mermaid-content-wrapper';
+          contentWrapper.style.cssText = 'padding: 16px 20px; overflow-x: auto; overflow-y: visible;';
+          
+          // 创建图表容器（支持拖动和缩放）
+          const container = document.createElement('div');
+          container.className = 'mermaid-container';
+          container.style.cssText = 'position: relative; width: 100%; overflow: visible; cursor: grab; background: transparent; min-height: 100px;';
+          
+          // 创建内容层
+          const content = document.createElement('div');
+          content.className = 'mermaid-content';
+          content.style.cssText = 'position: relative; transform: scale(1); transform-origin: top left; transition: transform 0.2s ease; display: inline-block; min-width: 100%;';
+          
+          contentWrapper.appendChild(container);
+          container.appendChild(content);
+          
+          wrapper.appendChild(header);
+          wrapper.appendChild(contentWrapper);
+          
+          // 替换代码块
+          block.parentNode.insertBefore(wrapper, block);
+          block.style.display = 'none';
+          
+          // 渲染图表
+          mermaid.render(id, graphDefinition).then(({ svg }) => {
+            content.innerHTML = svg;
+            
+            // 确保SVG完整显示
+            const svgElement = content.querySelector('svg');
+            if (svgElement) {
+              // 移除固定宽高，让SVG自适应内容
+              svgElement.style.maxWidth = 'none';
+              svgElement.style.width = 'auto';
+              svgElement.style.height = 'auto';
+              svgElement.style.display = 'block';
+              svgElement.style.overflow = 'visible';
+              
+              // 保存原始viewBox信息用于后续计算
+              const originalViewBox = svgElement.getAttribute('viewBox');
+              
+              // 修复foreignObject问题，确保多行文本显示完整
+              const foreignObjects = svgElement.querySelectorAll('foreignObject');
+              foreignObjects.forEach(fo => {
+                fo.style.overflow = 'visible';
+                const div = fo.querySelector('div');
+                if (div) {
+                  div.style.whiteSpace = 'pre-wrap';
+                  div.style.wordBreak = 'break-word';
+                }
+              });
+              
+              // 确保SVG的g元素也不会截断内容
+              const gElements = svgElement.querySelectorAll('g');
+              gElements.forEach(g => {
+                g.style.overflow = 'visible';
+              });
+              
+              // 计算实际内容尺寸并设置容器
+              requestAnimationFrame(() => {
+                const bbox = svgElement.getBBox();
+                const clientRect = svgElement.getBoundingClientRect();
+                
+                if (bbox && bbox.width > 0 && bbox.height > 0) {
+                  // 设置容器最小尺寸为实际内容尺寸
+                  container.style.minWidth = Math.ceil(bbox.width + bbox.x + 40) + 'px';
+                  container.style.minHeight = Math.ceil(bbox.height + bbox.y + 40) + 'px';
+                  
+                  // 计算初始缩放比例，让内容适应容器
+                  const containerWidth = container.clientWidth || clientRect.width;
+                  const containerHeight = container.clientHeight || clientRect.height;
+                  
+                  if (containerWidth > 0 && containerHeight > 0) {
+                    const scaleX = containerWidth / (bbox.width + bbox.x);
+                    const scaleY = containerHeight / (bbox.height + bbox.y);
+                    const fitScale = Math.min(scaleX, scaleY, 1); // 不放大，只缩小
+                    
+                    if (fitScale < 1) {
+                      scale = fitScale;
+                      updateTransform();
+                    }
+                  }
+                }
+              });
+            }
+            
+            // 初始化交互功能
+            initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn);
+          }).catch(err => {
+            console.error('Mermaid 渲染失败:', err);
+            content.innerHTML = '<div style="color: red; padding: 20px;">图表渲染失败</div>';
+          });
+        });
+      }
+      
+      // 初始化图表交互功能
+      function initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn) {
+        let scale = 1;
+        let isDragging = false;
+        let startX, startY, offsetX = 0, offsetY = 0;
+        let isFullscreen = false;
+        
+        // 更新变换
+        function updateTransform() {
+          content.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+        }
+        
+        // 按钮 hover 效果
+        const buttons = [zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn];
+        buttons.forEach(btn => {
+          btn.addEventListener('mouseenter', () => {
+            btn.style.background = 'rgba(232, 74, 122, 0.2)';
+            btn.style.borderColor = 'rgba(232, 74, 122, 0.5)';
+          });
+          btn.addEventListener('mouseleave', () => {
+            btn.style.background = 'rgba(232, 74, 122, 0.1)';
+            btn.style.borderColor = 'rgba(232, 74, 122, 0.3)';
+          });
+        });
+        
+        // 放大
+        zoomInBtn.addEventListener('click', () => {
+          scale = Math.min(scale * 1.2, 5);
+          updateTransform();
+        });
+        
+        // 缩小
+        zoomOutBtn.addEventListener('click', () => {
+          scale = Math.max(scale / 1.2, 0.3);
+          updateTransform();
+        });
+        
+        // 重置
+        resetBtn.addEventListener('click', () => {
+          scale = 1;
+          offsetX = 0;
+          offsetY = 0;
+          updateTransform();
+        });
+        
+        // 全屏
+        fullscreenBtn.addEventListener('click', () => {
+          if (!isFullscreen) {
+            if (wrapper.requestFullscreen) {
+              wrapper.requestFullscreen();
+            } else if (wrapper.webkitRequestFullscreen) {
+              wrapper.webkitRequestFullscreen();
+            }
+            isFullscreen = true;
+            wrapper.classList.add('mermaid-fullscreen');
+            fullscreenBtn.title = '退出全屏';
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+            }
+            isFullscreen = false;
+            wrapper.classList.remove('mermaid-fullscreen');
+            fullscreenBtn.title = '全屏';
+          }
+        });
+        
+        // 监听全屏变化
+        document.addEventListener('fullscreenchange', () => {
+          if (!document.fullscreenElement) {
+            isFullscreen = false;
+            wrapper.classList.remove('mermaid-fullscreen');
+            fullscreenBtn.title = '全屏';
+          }
+        });
+        
+        // 鼠标拖动
+        container.addEventListener('mousedown', (e) => {
+          if (e.target.tagName === 'BUTTON') return;
+          isDragging = true;
+          startX = e.clientX - offsetX;
+          startY = e.clientY - offsetY;
+          container.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          offsetX = e.clientX - startX;
+          offsetY = e.clientY - startY;
+          updateTransform();
+        });
+        
+        document.addEventListener('mouseup', () => {
+          isDragging = false;
+          container.style.cursor = 'grab';
+        });
+        
+        // 鼠标滚轮缩放
+        container.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? 0.9 : 1.1;
+          scale = Math.max(0.3, Math.min(5, scale * delta));
+          updateTransform();
+        });
+      }
+      
+      // 页面加载完成后渲染
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderMermaidDiagrams);
+      } else {
+        renderMermaidDiagrams();
+      }
+    </script>
+    
+    <style is:global>
+      /* Mermaid 全屏模式样式 */
+      .mermaid-wrapper.mermaid-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        overflow: auto !important;
+      }
+
+      .mermaid-wrapper.mermaid-fullscreen .mermaid-content-wrapper {
+        min-height: calc(100vh - 40px);
+        padding: 20px 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .mermaid-wrapper.mermaid-fullscreen .mermaid-container {
+        min-height: calc(100vh - 80px);
+        width: auto !important;
+        max-width: 100%;
+      }
+
+      /* 确保SVG文本完整显示 */
+      .mermaid-wrapper svg {
+        overflow: visible !important;
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+      }
+
+      .mermaid-wrapper svg text {
+        paint-order: stroke fill;
+        overflow: visible;
+      }
+
+      .mermaid-wrapper svg g {
+        overflow: visible !important;
+      }
+
+      .mermaid-wrapper svg foreignObject {
+        overflow: visible !important;
+      }
+
+      .mermaid-wrapper svg .nodeLabel {
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
+      }
+
+      /* Mermaid内容区域，确保不会被截断 */
+      .mermaid-content-wrapper {
+        overflow: visible !important;
+        width: auto !important;
+        max-width: none !important;
+      }
+
+      .mermaid-container {
+        overflow: visible !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+      }
+
+      .mermaid-content {
+        overflow: visible !important;
+        width: auto !important;
+        min-width: 0 !important;
+        background: transparent !important;
+      }
+
+      /* Markdown表格样式 - 粉紫主题 */
+      .prose table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5em 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08), 0 8px 32px rgba(232, 74, 122, 0.05);
+        border: 1px solid rgba(232, 74, 122, 0.15);
+      }
+
+      .prose table thead {
+        background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%);
+      }
+
+      .prose table thead th {
+        padding: 12px 16px;
+        font-weight: 600;
+        color: #e84a7a;
+        border-bottom: 2px solid rgba(232, 74, 122, 0.2);
+        border-right: 2px solid rgba(232, 74, 122, 0.15);
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 14px;
+      }
+
+      .prose table thead th:last-child {
+        border-right: none;
+      }
+
+      .prose table tbody tr {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+        transition: background 0.2s ease;
+      }
+
+      .prose table tbody tr:nth-child(even) {
+        background: linear-gradient(135deg, #fff5f7 0%, #fff0f5 100%);
+      }
+
+      .prose table tbody tr:hover {
+        background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+      }
+
+      .prose table tbody td {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(232, 74, 122, 0.1);
+        border-right: 2px solid rgba(232, 74, 122, 0.15);
+        color: #333;
+        font-size: 14px;
+      }
+
+      .prose table tbody td:last-child {
+        border-right: none;
+      }
+
+      .prose table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* 表格头部代码块样式 */
+      .prose table code {
+        background: rgba(232, 74, 122, 0.1);
+        color: #e84a7a;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 12px;
+      }
+
+      /* IP数据报格式图样式 */
+      .ip-header-diagram {
+        margin: 1.5em 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08), 0 8px 32px rgba(232, 74, 122, 0.05);
+        border: 2px solid rgba(232, 74, 122, 0.2);
+        background: #fff;
+      }
+
+      .ip-header-title {
+        background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%);
+        padding: 12px 16px;
+        font-weight: 600;
+        color: #e84a7a;
+        text-align: center;
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 14px;
+        border-bottom: 2px solid rgba(232, 74, 122, 0.2);
+      }
+
+      .bit-labels {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #fff5f7 0%, #fff0f5 100%);
+        border-bottom: 1px solid rgba(232, 74, 122, 0.1);
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 12px;
+        color: #e84a7a;
+      }
+
+      .ip-row {
+        display: flex;
+        border-bottom: 1px solid rgba(232, 74, 122, 0.15);
+      }
+
+      .ip-row:last-child {
+        border-bottom: none;
+      }
+
+      .ip-cell {
+        padding: 12px 8px;
+        text-align: center;
+        font-size: 13px;
+        color: #333;
+        border-right: 2px solid rgba(232, 74, 122, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+      }
+
+      .ip-cell:last-child {
+        border-right: none;
+      }
+
+      .ip-cell.full {
+        width: 100%;
+      }
+
+      /* 交替行颜色 */
+      .ip-row:nth-child(odd) .ip-cell {
+        background: linear-gradient(135deg, #fff0f5 0%, #ffeef8 100%);
+      }
+
+      .ip-row:nth-child(even) .ip-cell {
+        background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+      }
+
+      /* 可选字段 - 虚线边框 */
+      .ip-row.optional .ip-cell {
+        background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        border-style: dashed;
+        border-width: 2px;
+        border-color: rgba(156, 39, 176, 0.3);
+      }
+
+      /* 数据部分 */
+      .ip-row.data .ip-cell {
+        background: linear-gradient(135deg, #fff5f7 0%, #fce4ec 100%);
+        font-weight: 500;
+      }
+
+      /* TCP标志位样式 */
+      .ip-cell.tcp-flags {
+        padding: 4px 2px;
+      }
+
+      .ip-cell.tcp-flags .flag-row {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        height: 100%;
+      }
+
+      .ip-cell.tcp-flags .flag-row span {
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 11px;
+        font-weight: 600;
+        color: #e84a7a;
+        line-height: 1.2;
+        text-align: center;
+      }
+    </style>
 </body>
 </html>

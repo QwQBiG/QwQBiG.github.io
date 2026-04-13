@@ -36,7 +36,7 @@ signed main()
         // 在这里处理当前的排列 a
         // 比如 a[0] 到 a[8] 此时就是一个新的排列
 	} while (next_permutation(a.begin(), a.end()));
-    // while (next_permutation(a, a + 9));
+    // } while (next_permutation(a, a + 9));
 	
 	return 0;
 } 
@@ -261,77 +261,67 @@ while (true)
 ```
 
 > **🔥 蓝桥真题：【回文日期】**
-> **题目：** 输入两行，每行包括一个 8 位数字。第一行表示起始日期。第二行表示终止日期。要求的是“区间内有多少个回文日期”。
-> **秒杀思路：** 绝对不要一天一天往上加去模拟（容易写错且麻烦）。直接**枚举年份**（从起始日期遍历到终止日期），将年份反转拼成回文串，然后检查这个构造出的 8 位日期是否合法！
+> **题目：** 输入一个8位日期（如 20200202），输出下一个回文日期。
+> **秒杀思路：** 绝对不要一天一天往上加去模拟（容易写错且麻烦）。直接**枚举年份**（从输入的年份遍历到 9999 年），将年份反转拼成回文串，然后检查这个构造出的 8 位日期是否合法！
 > **验证合法性：** 截取出月份和日期，看月份是否在 1-12，日期是否在 `1 ~ getDays(y, m)` 之间。
 
 **姐：**
 
 ```cpp
 #include <bits/stdc++.h>
-#define int long long
 #define endl '\n'
+#define int long long
 using namespace std;
 
-// 月份天数表（非闰年）
+// 月份天数打表（2月平年28天，闰年在代码里单独判断）
 int days[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-// 检查日期是否合法
-bool check(int y, int m, int d)
+// 检查某个 8 位数日期是否合法
+bool check(int date)
 {
+    int y = date / 10000;        // 提取前 4 位年份
+    int m = date % 10000 / 100;  // 提取中间 2 位月份
+    int d = date % 100;          // 提取最后 2 位天数
+    
     if (m < 1 || m > 12) return false;
     if (d < 1) return false;
-    if (m != 2) return d <= days[m];
-    // 2月单独判断闰年
-    bool isLeap = (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);
-    return d <= (isLeap ? 29 : 28);
+    
+    // 判断闰年
+    if (m == 2 && ((y % 4 == 0 && y % 100 != 0) || y % 400 == 0))
+    {
+        if (d > 29) return false;
+    }
+    else
+    {
+        if (d > days[m]) return false;
+    }
+    return true;
 }
 
 signed main()
 {
-    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-
-    int date1, date2;
-    if (!(cin >> date1 >> date2)) return 0;  // 输入错误，就退出（直接cin就可以）
-
-    int y1 = date1 / 10000;  // 起始年份
-    int y2 = date2 / 10000;  // 终止年份
-    int ans = 0;
-
-    // 直接枚举年份
-    for (int i = y1; i <= y2; i++)
+    int start_date;
+    cin >> start_date;
+    int start_year = start_date / 10000;
+    
+    // 骗分核心：不要一天一天加！直接枚举年份（假设最多到 9999 年）
+    for (int y = start_year; y <= 9999; y++)
     {
-        // 假设当前年份是 i，构造它的回文
-        // 比如 i = 2011，我们要构造出 2011 1102
-        int year = i;
-        int t = i, rev = 0;
+        // C++11：用字符串拼接构造回文日期
+        string s_y = to_string(y);  // 例如 "2021"
+        string s_m_d = s_y;  // 复制一份
+        reverse(s_m_d.begin(), s_m_d.end());  // 翻转变成 "1202"
         
-        // 翻转年份得到后四位 (月和日)
-        while (t > 0)
+        string s_date = s_y + s_m_d;  // 拼凑成 "20211202"
+        int date = stoi(s_date);  // 字符串转回整数
+        
+        // 如果构造出的日期 > 输入的日期，且日期是合法的
+        if (date > start_date && check(date))
         {
-            rev = rev * 10 + t % 10;
-            t /= 10;
-        }
-
-        // 拼接成 8 位完整日期
-        int full_date = year * 10000 + rev;
-
-        // 逻辑判断
-        // 判断一：日期是否在 [date1, date2] 范围内
-        if (full_date >= date1 && full_date <= date2)
-        {
-            // 判断二：生成的月份和日期是否合法（比如 20116611 就不合法）
-            int month = rev / 100;  // 注意是 rev
-            int day = rev % 100;
-            if (check(year, month, day))
-            {
-                ans++;
-            }
+            cout << date << endl;
+            break; // 找到第一个就结束
         }
     }
-
-    cout << ans << endl;
-
     return 0;
 }
 ```
@@ -427,8 +417,8 @@ signed main()
 **模板：**
 ```cpp
 // 前缀和（求区间 [L, R] 的和）
-for (int i = 1; i <= n; i++) sum[i] = sum[i-1] + a[i];  // 预处理
-int ans = sum[R] - sum[L-1];  // O(1) 查询
+for (int i = 1; i <= n; i++) sum[i] = sum[i-1] + a[i]; // 预处理
+int ans = sum[R] - sum[L-1];                     // O(1) 查询
 
 // 差分（给区间 [L, R] 所有数加上 x）
 d[L] += x; 
@@ -736,515 +726,4 @@ int qpow(int a, int b, int p)
 
 ---
 
-### 五、 拉开分差的核心考点（能拿多少分拿多少）
-
-这部分是蓝桥杯省赛的**“分水岭”**。如果说前一部分保证你拿省三，这部分就是冲刺省一、省二的关键。
-
-就不讲复杂的树形DP或图论，只讲**性价比最高、考场最常用**的三个大招：**DFS、BFS、01背包**。
-
----
-
-#### 1. DFS（深度优先搜索）：万能暴力与骗分神器
-
-**核心逻辑：** “一条路走到黑，不通就回头”。
-**适用场景：** 迷宫找路径、组合排列、图形填充（Flood Fill）、只要题目规模小（如 $N \le 20$）都可以用 DFS 爆搜。
-
-**DFS 基础模板（以网格遍历/Flood Fill 为例）**
-
-```cpp
-int dx[] = {-1, 1, 0, 0};  // 上下左右位移
-int dy[] = {0, 0, -1, 1};
-
-void dfs(int x, int y)
-{
-    vis[x][y] = true;  // 标记已访问
-    
-    for (int i = 0; i < 4; i++)
-    {
-        int nx = x + dx[i], ny = y + dy[i];
-        // 边界检查 + 条件检查（比如是不是墙、是否走过）
-        if (nx >= 0 && nx < n && ny >= 0 && ny < m && !vis[nx][ny] && grid[nx][ny] == '1')
-        {
-            dfs(nx, ny);
-        }
-    }
-}
-```
-
-> **🔥 蓝桥真题：【岛屿数量】**
-> **题目：** 给一个 01 矩阵，1 代表陆地，0 代表水。如果陆地上下左右相连，算一个岛屿。求有多少个岛屿？
-> **思路：** 遍历整个矩阵，每遇到一个 `'1'` 且没被访问过，岛屿数 `+1`，然后从这个点开始 **DFS** 把所有相连的 `'1'` 全部标记为已访问。
-
-**姐：**
-```cpp
-#include <bits/stdc++.h>
-#define endl '\n'
-#define int long long
-using namespace std;
-
-int n, m;
-vector<string> grid;
-vector<vector<bool>> vis;
-int dx[] = {0, 0, 1, -1}, dy[] = {1, -1, 0, 0};
-
-void dfs(int x, int y)
-{
-    vis[x][y] = true;
-    for(int i = 0; i < 4; i++)
-    {
-        int nx = x + dx[i], ny = y + dy[i];
-        if(nx >= 0 && nx < n && ny >= 0 && ny < m && grid[nx][ny] == '1' && !vis[nx][ny])
-        {
-            dfs(nx, ny);
-        }
-    }
-}
-
-signed main()
-{
-    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);  // 关流
-
-    if(!(cin >> n >> m)) return 0;
-    grid.resize(n);
-    vis.assign(n, vector<bool>(m, false));
-    for(int i = 0; i < n; i++) cin >> grid[i];
-
-    int count = 0;
-    for(int i = 0; i < n; i++)
-    {
-        for(int j = 0; j < m; j++)
-        {
-            if(grid[i][j] == '1' && !vis[i][j])
-            {
-                count++;
-                dfs(i, j);  // 一次DFS标记整个岛屿
-            }
-        }
-    }
-    cout << count << endl;
-    return 0;
-}
-```
-
----
-
-#### 2. BFS（广度优先搜索）：最短路必刷
-
-**核心逻辑：** “层层推进”。
-**适用场景：** **权值为 1 的最短路径问题**（比如：从 A 到 B 最少走多少步）。
-
-**BFS 基础模板（必背）**
-
-```cpp
-struct Node { int x, y, step; };  // 坐标和当前步数
-
-int bfs(int start_x, int start_y)
-{
-    queue<Node> q;
-    q.push({start_x, start_y, 0});
-    vis[start_x][start_y] = true;
-
-    while (!q.empty())
-    {
-        Node curr = q.front(); q.pop();
-        
-        if (curr.x == target_x && curr.y == target_y) return curr.step;  // 搜到目标
-
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = curr.x + dx[i], ny = curr.y + dy[i];
-            if (/* 边界条件 && 未访问过 && 可通行 */) 
-            {
-                vis[nx][ny] = true;
-                q.push({nx, ny, curr.step + 1});
-            }
-        }
-    }
-    return -1;  // 搜不到
-}
-```
-
-> **🔥 蓝桥真题：【走迷宫 / Maze】**
-> **题目：**给定一个 $N \times M$ 的网格迷宫。
-> `0` 表示可以通行。
-> `1` 表示障碍物，不能通行。
-> 每次可以向上、下、左、右移动一格。
-> 求从左上角 $(1, 1)$ 到右下角 $(N, M)$ 的**最少步数**。如果无法到达，输出 `-1`。
-
-**输入：**
-```text
-5 5
-0 1 0 0 0
-0 1 0 1 0
-0 0 0 0 0
-0 1 1 1 0
-0 0 0 1 0
-```
-
-**输出：**
-```text
-8
-```
-
-**姐：**
-```cpp
-#include <bits/stdc++.h>
-#define int long long
-#define endl '\n'
-using namespace std;
-
-// 定义地图最大尺寸
-const int MAXN = 1005;
-int g[MAXN][MAXN];  // 存储地图
-int dist[MAXN][MAXN];  // 存储到每个点的最短距离，-1 表示未走过
-int n, m;
-
-// 方向数组：上下左右
-int dx[] = {-1, 1, 0, 0};
-int dy[] = {0, 0, -1, 1};
-
-signed main()
-{
-    ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
-
-    if(!(cin >> n >> m)) return 0;
-
-    for(int i = 1; i <= n; i++)
-    {
-        for(int j = 1; j <= m; j++)
-        {
-            cin >> g[i][j];
-        }
-    }
-
-    // 初始化距离数组为 -1
-    memset(dist, -1, sizeof(dist));
-
-    // BFS 开始
-    queue<pair<int, int>> q;
-    
-    // 起点入队
-    q.push({1, 1});
-    dist[1][1] = 0;  // 起点步数为 0
-
-    while(!q.empty())
-    {
-        pair<int, int> curr = q.front();
-        q.pop();
-
-        int x = curr.first;
-        int y = curr.second;
-
-        // 如果搜到了终点，直接输出并结束
-        if(x == n && y == m)
-        {
-            cout << dist[x][y] << endl;
-            return 0;
-        }
-
-        // 尝试向 4 个方向扩散
-        for(int i = 0; i < 4; i++)
-        {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            // 边界检查 + 障碍物检查 + 是否访问检查
-            if(nx >= 1 && nx <= n && ny >= 1 && ny <= m && g[nx][ny] == 0 && dist[nx][ny] == -1)
-            {
-                dist[nx][ny] = dist[x][y] + 1;  // 步数 +1
-                q.push({nx, ny});  // 新点入队
-            }
-        }
-    }
-
-    // 如果队列空了还没搜到终点
-    cout << -1 << endl;
-
-    return 0;
-}
-```
-
----
-
-#### 3. 01 背包（DP 入门必备）：拿部分分的利器
-
-**核心逻辑：** 每个物品选或不选，求价值最大化。
-**适用场景：** 蓝桥杯很多中档题，本质上都是变相的背包问题。
-
-**01 背包模板（一维优化版，最省空间最好背）**
-
-```cpp
-// v[i] 是体积，w[i] 是价值，m 是总容量
-for (int i = 1; i <= n; i++)
-{
-    for (int j = m; j >= v[i]; j--)  // 逆序遍历！
-    {
-        dp[j] = max(dp[j], dp[j - v[i]] + w[i]);
-    }
-}
-cout << dp[m];
-```
-
-> **🔥 蓝桥真题：【采药】**
-> **题目：** 给定时间内，每朵药草有采摘时间和价值，求能获得的最大价值。
-> **思路：** 标准 01 背包。
-
-**姐：**
-```cpp
-#include <bits/stdc++.h>
-#define endl '\n'
-#define int long long
-using namespace std;
-
-signed main()
-{
-    int T, M;  // T是总时间(背包容量), M是草药数量
-    cin >> T >> M;
-    vector<int> time(M + 1), value(M + 1);
-    vector<int> dp(T + 1, 0);
-
-    for(int i = 1; i <= M; i++) cin >> time[i] >> value[i];
-
-    for(int i = 1; i <= M; i++)
-    {
-        for(int j = T; j >= time[i]; j--)  // 01背包倒着遍历
-        {
-            dp[j] = max(dp[j], dp[j - time[i]] + value[i]);
-        }
-    }
-    cout << dp[T] << endl;
-    return 0;
-}
-```
-
----
-
-#### 4. 贪心（Greedy）：直觉与排序的艺术
-
-**核心逻辑：** 每一步都选当前最好的，通常配合**排序**使用。
-**适用场景：** 区间覆盖、活动安排、面值找零。
-
-> **🔥 蓝桥真题：【付账单】**
-> **题目：** $n$ 个人合租，总费用 $S$，每个人带了 $a_i$ 元。钱不够的要把钱全出，钱多的平摊。求每个人出资额的最小标准差。
-> **思路：** 贪心。先从小到大排序。平均值是 `avg = S/n`。从小到大遍历，如果钱不够平均值的，有多少出多少；剩下的差额由后面钱多的人平摊。
-
-**姐：**
-```cpp
-#include <bits/stdc++.h>
-#define endl '\n'
-#define int long long
-using namespace std;
-
-signed main()
-{
-    int n;
-    long double S;  // 涉及标准差，用 long double
-    cin >> n >> S;
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) cin >> a[i];
-    
-    sort(a.begin(), a.end());  // 排序是贪心的灵魂
-
-    long double avg = S / n;
-    long double sum_sq = 0;  // 平方和，计算标准差用
-    
-    for(int i = 0; i < n; i++)
-    {
-        long double cur_avg = S / (n - i);  // 当前剩余人应该平摊的均值
-        if(a[i] < cur_avg)
-        {
-            // 钱不够均值的，全出
-            sum_sq += (a[i] - avg) * (a[i] - avg);
-            S -= a[i];
-        }
-        else
-        {
-            // 钱够均值的，直接出当前的均值
-            sum_sq += (cur_avg - avg) * (cur_avg - avg) * (n - i);
-            break; // 后面的人钱都够，直接计算结束
-        }
-    }
-    // 标准差公式：sqrt(平方和 / n)
-    printf("%.4Lf\n", sqrt(sum_sq / n)); 
-    return 0;
-}
-```
-
----
-### 六、 一些黑科技
-
-这些内容通常出现在中后期的题目中，或者是用来优化你的代码性能。
-
----
-
-#### 1. 并查集 (Union-Find)：判断连通性的神
-**考点：** 只要题目问“这两个点是否连通”、“一共有多少个连通块”、“修最少的路让所有城市连通”，就用并查集。
-
-**模板（路径压缩版）：**
-```cpp
-int fa[100005];
-
-// 初始化：每个人最初都是自己的老大
-void init(int n)
-{
-    for (int i = 1; i <= n; i++) fa[i] = i;
-}
-
-// 找老大（核心：路径压缩，一行代码搞定）
-int find(int x)
-{
-    if (fa[x] == x) return x;
-    return fa[x] = find(fa[x]);  // 顺便把沿途的人都直接连到终极老大身上
-}
-
-// 合并：让 x 的老大认 y 的老大当老大
-void unite(int x, int y)
-{
-    int rootX = find(x);
-    int rootY = find(y);
-    if (rootX != rootY) fa[rootX] = rootY;
-}
-```
-
-> **🔥 蓝桥真题：【合根植物】**
-> **题目：** $N$ 个植物，给出 $K$ 对关系，表示这两个植物的根连在一起了。求最后有多少个独立的根系？
-> **思路：** 典型的并查集。每次读入一对关系就 `unite(x, y)`。最后遍历一遍，看有多少人的 `fa[i] == i`（即有多少个老大），就是多少个根系。
-
-**姐：**
-```cpp
-#include <bits/stdc++.h>
-#define int long long
-#define endl '\n'
-using namespace std;
-
-const int MAXN = 1000005;  // m*n 最大可能达到 10^6
-int fa[MAXN];
-
-// 查找老大（带路径压缩）
-int find(int x)
-{
-    if (fa[x] == x) return x;
-    return fa[x] = find(fa[x]);  // 这里的赋值就是路径压缩，极其重要！
-}
-
-// 合并两个集合
-void unite(int x, int y)
-{
-    int rootX = find(x);
-    int rootY = find(y);
-    if (rootX != rootY)
-    {
-        fa[rootX] = rootY;  // 让一个老大认另一个做老大
-    }
-}
-
-signed main()
-{
-    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-
-    int m, n, k;
-    if (!(cin >> m >> n >> k)) return 0;
-
-    // 初始化：编号从 1 到 m*n
-    int total = m * n;
-    for (int i = 1; i <= total; i++) fa[i] = i;
-
-    // 处理 k 条连边
-    for (int i = 0; i < k; i++)
-    {
-        int a, b;
-        cin >> a >> b;
-        unite(a, b);
-    }
-
-    // 统计有多少个顶级老大
-    int ans = 0;
-    for (int i = 1; i <= total; i++)
-    {
-        if (fa[i] == i) ans++;
-    }
-
-    cout << ans << endl;
-
-    return 0;
-}
-```
-
----
-
-#### 2. Dijkstra (最短路径)：带权地图必备
-**考点：** BFS 只能解决边权为 1 的最短路。如果边权不同（比如 A 到 B 距离 5，B 到 C 距离 10），必须用 Dijkstra。
-
-**模板（优先队列优化版）：**
-```cpp
-struct Edge { int to, w; };
-vector<Edge> g[100005];
-int dist[100005];
-
-void dijkstra(int start)
-{
-    memset(dist, 0x3f, sizeof(dist));  // 初始化距离为无穷大
-    dist[start] = 0;
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, start});  // {距离, 点}
-
-    while (!pq.empty())
-    {
-        int d = pq.top().first;
-        int u = pq.top().second;
-        pq.pop();
-
-        if (d > dist[u]) continue;  // 懒惰标记，优化效率
-
-        for (auto &edge : g[u])
-        {
-            if (dist[u] + edge.w < dist[edge.to])
-            {
-                dist[edge.to] = dist[u] + edge.w;
-                pq.push({dist[edge.to], edge.to});
-            }
-        }
-    }
-}
-```
-看看得了，题出难得话写不出来，但是：
-`https://www.lanqiao.cn/problems/609/learning/?page=1&first_category_id=1&second_category_id=3&name=%E6%9C%80%E7%9F%AD%E8%B7%AF`
-蓝桥杯这题直接自己瞪眼就可以了哈~
-
----
-
-#### 3. 浮点数精度与输出控制
-**考点：** 蓝桥杯经常有数学题要求输出小数点后几位。
-
-**必记：**
-1.  **类型选择**：永远优先使用 `double`，如果精度要求极高（如计算几何），使用 `long double`。
-2.  **格式化输出（C++ 方式）**：
-    ```cpp
-    // #include <iomanip>
-    // 输出小数点后 6 位
-    cout << fixed << setprecision(6) << ans << endl;
-    ```
-3.  **绝对值**：`abs()` 用于整数，`fabs()` 用于浮点数（或者直接统一用 `std::abs()`）。
-
----
-
-#### 4. 暴力打表法 (Pre-computation)
-*   **适用场景**：填空题，或者运行时间很长的逻辑。
-*   **操作**：如果在本地跑一个复杂的 DFS 需要 5 分钟才能出结果，千万别把代码直接交上去。**在本地跑出结果，然后直接在代码里 `cout << 结果;`**。蓝桥杯只看输出。
-
-#### 5. 巧用 `std::lower_bound` (二分快捷方式)
-*   不要手写二分了！如果你要在**有序**数组里找第一个“大于等于 $x$”的数：
-    ```cpp
-    auto it = lower_bound(v.begin(), v.end(), x);
-    if (it != v.end())
-    {
-        int index = distance(v.begin(), it);
-        int val = *it;
-    }
-    ```
-
-#### 6. 填空题的特殊武器：Excel
-*   蓝桥杯是可以开启 Excel 的！有些日期计算、简单的排列组合、甚至小规模的动态规划，如果你代码写不出来，**直接在 Excel 里拉公式**。
-
----
 

@@ -281,6 +281,13 @@
   function processCodeBlock(pre) {
     if (pre.dataset.processed === 'true') return;
 
+    // 跳过 Mermaid 图表代码块
+    const langClass = Array.from(pre.classList).find(c => c.startsWith('language-'));
+    if (langClass) {
+      const lang = langClass.replace('language-', '').toLowerCase();
+      if (lang === 'mermaid') return;
+    }
+
     const code = pre.querySelector('code');
     if (!code) return;
 
