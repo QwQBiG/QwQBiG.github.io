@@ -9,4 +9,4 @@ cascade:
   sort_by: "Weight"
 ---
 
-就是喜欢速通
+就是喜欢速通~
