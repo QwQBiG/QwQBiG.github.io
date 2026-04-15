@@ -10,7 +10,7 @@ series: ["逃课-速通"]
 
 ## 01_variables_and_types
 
-**代码：**
+### **代码：**
 ```rust
 // 01_variables_and_types.rs - 变量与数据类型
 
@@ -103,7 +103,7 @@ fn main()
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 x 的值是: 5
 y 的初始值是: 10
@@ -124,7 +124,7 @@ f64: 2, f32: 3
 
 ## 02_functions
 
-**代码：**
+### **代码：**
 ```rust
 // 02_functions.rs - 函数
 
@@ -189,7 +189,7 @@ fn temperature_warning(temp: i32) -> String
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 标签值是: 5h
 plus_one(5) 的结果是: 6
@@ -199,7 +199,7 @@ y 是: 4
 
 ## 03_control_flow
 
-**代码：**
+### **代码：**
 ```rust
 // 03_control_flow.rs - 流程控制
 
@@ -352,7 +352,7 @@ fn main()
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 条件为真
 number 的值是: 5
@@ -381,7 +381,7 @@ if let: 最大配置是 3
 
 ## 04_ownership
 
-**代码：**
+### **代码：**
 ```rust
 // 04_ownership.rs - 所有权
 
@@ -527,7 +527,7 @@ fn no_dangle() -> String
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 堆分配字符串, 追加内容
 hello, world!
@@ -543,7 +543,7 @@ no_dangle 返回的字符串: hello
 
 ## 05_structs
 
-**代码：**
+### **代码：**
 ```rust
 // 05_structs.rs - 结构体
 
@@ -711,7 +711,7 @@ impl Rectangle
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 用户邮箱: someone@example.com
 用户 someusername123 是活跃的
@@ -728,7 +728,7 @@ rect1 可以容纳 rect3 吗? false
 
 ## 06_enums_and_pattern_matching
 
-**代码：**
+### **代码：**
 ```rust
 // 06_enums_and_pattern_matching.rs - 枚举和模式匹配
 
@@ -953,7 +953,7 @@ fn value_in_cents(coin: Coin) -> u8
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 路由到 IP 版本: V4
 路由到 IP 版本: V6
@@ -979,7 +979,7 @@ sum 的值是: 15
 
 ## 07_common_collections
 
-**代码：**
+### **代码：**
 ```rust
 // 07_common_collections.rs - 常见集合
 
@@ -1158,7 +1158,7 @@ fn main()
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 v2: [1, 2, 3]
 v: [5, 6, 7, 8]
@@ -1192,7 +1192,7 @@ Yellow: 50
 
 ## 08_packages_and_modules
 
-**代码：**
+### **代码：**
 ```rust
 // 08_packages_and_modules.rs - 包和模块
 
@@ -1403,7 +1403,7 @@ fn outer_function()
 // 重新导出 (re-exporting)
 pub use sound::guitar as instrument_sound;  // 将 guitar 作为 instrument_sound 导出
 ```
-**终端：**
+### **终端：**
 ```text
 吉他声音
 吉他声音
@@ -1423,7 +1423,7 @@ HashMap: {1: "one", 2: "two"}
 
 ## 09_error_handling
 
-**代码：**
+### **代码：**
 ```rust
 // 09_error_handling.rs - 错误处理
 
@@ -1658,7 +1658,7 @@ fn risky_operation(success: bool) -> Result<(), CustomError>
 use std::fs;  // 为了 tiny 版本的函数
 ```
 
-**终端：**
+### **终端：**
 ```text
 读取用户名失败: Os { code: 2, kind: NotFound, message: "The system cannot find the file specified." }
 读取用户名失败 (短版本): Os { code: 2, kind: NotFound, message: "The system cannot find the file specified." }
@@ -1676,7 +1676,7 @@ None 值: None
 
 ## 10_generics
 
-**代码：**
+### **代码：**
 ```rust
 // 10_generics.rs - 泛型
 
@@ -1970,7 +1970,7 @@ impl<T> Stack<T>
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 最大的数字是: 100
 最大的字符是: y
@@ -1994,7 +1994,7 @@ Result: Ok("成功")
 
 ## 11_traits
 
-**代码：**
+### **代码：**
 ```rust
 // 11_traits.rs - Trait
 
@@ -2312,7 +2312,7 @@ trait OutlinePrint: Display  // OutlinePrint 需要实现 Display
 impl OutlinePrint for Tweet {}
 ```
 
-**终端：**
+### **终端：**
 ```text
 1 新推文: horse_ebooks: of course, as you probably already know, people
 1 新文章: Penguins win the Stanley Cup Championship! 作者: Iceburgh
@@ -2334,7 +2334,7 @@ Article 的默认实现: 这是一篇关于 Penguins win the Stanley Cup Champio
 
 ## 12_lifetimes
 
-**代码：**
+### **代码：**
 ```rust
 // 12_lifetimes.rs - 生命周期
 
@@ -2520,7 +2520,7 @@ fn avoid_dangling_reference() -> String
 }
 ```
 
-**终端：**
+### **终端：**
 ```text
 最长的字符串是: 'long string is long'
 重要摘录: 'Call me Ishmael'
@@ -2534,7 +2534,7 @@ fn avoid_dangling_reference() -> String
 
 ##  13_closures_and_iterators
 
-**代码：**
+### **代码：**
 ```rust
 // 13_closures_and_iterators.rs - 闭包与迭代器：Rust函数式编程
 
@@ -3070,7 +3070,7 @@ mod tests {
 
 ```
 
-**终端：**
+### **终端：**
 ```text
 === Rust函数式编程：闭包与迭代器 ===
 
