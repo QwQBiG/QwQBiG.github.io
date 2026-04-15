@@ -8,7 +8,7 @@ genre: "英文诗"
 mood: []
 pin: false
 ---
-### LDDDL（Love's date and deadline）
+
 
 Tell me a fairytale where love never ends,
 Vows are kept, through seasons and trends.

@@ -5,10 +5,9 @@ import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { getCollection } from 'astro:content';
 
-// Generate static paths for all poetry posts
 export async function getStaticPaths() {
   const poetryPosts = await getCollection('poetry', ({ data }) => !data.draft);
-  
+
   return poetryPosts.map(post => ({
     params: { slug: post.slug },
     props: { post },
@@ -26,32 +25,15 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
 
   <main class="flex-1 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Back Link -->
-      <a
-        href="/poetry/"
-        class="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-8"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        返回诗歌列表
-      </a>
 
-      <!-- Article Header -->
       <GlassContainer>
-      <article class="prose prose-lg max-w-none">
-        <header class="mb-8 text-center">
-          <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
+      <article class="poetry-article">
+        <header class="text-center mb-12">
+          <h1 class="text-4xl font-serif text-text-primary mb-6 tracking-wider">
             {post.data.title}
           </h1>
-          
-          {post.data.description && (
-            <p class="text-text-secondary text-lg">
-              {post.data.description}
-            </p>
-          )}
-          
-          <div class="flex flex-wrap items-center justify-center gap-3 mt-4 text-sm text-text-muted">
+
+          <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
             <time datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString('zh-CN', {
                 year: 'numeric',
@@ -59,7 +41,7 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
                 day: 'numeric'
               })}
             </time>
-            
+
             {post.data.genre && (
               <>
                 <span>·</span>
@@ -69,69 +51,135 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
               </>
             )}
           </div>
-          
-          {post.data.mood && post.data.mood.length > 0 && (
-            <div class="flex flex-wrap justify-center gap-2 mt-4">
-              {post.data.mood.map(m => (
-                <span class="px-2 py-1 text-xs bg-secondary/10 text-secondary rounded-full">
-                  {m}
-                </span>
-              ))}
-            </div>
-          )}
-          
+
           {post.data.tags && post.data.tags.length > 0 && (
             <div class="flex flex-wrap justify-center gap-2 mt-4">
               {post.data.tags.map(tag => (
-                <a 
-                  href={`/tags/${tag}/`}
-                  class="px-2 py-1 text-xs bg-bg-secondary text-text-secondary rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
-                >
+                <span class="px-2 py-1 text-sm bg-bg-secondary text-text-secondary rounded-full">
                   #{tag}
-                </a>
+                </span>
               ))}
             </div>
           )}
         </header>
 
-        <!-- Content -->
-        <div class="prose-content">
+        <div class="poetry-content">
           <Content />
         </div>
       </article>
       </GlassContainer>
 
-      <!-- Navigation -->
-      <div class="mt-12 pt-8 border-t border-border-color">
-        <a 
-          href="/poetry/" 
-          class="inline-flex items-center gap-2 text-text-secondary hover:text-primary transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-          </svg>
-          返回诗歌列表
-        </a>
-      </div>
     </div>
   </main>
-  
+
   <Footer />
 </Layout>
 
 <style>
-  .prose-content {
+  .poetry-article {
+    font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', serif;
+  }
+
+  .poetry-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .poetry-content :global(h1),
+  .poetry-content :global(h2),
+  .poetry-content :global(h3) {
+    display: none;
+  }
+
+  .poetry-content :global(p) {
+    text-align: center;
+    line-height: 2.4;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+  }
+
+  .poetry-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .poetry-content :global(strong) {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .poetry-content :global(em) {
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+
+  .poetry-content :global(hr) {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--border-color) 20%,
+      var(--border-color) 80%,
+      transparent
+    );
+    margin: 2rem auto;
+    width: 50%;
+  }
+
+  .poetry-content :global(ul),
+  .poetry-content :global(ol) {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+    text-align: left;
+  }
+
+  .poetry-content :global(li) {
     line-height: 2;
+    color: var(--text-primary);
+    text-align: left;
   }
-  
-  .prose-content :global(p) {
-    margin-bottom: 1.5em;
+
+  .poetry-content :global(blockquote) {
+    border-left: 3px solid var(--primary);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+    background: rgba(var(--primary-rgb), 0.03);
+    padding: 1rem 1.5rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    text-align: left;
   }
-  
-  .prose-content :global(h1),
-  .prose-content :global(h2),
-  .prose-content :global(h3) {
-    margin-top: 2em;
-    margin-bottom: 1em;
+
+  .poetry-content :global(pre) {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.875rem;
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  .poetry-content :global(code) {
+    font-family: inherit;
+  }
+
+  .poetry-content :global(div.poetry-long) {
+    text-align: left;
+    text-indent: 2em;
+    line-height: 2.4;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    max-width: 100%;
+  }
+
+  .poetry-content :global(div.poetry-long:last-child) {
+    margin-bottom: 0;
   }
 </style>
