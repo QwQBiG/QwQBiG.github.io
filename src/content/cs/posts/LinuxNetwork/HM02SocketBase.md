@@ -72,7 +72,7 @@ flowchart TD
 
 大端和小端只是对数据类型长度是两个及以上的，如 int short，对于单字节限制，在网络中经常需要考虑大端和小端的是 IP 和端口。
 
-**思考题：**0x12345678 如何存放？
+**思考题：** 0x12345678 如何存放？ 
 
 **如何验证本机上大端还是小端？** --使用共用体。
 
@@ -369,10 +369,43 @@ int socket(int domain, int type, int protocol);
 | 参数 | 说明 | 常用值 |
 |------|------|--------|
 | `domain` | 地址族 | `AF_INET`（IPv4）、`AF_INET6`（IPv6）、`AF_UNIX`（本地） |
-| `type` | 套接字类型 | `SOCK_STREAM`（TCP）、`SOCK_DGRAM`（UDP） |
+| `type` | 套接字类型 | `SOCK_STREAM`（TCP）（流式连接）、`SOCK_DGRAM`（UDP）（数据报式连接） |
 | `protocol` | 协议类型 | 0（自动选择）、`IPPROTO_TCP`、`IPPROTO_UDP` |
 
 **返回值**：成功返回文件描述符，失败返回 -1 并设置 `errno`。
+
+当调用 socket 函数以后，返回一个文件描述符，内核会提供与该文件描述符相对应的读和写缓冲区，同时还有两个队列，分别是请求连接队列和已连接队列。
+
+```mermaid
+flowchart TD
+    subgraph 套接字[socket]
+        A[发送端]
+        B[接收端]
+    end
+    
+    subgraph 套接字2[socket]
+        C[接收端]
+        D[发送端]
+    end
+    
+    sfd((sfd)) --> A
+    sfd --> B
+    
+    cfd((cfd)) --> C
+    cfd --> D
+    
+    A -->|数据流向| C
+    D -->|数据流向| B
+    
+    style 套接字 stroke-dasharray: 5,5,stroke:#c084fc,fill:#f5f3ff
+    style 套接字2 stroke-dasharray: 5,5,stroke:#c084fc,fill:#f5f3ff
+    style A fill:#f9a8d4,stroke:#db2777
+    style B fill:#f9a8d4,stroke:#db2777
+    style C fill:#f9a8d4,stroke:#db2777
+    style D fill:#f9a8d4,stroke:#db2777
+    style sfd fill:#a78bfa,stroke:#7c3aed
+    style cfd fill:#a78bfa,stroke:#7c3aed
+```
 
 **示例**：
 ```c
@@ -428,7 +461,7 @@ if (bind(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1)
 int listen(int sockfd, int backlog);
 ```
 
-**功能**：将套接字转为被动监听状态，准备接受连接。
+**功能**：将套接字由主动转为被动监听状态，准备接受连接。
 
 **参数说明**：
 | 参数 | 说明 |
@@ -456,7 +489,7 @@ if (listen(sockfd, 5) == -1)
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 ```
 
-**功能**：从等待队列中取出一个连接，创建新的套接字用于通信。
+**功能**：从等待队列中取出一个连接，创建新的套接字用于通信。若没有连接则会阻塞等待。
 
 **参数说明**：
 | 参数 | 说明 |
@@ -557,7 +590,56 @@ if (bytes_read > 0)
 
 ---
 
-### 2.2.7 close() - 关闭套接字
+### 2.2.7 read() / write() - 通用文件操作（Socket伪文件）
+
+由于 socket 被抽象为伪文件，可以使用标准的文件操作函数进行数据收发，体现了 Unix "一切皆文件" 的哲学。
+
+```c
+ssize_t read(int fd, void *buf, size_t count);
+ssize_t write(int fd, const void *buf, size_t count);
+```
+
+**功能**：从文件描述符读取/写入数据（适用于 socket、普通文件、管道等）。
+
+**参数说明**：
+| 参数 | 说明 |
+|------|------|
+| `fd` | 文件描述符（socket 返回的 fd 也适用） |
+| `buf` | 数据缓冲区 |
+| `count` | 要读取/写入的字节数 |
+
+**返回值**：成功返回实际读取/写入的字节数，失败返回 -1。
+
+**示例**：
+```c
+// 使用 write 发送数据
+char *msg = "Hello via write!";
+ssize_t bytes_written = write(connfd, msg, strlen(msg));
+
+// 使用 read 接收数据
+char buffer[1024];
+ssize_t bytes_read = read(connfd, buffer, sizeof(buffer)-1);
+if (bytes_read > 0)
+{
+    buffer[bytes_read] = '\0';
+    printf("Received via read: %s\n", buffer);
+}
+```
+
+**send/recv 与 read/write 的区别**：
+| 特性 | `send()` / `recv()` | `read()` / `write()` |
+|------|---------------------|---------------------|
+| **flags 参数** | 支持 MSG_OOB、MSG_PEEK 等标志 | 不支持特殊标志 |
+| **适用范围** | 仅适用于 socket | 适用于所有文件描述符 |
+| **紧急数据** | 支持带外数据（OOB） | 不支持 |
+| **行为** | 可能返回 EAGAIN（非阻塞模式） | 可能返回 EAGAIN（非阻塞模式） |
+
+
+> 注意：如果写缓冲区已满, write 也会阻塞, read 读操作的时候，若读缓冲区没有数据会引起阻塞。
+
+---
+
+### 2.2.8 close() - 关闭套接字
 
 ```c
 int close(int sockfd);
@@ -580,46 +662,168 @@ close(sockfd);  // 关闭监听套接字
 
 ---
 
+### TCP 客户端与服务端交互流程图
+
+```mermaid
+flowchart TD
+    subgraph Client[TCP客户端]
+        C1[socket]
+        C2[connect]
+        C3[send]
+        C4[recv]
+        C5[close]
+    end
+    
+    subgraph Server[TCP服务端]
+        S1[socket]
+        S2[bind]
+        S3[listen]
+        S4[accept]
+        S5[recv]
+        S6[send]
+        S7[close]
+    end
+    
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C4 --> C5
+    
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+    S6 --> S7
+    
+    C2 -.->|建立链接\n三次握手| S4
+    C3 -.->|数据请求| S5
+    S6 -.->|数据应答| C4
+    C5 -.->|结束通知| S7
+```
+
 ### 2.2.8 完整的 TCP 服务端流程
 
-```c
-// 1. 创建套接字
-int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+#### 服务端开发流程：
 
-// 2. 设置端口复用（可选但推荐）
-int opt = 1;
-setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+1. 创建`socket`,返回一个文件描述符`lfd` -- ``socket()` --该文件描述符用于监听客户端连接
 
-// 3. 绑定地址
-struct sockaddr_in serv_addr = {0};
-serv_addr.sin_family = AF_INET;
-serv_addr.sin_port = htons(8080);
-serv_addr.sin_addr.s_addr = INADDR_ANY;
-bind(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+2. 将`lfd`和`IP PORT`进行绑定 -- `bind()`
 
-// 4. 监听
-listen(sockfd, 5);
+3. 将`lfd`由主动变为被动监听 -- `listen()`
 
-// 5. 接受连接（循环处理）
-while (1)
+4. 接受一个新的连接,得到一个文件描述符`cfd` -- `accept()` -- 该文件描述符是用于和客户端进行通信的
+
+5. while(1)
 {
-    int connfd = accept(sockfd, NULL, NULL);
-    
-    // 处理客户端请求
-    char buf[1024];
-    recv(connfd, buf, sizeof(buf), 0);
-    send(connfd, "OK", 2, 0);
-    
-    close(connfd);
+    接收数据 -- `read`或者`recv`
+    发送数据 -- `write`或者`send`
 }
 
-// 6. 关闭
-close(sockfd);
+6. 关闭文件描述符 -- `close(lfd)`和`close(cfd)`
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+int main()
+{
+    // 1. 创建socket，返回监听文件描述符 lfd
+    int lfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (lfd < 0)
+    {
+        perror("socket error");
+        return -1;
+    }
+
+    // 2. 将 lfd 和 IP、PORT 进行绑定
+    struct sockaddr_in serv;
+    bzero(&serv, sizeof(serv));
+    serv.sin_family = AF_INET;
+    serv.sin_port = htons(8888);
+    serv.sin_addr.s_addr = htonl(INADDR_ANY);  // 绑定本地任意可用IP
+    
+    if (bind(lfd, (struct sockaddr*)&serv, sizeof(serv)) < 0)
+    {
+        perror("bind error");
+        close(lfd);
+        return -1;
+    }
+
+    // 3. 将 lfd 由主动变为被动监听
+    if (listen(lfd, 128) < 0)
+    {
+        perror("listen error");
+        close(lfd);
+        return -1;
+    }
+
+    // 4. 接受新连接，得到通信文件描述符 cfd
+    struct sockaddr_in client;
+    socklen_t len = sizeof(client);
+    int cfd = accept(lfd, (struct sockaddr*)&client, &len);
+    if (cfd < 0)
+    {
+        perror("accept error");
+        close(lfd);
+        return -1;
+    }
+
+    // 5. 循环处理客户端请求
+    int n = 0;
+    char buf[1024];
+    while (1)
+    {
+        // 接收数据
+        memset(buf, 0x00, sizeof(buf));
+        n = read(cfd, buf, sizeof(buf));
+        if (n <= 0)
+        {
+            printf("read error or client closed\n");
+            break;
+        }
+        printf("n=[%d], buf=[%s]\n", n, buf);
+
+        // 处理数据：转换为大写
+        for (int i = 0; i < n; i++)
+        {
+            buf[i] = toupper(buf[i]);
+        }
+
+        // 发送响应
+        write(cfd, buf, n);
+    }
+
+    // 6. 关闭文件描述符
+    close(cfd);
+    close(lfd);
+
+    return 0;
+}
 ```
 
 ---
 
 ### 2.2.9 完整的 TCP 客户端流程
+
+#### 客户端开发流程：
+
+1. 创建`socket`，返回一个文件描述符`cfd` -- `socket()` -- 该文件描述符是用于和服务端通信
+
+2. 连接服务端 -- `connect()`
+
+3. while(1)
+{
+    发送数据 -- `write`或者`send`
+    接收数据 -- `read`或者`recv`
+}
+
+4.`close(cfd)`
 
 ```c
 // 1. 创建套接字
