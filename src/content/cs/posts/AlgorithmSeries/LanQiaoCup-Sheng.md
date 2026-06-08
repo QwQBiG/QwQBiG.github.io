@@ -1,7 +1,7 @@
 ---
-title: "LanQiaoCup"
+title: "LanQiaoCup-Sheng"
 date: 2026-04-01T14:00:00+08:00
-tags: ["算法", "暴力", "蓝桥杯", "C++11"]
+tags: ["算法", "暴力", "蓝桥杯", "C++11", "省赛"]
 categories: ["算法学习"]
 series: ["算法合集"]
 weight: 1
@@ -677,7 +677,7 @@ signed main()
 bool isPrime(int n)
 {
     if (n < 2) return false;
-    for (int i = 2; i * i <= n; i++)  // 必须写 i*i <= n
+    for (int i = 2; i <= n / i; i++)  // 就是写 i*i <= n
     {
         if (n % i == 0) return false;
     }
