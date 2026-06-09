@@ -1,16 +1,17 @@
 ---
 title: "Redis001 基础概念"
-date: 2025-10-01T10:00:00+08:00
-tags: ["Redis", "基础", "概念", "数据库"]
+date: 2026-06-08T12:00:00+08:00
+tags: ["Redis", "基础", "概念", "数据库" , "实践"]
 categories: ["数据库"]
 series: ["数数数据库"]
 weight: 1
 ---
 
-# **SQL** (Structured Query Language)，中文意思是 结构化查询语言，代表为关系型数据库 而 **NoSQL** 则是 非结构化查询语言，代表为非关系型数据库。
+ **SQL** (Structured Query Language)，中文意思是 结构化查询语言，代表为关系型数据库 而 **NoSQL** 则是 非结构化查询语言，代表为非关系型数据库。
 
-** 注意：**
-> - SQL 发音 belike：**C 阔~**
+我们的 Redis 就是一个非关系型数据库。
+
+> SQL 发音 belike：**C 阔~**
 
 ## SQL 与 NoSQL 对比
 
@@ -25,10 +26,10 @@ weight: 1
 | **使用场景** | 1) 数据结构固定<br>2) 相关业务对数据安全性、一致性要求较高 | 1) 数据结构不固定<br>2) 对一致性要求不高<br>3) 对性能要求较高 |
 
 > **NoSQL 主要类型：**
-> - #1 键值类型 (Redis)
-> - #2 文档类型 (MongoDB)
-> - #3 列类型 (HBase)
-> - #4 Graph 类型 (Neo4j)
+> 1 键值类型 (Redis)
+> 2 文档类型 (MongoDB)
+> 3 列类型 (HBase)
+> 4 Graph 类型 (Neo4j)
 
 ---
 
@@ -322,3 +323,7 @@ g++ -std=c++20 main.cpp -o test_redis -lredis++ -lhiredis -pthread
 # 运行测试
 ./test_redis
 ```
+
+# 总结一下
+
+没啥可总结的，快点继续学习叭~
