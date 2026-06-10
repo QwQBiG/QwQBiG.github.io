@@ -287,7 +287,7 @@ body {
   color: var(--text-secondary);
 }
 
-.prose code:not(pre code) {
+.prose code {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.875em;
   padding: 0.2em 0.4em;
@@ -295,6 +295,12 @@ body {
   color: var(--color-primary);
   border-radius: 0.25rem;
   border: 1px solid var(--border-color);
+}
+
+/* 隐藏行内代码的反引号 */
+.prose code::before,
+.prose code::after {
+  content: none;
 }
 
 .prose pre {
@@ -310,7 +316,7 @@ body {
   background: none;
   border: none;
   padding: 0;
-  /* 不设置 color: inherit，让 token 颜色生效 */
+  color: inherit;
   font-size: 0.875rem;
   line-height: 1.7;
 }
@@ -451,6 +457,7 @@ body {
 .search-input:focus {
   outline: none;
   border-color: var(--color-primary);
+  caret-color: var(--color-primary);
 }
 
 .search-input-icon {

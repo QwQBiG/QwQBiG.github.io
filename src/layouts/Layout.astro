@@ -28,10 +28,8 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 禁用缓存 -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <!-- 合理的缓存策略：HTML不缓存，静态资源长期缓存由服务器/CDN处理 -->
+    <meta http-equiv="Cache-Control" content="no-cache" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={siteURL} />
@@ -55,7 +53,7 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/ZhenXun.png" />
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts - 添加 display=swap 避免阻塞渲染 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">

@@ -126,6 +126,18 @@
     const buttonsContainer = document.createElement('div');
     buttonsContainer.className = 'code-header-buttons';
 
+    // 搜索按钮
+    const searchBtn = document.createElement('button');
+    searchBtn.className = 'code-search-btn';
+    searchBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" width="14" height="14">
+        <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+    `;
+    searchBtn.title = '搜索代码 (Ctrl+Shift+F)';
+    searchBtn.addEventListener('click', () => openCodeSearch(pre));
+    buttonsContainer.appendChild(searchBtn);
+
     // 折叠按钮（代码超过 15 行才显示）
     const lines = code.textContent.split('\n').length;
     if (lines > 15) {
@@ -229,6 +241,12 @@
    */
   function addLineNumbers(pre, code) {
     const lines = code.innerHTML.split('\n');
+    
+    // 移除最后一个空行（如果存在）
+    if (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+      lines.pop();
+    }
+    
     const wrappedLines = lines.map((line, index) => {
       const lineNum = index + 1;
       return `<span class="line-number">${lineNum}</span><span class="line-content">${line}</span>`;
@@ -262,6 +280,13 @@
    */
   function processCodeBlock(pre) {
     if (pre.dataset.processed === 'true') return;
+
+    // 跳过 Mermaid 图表代码块
+    const langClass = Array.from(pre.classList).find(c => c.startsWith('language-'));
+    if (langClass) {
+      const lang = langClass.replace('language-', '').toLowerCase();
+      if (lang === 'mermaid') return;
+    }
 
     const code = pre.querySelector('code');
     if (!code) return;

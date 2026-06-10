@@ -62,6 +62,24 @@ const yearsActive = new Date().getFullYear() - 2024;
   <title>QwQBiG's World</title>
   <meta name="description" content="CS Learning Notes | Algorithms | Programming | Embedded Development">
   <link rel="icon" type="image/png" href="/ZhenXun.png">
+
+  <!-- 资源预连接优化 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- 预加载关键资源 -->
+  <link rel="preload" href="/ZhenXun.png" as="image" fetchpriority="high">
+  <link rel="preload" href="/images/character.png" as="image" fetchpriority="high">
+
+  <!-- 字体预加载：提前加载 latin 子集，避免 FOUT/FOIT -->
+  <!-- Google Fonts v2 API 已自动按 unicode-range 分片，此处只预加载 latin 子集 -->
+  <!-- Quicksand latin (覆盖 300/400/500/600/700) -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Cormorant Garamond Normal latin (覆盖 400/500/600/700) -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/cormorantgaramond/v21/co3bmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Cormorant Garamond Italic latin (覆盖 400/500) -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/cormorantgaramond/v21/co3ZmX5slCNuHLi8bLeY9MK7whWMhyjYrEtImSo.woff2" as="font" type="font/woff2" crossorigin>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
@@ -686,6 +704,9 @@ const yearsActive = new Date().getFullYear() - 2024;
                   src="/images/hahaha.png"
                   alt="Gallery Cover"
                   class="w-full h-32 object-cover rounded-2xl hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
               </div>
