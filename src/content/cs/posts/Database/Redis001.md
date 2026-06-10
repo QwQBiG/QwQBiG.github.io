@@ -205,7 +205,7 @@ bind 0.0.0.0
 取消 `# requirepass foobared` 的注释，并修改为您的密码：
 
 ```text
-requirepass zbh123456
+requirepass yourpassword
 ```
 
 **进程守护（Daemonize）**：
@@ -222,7 +222,7 @@ sudo systemctl enable --now redis-server
 ### 2.3 连接验证测试
 
 ```bash
-redis-cli -a zbh123456 ping
+redis-cli -a yourpassword ping
 # 返回 PONG 即为成功
 ```
 
