@@ -1,0 +1,18 @@
+import { b as createAstro, c as createComponent, m as maybeRenderHead, d as addAttribute, a as renderTemplate } from './astro/server_BR9bRUNn.mjs';
+import 'piccolore';
+import 'clsx';
+import { f as formatDate } from './date_fZ1mQONA.mjs';
+
+const $$Astro = createAstro("https://iqwqi.win");
+const $$PostCard = createComponent(($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$PostCard;
+  const { post, collection = "cs" } = Astro2.props;
+  const { title, date, tags, description } = post.data;
+  const series = collection === "cs" ? post.data.series : void 0;
+  const postUrl = `/${collection}/${post.slug}/`;
+  return renderTemplate`${maybeRenderHead()}<article class="group bg-bg-secondary rounded-2xl p-6 border border-border-color hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1"> <header class="mb-4"> <h2 class="font-sans font-bold text-xl text-text-primary group-hover:text-primary transition-colors line-clamp-2"> <a${addAttribute(postUrl, "href")} class="block"> ${title} </a> </h2> </header> ${description && renderTemplate`<div class="mb-4"> <p class="font-sans text-sm text-text-secondary line-clamp-2 leading-relaxed"> ${description} </p> </div>`} <footer class="flex flex-wrap items-center gap-3 text-xs"> <!-- Date --> <span class="flex items-center gap-1.5 text-text-muted"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path> </svg> ${formatDate(date)} </span> <!-- Series Badge --> ${series && series.length > 0 && renderTemplate`<span class="flex items-center gap-1.5 text-primary"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path> </svg> ${series[0]} </span>`} <!-- Tags --> ${tags && tags.length > 0 && renderTemplate`<div class="flex flex-wrap gap-1.5 ml-auto"> ${tags.slice(0, 3).map((tag) => renderTemplate`<span class="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-medium"> ${tag} </span>`)} ${tags.length > 3 && renderTemplate`<span class="px-2 py-0.5 text-text-muted text-xs">
++${tags.length - 3} </span>`} </div>`} </footer> </article>`;
+}, "D:/Projects/MyBlog-Astro/src/components/content/PostCard.astro", void 0);
+
+export { $$PostCard as $ };

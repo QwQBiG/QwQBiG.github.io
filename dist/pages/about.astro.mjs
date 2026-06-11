@@ -1,0 +1,56 @@
+/* empty css                                 */
+import { b as createAstro, c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_BR9bRUNn.mjs';
+import 'piccolore';
+import { $ as $$Layout, a as $$FloatingNavCard } from '../chunks/FloatingNavCard_eNI7wgnB.mjs';
+import { $ as $$Footer } from '../chunks/Footer_CA4_PYUB.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$Astro = createAstro("https://iqwqi.win");
+const $$About = createComponent(($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$About;
+  const pageTitle = "\u5173\u4E8E - iqwqi's World";
+  const pageDescription = "\u5173\u4E8E iqwqi \u548C\u4ED6\u7684\u535A\u5BA2";
+  const socialLinks = [
+    { name: "GitHub", url: "https://github.com/QwQBiG", icon: "github", color: "#333" },
+    { name: "Bilibili", url: "https://space.bilibili.com/3546921071282890", icon: "bilibili", color: "#00A1D6" },
+    { name: "LeetCode", url: "https://leetcode.cn/u/iqwqi/", icon: "leetcode", color: "#FFA116" }
+  ];
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": pageTitle, "description": pageDescription }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "FloatingNavCard", $$FloatingNavCard, {})} ${maybeRenderHead()}<main class="flex-1 py-12"> <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8"> <!-- Profile Card --> <div class="bg-bg-secondary rounded-3xl p-8 md:p-12 border border-border-color text-center mb-12"> <img src="/ZhenXun.png" alt="iqwqi" class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto border-4 border-primary/20 shadow-xl mb-6"> <h1 class="font-sans font-bold text-3xl text-text-primary mb-2">
+iqwqi
+</h1> <p class="font-sans text-lg text-text-secondary mb-6">
+CS Student / Code Lover
+</p> <!-- Social Links --> <div class="flex justify-center gap-4"> ${socialLinks.map((link) => renderTemplate`<a${addAttribute(link.url, "href")} target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-bg-primary border border-border-color hover:border-primary/30 transition-all hover:-translate-y-1"${addAttribute(link.name, "aria-label")}> ${link.icon === "github" && renderTemplate`<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"> <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path> </svg>`} ${link.icon === "bilibili" && renderTemplate`<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"> <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906l-1.174 1.12zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"></path> </svg>`} ${link.icon === "leetcode" && renderTemplate`<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"> <path d="M22,14.355c0-0.742-0.564-1.346-1.26-1.346H10.676c-0.696,0-1.26,0.604-1.26,1.346s0.563,1.346,1.26,1.346H20.74C21.436,15.702,22,15.098,22,14.355z"></path> <path d="M3.482,18.187l4.313,4.361C8.768,23.527,10.113,24,11.598,24c1.485,0,2.83-0.512,3.805-1.494l2.588-2.637c0.51-0.514,0.492-1.365-0.039-1.9c-0.531-0.535-1.375-0.553-1.884-0.039l-2.676,2.607c-0.462,0.467-1.102,0.662-1.809,0.662s-1.346-0.195-1.81-0.662l-4.298-4.363c-0.463-0.467-0.696-1.15-0.696-1.863c0-0.713,0.233-1.357,0.696-1.824l4.285-4.38c0.463-0.467,1.116-0.645,1.822-0.645s1.346,0.195,1.809,0.662l2.676,2.606c0.51,0.515,1.354,0.497,1.885-0.038c0.531-0.536,0.549-1.387,0.039-1.901l-2.588-2.636c-0.649-0.646-1.471-1.116-2.392-1.33l-0.034-0.007l2.447-2.503c0.512-0.514,0.494-1.366-0.037-1.901c-0.531-0.535-1.376-0.552-1.887-0.038L3.482,10.476C2.509,11.458,2,12.813,2,14.311C2,15.809,2.509,17.207,3.482,18.187z"></path> </svg>`} </a>`)} </div> </div> <!-- About Content --> <div class="prose prose-lg max-w-none"> <h2 class="font-sans font-bold text-2xl text-text-primary mb-4">关于我</h2> <p class="text-text-secondary leading-relaxed mb-6">
+Hi! I am <strong>iqwqi</strong>， a student of computer science.
+          This blog is where I share my learning notes and technical insights.
+</p> <h2 class="font-sans font-bold text-2xl text-text-primary mb-4">关于博客</h2> <p class="text-text-secondary leading-relaxed mb-6">
+This blog is built with <strong>Astro</strong> and deployed on <strong>GitHub Pages</strong>.
+          I mainly share the following topics:
+</p> <ul class="space-y-2 mb-6"> <li class="flex items-center gap-2 text-text-secondary"> <span class="w-2 h-2 bg-primary rounded-full"></span>
+Algorithm and Data Structures
+</li> <li class="flex items-center gap-2 text-text-secondary"> <span class="w-2 h-2 bg-primary rounded-full"></span>
+Programming Language Learning Notes (C++/Rust……)
+</li> <li class="flex items-center gap-2 text-text-secondary"> <span class="w-2 h-2 bg-primary rounded-full"></span>
+System Administration and Development Tools
+</li> <li class="flex items-center gap-2 text-text-secondary"> <span class="w-2 h-2 bg-primary rounded-full"></span>
+Embedded Development
+</li> </ul> <h2 class="font-sans font-bold text-2xl text-text-primary mb-4">联系方式</h2> <p class="text-text-secondary leading-relaxed">
+If you have any questions or suggestions, please contact me via the following methods:
+</p> <ul class="space-y-2 mt-4"> <li class="flex items-center gap-2 text-text-secondary"> <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path> </svg>
+GitHub: <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer">@QwQBiG</a> </li> <li class="flex items-center gap-2 text-text-secondary"> <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path> </svg>
+Bilibili: <a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer">QwQBiG</a> </li> </ul> </div> </div> </main> ${renderComponent($$result2, "Footer", $$Footer, {})} ` })}`;
+}, "D:/Projects/MyBlog-Astro/src/pages/about.astro", void 0);
+
+const $$file = "D:/Projects/MyBlog-Astro/src/pages/about.astro";
+const $$url = "/about";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$About,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
