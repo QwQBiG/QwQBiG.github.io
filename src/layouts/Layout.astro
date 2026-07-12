@@ -28,8 +28,8 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 合理的缓存策略：HTML不缓存，静态资源长期缓存由服务器/CDN处理 -->
-    <meta http-equiv="Cache-Control" content="no-cache" />
+    <!-- 缓存策略：HTML使用短缓存配合ETag，静态资源由服务器配置长期缓存 -->
+    <meta http-equiv="Cache-Control" content="public, max-age=600" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={siteURL} />
@@ -93,6 +93,8 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <script src="/js/prism-code-interactions.js" defer></script>
     <!-- XML 高亮修复 -->
     <script src="/js/prism-xml-fix.js" defer></script>
+    <!-- VanillaTilt 3D 倾斜效果 -->
+    <script src="/js/vanilla-tilt.js" defer></script>
     
     <!-- Mermaid 图表支持 -->
     <script type="module">

@@ -6,6 +6,14 @@ interface PhotoWallProps {
   photos: PhotoItem[];
 }
 
+const preloadImages = (photos: PhotoItem[]) => {
+  photos.forEach(photo => {
+    const img = new Image();
+    img.src = photo.src;
+    img.decode?.().catch(() => {});
+  });
+};
+
 // 生成随机散落位置 - 相对于容器中心
 const generateRandomPosition = (index: number, total: number, containerWidth: number, containerHeight: number, isMobile: boolean): PhotoState => {
   const angle = (index / total) * Math.PI * 2;
@@ -102,6 +110,11 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
     });
     setPhotoStates(initialStates);
   }, [photos, isLoaded, containerSize, isMobile]);
+
+  // 预加载所有图片，画廊图片数量少，直接预加载
+  useEffect(() => {
+    preloadImages(photos);
+  }, [photos]);
 
   // 提升层级
   const bringToFront = useCallback((photoId: string) => {
@@ -408,7 +421,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
             style={{
               imageRendering: 'high-quality',
             }}
-            loading="lazy"
+            loading="eager"
             decoding="async"
             draggable={false}
           />
