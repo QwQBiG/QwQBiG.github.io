@@ -70,9 +70,9 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
       </article>
       </GlassContainer>
 
-      <div class="mt-8">
-        <WalineComments path={Astro.url.pathname} title={post.data.title} />
-      </div>
+      <GlassContainer class="mt-8">
+        <WalineComments path={Astro.url.pathname} />
+      </GlassContainer>
 
     </div>
   </main>

@@ -4,7 +4,6 @@ date: 2026-04-21T16:00:00+08:00
 draft: false
 tags: ["学习", "感受", "日记", "休息", "个人"]
 categories: ["个人生活"]
-author: "QwQBiG"
 ---
 
 ### C艹

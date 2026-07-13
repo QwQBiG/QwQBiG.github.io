@@ -187,10 +187,10 @@ const pageTitle = `${title} - QwQBiG's World`;
           )}
           </GlassContainer>
 
-          <div class="mt-8">
-            <WalineComments path={Astro.url.pathname} title={title} />
-          </div>
-        </article>
+          <GlassContainer class="mt-8">
+            <WalineComments path={Astro.url.pathname} />
+          </GlassContainer>
+         </article>
 
         <!-- Sidebar -->
         <aside class="lg:col-span-3">

@@ -4,7 +4,6 @@ date: 2026-03-03T14:00:00+08:00
 draft: false
 tags: ["Windows", "Sandbox", "虚拟化", "安全", "Hyper-V"]
 categories: ["技术探索"]
-author: "QwQBiG"
 ---
 
 # Windows Sandbox 硬核解析：不是虚拟机，胜似虚拟机
