@@ -4,6 +4,7 @@ import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { getCollection } from 'astro:content';
+import WalineComments from '../../components/WalineComments.astro';
 
 export async function getStaticPaths() {
   const poetryPosts = await getCollection('poetry', ({ data }) => !data.draft);
@@ -68,6 +69,10 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
         </div>
       </article>
       </GlassContainer>
+
+      <div class="mt-8">
+        <WalineComments path={Astro.url.pathname} title={post.data.title} />
+      </div>
 
     </div>
   </main>

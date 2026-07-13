@@ -5,6 +5,7 @@ import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { getCollection, render } from 'astro:content';
 import { formatDate } from '../../utils/date';
+import WalineComments from '../../components/WalineComments.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('cs');
@@ -185,6 +186,10 @@ const pageTitle = `${title} - QwQBiG's World`;
             </nav>
           )}
           </GlassContainer>
+
+          <div class="mt-8">
+            <WalineComments path={Astro.url.pathname} title={title} />
+          </div>
         </article>
 
         <!-- Sidebar -->

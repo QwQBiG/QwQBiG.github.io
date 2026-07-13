@@ -1,0 +1,133 @@
+---
+export interface Props {
+  path: string;
+}
+const { path } = Astro.props;
+---
+
+<div id="waline" data-path={path}></div>
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+
+<script>
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+  const walineEl = document.getElementById('waline');
+  const pagePath = walineEl?.dataset.path || window.location.pathname;
+
+  init({
+    el: '#waline',
+    serverURL: 'https://waline.iqwqi.win/',
+    path: pagePath,
+    dark: false,
+    locale: {
+      placeholder: '写下你的评论...',
+      login: '登录',
+      admin: '管理员',
+      nick: '昵称',
+      mail: '邮箱',
+      link: '网站',
+      edit: '编辑',
+      reply: '回复',
+      cancel: '取消',
+      confirm: '确认',
+      delete: '删除',
+      sticky: '置顶',
+      unsticky: '取消置顶',
+      approved: '通过',
+      spam: '垃圾',
+      waiting: '待审核',
+      level0: '潜水',
+      level1: '冒泡',
+      level2: '吐槽',
+      level3: '活跃',
+      level4: '话痨',
+      level5: '传说',
+      github: 'GitHub',
+      twitter: 'Twitter',
+      facebook: 'Facebook',
+      google: 'Google',
+      weibo: '微博',
+      qq: 'QQ',
+      wechat: '微信',
+      word: '字数',
+      anonymous: '匿名',
+      optional: '选填',
+      uploadImage: '上传图片',
+      emoji: '表情',
+    },
+  });
+</script>
+
+<style is:global>
+  :root {
+    --waline-bgcolor: #fff;
+    --waline-bgcolor-light: #fff5f7;
+    --waline-bgcolor-hover: #fce4ec;
+    --waline-bgcolor-hover-color: #e84a7a;
+    --waline-primary-color: #e84a7a;
+    --waline-primary-color-light: #ff6b9d;
+    --waline-primary-color-dark: #c44569;
+    --waline-text-color: #2d3436;
+    --waline-text-reverse-color: #636e72;
+    --waline-border-color: rgba(232, 74, 122, 0.2);
+    --waline-highlight-color: #ff6b9d;
+    --waline-info-color: #b2bec3;
+    --waline-info-bgcolor: #fff0f5;
+    --waline-radius: 12px;
+    --waline-font-size: 14px;
+    --waline-avatar-size: 36px;
+    --waline-avatar-radius: 50%;
+    --waline-line-height: 1.6;
+  }
+
+  #waline {
+    margin-top: 24px;
+  }
+
+  .wl-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(232, 74, 122, 0.15);
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(232, 74, 122, 0.06);
+  }
+
+  .wl-btn {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .wl-btn-primary {
+    background: linear-gradient(135deg, #e84a7a 0%, #ff6b9d 100%) !important;
+    border: none !important;
+    color: white !important;
+  }
+
+  .wl-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(232, 74, 122, 0.4);
+  }
+
+  .wl-input {
+    border: 1px solid rgba(232, 74, 122, 0.2) !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .wl-input:focus {
+    border-color: #e84a7a !important;
+    box-shadow: 0 0 0 3px rgba(232, 74, 122, 0.2) !important;
+  }
+
+  .wl-panel {
+    border-radius: 12px !important;
+    border: 1px solid rgba(232, 74, 122, 0.15) !important;
+  }
+
+  .wl-separator {
+    border-color: rgba(232, 74, 122, 0.15) !important;
+  }
+</style>
