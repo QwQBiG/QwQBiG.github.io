@@ -1,6 +1,6 @@
 ---
 title: "Rust 与 Axum"
-date: 2025-10-01T10:00:00+08:00
+date: 2026-05-27T10:00:00+08:00
 tags: ["Rust", "基础", "库函数", "编程语言", "后端"]
 categories: ["语言学习"]
 series: ["Rust 蟹蟹"]
