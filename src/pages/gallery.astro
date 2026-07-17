@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import PhotoWall from '../components/3d/PhotoWall.tsx';
@@ -7,30 +9,27 @@ import type { PhotoItem } from '../types/photo';
 const pageTitle = "画廊 - QwQBiG's World";
 const pageDescription = "3D 散落照片墙 - 拖拽探索，点击查看大图";
 
-// 图片数据 - 自动从 public/images 目录加载（排除 character.png 和 banner.png）
-const photos: PhotoItem[] = [
-  {
-    id: '1',
-    src: '/images/2025-08.png',
-    alt: '2025-08',
-  },
-  {
-    id: '2',
-    src: '/images/Kafka.png',
-    alt: 'Kafka',
-  },
-  {
-    id: '3',
-    src: '/images/hahaha.png',
-    alt: 'Hahaha',
-  },
-];
+// 自动扫描 public/gallery 目录，直接丢图片进去即可
+const galleryDir = path.join(process.cwd(), 'public', 'gallery');
+const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+
+const photos: PhotoItem[] = fs.readdirSync(galleryDir)
+  .filter(file => imageExtensions.includes(path.extname(file).toLowerCase()))
+  .map((file, index) => {
+    const halfSizeFiles = ['ZhenXun.jpg', 'AIcard.png'];
+    return {
+      id: String(index + 1),
+      src: `/gallery/${file}`,
+      alt: path.basename(file, path.extname(file)),
+      scale: halfSizeFiles.includes(file) ? 0.5 : undefined,
+    };
+  });
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <link rel="preload" href="/images/2025-08.png" as="image">
-  <link rel="preload" href="/images/Kafka.png" as="image">
-  <link rel="preload" href="/images/hahaha.png" as="image">
+  {photos.filter(p => /\.(png|jpe?g)$/i.test(p.src)).map(p => (
+    <link rel="preload" href={p.src} as="image" />
+  ))}
   <FloatingNavCard />
 
   <main class="flex-1 h-screen relative overflow-hidden">

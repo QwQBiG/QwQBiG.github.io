@@ -194,7 +194,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
             key={photo.id}
             photo={photo}
             state={state}
-            cardWidth={cardWidth}
+            cardWidth={cardWidth * (photo.scale ?? 1)}
             containerCenterX={containerSize.width / 2}
             containerCenterY={containerSize.height / 2}
             onDragStart={(x, y) => handleDragStart(photo.id, x, y)}
@@ -229,8 +229,8 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
               className="relative cursor-pointer"
               onClick={handleClosePreview}
               style={{
-                maxWidth: isMobile ? '90vw' : '70vw',
-                maxHeight: isMobile ? '70vh' : '80vh',
+                maxWidth: isMobile ? '95vw' : '85vw',
+                maxHeight: isMobile ? '80vh' : '90vh',
               }}
             >
               {/* 拍立得相框 - 无底部留白 */}
@@ -246,7 +246,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
                   className="w-full h-auto object-contain pointer-events-none"
                   style={{
                     imageRendering: 'high-quality',
-                    maxHeight: isMobile ? '70vh' : '80vh',
+                    maxHeight: isMobile ? '80vh' : '90vh',
                   }}
                 />
               </div>

@@ -5,6 +5,7 @@ export interface PhotoItem {
   caption?: string;
   width?: number;
   height?: number;
+  scale?: number;
 }
 
 export interface PhotoState {
