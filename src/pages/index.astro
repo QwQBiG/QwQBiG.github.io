@@ -1181,11 +1181,11 @@ const yearsActive = new Date().getFullYear() - 2024;
         navCard.classList.add('gpu-accelerated', 'nav-card-layout-change');
       }
 
-      let shouldPlayHomeReturnMotion = false;
+      let shouldPlayHomeReturnMotion = new URLSearchParams(window.location.search).has('homeReturnMotion');
       try {
-        shouldPlayHomeReturnMotion = sessionStorage.getItem('home-return-motion') === '1';
+        shouldPlayHomeReturnMotion = shouldPlayHomeReturnMotion || sessionStorage.getItem('home-return-motion') === '1';
       } catch {
-        shouldPlayHomeReturnMotion = false;
+        // The URL flag remains available when sessionStorage is unavailable.
       }
 
       document.addEventListener('visibilitychange', function() {
@@ -1216,6 +1216,10 @@ const yearsActive = new Date().getFullYear() - 2024;
               sessionStorage.removeItem('home-return-motion');
             } catch {
               // Ignore unavailable sessionStorage.
+            }
+
+            if (window.location.search) {
+              window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.hash}`);
             }
           });
         });
