@@ -1171,6 +1171,23 @@ const yearsActive = new Date().getFullYear() - 2024;
       }
       
       // 页面可见性变化时重置导航栏（处理从其他页面返回的情况）
+      // Prepare the home navigation card in the same compact state used by the floating card.
+      function prepareNavCardForReturn() {
+        navCard.style.position = 'fixed';
+        navCard.style.top = '16px';
+        navCard.style.left = '16px';
+        navCard.style.zIndex = '9999';
+        navCard.classList.remove('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
+        navCard.classList.add('gpu-accelerated', 'nav-card-layout-change');
+      }
+
+      let shouldPlayHomeReturnMotion = false;
+      try {
+        shouldPlayHomeReturnMotion = sessionStorage.getItem('home-return-motion') === '1';
+      } catch {
+        shouldPlayHomeReturnMotion = false;
+      }
+
       document.addEventListener('visibilitychange', function() {
         if (document.visibilityState === 'visible') {
           // 页面重新可见时，重置导航栏状态
@@ -1187,6 +1204,23 @@ const yearsActive = new Date().getFullYear() - 2024;
       });
       
       // 获取所有会跳转的链接
+      // Avatar navigation is a normal link, so reproduce the history-return starting state.
+      if (shouldPlayHomeReturnMotion) {
+        prepareNavCardForReturn();
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            resetNavCardToCardState();
+
+            try {
+              sessionStorage.removeItem('home-return-motion');
+            } catch {
+              // Ignore unavailable sessionStorage.
+            }
+          });
+        });
+      }
+
       const allLinks = document.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"]');
       
       allLinks.forEach(link => {
@@ -1201,17 +1235,11 @@ const yearsActive = new Date().getFullYear() - 2024;
           // 使用 requestAnimationFrame 确保流畅的动画开始
           requestAnimationFrame(() => {
             // 直接设置固定定位到左上角
-            navCard.style.position = 'fixed';
-            navCard.style.top = '16px';
-            navCard.style.left = '16px';
-            navCard.style.zIndex = '9999';
-            navCard.classList.remove('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
+            prepareNavCardForReturn();
 
             // 添加 GPU 加速类
-            navCard.classList.add('gpu-accelerated');
             
             // 立即开始布局转换动画
-            navCard.classList.add('nav-card-layout-change');
           });
 
           // 其他元素淡出（排除统计卡片）- 使用 requestAnimationFrame 批量处理

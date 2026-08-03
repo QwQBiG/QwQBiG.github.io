@@ -63,7 +63,7 @@
       <!-- 横向布局，紧凑排列 -->
       <div class="flex flex-row items-center gap-2">
         <!-- 头像 - 2rem (32px) 与主界面转换后一致 -->
-        <a href="/" class="flex-shrink-0" style="pointer-events: auto;">
+        <a href="/" class="flex-shrink-0" data-home-return-link style="pointer-events: auto;">
           <div class="nav-avatar relative w-8 h-8">
             <img
               src="/ZhenXun.png"
@@ -174,3 +174,28 @@
       inset 0 -1px 1px 0 rgba(255, 255, 255, 0.4) !important;
   }
 </style>
+
+<script>
+  // Mark avatar navigation so the home page can play the return animation.
+  const homeReturnLink = document.querySelector('[data-home-return-link]');
+
+  homeReturnLink?.addEventListener('click', (event) => {
+    const mouseEvent = event as MouseEvent;
+
+    if (
+      mouseEvent.button !== 0 ||
+      mouseEvent.metaKey ||
+      mouseEvent.ctrlKey ||
+      mouseEvent.shiftKey ||
+      mouseEvent.altKey
+    ) {
+      return;
+    }
+
+    try {
+      sessionStorage.setItem('home-return-motion', '1');
+    } catch {
+      // Navigation still works when sessionStorage is unavailable.
+    }
+  });
+</script>
