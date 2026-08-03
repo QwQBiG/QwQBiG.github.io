@@ -63,6 +63,13 @@ const yearsActive = new Date().getFullYear() - 2024;
   <meta name="description" content="CS Learning Notes | Algorithms | Programming | Embedded Development">
   <link rel="icon" type="image/png" href="/ZhenXun.png">
 
+  <!-- Keep avatar returns in the compact state before the first paint. -->
+  <script is:inline>
+    if (new URLSearchParams(window.location.search).has('homeReturnMotion')) {
+      document.documentElement.dataset.homeReturnMotion = '1';
+    }
+  </script>
+
   <!-- 资源预连接优化 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -598,6 +605,70 @@ const yearsActive = new Date().getFullYear() - 2024;
     /* 整体容器微光效果 */
     .nav-card-moving .glass-card {
       animation: navGlowPulse 0.7s ease-out;
+    }
+
+    /* Avatar returns must start exactly where browser-history returns start. */
+    html[data-home-return-motion] #navCard {
+      position: fixed !important;
+      top: 16px !important;
+      left: 16px !important;
+      z-index: 9999 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    html[data-home-return-motion] #navCard .glass-card {
+      padding: 0.75rem !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-container {
+      flex-direction: row !important;
+      gap: 0.5rem !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-avatar {
+      width: 2rem !important;
+      height: 2rem !important;
+      transform: none !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-avatar img {
+      border-radius: 0.5rem !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-avatar .absolute {
+      width: 0.625rem !important;
+      height: 0.625rem !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-links {
+      flex-direction: row !important;
+      gap: 0.25rem !important;
+      opacity: 1 !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-link {
+      width: 2rem !important;
+      height: 2rem !important;
+      padding: 0 !important;
+      border-radius: 0.5rem !important;
+      justify-content: center !important;
+    }
+
+    html[data-home-return-motion] #navCard .nav-link span {
+      display: none !important;
+    }
+
+    /* Reverse the same inner animations used when leaving the home page. */
+    #navCard.nav-card-layout-change.nav-card-returning .glass-card,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-container,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-avatar,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-avatar img,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-avatar .absolute,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-links,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-link,
+    #navCard.nav-card-layout-change.nav-card-returning .nav-link span {
+      animation-direction: reverse;
     }
     
     @keyframes navGlowPulse {
@@ -1142,7 +1213,9 @@ const yearsActive = new Date().getFullYear() - 2024;
       const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
       
       // 重置导航栏到卡片状态的函数
-      function resetNavCardToCardState() {
+      function resetNavCardToCardState(keepReturnAnimation = false) {
+        document.documentElement.removeAttribute('data-home-return-motion');
+
         // 移除固定定位样式
         navCard.style.position = '';
         navCard.style.top = '';
@@ -1173,12 +1246,16 @@ const yearsActive = new Date().getFullYear() - 2024;
       // 页面可见性变化时重置导航栏（处理从其他页面返回的情况）
       // Prepare the home navigation card in the same compact state used by the floating card.
       function prepareNavCardForReturn() {
+        document.documentElement.dataset.homeReturnMotion = '1';
         navCard.style.position = 'fixed';
         navCard.style.top = '16px';
         navCard.style.left = '16px';
         navCard.style.zIndex = '9999';
         navCard.classList.remove('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
-        navCard.classList.add('gpu-accelerated', 'nav-card-layout-change');
+        navCard.classList.remove('gpu-accelerated');
+        if (!keepReturnAnimation) {
+          navCard.classList.remove('nav-card-layout-change', 'nav-card-returning');
+        }
       }
 
       let shouldPlayHomeReturnMotion = new URLSearchParams(window.location.search).has('homeReturnMotion');
@@ -1189,7 +1266,7 @@ const yearsActive = new Date().getFullYear() - 2024;
       }
 
       document.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'visible') {
+        if (document.visibilityState === 'visible' && !shouldPlayHomeReturnMotion) {
           // 页面重新可见时，重置导航栏状态
           resetNavCardToCardState();
         }
@@ -1198,7 +1275,7 @@ const yearsActive = new Date().getFullYear() - 2024;
       // 页面加载时确保导航栏在正确位置
       window.addEventListener('pageshow', function(e) {
         // 如果是从缓存加载的页面（如浏览器返回），重置导航栏
-        if (e.persisted) {
+        if (e.persisted && !shouldPlayHomeReturnMotion) {
           resetNavCardToCardState();
         }
       });
@@ -1206,11 +1283,16 @@ const yearsActive = new Date().getFullYear() - 2024;
       // 获取所有会跳转的链接
       // Avatar navigation is a normal link, so reproduce the history-return starting state.
       if (shouldPlayHomeReturnMotion) {
-        prepareNavCardForReturn();
+        const hasUrlReturnMarker = new URLSearchParams(window.location.search).has('homeReturnMotion');
+        if (!hasUrlReturnMarker) {
+          prepareNavCardForReturn();
+        }
 
         requestAnimationFrame(() => {
+          navCard.classList.add('gpu-accelerated', 'nav-card-layout-change', 'nav-card-returning');
+
           requestAnimationFrame(() => {
-            resetNavCardToCardState();
+            resetNavCardToCardState(true);
 
             try {
               sessionStorage.removeItem('home-return-motion');
@@ -1221,6 +1303,11 @@ const yearsActive = new Date().getFullYear() - 2024;
             if (window.location.search) {
               window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.hash}`);
             }
+
+            window.setTimeout(() => {
+              navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change', 'nav-card-returning');
+              shouldPlayHomeReturnMotion = false;
+            }, 850);
           });
         });
       }
