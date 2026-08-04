@@ -1244,7 +1244,17 @@ const yearsActive = new Date().getFullYear() - 2024;
       }
       
       // 页面可见性变化时重置导航栏（处理从其他页面返回的情况）
-      // Prepare the home navigation card in the same compact state used by the floating card.
+      // Prepare the home navigation card for the outbound conversion animation.
+      function prepareNavCardForOutbound() {
+        navCard.style.position = 'fixed';
+        navCard.style.top = '16px';
+        navCard.style.left = '16px';
+        navCard.style.zIndex = '9999';
+        navCard.classList.remove('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
+        navCard.classList.add('gpu-accelerated', 'nav-card-layout-change');
+      }
+
+      // Prepare an incoming avatar return without replaying the outbound animation.
       function prepareNavCardForReturn() {
         document.documentElement.dataset.homeReturnMotion = '1';
         navCard.style.position = 'fixed';
@@ -1252,10 +1262,7 @@ const yearsActive = new Date().getFullYear() - 2024;
         navCard.style.left = '16px';
         navCard.style.zIndex = '9999';
         navCard.classList.remove('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
-        navCard.classList.remove('gpu-accelerated');
-        if (!keepReturnAnimation) {
-          navCard.classList.remove('nav-card-layout-change', 'nav-card-returning');
-        }
+        navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change', 'nav-card-returning');
       }
 
       let shouldPlayHomeReturnMotion = new URLSearchParams(window.location.search).has('homeReturnMotion');
@@ -1326,7 +1333,7 @@ const yearsActive = new Date().getFullYear() - 2024;
           // 使用 requestAnimationFrame 确保流畅的动画开始
           requestAnimationFrame(() => {
             // 直接设置固定定位到左上角
-            prepareNavCardForReturn();
+            prepareNavCardForOutbound();
 
             // 添加 GPU 加速类
             
