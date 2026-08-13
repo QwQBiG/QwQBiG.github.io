@@ -1,0 +1,56 @@
+<!-- Door proportions reference the MIT-licensed Phosphor door-open icon. -->
+<div class="door-portal" data-interactive-object data-interaction="door" data-object-strength="0.08" role="img" aria-label="一扇会在选择去向时打开的门">
+  <svg viewBox="0 0 760 900" aria-hidden="true">
+    <defs>
+      <linearGradient id="door-frame" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" /><stop offset=".28" stop-color="#d5cadc" /><stop offset=".62" stop-color="#f2b5cd" /><stop offset="1" stop-color="#6d5d78" /></linearGradient>
+      <linearGradient id="door-panel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".94" /><stop offset=".45" stop-color="#f5ccdc" stop-opacity=".84" /><stop offset="1" stop-color="#9883cd" stop-opacity=".76" /></linearGradient>
+      <linearGradient id="beyond-light" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" /><stop offset=".35" stop-color="#ffd7e7" /><stop offset="1" stop-color="#9ec5ff" stop-opacity=".18" /></linearGradient>
+      <linearGradient id="plinth-top" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".82" /><stop offset=".48" stop-color="#d9d7ee" stop-opacity=".66" /><stop offset="1" stop-color="#b49ac4" stop-opacity=".72" /></linearGradient>
+      <linearGradient id="plinth-face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8a2c5" stop-opacity=".74" /><stop offset="1" stop-color="#574862" stop-opacity=".82" /></linearGradient>
+      <filter id="door-shadow" x="-50%" y="-40%" width="200%" height="200%"><feDropShadow dx="0" dy="25" stdDeviation="22" flood-color="#392a49" flood-opacity=".25" /></filter>
+      <filter id="door-glow" x="-80%" y="-60%" width="260%" height="240%"><feGaussianBlur stdDeviation="28" /></filter>
+      <clipPath id="door-opening-clip"><path d="M235 139H530V779H235Z" /></clipPath>
+    </defs>
+    <ellipse class="door-floor-shadow" cx="382" cy="848" rx="298" ry="37" fill="#3e2f49" opacity=".2" />
+    <path class="door-halo" d="M203 103H562V769H203Z" fill="#fff0f6" opacity=".52" filter="url(#door-glow)" />
+    <g class="architectural-door" filter="url(#door-shadow)">
+      <path class="door-beyond" d="M220 126H544V748H220Z" fill="url(#beyond-light)" />
+      <g class="beyond-corridor" fill="none" stroke="#ba9cc7" stroke-opacity=".24" stroke-width="3">
+        <path d="M220 126L334 247V748M544 126L430 247V748M334 247H430" />
+        <path d="M220 748L334 560H430L544 748" />
+      </g>
+      <text class="room-name" x="382" y="538" text-anchor="middle" fill="#5b4762" fill-opacity=".48" font-family="Georgia, serif" font-size="30" font-style="italic">the unfinished room</text>
+
+      <g class="door-panel-clip" clip-path="url(#door-opening-clip)">
+        <g class="door-panel">
+          <path d="M236 140H530V778H236Z" fill="url(#door-panel)" stroke="#fff" stroke-opacity=".84" stroke-width="4" />
+          <path d="M270 194H496V414H270ZM270 454H496V704H270Z" fill="#fff" fill-opacity=".13" stroke="#fff" stroke-opacity=".42" stroke-width="3" />
+          <path d="M288 217H468" stroke="#fff" stroke-opacity=".4" stroke-width="6" stroke-linecap="round" />
+          <g class="door-handle">
+            <ellipse cx="478" cy="474" rx="16" ry="19" fill="#e8c28f" stroke="#fff4d8" stroke-width="6" />
+            <path d="M478 474H511" stroke="#e8c28f" stroke-width="9" stroke-linecap="round" />
+          </g>
+        </g>
+      </g>
+
+      <g class="door-frame-assembly">
+        <path d="M176 79H589V779H530V139H235V779H176Z" fill="url(#door-frame)" stroke="#fff" stroke-opacity=".72" stroke-width="4" />
+        <path d="M176 79L201 52H614L589 79Z" fill="#fff" fill-opacity=".62" />
+        <path d="M589 79L614 52V760L589 779Z" fill="#8f7899" fill-opacity=".5" />
+        <path d="M235 139H530" stroke="#51415d" stroke-opacity=".28" stroke-width="3" />
+        <path d="M235 139L251 156V762L235 779ZM530 139L514 156V762L530 779Z" fill="#fff" fill-opacity=".18" />
+      </g>
+      <g class="door-hinges" fill="url(#door-frame)"><rect x="222" y="219" width="29" height="76" rx="8" /><rect x="222" y="569" width="29" height="76" rx="8" /></g>
+
+      <g class="door-plinth">
+        <path class="plinth-top" d="M176 779H589L664 824H98Z" fill="url(#plinth-top)" stroke="#fff" stroke-opacity=".72" stroke-width="3" />
+        <path class="plinth-left" d="M98 824L176 779L196 791L121 856Z" fill="#8e799d" fill-opacity=".7" />
+        <path class="plinth-right" d="M589 779L664 824L641 856L568 792Z" fill="#65576f" fill-opacity=".72" />
+        <path class="plinth-front" d="M98 824H664L641 856H121Z" fill="url(#plinth-face)" stroke="#fff" stroke-opacity=".34" stroke-width="2" />
+        <path class="plinth-inlay" d="M204 787H560L608 816H154Z" fill="#ff9fc2" fill-opacity=".16" stroke="#fff" stroke-opacity=".24" />
+        <path d="M121 856H641" stroke="#fff" stroke-opacity=".42" stroke-width="3" />
+      </g>
+      <g class="door-sign"><rect x="303" y="99" width="161" height="46" rx="14" fill="#2f2639" fill-opacity=".72" /><text x="384" y="128" text-anchor="middle" fill="#ffeaf2" font-family="JetBrains Mono, monospace" font-size="13" letter-spacing="4">CONTINUE / 06</text></g>
+    </g>
+  </svg>
+</div>

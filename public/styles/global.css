@@ -697,3 +697,399 @@ body {
                 代码块 - 使用 Prism.js
 ——————————————————————————————————————————————*/
 /* 代码块样式已迁移至 /styles/prism-theme.css */
+
+/* --------------------------------------------------------------------------
+   Inner-page visual system
+   Keep the homepage's bespoke dashboard untouched while bringing the rest
+   of the site into the same soft glass / candy-gradient language.
+   -------------------------------------------------------------------------- */
+.site-page-shell main {
+  position: relative;
+}
+
+.site-page-shell main > div[class*="max-w-"] > .text-center {
+  position: relative;
+  isolation: isolate;
+  padding: 2rem 2rem 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.58), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.18));
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 24px 50px -32px rgba(117, 74, 135, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.site-page-shell main > div[class*="max-w-"] > .text-center::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 0;
+  height: 1px;
+  z-index: -1;
+  background: linear-gradient(90deg, transparent, rgba(232, 74, 122, 0.32), transparent);
+}
+
+.site-page-shell main > div[class*="max-w-"] > .text-center h1 {
+  letter-spacing: 0.025em;
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.7);
+}
+
+.site-page-shell main article.group,
+.site-page-shell main a.group.block {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.68);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.74), rgba(255, 247, 250, 0.54));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 18px 36px -28px rgba(92, 54, 104, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.site-page-shell main article.group::before,
+.site-page-shell main a.group.block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.94), transparent);
+}
+
+.site-page-shell main article.group:hover,
+.site-page-shell main a.group.block:hover {
+  border-color: rgba(232, 74, 122, 0.28);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(255, 239, 247, 0.68));
+  box-shadow:
+    0 24px 42px -26px rgba(179, 70, 125, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.site-page-shell main > div[class*="max-w-3xl"] > div:first-child {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.72);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.64), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.62), rgba(255, 247, 250, 0.42));
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 24px 48px -28px rgba(92, 54, 104, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.site-page-shell main > div[class*="max-w-3xl"] > div:first-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.94), transparent);
+}
+
+.site-page-shell main [class~="bg-bg-secondary"][class~="rounded-xl"] {
+  border-color: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.36);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.56);
+}
+
+/* Content badges should sit in the same pink glass layer as their cards. */
+.site-page-shell [class~="bg-primary/10"][class~="rounded-full"] {
+  border: 1px solid rgba(232, 74, 122, 0.16);
+  background: rgba(232, 74, 122, 0.12) !important;
+  color: var(--color-primary) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.site-page-shell [class~="bg-secondary/10"][class~="rounded-full"] {
+  border: 1px solid rgba(161, 140, 209, 0.18);
+  background: rgba(161, 140, 209, 0.13) !important;
+  color: var(--color-secondary) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.site-page-shell main .prose h1,
+.site-page-shell main .prose h2,
+.site-page-shell main .prose h3 {
+  text-wrap: balance;
+}
+
+.site-page-shell main .prose h1 {
+  border-bottom-color: rgba(232, 74, 122, 0.18);
+}
+
+.site-page-shell main .post-card-meta {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.site-page-shell main .post-card-meta > span,
+.site-page-shell main .post-card-meta > div {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Article sidebars use the same translucent glass language as the cards. */
+.site-page-shell .toc {
+  position: sticky;
+  top: 6rem;
+  max-height: min(calc(100vh - 9rem), 42rem);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.34) !important;
+  border-color: rgba(255, 255, 255, 0.64);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 74, 122, 0.32) transparent;
+  box-shadow:
+    0 18px 36px -28px rgba(92, 54, 104, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.site-page-shell .toc::-webkit-scrollbar {
+  width: 6px;
+}
+
+.site-page-shell .toc::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.site-page-shell .toc::-webkit-scrollbar-button,
+.site-page-shell::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  -webkit-appearance: none;
+}
+
+.site-page-shell .toc::-webkit-scrollbar-button:single-button,
+.site-page-shell .toc::-webkit-scrollbar-button:start:decrement,
+.site-page-shell .toc::-webkit-scrollbar-button:end:increment,
+.site-page-shell .toc::-webkit-scrollbar-button:vertical:decrement,
+.site-page-shell .toc::-webkit-scrollbar-button:vertical:increment,
+.site-page-shell .toc::-webkit-scrollbar-button:horizontal:decrement,
+.site-page-shell .toc::-webkit-scrollbar-button:horizontal:increment {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  -webkit-appearance: none;
+}
+
+.site-page-shell .toc::-webkit-scrollbar-thumb {
+  background: rgba(232, 74, 122, 0.3);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.site-page-shell .toc::-webkit-scrollbar-thumb:hover {
+  background: rgba(232, 74, 122, 0.5);
+  background-clip: padding-box;
+}
+
+.site-page-shell .toc ul {
+  padding: 0 !important;
+  margin: 0;
+}
+
+.site-page-shell .toc li {
+  margin: 0.2rem 0;
+}
+
+.site-page-shell .toc a {
+  padding: 0.48rem 0.7rem;
+  line-height: 1.45;
+}
+
+.site-page-shell .toc a.h2 {
+  padding-left: 0.7rem;
+}
+
+.site-page-shell .toc a.h3 {
+  padding-left: 1.2rem;
+}
+
+.site-page-shell .toc a:hover,
+.site-page-shell .toc a.active {
+  background: rgba(232, 74, 122, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+/* Give inner pages a slim translucent document scrollbar instead of a white rail. */
+.site-page-shell {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 74, 122, 0.32) transparent;
+}
+
+.site-page-shell::-webkit-scrollbar {
+  width: 7px;
+}
+
+.site-page-shell::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.site-page-shell::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.site-page-shell::-webkit-scrollbar-thumb {
+  background: rgba(232, 74, 122, 0.28);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.site-page-shell::-webkit-scrollbar-thumb:hover {
+  background: rgba(232, 74, 122, 0.48);
+  background-clip: padding-box;
+}
+
+/* Keep the footer quiet: a thin glass layer with small, tactile social links. */
+.site-page-shell .site-footer {
+  background: rgba(255, 255, 255, 0.24) !important;
+  border-top-color: rgba(255, 255, 255, 0.58);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66), 0 -18px 36px -30px rgba(92, 54, 104, 0.38);
+}
+
+.site-page-shell .site-footer-social a {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-secondary);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.site-page-shell .site-footer-social a:hover {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-primary) !important;
+  transform: translateY(-2px);
+}
+
+.site-page-shell .archive-year-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  border-bottom: 0;
+  padding: 0 0.25rem 0.6rem;
+  position: relative;
+}
+
+.site-page-shell .archive-year-title::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(232, 74, 122, 0.44), transparent);
+}
+
+.site-page-shell .archive-item,
+.site-page-shell .search-result-item,
+.site-page-shell .tag-cloud-item {
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  background: rgba(255, 255, 255, 0.42);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64);
+}
+
+.site-page-shell .archive-item:hover,
+.site-page-shell .search-result-item:hover,
+.site-page-shell .tag-cloud-item:hover {
+  border-color: rgba(232, 74, 122, 0.28);
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 14px 26px -22px rgba(179, 70, 125, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.site-page-shell .search-input {
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.48);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 16px 34px -28px rgba(92, 54, 104, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.76);
+}
+
+.site-page-shell .search-input:focus {
+  border-color: rgba(232, 74, 122, 0.5);
+  box-shadow: 0 0 0 4px rgba(232, 74, 122, 0.1), 0 18px 34px -26px rgba(179, 70, 125, 0.5);
+}
+
+#floatingNavCard > .glass-card {
+  max-width: calc(100vw - 2rem);
+}
+
+.nav-link-item.is-active {
+  color: var(--color-primary);
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.nav-link-item.is-active:hover {
+  color: var(--color-primary-dark);
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  .site-page-shell main > div[class*="max-w-"] > .text-center {
+    padding: 1.5rem 1rem 1.25rem;
+    border-radius: 1.5rem;
+  }
+
+  .site-page-shell main > div[class*="max-w-"] > .text-center h1 {
+    font-size: 1.875rem;
+  }
+
+  .site-page-shell .toc {
+    position: relative;
+    top: auto;
+    max-height: min(70vh, 32rem);
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-page-shell main article.group,
+  .site-page-shell main a.group.block,
+  .site-page-shell .archive-item,
+  .site-page-shell .search-result-item,
+  .site-page-shell .tag-cloud-item {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,83 @@
+<div class="prism-bench" data-interactive-object data-interaction="prism" data-object-strength="0.12" role="img" aria-label="一座把同一束光分成代码与诗的光学棱镜台">
+  <svg viewBox="0 0 980 680" aria-hidden="true">
+    <defs>
+      <linearGradient id="prism-glass" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".82" />
+        <stop offset=".45" stop-color="#f7b6d2" stop-opacity=".25" />
+        <stop offset="1" stop-color="#a899e8" stop-opacity=".42" />
+      </linearGradient>
+      <linearGradient id="prism-brass" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff2d0" /><stop offset=".35" stop-color="#c49c69" /><stop offset=".7" stop-color="#f4d9a6" /><stop offset="1" stop-color="#785e4e" />
+      </linearGradient>
+      <linearGradient id="prism-base" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".55" /><stop offset="1" stop-color="#6b5477" stop-opacity=".48" />
+      </linearGradient>
+      <filter id="prism-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="12" />
+      </filter>
+      <filter id="prism-drop" x="-30%" y="-40%" width="160%" height="190%">
+        <feDropShadow dx="0" dy="20" stdDeviation="20" flood-color="#0b0713" flood-opacity=".34" />
+      </filter>
+    </defs>
+
+    <ellipse cx="501" cy="572" rx="360" ry="43" fill="#0b0713" opacity=".28" filter="url(#prism-glow)" />
+    <g class="optical-bench" filter="url(#prism-drop)">
+      <path d="M118 520L848 520L904 574L72 574Z" fill="url(#prism-base)" stroke="#fff" stroke-opacity=".42" stroke-width="2" />
+      <path d="M72 574H904L878 604H97Z" fill="#241d31" fill-opacity=".7" />
+      <g fill="#251e30" opacity=".9">
+        <path d="M137 599H222L205 635H149Z" /><path d="M754 599H839L827 635H771Z" />
+      </g>
+      <g class="bench-ticks" stroke="#f7d5e4" stroke-opacity=".35">
+        <path d="M154 536V553M212 536V547M270 536V553M328 536V547M386 536V553M444 536V547M502 536V553M560 536V547M618 536V553M676 536V547M734 536V553M792 536V547" />
+      </g>
+      <text x="104" y="591" fill="#f5bbd1" font-family="JetBrains Mono, monospace" font-size="12" letter-spacing="4">SAME SOURCE / TWO LANGUAGES</text>
+    </g>
+
+    <g class="prism-rig">
+      <g class="prism-stands">
+        <g class="prism-stand stand-left" transform="translate(332 0)">
+          <path d="M0 492H116L98 520H17Z" fill="url(#prism-brass)" />
+          <path d="M17 520H98L90 536H25Z" fill="#6f594d" opacity=".72" />
+          <rect x="48" y="334" width="21" height="166" rx="9" fill="url(#prism-brass)" />
+          <path d="M61 340H69V493H61Z" fill="#6e584e" opacity=".34" />
+          <circle cx="58" cy="349" r="25" fill="#3c3046" stroke="#f2d6ae" stroke-width="9" />
+          <circle cx="58" cy="349" r="8" fill="#f7b7d0" />
+          <path d="M82 349L113 354" stroke="#d5b17e" stroke-width="12" stroke-linecap="round" />
+          <circle cx="57" cy="510" r="5" fill="#fff2d0" />
+        </g>
+        <g class="prism-stand stand-right" transform="translate(548 0)">
+          <path d="M0 492H116L98 520H17Z" fill="url(#prism-brass)" />
+          <path d="M17 520H98L90 536H25Z" fill="#6f594d" opacity=".72" />
+          <rect x="48" y="334" width="21" height="166" rx="9" fill="url(#prism-brass)" />
+          <path d="M61 340H69V493H61Z" fill="#6e584e" opacity=".34" />
+          <circle cx="58" cy="349" r="25" fill="#3c3046" stroke="#f2d6ae" stroke-width="9" />
+          <circle cx="58" cy="349" r="8" fill="#f7b7d0" />
+          <path d="M34 349L3 354" stroke="#d5b17e" stroke-width="12" stroke-linecap="round" />
+          <circle cx="57" cy="510" r="5" fill="#fff2d0" />
+        </g>
+      </g>
+
+      <g class="glass-prism">
+        <path d="M486 188L644 464H328Z" fill="url(#prism-glass)" stroke="#fff" stroke-opacity=".88" stroke-width="4" />
+        <path d="M486 188L548 355L644 464" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2" />
+        <path d="M486 188L419 353L328 464" fill="none" stroke="#e992b4" stroke-opacity=".3" stroke-width="2" />
+        <path d="M419 353H548" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2" />
+        <path d="M458 223L501 216L596 428" fill="none" stroke="#fff" stroke-opacity=".34" stroke-width="15" stroke-linecap="round" />
+      </g>
+    </g>
+
+    <g class="prism-light-rays" fill="none" stroke-linecap="round">
+      <path class="beam beam-in-glow" d="M8 342H399" stroke="#fff3f8" stroke-opacity=".35" stroke-width="26" filter="url(#prism-glow)" />
+      <path class="beam beam-in" d="M8 342H399" stroke="#fff8fb" stroke-width="4" />
+      <path class="beam beam-code-glow" d="M568 342L964 219" stroke="#ff6b9e" stroke-opacity=".28" stroke-width="25" filter="url(#prism-glow)" />
+      <path class="beam beam-code" d="M568 342L964 219" stroke="#ff7cab" stroke-width="4" />
+      <path class="beam beam-poem-glow" d="M568 342L964 467" stroke="#c3aaff" stroke-opacity=".3" stroke-width="25" filter="url(#prism-glow)" />
+      <path class="beam beam-poem" d="M568 342L964 467" stroke="#d3c1ff" stroke-width="4" />
+    </g>
+
+    <g class="beam-labels" font-family="JetBrains Mono, monospace" font-weight="700">
+      <g transform="translate(824 160)"><rect width="95" height="66" rx="20" fill="#1d1629" fill-opacity=".5" stroke="#ff91b7" stroke-opacity=".55" /><text x="47" y="43" text-anchor="middle" fill="#ffb0ca" font-size="24">&#123; &#125;</text></g>
+      <g transform="translate(835 445)"><rect width="82" height="66" rx="20" fill="#1d1629" fill-opacity=".5" stroke="#ccb7ff" stroke-opacity=".55" /><text x="41" y="45" text-anchor="middle" fill="#e1d5ff" font-family="Georgia, serif" font-size="30">诗</text></g>
+    </g>
+  </svg>
+</div>

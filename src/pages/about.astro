@@ -2,121 +2,227 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
+import FieldJournal from '../components/about/FieldJournal.astro';
+import PrismBench from '../components/about/PrismBench.astro';
+import ProcessArtifacts from '../components/about/ProcessArtifacts.astro';
+import SyntaxLoom from '../components/about/SyntaxLoom.astro';
+import WritingDesk from '../components/about/WritingDesk.astro';
+import OpenDoor from '../components/about/OpenDoor.astro';
+import '../styles/about-film.css';
 
-const pageTitle = "关于 - iqwqi's World";
-const pageDescription = "关于 iqwqi 和他的博客";
+const pageTitle = "关于 iqwqi — 一幅持续发生的自画像";
+const pageDescription = 'iqwqi 的交互式数字自画像：在逻辑、文字与好奇心之间持续生长。';
 
-const socialLinks = [
-  { name: 'GitHub', url: 'https://github.com/QwQBiG', icon: 'github', color: '#333' },
-  { name: 'Bilibili', url: 'https://space.bilibili.com/3546921071282890', icon: 'bilibili', color: '#00A1D6' },
-  { name: 'LeetCode', url: 'https://leetcode.cn/u/iqwqi/', icon: 'leetcode', color: '#FFA116' },
+const movements = [
+  { no: '01', en: 'OBSERVE', zh: '观察', text: '先让熟悉的事物重新变得陌生。看见结构，也看见缝隙。' },
+  { no: '02', en: 'MAKE', zh: '建造', text: '把模糊的念头拆成可以运行的零件，再把温度装回去。' },
+  { no: '03', en: 'KEEP', zh: '留存', text: '把走过的路折叠成文字，留给下一次出发时的自己。' },
+];
+
+const materials = [
+  ['C++', 'SYSTEM / PERFORMANCE'],
+  ['RUST', 'SAFETY / STRUCTURE'],
+  ['ASTRO', 'WEB / EXPRESSION'],
+  ['LINUX', 'TOOLS / FREEDOM'],
+  ['POETRY', 'MEMORY / FEELING'],
+];
+
+const doors = [
+  { no: 'I', title: '计算机世界', note: '算法、语言、系统与实践', href: '/cs/' },
+  { no: 'II', title: '诗与碎片', note: '那些不必运行的句子', href: '/poetry/' },
+  { no: 'III', title: '时间归档', note: '沿时间翻阅全部记录', href: '/archives/' },
 ];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} image="/ZhenXun.png" gradientBg={false}>
   <FloatingNavCard />
-  
-  <main class="flex-1 py-12">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Profile Card -->
-      <div class="bg-bg-secondary rounded-3xl p-8 md:p-12 border border-border-color text-center mb-12">
-        <img 
-          src="/ZhenXun.png" 
-          alt="iqwqi" 
-          class="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto border-4 border-primary/20 shadow-xl mb-6"
-        />
-        <h1 class="font-sans font-bold text-3xl text-text-primary mb-2">
-          iqwqi
-        </h1>
-        <p class="font-sans text-lg text-text-secondary mb-6">
-          CS Student / Code Lover
-        </p>
-        
-        <!-- Social Links -->
-        <div class="flex justify-center gap-4">
-          {socialLinks.map((link) => (
-            <a 
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="p-3 rounded-xl bg-bg-primary border border-border-color hover:border-primary/30 transition-all hover:-translate-y-1"
-              aria-label={link.name}
-            >
-              {link.icon === 'github' && (
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-              )}
-              {link.icon === 'bilibili' && (
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906l-1.174 1.12zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/>
-                </svg>
-              )}
-              {link.icon === 'leetcode' && (
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M22,14.355c0-0.742-0.564-1.346-1.26-1.346H10.676c-0.696,0-1.26,0.604-1.26,1.346s0.563,1.346,1.26,1.346H20.74C21.436,15.702,22,15.098,22,14.355z"/>
-                  <path d="M3.482,18.187l4.313,4.361C8.768,23.527,10.113,24,11.598,24c1.485,0,2.83-0.512,3.805-1.494l2.588-2.637c0.51-0.514,0.492-1.365-0.039-1.9c-0.531-0.535-1.375-0.553-1.884-0.039l-2.676,2.607c-0.462,0.467-1.102,0.662-1.809,0.662s-1.346-0.195-1.81-0.662l-4.298-4.363c-0.463-0.467-0.696-1.15-0.696-1.863c0-0.713,0.233-1.357,0.696-1.824l4.285-4.38c0.463-0.467,1.116-0.645,1.822-0.645s1.346,0.195,1.809,0.662l2.676,2.606c0.51,0.515,1.354,0.497,1.885-0.038c0.531-0.536,0.549-1.387,0.039-1.901l-2.588-2.636c-0.649-0.646-1.471-1.116-2.392-1.33l-0.034-0.007l2.447-2.503c0.512-0.514,0.494-1.366-0.037-1.901c-0.531-0.535-1.376-0.552-1.887-0.038L3.482,10.476C2.509,11.458,2,12.813,2,14.311C2,15.809,2.509,17.207,3.482,18.187z"/>
-                </svg>
-              )}
-            </a>
-          ))}
+  <main class="about-film" data-about-film>
+    <canvas class="living-paint" data-living-paint aria-hidden="true"></canvas>
+    <canvas class="memory-thread" data-memory-thread aria-hidden="true"></canvas>
+    <div class="film-surface" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="film-cursor" data-film-cursor aria-hidden="true"><i></i><b></b></div>
+    <aside class="film-score" aria-hidden="true">
+      <span>IQWQI / SELF PORTRAIT</span>
+      <i><b data-film-progress></b></i>
+      <em data-film-index>01 — 06</em>
+    </aside>
+
+    <section class="film-scene scene-prologue" data-film-scene data-scene="0" id="top">
+      <div class="film-stage">
+        <div class="depth-layer layer-atmosphere" data-depth="1" aria-hidden="true">
+          <div class="journal-dust"><i></i><i></i><i></i><i></i><i></i></div>
+          <p>PERSONAL STUDY · 2026</p>
+        </div>
+        <div class="depth-layer layer-landscape" data-depth="2" aria-hidden="true">
+          <FieldJournal />
+        </div>
+        <div class="depth-layer layer-memory" data-depth="3" aria-hidden="true">
+          <span class="memory-word">iqwqi</span><small>BETWEEN LOGIC &amp; WONDER</small>
+        </div>
+        <div class="depth-layer layer-subject" data-depth="4">
+          <p class="scene-kicker" data-reveal>一幅正在发生的自画像</p>
+          <h1 data-reveal><span>理性是骨骼，</span><span><em>感受</em>是光。</span></h1>
+          <p class="hero-copy" data-reveal>你好，我是 <strong>iqwqi</strong>。我喜欢把世界拆开，看看它为何运行；也喜欢在一切安静以后，写几句不必运行的话。</p>
+        </div>
+        <div class="depth-layer layer-foreground" data-depth="5" aria-hidden="true">
+          <span class="folio">NO. 001</span><span class="coordinates">31°N / ONLINE / GROWING</span>
+          <a href="#premise" tabindex="-1">SCROLL TO ENTER <i>↓</i></a>
         </div>
       </div>
+    </section>
 
-      <!-- About Content -->
-      <div class="prose prose-lg max-w-none">
-        <h2 class="font-sans font-bold text-2xl text-text-primary mb-4">关于我</h2>
-        <p class="text-text-secondary leading-relaxed mb-6">
-          Hi! I am <strong>iqwqi</strong>， a student of computer science.
-          This blog is where I share my learning notes and technical insights.
-        </p>
-        
-        <h2 class="font-sans font-bold text-2xl text-text-primary mb-4">关于博客</h2>
-        <p class="text-text-secondary leading-relaxed mb-6">
-          This blog is built with <strong>Astro</strong> and deployed on <strong>GitHub Pages</strong>.
-          I mainly share the following topics:
-        </p>
-        
-        <ul class="space-y-2 mb-6">
-          <li class="flex items-center gap-2 text-text-secondary">
-            <span class="w-2 h-2 bg-primary rounded-full"></span>
-            Algorithm and Data Structures
-          </li>
-          <li class="flex items-center gap-2 text-text-secondary">
-            <span class="w-2 h-2 bg-primary rounded-full"></span>
-            Programming Language Learning Notes (C++/Rust……)
-          </li>
-          <li class="flex items-center gap-2 text-text-secondary">
-            <span class="w-2 h-2 bg-primary rounded-full"></span>
-            System Administration and Development Tools
-          </li>
-          <li class="flex items-center gap-2 text-text-secondary">
-            <span class="w-2 h-2 bg-primary rounded-full"></span>
-            Embedded Development
-          </li>
-        </ul>
-        
-        <h2 class="font-sans font-bold text-2xl text-text-primary mb-4">联系方式</h2>
-        <p class="text-text-secondary leading-relaxed">
-          If you have any questions or suggestions, please contact me via the following methods:
-        </p>
-        <ul class="space-y-2 mt-4">
-          <li class="flex items-center gap-2 text-text-secondary">
-            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-            GitHub: <a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer">@QwQBiG</a>
-          </li>
-          <li class="flex items-center gap-2 text-text-secondary">
-            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-            </svg>
-            Bilibili: <a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer">QwQBiG</a>
-          </li>
-        </ul>
+    <section class="film-scene scene-premise" data-film-scene data-scene="1" id="premise">
+      <div class="film-stage">
+        <div class="depth-layer layer-atmosphere" data-depth="1" aria-hidden="true">
+          <span class="light-seam"></span><p>00 / THE PREMISE</p>
+        </div>
+        <div class="depth-layer layer-landscape" data-depth="2" aria-hidden="true">
+          <PrismBench />
+        </div>
+        <div class="depth-layer layer-memory" data-depth="3" aria-hidden="true">
+          <span class="ampersand">＆</span><small>ONE MIND · TWO LANGUAGES</small>
+        </div>
+        <div class="depth-layer layer-subject" data-depth="4">
+          <p class="scene-kicker" data-reveal>我所在的位置</p>
+          <blockquote data-reveal>
+            <span>我不在代码与诗之间。</span>
+            <em>它们本来就是同一种好奇心，</em>
+            <span>只是使用了不同的语法。</span>
+          </blockquote>
+        </div>
+        <div class="depth-layer layer-foreground" data-depth="5" aria-hidden="true">
+          <span class="edge-note">A THOUGHT BECOMES FORM</span><i class="moving-glint"></i>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="film-scene scene-method" data-film-scene data-scene="2" id="method">
+      <div class="film-stage">
+        <div class="depth-layer layer-atmosphere" data-depth="1" aria-hidden="true">
+          <div class="process-constellation"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>01 / HOW I MOVE</p>
+        </div>
+        <div class="depth-layer layer-landscape" data-depth="2" aria-hidden="true">
+          <ProcessArtifacts />
+        </div>
+        <div class="depth-layer layer-memory" data-depth="3" aria-hidden="true">
+          <span class="memory-word">PROCESS</span><small>NO FIXED ROUTE</small>
+        </div>
+        <div class="depth-layer layer-subject" data-depth="4">
+          <header class="method-heading" data-reveal>
+            <p class="scene-kicker">一个念头，如何获得形状</p>
+            <h2>靠近。拆解。<em>留下。</em></h2>
+          </header>
+          <div class="movement-sequence">
+            {movements.map((movement, index) => (
+              <article data-reveal data-object-trigger={index} tabindex="0">
+                <span>{movement.no}</span><small>{movement.en}</small>
+                <h3>{movement.zh}</h3><p>{movement.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div class="depth-layer layer-foreground" data-depth="5" aria-hidden="true">
+          <span class="method-rule"></span><p>APPROACH → BREAK → RECOMPOSE</p>
+          <div class="process-near-dust"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="film-scene scene-materials" data-film-scene data-scene="3" id="materials">
+      <div class="film-stage">
+        <div class="depth-layer layer-atmosphere" data-depth="1" aria-hidden="true">
+          <div class="code-rain"><i>010</i><i>7F</i><i>诗</i><i>101</i><i>&#123; &#125;</i></div><p>02 / MATERIALS</p>
+        </div>
+        <div class="depth-layer layer-landscape" data-depth="2" aria-hidden="true">
+          <SyntaxLoom />
+        </div>
+        <div class="depth-layer layer-memory" data-depth="3" aria-hidden="true">
+          <span class="memory-word">MATTER</span><small>THE THINGS I THINK WITH</small>
+        </div>
+        <div class="depth-layer layer-subject" data-depth="4">
+          <header class="materials-heading" data-reveal>
+            <p class="scene-kicker">我用什么塑造现在</p>
+            <h2>工具会过时，<em>判断</em>留下来。</h2>
+          </header>
+          <ol class="material-ledger">
+            {materials.map(([name, note], index) => (
+              <li data-reveal data-material-trigger={index} tabindex="0"><span>0{index + 1}</span><strong>{name}</strong><small>{note}</small></li>
+            ))}
+          </ol>
+        </div>
+        <div class="depth-layer layer-foreground" data-depth="5" aria-hidden="true">
+          <span class="scan-beam"></span><p>LANGUAGE IS A LENS, NOT A CAGE.</p>
+          <div class="syntax-near"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="film-scene scene-words" data-film-scene data-scene="4" id="words">
+      <div class="film-stage">
+        <div class="depth-layer layer-atmosphere" data-depth="1" aria-hidden="true">
+          <span class="paper-moon"></span><div class="ink-motes"><i></i><i></i><i></i></div><p>03 / AFTER LOGIC</p>
+        </div>
+        <div class="depth-layer layer-landscape" data-depth="2" aria-hidden="true">
+          <WritingDesk />
+        </div>
+        <div class="depth-layer layer-memory" data-depth="3" aria-hidden="true">
+          <span class="memory-word">未编译</span><small>WORDS THAT DO NOT NEED TO RUN</small>
+        </div>
+        <div class="depth-layer layer-subject" data-depth="4">
+          <p class="scene-kicker" data-reveal>当屏幕安静下来</p>
+          <div class="poem" data-reveal>
+            <p>有些话不解决问题，</p>
+            <p>只负责在夜里发一点光。</p>
+            <p>我把它们写下，</p>
+            <p><em>免得自己走得太快。</em></p>
+          </div>
+          <a class="text-link" href="/poetry/" data-reveal>读诗与碎片 <span>↗</span></a>
+        </div>
+        <div class="depth-layer layer-foreground" data-depth="5" aria-hidden="true">
+          <span class="rain-streak streak-a"></span><span class="rain-streak streak-b"></span>
+          <div class="loose-words"><i>风</i><i>光</i><i>未完成</i><i>记忆</i></div>
+          <p>A SOFT PLACE FOR UNFINISHED THOUGHTS</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="film-scene scene-epilogue" data-film-scene data-scene="5" id="epilogue">
+      <div class="film-stage">
+        <div class="depth-layer layer-atmosphere" data-depth="1" aria-hidden="true">
+          <div class="dawn-motes"><i></i><i></i><i></i><i></i><i></i></div><p>04 / CONTINUE</p>
+        </div>
+        <div class="depth-layer layer-landscape" data-depth="2" aria-hidden="true">
+          <OpenDoor />
+        </div>
+        <div class="depth-layer layer-memory" data-depth="3" aria-hidden="true">
+          <span class="memory-word">NEXT</span><small>THE PORTRAIT REMAINS UNFINISHED</small>
+        </div>
+        <div class="depth-layer layer-subject" data-depth="4">
+          <header class="epilogue-heading" data-reveal>
+            <p class="scene-kicker">自画像没有完成时</p>
+            <h2>继续认识，<br /><em>继续成为。</em></h2>
+          </header>
+          <nav class="doorways" aria-label="继续浏览">
+            {doors.map((door, index) => (
+              <a href={door.href} data-reveal data-door-trigger={index}>
+                <span>{door.no}</span><strong>{door.title}</strong><small>{door.note}</small><i>↗</i>
+              </a>
+            ))}
+          </nav>
+        </div>
+        <div class="depth-layer layer-foreground" data-depth="5">
+          <div class="signature" data-reveal>
+            <small>WRITTEN, BUILT &amp; KEPT BY</small><strong>iqwqi</strong>
+            <p><a href="https://github.com/QwQBiG" target="_blank" rel="noopener noreferrer">GitHub</a><i></i><a href="https://space.bilibili.com/3546921071282890" target="_blank" rel="noopener noreferrer">Bilibili</a><i></i><a href="https://leetcode.cn/u/iqwqi/" target="_blank" rel="noopener noreferrer">LeetCode</a></p>
+          </div>
+          <a class="return-top" href="#top">RETURN TO LIGHT ↑</a>
+        </div>
+      </div>
+    </section>
   </main>
-  
   <Footer />
 </Layout>
+
+<script>
+  import '../scripts/about-film';
+</script>

@@ -8,11 +8,11 @@ const socialLinks = [
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="mt-auto bg-bg-secondary border-t border-border-color transition-colors duration-300">
+<footer class="site-footer mt-auto bg-bg-secondary border-t border-border-color transition-colors duration-300">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
       <!-- Copyright -->
-      <div class="text-center md:text-left">
+      <div class="site-footer-copy text-center md:text-left">
         <p class="font-sans text-sm text-text-secondary">
           © {currentYear} <span class="text-primary font-medium">QwQBiG</span>. All rights reserved.
         </p>
@@ -22,7 +22,7 @@ const currentYear = new Date().getFullYear();
       </div>
       
       <!-- Social Links -->
-      <div class="flex items-center gap-3">
+      <div class="site-footer-social flex items-center gap-3">
         {socialLinks.map((link) => (
           <a
             href={link.url}
