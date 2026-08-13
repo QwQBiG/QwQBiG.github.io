@@ -1,0 +1,31 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  canonicalURL?: string;
+}
+
+const {
+  title,
+  description = "QwQBiG's World",
+  canonicalURL = Astro.url.pathname,
+} = Astro.props;
+const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
+---
+
+<!doctype html>
+<html lang="zh-cn" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={siteURL} />
+    <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
+    <link rel="stylesheet" href="/styles/global.css" />
+  </head>
+  <body class="min-h-[100dvh] bg-bg-primary text-text-primary">
+    <slot />
+    <script src="/js/vanilla-tilt.js" defer></script>
+  </body>
+</html>

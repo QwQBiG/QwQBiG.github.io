@@ -1,71 +1,212 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import Layout from '../layouts/Layout.astro';
+import Layout from '../layouts/LightLayout.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
-import PhotoWall from '../components/3d/PhotoWall.tsx';
-import type { PhotoItem } from '../types/photo';
+
+interface GalleryPhoto {
+  alt: string;
+  width: number;
+  height: number;
+  thumb: string;
+  preview: string;
+}
 
 const pageTitle = "画廊 - QwQBiG's World";
-const pageDescription = "3D 散落照片墙 - 拖拽探索，点击查看大图";
-
-// 自动扫描 public/gallery 目录，直接丢图片进去即可
-const galleryDir = path.join(process.cwd(), 'public', 'gallery');
-const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
-
-const photos: PhotoItem[] = fs.readdirSync(galleryDir)
-  .filter(file => imageExtensions.includes(path.extname(file).toLowerCase()))
-  .map((file, index) => {
-    const halfSizeFiles = ['ZhenXun.jpg', 'AIcard.png'];
-    return {
-      id: String(index + 1),
-      src: `/gallery/${file}`,
-      alt: path.basename(file, path.extname(file)),
-      scale: halfSizeFiles.includes(file) ? 0.5 : undefined,
-    };
-  });
+const pageDescription = "散落照片墙 - 拖拽探索，点击查看大图";
+const manifestPath = path.join(process.cwd(), 'public', 'generated', 'gallery', 'manifest.json');
+const photos = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as GalleryPhoto[];
+const positions = [
+  { x: '-38vw', y: '-21vh', r: '-8deg' },
+  { x: '-14vw', y: '20vh', r: '7deg' },
+  { x: '12vw', y: '-19vh', r: '5deg' },
+  { x: '37vw', y: '15vh', r: '-6deg' },
+  { x: '2vw', y: '8vh', r: '-2deg' },
+];
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
-  {photos.filter(p => /\.(png|jpe?g)$/i.test(p.src)).map(p => (
-    <link rel="preload" href={p.src} as="image" />
-  ))}
+<Layout title={pageTitle} description={pageDescription} articleAssets={false}>
   <FloatingNavCard />
-
-  <main class="flex-1 h-screen relative overflow-hidden">
-    {/* 渐变背景 */}
-    <div class="absolute inset-0 gradient-bg -z-10"></div>
-
-    {/* 3D 照片墙组件 - 全屏显示 */}
-    <div class="h-full">
-      <PhotoWall photos={photos} client:load />
+  <main class="gallery-shell" data-gallery>
+    <div class="gallery-bg" aria-hidden="true"></div>
+    <div class="gallery-intro"><span>drag · arrange · remember</span><h1>Gallery</h1></div>
+    <div class="photo-wall" aria-label="照片墙">
+      {photos.map((photo, index) => {
+        const position = positions[index % positions.length];
+        return (
+          <button
+            class:list={['photo-card', photo.height > photo.width && 'is-portrait']}
+            type="button"
+            data-photo
+            data-preview={photo.preview}
+            data-alt={photo.alt}
+            style={`--x:${position.x};--y:${position.y};--r:${position.r};--z:${index + 1}`}
+            aria-label={`查看 ${photo.alt}`}
+          >
+            <span class="photo-frame">
+              <img
+                src={photo.thumb}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                loading={index < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+                fetchpriority={index === 0 ? 'high' : 'auto'}
+              />
+            </span>
+          </button>
+        );
+      })}
     </div>
+    <dialog class="photo-preview" data-preview-dialog>
+      <button type="button" class="preview-close" data-preview-close aria-label="关闭预览">×</button>
+      <div class="preview-frame">
+        <img data-preview-image alt="" />
+        <span class="preview-loading" data-preview-loading>loading high-resolution image…</span>
+      </div>
+    </dialog>
   </main>
 </Layout>
 
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-preview-dialog]');
+  const previewImage = dialog?.querySelector<HTMLImageElement>('[data-preview-image]');
+  const loadingLabel = dialog?.querySelector<HTMLElement>('[data-preview-loading]');
+  let activeCard: HTMLElement | null = null;
+  let highestZ = 20;
+
+  function openPreview(card: HTMLElement) {
+    if (!dialog || !previewImage || !loadingLabel) return;
+    previewImage.src = card.querySelector<HTMLImageElement>('img')?.currentSrc || '';
+    previewImage.alt = card.dataset.alt || '';
+    loadingLabel.hidden = false;
+    dialog.showModal();
+    const highResolution = new Image();
+    highResolution.decoding = 'async';
+    highResolution.onload = async () => {
+      try { await highResolution.decode(); } catch {}
+      previewImage.src = highResolution.src;
+      loadingLabel.hidden = true;
+    };
+    highResolution.src = card.dataset.preview || '';
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-photo]').forEach((card) => {
+    let pointerId = 0;
+    let startX = 0;
+    let startY = 0;
+    let originX = 0;
+    let originY = 0;
+    let moved = false;
+
+    card.addEventListener('pointerdown', (event) => {
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      startY = event.clientY;
+      const matrix = new DOMMatrixReadOnly(getComputedStyle(card).transform);
+      originX = matrix.m41;
+      originY = matrix.m42;
+      moved = false;
+      activeCard = card;
+      card.style.zIndex = String(++highestZ);
+      card.classList.add('is-dragging');
+      card.setPointerCapture(pointerId);
+    });
+    card.addEventListener('pointermove', (event) => {
+      if (activeCard !== card || event.pointerId !== pointerId) return;
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      moved ||= Math.hypot(dx, dy) > 8;
+      card.style.transform = `translate3d(${originX + dx}px, ${originY + dy}px, 0) rotate(0deg) scale(1.04)`;
+    });
+    card.addEventListener('pointerup', (event) => {
+      if (event.pointerId !== pointerId) return;
+      card.releasePointerCapture(pointerId);
+      card.classList.remove('is-dragging');
+      const matrix = new DOMMatrixReadOnly(getComputedStyle(card).transform);
+      card.style.setProperty('--x', `${matrix.m41}px`);
+      card.style.setProperty('--y', `${matrix.m42}px`);
+      card.style.setProperty('--r', '0deg');
+      card.style.transform = '';
+      activeCard = null;
+      if (!moved) openPreview(card);
+    });
+    card.addEventListener('pointercancel', () => {
+      card.classList.remove('is-dragging');
+      card.style.transform = '';
+      activeCard = null;
+    });
+  });
+
+  dialog?.querySelector('[data-preview-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+  dialog?.addEventListener('close', () => { if (previewImage) previewImage.src = ''; });
+</script>
+
 <style>
-  /* 手写体字体 */
-  .font-handwriting {
-    font-family: 'Caveat', 'Dancing Script', cursive;
+  .gallery-shell { position: relative; min-height: 100dvh; overflow: hidden; isolation: isolate; }
+  .gallery-bg {
+    position: absolute; inset: 0; z-index: -2;
+    background: radial-gradient(circle at 15% 10%, rgba(255,255,255,.95), transparent 28%),
+      radial-gradient(circle at 85% 75%, rgba(200,181,255,.35), transparent 34%),
+      linear-gradient(135deg, #fff8fb 0%, #f7efff 52%, #edf5ff 100%);
   }
-
-  /* 确保照片墙容器正确显示 */
-  :global(.photo-wall-container) {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  .gallery-bg::after {
+    content: ""; position: absolute; inset: 0; opacity: .28;
+    background-image: radial-gradient(rgba(109,77,128,.28) .7px, transparent .7px);
+    background-size: 18px 18px;
   }
-
-  /* 响应式调整 */
+  .gallery-intro {
+    position: absolute; left: clamp(1.5rem, 5vw, 5rem); bottom: clamp(1.5rem, 5vh, 4rem);
+    z-index: 30; pointer-events: none; color: rgba(67,49,75,.62);
+  }
+  .gallery-intro span { font: 600 .65rem/1 system-ui, sans-serif; letter-spacing: .24em; text-transform: uppercase; }
+  .gallery-intro h1 { margin: .25rem 0 0; font: italic clamp(2.8rem, 8vw, 7rem)/.9 Georgia, serif; color: rgba(78,54,90,.78); }
+  .photo-wall { position: absolute; inset: 0; }
+  .photo-card {
+    position: absolute; left: 50%; top: 50%; z-index: var(--z); width: min(24vw, 360px);
+    padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; user-select: none;
+    transform: translate3d(var(--x), var(--y), 0) rotate(var(--r));
+    transition: filter .18s ease, transform .28s cubic-bezier(.2,.8,.2,1); will-change: transform;
+  }
+  .photo-card.is-portrait { width: min(15vw, 210px); }
+  .photo-card:hover { filter: brightness(1.025); transform: translate3d(var(--x), calc(var(--y) - 8px), 0) rotate(var(--r)) scale(1.025); }
+  .photo-card.is-dragging { cursor: grabbing; transition: none; }
+  .photo-frame {
+    display: block; padding: 5px; background: #fff; border-radius: 3px;
+    box-shadow: 0 18px 45px rgba(53,37,63,.23), 0 5px 14px rgba(53,37,63,.14);
+  }
+  .photo-frame img {
+    display: block; width: 100%; height: auto; max-height: 42vh; object-fit: cover;
+    pointer-events: none; background: #f4edf7;
+  }
+  .photo-preview { width: min(92vw, 1200px); max-width: none; padding: 0; border: 0; background: transparent; overflow: visible; }
+  .photo-preview::backdrop { background: rgba(24,17,30,.78); backdrop-filter: blur(10px); }
+  .preview-frame {
+    position: relative; display: grid; place-items: center; min-height: 35vh; padding: 8px;
+    border-radius: 5px; background: #fff; box-shadow: 0 35px 90px rgba(0,0,0,.48);
+  }
+  .preview-frame img { display: block; max-width: calc(92vw - 16px); max-height: 86vh; object-fit: contain; }
+  .preview-loading {
+    position: absolute; right: 1rem; bottom: 1rem; padding: .45rem .7rem; border-radius: 999px;
+    color: #fff; background: rgba(39,29,45,.72); font: 600 .65rem/1 system-ui, sans-serif; letter-spacing: .08em;
+  }
+  .preview-close {
+    position: absolute; right: -.6rem; top: -.8rem; z-index: 2; width: 2.5rem; height: 2.5rem;
+    border: 1px solid rgba(255,255,255,.5); border-radius: 999px; color: #fff;
+    background: rgba(35,25,42,.78); font-size: 1.8rem; line-height: 1; cursor: pointer;
+  }
   @media (max-width: 768px) {
-    :global(.photo-card) {
-      width: 150px !important;
-    }
+    .photo-card { width: min(56vw, 250px); }
+    .photo-card.is-portrait { width: min(36vw, 170px); }
+    .photo-card:nth-child(1) { --x: -47vw !important; --y: -27vh !important; }
+    .photo-card:nth-child(2) { --x: -33vw !important; --y: 8vh !important; }
+    .photo-card:nth-child(3) { --x: -5vw !important; --y: -8vh !important; }
+    .photo-card:nth-child(4) { --x: 8vw !important; --y: 23vh !important; }
+    .photo-card:nth-child(5) { --x: 8vw !important; --y: -34vh !important; }
   }
-
-  @media (max-width: 480px) {
-    :global(.photo-card) {
-      width: 120px !important;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .photo-card { transition: none; }
+    .photo-preview::backdrop { backdrop-filter: none; }
   }
 </style>

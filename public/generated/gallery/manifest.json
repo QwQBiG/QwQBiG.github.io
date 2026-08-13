@@ -1,0 +1,42 @@
+[
+  {
+    "file": "2025-08.png",
+    "alt": "2025-08",
+    "width": 2560,
+    "height": 1600,
+    "thumb": "/generated/gallery/2025-08-720.webp",
+    "preview": "/generated/gallery/2025-08-1920.webp"
+  },
+  {
+    "file": "AIcard.png",
+    "alt": "AIcard",
+    "width": 564,
+    "height": 750,
+    "thumb": "/generated/gallery/AIcard-720.webp",
+    "preview": "/generated/gallery/AIcard-1920.webp"
+  },
+  {
+    "file": "hahaha.png",
+    "alt": "hahaha",
+    "width": 1920,
+    "height": 1080,
+    "thumb": "/generated/gallery/hahaha-720.webp",
+    "preview": "/generated/gallery/hahaha-1920.webp"
+  },
+  {
+    "file": "Kafka.png",
+    "alt": "Kafka",
+    "width": 3840,
+    "height": 2160,
+    "thumb": "/generated/gallery/Kafka-720.webp",
+    "preview": "/generated/gallery/Kafka-1920.webp"
+  },
+  {
+    "file": "ZhenXun.jpg",
+    "alt": "ZhenXun",
+    "width": 403,
+    "height": 403,
+    "thumb": "/generated/gallery/ZhenXun-720.webp",
+    "preview": "/generated/gallery/ZhenXun-1920.webp"
+  }
+]
