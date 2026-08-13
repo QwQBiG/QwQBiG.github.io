@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { PhotoItem, PhotoState } from '../types/photo';
+import type { PhotoItem, PhotoState } from '../../types/photo';
 
 interface PhotoWallProps {
   photos: PhotoItem[];
@@ -245,7 +245,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
                   alt={selectedPhoto.alt}
                   className="w-full h-auto object-contain pointer-events-none"
                   style={{
-                    imageRendering: 'high-quality',
+                    imageRendering: 'auto',
                     maxHeight: isMobile ? '80vh' : '90vh',
                   }}
                 />
@@ -419,7 +419,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
             alt={photo.alt}
             className="w-full h-auto object-cover pointer-events-none"
             style={{
-              imageRendering: 'high-quality',
+              imageRendering: 'auto',
             }}
             loading="eager"
             decoding="async"

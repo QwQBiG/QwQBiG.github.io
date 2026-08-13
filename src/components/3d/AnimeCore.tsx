@@ -32,7 +32,7 @@ function CharacterPlane() {
     loader.minFilter = THREE.LinearFilter;
     loader.magFilter = THREE.LinearFilter;
     loader.anisotropy = 8; // 降低各向异性过滤以提升性能
-  });
+  }) as THREE.Texture<HTMLImageElement>;
 
   // 获取图片原始宽高比
   const imageAspect = texture.image ? texture.image.width / texture.image.height : 1;
