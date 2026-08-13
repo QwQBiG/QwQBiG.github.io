@@ -286,7 +286,7 @@ npm run preview
 
 ## 📄 许可证
 
-本项目采用 [MIT](LICENSE) 许可证开源。
+本站源代码采用 [MIT](LICENSE) 许可证；文章、图片与音频不包含在内。
 
 ---
 
