@@ -9,6 +9,8 @@ interface GalleryPhoto {
   width: number;
   height: number;
   thumb: string;
+  thumb2x: string;
+  placeholder: string;
   preview: string;
 }
 
@@ -43,13 +45,15 @@ const positions = [
             style={`--x:${position.x};--y:${position.y};--r:${position.r};--z:${index + 1}`}
             aria-label={`查看 ${photo.alt}`}
           >
-            <span class="photo-frame">
+            <span class="photo-frame" style={`background-image:url(${photo.placeholder})`}>
               <img
                 src={photo.thumb}
+                srcset={`${photo.thumb} 360w, ${photo.thumb2x} 720w`}
+                sizes="(max-width: 768px) 56vw, min(24vw, 360px)"
                 alt={photo.alt}
                 width={photo.width}
                 height={photo.height}
-                loading={index < 3 ? 'eager' : 'lazy'}
+                loading="eager"
                 decoding="async"
                 fetchpriority={index === 0 ? 'high' : 'auto'}
               />
@@ -143,7 +147,7 @@ const positions = [
   dialog?.addEventListener('close', () => { if (previewImage) previewImage.src = ''; });
 </script>
 
-<style>
+<style is:inline>
   .gallery-shell { position: relative; min-height: 100dvh; overflow: hidden; isolation: isolate; }
   .gallery-bg {
     position: absolute; inset: 0; z-index: -2;
@@ -173,12 +177,13 @@ const positions = [
   .photo-card:hover { filter: brightness(1.025); transform: translate3d(var(--x), calc(var(--y) - 8px), 0) rotate(var(--r)) scale(1.025); }
   .photo-card.is-dragging { cursor: grabbing; transition: none; }
   .photo-frame {
-    display: block; padding: 5px; background: #fff; border-radius: 3px;
+    display: block; padding: 5px; background-color: #fff; background-position: center;
+    background-repeat: no-repeat; background-size: cover; border-radius: 3px;
     box-shadow: 0 18px 45px rgba(53,37,63,.23), 0 5px 14px rgba(53,37,63,.14);
   }
   .photo-frame img {
     display: block; width: 100%; height: auto; max-height: 42vh; object-fit: cover;
-    pointer-events: none; background: #f4edf7;
+    pointer-events: none; background: transparent;
   }
   .photo-preview { width: min(92vw, 1200px); max-width: none; padding: 0; border: 0; background: transparent; overflow: visible; }
   .photo-preview::backdrop { background: rgba(24,17,30,.78); backdrop-filter: blur(10px); }

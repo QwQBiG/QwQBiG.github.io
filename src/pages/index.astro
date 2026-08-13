@@ -3,6 +3,7 @@ import GlassCard from '../components/ui/GlassCard.astro';
 import ClockWidget from '../components/widgets/ClockWidget.astro';
 import CalendarWidget from '../components/widgets/CalendarWidget.astro';
 import MusicWidget from '../components/widgets/MusicWidget.astro';
+import AnimeCore from '../components/3d/AnimeCore';
 import { getCollection } from 'astro:content';
 
 // Get all posts from CS collection
@@ -71,8 +72,32 @@ const yearsActive = new Date().getFullYear() - 2024;
 
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
   <link rel="preload" href="/generated/site/character.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="/fonts/quicksand-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <style>
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('/fonts/quicksand-latin.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cormorant Garamond';
+      src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Cormorant Garamond';
+      src: url('/fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
+      font-style: italic;
+      font-weight: 400 500;
+      font-display: swap;
+    }
     * {
       margin: 0;
       padding: 0;
@@ -80,7 +105,7 @@ const yearsActive = new Date().getFullYear() - 2024;
     }
     
     body {
-      font-family: ui-rounded, 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
       /* 使用 dvh 单位避免移动端地址栏影响 */
       min-height: 100dvh;
       min-height: 100vh; /* 回退 */
@@ -184,12 +209,24 @@ const yearsActive = new Date().getFullYear() - 2024;
     }
     
     .character-visual {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       padding: 1.15rem 2.6rem;
       object-fit: contain;
       filter: drop-shadow(0 14px 24px rgba(119, 72, 152, 0.24));
       transform: translateZ(0);
+      transition: opacity .35s ease;
+    }
+
+    .anime-core-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    :global(html.anime-core-ready) .character-fallback {
+      opacity: 0;
     }
     @keyframes breathe {
       0%, 100% {
@@ -759,7 +796,7 @@ const yearsActive = new Date().getFullYear() - 2024;
 
         <!-- 图片卡片 - 移动端第8，桌面端中上 -->
         <div class="order-8 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-center [@media(min-width:924px)]:self-start [@media(min-width:924px)]:translate-y-4">
-          <a href="/gallery/" class="block">
+          <a href="/gallery/" class="block" data-astro-prefetch="hover">
             <GlassCard padding="small" tilt={true} class="w-full max-w-[60vw] [@media(min-width:924px)]:w-64 rounded-2xl">
               <div class="relative overflow-hidden rounded-2xl">
                 <img
@@ -915,10 +952,13 @@ const yearsActive = new Date().getFullYear() - 2024;
                 alt="动漫角色"
                 width="213"
                 height="559"
-                class="character-visual"
+                class="character-visual character-fallback"
                 decoding="async"
                 fetchpriority="high"
               />
+              <div class="anime-core-layer" aria-hidden="true">
+                <AnimeCore client:idle />
+              </div>
             </div>
 
             <!-- 环形文字 - 优雅的3D悬浮动效 + 交互 -->

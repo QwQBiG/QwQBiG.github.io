@@ -4,7 +4,9 @@
     "alt": "2025-08",
     "width": 2560,
     "height": 1600,
-    "thumb": "/generated/gallery/2025-08-720.webp",
+    "thumb": "/generated/gallery/2025-08-360.webp",
+    "thumb2x": "/generated/gallery/2025-08-720.webp",
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQBACdASoYAA8APwFqrE8rJiQiMAgBYCAJZgCdIIjDFt05G7SnL2YMgAD9azL+g4EbCa80wNbuu3+GXEuUC7d1duV4amL/N4LTHWiAxNDsA/SVgto5lcZoQN/ZSkRYRiLDpegA",
     "preview": "/generated/gallery/2025-08-1920.webp"
   },
   {
@@ -12,7 +14,9 @@
     "alt": "AIcard",
     "width": 564,
     "height": 750,
-    "thumb": "/generated/gallery/AIcard-720.webp",
+    "thumb": "/generated/gallery/AIcard-360.webp",
+    "thumb2x": "/generated/gallery/AIcard-720.webp",
+    "placeholder": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAADwBACdASoSABgAPwFys1GrJqSiqAqpYCAJZgCdMs2v/gHCVeUCdYgSMYC41tekcKAA+2TjJpR6YFE1cqy34ABCfrMW8TrjhPL7LUR6UL6AXlSK3wsA3ornZ7R2Ln6QdKpQvL16RBfVEmrePyNy1NWRAgg+6yQjM9j4HV3vKNws8BWkCOAAAA==",
     "preview": "/generated/gallery/AIcard-1920.webp"
   },
   {
@@ -20,7 +24,9 @@
     "alt": "hahaha",
     "width": 1920,
     "height": 1080,
-    "thumb": "/generated/gallery/hahaha-720.webp",
+    "thumb": "/generated/gallery/hahaha-360.webp",
+    "thumb2x": "/generated/gallery/hahaha-720.webp",
+    "placeholder": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAACQAwCdASoYAA4ALsGAwGAjqysrCwDAS2AE6AId7TqnJgUvHhSwAP7zid23vx7h6sZr6bUHy+IMuR8vzHlgMOLyAzT43sPQKRShBgdnMDaWMehdiW9D6AoRIxzB0SnRVbm8AAAA",
     "preview": "/generated/gallery/hahaha-1920.webp"
   },
   {
@@ -28,7 +34,9 @@
     "alt": "Kafka",
     "width": 3840,
     "height": 2160,
-    "thumb": "/generated/gallery/Kafka-720.webp",
+    "thumb": "/generated/gallery/Kafka-360.webp",
+    "thumb2x": "/generated/gallery/Kafka-720.webp",
+    "placeholder": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAABQBACdASoYAA4APwFqrU6rJiQiMAgBYCAJQBWGUABbJ9ZNoIPuFniAQNgAAP7L4kkBUTnjHOJ0Zzq8x+o3HJVENlsImussmSTFOJO/Uva69qVN8RwM1x25cKKtsYVdwTVtxgY4nzfZZKOkLUjCAAAA",
     "preview": "/generated/gallery/Kafka-1920.webp"
   },
   {
@@ -36,7 +44,9 @@
     "alt": "ZhenXun",
     "width": 403,
     "height": 403,
-    "thumb": "/generated/gallery/ZhenXun-720.webp",
+    "thumb": "/generated/gallery/ZhenXun-360.webp",
+    "thumb2x": "/generated/gallery/ZhenXun-720.webp",
+    "placeholder": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAABQBACdASoYABgAPvVmqU6qpaOiN/VYAVAeiUAVgAG7G7dZI42O3uQe/8W2AP7rEu4revMQ3KWmFPN++xdrY2FhUccEwaXiNTUHk78/wAC5KTXHWzU2A2ZPo5Qa30XWioPcYVqAEyWAAA==",
     "preview": "/generated/gallery/ZhenXun-1920.webp"
   }
 ]
