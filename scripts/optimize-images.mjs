@@ -19,25 +19,15 @@ async function optimizeGallery() {
     const sourcePath = path.join(gallerySourceDir, file);
     const metadata = await sharp(sourcePath).metadata();
     const stem = path.parse(file).name.replace(/[^a-zA-Z0-9_-]+/g, '-');
-    const thumbName = `${stem}-360.webp`;
-    const thumb2xName = `${stem}-720.webp`;
+    const thumbName = `${stem}-720.webp`;
     const previewName = `${stem}-1920.webp`;
 
     const pipeline = sharp(sourcePath).rotate();
-    const [placeholder] = await Promise.all([
-      pipeline.clone()
-        .resize({ width: 24, height: 24, fit: 'inside', withoutEnlargement: true })
-        .blur(0.6)
-        .webp({ quality: 35, effort: 3 })
-        .toBuffer(),
-      pipeline.clone()
-        .resize({ width: 360, height: 360, fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: 74, effort: 5, smartSubsample: true })
-        .toFile(path.join(galleryOutputDir, thumbName)),
+    await Promise.all([
       pipeline.clone()
         .resize({ width: 720, height: 720, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 78, effort: 5, smartSubsample: true })
-        .toFile(path.join(galleryOutputDir, thumb2xName)),
+        .toFile(path.join(galleryOutputDir, thumbName)),
       pipeline.clone()
         .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 84, effort: 5, smartSubsample: true })
@@ -49,9 +39,7 @@ async function optimizeGallery() {
       alt: path.parse(file).name,
       width: metadata.width,
       height: metadata.height,
-      thumb: `/generated/gallery/${thumbName}`,
-      thumb2x: `/generated/gallery/${thumb2xName}`,
-      placeholder: `data:image/webp;base64,${placeholder.toString('base64')}`,
+      thumb2x: `/generated/gallery/${thumbName}`,
       preview: `/generated/gallery/${previewName}`,
     });
   }

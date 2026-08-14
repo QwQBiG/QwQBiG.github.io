@@ -26,20 +26,14 @@ function CharacterPlane() {
   const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 使用首页已预载的轻量贴图；静态首帧和 3D 共用同一份资源。
+  // 保持原贴图与过滤参数，只移除未使用的 Drei 包装层。
   const texture = useLoader(
     THREE.TextureLoader,
-    '/generated/site/character.webp',
+    '/images/character.png',
   ) as THREE.Texture<HTMLImageElement>;
-
-  useEffect(() => {
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.anisotropy = 4;
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.needsUpdate = true;
-    document.documentElement.classList.add('anime-core-ready');
-  }, [texture]);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.anisotropy = 8;
 
   // 获取图片原始宽高比
   const imageAspect = texture.image ? texture.image.width / texture.image.height : 1;

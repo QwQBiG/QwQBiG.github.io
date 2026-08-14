@@ -24,7 +24,7 @@ const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
     <link rel="stylesheet" href="/styles/global.css" />
   </head>
-  <body class="min-h-[100dvh] bg-bg-primary text-text-primary">
+  <body class="site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 gradient-bg">
     <slot />
     <script src="/js/vanilla-tilt.js" defer></script>
   </body>
