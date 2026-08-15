@@ -29,7 +29,7 @@ function CharacterPlane() {
   // 保持原贴图与过滤参数，只移除未使用的 Drei 包装层。
   const texture = useLoader(
     THREE.TextureLoader,
-    '/images/character.png',
+    '/generated/site/character.webp',
   ) as THREE.Texture<HTMLImageElement>;
   texture.minFilter = THREE.LinearFilter;
   texture.magFilter = THREE.LinearFilter;

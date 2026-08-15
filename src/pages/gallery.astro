@@ -62,6 +62,7 @@ const initialPositions = [
         return (
           <div
             class="static-photo-card"
+            data-photo-id={photo.id}
             style={`--left:${position.left};--top:${position.top};--rotate:${position.rotate};--card-scale:${photo.scale ?? 1}`}
           >
             <div class="static-photo-frame">
@@ -85,6 +86,27 @@ const initialPositions = [
 </Layout>
 
 <script is:inline>
+  // 在 React 接管前复用上次位置，避免首屏先闪到默认坐标。
+  (() => {
+    try {
+      const cards = document.querySelectorAll('[data-static-photo-wall] [data-photo-id]');
+      const mobile = window.innerWidth < 768;
+      const cardWidth = mobile ? (window.innerWidth < 480 ? 120 : 150) : 360;
+      cards.forEach((card) => {
+        const id = card.getAttribute('data-photo-id');
+        if (!id) return;
+        const saved = JSON.parse(localStorage.getItem('photo-wall-' + id) || 'null');
+        if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return;
+        const scale = Number(card.style.getPropertyValue('--card-scale')) || 1;
+        const width = cardWidth * scale;
+        const verticalOffset = width < 250 ? width * 0.6 : 100;
+        card.style.left = '50%';
+        card.style.top = '50%';
+        card.style.transform = 'translate3d(' + (saved.x - width / 2) + 'px, ' + (saved.y - verticalOffset) + 'px, 0) rotate(' + (Number(saved.rotation) || 0) + 'deg)';
+      });
+    } catch {}
+  })();
+
   window.addEventListener('photo-wall-ready', () => {
     document.documentElement.classList.add('photo-wall-ready');
   }, { once: true });

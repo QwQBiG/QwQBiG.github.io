@@ -72,7 +72,7 @@ const yearsActive = new Date().getFullYear() - 2024;
 
   <!-- 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 -->
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
-  <link rel="preload" href="/images/character.png" as="image" fetchpriority="high">
+  <link rel="preload" href="/generated/site/character.webp" as="image" fetchpriority="high">
   <link rel="preload" href="/fonts/quicksand-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -931,6 +931,15 @@ const yearsActive = new Date().getFullYear() - 2024;
 
             <!-- 中心 3D 动漫角色展示 - 呼吸感球体样式 -->
             <div class="absolute w-44 h-44 sm:w-52 sm:h-52 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
+              <img
+                src="/generated/site/character.webp"
+                alt=""
+                class="absolute inset-0 z-0 w-full h-full object-contain pointer-events-none"
+                width="640"
+                height="640"
+                decoding="async"
+                fetchpriority="high"
+              />
               <AnimeCore
                 client:load
               />
