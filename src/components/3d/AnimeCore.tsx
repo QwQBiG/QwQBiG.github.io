@@ -246,6 +246,9 @@ export default function AnimeCore() {
   return (
     <div className="w-full h-full relative">
       <Canvas
+        onCreated={() => {
+          if (typeof window !== 'undefined') window.dispatchEvent(new Event('anime-core-ready'));
+        }}
         camera={{ position: [0, 0, 4.5], fov: 50 }}
         gl={{
           antialias: true, // 所有设备启用抗锯齿

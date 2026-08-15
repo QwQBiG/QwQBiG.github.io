@@ -70,6 +70,16 @@ const yearsActive = new Date().getFullYear() - 2024;
     }
   </script>
 
+  <script is:inline>
+    window.addEventListener('anime-core-ready', () => {
+      const fallback = document.querySelector('[data-anime-fallback]');
+      if (fallback) {
+        fallback.style.opacity = '0';
+        fallback.setAttribute('aria-hidden', 'true');
+      }
+    }, { once: true });
+  </script>
+
   <!-- 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 -->
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
   <link rel="preload" href="/generated/site/character.webp" as="image" fetchpriority="high">
@@ -934,7 +944,8 @@ const yearsActive = new Date().getFullYear() - 2024;
               <img
                 src="/generated/site/character.webp"
                 alt=""
-                class="absolute inset-0 z-0 w-full h-full object-contain pointer-events-none"
+                class="anime-core-fallback absolute inset-0 z-0 w-full h-full object-contain pointer-events-none"
+                data-anime-fallback
                 width="640"
                 height="640"
                 decoding="async"
