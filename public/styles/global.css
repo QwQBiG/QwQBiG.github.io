@@ -2,6 +2,7 @@
                 CSS 变量定义
 ——————————————————————————————————————————————*/
 :root {
+  color-scheme: light;
   /* 浅色模式颜色 */
   --color-primary: #e84a7a;
   --color-primary-light: #ff6b9d;

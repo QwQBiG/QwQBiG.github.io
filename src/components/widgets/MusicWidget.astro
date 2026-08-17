@@ -253,40 +253,6 @@
   .volume-fill {
     background: linear-gradient(90deg, #a78bfa 0%, #f472b6 100%);
   }
-
-  /* 深色模式适配 */
-  @media (prefers-color-scheme: dark) {
-    .track-name {
-      background: linear-gradient(135deg, rgba(196, 181, 253, 0.95) 0%, rgba(244, 114, 182, 0.9) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .artist-name {
-      color: rgba(156, 163, 175, 0.7);
-    }
-
-    .time-display {
-      color: rgba(167, 139, 250, 0.8);
-    }
-
-    .progress-track {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .progress-thumb {
-      background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-      border-color: rgba(167, 139, 250, 0.5);
-      box-shadow:
-        0 2px 6px rgba(0, 0, 0, 0.3),
-        0 0 0 2px rgba(55, 65, 81, 0.8);
-    }
-
-    .volume-slider {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  }
 </style>
 
 <script>

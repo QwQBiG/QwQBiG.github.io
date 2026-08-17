@@ -131,37 +131,6 @@
       0 5px 14px rgba(167, 139, 250, 0.45),
       inset 0 1px 1px rgba(255, 255, 255, 0.4);
   }
-  
-  /* 深色模式适配 */
-  @media (prefers-color-scheme: dark) {
-    .calendar-title {
-      background: linear-gradient(135deg, rgba(196, 181, 253, 0.95) 0%, rgba(244, 114, 182, 0.9) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .calendar-weekday {
-      color: rgba(167, 139, 250, 0.6);
-    }
-    
-    .calendar-day {
-      /* 深色模式下本月日期 - 使用与时钟日期相同的灰色 */
-      color: rgba(156, 163, 175, 0.9);
-    }
-    
-    .calendar-day.other-month {
-      color: rgba(107, 114, 128, 0.2) !important;
-    }
-    
-    .calendar-day.weekend {
-      color: rgba(167, 139, 250, 0.85) !important;
-    }
-    
-    .calendar-day:hover:not(.today):not(.other-month) {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  }
 </style>
 
 <script>

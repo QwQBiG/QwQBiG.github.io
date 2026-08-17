@@ -43,20 +43,6 @@ const currentPath = Astro.url.pathname;
       
       <!-- Right Side -->
       <div class="flex items-center gap-2">
-        <!-- Theme Toggle -->
-        <button
-          id="theme-toggle"
-          class="p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200"
-          aria-label="切换主题"
-        >
-          <svg class="w-5 h-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-          </svg>
-          <svg class="w-5 h-5 moon-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-          </svg>
-        </button>
-        
         <!-- Mobile Menu Button -->
         <button
           id="mobile-menu-toggle"
@@ -95,45 +81,7 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
-  // Theme Toggle
-  const themeToggle = document.getElementById('theme-toggle');
-  const sunIcon = themeToggle?.querySelector('.sun-icon');
-  const moonIcon = themeToggle?.querySelector('.moon-icon');
   
-  function updateThemeIcons(theme: string) {
-    if (theme === 'dark') {
-      sunIcon?.classList.add('hidden');
-      moonIcon?.classList.remove('hidden');
-    } else if (theme === 'light') {
-      sunIcon?.classList.remove('hidden');
-      moonIcon?.classList.add('hidden');
-    } else {
-      // Auto mode
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (isDark) {
-        sunIcon?.classList.add('hidden');
-        moonIcon?.classList.remove('hidden');
-      } else {
-        sunIcon?.classList.remove('hidden');
-        moonIcon?.classList.add('hidden');
-      }
-    }
-  }
-  
-  themeToggle?.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'auto';
-    const themes = ['auto', 'light', 'dark'];
-    const currentIndex = themes.indexOf(currentTheme);
-    const nextTheme = themes[(currentIndex + 1) % themes.length];
-    
-    document.documentElement.setAttribute('data-theme', nextTheme);
-    localStorage.setItem('theme', nextTheme);
-    updateThemeIcons(nextTheme);
-  });
-  
-  // Initialize icons
-  const savedTheme = localStorage.getItem('theme') || 'auto';
-  updateThemeIcons(savedTheme);
   
   // Mobile Menu Toggle
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
