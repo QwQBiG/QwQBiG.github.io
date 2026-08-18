@@ -22,6 +22,17 @@ pin: true
 
 ## 下载
 
+### 方式一：GitHub Releases（推荐，有梯子）
+
+- [GitHub Releases 页面](https://github.com/QwQBiG/XianGeCe/releases/latest)
+- [直接下载最新版 APK](https://github.com/QwQBiG/XianGeCe/releases/latest/download/xiangece.apk)
+
+### 方式二：国内网盘（无梯子，国内速度快）
+
+- **夸克网盘**：<https://pan.quark.cn/s/edc1876d6a89>
+- **百度网盘**：<https://pan.baidu.com/s/1mVtkpbJvv5ZmWg0VcCHFMA> 提取码：`ydWI`
+
+手机扫码或打开链接，下载 APK 后覆盖安装即可。
 
 - 应用包名：`win.iqwqi.xiangece`
 - 当前版本：`0.0.1` · versionCode `2`
@@ -266,9 +277,11 @@ Android 自动云备份已被禁用。你可主动导出 `.xiangece` 备份并�
 
 更新前可选「备份后更新」，先导出 `.xiangece` 再下载安装。
 
+应用同时提供国内网盘下载备选通道：当 GitHub 下载较慢或不可达时，可在更新对话框中选择「浏览器打开网盘下载」，通过夸克网盘或百度网盘获取 APK。
+
 更新资源统一发布在 GitHub Release，文件名固定：
 
-- `update.json`：版本号、下载地址、SHA-256、最低兼容版本、发布说明。
+- `update.json`：版本号、下载地址、SHA-256、最低兼容版本、发布说明、网盘下载源列表。
 - `xiangece.apk`：应用安装包。
 
 ---
