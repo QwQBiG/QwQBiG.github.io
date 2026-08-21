@@ -20,6 +20,9 @@ const preloadImages = (photos: PhotoItem[]) => Promise.all(
   })),
 );
 
+const getCardWidth = (viewportWidth: number) =>
+  viewportWidth < 480 ? 120 : viewportWidth < 768 ? 150 : 360;
+
 // 生成随机散落位置 - 相对于容器中心
 const generateRandomPosition = (index: number, total: number, containerWidth: number, containerHeight: number, isMobile: boolean): PhotoState => {
   const angle = (index / total) * Math.PI * 2;
@@ -74,7 +77,6 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
   const [highestZIndex, setHighestZIndex] = useState(photos.length);
   const [containerSize, setContainerSize] = useState({ width: 800, height: 600 });
-  const [isMobile, setIsMobile] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStartTime = useRef(0);
@@ -83,23 +85,48 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   // 先保留 Astro 输出的清晰静态照片墙；缩略图解码完成后再无缝接管交互。
   useEffect(() => {
     let cancelled = false;
-    const updateSize = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setContainerSize({ width: rect.width, height: rect.height });
-        setIsMobile(window.innerWidth < 768);
+    const measureContainer = () => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect || rect.width === 0 || rect.height === 0) {
+        return null;
       }
+      const nextSize = { width: rect.width, height: rect.height };
+      setContainerSize(nextSize);
+      return nextSize;
     };
 
-    updateSize();
+    const updateSize = () => {
+      measureContainer();
+    };
+    measureContainer();
     window.addEventListener('resize', updateSize);
     preloadImages(photos).then(() => {
       if (cancelled) return;
-      updateSize();
+      const measuredSize = measureContainer() ?? {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+      const initialStates = new Map<string, PhotoState>();
+      let maxZIndex = photos.length;
+      photos.forEach((photo, index) => {
+        const savedState = loadStateFromStorage(photo.id);
+        if (savedState) {
+          maxZIndex = Math.max(maxZIndex, savedState.zIndex);
+        }
+        initialStates.set(
+          photo.id,
+          savedState || generateRandomPosition(
+            index,
+            photos.length,
+            measuredSize.width,
+            measuredSize.height,
+            measuredSize.width < 768,
+          ),
+        );
+      });
+      setPhotoStates(initialStates);
+      setHighestZIndex(maxZIndex);
       setIsLoaded(true);
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        window.dispatchEvent(new CustomEvent('photo-wall-ready'));
-      }));
     });
 
     return () => {
@@ -107,18 +134,20 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
       window.removeEventListener('resize', updateSize);
     };
   }, [photos]);
-
-  // 初始化照片状态
+  // React 卡片与静态首屏位置准备好后再一次性切换，避免空墙或二次跳动。
   useEffect(() => {
-    if (!isLoaded) return;
-
-    const initialStates = new Map<string, PhotoState>();
-    photos.forEach((photo, index) => {
-      const savedState = loadStateFromStorage(photo.id);
-      initialStates.set(photo.id, savedState || generateRandomPosition(index, photos.length, containerSize.width, containerSize.height, isMobile));
+    if (!isLoaded || photoStates.size !== photos.length) return;
+    let secondFrame: number | undefined;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        window.dispatchEvent(new CustomEvent('photo-wall-ready'));
+      });
     });
-    setPhotoStates(initialStates);
-  }, [photos, isLoaded, containerSize, isMobile]);
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      if (secondFrame !== undefined) cancelAnimationFrame(secondFrame);
+    };
+  }, [isLoaded, photoStates.size, photos.length]);
 
 
   // 提升层级
@@ -176,8 +205,9 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
     setSelectedPhoto(null);
   };
 
-  // 计算卡片尺寸 - 更大图片
-  const cardWidth = useMemo(() => isMobile ? 220 : 360, [isMobile]);
+  // 静态首屏和 React 使用同一套断点，避免接管时卡片尺寸改变。
+  const isMobile = containerSize.width < 768;
+  const cardWidth = useMemo(() => getCardWidth(containerSize.width), [containerSize.width]);
 
   if (!isLoaded) {
     return <div ref={containerRef} className="w-full h-full" />;
@@ -224,7 +254,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
             }}
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={false}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{
@@ -368,7 +398,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   return (
     <motion.div
       ref={cardRef}
-      initial={{ scale: 0.8, opacity: 0 }}
+      initial={false}
       animate={{
         x: pixelX,
         y: pixelY,

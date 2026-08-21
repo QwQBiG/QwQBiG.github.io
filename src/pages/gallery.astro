@@ -31,14 +31,7 @@ const photos: PhotoItem[] = entries.map((entry, index) => ({
   scale: halfSizeFiles.has(entry.file) ? 0.5 : undefined,
 }));
 
-// 首屏直接内嵌清晰的 720px WebP，避免 HTML 到达后还要等待五个图片请求。
-const staticPhotos = entries.map((entry, index) => {
-  const thumbPath = path.join(process.cwd(), 'public', ...entry.thumb2x.split('/').filter(Boolean));
-  return {
-    ...photos[index],
-    dataUri: `data:image/webp;base64,${fs.readFileSync(thumbPath).toString('base64')}`,
-  };
-});
+const photoScales = Object.fromEntries(photos.map((photo) => [photo.id, photo.scale ?? 1]));
 
 const initialPositions = [
   { left: '10%', top: '18%', rotate: '-7deg' },
@@ -50,6 +43,37 @@ const initialPositions = [
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
+  <Fragment slot="head">
+    {photos.map((photo) => (
+      <link rel="preload" as="image" href={photo.src} type="image/webp" />
+    ))}
+    <script is:inline define:vars={{ photoScales }}>
+      (() => {
+        const root = document.documentElement;
+        try {
+          const viewportWidth = window.innerWidth;
+          const baseWidth = viewportWidth < 480 ? 120 : viewportWidth < 768 ? 150 : 360;
+          Object.entries(photoScales).forEach(([id, scaleValue]) => {
+            const saved = JSON.parse(localStorage.getItem('photo-wall-' + id) || 'null');
+            if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return;
+            const width = baseWidth * (Number(scaleValue) || 1);
+            const verticalOffset = width < 250 ? width * 0.6 : 100;
+            const rotation = Number.isFinite(saved.rotation) ? saved.rotation : 0;
+            const zIndex = Number.isFinite(saved.zIndex) ? saved.zIndex : Number(id);
+            root.style.setProperty('--photo-' + id + '-left', '50%');
+            root.style.setProperty('--photo-' + id + '-top', '50%');
+            root.style.setProperty(
+              '--photo-' + id + '-transform',
+              'translate3d(' + (saved.x - width / 2) + 'px,' + (saved.y - verticalOffset) + 'px,0) rotate(' + rotation + 'deg)',
+            );
+            root.style.setProperty('--photo-' + id + '-z', String(zIndex));
+          });
+        } catch {}
+        root.classList.add('photo-wall-state-ready');
+      })();
+    </script>
+  </Fragment>
+
   <FloatingNavCard />
 
   <main class="flex-1 h-screen relative overflow-hidden">
@@ -57,21 +81,23 @@ const initialPositions = [
 
     <!-- React/Framer 加载前显示同样的拍立得墙，图片是清晰缩略图，不使用模糊占位。 -->
     <div class="static-photo-wall" data-static-photo-wall aria-hidden="true">
-      {staticPhotos.map((photo, index) => {
+      {photos.map((photo, index) => {
         const position = initialPositions[index % initialPositions.length];
+        const scale = photo.scale ?? 1;
         return (
           <div
             class="static-photo-card"
             data-photo-id={photo.id}
-            style={`--left:${position.left};--top:${position.top};--rotate:${position.rotate};--card-scale:${photo.scale ?? 1}`}
+            style={`--left:${position.left};--top:${position.top};--rotate:${position.rotate};--desktop-width:${360 * scale}px;--tablet-width:${150 * scale}px;--phone-width:${120 * scale}px;--resolved-left:var(--photo-${photo.id}-left,var(--left));--resolved-top:var(--photo-${photo.id}-top,var(--top));--resolved-transform:var(--photo-${photo.id}-transform,rotate(var(--rotate)));--resolved-z:var(--photo-${photo.id}-z,${index})`}
           >
             <div class="static-photo-frame">
               <img
-                src={photo.dataUri}
+                src={photo.src}
                 alt=""
                 width={photo.width}
                 height={photo.height}
-                decoding="sync"
+                loading="eager"
+                decoding="async"
               />
             </div>
           </div>
@@ -86,27 +112,6 @@ const initialPositions = [
 </Layout>
 
 <script is:inline>
-  // 在 React 接管前复用上次位置，避免首屏先闪到默认坐标。
-  (() => {
-    try {
-      const cards = document.querySelectorAll('[data-static-photo-wall] [data-photo-id]');
-      const mobile = window.innerWidth < 768;
-      const cardWidth = mobile ? (window.innerWidth < 480 ? 120 : 150) : 360;
-      cards.forEach((card) => {
-        const id = card.getAttribute('data-photo-id');
-        if (!id) return;
-        const saved = JSON.parse(localStorage.getItem('photo-wall-' + id) || 'null');
-        if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return;
-        const scale = Number(card.style.getPropertyValue('--card-scale')) || 1;
-        const width = cardWidth * scale;
-        const verticalOffset = width < 250 ? width * 0.6 : 100;
-        card.style.left = '50%';
-        card.style.top = '50%';
-        card.style.transform = 'translate3d(' + (saved.x - width / 2) + 'px, ' + (saved.y - verticalOffset) + 'px, 0) rotate(' + (Number(saved.rotation) || 0) + 'deg)';
-      });
-    } catch {}
-  })();
-
   window.addEventListener('photo-wall-ready', () => {
     document.documentElement.classList.add('photo-wall-ready');
   }, { once: true });
@@ -130,24 +135,30 @@ const initialPositions = [
     overflow: hidden;
     pointer-events: none;
     opacity: 1;
-    transition: opacity 120ms ease;
   }
 
   :global(html.photo-wall-ready) .static-photo-wall {
     opacity: 0;
+    visibility: hidden;
   }
 
   .photo-wall-runtime {
     position: relative;
     z-index: 2;
+    opacity: 0;
+  }
+
+  :global(html.photo-wall-ready) .photo-wall-runtime {
+    opacity: 1;
   }
 
   .static-photo-card {
     position: absolute;
-    left: var(--left);
-    top: var(--top);
-    width: calc(360px * var(--card-scale));
-    transform: rotate(var(--rotate));
+    left: var(--resolved-left);
+    top: var(--resolved-top);
+    width: var(--desktop-width);
+    transform: var(--resolved-transform);
+    z-index: var(--resolved-z);
   }
 
   .static-photo-frame {
@@ -165,12 +176,10 @@ const initialPositions = [
   }
 
   @media (max-width: 768px) {
-    :global(.photo-card) { width: 150px !important; }
-    .static-photo-card { width: calc(150px * var(--card-scale)); }
+    .static-photo-card { width: var(--tablet-width); }
   }
 
   @media (max-width: 480px) {
-    :global(.photo-card) { width: 120px !important; }
-    .static-photo-card { width: calc(120px * var(--card-scale)); }
+    .static-photo-card { width: var(--phone-width); }
   }
 </style>

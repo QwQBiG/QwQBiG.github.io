@@ -23,6 +23,7 @@ const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
     <link rel="canonical" href={siteURL} />
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
     <link rel="stylesheet" href="/styles/global.css" />
+    <slot name="head" />
   </head>
   <body class="site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 gradient-bg">
     <slot />
