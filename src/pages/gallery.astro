@@ -52,19 +52,30 @@ const initialPositions = [
         const root = document.documentElement;
         try {
           const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
           const baseWidth = viewportWidth < 480 ? 120 : viewportWidth < 768 ? 150 : 360;
+          const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
           Object.entries(photoScales).forEach(([id, scaleValue]) => {
             const saved = JSON.parse(localStorage.getItem('photo-wall-' + id) || 'null');
             if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return;
             const width = baseWidth * (Number(scaleValue) || 1);
             const verticalOffset = width < 250 ? width * 0.6 : 100;
+            const minX = 12 + width / 2 - viewportWidth / 2;
+            const maxX = viewportWidth / 2 - 12 - width / 2;
+            const minY = 12 + verticalOffset - viewportHeight / 2;
+            const maxY = viewportHeight / 2 - 12 - verticalOffset;
+            const x = clamp(saved.x, minX, maxX);
+            const y = clamp(saved.y, minY, maxY);
             const rotation = Number.isFinite(saved.rotation) ? saved.rotation : 0;
             const zIndex = Number.isFinite(saved.zIndex) ? saved.zIndex : Number(id);
+            if (x !== saved.x || y !== saved.y) {
+              localStorage.setItem('photo-wall-' + id, JSON.stringify({ ...saved, x, y }));
+            }
             root.style.setProperty('--photo-' + id + '-left', '50%');
             root.style.setProperty('--photo-' + id + '-top', '50%');
             root.style.setProperty(
               '--photo-' + id + '-transform',
-              'translate3d(' + (saved.x - width / 2) + 'px,' + (saved.y - verticalOffset) + 'px,0) rotate(' + rotation + 'deg)',
+              'translate3d(' + (x - width / 2) + 'px,' + (y - verticalOffset) + 'px,0) rotate(' + rotation + 'deg)',
             );
             root.style.setProperty('--photo-' + id + '-z', String(zIndex));
           });

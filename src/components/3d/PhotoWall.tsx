@@ -22,7 +22,25 @@ const preloadImages = (photos: PhotoItem[]) => Promise.all(
 
 const getCardWidth = (viewportWidth: number) =>
   viewportWidth < 480 ? 120 : viewportWidth < 768 ? 150 : 360;
+const normalizeSavedState = (
+  state: PhotoState,
+  containerWidth: number,
+  containerHeight: number,
+  cardWidth: number,
+): PhotoState => {
+  const verticalOffset = cardWidth < 250 ? cardWidth * 0.6 : 100;
+  const minX = 12 + cardWidth / 2 - containerWidth / 2;
+  const maxX = containerWidth / 2 - 12 - cardWidth / 2;
+  const minY = 12 + verticalOffset - containerHeight / 2;
+  const maxY = containerHeight / 2 - 12 - verticalOffset;
+  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
+  return {
+    ...state,
+    x: clamp(state.x, minX, maxX),
+    y: clamp(state.y, minY, maxY),
+  };
+};
 // 生成随机散落位置 - 相对于容器中心
 const generateRandomPosition = (index: number, total: number, containerWidth: number, containerHeight: number, isMobile: boolean): PhotoState => {
   const angle = (index / total) * Math.PI * 2;
@@ -109,9 +127,20 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
       const initialStates = new Map<string, PhotoState>();
       let maxZIndex = photos.length;
       photos.forEach((photo, index) => {
-        const savedState = loadStateFromStorage(photo.id);
+        const rawSavedState = loadStateFromStorage(photo.id);
+        const savedState = rawSavedState
+          ? normalizeSavedState(
+              rawSavedState,
+              measuredSize.width,
+              measuredSize.height,
+              getCardWidth(measuredSize.width) * (photo.scale ?? 1),
+            )
+          : null;
         if (savedState) {
           maxZIndex = Math.max(maxZIndex, savedState.zIndex);
+          if (savedState.x !== rawSavedState?.x || savedState.y !== rawSavedState?.y) {
+            saveStateToStorage(photo.id, savedState);
+          }
         }
         initialStates.set(
           photo.id,
