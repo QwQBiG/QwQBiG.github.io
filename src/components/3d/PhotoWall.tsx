@@ -312,12 +312,17 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   onPointerUp,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const [position, setPosition] = useState({ x: state.x, y: state.y });
   const [isLifted, setIsLifted] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const velocityRef = useRef({ x: 0, y: 0 });
   const lastPosRef = useRef({ x: 0, y: 0 });
   const lastTimeRef = useRef(Date.now());
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // 同步外部状态
   useEffect(() => {
@@ -329,6 +334,9 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   const verticalOffset = cardWidth < 250 ? cardWidth * 0.6 : 100;
   const pixelX = containerCenterX + position.x - cardWidth / 2;
   const pixelY = containerCenterY + position.y - verticalOffset;
+  const transition = hasMounted
+    ? { type: 'spring' as const, stiffness: isDragging ? 1200 : 500, damping: isDragging ? 35 : 40, mass: 1, scale: { duration: 0.12 }, zIndex: { duration: 0 } }
+    : { duration: 0 };
 
   const handlePointerDown = (e: React.PointerEvent) => {
     e.preventDefault();
@@ -407,14 +415,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
         opacity: 1,
         zIndex: isLifted ? 1000 : state.zIndex,
       }}
-      transition={{
-        type: 'spring',
-        stiffness: isDragging ? 1200 : 500,
-        damping: isDragging ? 35 : 40,
-        mass: 1,
-        scale: { duration: 0.12 },
-        zIndex: { duration: 0 },
-      }}
+      transition={transition}
       onPointerDown={handlePointerDown}
       style={{
         position: 'absolute',
