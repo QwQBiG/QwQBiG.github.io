@@ -22,13 +22,13 @@ If it weren't to open a gate.
 What a shame, it...  
 
 Now I'm trapped in love's deadline  
-It means: "Love, Dead and Line".  
-"L" is not allowed to trans to "F", Fine  
-Just like the "M" left behind.  
+It means: “Love, Dead and Line”.  
+“L” is not allowed to trans to “F”, Fine  
+Just like the “M” left behind.  
  
 You never hurt me, you never cheated me,  
 And you never told me, what's everlasting.  
-Above love, above "YOUR" love.  
+Above love, above “YOUR” love.  
 
 Teeth trembling, because the tear  
 Tear welling up, then dropping somewhere?  
@@ -39,7 +39,7 @@ Thus I will be dead, in never-mind's night.
 But hold on tight before silence claims—  
 See summer flowers burst into flames!  
 Before love's deadline seals its fate,  
-Let's seize our "date," before it's too late.  
+Let's seize our “date,” before it's too late.  
 
 And, I will never go  
 Just be with you, wherever we flow.  
