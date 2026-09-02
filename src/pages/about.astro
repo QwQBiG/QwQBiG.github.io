@@ -32,6 +32,15 @@ const doors = [
   { no: 'II', title: '诗与碎片', note: '那些不必运行的句子', href: '/poetry/' },
   { no: 'III', title: '时间归档', note: '沿时间翻阅全部记录', href: '/archives/' },
 ];
+
+const chapters = [
+  { no: '01', label: '序章', href: '#top' },
+  { no: '02', label: '坐标', href: '#premise' },
+  { no: '03', label: '方法', href: '#method' },
+  { no: '04', label: '材料', href: '#materials' },
+  { no: '05', label: '诗句', href: '#words' },
+  { no: '06', label: '继续', href: '#epilogue' },
+];
 ---
 
 <Layout title={pageTitle} description={pageDescription} image="/ZhenXun.png" gradientBg={false}>
@@ -46,6 +55,13 @@ const doors = [
       <i><b data-film-progress></b></i>
       <em data-film-index>01 — 06</em>
     </aside>
+    <nav class="film-chapters" aria-label="自画像章节">
+      {chapters.map((chapter, index) => (
+        <a href={chapter.href} data-film-chapter={index} aria-label={`${chapter.no} ${chapter.label}`} aria-current={index === 0 ? 'step' : undefined}>
+          <i></i><span>{chapter.no}</span><small>{chapter.label}</small>
+        </a>
+      ))}
+    </nav>
 
     <section class="film-scene scene-prologue" data-film-scene data-scene="0" id="top">
       <div class="film-stage">
@@ -63,6 +79,11 @@ const doors = [
           <p class="scene-kicker" data-reveal>一幅正在发生的自画像</p>
           <h1 data-reveal><span>理性是骨骼，</span><span><em>感受</em>是光。</span></h1>
           <p class="hero-copy" data-reveal>你好，我是 <strong>iqwqi</strong>。我喜欢把世界拆开，看看它为何运行；也喜欢在一切安静以后，写几句不必运行的话。</p>
+          <div class="hero-manifest" data-reveal aria-label="关注方向">
+            <span><i>01</i> SYSTEMS</span>
+            <span><i>02</i> OPEN SOURCE</span>
+            <span><i>03</i> POETRY</span>
+          </div>
         </div>
         <div class="depth-layer layer-foreground" data-depth="5" aria-hidden="true">
           <span class="folio">NO. 001</span><span class="coordinates">31°N / ONLINE / GROWING</span>

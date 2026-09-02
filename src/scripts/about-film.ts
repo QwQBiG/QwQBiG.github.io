@@ -353,6 +353,7 @@ function setupAboutFilm(): (() => void) | undefined {
   const cursor = root.querySelector<HTMLElement>('[data-film-cursor]');
   const progressBar = root.querySelector<HTMLElement>('[data-film-progress]');
   const indexLabel = root.querySelector<HTMLElement>('[data-film-index]');
+  const chapterLinks = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-film-chapter]'));
   const scenes = Array.from(root.querySelectorAll<HTMLElement>('[data-film-scene]'));
   const interactiveObjects = Array.from(root.querySelectorAll<HTMLElement>('[data-interactive-object]'));
   const processObjects = Array.from(root.querySelectorAll<HTMLElement>('[data-process-object]'));
@@ -368,8 +369,16 @@ function setupAboutFilm(): (() => void) | undefined {
   gsap.registerPlugin(ScrollTrigger);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = window.matchMedia('(pointer: coarse)').matches;
-  const paint = LivingPaint.create(canvas);
-  const thread = MemoryThread.create(threadCanvas);
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
+  const lowPower = reduced
+    || connection?.saveData === true
+    || deviceMemory <= 4
+    || navigator.hardwareConcurrency <= 4
+    || window.innerWidth < 720;
+  root.dataset.quality = lowPower ? 'lite' : 'full';
+  const paint = lowPower ? null : LivingPaint.create(canvas);
+  const thread = lowPower ? null : MemoryThread.create(threadCanvas);
   const state: FilmState = {
     time: 0,
     scroll: 0,
@@ -384,7 +393,22 @@ function setupAboutFilm(): (() => void) | undefined {
   let visible = !document.hidden;
   let activationTimer = 0;
   let writingTimer = 0;
+  let activeScene = -1;
   const interactionCleanups: Array<() => void> = [];
+
+  const setActiveScene = (index: number) => {
+    if (activeScene === index) return;
+    activeScene = index;
+    root.dataset.activeScene = String(index);
+    scenes.forEach((scene, sceneIndex) => scene.classList.toggle('is-current', sceneIndex === index));
+    chapterLinks.forEach((link, linkIndex) => {
+      if (linkIndex === index) link.setAttribute('aria-current', 'step');
+      else link.removeAttribute('aria-current');
+    });
+    if (indexLabel) indexLabel.textContent = `0${index + 1} — 06`;
+  };
+
+  setActiveScene(0);
 
   const lenis = !reduced && !coarse
     ? new Lenis({ lerp: 0.082, smoothWheel: true, wheelMultiplier: 0.88 })
@@ -396,6 +420,23 @@ function setupAboutFilm(): (() => void) | undefined {
       ScrollTrigger.update();
     });
   }
+
+  chapterLinks.forEach((link) => {
+    const navigateToScene = (event: MouseEvent) => {
+      const selector = link.getAttribute('href');
+      const destination = selector ? document.querySelector<HTMLElement>(selector) : null;
+      if (!destination) return;
+      event.preventDefault();
+      const travel = Math.max(0, destination.offsetHeight - window.innerHeight);
+      const targetY = destination.id === 'top'
+        ? 0
+        : destination.offsetTop + Math.min(window.innerHeight * .62, travel * .22);
+      if (lenis) lenis.scrollTo(targetY, { duration: 1.05 });
+      else window.scrollTo({ top: targetY, behavior: reduced ? 'auto' : 'smooth' });
+    };
+    link.addEventListener('click', navigateToScene);
+    interactionCleanups.push(() => link.removeEventListener('click', navigateToScene));
+  });
 
   const activateProcess = (index: number) => {
     processObjects.forEach((object, objectIndex) => object.classList.toggle('is-active', objectIndex === index));
@@ -501,8 +542,8 @@ function setupAboutFilm(): (() => void) | undefined {
           end: 'bottom bottom',
           scrub: reduced ? false : 1.05,
           invalidateOnRefresh: true,
-          onEnter: () => { if (indexLabel) indexLabel.textContent = `0${sceneIndex + 1} — 06`; },
-          onEnterBack: () => { if (indexLabel) indexLabel.textContent = `0${sceneIndex + 1} — 06`; },
+          onEnter: () => setActiveScene(sceneIndex),
+          onEnterBack: () => setActiveScene(sceneIndex),
           onUpdate: ({ progress }) => {
             const transition = gsap.utils.clamp(0, 1, (progress - 0.60) / 0.40);
             target.scene = Math.min(5, sceneIndex + transition);
@@ -602,69 +643,79 @@ function setupAboutFilm(): (() => void) | undefined {
     }
   };
 
-  const handlePointerMove = (event: PointerEvent) => {
-    target.pointerX = event.clientX / Math.max(window.innerWidth, 1);
-    target.pointerY = event.clientY / Math.max(window.innerHeight, 1);
+  let pointerFrame = 0;
+  let activePointerObject: HTMLElement | null = null;
+  let pointerSample = { x: window.innerWidth / 2, y: window.innerHeight / 2, element: null as Element | null };
+
+  const updatePointerEffects = () => {
+    pointerFrame = 0;
+    const { x, y, element } = pointerSample;
+    target.pointerX = x / Math.max(window.innerWidth, 1);
+    target.pointerY = y / Math.max(window.innerHeight, 1);
     const normalizedX = target.pointerX - .5;
     const normalizedY = target.pointerY - .5;
     root.style.setProperty('--pointer-x', normalizedX.toFixed(4));
     root.style.setProperty('--pointer-y', normalizedY.toFixed(4));
 
-    interactiveObjects.forEach((object) => {
+    const object = element?.closest<HTMLElement>('[data-interactive-object]') ?? null;
+    if (activePointerObject && activePointerObject !== object) resetObjectMotion(activePointerObject);
+    activePointerObject = object;
+
+    if (object) {
       const bounds = object.getBoundingClientRect();
-      const isInside = event.clientX >= bounds.left
-        && event.clientX <= bounds.right
-        && event.clientY >= bounds.top
-        && event.clientY <= bounds.bottom;
+      const isInside = x >= bounds.left && x <= bounds.right && y >= bounds.top && y <= bounds.bottom;
       if (!isInside || bounds.bottom < -80 || bounds.top > window.innerHeight + 80) {
         resetObjectMotion(object);
-        return;
-      }
+      } else {
+        const interaction = object.dataset.interaction || 'generic';
+        const profile = interaction === 'journal'
+          ? { rx: 1.8, ry: 2.8, x: 3.5, y: 2.5 }
+          : interaction === 'writing'
+            ? { rx: 1.2, ry: 1.8, x: 2.8, y: 1.8 }
+            : interaction === 'prism'
+              ? { rx: .55, ry: .8, x: 1.2, y: .8 }
+              : { rx: .65, ry: .95, x: 1.4, y: 1 };
+        const localX = gsap.utils.clamp(-.5, .5, (x - (bounds.left + bounds.width * .5)) / Math.max(bounds.width, 1));
+        const localY = gsap.utils.clamp(-.5, .5, (y - (bounds.top + bounds.height * .5)) / Math.max(bounds.height, 1));
+        object.style.setProperty('--object-rx', `${-localY * profile.rx}deg`);
+        object.style.setProperty('--object-ry', `${localX * profile.ry}deg`);
+        object.style.setProperty('--object-x', `${localX * profile.x}px`);
+        object.style.setProperty('--object-y', `${localY * profile.y}px`);
 
-      const interaction = object.dataset.interaction || 'generic';
-      const profile = interaction === 'journal'
-        ? { rx: 1.8, ry: 2.8, x: 3.5, y: 2.5 }
-        : interaction === 'writing'
-          ? { rx: 1.2, ry: 1.8, x: 2.8, y: 1.8 }
-          : interaction === 'prism'
-            ? { rx: .55, ry: .8, x: 1.2, y: .8 }
-            : interaction === 'door'
-              ? { rx: .25, ry: .4, x: .5, y: .4 }
-              : interaction === 'scanner' || interaction === 'compass' || interaction === 'archive'
-                ? { rx: .65, ry: .95, x: 1.4, y: 1 }
-                : { rx: 1.2, ry: 1.7, x: 2.4, y: 1.6 };
-      const localX = gsap.utils.clamp(-.5, .5, (event.clientX - (bounds.left + bounds.width * .5)) / Math.max(bounds.width, 1));
-      const localY = gsap.utils.clamp(-.5, .5, (event.clientY - (bounds.top + bounds.height * .5)) / Math.max(bounds.height, 1));
-      object.style.setProperty('--object-rx', `${-localY * profile.rx}deg`);
-      object.style.setProperty('--object-ry', `${localX * profile.ry}deg`);
-      object.style.setProperty('--object-x', `${localX * profile.x}px`);
-      object.style.setProperty('--object-y', `${localY * profile.y}px`);
+        if (interaction === 'scanner') {
+          object.style.setProperty('--artifact-x', `${localX * 46}px`);
+          object.style.setProperty('--artifact-y', `${localY * 34}px`);
+          object.style.setProperty('--artifact-r', `${localX * 7}deg`);
+        } else if (interaction === 'compass') {
+          object.style.setProperty('--artifact-tool-x', `${localX * 12}px`);
+          object.style.setProperty('--artifact-tool-y', `${localY * 9}px`);
+          object.style.setProperty('--artifact-spread', `${Math.max(0, (.5 - localY) * 4.5)}deg`);
+        }
 
-      if (interaction === 'scanner') {
-        object.style.setProperty('--artifact-x', `${localX * 46}px`);
-        object.style.setProperty('--artifact-y', `${localY * 34}px`);
-        object.style.setProperty('--artifact-r', `${localX * 7}deg`);
-      } else if (interaction === 'compass') {
-        object.style.setProperty('--artifact-tool-x', `${localX * 12}px`);
-        object.style.setProperty('--artifact-tool-y', `${localY * 9}px`);
-        object.style.setProperty('--artifact-spread', `${Math.max(0, (.5 - localY) * 4.5)}deg`);
+        if (object.classList.contains('syntax-loom')) {
+          object.style.setProperty('--loom-x', `${localX * 42}px`);
+          object.style.setProperty('--loom-y', `${localY * 24}px`);
+        }
       }
-
-      if (object.classList.contains('syntax-loom')) {
-        object.style.setProperty('--loom-x', `${localX * 42}px`);
-        object.style.setProperty('--loom-y', `${localY * 24}px`);
-      }
-    });
+    }
 
     if (cursor) {
       cursor.style.opacity = '1';
-      cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate3d(-50%, -50%, 0)`;
+      cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translate3d(-50%, -50%, 0)`;
     }
   };
 
+  const handlePointerMove = (event: PointerEvent) => {
+    pointerSample = { x: event.clientX, y: event.clientY, element: event.target instanceof Element ? event.target : null };
+    if (!pointerFrame) pointerFrame = requestAnimationFrame(updatePointerEffects);
+  };
+
   const handlePointerLeave = () => {
+    if (pointerFrame) cancelAnimationFrame(pointerFrame);
+    pointerFrame = 0;
     if (cursor) cursor.style.opacity = '0';
     interactiveObjects.forEach(resetObjectMotion);
+    activePointerObject = null;
   };
 
   const handlePointerDown = (event: PointerEvent) => {
@@ -689,10 +740,15 @@ function setupAboutFilm(): (() => void) | undefined {
     }, 180);
   };
 
+  let resizeFrame = 0;
   const handleResize = () => {
-    paint?.resize();
-    thread?.resize();
-    ScrollTrigger.refresh();
+    if (resizeFrame) return;
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = 0;
+      paint?.resize();
+      thread?.resize();
+      ScrollTrigger.refresh();
+    });
   };
 
   const handleVisibility = () => {
@@ -705,9 +761,11 @@ function setupAboutFilm(): (() => void) | undefined {
   window.addEventListener('resize', handleResize, { passive: true });
   document.addEventListener('visibilitychange', handleVisibility);
 
+  let lastCanvasFrame = -1;
+  const canvasFrameInterval = 1 / 30;
   const tick = (time: number) => {
-    if (lenis) lenis.raf(time * 1000);
     if (!visible) return;
+    if (lenis) lenis.raf(time * 1000);
     target.pulse *= 0.92;
     target.velocity *= 0.88;
     const smoothing = reduced ? 1 : 0.075;
@@ -719,8 +777,11 @@ function setupAboutFilm(): (() => void) | undefined {
     state.pointerY += (target.pointerY - state.pointerY) * 0.09;
     state.pulse += (target.pulse - state.pulse) * 0.14;
     state.time = reduced ? 0 : time;
-    paint?.render(state);
-    thread?.render(state);
+    if (time - lastCanvasFrame >= canvasFrameInterval) {
+      lastCanvasFrame = time;
+      paint?.render(state);
+      thread?.render(state);
+    }
   };
 
   gsap.ticker.add(tick);
@@ -733,6 +794,8 @@ function setupAboutFilm(): (() => void) | undefined {
     context.revert();
     lenis?.destroy();
     paint?.destroy();
+    if (pointerFrame) cancelAnimationFrame(pointerFrame);
+    if (resizeFrame) cancelAnimationFrame(resizeFrame);
     window.clearTimeout(activationTimer);
     window.clearTimeout(writingTimer);
     interactionCleanups.forEach((cleanup) => cleanup());

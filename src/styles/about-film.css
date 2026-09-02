@@ -2364,3 +2364,115 @@ body:has(.about-film) {
   .prism-bench .beam,
   .writing-desk .written-stroke { stroke-dashoffset: 0; }
 }
+
+/* Chapter rail, hero clarity, and adaptive rendering. */
+.film-chapters {
+  position: fixed;
+  top: 50%;
+  right: 4.1rem;
+  z-index: 44;
+  display: grid;
+  gap: .42rem;
+  transform: translateY(-50%);
+}
+
+.film-chapters a {
+  position: relative;
+  display: grid;
+  grid-template-columns: .7rem 1.8rem auto;
+  align-items: center;
+  min-height: 1.85rem;
+  color: rgba(45, 34, 50, .48);
+  text-decoration: none;
+  font: 700 .58rem/1 "JetBrains Mono", monospace;
+  letter-spacing: .12em;
+}
+
+.film-chapters a > i {
+  width: .32rem;
+  height: .32rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 0 0 0 rgba(236, 78, 131, 0);
+  transition: transform .3s ease, background .3s ease, box-shadow .3s ease;
+}
+
+.film-chapters a > small {
+  padding: .38rem .55rem;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 999px;
+  background: rgba(255,248,251,.42);
+  opacity: 0;
+  transform: translateX(.5rem);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.film-chapters a:hover > small,
+.film-chapters a:focus-visible > small,
+.film-chapters a[aria-current="step"] > small { opacity: 1; transform: translateX(0); }
+.film-chapters a[aria-current="step"] { color: var(--film-rose); }
+.film-chapters a[aria-current="step"] > i {
+  border-color: var(--film-rose);
+  background: var(--film-rose);
+  transform: scale(1.55);
+  box-shadow: 0 0 1rem .12rem rgba(236,78,131,.38);
+}
+
+.hero-copy {
+  position: relative;
+  padding: 1rem 1.2rem 1rem 1.35rem;
+  border-left: 2px solid rgba(236,78,131,.68);
+  background: linear-gradient(90deg, rgba(255,248,251,.46), rgba(255,248,251,.06));
+  text-shadow: 0 1px rgba(255,255,255,.28);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.hero-manifest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem 1.2rem;
+  max-width: 38rem;
+  margin: 1.25rem 0 0 clamp(1rem, 22vw, 22rem);
+  color: rgba(45,34,50,.58);
+  font: 700 .58rem/1.2 "JetBrains Mono", monospace;
+  letter-spacing: .13em;
+}
+
+.hero-manifest span { display: inline-flex; align-items: center; gap: .42rem; }
+.hero-manifest i { color: var(--film-rose); font-style: normal; }
+.film-scene:not(.is-current) .depth-layer { will-change: auto; }
+
+.about-film[data-quality="lite"] .living-paint,
+.about-film[data-quality="lite"] .memory-thread,
+.about-film[data-quality="lite"] .film-surface > i:first-child { display: none; }
+.about-film[data-quality="lite"] .scene-prologue .film-stage { background: linear-gradient(135deg, #d9abc7, #c79cbd 54%, #b48eae); }
+.about-film[data-quality="lite"] .scene-premise .film-stage { background: linear-gradient(135deg, #21172b, #4a2d53 52%, #24243f); }
+.about-film[data-quality="lite"] .scene-method .film-stage { background: linear-gradient(135deg, #d9d2e7, #bdb8d7 52%, #d6bfd6); }
+.about-film[data-quality="lite"] .scene-materials .film-stage { background: linear-gradient(135deg, #12142b, #2e254b 52%, #1a1534); }
+.about-film[data-quality="lite"] .scene-words .film-stage { background: linear-gradient(135deg, #171226, #3a2145 52%, #1d2548); }
+.about-film[data-quality="lite"] .scene-epilogue .film-stage { background: linear-gradient(135deg, #a9c4df, #cfbfd7 52%, #e7c4d7); }
+
+@media (max-width: 900px) {
+  .film-chapters { right: 1.1rem; gap: .28rem; }
+  .film-chapters a { grid-template-columns: .65rem; min-height: 1.35rem; }
+  .film-chapters a > span,
+  .film-chapters a > small { display: none; }
+  .hero-manifest { margin-left: clamp(0rem, 10vw, 5rem); }
+}
+
+@media (max-width: 620px) {
+  .scene-prologue h1 { max-width: 100%; font-size: clamp(2.7rem, 14vw, 5.3rem); }
+  .scene-prologue h1 span { white-space: nowrap; }
+  .hero-copy { padding: .85rem 1rem; background: linear-gradient(90deg, rgba(255,248,251,.58), rgba(255,248,251,.12)); }
+  .hero-manifest { gap: .45rem .8rem; margin-top: .9rem; font-size: .5rem; }
+  .film-chapters { right: .55rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-chapters a > i,
+  .film-chapters a > small { transition: none; }
+}
