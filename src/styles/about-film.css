@@ -2365,90 +2365,33 @@ body:has(.about-film) {
   .writing-desk .written-stroke { stroke-dashoffset: 0; }
 }
 
-/* Chapter rail, hero clarity, and adaptive rendering. */
-.film-chapters {
-  position: fixed;
-  top: 50%;
-  right: 4.1rem;
-  z-index: 44;
-  display: grid;
-  gap: .42rem;
-  transform: translateY(-50%);
-}
-
-.film-chapters a {
-  position: relative;
-  display: grid;
-  grid-template-columns: .7rem 1.8rem auto;
-  align-items: center;
-  min-height: 1.85rem;
-  color: rgba(45, 34, 50, .48);
-  text-decoration: none;
-  font: 700 .58rem/1 "JetBrains Mono", monospace;
-  letter-spacing: .12em;
-}
-
-.film-chapters a > i {
-  width: .32rem;
-  height: .32rem;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  background: transparent;
-  box-shadow: 0 0 0 0 rgba(236, 78, 131, 0);
-  transition: transform .3s ease, background .3s ease, box-shadow .3s ease;
-}
-
-.film-chapters a > small {
-  padding: .38rem .55rem;
-  border: 1px solid rgba(255,255,255,.42);
-  border-radius: 999px;
-  background: rgba(255,248,251,.42);
-  opacity: 0;
-  transform: translateX(.5rem);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  transition: opacity .25s ease, transform .25s ease;
-}
-
-.film-chapters a:hover > small,
-.film-chapters a:focus-visible > small,
-.film-chapters a[aria-current="step"] > small { opacity: 1; transform: translateX(0); }
-.film-chapters a[aria-current="step"] { color: var(--film-rose); }
-.film-chapters a[aria-current="step"] > i {
-  border-color: var(--film-rose);
-  background: var(--film-rose);
-  transform: scale(1.55);
-  box-shadow: 0 0 1rem .12rem rgba(236,78,131,.38);
-}
+/* Optical depth and adaptive rendering — no duplicate navigation chrome. */
 
 .hero-copy {
   position: relative;
-  padding: 1rem 1.2rem 1rem 1.35rem;
-  border-left: 2px solid rgba(236,78,131,.68);
-  background: linear-gradient(90deg, rgba(255,248,251,.46), rgba(255,248,251,.06));
-  text-shadow: 0 1px rgba(255,255,255,.28);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  max-width: 31rem;
+  margin-left: clamp(0rem, 6vw, 6rem);
+  padding-left: 1.2rem;
+  color: rgba(39, 30, 43, .78);
+  text-shadow: 0 1px rgba(255,255,255,.3), 0 .8rem 2.4rem rgba(63,39,69,.1);
 }
 
-.hero-manifest {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .55rem 1.2rem;
-  max-width: 38rem;
-  margin: 1.25rem 0 0 clamp(1rem, 22vw, 22rem);
-  color: rgba(45,34,50,.58);
-  font: 700 .58rem/1.2 "JetBrains Mono", monospace;
-  letter-spacing: .13em;
+.hero-copy::before {
+  position: absolute;
+  top: .25rem;
+  bottom: .25rem;
+  left: 0;
+  width: 1px;
+  content: "";
+  background: linear-gradient(transparent, rgba(236,78,131,.82) 24% 76%, transparent);
+  box-shadow: 0 0 1.25rem rgba(236,78,131,.34);
 }
 
-.hero-manifest span { display: inline-flex; align-items: center; gap: .42rem; }
-.hero-manifest i { color: var(--film-rose); font-style: normal; }
 .film-scene:not(.is-current) .depth-layer { will-change: auto; }
 
 .about-film[data-quality="lite"] .living-paint,
-.about-film[data-quality="lite"] .memory-thread,
 .about-film[data-quality="lite"] .film-surface > i:first-child { display: none; }
+.about-film[data-quality="lite"] .memory-thread { opacity: .42; }
 .about-film[data-quality="lite"] .scene-prologue .film-stage { background: linear-gradient(135deg, #d9abc7, #c79cbd 54%, #b48eae); }
 .about-film[data-quality="lite"] .scene-premise .film-stage { background: linear-gradient(135deg, #21172b, #4a2d53 52%, #24243f); }
 .about-film[data-quality="lite"] .scene-method .film-stage { background: linear-gradient(135deg, #d9d2e7, #bdb8d7 52%, #d6bfd6); }
@@ -2456,23 +2399,111 @@ body:has(.about-film) {
 .about-film[data-quality="lite"] .scene-words .film-stage { background: linear-gradient(135deg, #171226, #3a2145 52%, #1d2548); }
 .about-film[data-quality="lite"] .scene-epilogue .film-stage { background: linear-gradient(135deg, #a9c4df, #cfbfd7 52%, #e7c4d7); }
 
+.film-scene {
+  --scene-bloom: rgba(255, 214, 231, .2);
+  --scene-haze: rgba(150, 132, 205, .12);
+  --scene-vignette: rgba(45, 27, 52, .2);
+  --scene-focus-x: 72%;
+  --scene-focus-y: 42%;
+}
+
+.scene-premise {
+  --scene-bloom: rgba(255, 124, 179, .17);
+  --scene-haze: rgba(118, 112, 220, .13);
+  --scene-vignette: rgba(8, 5, 18, .36);
+  --scene-focus-x: 50%;
+  --scene-focus-y: 58%;
+}
+
+.scene-method {
+  --scene-bloom: rgba(255, 228, 239, .18);
+  --scene-haze: rgba(123, 145, 211, .14);
+  --scene-focus-x: 34%;
+  --scene-focus-y: 54%;
+}
+
+.scene-materials,
+.scene-words {
+  --scene-bloom: rgba(255, 126, 183, .14);
+  --scene-haze: rgba(100, 122, 230, .15);
+  --scene-vignette: rgba(6, 6, 22, .4);
+  --scene-focus-x: 70%;
+  --scene-focus-y: 48%;
+}
+
+.scene-epilogue {
+  --scene-bloom: rgba(255, 229, 239, .22);
+  --scene-haze: rgba(116, 157, 217, .14);
+  --scene-focus-x: 74%;
+  --scene-focus-y: 45%;
+}
+
+.film-stage::before,
+.film-stage::after {
+  position: absolute;
+  pointer-events: none;
+  content: "";
+}
+
+.film-stage::before {
+  inset: -18%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at var(--scene-focus-x) var(--scene-focus-y), var(--scene-bloom), transparent 31%),
+    radial-gradient(ellipse at 20% 78%, var(--scene-haze), transparent 42%);
+  filter: blur(18px);
+  opacity: .72;
+  transform: translate3d(calc(var(--pointer-x, 0) * -18px), calc(var(--pointer-y, 0) * -12px), -640px) scale(1.55);
+  transform-origin: var(--scene-focus-x) var(--scene-focus-y);
+}
+
+.film-stage::after {
+  inset: -2px;
+  z-index: 7;
+  background:
+    linear-gradient(112deg, rgba(255,255,255,.07), transparent 19% 80%, rgba(255,208,228,.045)),
+    radial-gradient(ellipse at 50% 46%, transparent 44%, var(--scene-vignette) 132%);
+  box-shadow: inset 0 0 clamp(5rem, 12vw, 11rem) var(--scene-vignette);
+  opacity: .64;
+  transform: translate3d(calc(var(--pointer-x, 0) * 5px), calc(var(--pointer-y, 0) * 3px), 180px) scale(.9);
+  mix-blend-mode: soft-light;
+}
+
+.layer-landscape [data-interactive-object] {
+  filter: drop-shadow(0 2.2rem 2.8rem rgba(36, 21, 43, .2));
+}
+
+.scene-premise .layer-landscape [data-interactive-object],
+.scene-materials .layer-landscape [data-interactive-object],
+.scene-words .layer-landscape [data-interactive-object] {
+  filter: drop-shadow(0 2.4rem 3.2rem rgba(0, 0, 12, .32));
+}
+
+.layer-landscape [data-interactive-object].is-activated {
+  filter: saturate(1.25) brightness(1.08) drop-shadow(0 2.4rem 3rem rgba(36, 21, 43, .24));
+}
+
+.about-film[data-quality="lite"] .film-stage::before { filter: none; opacity: .38; }
+.about-film[data-quality="lite"] .layer-landscape [data-interactive-object] { filter: none; }
+.about-film[data-quality="lite"] .layer-atmosphere *,
+.about-film[data-quality="lite"] .layer-foreground *,
+.about-film[data-quality="lite"] .journal-bookmarks,
+.about-film[data-quality="lite"] .prism-bench .beam,
+.about-film[data-quality="lite"] .syntax-loom .loom-shuttle-svg { animation: none !important; }
+
 @media (max-width: 900px) {
-  .film-chapters { right: 1.1rem; gap: .28rem; }
-  .film-chapters a { grid-template-columns: .65rem; min-height: 1.35rem; }
-  .film-chapters a > span,
-  .film-chapters a > small { display: none; }
-  .hero-manifest { margin-left: clamp(0rem, 10vw, 5rem); }
+  .hero-copy { margin-left: clamp(0rem, 5vw, 3rem); }
 }
 
 @media (max-width: 620px) {
   .scene-prologue h1 { max-width: 100%; font-size: clamp(2.7rem, 14vw, 5.3rem); }
   .scene-prologue h1 span { white-space: nowrap; }
-  .hero-copy { padding: .85rem 1rem; background: linear-gradient(90deg, rgba(255,248,251,.58), rgba(255,248,251,.12)); }
-  .hero-manifest { gap: .45rem .8rem; margin-top: .9rem; font-size: .5rem; }
-  .film-chapters { right: .55rem; }
+  .hero-copy { margin-left: 0; padding-left: .9rem; }
+  .film-stage::after { opacity: .48; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .film-chapters a > i,
-  .film-chapters a > small { transition: none; }
+  .film-stage::before,
+  .film-stage::after { transform: none !important; }
+  .film-stage::before { filter: none; }
 }

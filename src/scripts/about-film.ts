@@ -234,22 +234,24 @@ class MemoryThread {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private dpr = 1;
+  private dprLimit: number;
 
-  static create(canvas: HTMLCanvasElement | null): MemoryThread | null {
+  static create(canvas: HTMLCanvasElement | null, dprLimit = 1.5): MemoryThread | null {
     if (!canvas) return null;
     const context = canvas.getContext('2d');
     if (!context) return null;
-    return new MemoryThread(canvas, context);
+    return new MemoryThread(canvas, context, dprLimit);
   }
 
-  private constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  private constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, dprLimit: number) {
     this.canvas = canvas;
     this.context = context;
+    this.dprLimit = dprLimit;
     this.resize();
   }
 
   resize(): void {
-    this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    this.dpr = Math.min(window.devicePixelRatio || 1, this.dprLimit);
     this.canvas.width = Math.max(1, Math.round(window.innerWidth * this.dpr));
     this.canvas.height = Math.max(1, Math.round(window.innerHeight * this.dpr));
     this.context.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
@@ -278,49 +280,81 @@ class MemoryThread {
       return height * .64 + primary + secondary + pointerPull + offset;
     };
 
+    const ink = darkScene ? '255, 184, 213' : '187, 55, 111';
+    const highlight = darkScene ? '255, 226, 238' : '236, 78, 131';
     const strands = [
-      { width: 2.4, alpha: .16, offset: 9 },
-      { width: .85, alpha: .54, offset: 0 },
+      { width: 6.4, alpha: .035, offset: 16, blur: 14 },
+      { width: 2.2, alpha: .13, offset: 8, blur: 5 },
+      { width: .8, alpha: .52, offset: 0, blur: 0 },
     ];
 
-    strands.forEach((strand, index) => {
+    const traceThread = (offset: number) => {
       context.beginPath();
       for (let step = 0; step <= 96; step += 1) {
         const x = width * (step / 96);
-        const y = sampleY(x, strand.offset);
+        const y = sampleY(x, offset);
         if (step === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
-      context.strokeStyle = darkScene
-        ? `rgba(255, 184, 213, ${strand.alpha})`
-        : `rgba(187, 55, 111, ${strand.alpha})`;
+    };
+
+    strands.forEach((strand) => {
+      traceThread(strand.offset);
+      context.strokeStyle = `rgba(${ink}, ${strand.alpha})`;
       context.lineWidth = strand.width;
       context.lineCap = 'round';
+      context.shadowColor = `rgba(${highlight}, ${strand.alpha * 1.4})`;
+      context.shadowBlur = strand.blur;
       context.stroke();
-
-      if (index === 0) return;
-      for (let node = 0; node < 6; node += 1) {
-        const x = width * (.1 + node * .16);
-        const y = sampleY(x, 0);
-        const distance = Math.abs(state.scene - node);
-        const active = Math.max(0, 1 - distance);
-        context.beginPath();
-        context.arc(x, y, 2.2 + active * 3.8, 0, Math.PI * 2);
-        context.fillStyle = darkScene
-          ? `rgba(255, 222, 235, ${.3 + active * .58})`
-          : `rgba(224, 66, 126, ${.3 + active * .58})`;
-        context.fill();
-        if (active > .1) {
-          context.beginPath();
-          context.arc(x, y, 9 + active * 7, 0, Math.PI * 2);
-          context.strokeStyle = darkScene
-            ? `rgba(255, 163, 201, ${active * .28})`
-            : `rgba(216, 54, 113, ${active * .22})`;
-          context.lineWidth = 1;
-          context.stroke();
-        }
-      }
     });
+
+    context.shadowBlur = 0;
+    const scenePosition = Math.max(0, Math.min(5, state.scene));
+    const progressX = width * (.1 + scenePosition * .16);
+    context.save();
+    context.beginPath();
+    context.rect(0, 0, progressX, height);
+    context.clip();
+    traceThread(0);
+    context.strokeStyle = `rgba(${highlight}, ${darkScene ? .68 : .58})`;
+    context.lineWidth = 1.2;
+    context.shadowColor = `rgba(${highlight}, .55)`;
+    context.shadowBlur = 9;
+    context.stroke();
+    context.restore();
+
+    for (let node = 0; node < 6; node += 1) {
+      const x = width * (.1 + node * .16);
+      const y = sampleY(x, 0);
+      const distance = Math.abs(state.scene - node);
+      const active = Math.max(0, 1 - distance);
+      const visited = node <= scenePosition + .02;
+      const breath = active * (.78 + Math.sin(state.time * 2.2) * .12);
+      context.beginPath();
+      context.arc(x, y, 2 + active * 3.5, 0, Math.PI * 2);
+      context.fillStyle = `rgba(${visited ? highlight : ink}, ${visited ? .45 + active * .48 : .2})`;
+      context.shadowColor = `rgba(${highlight}, ${active * .72})`;
+      context.shadowBlur = active * 18;
+      context.fill();
+      context.shadowBlur = 0;
+      if (active > .08) {
+        context.beginPath();
+        context.arc(x, y, 9 + breath * 8, 0, Math.PI * 2);
+        context.strokeStyle = `rgba(${highlight}, ${breath * .28})`;
+        context.lineWidth = 1;
+        context.stroke();
+      }
+    }
+
+    const travellingY = sampleY(progressX, 0);
+    const glow = context.createRadialGradient(progressX, travellingY, 0, progressX, travellingY, 24);
+    glow.addColorStop(0, `rgba(${highlight}, .48)`);
+    glow.addColorStop(.22, `rgba(${highlight}, .16)`);
+    glow.addColorStop(1, `rgba(${highlight}, 0)`);
+    context.fillStyle = glow;
+    context.beginPath();
+    context.arc(progressX, travellingY, 24, 0, Math.PI * 2);
+    context.fill();
 
     const pulse = Math.max(.08, state.pulse);
     context.beginPath();
@@ -335,11 +369,11 @@ class MemoryThread {
 }
 
 const layerMotion = [
-  { from: { yPercent: -2, xPercent: -2, z: -720, scale: 1.5, rotate: 0.8 }, to: { yPercent: 3, xPercent: 2, z: -520, scale: 1.32, rotate: -0.6 } },
-  { from: { yPercent: 13, xPercent: -13, z: -350, scale: 1.28, rotate: -1.2 }, to: { yPercent: -14, xPercent: 11, z: -190, scale: 1.1, rotate: 1.0 } },
-  { from: { yPercent: 8, xPercent: 18, z: -120, scale: 1.12, rotate: 0.7 }, to: { yPercent: -9, xPercent: -17, z: 20, scale: 1.0, rotate: -0.7 } },
+  { from: { yPercent: -3, xPercent: -2, z: -760, scale: 1.52, rotate: 0.12 }, to: { yPercent: 4, xPercent: 2, z: -540, scale: 1.34, rotate: -0.1 } },
+  { from: { yPercent: 13, xPercent: -12, z: -380, scale: 1.3, rotate: -0.26 }, to: { yPercent: -14, xPercent: 10, z: -180, scale: 1.08, rotate: 0.22 } },
+  { from: { yPercent: 8, xPercent: 16, z: -140, scale: 1.13, rotate: 0.18 }, to: { yPercent: -9, xPercent: -15, z: 24, scale: 1.0, rotate: -0.16 } },
   { from: { yPercent: 17, xPercent: 0, z: 20, scale: 0.94, rotate: 0 }, to: { yPercent: -11, xPercent: 0, z: 95, scale: 1.025, rotate: 0 } },
-  { from: { yPercent: 21, xPercent: -16, z: 260, scale: 0.82, rotate: -1.1 }, to: { yPercent: -22, xPercent: 14, z: 430, scale: 0.68, rotate: 1.05 } },
+  { from: { yPercent: 22, xPercent: -15, z: 280, scale: 0.8, rotate: -0.3 }, to: { yPercent: -23, xPercent: 13, z: 460, scale: 0.66, rotate: 0.28 } },
 ];
 
 let disposeCurrent: (() => void) | undefined;
@@ -353,7 +387,6 @@ function setupAboutFilm(): (() => void) | undefined {
   const cursor = root.querySelector<HTMLElement>('[data-film-cursor]');
   const progressBar = root.querySelector<HTMLElement>('[data-film-progress]');
   const indexLabel = root.querySelector<HTMLElement>('[data-film-index]');
-  const chapterLinks = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-film-chapter]'));
   const scenes = Array.from(root.querySelectorAll<HTMLElement>('[data-film-scene]'));
   const interactiveObjects = Array.from(root.querySelectorAll<HTMLElement>('[data-interactive-object]'));
   const processObjects = Array.from(root.querySelectorAll<HTMLElement>('[data-process-object]'));
@@ -378,7 +411,7 @@ function setupAboutFilm(): (() => void) | undefined {
     || window.innerWidth < 720;
   root.dataset.quality = lowPower ? 'lite' : 'full';
   const paint = lowPower ? null : LivingPaint.create(canvas);
-  const thread = lowPower ? null : MemoryThread.create(threadCanvas);
+  const thread = MemoryThread.create(threadCanvas, lowPower ? 1 : 1.5);
   const state: FilmState = {
     time: 0,
     scroll: 0,
@@ -401,10 +434,6 @@ function setupAboutFilm(): (() => void) | undefined {
     activeScene = index;
     root.dataset.activeScene = String(index);
     scenes.forEach((scene, sceneIndex) => scene.classList.toggle('is-current', sceneIndex === index));
-    chapterLinks.forEach((link, linkIndex) => {
-      if (linkIndex === index) link.setAttribute('aria-current', 'step');
-      else link.removeAttribute('aria-current');
-    });
     if (indexLabel) indexLabel.textContent = `0${index + 1} — 06`;
   };
 
@@ -420,23 +449,6 @@ function setupAboutFilm(): (() => void) | undefined {
       ScrollTrigger.update();
     });
   }
-
-  chapterLinks.forEach((link) => {
-    const navigateToScene = (event: MouseEvent) => {
-      const selector = link.getAttribute('href');
-      const destination = selector ? document.querySelector<HTMLElement>(selector) : null;
-      if (!destination) return;
-      event.preventDefault();
-      const travel = Math.max(0, destination.offsetHeight - window.innerHeight);
-      const targetY = destination.id === 'top'
-        ? 0
-        : destination.offsetTop + Math.min(window.innerHeight * .62, travel * .22);
-      if (lenis) lenis.scrollTo(targetY, { duration: 1.05 });
-      else window.scrollTo({ top: targetY, behavior: reduced ? 'auto' : 'smooth' });
-    };
-    link.addEventListener('click', navigateToScene);
-    interactionCleanups.push(() => link.removeEventListener('click', navigateToScene));
-  });
 
   const activateProcess = (index: number) => {
     processObjects.forEach((object, objectIndex) => object.classList.toggle('is-active', objectIndex === index));
@@ -575,12 +587,12 @@ function setupAboutFilm(): (() => void) | undefined {
           {
             '--object-scroll-x': `${-38 * direction}px`,
             '--object-scroll-y': `${52 + objectIndex * 9}px`,
-            '--object-scroll-r': `${-4.5 * direction}deg`,
+            '--object-scroll-r': `${-1.25 * direction}deg`,
           },
           {
             '--object-scroll-x': `${44 * direction}px`,
             '--object-scroll-y': `${-64 - objectIndex * 8}px`,
-            '--object-scroll-r': `${5.5 * direction}deg`,
+            '--object-scroll-r': `${1.5 * direction}deg`,
             duration: 1,
           },
           0,
@@ -762,7 +774,7 @@ function setupAboutFilm(): (() => void) | undefined {
   document.addEventListener('visibilitychange', handleVisibility);
 
   let lastCanvasFrame = -1;
-  const canvasFrameInterval = 1 / 30;
+  const canvasFrameInterval = lowPower ? 1 / 15 : 1 / 30;
   const tick = (time: number) => {
     if (!visible) return;
     if (lenis) lenis.raf(time * 1000);
