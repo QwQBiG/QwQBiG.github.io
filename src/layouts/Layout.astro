@@ -24,10 +24,24 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 ---
 
 <!DOCTYPE html>
-<html lang="zh-cn" data-theme="light" class="scroll-smooth" style="color-scheme: light">
+<html lang="zh-cn" data-theme="light" class="scroll-smooth" style="color-scheme: only light">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="only light" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        root.setAttribute('data-theme', 'light');
+        root.classList.remove('dark');
+        root.style.colorScheme = 'only light';
+        try {
+          localStorage.setItem('theme', 'light');
+        } catch {
+          // 浅色模式不依赖本地存储权限。
+        }
+      })();
+    </script>
     <!-- 缓存策略：HTML使用短缓存配合ETag，静态资源由服务器配置长期缓存 -->
     <meta http-equiv="Cache-Control" content="public, max-age=600" />
     <title>{title}</title>
@@ -73,15 +87,6 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 </head>
 <body class={`site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <slot />
-
-    <!-- Theme Script - 强制使用浅色模式 -->
-    <script is:inline>
-      (function() {
-        // 强制使用浅色模式，禁用深色模式
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-      })();
-    </script>
 
     <!-- Prism.js Code Blocks Functionality -->
     <script src="/js/prism-code-blocks.js" defer></script>

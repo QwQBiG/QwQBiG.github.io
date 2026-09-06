@@ -2,7 +2,7 @@
                 CSS 变量定义
 ——————————————————————————————————————————————*/
 :root {
-  color-scheme: light;
+  color-scheme: only light;
   /* 浅色模式颜色 */
   --color-primary: #e84a7a;
   --color-primary-light: #ff6b9d;
@@ -30,6 +30,10 @@
 }
 
 /* 深色模式已禁用 - 仅使用浅色模式 */
+html,
+body {
+  color-scheme: only light;
+}
 
 /*——————————————————————————————————————————————
                 基础样式
