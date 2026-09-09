@@ -62,10 +62,12 @@ async function optimizeSiteImages() {
       .resize({ width: 640, height: 360, fit: 'cover' })
       .webp({ quality: 78, effort: 5, smartSubsample: true })
       .toFile(path.join(siteDir, 'gallery-cover-640.webp')),
-    sharp(path.join(root, 'src', 'assets', 'site', 'character.png')).rotate()
-      .resize({ width: 320, height: 640, fit: 'inside', withoutEnlargement: true })
-      .webp({ quality: 84, effort: 5, smartSubsample: true })
-      .toFile(path.join(siteDir, 'character.webp')),
+    ...['character', 'character-happy', 'character-wink', 'character-shy'].map((name) =>
+      sharp(path.join(root, 'src', 'assets', 'site', `${name}.png`)).rotate()
+      .resize({ width: 768, height: 1152, fit: 'inside', withoutEnlargement: true })
+      .webp({ quality: 90, effort: 5, smartSubsample: true })
+      .toFile(path.join(siteDir, `${name}.webp`)),
+    ),
   ]);
 }
 

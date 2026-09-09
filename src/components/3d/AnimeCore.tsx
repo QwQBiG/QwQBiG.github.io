@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useState } from 'react';
+import React, { useRef, useMemo, useEffect, useState, useCallback } from 'react';
 import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -17,26 +17,101 @@ const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(point
 // 限制 DPR 上限，避免高分屏性能开销过大
 const DPR_LIMIT = 1.5;
 
+const EXPRESSIONS = [
+  { label: 'Smile', image: '/generated/site/character.webp' },
+  { label: 'Happy', image: '/generated/site/character-happy.webp' },
+  { label: 'Wink', image: '/generated/site/character-wink.webp' },
+  { label: 'Shy', image: '/generated/site/character-shy.webp' },
+];
+
+type ExpressionRequest = { index: number; revision: number };
+type CharacterProps = {
+  request: ExpressionRequest;
+  onDisplay: (index: number) => void;
+  onLoadError: () => void;
+};
+type Portrait = { index: number; texture: THREE.Texture };
+
+function prepareTexture(texture: THREE.Texture) {
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.anisotropy = 8;
+  return texture;
+}
+
 // 角色平面组件 - 带呼吸和视差效果 - 优化版本
-function CharacterPlane() {
+function CharacterPlane({ request, onDisplay, onLoadError }: CharacterProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { mouse } = useThree();
   const frameCount = useRef(0);
   const [isVisible, setIsVisible] = useState(true);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 保持原贴图与过滤参数，只移除未使用的 Drei 包装层。
+  // 使用原始 OC 插画，在着色器中取景，保留完整源图。
   const texture = useLoader(
     THREE.TextureLoader,
-    '/generated/site/character.webp',
+    EXPRESSIONS[0].image,
   ) as THREE.Texture<HTMLImageElement>;
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.anisotropy = 8;
+  prepareTexture(texture);
 
-  // 获取图片原始宽高比
-  const imageAspect = texture.image ? texture.image.width / texture.image.height : 1;
+  const currentPortrait = useRef<Portrait>({ index: 0, texture });
+  const desiredPortrait = useRef<Portrait>({ index: 0, texture });
+  const transition = useRef<{ target: Portrait; elapsed: number } | null>(null);
+  const reduceMotion = useRef(false);
+  const loadPortrait = useRef<((index: number) => Promise<THREE.Texture>) | undefined>(undefined);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateMotion = () => { reduceMotion.current = media.matches; };
+    updateMotion();
+    media.addEventListener('change', updateMotion);
+    return () => media.removeEventListener('change', updateMotion);
+  }, []);
+
+  useEffect(() => {
+    let disposed = false;
+    const textures = new Set<THREE.Texture>();
+    const cache = new Map<number, Promise<THREE.Texture>>([[0, Promise.resolve(texture)]]);
+    const loader = new THREE.TextureLoader();
+    const load = (index: number) => {
+      const existing = cache.get(index);
+      if (existing) return existing;
+      const promise = loader.loadAsync(EXPRESSIONS[index].image).then((loaded) => {
+        if (disposed) {
+          loaded.dispose();
+          throw new Error('Portrait component unmounted');
+        }
+        textures.add(loaded);
+        return prepareTexture(loaded);
+      }).catch((error: unknown) => {
+        cache.delete(index);
+        throw error;
+      });
+      cache.set(index, promise);
+      return promise;
+    };
+    loadPortrait.current = load;
+    // 默认肖像先显示，其他表情在后台各加载一次；失败后允许重新请求。
+    EXPRESSIONS.slice(1).forEach((_, index) => { void load(index + 1).catch(() => {}); });
+    return () => {
+      disposed = true;
+      loadPortrait.current = undefined;
+      textures.forEach((loaded) => loaded.dispose());
+    };
+  }, [texture]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void loadPortrait.current?.(request.index).then((loaded) => {
+      if (!cancelled) desiredPortrait.current = { index: request.index, texture: loaded };
+    }).catch(() => {
+      if (!cancelled) {
+        desiredPortrait.current = transition.current?.target ?? currentPortrait.current;
+        onLoadError();
+      }
+    });
+    return () => { cancelled = true; };
+  }, [request, onLoadError]);
 
   // 鼠标位置平滑插值
   const mousePosition = useMemo(() => new THREE.Vector2(0, 0), []);
@@ -66,8 +141,27 @@ function CharacterPlane() {
     return () => observer.disconnect();
   }, []);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (!meshRef.current || !materialRef.current || !isVisible) return;
+
+    const uniforms = materialRef.current.uniforms;
+    if (!transition.current && desiredPortrait.current.index !== currentPortrait.current.index) {
+      transition.current = { target: desiredPortrait.current, elapsed: 0 };
+      uniforms.uNextTexture.value = desiredPortrait.current.texture;
+    }
+    if (transition.current) {
+      transition.current.elapsed += delta;
+      const progress = reduceMotion.current ? 1 : Math.min(transition.current.elapsed / 0.22, 1);
+      uniforms.uTransition.value = progress * progress * (3 - 2 * progress);
+      if (progress === 1) {
+        currentPortrait.current = transition.current.target;
+        uniforms.uTexture.value = currentPortrait.current.texture;
+        uniforms.uNextTexture.value = currentPortrait.current.texture;
+        uniforms.uTransition.value = 0;
+        transition.current = null;
+        onDisplay(currentPortrait.current.index);
+      }
+    }
 
     // 触摸设备降低帧率以节省性能
     frameCount.current++;
@@ -110,8 +204,10 @@ function CharacterPlane() {
       uTime: { value: 0 },
       uMouse: { value: new THREE.Vector2(0, 0) },
       uTexture: { value: texture },
+      uNextTexture: { value: texture },
+      uTransition: { value: 0 },
       uGlowColor: { value: new THREE.Color(0xc084fc) },
-      uGlowIntensity: { value: 0.25 },
+      uGlowIntensity: { value: 0.08 },
     },
     vertexShader: `
       varying vec2 vUv;
@@ -131,6 +227,8 @@ function CharacterPlane() {
     `,
     fragmentShader: `
       uniform sampler2D uTexture;
+      uniform sampler2D uNextTexture;
+      uniform float uTransition;
       uniform float uTime;
       uniform vec2 uMouse;
       uniform vec3 uGlowColor;
@@ -138,8 +236,27 @@ function CharacterPlane() {
 
       varying vec2 vUv;
 
+      vec4 samplePortrait(sampler2D portrait, vec2 portraitUv) {
+        vec4 color = texture2D(portrait, clamp(portraitUv, 0.0, 1.0));
+        float radius = length(vUv - vec2(0.5));
+        float paper = smoothstep(0.94, 0.995, min(color.r, min(color.g, color.b)));
+        color.a *= 1.0 - paper * smoothstep(0.16, 0.46, radius);
+        color.a *= 1.0 - smoothstep(0.46, 0.5, radius);
+        return color;
+      }
+
       void main() {
-        vec4 texColor = texture2D(uTexture, vUv);
+        // 从 2:3 全身插画取上半身，头顶留白，人物向右微调以视觉居中。
+        vec2 portraitUv = vec2(
+          0.5 + (vUv.x - 0.53) * (760.0 / 1024.0),
+          1.0 - ((1.0 - vUv.y) * 760.0 - 45.0) / 1536.0
+        );
+        // 两张肖像分别柔化纸边后混合，切换时始终保留完整人物。
+        vec4 currentColor = samplePortrait(uTexture, portraitUv);
+        vec4 nextColor = samplePortrait(uNextTexture, portraitUv);
+        float alpha = mix(currentColor.a, nextColor.a, uTransition);
+        vec3 rgb = mix(currentColor.rgb * currentColor.a, nextColor.rgb * nextColor.a, uTransition);
+        vec4 texColor = vec4(rgb / max(alpha, 0.001), alpha);
 
         // 丢弃透明像素
         if (texColor.a < 0.01) discard;
@@ -147,7 +264,7 @@ function CharacterPlane() {
         // 边缘检测用于发光效果
         vec2 center = vUv - vec2(0.5);
         float dist = length(center);
-        float edgeGlow = smoothstep(0.5, 0.35, dist) * uGlowIntensity;
+        float edgeGlow = (1.0 - smoothstep(0.35, 0.5, dist)) * uGlowIntensity;
 
         // 动态光晕强度
         float pulse = sin(uTime * 1.0) * 0.1 + 0.9;
@@ -167,15 +284,12 @@ function CharacterPlane() {
     side: THREE.DoubleSide,
   }), [texture]);
 
-  // 根据宽高比计算平面尺寸，保持图片比例
-  // 使用 contain 策略：确保图片完整显示，可能有留白
-  const baseSize = 3.8; // 稍微减小基础尺寸，避免边缘被裁剪
-  const planeWidth = imageAspect >= 1 ? baseSize : baseSize * imageAspect;
-  const planeHeight = imageAspect >= 1 ? baseSize / imageAspect : baseSize;
+  // 方形取景覆盖球面，半身肖像在小屏幕上也能保持清晰。
+  const baseSize = 4.2;
 
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
-      <planeGeometry args={[planeWidth, planeHeight, 16, 16]} />
+      <planeGeometry args={[baseSize, baseSize, 16, 16]} />
       <shaderMaterial
         ref={materialRef}
         {...shaderData}
@@ -216,7 +330,7 @@ function AmbientGlow() {
 }
 
 // 场景组件
-function Scene() {
+function Scene(props: CharacterProps) {
   return (
     <>
       {/* 环境光 */}
@@ -231,21 +345,50 @@ function Scene() {
       <AmbientGlow />
 
       {/* 角色主体 */}
-      <CharacterPlane />
+      <CharacterPlane {...props} />
     </>
   );
 }
 
 // 主组件 - 优化版本
 export default function AnimeCore() {
+  const interactionRef = useRef<HTMLDivElement>(null!);
+  const [request, setRequest] = useState<ExpressionRequest>({ index: 0, revision: 0 });
+  const [displayedExpression, setDisplayedExpression] = useState(0);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const reportLoadError = useCallback(() => setLoadFailed(true), []);
+  const changeExpression = () => {
+    setLoadFailed(false);
+    setRequest((previous) => ({
+      index: loadFailed ? previous.index : (previous.index + 1) % EXPRESSIONS.length,
+      revision: previous.revision + 1,
+    }));
+  };
+  const currentLabel = EXPRESSIONS[displayedExpression].label;
+  const isLoading = request.index !== displayedExpression && !loadFailed;
+
   // DPR 设置：限制上限避免高分屏性能开销过大
   const dpr = typeof window !== 'undefined'
     ? Math.min(window.devicePixelRatio, DPR_LIMIT)
     : 1;
 
   return (
-    <div className="w-full h-full relative">
+    <div ref={interactionRef} className="w-full h-full relative">
       <Canvas
+        eventSource={interactionRef}
+        onCreated={(state) => state.setEvents({
+          compute: (event, root) => {
+            const bounds = interactionRef.current.getBoundingClientRect();
+            // 键盘触发的 click 没有指针坐标，继续使用原来的视差位置。
+            if (event.type !== 'click' || event.detail !== 0) {
+              root.pointer.set(
+                ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+                -((event.clientY - bounds.top) / bounds.height) * 2 + 1,
+              );
+            }
+            root.raycaster.setFromCamera(root.pointer, root.camera);
+          },
+        })}
         camera={{ position: [0, 0, 4.5], fov: 50 }}
         gl={{
           antialias: true, // 所有设备启用抗锯齿
@@ -260,8 +403,58 @@ export default function AnimeCore() {
         frameloop="always"
         performance={{ min: 0.5 }}
       >
-        <Scene />
+        <Scene request={request} onDisplay={setDisplayedExpression} onLoadError={reportLoadError} />
       </Canvas>
+      <button
+        type="button"
+        className="portrait-expression-button"
+        onClick={changeExpression}
+        title={loadFailed ? 'Image unavailable. Click to retry' : 'Click to change expression'}
+        aria-label={`Current expression: ${currentLabel}. ${loadFailed ? 'Image unavailable. Click to retry' : 'Click to change expression'}`}
+        aria-busy={isLoading}
+      >
+        <span className="portrait-expression-hint" aria-hidden="true">
+          {loadFailed ? 'Tap to retry' : request.revision === 0 ? 'Tap to change' : `${currentLabel} · Tap again`}
+        </span>
+      </button>
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {loadFailed ? 'Expression image unavailable. The current portrait is unchanged. Click to retry.' : `Current expression: ${currentLabel}`}
+      </span>
+      <style>{`
+        .portrait-expression-button {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          border: 0;
+          border-radius: 50%;
+          padding: 0;
+          background: transparent;
+          cursor: pointer;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .portrait-expression-button:focus-visible {
+          outline: 2px solid #a78bfa;
+          outline-offset: -6px;
+        }
+        .portrait-expression-hint {
+          position: absolute;
+          bottom: 12%;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: 3px 9px;
+          border: 1px solid rgba(196, 181, 253, 0.3);
+          border-radius: 999px;
+          color: #70548d;
+          background: rgba(255, 255, 255, 0.74);
+          font-size: clamp(10px, 1vw, 11px);
+          line-height: 1.4;
+          letter-spacing: 0.03em;
+          white-space: nowrap;
+          pointer-events: none;
+        }
+      `}</style>
     </div>
   );
 }
