@@ -160,14 +160,14 @@ blog.iqwqi.win    → CNAME 到主域名
 
 绑定自定义域名的关键步骤：
 
-1. ✅ 修改 Hugo `baseURL`
-2. ✅ 创建 `static/CNAME` 文件
-3. ✅ Cloudflare 添加 DNS 记录
-4. ✅ GitHub Pages 设置自定义域名
-5. ✅ 启用 HTTPS
-6. ✅ 部署网站
+1. 修改 Hugo `baseURL`
+2. 创建 `static/CNAME` 文件
+3. Cloudflare 添加 DNS 记录
+4. GitHub Pages 设置自定义域名
+5. 启用 HTTPS
+6. 部署网站
 
-现在博客可以通过 `https://iqwqi.win` 访问了！🎉
+现在博客可以通过 `https://iqwqi.win` 访问了！
 
 ## 参考链接
 

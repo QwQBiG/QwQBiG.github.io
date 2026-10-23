@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
+import ContentIcon from '../components/ui/ContentIcon.astro';
 
 const pageTitle = "搜索 - QwQBiG's World";
 const pageDescription = "搜索博客文章";
@@ -14,8 +15,8 @@ const pageDescription = "搜索博客文章";
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="text-center mb-12">
-        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
-          🔍 搜索
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
+          <ContentIcon name="search" />搜索
         </h1>
         <p class="font-sans text-lg text-text-secondary">
           输入关键词搜索文章

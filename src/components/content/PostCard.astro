@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '../../utils/date';
+import { getPostTags } from '../../utils/content';
 
 interface Props {
   post: CollectionEntry<'cs'> | CollectionEntry<'poetry'>;
@@ -8,7 +9,8 @@ interface Props {
 }
 
 const { post, collection = 'cs' } = Astro.props;
-const { title, date, tags, description } = post.data;
+const { title, date, description } = post.data;
+const tags = getPostTags(post);
 // series 只在 cs collection 中存在
 const series = collection === 'cs' ? (post.data as CollectionEntry<'cs'>['data']).series : undefined;
 

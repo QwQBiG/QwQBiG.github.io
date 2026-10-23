@@ -9,6 +9,7 @@ const { path } = Astro.props;
 
 <script>
   import walineStyles from '@waline/client/waline.css?url';
+  import { keepCommentDisplayEmojiFree } from '../scripts/waline-display';
 
   const walineEl = document.getElementById('waline');
   const pagePath = walineEl?.dataset.path || window.location.pathname;
@@ -39,6 +40,10 @@ const { path } = Astro.props;
       login: 'force',
       path: pagePath,
       dark: false,
+      lang: 'zh-CN',
+      emoji: false,
+      search: false,
+      reaction: false,
       locale: {
         placeholder: '写下你的评论...',
         login: '登录',
@@ -85,6 +90,8 @@ const { path } = Astro.props;
   };
 
   if (walineEl) {
+    const stopFormatting = keepCommentDisplayEmojiFree(walineEl);
+    document.addEventListener('astro:before-swap', stopFormatting, { once: true });
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
@@ -123,6 +130,10 @@ const { path } = Astro.props;
 
   #waline {
     margin-top: 0;
+  }
+
+  #waline .wl-emoji {
+    display: none !important;
   }
 
   .wl-card {

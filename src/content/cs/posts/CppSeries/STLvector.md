@@ -246,7 +246,7 @@ long long sum = pref[r + 1] - pref[l];  // a[1]+a[2]+a[3] = 9
 ### 5.1 为什么 erase + 循环是 O(N²) 陷阱
 
 ```cpp
-// ❌ 致命错误！每次 erase 后移 O(N) 元素，总共 O(N²)
+// 致命错误！每次 erase 后移 O(N) 元素，总共 O(N²)
 vector<int> v = {1, 2, 3, 4, 5};
 for (auto it = v.begin(); it != v.end(); )
 {
@@ -260,7 +260,7 @@ for (auto it = v.begin(); it != v.end(); )
     }
 }
 
-// ❌ 倒序删除也是 O(N²)!
+// 倒序删除也是 O(N²)!
 for (int i = (int)v.size() - 1; i >= 0; i--)
 {
     if (v[i] % 2 == 0)
@@ -278,19 +278,19 @@ for (int i = (int)v.size() - 1; i >= 0; i--)
 
 vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-// ✅ C++11 推荐：O(N) 删除所有偶数！
+// C++11 推荐：O(N) 删除所有偶数！
 v.erase(remove_if(all(v), [](int x)
 {
     return x % 2 == 0;
 }), v.end());
 
-// ✅ 删除所有小于5的元素
+// 删除所有小于5的元素
 v.erase(remove_if(all(v), [](int x)
 {
     return x < 5;
 }), v.end());
 
-// ✅ 删除特定值
+// 删除特定值
 v.erase(remove(all(v), 5), v.end());  // 删除所有值为5的元素
 ```
 
@@ -320,7 +320,7 @@ v.erase(remove_if(all(v), [&](int x)
 ### 6.1 为什么不推荐使用 vector<bool>
 
 ```cpp
-// ❌ 致命错误！vector<bool> 是特化版本，有严重性能问题
+// 致命错误！vector<bool> 是特化版本，有严重性能问题
 vector<bool> flags(n);
 
 // 问题1: 无法返回真正引用，只能返回代理对象
@@ -339,17 +339,17 @@ flags[0] = true;  // 实际是代理对象赋值，有额外开销
 ### 6.2 正确替代方案
 
 ```cpp
-// ✅ 推荐1: vector<char>（1字节，效率最高）
+// 推荐1: vector<char>（1字节，效率最高）
 vector<char> flags(n, 0);
 flags[i] = 1;
 
-// ✅ 推荐2: vector<uint8_t> / vector<unsigned char>
+// 推荐2: vector<uint8_t> / vector<unsigned char>
 vector<uint8_t> flags2(n);
 
-// ✅ 推荐3: vector<int>（如果需要布尔运算）
+// 推荐3: vector<int>（如果需要布尔运算）
 vector<int> flags3(n);
 
-// ✅ 布尔数组用 std::vector<bool>::reference 的替代方案
+// 布尔数组用 std::vector<bool>::reference 的替代方案
 // 使用 deque<bool> 或自己封装
 ```
 
@@ -357,9 +357,9 @@ vector<int> flags3(n);
 
 | 类型 | 访问时间 | 内存 | 适用场景 |
 |------|---------|------|---------|
-| `vector<bool>` | 最慢 | 1 bit | ❌ 不推荐 |
-| `vector<char>` | 最快 | 1 byte | ✅ 竞赛首选 |
-| `vector<uint8_t>` | 快 | 1 byte | ✅ 明确语义 |
+| `vector<bool>` | 最慢 | 1 bit | 不推荐 |
+| `vector<char>` | 最快 | 1 byte | 竞赛首选 |
+| `vector<uint8_t>` | 快 | 1 byte | 明确语义 |
 | `vector<int>` | 快 | 4 byte | 需要位运算时 |
 
 ---
@@ -381,13 +381,13 @@ v.push_back(6);  // 可能触发reallocation，it失效！
 ```cpp
 vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-// ✅ C++11 推荐：使用 Erase-Remove 惯用法，O(N)
+// C++11 推荐：使用 Erase-Remove 惯用法，O(N)
 v.erase(remove_if(all(v), [](int x)
 {
     return x % 2 == 0;
 }), v.end());
 
-// ✅ 传统正确做法：使用 erase 返回值
+// 传统正确做法：使用 erase 返回值
 for (auto it = v.begin(); it != v.end(); )
 {
     if (*it % 2 == 0)

@@ -183,18 +183,18 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    subgraph Network["🌐 网络传输总览"]
+    subgraph Network["网络传输总览"]
         direction LR
-        PCA["🖥️ PC机A"] -->|发送| Router1["📡 路由器"]
-        Router1 -->|路由| Cloud["☁️ 互联网"]
-        Cloud -->|路由| Router2["📡 路由器"]
-        Router2 -->|接收| PCB["🖥️ PC机B"]
+        PCA["PC机A"] -->|发送| Router1["路由器"]
+        Router1 -->|路由| Cloud["互联网"]
+        Cloud -->|路由| Router2["路由器"]
+        Router2 -->|接收| PCB["PC机B"]
     end
 
     subgraph Process["数据处理流程"]
         direction LR
 
-        subgraph Encapsulation["📦 发送方：数据封装"]
+        subgraph Encapsulation["发送方：数据封装"]
             direction TB
             E1["应用层<br/>原始数据"]
             E2["传输层<br/>+ TCP/UDP头部"]
@@ -204,12 +204,12 @@ flowchart TB
             E1 --> E2 --> E3 --> E4
         end
 
-        subgraph Transmit["📤 数据传输"]
+        subgraph Transmit["数据传输"]
             direction TB
             T["数据帧<br/>通过物理介质传输"]
         end
 
-        subgraph Decapsulation["📭 接收方：数据解封装"]
+        subgraph Decapsulation["接收方：数据解封装"]
             direction TB
             D4["链路层<br/>去除MAC头部"]
             D3["网络层<br/>去除IP头部"]
@@ -396,7 +396,7 @@ flowchart TB
             PCA["PC机A<br/>IP: 192.168.10.143<br/>MAC: 00:0c:29:7f:37:1b"]
         end
 
-        Cloud["☁️ 局域网"]
+        Cloud["局域网"]
 
         subgraph Target["目的主机"]
             PCB["PC机B<br/>IP: 192.168.10.149<br/>MAC: 00:0c:29:7f:37:3f"]

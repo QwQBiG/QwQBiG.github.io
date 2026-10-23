@@ -2,19 +2,14 @@
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
-import { getCollection } from 'astro:content';
+import ContentIcon from '../../components/ui/ContentIcon.astro';
+import { loadContent } from '../../utils/load-content';
 
-// Get all poetry posts
-const poetryPosts = await getCollection('poetry', ({ data }) => !data.draft);
-
-// Sort by date (newest first)
-const sortedPosts = poetryPosts.sort((a, b) => 
-  b.data.date.valueOf() - a.data.date.valueOf()
-);
+const { poetryPosts: sortedPosts } = await loadContent();
 
 // Get unique genres and moods for filtering
-const allGenres = [...new Set(poetryPosts.map(p => p.data.genre))];
-const allMoods = [...new Set(poetryPosts.flatMap(p => p.data.mood))];
+const allGenres = [...new Set(sortedPosts.map(p => p.data.genre))];
+const allMoods = [...new Set(sortedPosts.flatMap(p => p.data.mood))];
 
 const pageTitle = "诗歌 - QwQBiG's World";
 const pageDescription = "我的诗歌创作空间";
@@ -27,8 +22,8 @@ const pageDescription = "我的诗歌创作空间";
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="text-center mb-12">
-        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
-          📝 诗歌
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
+          <ContentIcon name="poetry" />诗歌
         </h1>
         <p class="font-sans text-lg text-text-secondary">
           共 {sortedPosts.length} 首诗歌
@@ -89,6 +84,7 @@ const pageDescription = "我的诗歌创作空间";
               <div class="flex items-center justify-between text-xs text-text-muted">
                 <time datetime={post.data.date.toISOString()}>
                   {post.data.date.toLocaleDateString('zh-CN', {
+                    timeZone: 'Asia/Shanghai',
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'

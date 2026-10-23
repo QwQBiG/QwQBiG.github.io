@@ -6,9 +6,11 @@
     "dev": "astro dev",
     "start": "astro dev",
     "optimize:images": "node scripts/optimize-images.mjs",
-    "build": "npm run optimize:images && astro build",
+    "build": "npm run check:emoji && npm run optimize:images && astro build && npm run check:emoji -- --dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "check:emoji": "node --experimental-strip-types scripts/check-emoji.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.0",
@@ -45,6 +47,7 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.3",
     "sharp": "^0.34.5",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "parse5": "7.3.0"
   }
 }

@@ -15,9 +15,9 @@ description: "为 Astro 静态博客集成 Waline 评论系统，支持回复、
 
 | 方案 | 数据存储 | 匿名评论 | 内容审核 | 部署难度 |
 |------|---------|---------|---------|---------|
-| Utterances | GitHub Issues | ❌ | ❌ | ⭐ |
-| Giscus | GitHub Discussions | ✅ | 手动审核 | ⭐ |
-| **Waline** | Vercel KV / Neon | ✅ | 关键词过滤 + 手动审核 | ⭐⭐ |
+| Utterances | GitHub Issues | 不支持 | 不支持 | 低 |
+| Giscus | GitHub Discussions | 支持 | 手动审核 | 低 |
+| **Waline** | Vercel KV / Neon | 支持 | 关键词过滤 + 手动审核 | 中 |
 
 最终选了 **Waline**，因为它是三者中唯一支持**自动敏感词过滤**的，而且不需要用户注册 GitHub。
 

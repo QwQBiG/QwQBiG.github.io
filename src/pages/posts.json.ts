@@ -1,13 +1,10 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 import { formatDate } from '../utils/date';
+import { loadContent } from '../utils/load-content';
+import { getPostTags } from '../utils/content';
 
 export const GET: APIRoute = async () => {
-  const csPosts = await getCollection('cs', ({ data }) => !data.draft);
-  
-  const allPosts = csPosts.filter(post => 
-    !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
-  );
+  const { posts: allPosts } = await loadContent();
   
   const posts = allPosts.map(post => ({
     title: post.data.title,
@@ -15,7 +12,7 @@ export const GET: APIRoute = async () => {
     slug: post.slug,
     collection: post.collection,
     date: formatDate(post.data.date),
-    tags: post.data.tags || [],
+    tags: getPostTags(post),
   }));
   
   return new Response(JSON.stringify(posts), {

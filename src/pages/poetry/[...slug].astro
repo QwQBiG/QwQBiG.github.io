@@ -3,11 +3,13 @@ import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import GlassContainer from '../../components/ui/GlassContainer.astro';
-import { getCollection } from 'astro:content';
+import { render } from 'astro:content';
+import { loadContent } from '../../utils/load-content';
+import { getPostTags } from '../../utils/content';
 import WalineComments from '../../components/WalineComments.astro';
 
 export async function getStaticPaths() {
-  const poetryPosts = await getCollection('poetry', ({ data }) => !data.draft);
+  const { publishedPoetry: poetryPosts } = await loadContent();
 
   return poetryPosts.map(post => ({
     params: { slug: post.slug },
@@ -16,12 +18,13 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
+const tags = getPostTags(post);
 
 const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
 ---
 
-<Layout title={pageTitle} description={post.data.description}>
+<Layout title={pageTitle} description={post.data.description} noIndex={post.data.hidden}>
   <FloatingNavCard />
 
   <main class="flex-1 py-12">
@@ -37,6 +40,7 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
           <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
             <time datetime={post.data.date.toISOString()}>
               {post.data.date.toLocaleDateString('zh-CN', {
+                timeZone: 'Asia/Shanghai',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -53,9 +57,9 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
             )}
           </div>
 
-          {post.data.tags && post.data.tags.length > 0 && (
+          {tags.length > 0 && (
             <div class="flex flex-wrap justify-center gap-2 mt-4">
-              {post.data.tags.map(tag => (
+              {tags.map(tag => (
                 <span class="px-2 py-1 text-sm bg-bg-secondary text-text-secondary rounded-full">
                   #{tag}
                 </span>

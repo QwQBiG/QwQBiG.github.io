@@ -2,25 +2,11 @@
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
-import { getCollection } from 'astro:content';
+import ContentIcon from '../../components/ui/ContentIcon.astro';
+import { loadContent } from '../../utils/load-content';
+import { getTagUrl } from '../../utils/content';
 
-// Get all posts
-const csPosts = await getCollection('cs', ({ data }) => !data.draft);
-
-const allPosts = csPosts.filter(post => 
-  !post.slug.endsWith('/_index') && !post.slug.endsWith('_index')
-);
-
-// Count tags
-const tagCounts = new Map<string, number>();
-allPosts.forEach(post => {
-  post.data.tags?.forEach(tag => {
-    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
-  });
-});
-
-// Sort by count (descending)
-const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
+const { tags: sortedTags } = await loadContent();
 
 const pageTitle = "标签 - QwQBiG's World";
 const pageDescription = "按标签浏览文章";
@@ -33,8 +19,8 @@ const pageDescription = "按标签浏览文章";
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="text-center mb-12">
-        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
-          🏷️ 标签
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
+          <ContentIcon name="tag" />标签
         </h1>
         <p class="font-sans text-lg text-text-secondary">
           共 {sortedTags.length} 个标签
@@ -45,7 +31,7 @@ const pageDescription = "按标签浏览文章";
       <div class="tag-cloud">
         {sortedTags.map(([tag, count]) => (
           <a 
-            href={`/tags/${tag}/`}
+            href={getTagUrl(tag)}
             class="tag-cloud-item"
             style={`font-size: ${Math.max(0.875, Math.min(1.5, 0.875 + count * 0.05))}rem;`}
           >

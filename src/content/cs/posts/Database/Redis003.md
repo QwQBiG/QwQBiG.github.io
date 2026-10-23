@@ -33,7 +33,7 @@ weight: 3
 | **`TYPE`** <br>(Type / 数据类型) | `TYPE key` | 返回键的数据类型（如 `string`、`hash`、`list`、`set`、`zset`）。 | `TYPE mykey` |
 | **`KEYS`** <br>(Keys / 键查询) | `KEYS pattern` | 查找所有符合给定模式的键。例如 `KEYS *` 会列出所有键。 | `KEYS user:*` |
 
-> ⚠️ **生产环境安全警告（`KEYS` 命令）**：
+> **生产环境安全警告（`KEYS` 命令）**：
 > 在包含大量 Key 的生产环境数据库中，绝对不要运行 `KEYS *`。该命令会阻塞 Redis 单线程服务器，导致其他所有客户端请求超时。如果需要检索 Key，请使用非阻塞的 **`SCAN`** <br> (Scan / 渐进式扫描) 命令。
 
 ---
@@ -119,7 +119,7 @@ Redis 默认提供 16 个数据库，编号为 `0` 到 `15`（默认连接的是
 | **`DECRBY`** <br>(Decrement By / 按整型值递减) | `DECRBY key decrement` | 将键存储的整数值**减去指定的整数**。 | `DECRBY score 5` |
 | **`INCRBYFLOAT`** <br>(Increment By Float / 按浮点数值递增) | `INCRBYFLOAT key increment` | 将键存储的值**加上指定的浮点数**（支持小数加减）。 | `INCRBYFLOAT money 1.5` |
 
-> 💡 **C++ 开发者视角**：这些加减操作在 Redis 内部是**原子性**的，类似于 C++ 中的 `std::atomic`。在多线程或多进程的高并发场景下，直接使用 `INCR` 计数，无需加锁，也不会出现数据竞争（Race Condition）导致的计数偏差。
+> **C++ 开发者视角**：这些加减操作在 Redis 内部是**原子性**的，类似于 C++ 中的 `std::atomic`。在多线程或多进程的高并发场景下，直接使用 `INCR` 计数，无需加锁，也不会出现数据竞争（Race Condition）导致的计数偏差。
 
 ---
 
@@ -184,7 +184,7 @@ Redis 默认提供 16 个数据库，编号为 `0` 到 `15`（默认连接的是
 | **`HINCRBY`** <br>(Hash Increment By / 哈希字段整型值递增) | `HINCRBY key field increment` | 将指定哈希字段存储的数值加上给定的**整数**值。支持负数。 | `HINCRBY user:100 age 1` |
 | **`HINCRBYFLOAT`** <br>(Hash Increment By Float / 哈希字段浮点数值递增) | `HINCRBYFLOAT key field increment` | 将指定哈希字段存储的数值加上给定的**浮点数**值。 | `HINCRBYFLOAT user:100 score 1.5` |
 
-> 💡 **C++ 开发者建议（关于对象存储的选型）**：
+> **C++ 开发者建议（关于对象存储的选型）**：
 > 在存储结构化对象（例如 User、Product）时，通常面临两种方案：
 > 1. **方案 A (String + JSON)**：将整个对象序列化为 JSON 字符串，用 `SET` 存储。
 > 2. **方案 B (Hash)**：将对象的每个属性映射为哈希表的 Field，用 `HSET` 存储。
@@ -244,7 +244,7 @@ Redis 默认提供 16 个数据库，编号为 `0` 到 `15`（默认连接的是
 | **`BLPOP`** <br>(Blocking Left Pop / 阻塞式左侧弹出) | `BLPOP key [key ...] timeout` | `LPOP` 的阻塞版本。在给定的 `timeout`（单位：秒）时间内，如果列表中有元素则立即弹出；若没有，则进入阻塞等待。如果 `timeout` 为 `0`，则无限期等待。 | `BLPOP queue_key 5` |
 | **`BRPOP`** <br>(Blocking Right Pop / 阻塞式右侧弹出) | `BRPOP key [key ...] timeout` | `RPOP` 的阻塞版本。行为与 `BLPOP` 相同，区别在于它是从尾部（右端）弹出。 | `BRPOP queue_key 0` |
 
-> 💡 **C++ 开发者建议（生产者-消费者模型构建）**：
+> **C++ 开发者建议（生产者-消费者模型构建）**：
 > 在 C++ 多线程开发中，传统的线程安全队列需要使用 `std::mutex`（互斥锁）和 `std::condition_variable`（条件变量）来实现多线程间的数据同步与等待。
 > 
 > 而当使用 Redis 的 **`LPUSH`** + **`BRPOP`** 组合时：
@@ -281,7 +281,7 @@ Redis 默认提供 16 个数据库，编号为 `0` 到 `15`（默认连接的是
 | **`SCARD`** <br>(Set Cardinality / 获取集合成员数量) | `SCARD key` | 获取集合中的成员数量（基数）。如果键不存在，返回 `0`。 | `SCARD tags` |
 | **`SMEMBERS`** <br>(Set Members / 获取集合所有成员) | `SMEMBERS key` | 获取集合中的所有成员列表（无序）。 | `SMEMBERS tags` |
 
-> ⚠️ **性能警告（`SMEMBERS` 命令）**：
+> **性能警告（`SMEMBERS` 命令）**：
 > 与 `KEYS` 命令类似，如果集合中的成员数量极其庞大（例如数十万个），运行 `SMEMBERS` 可能会阻塞 Redis 主线程。在生产环境下对于大集合推荐使用 **`SSCAN`** <br>(Set Scan / 渐进式集合扫描) 命令进行分批迭代。
 
 ---
@@ -306,7 +306,7 @@ Redis 默认提供 16 个数据库，编号为 `0` 到 `15`（默认连接的是
 | **`SUNIONSTORE`** <br>(Set Union Store / 存储并集) | `SUNIONSTORE destination key [key ...]` | 计算给定集合的**并集**，并将结果存储到 `destination` 集合中。 | `SUNIONSTORE all_tags tags1 tags2` |
 | **`SDIFFSTORE`** <br>(Set Difference Store / 存储差集) | `SDIFFSTORE destination key [key ...]` | 计算第一个集合与其他集合的**差集**，并将结果存储到 `destination` 集合中。 | `SDIFFSTORE unique_to_A userA:follows userB:follows` |
 
-> 💡 **C++ 开发者建议（社交网络应用）**：
+> **C++ 开发者建议（社交网络应用）**：
 > 在社交网络中，集合运算非常适合用于计算用户关系：
 > * **共同好友**：使用 `SINTER` 计算 A 和 B 的关注列表交集。
 > * **二度人脉**：先计算 A 的关注列表与 B 的关注列表的交集，再对结果进行扩展。

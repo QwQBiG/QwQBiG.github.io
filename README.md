@@ -22,11 +22,14 @@ npm run dev
 ## 构建与部署
 
 ```bash
+npm test
 npm run build
 npm run preview
 ```
 
 `npm run build` 会先优化图片，再把静态文件生成到 `dist/`。推送到 `main` 分支后，GitHub Actions 会自动构建并部署。
+
+界面图标使用 SVG。构建时会检查源文件和生成页面中的 emoji，也可以单独运行 `npm run check:emoji`。
 
 ## 写文章
 
@@ -46,6 +49,8 @@ draft: false
 ```
 
 诗词还可以填写体裁 `genre` 和主题 `mood`。其他字段见 [`src/content/config.ts`](src/content/config.ts)。
+
+首页、归档、标签、搜索和 RSS 使用同一份内容数据，合集不计入文章数量，标签忽略大小写去重。`draft: true` 不发布，`hidden: true` 保留直达链接，但不出现在列表和统计中。
 
 ## 许可
 

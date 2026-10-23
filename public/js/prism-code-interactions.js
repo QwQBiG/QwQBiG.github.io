@@ -64,8 +64,18 @@
     searchOverlay.innerHTML = `
       <div class="code-search-card">
         <div class="code-search-header">
-          <span class="code-search-title">🔍 Search Code</span>
-          <button class="code-search-close">✕</button>
+          <span class="code-search-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5"></circle>
+              <path d="m16 16 4.5 4.5"></path>
+            </svg>
+            Search Code
+          </span>
+          <button class="code-search-close" type="button" aria-label="关闭代码搜索">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+              <path d="m6 6 12 12M6 18 18 6"></path>
+            </svg>
+          </button>
         </div>
         <div class="code-search-body">
           <div class="code-search-input-wrapper">
@@ -74,13 +84,13 @@
           <div class="code-search-controls">
             <span class="code-search-count">0/0</span>
             <div class="code-search-buttons">
-              <button class="code-search-prev">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <button class="code-search-prev" type="button" aria-label="上一个搜索结果">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <polyline points="18 15 12 9 6 15"></polyline>
                 </svg>
               </button>
-              <button class="code-search-next">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <button class="code-search-next" type="button" aria-label="下一个搜索结果">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>

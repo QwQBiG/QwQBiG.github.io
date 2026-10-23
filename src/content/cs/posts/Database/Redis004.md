@@ -55,14 +55,14 @@ weight: 4
 在图形界面中，它们不会杂乱无章地平铺，而是会被自动收纳在清晰的树形目录结构中：
 
 ```text
-📁 mall
-  ├── 📁 prod
-  │     └── 📁 stock
-  │           └── 📄 88  (String 对象)
-  └── 📁 usr
-        └── 📁 info
-              ├── 📄 100  (Hash 对象)
-              └── 📄 101  (Hash 对象)
+mall/
+├── prod/
+│   └── stock/
+│       └── 88  (String 对象)
+└── usr/
+    └── info/
+        ├── 100  (Hash 对象)
+        └── 101  (Hash 对象)
 ```
 这彻底解决了没有 Table 导致数据难以维护、难以全局查阅的痛点。
 
@@ -72,8 +72,8 @@ weight: 4
 
 ### 1. 控制 Key 的长度（精简命名）
 Redis 的 Key 是常驻于内存中的，Key 占据的每一个字节都会消耗内存空间。如果 Key 极其冗长，在有数百万个 Key 的情况下，单是 Key 自身就会浪费数 GB 内存。
-* ❌ **反面教材**：`e_commerce_shopping_mall_system:user_profile_information_module:user_id_number:10086`
-* ✔️ **正面推荐**：`mall:usr:info:10086` （使用业务缩写，既具备可读性，又节省宝贵的内存）。
+* **反面教材**：`e_commerce_shopping_mall_system:user_profile_information_module:user_id_number:10086`
+* **正面推荐**：`mall:usr:info:10086` （使用业务缩写，既具备可读性，又节省宝贵的内存）。
 
 ### 2. 命名的一致性（使用 C++ 构建器模式）
 在 C++ 后端项目中，绝不要让开发人员在各个业务代码中手动拼接 Key 字符串，极易因拼写错误导致逻辑 Bug。推荐在代码中封装统一的 Key 生成器类（KeyBuilder）：

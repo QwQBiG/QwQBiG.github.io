@@ -89,6 +89,9 @@ pre[class*="language-"] .line.line-highlight .line-number {
 }
 
 .code-search-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-size: 13px;
   font-weight: 600;
   color: #4c4f69;

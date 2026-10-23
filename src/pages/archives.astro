@@ -2,29 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
-import { getCollection } from 'astro:content';
+import ContentIcon from '../components/ui/ContentIcon.astro';
+import { loadContent } from '../utils/load-content';
 import { formatDate, groupByYear } from '../utils/date';
 
-// Get all posts from CS collection
-const csPosts = await getCollection('cs', ({ data }) => !data.draft);
-
-// Filter out index pages and 合集 (series collections)
-const allPosts = csPosts.filter(post => {
-  // 排除 index 页面
-  if (post.slug.endsWith('/_index') || post.slug.endsWith('_index')) {
-    return false;
-  }
-  // 排除合集（categories 包含 "合集" 的）
-  if (post.data.categories && post.data.categories.includes('合集')) {
-    return false;
-  }
-  return true;
-});
-
-// Sort by date (newest first)
-const sortedPosts = allPosts.sort((a, b) => 
-  b.data.date.getTime() - a.data.date.getTime()
-);
+const { posts: sortedPosts } = await loadContent();
 
 // Group by year
 const postsByYear = groupByYear(sortedPosts);
@@ -40,8 +22,8 @@ const pageDescription = "按时间顺序浏览所有文章";
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="text-center mb-12">
-        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4">
-          📚 归档
+        <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
+          <ContentIcon name="archive" />归档
         </h1>
         <p class="font-sans text-lg text-text-secondary">
           共 {sortedPosts.length} 篇文章
@@ -61,6 +43,7 @@ const pageDescription = "按时间顺序浏览所有文章";
               {posts.map((post) => {
                 const collection = post.collection;
                 const url = `/${collection}/${post.slug}/`;
+                const series = post.collection === 'cs' ? post.data.series : undefined;
                 
                 return (
                   <a href={url} class="archive-item group">
@@ -70,9 +53,9 @@ const pageDescription = "按时间顺序浏览所有文章";
                     <span class="archive-title group-hover:text-primary transition-colors">
                       {post.data.title}
                     </span>
-                    {post.data.series && post.data.series.length > 0 && (
+                    {series && series.length > 0 && (
                       <span class="ml-auto text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
-                        {post.data.series[0]}
+                        {series[0]}
                       </span>
                     )}
                   </a>

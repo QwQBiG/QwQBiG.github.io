@@ -44,3 +44,20 @@ const pageDescription = "抱歉，您访问的页面不存在";
   
   <Footer />
 </Layout>
+
+<script>
+  import { getTagUrl } from '../utils/content';
+
+  // GitHub Pages serves this page for old tag links whose casing has changed.
+  const match = window.location.pathname.match(/^\/tags\/([^/]+)\/?$/);
+  if (match) {
+    try {
+      const canonicalPath = getTagUrl(decodeURIComponent(match[1]));
+      if (window.location.pathname !== canonicalPath) {
+        window.location.replace(canonicalPath + window.location.search + window.location.hash);
+      }
+    } catch {
+      // A malformed URL stays on the normal not-found page.
+    }
+  }
+</script>
