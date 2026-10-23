@@ -68,6 +68,8 @@ const pageDescription = "搜索博客文章";
     try {
       const response = await fetch('/posts.json');
       posts = await response.json();
+      // The visitor may have typed while the index was still loading.
+      search(searchInput?.value ?? '');
     } catch (error) {
       console.error('Failed to load posts:', error);
     }

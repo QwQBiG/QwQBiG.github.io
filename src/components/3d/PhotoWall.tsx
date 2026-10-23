@@ -1,24 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import type { PhotoItem, PhotoState } from '../../types/photo';
+import { listenForPointerDrag, preloadPhotos, resolvePhotoWallSize } from '../../utils/photo-wall';
 
 interface PhotoWallProps {
   photos: PhotoItem[];
 }
-
-const preloadImages = (photos: PhotoItem[]) => Promise.all(
-  photos.map((photo) => new Promise<void>((resolve) => {
-    const img = new Image();
-    img.src = photo.src;
-    if (img.complete) {
-      img.decode?.().catch(() => {}).finally(resolve);
-      return;
-    }
-    img.onload = () => img.decode?.().catch(() => {}).finally(resolve);
-    img.onerror = () => resolve();
-  })),
-);
 
 const getCardWidth = (viewportWidth: number) =>
   viewportWidth < 480 ? 120 : viewportWidth < 768 ? 150 : 360;
@@ -104,11 +92,15 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   useEffect(() => {
     let cancelled = false;
     const measureContainer = () => {
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect || rect.width === 0 || rect.height === 0) {
-        return null;
-      }
-      const nextSize = { width: rect.width, height: rect.height };
+      const container = containerRef.current;
+      const rect = container?.getBoundingClientRect();
+      const mainRect = !rect || rect.width <= 0 || rect.height <= 0
+        ? container?.closest('main')?.getBoundingClientRect()
+        : null;
+      const nextSize = resolvePhotoWallSize(rect, mainRect, {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
       setContainerSize(nextSize);
       return nextSize;
     };
@@ -118,12 +110,9 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
     };
     measureContainer();
     window.addEventListener('resize', updateSize);
-    preloadImages(photos).then(() => {
+    preloadPhotos(photos).then(() => {
       if (cancelled) return;
-      const measuredSize = measureContainer() ?? {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      };
+      const measuredSize = measureContainer();
       const initialStates = new Map<string, PhotoState>();
       let maxZIndex = photos.length;
       photos.forEach((photo, index) => {
@@ -243,6 +232,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   }
 
   return (
+    <LazyMotion features={domAnimation}>
     <div
       ref={containerRef}
       className="relative w-full h-full overflow-visible"
@@ -272,7 +262,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
       {typeof document !== 'undefined' && createPortal(
       <AnimatePresence>
         {selectedPhoto && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -282,7 +272,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
               backdropFilter: 'blur(10px)',
             }}
           >
-            <motion.div
+            <m.div
               initial={false}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
@@ -309,12 +299,13 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
                   }}
                 />
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>,
       document.body)}
     </div>
+    </LazyMotion>
   );
 };
 
@@ -345,12 +336,11 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   const [position, setPosition] = useState({ x: state.x, y: state.y });
   const [isLifted, setIsLifted] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const velocityRef = useRef({ x: 0, y: 0 });
-  const lastPosRef = useRef({ x: 0, y: 0 });
-  const lastTimeRef = useRef(Date.now());
+  const dragCleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     setHasMounted(true);
+    return () => dragCleanupRef.current?.();
   }, []);
 
   // 同步外部状态
@@ -368,8 +358,11 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
     : { duration: 0 };
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    dragCleanupRef.current?.();
     e.preventDefault();
-    e.currentTarget.setPointerCapture(e.pointerId);
+    const card = e.currentTarget;
+    const pointerId = e.pointerId;
+    card.setPointerCapture(pointerId);
 
     setIsDragging(true);
     setIsLifted(true);
@@ -380,33 +373,17 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
     const initialPosX = position.x;
     const initialPosY = position.y;
 
-    // 重置速度追踪
-    velocityRef.current = { x: 0, y: 0 };
-    lastPosRef.current = { x: startX, y: startY };
-    lastTimeRef.current = Date.now();
+    let latestPosition = { x: initialPosX, y: initialPosY };
 
     const handlePointerMove = (moveEvent: PointerEvent) => {
-      const currentTime = Date.now();
-      const deltaTime = currentTime - lastTimeRef.current;
-
-      // 计算速度（用于惯性）
-      if (deltaTime > 0) {
-        velocityRef.current = {
-          x: (moveEvent.clientX - lastPosRef.current.x) / deltaTime,
-          y: (moveEvent.clientY - lastPosRef.current.y) / deltaTime,
-        };
-      }
-
-      lastPosRef.current = { x: moveEvent.clientX, y: moveEvent.clientY };
-      lastTimeRef.current = currentTime;
-
       // 直接更新位置，无延迟
       const deltaX = moveEvent.clientX - startX;
       const deltaY = moveEvent.clientY - startY;
-      setPosition({
+      latestPosition = {
         x: initialPosX + deltaX,
         y: initialPosY + deltaY,
-      });
+      };
+      setPosition(latestPosition);
     };
 
     const handlePointerUp = (upEvent: PointerEvent) => {
@@ -424,16 +401,31 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
       onDragEnd(finalX, finalY, state.rotation);
       onPointerUp(upEvent.clientX, upEvent.clientY);
 
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
+      cleanup();
     };
 
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', handlePointerUp);
+    const handlePointerCancel = () => {
+      setIsDragging(false);
+      setIsLifted(false);
+      setPosition(latestPosition);
+      onDragEnd(latestPosition.x, latestPosition.y, state.rotation);
+      cleanup();
+    };
+    const stopListening = listenForPointerDrag(window, pointerId, {
+      onMove: handlePointerMove,
+      onEnd: handlePointerUp,
+      onCancel: handlePointerCancel,
+    });
+    const cleanup = () => {
+      stopListening();
+      if (card.hasPointerCapture(pointerId)) card.releasePointerCapture(pointerId);
+      if (dragCleanupRef.current === cleanup) dragCleanupRef.current = null;
+    };
+    dragCleanupRef.current = cleanup;
   };
 
   return (
-    <motion.div
+    <m.div
       ref={cardRef}
       initial={false}
       animate={{
@@ -488,7 +480,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
           />
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

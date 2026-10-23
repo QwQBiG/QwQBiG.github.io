@@ -2,7 +2,8 @@
 import '@fontsource-variable/noto-sans-sc';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
-import 'katex/dist/katex.min.css';
+import katexStyles from 'katex/dist/katex.min.css?url';
+import { getPageFeatures } from '../utils/page-features';
 
 export interface Props {
   title: string;
@@ -26,6 +27,9 @@ const {
 
 const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
 const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
+// Render once so resource loading follows actual content, including nested components.
+const content = await Astro.slots.render('default');
+const { hasCode, hasMath } = getPageFeatures(content);
 ---
 
 <!DOCTYPE html>
@@ -74,28 +78,33 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     
     <!-- Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
-    <!-- 少女心代码高亮主题 (Catppuccin Latte) -->
-    <link rel="stylesheet" href="/styles/prism-catppuccin.css" />
-    <!-- 自定义代码块样式 (不包含语法高亮颜色) -->
-    <link rel="stylesheet" href="/styles/prism-theme.css" />
-    <!-- 彩虹括号样式 -->
-    <link rel="stylesheet" href="/styles/prism-rainbow-brackets.css" />
-    <!-- 代码交互样式 -->
-    <link rel="stylesheet" href="/styles/prism-code-interactions.css" />
+    {hasCode && <>
+      <!-- 少女心代码高亮主题 (Catppuccin Latte) -->
+      <link rel="stylesheet" href="/styles/prism-catppuccin.css" />
+      <!-- 自定义代码块样式 (不包含语法高亮颜色) -->
+      <link rel="stylesheet" href="/styles/prism-theme.css" />
+      <!-- 彩虹括号样式 -->
+      <link rel="stylesheet" href="/styles/prism-rainbow-brackets.css" />
+      <!-- 代码交互样式 -->
+      <link rel="stylesheet" href="/styles/prism-code-interactions.css" />
+    </>}
+    {hasMath && <link rel="stylesheet" href={katexStyles} />}
 </head>
 <body class={`site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
-    <slot />
+    <Fragment set:html={content} />
 
-    <!-- Prism.js Code Blocks Functionality -->
-    <script src="/js/prism-code-blocks.js" defer></script>
-    <!-- 彩虹括号功能 -->
-    <script src="/js/prism-rainbow-brackets.js" defer></script>
-    <!-- 语法高亮增强 -->
-    <script src="/js/prism-enhance.js" defer></script>
-    <!-- 代码交互功能 -->
-    <script src="/js/prism-code-interactions.js" defer></script>
-    <!-- XML 高亮修复 -->
-    <script src="/js/prism-xml-fix.js" defer></script>
+    {hasCode && <>
+      <!-- Prism.js Code Blocks Functionality -->
+      <script src="/js/prism-code-blocks.js" defer></script>
+      <!-- 彩虹括号功能 -->
+      <script src="/js/prism-rainbow-brackets.js" defer></script>
+      <!-- 语法高亮增强 -->
+      <script src="/js/prism-enhance.js" defer></script>
+      <!-- 代码交互功能 -->
+      <script src="/js/prism-code-interactions.js" defer></script>
+      <!-- XML 高亮修复 -->
+      <script src="/js/prism-xml-fix.js" defer></script>
+    </>}
     <!-- VanillaTilt 3D 倾斜效果 -->
     <script src="/js/vanilla-tilt.js" defer></script>
     

@@ -57,10 +57,7 @@
   /**
    * 增强代码块的语法高亮
    */
-  function enhanceSyntaxHighlighting() {
-    // 查找所有代码块
-    const codeBlocks = document.querySelectorAll('pre[class*="language-"] code, pre code');
-
+  function enhanceSyntaxHighlighting(codeBlocks = document.querySelectorAll('pre code')) {
     codeBlocks.forEach(code => {
       // 处理关键字
       enhanceKeywords(code);
@@ -220,36 +217,45 @@
    * 使用 MutationObserver 监听 DOM 变化
    */
   function initObserver() {
+    const pendingCodes = new Set();
+    let updateTimer = null;
+
+    function collectCodeBlocks(node) {
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      if (node.matches('code') && node.closest('pre')) {
+        pendingCodes.add(node);
+      }
+      node.querySelectorAll('pre code').forEach(code => pendingCodes.add(code));
+    }
+
     const observer = new MutationObserver((mutations) => {
-      let shouldProcess = false;
-
       mutations.forEach((mutation) => {
-        // 检查新增的节点
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            // 如果是代码块
-            if (node.matches && (node.matches('pre[class*="language-"]') || node.matches('code'))) {
-              shouldProcess = true;
-            }
-            // 或者包含代码块
-            else if (node.querySelectorAll) {
-              const codeBlocks = node.querySelectorAll('pre[class*="language-"], pre code');
-              if (codeBlocks.length > 0) {
-                shouldProcess = true;
-              }
-            }
+        const target = mutation.target;
+        if (mutation.type === 'attributes') {
+          if (target.matches('code') && target.closest('pre')) {
+            pendingCodes.add(target);
           }
-        });
-
-        // 检查属性变化（比如 class 变化）
-        if (mutation.type === 'attributes' && mutation.target.matches && mutation.target.matches('code')) {
-          shouldProcess = true;
+          return;
         }
+
+        // Prism/XML 修复会直接重建已有 code 内的 token，不一定新增 code。
+        const code = target.closest('code');
+        if (code && code.closest('pre')) {
+          pendingCodes.add(code);
+          return;
+        }
+
+        mutation.addedNodes.forEach(collectCodeBlocks);
       });
 
-      if (shouldProcess) {
-        // 延迟执行，确保高亮已完成
-        setTimeout(enhanceSyntaxHighlighting, 50);
+      if (pendingCodes.size > 0 && updateTimer === null) {
+        // 合并同一轮高亮/行号包装产生的变化，只处理受影响的代码块。
+        updateTimer = setTimeout(() => {
+          updateTimer = null;
+          const codeBlocks = Array.from(pendingCodes).filter(code => code.isConnected && code.closest('pre'));
+          pendingCodes.clear();
+          enhanceSyntaxHighlighting(codeBlocks);
+        }, 50);
       }
     });
 
@@ -268,16 +274,6 @@
 
     // 监听 DOM 变化
     initObserver();
-
-    // 定期检查（处理可能的异步加载）
-    let checkCount = 0;
-    const checkInterval = setInterval(() => {
-      enhanceSyntaxHighlighting();
-      checkCount++;
-      if (checkCount > 20) { // 10秒后停止检查
-        clearInterval(checkInterval);
-      }
-    }, 500);
   }
 
   // 页面加载完成后初始化

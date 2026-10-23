@@ -15,90 +15,179 @@ const portrait = '/generated/site/portrait-smile.webp';
 </character-portrait>
 
 <script>
+  import { createPortraitCache, createPortraitSwitcher, decodePortrait } from '../utils/portrait';
+
   const expressions = ['Smile', 'Happy', 'Wink', 'Shy'];
   const portraitURL = (index: number) => `/generated/site/portrait-${expressions[index].toLowerCase()}.webp`;
 
   class CharacterPortrait extends HTMLElement {
+    private cleanup?: () => void;
+
     connectedCallback() {
-      if (this.dataset.ready) return;
+      if (this.cleanup) return;
       this.dataset.ready = 'true';
       const button = this.querySelector<HTMLButtonElement>('button')!;
       const hint = this.querySelector<HTMLElement>('.portrait-expression-hint')!;
       const status = this.querySelector<HTMLElement>('.portrait-status')!;
       const images = [...this.querySelectorAll<HTMLImageElement>('.portrait-image')];
-      const cache = new Map<number, Promise<string>>([[0, Promise.resolve(portraitURL(0))]]);
-      let activeImage = 0;
-      let displayed = 0;
-      let requested = 0;
-      let revision = 0;
-      let failed = false;
-      let transition = Promise.resolve();
-
-      const load = (index: number) => {
-        const existing = cache.get(index);
-        if (existing) return existing;
-        const pending = new Promise<string>((resolve, reject) => {
+      const lifetime = new AbortController();
+      const initial = Math.max(0, expressions.indexOf(this.dataset.expression ?? 'Smile'));
+      let activeImage = Math.max(0, images.findIndex((image) => image.classList.contains('is-visible')));
+      let visualIndex = initial;
+      let fadeTimer: ReturnType<typeof setTimeout> | undefined;
+      let finishFade: (() => void) | undefined;
+      let idleTask: number | undefined;
+      let idleUsesTimer = false;
+      const loadingImages = new Map<number, HTMLImageElement>();
+      const cache = createPortraitCache<HTMLImageElement>((index, signal) => (
+        new Promise((resolve, reject) => {
           const image = new Image();
+          loadingImages.set(index, image);
           image.decoding = 'async';
-          image.onload = () => image.decode().then(() => resolve(image.src), reject);
-          image.onerror = () => reject(new Error('Portrait image unavailable'));
+          image.fetchPriority = 'low';
+          const clear = () => {
+            image.onload = null;
+            image.onerror = null;
+            signal.removeEventListener('abort', abort);
+            if (loadingImages.get(index) === image) loadingImages.delete(index);
+          };
+          const abort = () => {
+            clear();
+            image.removeAttribute('src');
+            reject(new Error('Portrait removed'));
+          };
+          image.onload = () => {
+            void decodePortrait(image, signal).then(() => {
+              clear();
+              if (!signal.aborted) resolve(image);
+            }, (error: unknown) => { clear(); reject(error); });
+          };
+          image.onerror = () => { clear(); reject(new Error('Portrait image unavailable')); };
+          signal.addEventListener('abort', abort, { once: true });
           image.src = portraitURL(index);
-        }).catch((error: unknown) => {
-          cache.delete(index);
-          throw error;
-        });
-        cache.set(index, pending);
+        })
+      ));
+
+      const canWarmInBackground = () => {
+        const connection = (navigator as Navigator & {
+          connection?: { saveData?: boolean; effectiveType?: string };
+        }).connection;
+        return !connection?.saveData && !['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
+      };
+      const loadForInteraction = (index: number) => {
+        const pending = cache.load(index);
+        const image = loadingImages.get(index);
+        if (image) image.fetchPriority = 'high';
         return pending;
       };
-
-      const show = (index: number) => {
-        const token = ++revision;
-        requested = index;
-        failed = false;
-        button.setAttribute('aria-busy', 'true');
-        // Fetch immediately, but keep an in-progress fade intact before swapping layers.
-        const loading = load(index).then((source) => ({ source }), () => ({ source: null }));
-        transition = transition.then(async () => {
-        try {
-          const { source } = await loading;
-          if (token !== revision || !this.isConnected) return;
-          if (!source) throw new Error('Portrait image unavailable');
+      const warm = (index: number) => { void cache.load(index).catch(() => {}); };
+      const renderDisplayed = (index: number) => {
+        this.dataset.expression = expressions[index];
+        hint.textContent = `${expressions[index]} · Tap again`;
+        button.title = 'Click to change expression';
+        button.setAttribute('aria-label', `Current expression: ${expressions[index]}. Click to change expression`);
+        status.textContent = `Current expression: ${expressions[index]}`;
+      };
+      const switcher = createPortraitSwitcher({
+        count: expressions.length,
+        initial,
+        load: loadForInteraction,
+        prepare: async (image) => {
           const nextImage = 1 - activeImage;
-          images[nextImage].src = source;
-          await images[nextImage].decode();
-          if (token !== revision || !this.isConnected) return;
+          images[nextImage].src = image.src;
+          await decodePortrait(images[nextImage], lifetime.signal);
+        },
+        fade: (index) => {
+          const nextImage = 1 - activeImage;
           images[nextImage].classList.add('is-visible');
           images[activeImage].classList.remove('is-visible');
           images[nextImage].alt = "QwQBiG's character";
           images[activeImage].alt = '';
           activeImage = nextImage;
+          visualIndex = index;
           const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          await new Promise((resolve) => setTimeout(resolve, reduceMotion ? 0 : 220));
-          if (!this.isConnected) return;
-          displayed = index;
-          this.dataset.expression = expressions[index];
-          hint.textContent = `${expressions[index]} · Tap again`;
-          button.title = 'Click to change expression';
-          button.setAttribute('aria-label', `Current expression: ${expressions[index]}. Click to change expression`);
-          status.textContent = `Current expression: ${expressions[index]}`;
-        } catch {
-          if (token !== revision || !this.isConnected) return;
-          failed = true;
-          hint.textContent = 'Tap to retry';
-          button.title = 'Image unavailable. Click to retry';
-          button.setAttribute('aria-label', `Current expression: ${expressions[displayed]}. Image unavailable. Click to retry`);
-          status.textContent = 'Expression image unavailable. The current portrait is unchanged. Click to retry.';
-        } finally {
-          if (token === revision) button.setAttribute('aria-busy', 'false');
-        }
-        });
-      };
+          return new Promise<void>((resolve) => {
+            finishFade = resolve;
+            fadeTimer = setTimeout(() => {
+              fadeTimer = undefined;
+              finishFade = undefined;
+              resolve();
+            }, reduceMotion ? 0 : 220);
+          });
+        },
+        onChange: (state, reason) => {
+          button.setAttribute('aria-busy', String(state.busy));
+          if (reason === 'request') return;
+          this.dataset.expression = expressions[state.displayed];
+          if (state.failed) {
+            hint.textContent = 'Tap to retry';
+            button.title = 'Image unavailable. Click to retry';
+            button.setAttribute('aria-label', `Current expression: ${expressions[state.displayed]}. Image unavailable. Click to retry`);
+            status.textContent = 'Expression image unavailable. The current portrait is unchanged. Click to retry.';
+            return;
+          }
+          renderDisplayed(state.displayed);
+          if (canWarmInBackground()) warm((state.requested + 1) % expressions.length);
+        },
+      });
 
-      button.addEventListener('click', () => { void show(failed ? requested : (requested + 1) % expressions.length); });
-      // Warm only the next expression when the portrait is approached.
-      const warmNext = () => { void load((requested + 1) % expressions.length).catch(() => {}); };
-      button.addEventListener('pointerenter', warmNext, { passive: true });
-      button.addEventListener('focus', warmNext);
+      const warmNext = () => {
+        void loadForInteraction((switcher.state.requested + 1) % expressions.length).catch(() => {});
+      };
+      const listenerOptions = { signal: lifetime.signal };
+      button.addEventListener('click', () => switcher.next(), listenerOptions);
+      button.addEventListener('pointerenter', warmNext, { ...listenerOptions, passive: true });
+      button.addEventListener('pointerdown', warmNext, { ...listenerOptions, passive: true });
+      button.addEventListener('focus', warmNext, listenerOptions);
+
+      // Start only after the visible portrait is decoded, then warm one image per idle period.
+      const remaining = Array.from({ length: expressions.length - 1 }, (_, offset) => (
+        (initial + offset + 1) % expressions.length
+      ));
+      const scheduleWarm = () => {
+        if (lifetime.signal.aborted || !remaining.length || !canWarmInBackground()) return;
+        const next = () => {
+          idleTask = undefined;
+          if (lifetime.signal.aborted || !canWarmInBackground()) return;
+          const index = remaining.shift()!;
+          void cache.load(index).catch(() => {}).finally(scheduleWarm);
+        };
+        if (typeof window.requestIdleCallback === 'function') {
+          idleUsesTimer = false;
+          idleTask = window.requestIdleCallback(next, { timeout: 1500 });
+        } else {
+          idleUsesTimer = true;
+          idleTask = window.setTimeout(next, 300);
+        }
+      };
+      const initialReady = () => {
+        void decodePortrait(images[activeImage], lifetime.signal).catch(() => {})
+          .then(() => lifetime.signal.aborted ? undefined : cache.load(initial).catch(() => {}))
+          .then(scheduleWarm);
+      };
+      if (images[activeImage].complete) initialReady();
+      else images[activeImage].addEventListener('load', initialReady, { ...listenerOptions, once: true });
+
+      this.cleanup = () => {
+        switcher.dispose();
+        lifetime.abort();
+        cache.dispose();
+        loadingImages.clear();
+        if (idleTask !== undefined) {
+          if (idleUsesTimer) clearTimeout(idleTask);
+          else window.cancelIdleCallback(idleTask);
+        }
+        if (fadeTimer !== undefined) clearTimeout(fadeTimer);
+        finishFade?.();
+        renderDisplayed(visualIndex);
+        button.setAttribute('aria-busy', 'false');
+        delete this.dataset.ready;
+      };
+    }
+
+    disconnectedCallback() {
+      this.cleanup?.();
+      this.cleanup = undefined;
     }
   }
 

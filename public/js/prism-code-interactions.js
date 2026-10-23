@@ -11,9 +11,7 @@
   /**
    * 为代码块添加行交互
    */
-  function initLineInteractions() {
-    const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
-
+  function initLineInteractions(codeBlocks = document.querySelectorAll('pre[class*="language-"]')) {
     codeBlocks.forEach(pre => {
       // 检查是否已初始化
       if (pre.dataset.lineInteractions) return;
@@ -343,9 +341,34 @@
     initSelectionHighlight();
     initShortcuts();
 
-    // 监听新代码块
-    const observer = new MutationObserver(() => {
-      initLineInteractions();
+    // 仅新增代码块时处理，评论和搜索浮层的普通 DOM 变化不触发全文扫描。
+    const pendingBlocks = new Set();
+    let updateTimer = null;
+    const preSelector = 'pre[class*="language-"]';
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType !== Node.ELEMENT_NODE) return;
+          if (node.matches(preSelector)) {
+            pendingBlocks.add(node);
+          } else if (node.matches('code')) {
+            const pre = node.closest(preSelector);
+            if (pre) pendingBlocks.add(pre);
+          }
+          node.querySelectorAll(`${preSelector}, ${preSelector} code`).forEach(element => {
+            pendingBlocks.add(element.matches(preSelector) ? element : element.closest(preSelector));
+          });
+        });
+      });
+
+      if (pendingBlocks.size > 0 && updateTimer === null) {
+        updateTimer = setTimeout(() => {
+          updateTimer = null;
+          const codeBlocks = Array.from(pendingBlocks).filter(pre => pre.isConnected);
+          pendingBlocks.clear();
+          initLineInteractions(codeBlocks);
+        }, 0);
+      }
     });
 
     observer.observe(document.body, {
