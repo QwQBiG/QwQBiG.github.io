@@ -19,7 +19,7 @@ const currentPath = Astro.url.pathname;
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-3 group">
+      <a href="/" data-astro-prefetch="hover" class="flex items-center gap-3 group">
         <img src="/generated/site/avatar-160.webp" alt="QwQBiG" class="w-10 h-10 rounded-full border-2 border-primary/30 group-hover:border-primary transition-colors" />
         <span class="font-sans font-bold text-xl text-primary hidden sm:block">QwQBiG's World</span>
       </a>
@@ -29,6 +29,7 @@ const currentPath = Astro.url.pathname;
         {navItems.map((item) => (
           <a
             href={item.url}
+            data-astro-prefetch="hover"
             class:list={[
               'px-4 py-2 rounded-lg font-sans font-medium text-sm transition-all duration-200',
               currentPath === item.url || currentPath.startsWith(item.url.slice(0, -1))
@@ -66,6 +67,7 @@ const currentPath = Astro.url.pathname;
       {navItems.map((item) => (
         <a
           href={item.url}
+          data-astro-prefetch="hover"
           class:list={[
             'block px-4 py-3 rounded-lg font-sans font-medium transition-all duration-200',
             currentPath === item.url || currentPath.startsWith(item.url.slice(0, -1))
@@ -81,6 +83,7 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
+  import '../../scripts/navigation-prefetch';
   
   
   // Mobile Menu Toggle

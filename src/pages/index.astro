@@ -1,6 +1,6 @@
 ---
 import GlassCard from '../components/ui/GlassCard.astro';
-import AnimeCore from '../components/3d/AnimeCore.tsx';
+import CharacterPortrait from '../components/CharacterPortrait.astro';
 import ClockWidget from '../components/widgets/ClockWidget.astro';
 import CalendarWidget from '../components/widgets/CalendarWidget.astro';
 import MusicWidget from '../components/widgets/MusicWidget.astro';
@@ -86,7 +86,7 @@ const yearsActive = new Date().getFullYear() - 2024;
 
   <!-- 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 -->
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
-  <link rel="preload" href="/generated/site/character.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="/generated/site/portrait-smile.webp" as="image" fetchpriority="high">
   <link rel="preload" href="/generated/site/gallery-cover-640.webp" as="image" fetchpriority="low">
   <link rel="preload" href="/fonts/quicksand-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -686,16 +686,9 @@ const yearsActive = new Date().getFullYear() - 2024;
       display: none !important;
     }
 
-    /* Reverse the same inner animations used when leaving the home page. */
-    #navCard.nav-card-layout-change.nav-card-returning .glass-card,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-container,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-avatar,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-avatar img,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-avatar .absolute,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-links,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-link,
-    #navCard.nav-card-layout-change.nav-card-returning .nav-link span {
-      animation-direction: reverse;
+    /* Match history restoration: reset inner layout without extra size transitions. */
+    #navCard[data-home-return-reset] * {
+      transition: none !important;
     }
 
     @keyframes navGlowPulse {
@@ -742,14 +735,14 @@ const yearsActive = new Date().getFullYear() - 2024;
               <p class="text-sm text-gray-500 mb-4 font-['Quicksand'] font-light">explore · create · share</p>
               <div class="flex flex-wrap gap-3">
                 <!-- 主按钮 - 优雅的渐变填充 -->
-                <a href="/cs/" class="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-500/90 to-pink-500/90 text-white rounded-2xl font-medium text-sm tracking-wide hover:shadow-xl hover:shadow-purple-300/30 transition-all duration-300 hover:-translate-y-0.5 font-['Quicksand'] backdrop-blur-sm border border-white/20">
+                <a href="/cs/" data-astro-prefetch="viewport" class="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-500/90 to-pink-500/90 text-white rounded-2xl font-medium text-sm tracking-wide hover:shadow-xl hover:shadow-purple-300/30 transition-all duration-300 hover:-translate-y-0.5 font-['Quicksand'] backdrop-blur-sm border border-white/20">
                   <span>enter</span>
                   <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                   </svg>
                 </a>
                 <!-- 次按钮 - 极简描边风格 -->
-                <a href="/series/" class="group inline-flex items-center px-5 py-2.5 bg-white/40 text-purple-700 rounded-2xl font-medium text-sm tracking-wide hover:bg-white/60 hover:shadow-lg transition-all duration-300 border border-purple-200/50 font-['Quicksand']">
+                <a href="/series/" data-astro-prefetch="hover" class="group inline-flex items-center px-5 py-2.5 bg-white/40 text-purple-700 rounded-2xl font-medium text-sm tracking-wide hover:bg-white/60 hover:shadow-lg transition-all duration-300 border border-purple-200/50 font-['Quicksand']">
                   <span>series</span>
                   <svg class="w-3.5 h-3.5 ml-1.5 text-purple-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -945,11 +938,9 @@ const yearsActive = new Date().getFullYear() - 2024;
               style="box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.15), 0 50px 100px -30px rgba(0, 0, 0, 0.1), 0 80px 140px -40px rgba(0, 0, 0, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);">
             </div>
 
-            <!-- 中心 3D 动漫角色展示 - 呼吸感球体样式 -->
+            <!-- 中心角色展示 - 呼吸感球体样式 -->
             <div class="absolute w-44 h-44 sm:w-52 sm:h-52 md:w-64 md:h-64 [@media(min-width:924px)]:w-80 [@media(min-width:924px)]:h-80 rounded-full overflow-hidden z-10 breathing-sphere">
-              <AnimeCore
-                client:load
-              />
+              <CharacterPortrait />
             </div>
 
             <!-- 环形文字 - 优雅的3D悬浮动效 + 交互 -->
@@ -1129,6 +1120,21 @@ const yearsActive = new Date().getFullYear() - 2024;
       let targetRotateX = 0;
       let targetRotateY = 0;
       let lastUpdateTime = 0;
+      let isRingVisible = true;
+      let lastRotateX = '0.00deg';
+      let lastRotateY = '0.00deg';
+      let lastTranslateZ = '0px';
+
+      function scheduleRingUpdate() {
+        if (animationId === null && isRingVisible && !document.hidden) {
+          animationId = requestAnimationFrame(updateRingTransform);
+        }
+      }
+
+      function stopRingUpdate() {
+        if (animationId !== null) cancelAnimationFrame(animationId);
+        animationId = null;
+      }
 
       // 平滑插值函数 - 触摸设备使用更快的响应
       function lerp(start, end, factor) {
@@ -1137,10 +1143,12 @@ const yearsActive = new Date().getFullYear() - 2024;
 
       // 更新环形文字的3D旋转 - 优化版本
       function updateRingTransform(timestamp) {
+        animationId = null;
+        if (!isRingVisible || document.hidden) return;
         // 节流：触摸设备每 16ms (60fps) 更新一次，非触摸设备可以更快
         const minInterval = isTouchDevice ? 16 : 8;
         if (timestamp - lastUpdateTime < minInterval) {
-          animationId = requestAnimationFrame(updateRingTransform);
+          scheduleRingUpdate();
           return;
         }
         lastUpdateTime = timestamp;
@@ -1150,14 +1158,33 @@ const yearsActive = new Date().getFullYear() - 2024;
         currentRotateX = lerp(currentRotateX, targetRotateX, lerpFactor);
         currentRotateY = lerp(currentRotateY, targetRotateY, lerpFactor);
 
-        // 批量设置样式，减少重排
-        ring.style.cssText += `--rotateX: ${currentRotateX.toFixed(2)}deg; --rotateY: ${currentRotateY.toFixed(2)}deg; --translateZ: ${isInteracting ? '30px' : '0px'};`;
-
-        animationId = requestAnimationFrame(updateRingTransform);
+        const settled = Math.abs(currentRotateX - targetRotateX) < 0.01 && Math.abs(currentRotateY - targetRotateY) < 0.01;
+        if (settled) {
+          currentRotateX = targetRotateX;
+          currentRotateY = targetRotateY;
+        }
+        const rotateX = `${currentRotateX.toFixed(2)}deg`;
+        const rotateY = `${currentRotateY.toFixed(2)}deg`;
+        const translateZ = isInteracting ? '30px' : '0px';
+        if (rotateX !== lastRotateX) ring.style.setProperty('--rotateX', rotateX);
+        if (rotateY !== lastRotateY) ring.style.setProperty('--rotateY', rotateY);
+        if (translateZ !== lastTranslateZ) ring.style.setProperty('--translateZ', translateZ);
+        lastRotateX = rotateX;
+        lastRotateY = rotateY;
+        lastTranslateZ = translateZ;
+        if (!settled) scheduleRingUpdate();
       }
 
-      // 开始动画循环
-      animationId = requestAnimationFrame(updateRingTransform);
+      // Keep CSS rotation; run the pointer interpolation only while it changes.
+      new IntersectionObserver(([entry]) => {
+        isRingVisible = entry.isIntersecting;
+        if (isRingVisible) scheduleRingUpdate();
+        else stopRingUpdate();
+      }).observe(ring);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopRingUpdate();
+        else scheduleRingUpdate();
+      });
 
       // 鼠标移动事件
       function handleMove(clientX, clientY) {
@@ -1176,12 +1203,14 @@ const yearsActive = new Date().getFullYear() - 2024;
         // 设置目标旋转角度 (最大 ±15度)
         targetRotateY = clampedX * 15;
         targetRotateX = -clampedY * 15;
+        scheduleRingUpdate();
       }
 
       // 鼠标进入
       ring.addEventListener('mouseenter', function() {
         isInteracting = true;
         ring.classList.add('interacting');
+        scheduleRingUpdate();
       });
 
       // 鼠标移动
@@ -1195,12 +1224,14 @@ const yearsActive = new Date().getFullYear() - 2024;
         ring.classList.remove('interacting');
         targetRotateX = 0;
         targetRotateY = 0;
+        scheduleRingUpdate();
       });
 
       // 触摸事件支持
       ring.addEventListener('touchstart', function(e) {
         isInteracting = true;
         ring.classList.add('interacting');
+        scheduleRingUpdate();
         e.preventDefault();
       }, { passive: false });
 
@@ -1216,6 +1247,7 @@ const yearsActive = new Date().getFullYear() - 2024;
         ring.classList.remove('interacting');
         targetRotateX = 0;
         targetRotateY = 0;
+        scheduleRingUpdate();
       });
 
       // 设备方向支持 (移动端)
@@ -1225,6 +1257,7 @@ const yearsActive = new Date().getFullYear() - 2024;
             // beta: 前后倾斜 (-180 到 180), gamma: 左右倾斜 (-90 到 90)
             targetRotateX = Math.max(-15, Math.min(15, e.beta * 0.3));
             targetRotateY = Math.max(-15, Math.min(15, e.gamma * 0.3));
+            scheduleRingUpdate();
           }
         });
       }
@@ -1240,8 +1273,16 @@ const yearsActive = new Date().getFullYear() - 2024;
       // 检测是否为触摸设备
       const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
-      // 重置导航栏到卡片状态的函数
-      function resetNavCardToCardState(keepReturnAnimation = false) {
+      let isNavigating = false;
+      let navigationTimer;
+      let recoveryTimer;
+
+      // History and avatar returns share the same layout transition.
+      function resetNavCardToCardState() {
+        clearTimeout(navigationTimer);
+        clearTimeout(recoveryTimer);
+        isNavigating = false;
+        navCard.removeAttribute('aria-busy');
         document.documentElement.removeAttribute('data-home-return-motion');
 
         // 移除固定定位样式
@@ -1290,7 +1331,7 @@ const yearsActive = new Date().getFullYear() - 2024;
         navCard.style.left = '16px';
         navCard.style.zIndex = '9999';
         navCard.classList.remove('[@media(min-width:924px)]:translate-x-64', '[@media(min-width:924px)]:-translate-y-0');
-        navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change', 'nav-card-returning');
+        navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change');
       }
 
       let shouldPlayHomeReturnMotion = new URLSearchParams(window.location.search).has('homeReturnMotion');
@@ -1301,7 +1342,7 @@ const yearsActive = new Date().getFullYear() - 2024;
       }
 
       document.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'visible' && !shouldPlayHomeReturnMotion) {
+        if (document.visibilityState === 'visible' && !shouldPlayHomeReturnMotion && !isNavigating) {
           // 页面重新可见时，重置导航栏状态
           resetNavCardToCardState();
         }
@@ -1315,6 +1356,11 @@ const yearsActive = new Date().getFullYear() - 2024;
         }
       });
 
+      window.addEventListener('pagehide', () => {
+        clearTimeout(navigationTimer);
+        clearTimeout(recoveryTimer);
+      });
+
       // 获取所有会跳转的链接
       // Avatar navigation is a normal link, so reproduce the history-return starting state.
       if (shouldPlayHomeReturnMotion) {
@@ -1324,10 +1370,13 @@ const yearsActive = new Date().getFullYear() - 2024;
         }
 
         requestAnimationFrame(() => {
-          navCard.classList.add('gpu-accelerated', 'nav-card-layout-change', 'nav-card-returning');
-
           requestAnimationFrame(() => {
-            resetNavCardToCardState(true);
+            navCard.setAttribute('data-home-return-reset', '');
+            resetNavCardToCardState();
+            // Commit the inner reset while keeping the card's original movement.
+            void navCard.offsetWidth;
+            navCard.removeAttribute('data-home-return-reset');
+            shouldPlayHomeReturnMotion = false;
 
             try {
               sessionStorage.removeItem('home-return-motion');
@@ -1339,10 +1388,6 @@ const yearsActive = new Date().getFullYear() - 2024;
               window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.hash}`);
             }
 
-            window.setTimeout(() => {
-              navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change', 'nav-card-returning');
-              shouldPlayHomeReturnMotion = false;
-            }, 850);
           });
         });
       }
@@ -1350,13 +1395,22 @@ const yearsActive = new Date().getFullYear() - 2024;
       const allLinks = document.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"]');
 
       allLinks.forEach(link => {
+        // Astro initializes hover prefetching after these inline handlers run.
+        if (!link.hasAttribute('data-astro-prefetch')) link.dataset.astroPrefetch = 'hover';
         link.addEventListener('click', function(e) {
           const href = this.getAttribute('href');
 
-          // 排除外部链接和锚点链接
-          if (!href || href.startsWith('http') || href.startsWith('#')) return;
+          // Keep new-tab, download and same-page navigation native.
+          if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey ||
+              this.hasAttribute('download') || (this.target && this.target !== '_self') || !href) return;
+          const destination = new URL(href, window.location.href);
+          if (destination.origin !== window.location.origin ||
+              (destination.pathname === window.location.pathname && destination.search === window.location.search)) return;
 
           e.preventDefault();
+          if (isNavigating) return;
+          isNavigating = true;
+          navCard.setAttribute('aria-busy', 'true');
 
           // 使用 requestAnimationFrame 确保流畅的动画开始
           requestAnimationFrame(() => {
@@ -1387,14 +1441,19 @@ const yearsActive = new Date().getFullYear() - 2024;
 
           // 延迟跳转 - 移动端使用更短的延迟
           const delay = isTouchDevice ? 650 : 750;
-          setTimeout(() => {
-            window.location.href = href;
+          navigationTimer = setTimeout(() => {
+            window.location.href = destination.href;
           }, delay);
+          // A cancelled or slow navigation must not leave the current page faded out.
+          recoveryTimer = setTimeout(() => resetNavCardToCardState(), delay + 3000);
         });
       });
     })();
   </script>
   <!-- VanillaTilt 3D 倾斜效果 -->
+  <script>
+    import '../scripts/navigation-prefetch';
+  </script>
   <script src="/js/vanilla-tilt.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "family": "Noto Sans SC",
+      "package": "@fontsource-variable/noto-sans-sc",
+      "version": "5.3.1",
+      "source": "https://fontsource.org/fonts/noto-sans-sc",
+      "license": "OFL-1.1",
+      "licenseFile": "noto-sans-sc-OFL.txt"
+    },
+    {
+      "family": "JetBrains Mono",
+      "package": "@fontsource/jetbrains-mono",
+      "version": "5.3.0",
+      "source": "https://fontsource.org/fonts/jetbrains-mono",
+      "license": "OFL-1.1",
+      "licenseFile": "jetbrains-mono-OFL.txt"
+    }
+  ]
+}

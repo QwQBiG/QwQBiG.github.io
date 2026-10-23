@@ -7,57 +7,96 @@ const { path } = Astro.props;
 
 <div id="waline" data-path={path}></div>
 
-<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
-
 <script>
-  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+  import walineStyles from '@waline/client/waline.css?url';
 
   const walineEl = document.getElementById('waline');
   const pagePath = walineEl?.dataset.path || window.location.pathname;
 
-  init({
-    el: '#waline',
-    serverURL: 'https://waline.iqwqi.win/',
-    login: 'force',
-    path: pagePath,
-    dark: false,
-    locale: {
-      placeholder: '写下你的评论...',
-      login: '登录',
-      admin: '管理员',
-      nick: '昵称',
-      mail: '邮箱',
-      link: '网站',
-      edit: '编辑',
-      reply: '回复',
-      cancel: '取消',
-      confirm: '确认',
-      delete: '删除',
-      sticky: '置顶',
-      unsticky: '取消置顶',
-      approved: '通过',
-      spam: '垃圾',
-      waiting: '待审核',
-      level0: '潜水',
-      level1: '冒泡',
-      level2: '吐槽',
-      level3: '活跃',
-      level4: '话痨',
-      level5: '传说',
-      github: 'GitHub',
-      twitter: 'Twitter',
-      facebook: 'Facebook',
-      google: 'Google',
-      weibo: '微博',
-      qq: 'QQ',
-      wechat: '微信',
-      word: '字数',
-      anonymous: '匿名',
-      optional: '选填',
-      uploadImage: '上传图片',
-      emoji: '表情',
-    },
+  const loadCommentStyles = () => new Promise<void>((resolve, reject) => {
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = walineStyles;
+    stylesheet.onload = () => resolve();
+    stylesheet.onerror = () => {
+      stylesheet.remove();
+      reject(new Error('Comment stylesheet unavailable'));
+    };
+    // 保持样式在评论容器之后的原有顺序，让主题覆盖关系不变。
+    walineEl!.after(stylesheet);
   });
+
+  async function loadComments() {
+    // 评论接近视口时再获取模块和样式，不占用正文的首屏加载。
+    const [{ init }] = await Promise.all([
+      import('@waline/client/full'),
+      loadCommentStyles(),
+    ]);
+
+    init({
+      el: '#waline',
+      serverURL: 'https://waline.iqwqi.win/',
+      login: 'force',
+      path: pagePath,
+      dark: false,
+      locale: {
+        placeholder: '写下你的评论...',
+        login: '登录',
+        admin: '管理员',
+        nick: '昵称',
+        mail: '邮箱',
+        link: '网站',
+        edit: '编辑',
+        reply: '回复',
+        cancel: '取消',
+        confirm: '确认',
+        delete: '删除',
+        sticky: '置顶',
+        unsticky: '取消置顶',
+        approved: '通过',
+        spam: '垃圾',
+        waiting: '待审核',
+        level0: '潜水',
+        level1: '冒泡',
+        level2: '吐槽',
+        level3: '活跃',
+        level4: '话痨',
+        level5: '传说',
+        github: 'GitHub',
+        twitter: 'Twitter',
+        facebook: 'Facebook',
+        google: 'Google',
+        weibo: '微博',
+        qq: 'QQ',
+        wechat: '微信',
+        word: '字数',
+        anonymous: '匿名',
+        optional: '选填',
+        uploadImage: '上传图片',
+        emoji: '表情',
+      },
+    });
+  }
+
+  const startComments = () => {
+    void loadComments().catch((error) => {
+      console.error('评论加载失败:', error);
+    });
+  };
+
+  if (walineEl) {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          startComments();
+        }
+      }, { rootMargin: '400px' });
+      observer.observe(walineEl);
+    } else {
+      startComments();
+    }
+  }
 </script>
 
 <style is:global>

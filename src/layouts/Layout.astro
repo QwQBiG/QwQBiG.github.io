@@ -1,4 +1,9 @@
 ---
+import '@fontsource-variable/noto-sans-sc';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import 'katex/dist/katex.min.css';
+
 export interface Props {
   title: string;
   description?: string;
@@ -67,11 +72,6 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <!-- Favicon -->
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
     
-    <!-- Google Fonts - 添加 display=swap 避免阻塞渲染 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
     <!-- 少女心代码高亮主题 (Catppuccin Latte) -->
@@ -82,8 +82,6 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <link rel="stylesheet" href="/styles/prism-rainbow-brackets.css" />
     <!-- 代码交互样式 -->
     <link rel="stylesheet" href="/styles/prism-code-interactions.css" />
-    <!-- KaTeX 数学公式样式 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
 </head>
 <body class={`site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <slot />
@@ -102,39 +100,41 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
     <script src="/js/vanilla-tilt.js" defer></script>
     
     <!-- Mermaid 图表支持 -->
-    <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-      
-      // 初始化 Mermaid - 禁用自动宽度限制，确保完整显示
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'default',
-        themeVariables: {
-          background: 'transparent',
-          primaryColor: '#fce4ec',
-          primaryTextColor: '#333',
-          primaryBorderColor: '#ec4899',
-          lineColor: '#9c27b0',
-          secondaryColor: '#f8bbd9',
-          tertiaryColor: '#f3e5f5'
-        },
-        flowchart: {
-          useMaxWidth: false,
-          htmlLabels: true,
-          curve: 'basis',
-          padding: 20
-        },
-        sequence: {
-          useMaxWidth: false,
-          diagramMarginX: 50,
-          diagramMarginY: 20
-        }
-      });
-      
-      // 手动渲染所有 Mermaid 代码块
-      function renderMermaidDiagrams() {
+    <script>
+      async function renderMermaidDiagrams() {
         const mermaidBlocks = document.querySelectorAll('pre.language-mermaid, pre[class*="mermaid"]');
-        
+        if (mermaidBlocks.length === 0) return;
+
+        // 图表库只在有图块的页面加载，模块由站点构建提供。
+        const { default: mermaid } = await import('mermaid');
+      
+        // 初始化 Mermaid - 禁用自动宽度限制，确保完整显示。
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'default',
+          themeVariables: {
+            background: 'transparent',
+            primaryColor: '#fce4ec',
+            primaryTextColor: '#333',
+            primaryBorderColor: '#ec4899',
+            lineColor: '#9c27b0',
+            secondaryColor: '#f8bbd9',
+            tertiaryColor: '#f3e5f5'
+          },
+          flowchart: {
+            useMaxWidth: false,
+            htmlLabels: true,
+            curve: 'basis',
+            padding: 20
+          },
+          sequence: {
+            useMaxWidth: false,
+            diagramMarginX: 50,
+            diagramMarginY: 20
+          }
+        });
+      
+        // 手动渲染所有 Mermaid 代码块。
         mermaidBlocks.forEach((block, index) => {
           const code = block.querySelector('code');
           if (!code) return;
@@ -169,7 +169,7 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
             const btn = document.createElement('button');
             btn.className = className;
             btn.title = title;
-            btn.style.cssText = 'height: 24px; padding: 0 10px; font-family: "Noto Sans SC", sans-serif; font-size: 12px; font-weight: 600; color: #e84a7a; background: rgba(232, 74, 122, 0.1); border: 1px solid rgba(232, 74, 122, 0.3); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
+            btn.style.cssText = 'height: 24px; padding: 0 10px; font-family: "Noto Sans SC Variable", sans-serif; font-size: 12px; font-weight: 600; color: #e84a7a; background: rgba(232, 74, 122, 0.1); border: 1px solid rgba(232, 74, 122, 0.3); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
             return btn;
           };
           
@@ -252,32 +252,6 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
                 g.style.overflow = 'visible';
               });
               
-              // 计算实际内容尺寸并设置容器
-              requestAnimationFrame(() => {
-                const bbox = svgElement.getBBox();
-                const clientRect = svgElement.getBoundingClientRect();
-                
-                if (bbox && bbox.width > 0 && bbox.height > 0) {
-                  // 设置容器最小尺寸为实际内容尺寸
-                  container.style.minWidth = Math.ceil(bbox.width + bbox.x + 40) + 'px';
-                  container.style.minHeight = Math.ceil(bbox.height + bbox.y + 40) + 'px';
-                  
-                  // 计算初始缩放比例，让内容适应容器
-                  const containerWidth = container.clientWidth || clientRect.width;
-                  const containerHeight = container.clientHeight || clientRect.height;
-                  
-                  if (containerWidth > 0 && containerHeight > 0) {
-                    const scaleX = containerWidth / (bbox.width + bbox.x);
-                    const scaleY = containerHeight / (bbox.height + bbox.y);
-                    const fitScale = Math.min(scaleX, scaleY, 1); // 不放大，只缩小
-                    
-                    if (fitScale < 1) {
-                      scale = fitScale;
-                      updateTransform();
-                    }
-                  }
-                }
-              });
             }
             
             // 初始化交互功能
@@ -299,6 +273,34 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
         // 更新变换
         function updateTransform() {
           content.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+        }
+
+        // 初始适配与按钮、滚轮共用缩放状态。
+        const svgElement = content.querySelector('svg');
+        if (svgElement) {
+          requestAnimationFrame(() => {
+            const bbox = svgElement.getBBox();
+            const clientRect = svgElement.getBoundingClientRect();
+
+            if (bbox && bbox.width > 0 && bbox.height > 0) {
+              container.style.minWidth = Math.ceil(bbox.width + bbox.x + 40) + 'px';
+              container.style.minHeight = Math.ceil(bbox.height + bbox.y + 40) + 'px';
+
+              const containerWidth = container.clientWidth || clientRect.width;
+              const containerHeight = container.clientHeight || clientRect.height;
+
+              if (containerWidth > 0 && containerHeight > 0) {
+                const scaleX = containerWidth / (bbox.width + bbox.x);
+                const scaleY = containerHeight / (bbox.height + bbox.y);
+                const fitScale = Math.min(scaleX, scaleY, 1); // 不放大，只缩小
+
+                if (fitScale < 1) {
+                  scale = fitScale;
+                  updateTransform();
+                }
+              }
+            }
+          });
         }
         
         // 按钮 hover 效果
@@ -397,11 +399,17 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
         });
       }
       
-      // 页面加载完成后渲染
+      const renderDiagrams = () => {
+        void renderMermaidDiagrams().catch((error) => {
+          console.error('Mermaid 加载失败:', error);
+        });
+      };
+
+      // 页面加载完成后渲染。
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', renderMermaidDiagrams);
+        document.addEventListener('DOMContentLoaded', renderDiagrams, { once: true });
       } else {
-        renderMermaidDiagrams();
+        renderDiagrams();
       }
     </script>
     

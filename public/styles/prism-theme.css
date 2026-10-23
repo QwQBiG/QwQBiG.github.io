@@ -137,7 +137,7 @@
 .prose pre[class*="language-"] .custom-copy-code {
   height: 24px;
   padding: 0 10px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'Noto Sans SC Variable', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #e84a7a;
@@ -164,7 +164,7 @@
   height: 24px;
   width: 24px;
   padding: 0;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'Noto Sans SC Variable', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #e84a7a;
@@ -193,7 +193,7 @@
 .prose pre[class*="language-"] .code-fold-toggle {
   height: 24px;
   padding: 0 10px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'Noto Sans SC Variable', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #e84a7a;
@@ -229,7 +229,7 @@
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'Noto Sans SC Variable', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: #e84a7a;

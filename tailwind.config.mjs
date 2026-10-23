@@ -25,7 +25,7 @@ export default {
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'Courier New', 'monospace'],
-        sans: ['Noto Sans SC', 'system-ui', 'sans-serif'],
+        sans: ['Noto Sans SC Variable', 'system-ui', 'sans-serif'],
       },
       typography: {
         DEFAULT: {

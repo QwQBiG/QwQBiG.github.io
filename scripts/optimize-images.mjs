@@ -71,5 +71,46 @@ async function optimizeSiteImages() {
   ]);
 }
 
-await Promise.all([optimizeGallery(), optimizeSiteImages()]);
+async function optimizePortraits() {
+  const siteDir = path.join(generatedDir, 'site');
+  await fs.mkdir(siteDir, { recursive: true });
+  const smoothstep = (start, end, value) => {
+    const t = Math.max(0, Math.min(1, (value - start) / (end - start)));
+    return t * t * (3 - 2 * t);
+  };
+
+  for (const expression of ['smile', 'happy', 'wink', 'shy']) {
+    const source = expression === 'smile' ? 'character' : `character-${expression}`;
+    // Render the upper-body crop and soft paper edges once at build time.
+    const { data, info } = await sharp(path.join(root, 'src', 'assets', 'site', `${source}.png`))
+      .rotate()
+      .extract({ left: 109, top: 0, width: 760, height: 715 })
+      .extend({ top: 45, bottom: 0, left: 0, right: 0, background: '#ffffff' })
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+
+    for (let y = 0; y < info.height; y++) {
+      for (let x = 0; x < info.width; x++) {
+        const offset = (y * info.width + x) * info.channels;
+        const radius = Math.hypot((x + 0.5) / info.width - 0.5, (y + 0.5) / info.height - 0.5);
+        const paper = smoothstep(0.94, 0.995, Math.min(data[offset], data[offset + 1], data[offset + 2]) / 255);
+        data[offset + 3] = Math.round(data[offset + 3]
+          * (1 - paper * smoothstep(0.16, 0.46, radius))
+          * (1 - smoothstep(0.46, 0.5, radius)));
+        const glow = (1 - smoothstep(0.35, 0.5, radius)) * 0.08 * 0.9 * 255;
+        for (const [channel, color] of [0.527, 0.231, 0.973].entries()) {
+          data[offset + channel] = Math.min(255, Math.round(data[offset + channel] + color * glow));
+        }
+      }
+    }
+
+    await sharp(data, { raw: info })
+      .resize(640, 640)
+      .webp({ quality: 90, alphaQuality: 100, effort: 5, smartSubsample: true })
+      .toFile(path.join(siteDir, `portrait-${expression}.webp`));
+  }
+}
+
+await Promise.all([optimizeGallery(), optimizeSiteImages(), optimizePortraits()]);
 console.log('Optimized gallery and site images.');

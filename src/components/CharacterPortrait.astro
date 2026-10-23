@@ -1,0 +1,153 @@
+---
+const portrait = '/generated/site/portrait-smile.webp';
+---
+
+<character-portrait class="portrait" data-expression="Smile">
+  <div class="portrait-ambient" aria-hidden="true"></div>
+  <img class="portrait-image is-visible" src={portrait} width="760" height="760"
+    alt="QwQBiG's character" decoding="async" fetchpriority="high" draggable="false" />
+  <img class="portrait-image" width="760" height="760" alt="" decoding="async" draggable="false" />
+  <button type="button" class="portrait-expression-button" title="Click to change expression"
+    aria-label="Current expression: Smile. Click to change expression" aria-busy="false">
+    <span class="portrait-expression-hint" aria-hidden="true">Tap to change</span>
+  </button>
+  <span class="portrait-status sr-only" aria-live="polite" aria-atomic="true">Current expression: Smile</span>
+</character-portrait>
+
+<script>
+  const expressions = ['Smile', 'Happy', 'Wink', 'Shy'];
+  const portraitURL = (index: number) => `/generated/site/portrait-${expressions[index].toLowerCase()}.webp`;
+
+  class CharacterPortrait extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      this.dataset.ready = 'true';
+      const button = this.querySelector<HTMLButtonElement>('button')!;
+      const hint = this.querySelector<HTMLElement>('.portrait-expression-hint')!;
+      const status = this.querySelector<HTMLElement>('.portrait-status')!;
+      const images = [...this.querySelectorAll<HTMLImageElement>('.portrait-image')];
+      const cache = new Map<number, Promise<string>>([[0, Promise.resolve(portraitURL(0))]]);
+      let activeImage = 0;
+      let displayed = 0;
+      let requested = 0;
+      let revision = 0;
+      let failed = false;
+      let transition = Promise.resolve();
+
+      const load = (index: number) => {
+        const existing = cache.get(index);
+        if (existing) return existing;
+        const pending = new Promise<string>((resolve, reject) => {
+          const image = new Image();
+          image.decoding = 'async';
+          image.onload = () => image.decode().then(() => resolve(image.src), reject);
+          image.onerror = () => reject(new Error('Portrait image unavailable'));
+          image.src = portraitURL(index);
+        }).catch((error: unknown) => {
+          cache.delete(index);
+          throw error;
+        });
+        cache.set(index, pending);
+        return pending;
+      };
+
+      const show = (index: number) => {
+        const token = ++revision;
+        requested = index;
+        failed = false;
+        button.setAttribute('aria-busy', 'true');
+        // Fetch immediately, but keep an in-progress fade intact before swapping layers.
+        const loading = load(index).then((source) => ({ source }), () => ({ source: null }));
+        transition = transition.then(async () => {
+        try {
+          const { source } = await loading;
+          if (token !== revision || !this.isConnected) return;
+          if (!source) throw new Error('Portrait image unavailable');
+          const nextImage = 1 - activeImage;
+          images[nextImage].src = source;
+          await images[nextImage].decode();
+          if (token !== revision || !this.isConnected) return;
+          images[nextImage].classList.add('is-visible');
+          images[activeImage].classList.remove('is-visible');
+          images[nextImage].alt = "QwQBiG's character";
+          images[activeImage].alt = '';
+          activeImage = nextImage;
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          await new Promise((resolve) => setTimeout(resolve, reduceMotion ? 0 : 220));
+          if (!this.isConnected) return;
+          displayed = index;
+          this.dataset.expression = expressions[index];
+          hint.textContent = `${expressions[index]} · Tap again`;
+          button.title = 'Click to change expression';
+          button.setAttribute('aria-label', `Current expression: ${expressions[index]}. Click to change expression`);
+          status.textContent = `Current expression: ${expressions[index]}`;
+        } catch {
+          if (token !== revision || !this.isConnected) return;
+          failed = true;
+          hint.textContent = 'Tap to retry';
+          button.title = 'Image unavailable. Click to retry';
+          button.setAttribute('aria-label', `Current expression: ${expressions[displayed]}. Image unavailable. Click to retry`);
+          status.textContent = 'Expression image unavailable. The current portrait is unchanged. Click to retry.';
+        } finally {
+          if (token === revision) button.setAttribute('aria-busy', 'false');
+        }
+        });
+      };
+
+      button.addEventListener('click', () => { void show(failed ? requested : (requested + 1) % expressions.length); });
+      // Warm only the next expression when the portrait is approached.
+      const warmNext = () => { void load((requested + 1) % expressions.length).catch(() => {}); };
+      button.addEventListener('pointerenter', warmNext, { passive: true });
+      button.addEventListener('focus', warmNext);
+    }
+  }
+
+  if (!customElements.get('character-portrait')) customElements.define('character-portrait', CharacterPortrait);
+</script>
+
+<style>
+  .portrait { display: block; position: relative; width: 100%; height: 100%; }
+  .portrait-ambient { position: absolute; inset: 0; border-radius: 50%; background: rgba(233, 213, 255, 0.12); }
+  .portrait-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 220ms ease-in-out;
+    pointer-events: none;
+  }
+  .portrait-image.is-visible { opacity: 1; }
+  .portrait-expression-button {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .portrait-expression-button:focus-visible { outline: 2px solid #a78bfa; outline-offset: -6px; }
+  .portrait-expression-hint {
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 3px 9px;
+    border: 1px solid rgba(196, 181, 253, 0.3);
+    border-radius: 999px;
+    color: #70548d;
+    background: rgba(255, 255, 255, 0.74);
+    font-size: clamp(10px, 1vw, 11px);
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) { .portrait-image { transition: none; } }
+</style>
