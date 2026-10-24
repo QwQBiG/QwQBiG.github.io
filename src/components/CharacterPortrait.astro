@@ -15,6 +15,7 @@ const portrait = '/generated/site/portrait-smile.webp';
 </character-portrait>
 
 <script>
+  import { scheduleBackgroundTask } from '../utils/background-tasks';
   import { createPortraitCache, createPortraitSwitcher, decodePortrait } from '../utils/portrait';
 
   const expressions = ['Smile', 'Happy', 'Wink', 'Shy'];
@@ -36,8 +37,7 @@ const portrait = '/generated/site/portrait-smile.webp';
       let visualIndex = initial;
       let fadeTimer: ReturnType<typeof setTimeout> | undefined;
       let finishFade: (() => void) | undefined;
-      let idleTask: number | undefined;
-      let idleUsesTimer = false;
+      const backgroundImages = new Set<number>();
       const loadingImages = new Map<number, HTMLImageElement>();
       const cache = createPortraitCache<HTMLImageElement>((index, signal) => (
         new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ const portrait = '/generated/site/portrait-smile.webp';
         const connection = (navigator as Navigator & {
           connection?: { saveData?: boolean; effectiveType?: string };
         }).connection;
-        return !connection?.saveData && !['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
+        return !connection?.saveData;
       };
       const loadForInteraction = (index: number) => {
         const pending = cache.load(index);
@@ -80,7 +80,25 @@ const portrait = '/generated/site/portrait-smile.webp';
         if (image) image.fetchPriority = 'high';
         return pending;
       };
-      const warm = (index: number) => { void cache.load(index).catch(() => {}); };
+      const warm = (index: number) => {
+        if (lifetime.signal.aborted || backgroundImages.has(index) || !canWarmInBackground()) return;
+        backgroundImages.add(index);
+        let ready = false;
+        const task = scheduleBackgroundTask({
+          key: `portrait:${portraitURL(index)}`,
+          priority: 'image',
+          signal: lifetime.signal,
+          // Keep an image already being decoded available to an expression click.
+          run: async (signal) => {
+            if (signal.aborted || !canWarmInBackground()) return;
+            await cache.load(index);
+            ready = !signal.aborted;
+          },
+        });
+        void task.done.then(() => {
+          if (!ready) backgroundImages.delete(index);
+        });
+      };
       const renderDisplayed = (index: number) => {
         this.dataset.expression = expressions[index];
         hint.textContent = `${expressions[index]} · Tap again`;
@@ -140,30 +158,14 @@ const portrait = '/generated/site/portrait-smile.webp';
       button.addEventListener('pointerdown', warmNext, { ...listenerOptions, passive: true });
       button.addEventListener('focus', warmNext, listenerOptions);
 
-      // Start only after the visible portrait is decoded, then warm one image per idle period.
+      // The shared queue waits for the page to load and gives navigation priority.
       const remaining = Array.from({ length: expressions.length - 1 }, (_, offset) => (
         (initial + offset + 1) % expressions.length
       ));
-      const scheduleWarm = () => {
-        if (lifetime.signal.aborted || !remaining.length || !canWarmInBackground()) return;
-        const next = () => {
-          idleTask = undefined;
-          if (lifetime.signal.aborted || !canWarmInBackground()) return;
-          const index = remaining.shift()!;
-          void cache.load(index).catch(() => {}).finally(scheduleWarm);
-        };
-        if (typeof window.requestIdleCallback === 'function') {
-          idleUsesTimer = false;
-          idleTask = window.requestIdleCallback(next, { timeout: 1500 });
-        } else {
-          idleUsesTimer = true;
-          idleTask = window.setTimeout(next, 300);
-        }
-      };
       const initialReady = () => {
         void decodePortrait(images[activeImage], lifetime.signal).catch(() => {})
           .then(() => lifetime.signal.aborted ? undefined : cache.load(initial).catch(() => {}))
-          .then(scheduleWarm);
+          .then(() => remaining.forEach(warm));
       };
       if (images[activeImage].complete) initialReady();
       else images[activeImage].addEventListener('load', initialReady, { ...listenerOptions, once: true });
@@ -173,10 +175,7 @@ const portrait = '/generated/site/portrait-smile.webp';
         lifetime.abort();
         cache.dispose();
         loadingImages.clear();
-        if (idleTask !== undefined) {
-          if (idleUsesTimer) clearTimeout(idleTask);
-          else window.cancelIdleCallback(idleTask);
-        }
+        backgroundImages.clear();
         if (fadeTimer !== undefined) clearTimeout(fadeTimer);
         finishFade?.();
         renderDisplayed(visualIndex);

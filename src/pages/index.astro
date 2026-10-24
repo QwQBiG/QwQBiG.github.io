@@ -5,9 +5,10 @@ import ClockWidget from '../components/widgets/ClockWidget.astro';
 import CalendarWidget from '../components/widgets/CalendarWidget.astro';
 import MusicWidget from '../components/widgets/MusicWidget.astro';
 import { loadContent } from '../utils/load-content';
-import { getPostUrl, getTagUrl } from '../utils/content';
+import { createContentIndex, getPostUrl, getTagUrl } from '../utils/content';
 
 const { csPosts, poetryPosts, series, tags, latestPosts } = await loadContent();
+const popularTags = createContentIndex({ cs: csPosts }).tags;
 const statistics = [
   { label: 'posts', count: csPosts.length, href: '/cs/', description: '已发布的笔记与文章' },
   { label: 'series', count: series.length, href: '/series/', description: '文章合集' },
@@ -975,7 +976,7 @@ const statistics = [
                 popular tags
               </h3>
               <div class="flex flex-wrap gap-1.5">
-                {tags.slice(0, 8).map(([tag, count]) => (
+                {popularTags.slice(0, 8).map(([tag, count]) => (
                   <a href={getTagUrl(tag)} class="tag" title={`${count} 篇内容`} aria-label={`${tag}，${count} 篇内容`}>
                     {tag}
                   </a>

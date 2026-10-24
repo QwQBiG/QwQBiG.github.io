@@ -1,10 +1,23 @@
 ---
 // MusicWidget.astro - 横向条形音乐播放器（适配毛玻璃风格）
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+
+const musicSources = [
+  { file: 'music/world.execute(me);[Neuro].mp3', type: 'audio/mpeg' },
+  { file: 'music/world.execute(me);[Neuro].aac', type: 'audio/aac' },
+].map(({ file, type }) => {
+  const version = createHash('sha256')
+    .update(readFileSync(path.join(process.cwd(), 'public', file)))
+    .digest('hex').slice(0, 12);
+  return { src: `/${file}?v=${version}`, type };
+});
 ---
 
 <div class="music-bar w-full h-full flex items-center gap-2 md:gap-3 px-1" style="position: relative; z-index: 200; pointer-events: auto;">
   <!-- 播放/暂停按钮 - 使用最高z-index确保在最上层 -->
-  <button id="play-btn" class="play-btn flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center" style="position: relative; z-index: 9999; pointer-events: auto; cursor: pointer;">
+  <button id="play-btn" type="button" aria-label="播放音乐" title="播放音乐" aria-pressed="false" aria-busy="false" class="play-btn flex-shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center" style="position: relative; z-index: 9999; pointer-events: auto; cursor: pointer;">
     <svg id="play-icon" class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
       <path d="M8 5v14l11-7z"/>
     </svg>
@@ -75,9 +88,8 @@
   </div>
 </div>
 
-<audio id="audio-player" preload="metadata" class="hidden" crossorigin="anonymous" playsinline>
-  <source src="/music/world.execute(me);[Neuro].mp3" type="audio/mpeg">
-  <source src="/music/world.execute(me);[Neuro].aac" type="audio/aac">
+<audio id="audio-player" preload="none" data-music-cache="idle" class="hidden" crossorigin="anonymous" playsinline>
+  {musicSources.map(source => <source src={source.src} type={source.type} />)}
   Your browser does not support the audio element.
 </audio>
 
@@ -256,214 +268,250 @@
 </style>
 
 <script>
-  (function() {
-    'use strict';
+  import { scheduleBackgroundTask } from '../../utils/background-tasks';
+  import { createMusicPreloader } from '../../utils/music-cache';
+  import { createMusicPlayback } from '../../utils/music-playback';
 
-    var isInitialized = false;
-    var isPlaying = false;
-    var volume = 70;
-    var isMuted = false;
+  let currentAudio: HTMLAudioElement | undefined;
+  let disposeCurrent: (() => void) | undefined;
 
-    var audio, playBtn, progressFill, progressThumb;
-    var progressContainer, timeDisplay;
-    var volumeBtn, volumeSlider, volumeFill, prevBtn, nextBtn;
+  function initMusic() {
+    const audio = document.getElementById('audio-player') as HTMLAudioElement | null;
+    const playBtn = document.getElementById('play-btn') as HTMLButtonElement | null;
+    if (audio === currentAudio) return;
+    disposeCurrent?.();
+    disposeCurrent = undefined;
+    if (!audio || !playBtn) return;
+    currentAudio = audio;
 
-    function getElements() {
-      audio = document.getElementById('audio-player');
-      playBtn = document.getElementById('play-btn');
-      progressFill = document.getElementById('progress-fill');
-      progressThumb = document.getElementById('progress-thumb');
-      progressContainer = document.getElementById('progress-container');
-      timeDisplay = document.getElementById('time-display');
-      volumeBtn = document.getElementById('volume-btn');
-      volumeSlider = document.querySelector('.volume-slider');
-      volumeFill = document.querySelector('.volume-fill');
-      prevBtn = document.getElementById('prev-btn');
-      nextBtn = document.getElementById('next-btn');
+    const lifetime = new AbortController();
+    const listeners = { signal: lifetime.signal };
+    const progressFill = document.getElementById('progress-fill');
+    const progressThumb = document.getElementById('progress-thumb');
+    const progressContainer = document.getElementById('progress-container');
+    const timeDisplay = document.getElementById('time-display');
+    const volumeBtn = document.getElementById('volume-btn');
+    const volumeSlider = document.querySelector<HTMLElement>('.volume-slider');
+    const volumeFill = document.querySelector<HTMLElement>('.volume-fill');
+    const sources = Array.from(audio.querySelectorAll('source'));
+    const source = sources.find(candidate => audio.canPlayType(candidate.type)) ?? sources[0];
+    let preloader: ReturnType<typeof createMusicPreloader> | undefined;
+    let warmupTask: ReturnType<typeof scheduleBackgroundTask> | undefined;
+    let objectURL: string | undefined;
+    let interacted = false;
+    let nativeFallback = false;
+    let disposed = false;
+    let suspended = false;
+    let generation = 0;
+    let overflowFrame = 0;
 
-      return !!(audio && playBtn);
-    }
-
-    // 检测文字是否溢出，决定是否启用滚动
-    function checkTextOverflow() {
-      var scrollContainer = document.querySelector('.track-scroll-container');
-      var scrollContent = document.querySelector('.track-scroll-content');
-      if (!scrollContainer || !scrollContent) return;
-
-      // 获取原始内容（不包含 duplicate 部分）
-      var originalContent = scrollContent.cloneNode(true);
-      var duplicates = originalContent.querySelectorAll('.duplicate');
-      duplicates.forEach(function(d) { d.remove(); });
-      
-      // 创建一个临时元素来计算原始内容的实际宽度
-      var tempDiv = document.createElement('div');
-      tempDiv.style.cssText = 'position: absolute; visibility: hidden; white-space: nowrap; display: inline-flex; align-items: center;';
-      tempDiv.innerHTML = originalContent.innerHTML;
-      document.body.appendChild(tempDiv);
-      var originalWidth = tempDiv.scrollWidth;
-      document.body.removeChild(tempDiv);
-      
-      var containerWidth = scrollContainer.clientWidth;
-
-      if (originalWidth > containerWidth + 5) {
-        // 文字溢出，启用滚动
-        scrollContainer.classList.add('can-scroll');
-        // 设置 CSS 变量用于动画
-        var scrollDistance = -(originalWidth + 32); // 32px 是 ml-8 的间距
-        scrollContainer.style.setProperty('--scroll-distance', scrollDistance + 'px');
-      } else {
-        // 文字未溢出，禁用滚动
-        scrollContainer.classList.remove('can-scroll');
-      }
-    }
-
-    function updateIcons() {
-      var playIcon = document.getElementById('play-icon');
-      var pauseIcon = document.getElementById('pause-icon');
-      var indicator = document.getElementById('playing-indicator');
-
-      if (isPlaying) {
-        if (playIcon) playIcon.classList.add('hidden');
-        if (pauseIcon) pauseIcon.classList.remove('hidden');
-        if (indicator) indicator.classList.remove('opacity-0');
-      } else {
-        if (playIcon) playIcon.classList.remove('hidden');
-        if (pauseIcon) pauseIcon.classList.add('hidden');
-        if (indicator) indicator.classList.add('opacity-0');
-      }
-    }
-
-    function formatTime(seconds) {
-      if (!seconds || isNaN(seconds)) return '0:00';
-      var mins = Math.floor(seconds / 60);
-      var secs = Math.floor(seconds % 60);
-      return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    function formatTime(seconds: number) {
+      if (!Number.isFinite(seconds) || seconds <= 0) return '0:00';
+      return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
     }
 
     function updateProgress() {
-      if (!audio || !audio.duration || !progressFill || !progressThumb || !timeDisplay) return;
-
-      var percent = (audio.currentTime / audio.duration) * 100;
-      progressFill.style.width = percent + '%';
-      progressThumb.style.left = percent + '%';
-      timeDisplay.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+      if (!Number.isFinite(audio!.duration) || audio!.duration <= 0) return;
+      const percent = (audio!.currentTime / audio!.duration) * 100;
+      if (progressFill) progressFill.style.width = `${percent}%`;
+      if (progressThumb) progressThumb.style.left = `${percent}%`;
+      if (timeDisplay) timeDisplay.textContent = `${formatTime(audio!.currentTime)} / ${formatTime(audio!.duration)}`;
     }
 
-    function togglePlay(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-
-      if (!audio) return;
-
-      if (isPlaying) {
-        audio.pause();
-        isPlaying = false;
-        updateIcons();
-      } else {
-        var playPromise = audio.play();
-        if (playPromise !== undefined) {
-          playPromise.then(function() {
-            isPlaying = true;
-            updateIcons();
-          });
-        }
-      }
+    function checkTextOverflow() {
+      overflowFrame = 0;
+      const container = document.querySelector<HTMLElement>('.track-scroll-container');
+      const content = document.querySelector<HTMLElement>('.track-scroll-content');
+      if (!container || !content) return;
+      const original = content.cloneNode(true) as HTMLElement;
+      original.querySelectorAll('.duplicate').forEach(node => node.remove());
+      const measure = document.createElement('div');
+      measure.style.cssText = 'position: absolute; visibility: hidden; white-space: nowrap; display: inline-flex; align-items: center;';
+      measure.innerHTML = original.innerHTML;
+      document.body.appendChild(measure);
+      const originalWidth = measure.scrollWidth;
+      measure.remove();
+      const overflowing = originalWidth > container.clientWidth + 5;
+      container.classList.toggle('can-scroll', overflowing);
+      if (overflowing) container.style.setProperty('--scroll-distance', `${-(originalWidth + 32)}px`);
     }
 
-    function init() {
-      if (isInitialized) return true;
-      if (!getElements()) return false;
+    function stopWarmup() {
+      generation += 1;
+      warmupTask?.cancel();
+      warmupTask = undefined;
+      preloader?.cancel();
+      preloader = undefined;
+    }
 
-      audio.volume = 0.7;
-
-      playBtn.addEventListener('click', togglePlay);
-
-      audio.addEventListener('loadedmetadata', updateProgress);
-      audio.addEventListener('timeupdate', updateProgress);
-      audio.addEventListener('ended', function() {
-        isPlaying = false;
-        updateIcons();
-      });
-
-      if (progressContainer) {
-        progressContainer.addEventListener('click', function(e) {
-          if (!audio || !audio.duration) return;
-          var rect = progressContainer.getBoundingClientRect();
-          var percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-          audio.currentTime = percent * audio.duration;
-        });
-      }
-
-      if (volumeBtn) {
-        volumeBtn.addEventListener('click', function() {
-          isMuted = !isMuted;
-          audio.muted = isMuted;
-          updateVolumeIcon();
-        });
-      }
-
-      // 更新音量图标
-      function updateVolumeIcon() {
-        var volumeOnIcon = document.getElementById('volume-on-icon');
-        var volumeOffIcon = document.getElementById('volume-off-icon');
-        if (volumeOnIcon && volumeOffIcon) {
-          if (isMuted) {
-            volumeOnIcon.classList.add('hidden');
-            volumeOffIcon.classList.remove('hidden');
-          } else {
-            volumeOnIcon.classList.remove('hidden');
-            volumeOffIcon.classList.add('hidden');
+    const playback = createMusicPlayback(audio, {
+      beforePlay() {
+        // Stay in the click call stack: never wait for the background download to play.
+        interacted = true;
+        stopWarmup();
+        audio.preload = 'auto';
+        if (audio.error) {
+          if (objectURL) {
+            URL.revokeObjectURL(objectURL);
+            objectURL = undefined;
+            audio.removeAttribute('src');
           }
+          // Retry a failed resource only on a new click, before this new play() call.
+          audio.load();
         }
-      }
-
-      if (volumeSlider) {
-        volumeSlider.addEventListener('click', function(e) {
-          var rect = volumeSlider.getBoundingClientRect();
-          var percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-          volume = Math.round(percent * 100);
-          audio.volume = percent;
-          audio.muted = volume === 0;
-          if (volumeFill) volumeFill.style.width = volume + '%';
-        });
-      }
-
-      if (prevBtn) {
-        prevBtn.addEventListener('click', function() {
-          audio.currentTime = 0;
-          if (isPlaying) audio.play();
-        });
-      }
-
-      if (nextBtn) {
-        nextBtn.addEventListener('click', function() {
-          audio.currentTime = 0;
-          if (isPlaying) audio.play();
-        });
-      }
-
-      // 初始化时检测文字溢出
-      checkTextOverflow();
-
-      // 窗口大小变化时重新检测
-      window.addEventListener('resize', checkTextOverflow);
-
-      isInitialized = true;
-      return true;
-    }
-
-    init();
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    }
-
-    document.addEventListener('astro:page-load', function() {
-      isInitialized = false;
-      init();
+        if (!objectURL) audio.dataset.musicCache = 'native';
+      },
+      onChange(state) {
+        document.getElementById('play-icon')?.classList.toggle('hidden', state.playing);
+        document.getElementById('pause-icon')?.classList.toggle('hidden', !state.playing);
+        document.getElementById('playing-indicator')?.classList.toggle('opacity-0', !state.playing);
+        playBtn.setAttribute('aria-busy', String(state.pending));
+        playBtn.setAttribute('aria-pressed', String(state.requested));
+        const label = state.pending ? '正在加载，点击取消'
+          : state.playing ? '暂停音乐'
+          : state.error ? '播放失败，点击重试' : '播放音乐';
+        playBtn.title = label;
+        playBtn.setAttribute('aria-label', label);
+      },
     });
 
-  })();
+    function canWarmInBackground() {
+      const connection = (navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }).connection;
+      return !connection?.saveData;
+    }
+
+    function startWarmup() {
+      if (disposed || suspended || interacted || nativeFallback || objectURL || warmupTask || !source || document.readyState !== 'complete') return;
+      if (!canWarmInBackground()) {
+        audio!.dataset.musicCache = 'deferred';
+        return;
+      }
+      const token = ++generation;
+      audio!.dataset.musicCache = 'queued';
+      const task = scheduleBackgroundTask({
+        key: `music:${source.src}`,
+        priority: 'media',
+        signal: lifetime.signal,
+        run: async (signal) => {
+          if (signal.aborted || disposed || suspended || interacted || token !== generation) return;
+          if (!canWarmInBackground()) {
+            audio!.dataset.musicCache = 'deferred';
+            return;
+          }
+          let storage: CacheStorage | undefined;
+          try { storage = window.caches; } catch { /* Private browsing can deny persistent storage. */ }
+          // Keep this request through hover/navigation hints; playback and page exit cancel it.
+          const attempt = createMusicPreloader({ url: source.src, type: source.type, storage, fetch: window.fetch.bind(window) });
+          preloader = attempt;
+          const cancel = () => {
+            attempt.cancel();
+            if (!disposed && !suspended && !interacted && token === generation) audio!.dataset.musicCache = 'queued';
+          };
+          signal.addEventListener('abort', cancel, { once: true });
+          audio!.dataset.musicCache = 'warming';
+          try {
+            const result = await attempt.warm();
+            if (signal.aborted || disposed || suspended || interacted || token !== generation) return;
+            if (!result) {
+              nativeFallback = true;
+              audio!.dataset.musicCache = 'unavailable';
+              audio!.preload = 'auto';
+              audio!.load();
+              return;
+            }
+            audio!.dataset.musicCache = result.fromCache ? 'cache' : 'network';
+            objectURL = URL.createObjectURL(result.blob);
+            audio!.src = objectURL;
+            audio!.preload = 'auto';
+            // This runs only before a user's play request, so it cannot interrupt playback.
+            audio!.load();
+          } finally {
+            signal.removeEventListener('abort', cancel);
+            if (preloader === attempt) preloader = undefined;
+          }
+        },
+      });
+      warmupTask = task;
+      void task.done.then(() => {
+        if (warmupTask === task) warmupTask = undefined;
+      });
+    }
+
+    audio.volume = 0.7;
+    playBtn.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      playback.toggle();
+    }, listeners);
+    for (const event of ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked']) {
+      audio.addEventListener(event, updateProgress, listeners);
+    }
+    progressContainer?.addEventListener('click', event => {
+      if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+      const rect = progressContainer.getBoundingClientRect();
+      audio.currentTime = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)) * audio.duration;
+    }, listeners);
+
+    function updateVolume() {
+      const muted = audio!.muted || audio!.volume === 0;
+      document.getElementById('volume-on-icon')?.classList.toggle('hidden', muted);
+      document.getElementById('volume-off-icon')?.classList.toggle('hidden', !muted);
+      if (volumeFill) volumeFill.style.width = `${Math.round(audio!.volume * 100)}%`;
+    }
+    volumeBtn?.addEventListener('click', () => { audio.muted = !audio.muted; }, listeners);
+    audio.addEventListener('volumechange', updateVolume, listeners);
+    volumeSlider?.addEventListener('click', event => {
+      const rect = volumeSlider.getBoundingClientRect();
+      audio.volume = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      audio.muted = audio.volume === 0;
+    }, listeners);
+    for (const id of ['prev-btn', 'next-btn']) {
+      document.getElementById(id)?.addEventListener('click', () => { audio.currentTime = 0; }, listeners);
+    }
+    checkTextOverflow();
+    updateProgress();
+    updateVolume();
+    window.addEventListener('resize', () => {
+      if (!overflowFrame) overflowFrame = requestAnimationFrame(checkTextOverflow);
+    }, { ...listeners, passive: true });
+    window.addEventListener('load', startWarmup, { ...listeners, once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) startWarmup();
+    }, listeners);
+    window.addEventListener('pagehide', event => {
+      suspended = true;
+      stopWarmup();
+      playback.pause();
+      // Preserve a prepared Blob URL when this exact document enters the back/forward cache.
+      if (!event.persisted) disposeCurrent?.();
+    }, listeners);
+    window.addEventListener('pageshow', event => {
+      if (!event.persisted) return;
+      suspended = false;
+      startWarmup();
+    }, listeners);
+
+    disposeCurrent = () => {
+      if (disposed) return;
+      disposed = true;
+      stopWarmup();
+      playback.pause();
+      playback.dispose();
+      lifetime.abort();
+      cancelAnimationFrame(overflowFrame);
+      if (objectURL) URL.revokeObjectURL(objectURL);
+      if (currentAudio === audio) currentAudio = undefined;
+    };
+    startWarmup();
+  }
+
+  initMusic();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMusic, { once: true });
+  document.addEventListener('astro:page-load', initMusic);
+  document.addEventListener('astro:before-swap', () => {
+    disposeCurrent?.();
+    disposeCurrent = undefined;
+  });
 </script>

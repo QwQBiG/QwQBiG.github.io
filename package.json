@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "optimize:images": "node scripts/optimize-images.mjs",
-    "build": "npm run check:emoji && npm run optimize:images && astro build && npm run check:emoji -- --dist",
+    "build": "npm run check:emoji && npm run optimize:images && astro build && node scripts/navigation-assets.mjs && npm run check:emoji -- --dist",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
