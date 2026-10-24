@@ -143,7 +143,7 @@ printPerson(me); // 传引用
 ```
 
 ### 4. Rust (Ownership)
-```Rust
+```rust
 struct Person { name: String }
 
 fn print_person(p: Person)

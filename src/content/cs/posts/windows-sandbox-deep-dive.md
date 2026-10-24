@@ -62,7 +62,7 @@ Windows Sandbox 的本质是基于 **Hyper-V 容器技术 (Hyper-V Containers)**
 
 ## CS 学生的进阶玩法：使用 .wsb 配置文件
 
-千万不要只通过点击图标来启动沙盒！你可以通过编写 XML 格式的 `.wsb` (Windows Sandbox Configuration) 文件来定制沙盒的行为。
+不用只通过点击图标来启动沙盒。你可以通过编写 XML 格式的 `.wsb` (Windows Sandbox Configuration) 文件来定制沙盒的行为。
 
 创建一个文本文件，命名为 `test.wsb`，写入以下代码：
 

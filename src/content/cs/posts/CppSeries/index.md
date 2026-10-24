@@ -1,6 +1,6 @@
 ---
 title: "C++的世界"
-description: "C++编程语言学习笔记与进阶指南"
+description: "C艹 C艹 C++"
 date: 2025-10-01T00:00:00+08:00
 pin: true
 categories: ["合集"]

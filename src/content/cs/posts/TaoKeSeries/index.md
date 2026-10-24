@@ -1,6 +1,6 @@
 ---
 title: "逃课-速通"
-description: "快速学习各类技术的速成指南"
+description: "速度啊！速、速、速！"
 date: 2025-12-12T00:00:00+08:00
 pin: true
 categories: ["合集"]

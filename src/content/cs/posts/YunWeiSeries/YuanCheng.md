@@ -60,4 +60,4 @@ sudo docker logs --tail 20 frp-client
 
 ## 一句话总结：
 
-**Docker 跑 FRP，认准 `--network host` 和 `--dns`，内网 IP 填 `127.0.0.1`，永远不掉线。**
+**Docker 跑 FRP，就 `--network host` 和 `--dns`，内网 IP 填 `127.0.0.1`，非常好的啦～**

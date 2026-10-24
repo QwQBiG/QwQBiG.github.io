@@ -1,6 +1,6 @@
 ---
 title: "运维"
-description: "Linux运维、Docker、K8s等技术实践"
+description: "Linux运维、Docker、K8s……"
 date: 2025-10-01T00:00:00+08:00
 pin: true
 categories: ["合集"]
