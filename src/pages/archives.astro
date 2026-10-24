@@ -6,7 +6,7 @@ import ContentIcon from '../components/ui/ContentIcon.astro';
 import { loadContent } from '../utils/load-content';
 import { formatDate, groupByYear } from '../utils/date';
 
-const { posts: sortedPosts } = await loadContent();
+const { csPosts: sortedPosts } = await loadContent();
 
 // Group by year
 const postsByYear = groupByYear(sortedPosts);

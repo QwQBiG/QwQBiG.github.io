@@ -36,10 +36,11 @@
 
         // 点击高亮（持久）
         line.addEventListener('click', () => {
+          const wasHighlighted = line.classList.contains('line-highlight');
           // 移除其他行的高亮
           lines.forEach(l => l.classList.remove('line-highlight'));
-          // 添加当前行高亮
-          line.classList.add('line-highlight');
+          // 再次点击当前行时取消，否则切换到当前行。
+          if (!wasHighlighted) line.classList.add('line-highlight');
         });
       });
     });
