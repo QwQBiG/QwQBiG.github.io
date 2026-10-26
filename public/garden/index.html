@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="dark">
+<title>每日一盆 · 进温室坐坐</title>
+<style>
+:root{--bg:#0b1712;--green:#d2e3b2;--text:#eeeedd;--soft:#a4b79d;--line:#2d4132;--paper:#ecebdc;--ink:#28452f;--terra:#bd8c66;font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:var(--bg);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 25% 0%,#1b3021 0,transparent 50%),var(--bg)}button,input{font:inherit}button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:default;opacity:.4}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d1e0a7;outline-offset:4px}a{color:inherit}button{touch-action:manipulation}button svg{pointer-events:none}.shell{max-width:1240px;margin:auto;padding:0 38px 44px}.topbar{height:96px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px;text-decoration:none}.brand-mark{width:39px;height:39px;display:grid;place-items:center;border:1px solid #607951;border-radius:12px;color:#c1d49b}.brand-title{font-size:15px;letter-spacing:3px}.brand-sub{font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:1.8px;color:var(--soft);margin-top:4px}.sill-link{font-size:13px;color:#bfceb5;text-decoration:none;display:flex;gap:9px;align-items:center}.sill-link b{font-weight:400;border:1px solid #41543c;border-radius:20px;min-width:26px;padding:4px 7px;text-align:center;font-size:11px}.intro{padding:34px 0 25px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#b8c697;margin:0 0 13px}.intro h1{font-size:30px;font-weight:500;letter-spacing:1.5px;margin:0 0 10px;line-height:1.45}.intro p{font-size:13px;line-height:1.8;color:var(--soft);margin:0}.local-note{font-size:11px;color:#83977d;white-space:nowrap;margin-bottom:5px}.local-note:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#b4ca8a;margin-right:8px}.date-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.date-group{display:flex;align-items:center;gap:9px}.date-label{font-size:12px;color:#b6c6ad;margin-right:8px}.date-nav{height:36px;width:36px;border:1px solid #3b503a;border-radius:9px;background:transparent;color:#dce7cc;display:grid;place-items:center}.date-input{color:#dce7ce;background:transparent;border:0;min-width:140px;padding:8px 5px;font:13px ui-monospace,SFMono-Regular,monospace;max-width:158px}.text-button{background:transparent;color:#acbe9e;border:0;font-size:12px;padding:9px 11px;border-radius:8px}.text-button:hover{background:#233525;color:#e0e9cf}.day-label{font-size:12px;color:#97ad8f}.main-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,.85fr);gap:21px;align-items:stretch}.scene{position:relative;min-height:493px;overflow:hidden;border:1px solid #354a36;border-radius:23px;background:radial-gradient(ellipse at 50% 35%,#35523555,transparent 70%),linear-gradient(145deg,#1e3524,#101f17);transition:background .3s}.scene.moonlight{background:radial-gradient(ellipse at 50% 25%,#444e5c66,transparent 65%),linear-gradient(145deg,#1c2a30,#111d22)}.glass-lines{position:absolute;width:100%;height:100%;inset:0;color:#80966e;opacity:.45}.scene-label{position:absolute;top:25px;left:27px;font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#a5bc93}.room-badge{position:absolute;right:25px;top:22px;font-size:11px;color:#cfdec1;display:flex;align-items:center;gap:8px}.room-light{width:22px;height:22px;border-radius:50%;background:#dde2b0;box-shadow:0 0 34px #d9dc9d22}.moonlight .room-light{box-shadow:inset -7px -4px 0 #243238;background:#e4e7cc}.floor-glow{position:absolute;left:12%;right:12%;bottom:69px;height:40px;border-radius:50%;background:#090f0b66;filter:blur(9px)}.bench{position:absolute;left:8%;right:8%;height:13px;bottom:93px;background:linear-gradient(#617254,#475d41);border-radius:4px;box-shadow:0 3px 0 #102217}.bench:before,.bench:after{content:"";position:absolute;top:13px;width:12px;height:37px;background:#3b5136}.bench:before{left:24px}.bench:after{right:24px}.plant-display{position:absolute;left:50%;bottom:72px;width:285px;height:304px;transform:translateX(-50%);z-index:2;pointer-events:none}.plant-display svg{width:100%;height:100%;overflow:visible}.plant-sway{transform-box:view-box;transform-origin:150px 228px}.watered .plant-sway{animation:sway 1.25s ease-in-out}.neighbor{position:absolute;width:100px;height:108px;bottom:94px;border:0;padding:0;color:#9db28d;background:none;opacity:.76;z-index:1;transition:opacity .2s}.neighbor:hover{opacity:1}.neighbor svg{width:100%;height:100%;overflow:visible}.neighbor.left{left:7%}.neighbor.right{right:7%}.neighbor-caption{position:absolute;bottom:-23px;left:0;right:0;font-size:10px;letter-spacing:1px}.scene-bottom{position:absolute;bottom:19px;left:27px;right:27px;display:flex;justify-content:space-between;gap:12px;font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:1.5px;color:#8da281}.scene-bottom span:last-child{color:#c0cba0}.water-drops{position:absolute;left:50%;bottom:300px;width:120px;height:72px;transform:translateX(-50%);pointer-events:none;z-index:3;opacity:0}.water-drops i{position:absolute;top:0;width:6px;height:12px;border-radius:60% 40% 60% 40%;transform:rotate(25deg);background:#bddde2}.water-drops i:nth-child(1){left:22px;animation-delay:0s}.water-drops i:nth-child(2){left:58px;animation-delay:.12s}.water-drops i:nth-child(3){left:93px;animation-delay:.23s}.watered .water-drops{opacity:1}.watered .water-drops i{animation:drop .75s ease-out both}.room-stars{position:absolute;inset:0;pointer-events:none;opacity:.28}.room-stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#d6e3b7}.room-stars i:nth-child(1){top:18%;left:22%}.room-stars i:nth-child(2){top:31%;left:72%;width:2px;height:2px}.room-stars i:nth-child(3){top:16%;left:60%;width:2px;height:2px}.room-stars i:nth-child(4){top:45%;left:85%}.moonlight .room-stars{opacity:.9}.specimen{background:var(--paper);border:1px solid #eeeede;border-radius:21px;color:var(--ink);padding:27px 27px 22px;display:flex;flex-direction:column;min-width:0;box-shadow:0 9px 35px #030d0722}.specimen-kicker{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#698063;display:flex;justify-content:space-between;gap:10px}.variant{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;background:#dbe2cb;border-radius:6px;font-size:11px;color:#4b6845;margin:24px 0 13px}.variant.rare{background:#dddde9;color:#595b80}.variant-dot{width:5px;height:5px;background:#809d69;border-radius:50%}.rare .variant-dot{background:#8a85ab}.plant-name{font-size:40px;font-weight:500;letter-spacing:2px;line-height:1.2;margin:0 0 8px}.latin-name{font:italic 17px Georgia,serif;color:#698264;margin:0}.plant-line{font-size:12px;line-height:1.9;color:#63745c;margin:22px 0 23px;min-height:23px}.leaf-label{font-size:11px;display:flex;justify-content:space-between;color:#607159;gap:10px}.leaf-label b{font-weight:500;font-variant-numeric:tabular-nums;color:#365830}.leaf-meter{display:flex;gap:7px;margin:12px 0 24px}.leaf-meter span{height:8px;flex:1;border-radius:3px;background:#d2d8c5}.leaf-meter span.filled{background:#7b9b63}.rare-card .leaf-meter span.filled{background:#9898b1}.seed-row{border-top:1px solid #cbd2bc;padding-top:16px;margin-top:auto;display:flex;gap:6px;flex-direction:column}.seed-row span{font-size:10px;color:#75846b}.seed-id{font:11px ui-monospace,SFMono-Regular,monospace;letter-spacing:.35px;color:#536a4a;overflow-wrap:anywhere}.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:22px}.card-action{border:1px solid #c2ccb4;background:transparent;color:#3e5b37;border-radius:10px;padding:12px 9px;font-size:12px;display:flex;justify-content:center;align-items:center;gap:7px;min-height:43px}.card-action.primary{background:#36552f;color:#f0f0de;border-color:#36552f}.card-action:hover{filter:brightness(.96)}.card-action.saved{background:#dde4cf;color:#3d5c36;border-color:#bccdaf}.card-action:focus-visible{outline-color:#54734b}.care-note{font-size:10px;color:#7b876f;line-height:1.7;margin:12px 0 0;text-align:center}.discovery-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:19px 0 12px;flex-wrap:wrap}.discovery-btn{background:none;border:0;color:#b8c9aa;padding:9px 12px;font-size:12px;border-radius:9px;display:flex;gap:8px;align-items:center}.discovery-btn:hover{background:#233827}.discovery-divider{width:1px;height:13px;background:#3a4d36}.notice{min-height:25px;color:#c6d6b6;text-align:center;font-size:12px;line-height:1.7;margin:3px 0 0}.notice.error{color:#e4bb9d}.sill{padding-top:29px;margin-top:11px;border-top:1px solid var(--line);scroll-margin-top:24px}.sill-heading{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:20px}.sill-heading h2{font-size:19px;font-weight:500;letter-spacing:1px;margin:0 0 7px}.sill-heading p{font-size:11px;color:#99ae8e;margin:0}.sill-progress{font:11px ui-monospace,SFMono-Regular,monospace;color:#bbcea7;white-space:nowrap}.album{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:13px}.album-slot{min-width:0;min-height:178px;border:1px dashed #3b5036;border-radius:14px;background:#132119;color:#93a38a;padding:12px 7px 13px;position:relative;text-align:center}.album-slot.unlocked{background:#1e3223;border:1px solid #506847;color:#d2dfc1}.album-slot.unlocked:hover{background:#273c2a}.album-art{height:118px;max-width:138px;margin:auto;opacity:.26}.unlocked .album-art{opacity:1}.album-art svg{width:100%;height:100%;overflow:visible}.album-name{font-size:12px;letter-spacing:.6px}.album-sub{font-size:10px;color:#7f9577;margin-top:6px}.unlocked .album-sub{color:#9db78b}.album-moon{position:absolute;top:10px;right:10px;color:#d2cfe7;font-size:11px}.saved-dates{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}.date-chip{font:10px ui-monospace,SFMono-Regular,monospace;color:#aabd9d;background:transparent;border:1px solid #354b34;border-radius:20px;padding:7px 11px}.date-chip.current{background:#30472d;color:#e1e7ce;border-color:#69875b}.date-chip:hover{border-color:#769065}.empty-note{color:#7f9577;font-size:11px;line-height:1.9;margin:17px 0 0}.footer{display:flex;align-items:center;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding-top:20px;margin-top:30px;font-size:10px;line-height:1.8;color:#7e9476}.footer p{margin:0}.footer .signature{font:italic 14px Georgia,serif;color:#9caf88;white-space:nowrap}.noscript{padding:20px;background:#253d26;color:#e6efd8}.loading-note{padding:120px 20px;text-align:center;color:#b8c9aa}
+@keyframes sway{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}42%{transform:rotate(4deg)}65%{transform:rotate(-2deg)}82%{transform:rotate(1deg)}}@keyframes drop{0%{transform:translateY(-20px) rotate(25deg);opacity:0}20%{opacity:1}100%{transform:translateY(85px) rotate(25deg);opacity:0}}
+@media(max-width:900px){.shell{padding:0 24px 32px}.main-grid{grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);gap:14px}.scene{min-height:468px}.specimen{padding:24px 20px 20px}.plant-name{font-size:35px}.plant-display{width:250px;height:267px;bottom:76px}.neighbor{width:80px;height:86px;bottom:96px}.neighbor.left{left:4%}.neighbor.right{right:4%}.album{gap:9px}.album-slot{min-height:153px;padding:10px 5px}.album-art{height:98px}}
+@media(max-width:700px){.shell{padding:0 17px 26px}.topbar{height:78px}.brand-title{font-size:13px;letter-spacing:2px}.brand-sub{font-size:9px}.brand-mark{width:34px;height:34px}.intro{padding:27px 0 23px}.intro h1{font-size:23px;letter-spacing:1px}.intro p{font-size:12px}.local-note{display:none}.date-bar{align-items:center;flex-wrap:wrap}.date-label{display:none}.date-group{gap:5px}.date-nav{height:44px;width:44px}.date-input{min-width:130px;width:130px;font-size:16px}.day-label{font-size:11px}.text-button{padding:8px 5px;min-height:44px}.main-grid{grid-template-columns:1fr;gap:14px}.scene{min-height:390px}.plant-display{width:240px;height:256px;bottom:58px}.bench{bottom:74px;left:7%;right:7%}.neighbor{bottom:78px;width:76px;height:81px}.neighbor.left{left:5%}.neighbor.right{right:5%}.scene-label{top:22px;left:22px;font-size:9px}.scene-bottom{left:20px;right:20px;bottom:15px;font-size:8px;letter-spacing:1px}.room-badge{top:19px;right:20px}.specimen{padding:23px;display:grid;grid-template-columns:1fr auto;column-gap:20px}.specimen-kicker{grid-column:1/-1}.variant{grid-column:1/-1;margin:17px 0 12px}.plant-name,.latin-name,.plant-line,.leaf-label,.leaf-meter,.seed-row,.card-actions,.care-note{grid-column:1/-1}.plant-name{font-size:34px}.plant-line{margin:15px 0 17px}.leaf-meter{margin-bottom:20px}.seed-row{margin-top:0}.card-actions{margin-top:18px}.care-note{font-size:10px}.sill{padding-top:25px}.album{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.album-slot{min-height:155px}.album-art{height:105px}.sill-heading h2{font-size:17px}.footer{align-items:start}.footer p{max-width:230px}.footer .signature{font-size:12px}.water-drops{bottom:250px}.sill-progress{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.water-drops{display:none}}
+</style>
+</head>
+<body>
+<noscript><p class="noscript">小温室需要启用 JavaScript。所有计算都在本地进行，不连接 GitHub 或其他服务。</p></noscript>
+<div class="shell" id="greenhouse-app">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="每日一盆，回到今天"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">每日一盆</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
+    <a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a>
+  </header>
+  <div class="intro"><div><div class="eyebrow">SOME DAYS DESERVE A LITTLE GREEN.</div><h1>把日子，养得有一点不一样。</h1><p>进来坐坐。每个日期，都藏着一粒自己的种子。</p></div><span class="local-note">日历里的小温室</span></div>
+  <div class="date-bar"><div class="date-group"><span class="date-label">逛一天</span><button class="date-nav" id="previous-day" type="button" aria-label="前一天">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">植物日期</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="植物日期"></label><button class="date-nav" id="next-day" type="button" aria-label="后一天">→</button><button class="text-button" id="today-button" type="button">今天</button></div><span class="day-label" id="day-label"></span></div>
+  <main class="main-grid" aria-label="日期植物">
+    <section class="scene" id="scene" aria-label="小温室里的植物">
+      <svg class="glass-lines" viewBox="0 0 720 510" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="currentColor"><path d="M-50 188 360 17 770 188" stroke-width="2"/><path d="M-50 206 360 35 770 206M0 185H720M0 222H720M110 132V415M235 79V415M360 35V415M485 79V415M610 132V415" stroke-width="1"/><path d="M35 390H685M35 410H685" stroke-width="1"/></g></svg>
+      <div class="room-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <span class="scene-label">A QUIET PLACE TO GROW</span><span class="room-badge"><i class="room-light" aria-hidden="true"></i><span id="room-label">晨光温室</span></span>
+      <div class="floor-glow" aria-hidden="true"></div><div class="bench" aria-hidden="true"></div>
+      <button class="neighbor left" id="neighbor-left" type="button" aria-label="看看前一天"><span id="neighbor-left-art"></span><span class="neighbor-caption">前一天</span></button>
+      <div class="plant-display" id="plant-display"><p class="loading-note">正在打开温室…</p></div>
+      <button class="neighbor right" id="neighbor-right" type="button" aria-label="看看后一天"><span id="neighbor-right-art"></span><span class="neighbor-caption">后一天</span></button>
+      <div class="water-drops" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="scene-bottom"><span id="scene-date">ONE DATE. ONE LITTLE PLANT.</span><span id="scene-note">TAKE YOUR TIME.</span></div>
+    </section>
+    <section class="specimen" id="specimen" aria-label="植物卡">
+      <div class="specimen-kicker"><span>BOTANICAL NOTES</span><span id="specimen-no">NO. 01</span></div>
+      <div class="variant" id="variant"><i class="variant-dot" aria-hidden="true"></i><span id="variant-text">晨绿叶 · 常规款</span></div>
+      <h2 class="plant-name" id="plant-name">—</h2><p class="latin-name" id="plant-english"></p><p class="plant-line" id="plant-line"></p>
+      <div class="leaf-label"><span>这一天的叶片</span><b id="leaf-value">— / 6</b></div><div class="leaf-meter" id="leaf-meter" role="meter" aria-label="这一天的叶片" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
+      <div class="seed-row"><span>这一盆的日历种子</span><code class="seed-id" id="seed-id">—</code></div>
+      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg width="15" height="17" viewBox="0 0 16 20" fill="none" aria-hidden="true"><path d="M8 1C6 4 2 8 2 12a6 6 0 0 0 12 0C14 8 10 4 8 1Z" stroke="currentColor" stroke-width="1.4"/><path d="M5 12a3 3 0 0 0 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> 浇一点水</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">放上窗台 ＋</button></div>
+      <p class="care-note">浇水会让叶子轻轻晃动，种子和叶片数不会改变。</p>
+    </section>
+  </main>
+  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button></div>
+  <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
+  <section class="sill" id="window-sill" aria-labelledby="sill-title">
+    <div class="sill-heading"><div><h2 id="sill-title">我的小窗台</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span></div>
+    <div class="album" id="album"></div><div class="saved-dates" id="saved-dates" aria-label="已收藏的日期"></div><p class="empty-note" id="empty-note">窗台还空着。收藏一盆薄荷，或者去日历里寻找一片月光。</p>
+  </section>
+  <footer class="footer"><p id="storage-note">收藏只保存在当前浏览器。这里的浇水和收藏都不会改动 GitHub 记录。</p><a class="signature" href="/">← 回到博客</a></footer>
+</div>
+<script data-source="garden-core.js">
+/* Offline calendar seeds. Keep the v1 namespaces aligned with the Python cards. */
+(function (root, factory) {
+  "use strict";
+  var api = factory();
+  if (typeof module === "object" && module.exports) module.exports = api;
+  root.GreenhouseCore = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+  "use strict";
+
+  var PLANTS = [
+    ["", "薄荷"], ["", "三叶草"], ["", "仙人掌"],
+    ["", "向日葵"], ["", "铃兰"], ["", "含羞草"]
+  ];
+  var ROUND = [
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+  ];
+
+  function rotate(value, count) {
+    return (value >>> count) | (value << (32 - count));
+  }
+
+  function sha256(message) {
+    // Both private namespaces contain ASCII only; no browser crypto or network is needed.
+    var bytes = Array.from(message, function (character) { return character.charCodeAt(0); });
+    var bitLength = bytes.length * 8;
+    bytes.push(0x80);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    bytes.push(0, 0, 0, 0, (bitLength >>> 24) & 255, (bitLength >>> 16) & 255,
+      (bitLength >>> 8) & 255, bitLength & 255);
+    var state = new Uint32Array([
+      0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+      0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+    ]);
+    var words = new Uint32Array(64);
+    for (var offset = 0; offset < bytes.length; offset += 64) {
+      for (var i = 0; i < 16; i += 1) {
+        var position = offset + i * 4;
+        words[i] = ((bytes[position] << 24) | (bytes[position + 1] << 16)
+          | (bytes[position + 2] << 8) | bytes[position + 3]) >>> 0;
+      }
+      for (var j = 16; j < 64; j += 1) {
+        var small0 = rotate(words[j - 15], 7) ^ rotate(words[j - 15], 18) ^ (words[j - 15] >>> 3);
+        var small1 = rotate(words[j - 2], 17) ^ rotate(words[j - 2], 19) ^ (words[j - 2] >>> 10);
+        words[j] = (words[j - 16] + small0 + words[j - 7] + small1) >>> 0;
+      }
+      var a = state[0], b = state[1], c = state[2], d = state[3];
+      var e = state[4], f = state[5], g = state[6], h = state[7];
+      for (var round = 0; round < 64; round += 1) {
+        var big1 = rotate(e, 6) ^ rotate(e, 11) ^ rotate(e, 25);
+        var choice = (e & f) ^ (~e & g);
+        var first = (h + big1 + choice + ROUND[round] + words[round]) >>> 0;
+        var big0 = rotate(a, 2) ^ rotate(a, 13) ^ rotate(a, 22);
+        var majority = (a & b) ^ (a & c) ^ (b & c);
+        var second = (big0 + majority) >>> 0;
+        h = g; g = f; f = e; e = (d + first) >>> 0;
+        d = c; c = b; b = a; a = (first + second) >>> 0;
+      }
+      var values = [a, b, c, d, e, f, g, h];
+      for (var index = 0; index < 8; index += 1) state[index] = (state[index] + values[index]) >>> 0;
+    }
+    var digest = new Uint8Array(32);
+    for (var word = 0; word < 8; word += 1) {
+      for (var byte = 0; byte < 4; byte += 1) digest[word * 4 + byte] = (state[word] >>> (24 - byte * 8)) & 255;
+    }
+    return digest;
+  }
+
+  function parseDate(iso) {
+    if (typeof iso !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+      throw new RangeError("日期应为 YYYY-MM-DD。");
+    }
+    var year = Number(iso.slice(0, 4));
+    var month = Number(iso.slice(5, 7));
+    var day = Number(iso.slice(8, 10));
+    // setUTCFullYear preserves years 0001–0099 rather than adding 1900.
+    var parsed = new Date(0);
+    parsed.setUTCHours(0, 0, 0, 0);
+    parsed.setUTCFullYear(year, month - 1, day);
+    if (year < 1 || parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1
+        || parsed.getUTCDate() !== day) throw new RangeError("日期不存在。");
+    return parsed;
+  }
+
+  function shiftDate(iso, deltaDays) {
+    var shifted = parseDate(iso);
+    if (!Number.isSafeInteger(deltaDays)) throw new RangeError("天数必须是整数。");
+    shifted.setUTCDate(shifted.getUTCDate() + deltaDays);
+    if (!Number.isFinite(shifted.getTime()) || shifted.getUTCFullYear() < 1
+        || shifted.getUTCFullYear() > 9999) throw new RangeError("日期超出可预览范围。");
+    return shifted.toISOString().slice(0, 10);
+  }
+
+  function firstEightModulo(digest, divisor) {
+    // Never convert the full 64-bit seed to an imprecise JavaScript Number.
+    var remainder = 0;
+    for (var i = 0; i < 8; i += 1) remainder = (remainder * 256 + digest[i]) % divisor;
+    return remainder;
+  }
+
+  function cardForDate(iso) {
+    parseDate(iso);
+    var digest = sha256("daily-green-garden-v1:" + iso);
+    var speciesIndex = firstEightModulo(digest, PLANTS.length);
+    var moonlight = digest[8] % 32 === 0;
+    var prefix = Array.from(digest.slice(0, 3), function (byte) { return byte.toString(16).padStart(2, "0"); }).join("");
+    return {
+      date: iso,
+      emoji: PLANTS[speciesIndex][0],
+      species: PLANTS[speciesIndex][1],
+      speciesIndex: speciesIndex,
+      moonlight: moonlight,
+      variant: moonlight ? "月光叶" : "晨绿叶",
+      leaves: 2 + firstEightModulo(sha256("daily-green-v1:" + iso), 5),
+      id: "DG-" + iso.replace(/-/g, "") + "-" + prefix
+    };
+  }
+
+  function todayInShanghai(now) {
+    if (now === undefined) now = new Date();
+    if (!(now instanceof Date) || !Number.isFinite(now.getTime())) throw new RangeError("当前时间无效。");
+    var formatter = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Shanghai", calendar: "gregory", numberingSystem: "latn",
+      year: "numeric", month: "2-digit", day: "2-digit"
+    });
+    var parts = {};
+    formatter.formatToParts(now).forEach(function (part) { parts[part.type] = part.value; });
+    var iso = parts.year.padStart(4, "0") + "-" + parts.month + "-" + parts.day;
+    parseDate(iso);
+    return iso;
+  }
+
+  function findMoonlightDate(fromIso, direction, limit) {
+    parseDate(fromIso);
+    if (direction === undefined) direction = -1;
+    if (limit === undefined) limit = 120;
+    if ((direction !== -1 && direction !== 1) || !Number.isSafeInteger(limit) || limit < 0 || limit > 366) {
+      throw new RangeError("寻找方向应为 -1 或 1，天数应为 0–366。");
+    }
+    var candidate = fromIso;
+    // Start with the adjacent date so repeated clicks can explore another moonlight plant.
+    for (var checked = 0; checked < limit; checked += 1) {
+      try { candidate = shiftDate(candidate, direction); }
+      catch (error) { if (error instanceof RangeError) return null; throw error; }
+      if (cardForDate(candidate).moonlight) return candidate;
+    }
+    return null;
+  }
+
+  return Object.freeze({
+    cardForDate: cardForDate,
+    parseDate: parseDate,
+    shiftDate: shiftDate,
+    todayInShanghai: todayInShanghai,
+    findMoonlightDate: findMoonlightDate
+  });
+});
+</script>
+<script data-source="plant-art.js">
+/* Local vector illustrations. No network, timers, randomness, or stored state. */
+(function (root, factory) {
+  'use strict';
+  var art = factory();
+  if (typeof module === 'object' && module.exports) module.exports = art;
+  root.GreenhouseArt = art;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  var names = ['薄荷', '三叶草', '仙人掌', '向日葵', '铃兰', '含羞草'];
+
+  function escapeText(value) {
+    return String(value).replace(/[&<>"']/g, function (character) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+    });
+  }
+
+  function renderPlant(card, options) {
+    card = card && typeof card === 'object' ? card : {};
+    options = options && typeof options === 'object' ? options : {};
+    var mini = options.mini === true;
+    var kind = Number.isInteger(card.speciesIndex) && card.speciesIndex >= 0 && card.speciesIndex < 6 ? card.speciesIndex : 0;
+    var leaves = Number.isInteger(card.leaves) && card.leaves >= 2 && card.leaves <= 6 ? card.leaves : 4;
+    var moon = card.moonlight === true;
+    var species = typeof card.species === 'string' && card.species.length < 100 ? card.species : names[kind];
+    var label = escapeText(species + ' · ' + (moon ? '月光叶' : '晨绿叶'));
+    var p = moon ? {
+      stem: '#a9bd8c', dark: '#a5be94', leaf: '#cad8ae', light: '#e2e7c1', vein: '#f0efd2',
+      flower: '#efebca', center: '#c4b77e', soil: '#454431', clay: '#ae9670', rim: '#d6c29b'
+    } : {
+      stem: '#6f9657', dark: '#4e8450', leaf: '#83ad66', light: '#b1ca81', vein: '#c4d793',
+      flower: '#d9b86a', center: '#94713f', soil: '#423a2b', clay: '#b17b56', rim: '#d5a378'
+    };
+
+    function stem(d, width) {
+      return '<path d="' + d + '" fill="none" stroke="' + p.stem + '" stroke-width="' + (width || 3) + '" stroke-linecap="round" stroke-linejoin="round"/>';
+    }
+
+    function leaf(x, y, scale, angle, fill, mirrored) {
+      return '<g transform="translate(' + x + ' ' + y + ') rotate(' + angle + ') scale(' + (mirrored ? -scale : scale) + ' ' + scale + ')">' +
+        '<path d="M0 0C-8-19-26-23-37-12C-36 3-17 10 0 0Z" fill="' + fill + '"/>' +
+        (mini ? '' : '<path d="M-3-1Q-18-9-32-11M-15-6L-19-15M-23-9L-30-4" fill="none" stroke="' + p.vein + '" stroke-opacity=".38" stroke-width=".8" stroke-linecap="round"/>') + '</g>';
+    }
+
+    function sparkle(x, y, size) {
+      return '<path d="M' + x + ' ' + (y - size) + 'Q' + x + ' ' + y + ' ' + (x + size) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + size) + 'Q' + x + ' ' + y + ' ' + (x - size) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - size) + 'Z" fill="#e7e8bc"/>';
+    }
+
+    function mint() {
+      return stem('M150 229C144 190 156 147 151 95') +
+        leaf(149, 204, 1.08, -8, p.dark) + leaf(150, 186, 1.05, 4, p.leaf, true) +
+        leaf(151, 167, .96, 3, p.leaf) + leaf(152, 147, .96, -8, p.light, true) +
+        leaf(152, 128, .75, 12, p.light) + leaf(151, 108, .63, -15, p.leaf, true) +
+        leaf(151, 97, .49, 52, p.light);
+    }
+
+    function cloverHead(x, y, scale, fill) {
+      var petals = '';
+      for (var i = 0; i < 3; i++) {
+        petals += '<g transform="rotate(' + (i * 120) + ')"><path d="M0 2C-19-1-27-20-15-27C-7-32-1-26 0-21C4-31 14-30 20-23C30-10 16 1 0 2Z" fill="' + fill + '"/>' +
+          (mini ? '' : '<path d="M0-2 0-19" stroke="' + p.vein + '" stroke-width="1" stroke-opacity=".42"/>') + '</g>';
+      }
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + scale + ')">' + petals + '</g>';
+    }
+
+    function clover() {
+      return stem('M149 229Q144 190 110 151M150 229Q159 166 160 111M151 229Q178 189 200 159', 2.7) +
+        cloverHead(110, 151, .83, p.dark) + cloverHead(160, 111, 1.0, p.light) + cloverHead(200, 159, .8, p.leaf);
+    }
+
+    function cactus() {
+      var art = '<path d="M134 191H108Q78 191 78 161V145Q78 132 91 132Q104 132 104 145V159Q104 169 115 169H134Z" fill="' + p.dark + '"/>' +
+        '<path d="M170 164H187Q217 164 217 134V119Q217 106 204 106Q191 106 191 119V132Q191 141 180 141H170Z" fill="' + p.leaf + '"/>' +
+        '<rect x="127" y="80" width="47" height="151" rx="23.5" fill="' + p.leaf + '"/>' +
+        '<path d="M143 91Q138 142 140 218M158 91Q165 146 160 220" fill="none" stroke="' + p.light + '" stroke-width="2.2" stroke-opacity=".57"/>';
+      if (!mini) {
+        for (var y = 112; y < 216; y += 22) {
+          art += '<path d="M128 ' + y + 'l-4-3m5 6-5 2M173 ' + (y + 5) + 'l5-2m-5 5 4 3" fill="none" stroke="' + p.vein + '" stroke-width="1" stroke-linecap="round"/>';
+        }
+        art += '<path d="M86 147h9m-4-4v8M199 120h9m-4-4v8" stroke="' + p.vein + '" stroke-width="1" stroke-opacity=".7"/>';
+      }
+      return art + '<g transform="translate(151 81)"><ellipse cy="-7" rx="5" ry="8" fill="' + (moon ? '#e8e3be' : '#dbada1') + '"/><ellipse cx="-6" cy="-2" rx="7" ry="4" fill="' + (moon ? '#efebca' : '#e7bcad') + '"/><ellipse cx="6" cy="-2" rx="7" ry="4" fill="' + (moon ? '#efebca' : '#e7bcad') + '"/><circle r="3" fill="' + p.center + '"/></g>';
+    }
+
+    function sunflower() {
+      var petals = '';
+      for (var i = 0; i < 12; i++) {
+        petals += '<ellipse cx="150" cy="69" rx="9.5" ry="20" fill="' + (i % 2 ? p.flower : (moon ? '#e5e4bb' : '#e4c579')) + '" transform="rotate(' + (i * 30) + ' 150 100)"/>';
+      }
+      var seeds = '';
+      if (!mini) {
+        for (var j = 0; j < 8; j++) {
+          var a = j * Math.PI / 4;
+          seeds += '<circle cx="' + (150 + Math.cos(a) * 13).toFixed(2) + '" cy="' + (100 + Math.sin(a) * 13).toFixed(2) + '" r="1.5" fill="#d2b77a" opacity=".7"/>';
+        }
+      }
+      return stem('M151 229C153 188 145 145 150 102', 4) +
+        leaf(150, 190, 1.37, -12, p.dark) + leaf(150, 165, 1.24, -2, p.leaf, true) + petals +
+        '<circle cx="150" cy="100" r="24" fill="' + p.center + '"/><circle cx="150" cy="100" r="17" fill="' + (moon ? '#9b996b' : '#685634') + '"/>' + seeds +
+        '<circle cx="150" cy="100" r="5" fill="' + p.center + '"/>';
+    }
+
+    function bell(x, y, scale) {
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + scale + ')"><path d="M-10 1C-11-11-5-18 0-18C6-18 11-10 10 1Q6-1 3 3Q0 0-3 3Q-6-1-10 1Z" fill="' + (moon ? '#f1edce' : '#ece9cb') + '"/>' +
+        '<path d="M-3-12Q-5-7-5-3" fill="none" stroke="#fff9df" stroke-opacity=".65" stroke-width="1.2" stroke-linecap="round"/><circle cy="4" r="1.6" fill="' + p.center + '"/></g>';
+    }
+
+    function lily() {
+      return '<path d="M151 230C94 211 93 152 126 114C142 151 157 193 151 230Z" fill="' + p.dark + '"/>' +
+        '<path d="M150 230C190 215 214 166 195 122C170 152 151 194 150 230Z" fill="' + p.leaf + '"/>' +
+        (mini ? '' : '<path d="M149 225Q119 175 126 126M153 225Q184 175 193 135" fill="none" stroke="' + p.vein + '" stroke-width="1.1" stroke-opacity=".4"/>') +
+        stem('M151 229C144 179 145 107 174 100C193 96 209 113 207 138', 2.8) +
+        stem('M170 102Q164 108 168 123M184 102Q182 112 185 128M198 111Q195 122 199 139M206 126Q204 135 208 151', 1.8) +
+        bell(168, 138, .85) + bell(185, 143, .9) + bell(199, 154, .84) + bell(208, 167, .74);
+    }
+
+    function frond(x1, y1, x2, y2, fill) {
+      var dx = x2 - x1, dy = y2 - y1;
+      var length = Math.sqrt(dx * dx + dy * dy);
+      var angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      var art = stem('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2, 1.8);
+      for (var i = 0; i < 5; i++) {
+        var t = .22 + i * .16;
+        var x = x1 + dx * t, y = y1 + dy * t;
+        var size = Math.max(5.7, length * .135 * (1 - i * .07));
+        art += '<g transform="translate(' + x.toFixed(2) + ' ' + y.toFixed(2) + ') rotate(' + angle.toFixed(2) + ')"><ellipse cy="' + (-size * .65).toFixed(2) + '" rx="3.8" ry="' + size.toFixed(2) + '" fill="' + fill + '" transform="rotate(-24)"/><ellipse cy="' + (size * .65).toFixed(2) + '" rx="3.8" ry="' + size.toFixed(2) + '" fill="' + fill + '" transform="rotate(24)"/></g>';
+      }
+      return art;
+    }
+
+    function mimosa() {
+      var art = stem('M149 230Q145 180 158 118', 2.5) +
+        frond(150, 195, 91, 163, p.dark) + frond(151, 182, 209, 157, p.leaf) +
+        frond(154, 160, 112, 126, p.leaf) + frond(157, 145, 200, 114, p.light) +
+        frond(158, 126, 151, 89, p.light);
+      var puffColor = moon ? '#e5e5bd' : '#d6a2af';
+      for (var n = 0; n < 2; n++) {
+        var cx = 130 + n * 42, cy = 112 - n * 16;
+        art += stem('M157 145Q' + cx + ' 124 ' + cx + ' ' + cy, 1.2);
+        for (var i = 0; i < (mini ? 8 : 16); i++) {
+          var angle = i * Math.PI * 2 / (mini ? 8 : 16);
+          art += '<path d="M' + cx + ' ' + cy + 'l' + (Math.cos(angle) * 10).toFixed(2) + ' ' + (Math.sin(angle) * 10).toFixed(2) + '" stroke="' + puffColor + '" stroke-width="1" stroke-linecap="round"/>';
+        }
+        art += '<circle cx="' + cx + '" cy="' + cy + '" r="4" fill="' + puffColor + '"/>';
+      }
+      return art;
+    }
+
+    var foliage = [mint, clover, cactus, sunflower, lily, mimosa][kind]();
+    var growth = .82 + (leaves - 2) * .045;
+    var pot = '<g class="plant-pot"><ellipse cx="150" cy="285" rx="60" ry="8" fill="#050e08" opacity=".24"/>' +
+      '<path d="M103 228H197L187 276Q150 291 113 276Z" fill="' + p.clay + '"/>' +
+      '<path d="M113 234 121 273Q151 283 180 274" fill="none" stroke="#efd0a0" stroke-opacity=".18" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M184 235 178 272" stroke="#704f39" stroke-opacity=".23" stroke-width="4" stroke-linecap="round"/>' +
+      '<ellipse cx="150" cy="229" rx="51" ry="12" fill="' + p.rim + '"/>' +
+      '<ellipse cx="150" cy="226" rx="43" ry="7" fill="' + p.soil + '"/>' +
+      (mini ? '' : '<g fill="#a1956c" opacity=".5"><circle cx="128" cy="226" r="1.2"/><circle cx="164" cy="228" r="1"/><circle cx="177" cy="224" r="1.2"/><circle cx="142" cy="223" r="1"/></g>') +
+      '<path d="M143 254Q151 246 157 254Q151 263 143 254Z" fill="none" stroke="#edc89a" stroke-width="1.5" stroke-opacity=".65"/><path d="M147 257 154 251" stroke="#edc89a" stroke-width="1" stroke-opacity=".6"/>' +
+      '<path d="M100 231Q150 246 200 231" fill="none" stroke="' + p.rim + '" stroke-width="5" stroke-linecap="round"/></g>';
+
+    return '<svg xmlns="http://www.w3.org/2000/svg" class="plant-art" viewBox="0 0 300 320" width="300" height="320" role="img" aria-label="' + label + '" data-species="' + kind + '">' +
+      '<title>' + label + '</title><desc>装饰性的盆栽插画；植物长势由这一天固定的日历种子决定。</desc>' +
+      (moon ? '<ellipse cx="150" cy="159" rx="92" ry="105" fill="#d6e2b7" opacity=".045"/>' : '') +
+      pot + '<g class="plant-sway" style="transform-origin:150px 228px"><g transform="translate(150 228) scale(' + growth.toFixed(3) + ') translate(-150 -228)">' + foliage + '</g></g>' +
+      (moon ? '<g class="plant-sparkles" aria-hidden="true">' + sparkle(76, 108, 5) + sparkle(225, 173, 4) + sparkle(209, 74, 3) + '</g>' : '') + '</svg>';
+  }
+
+  return Object.freeze({ renderPlant: renderPlant });
+});
+</script>
+<script>
+(() => {
+ 'use strict';
+ const Core = globalThis.GreenhouseCore;
+ const Art = globalThis.GreenhouseArt;
+ const $ = id => document.getElementById(id);
+ const names = ['Mint','Clover','Cactus','Sunflower','Lily of the valley','Sensitive plant'];
+ const lines = ['清清凉凉，把忙碌的一天放慢一点。','小小的三片叶子，也有自己的好运气。','不着急喝水，也会认真长大。','把脸转向有光的地方。','安静的小铃铛，等一阵风经过。','轻轻碰碰，日子也会有一点回应。'];
+ const STORE = 'daily-green-greenhouse-v1';
+ const MAX_SAVED = 48;
+ let current = null, saved = [], persistent = true, waterTimer = null;
+ function notify(text, error = false) { $('notice').textContent = text; $('notice').classList.toggle('error', error); }
+ function validDate(text) { try { Core.parseDate(text); return true; } catch { return false; } }
+ function loadSaved() {
+   try {
+     const raw = localStorage.getItem(STORE);
+     const data = raw ? JSON.parse(raw) : null;
+     if (data && data.version === 1 && Array.isArray(data.dates)) saved = [...new Set(data.dates.filter(day => typeof day === 'string' && validDate(day)))].slice(0, MAX_SAVED);
+   } catch { persistent = false; }
+ }
+ function persist() {
+   try { localStorage.setItem(STORE, JSON.stringify({version:1,dates:saved})); }
+   catch { persistent = false; }
+   if (!persistent) $('storage-note').textContent = '当前浏览器未开放本地保存，收藏仅保留在本次页面中。仍然可以离线游玩。';
+ }
+ function neighbor(day, direction, buttonId, artId) {
+   try {
+     const next = Core.shiftDate(day, direction);
+     $(buttonId).disabled = false;
+     $(buttonId).dataset.date = next;
+     $(artId).innerHTML = Art.renderPlant(Core.cardForDate(next), {mini:true});
+   } catch { $(buttonId).disabled = true; $(buttonId).removeAttribute('data-date'); $(artId).replaceChildren(); }
+ }
+ function updateSaveButton() {
+   const selected = saved.includes(current.date);
+   $('save-button').textContent = selected ? '已在窗台 ✓' : '放上窗台 ＋';
+   $('save-button').classList.toggle('saved', selected);
+   $('save-button').classList.toggle('primary', !selected);
+   $('save-button').setAttribute('aria-pressed', String(selected));
+   $('save-button').setAttribute('aria-label', selected ? '从窗台收起这一天' : '收藏这一天到窗台');
+ }
+ function renderCollection() {
+   const cards = saved.map(day => Core.cardForDate(day));
+   const species = new Set(cards.map(card => card.speciesIndex));
+   $('saved-count').textContent = String(saved.length);
+   $('album-progress').textContent = `认识了 ${species.size} / 6 种植物`;
+   $('sill-description').textContent = saved.length ? `留住了 ${saved.length} 盆属于不同日期的绿意。` : '喜欢哪一盆，就把它留在这里。';
+   $('empty-note').hidden = saved.length !== 0;
+   $('album').replaceChildren();
+   for (let index = 0; index < 6; index++) {
+     const found = cards.filter(card => card.speciesIndex === index);
+     const card = found[0];
+     const slot = document.createElement(card ? 'button' : 'div');
+     slot.className = `album-slot${card ? ' unlocked' : ''}`;
+     const illustration = document.createElement('div'); illustration.className = 'album-art';
+     illustration.innerHTML = Art.renderPlant(card || {speciesIndex:index,species:['薄荷','三叶草','仙人掌','向日葵','铃兰','含羞草'][index],moonlight:false,leaves:4}, {mini:true});
+     const label = document.createElement('div'); label.className = 'album-name'; label.textContent = card ? card.species : ['薄荷','三叶草','仙人掌','向日葵','铃兰','含羞草'][index];
+     const detail = document.createElement('div'); detail.className = 'album-sub'; detail.textContent = card ? `窗台上有 ${found.length} 盆` : '还未相遇';
+     slot.append(illustration, label, detail);
+     if (card) {
+       slot.type = 'button'; slot.setAttribute('aria-label', `查看收藏的${card.species}，${card.date}`);
+       slot.addEventListener('click', () => { showDate(card.date); notify(`又见面啦，${card.date} 的${card.species}。`); $('plant-date').focus(); });
+       if (found.some(item => item.moonlight)) { const star = document.createElement('span'); star.className = 'album-moon'; star.textContent = '☾'; star.setAttribute('aria-label','收藏过月光叶'); slot.append(star); }
+     }
+     $('album').append(slot);
+   }
+   $('saved-dates').replaceChildren();
+   for (const day of saved) {
+     const chip = document.createElement('button'); chip.type = 'button'; chip.className = `date-chip${current && current.date === day ? ' current' : ''}`;
+     chip.textContent = day; chip.setAttribute('aria-label', `查看收藏的 ${day}`); chip.addEventListener('click', () => showDate(day)); $('saved-dates').append(chip);
+   }
+ }
+ function showDate(day) {
+   let next; try { next = Core.cardForDate(day); } catch { notify('选一个完整、有效的日期，再来种下这一盆。',true); if(current) $('plant-date').value = current.date; return; }
+   current = next;
+   clearTimeout(waterTimer); $('scene').classList.remove('watered');
+   $('plant-date').value = day;
+   $('day-label').textContent = new Intl.DateTimeFormat('zh-CN',{weekday:'long',timeZone:'UTC'}).format(Core.parseDate(day));
+   $('plant-name').textContent = next.species;
+   $('plant-english').textContent = names[next.speciesIndex];
+   $('plant-line').textContent = next.moonlight ? '像借来的一小束月光，安安静静地发亮。' : lines[next.speciesIndex];
+   $('specimen-no').textContent = `NO. 0${next.speciesIndex + 1}`;
+   $('variant-text').textContent = next.moonlight ? '月光叶 · 特别款' : '晨绿叶 · 常规款';
+   $('variant').classList.toggle('rare',next.moonlight); $('specimen').classList.toggle('rare-card',next.moonlight); $('scene').classList.toggle('moonlight',next.moonlight);
+   $('room-label').textContent = next.moonlight ? '月光温室' : '晨光温室';
+   $('scene-date').textContent = day;
+   $('scene-note').textContent = next.moonlight ? 'A LITTLE PIECE OF MOONLIGHT.' : 'TAKE YOUR TIME.';
+   $('plant-display').innerHTML = Art.renderPlant(next);
+   $('scene').setAttribute('aria-label',`${day} 的${next.species}，${next.variant}，叶片 ${next.leaves}/6`);
+   $('seed-id').textContent = next.id;
+   $('leaf-value').textContent = `${next.leaves} / 6`; $('leaf-meter').setAttribute('aria-valuenow',String(next.leaves));
+   $('leaf-meter').replaceChildren(); for(let i=0;i<6;i++){const leaf=document.createElement('span');if(i<next.leaves)leaf.className='filled';leaf.setAttribute('aria-hidden','true');$('leaf-meter').append(leaf);}
+   neighbor(day,-1,'neighbor-left','neighbor-left-art'); neighbor(day,1,'neighbor-right','neighbor-right-art');
+   $('previous-day').disabled = $('neighbor-left').disabled; $('next-day').disabled = $('neighbor-right').disabled;
+   updateSaveButton(); renderCollection();
+   notify(`${day}，遇见了一盆${next.species}。`);
+ }
+ function shift(direction) { try { showDate(Core.shiftDate(current.date,direction)); } catch { notify('这一页已经到日历边界啦。'); } }
+ function toToday() { if(!Core||!Art){notify('温室文件不完整，请把整个 garden 文件夹放在一起打开。',true);return;} showDate(Core.todayInShanghai()); notify('回来啦，这是今天的那一盆。'); }
+ $('previous-day').addEventListener('click',()=>shift(-1)); $('next-day').addEventListener('click',()=>shift(1));
+ $('neighbor-left').addEventListener('click',()=>shift(-1)); $('neighbor-right').addEventListener('click',()=>shift(1));
+ $('today-button').addEventListener('click',toToday);
+ document.querySelector('.brand').addEventListener('click',event=>{event.preventDefault();toToday();});
+ $('plant-date').addEventListener('change',event=>showDate(event.target.value));
+ $('water-button').addEventListener('click',()=>{
+   clearTimeout(waterTimer); $('scene').classList.remove('watered'); void $('scene').offsetWidth; $('scene').classList.add('watered');
+   notify(current.speciesIndex===5 ? '轻轻浇一点水，含羞草也探了探头。' : '刚刚浇了点水，叶子开心地晃了晃。');
+   waterTimer=setTimeout(()=>$('scene').classList.remove('watered'),1300);
+ });
+ $('save-button').addEventListener('click',()=>{
+   const exists=saved.includes(current.date);
+   if(!exists && saved.length>=MAX_SAVED){notify('窗台已经住着 48 盆啦。先收起一盆，再留住新的日子。');return;}
+   saved=exists?saved.filter(day=>day!==current.date):[current.date,...saved]; persist(); updateSaveButton(); renderCollection();
+   notify(exists ? '先把这一天收起来，日历里随时还能找到它。' : `${current.species}已放上窗台${persistent ? '，下次回来还在。' : '，本次页面中会留着。'}`);
+ });
+ $('wander-button').addEventListener('click',()=>{
+   const first=Core.parseDate('2025-11-15').getTime(),last=Core.parseDate(Core.todayInShanghai()).getTime();
+   const count=Math.max(0,Math.floor((last-first)/86400000));const offset=Math.floor(Math.random()*(count+1));
+   showDate(Core.shiftDate('2025-11-15',offset));notify('在日历里拐了个弯，遇见了这一盆。');
+ });
+ $('moon-button').addEventListener('click',()=>{
+   const day=Core.findMoonlightDate(current.date,-1,120)||Core.findMoonlightDate(current.date,1,120);
+   if(day){showDate(day);notify('找到了。这一盆，借了一点月亮的光。');}else notify('这段日历里还没遇见月光叶，再换个日期走走吧。');
+ });
+ try {
+   if(!Core||!Art) throw new Error('missing local files');
+   loadSaved();
+   const requested=new URLSearchParams(location.search).get('date');
+   showDate(requested && validDate(requested) ? requested : Core.todayInShanghai());
+   if(!persistent)$('storage-note').textContent='当前浏览器未开放本地保存，收藏仅保留在本次页面中。仍然可以离线游玩。';
+ } catch { $('plant-display').innerHTML='<p class="loading-note">温室暂时没有打开。</p>';notify('请把整个 garden 文件夹放在一起，再打开 index.html。',true);document.querySelectorAll('button').forEach(button=>button.disabled=true);$('plant-date').disabled=true;document.querySelector('.brand').setAttribute('aria-disabled','true'); }
+})();
+</script>
+</body>
+</html>
