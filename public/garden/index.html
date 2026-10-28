@@ -12,6 +12,13 @@
 @keyframes sway{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}42%{transform:rotate(4deg)}65%{transform:rotate(-2deg)}82%{transform:rotate(1deg)}}@keyframes drop{0%{transform:translateY(-20px) rotate(25deg);opacity:0}20%{opacity:1}100%{transform:translateY(85px) rotate(25deg);opacity:0}}
 @media(max-width:900px){.shell{padding:0 24px 32px}.main-grid{grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);gap:14px}.scene{min-height:468px}.specimen{padding:24px 20px 20px}.plant-name{font-size:35px}.plant-display{width:250px;height:267px;bottom:76px}.neighbor{width:80px;height:86px;bottom:96px}.neighbor.left{left:4%}.neighbor.right{right:4%}.album{gap:9px}.album-slot{min-height:153px;padding:10px 5px}.album-art{height:98px}}
 @media(max-width:700px){.shell{padding:0 17px 26px}.topbar{height:78px}.brand-title{font-size:13px;letter-spacing:2px}.brand-sub{font-size:9px}.brand-mark{width:34px;height:34px}.intro{padding:27px 0 23px}.intro h1{font-size:23px;letter-spacing:1px}.intro p{font-size:12px}.local-note{display:none}.date-bar{align-items:center;flex-wrap:wrap}.date-label{display:none}.date-group{gap:5px}.date-nav{height:44px;width:44px}.date-input{min-width:130px;width:130px;font-size:16px}.day-label{font-size:11px}.text-button{padding:8px 5px;min-height:44px}.main-grid{grid-template-columns:1fr;gap:14px}.scene{min-height:390px}.plant-display{width:240px;height:256px;bottom:58px}.bench{bottom:74px;left:7%;right:7%}.neighbor{bottom:78px;width:76px;height:81px}.neighbor.left{left:5%}.neighbor.right{right:5%}.scene-label{top:22px;left:22px;font-size:9px}.scene-bottom{left:20px;right:20px;bottom:15px;font-size:8px;letter-spacing:1px}.room-badge{top:19px;right:20px}.specimen{padding:23px;display:grid;grid-template-columns:1fr auto;column-gap:20px}.specimen-kicker{grid-column:1/-1}.variant{grid-column:1/-1;margin:17px 0 12px}.plant-name,.latin-name,.plant-line,.leaf-label,.leaf-meter,.seed-row,.card-actions,.care-note{grid-column:1/-1}.plant-name{font-size:34px}.plant-line{margin:15px 0 17px}.leaf-meter{margin-bottom:20px}.seed-row{margin-top:0}.card-actions{margin-top:18px}.care-note{font-size:10px}.sill{padding-top:25px}.album{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.album-slot{min-height:155px}.album-art{height:105px}.sill-heading h2{font-size:17px}.footer{align-items:start}.footer p{max-width:230px}.footer .signature{font-size:12px}.water-drops{bottom:250px}.sill-progress{font-size:10px}}
+
+/* A little weather, a visitor, and an evening with no clock to keep. */
+.weather-badge{position:absolute;right:25px;top:58px;font-size:10px;color:#a8bd9b;z-index:3}.weather-badge b{font-weight:400;color:#d2dfbc;margin-left:7px}.weather-layer{position:absolute;inset:60px 0 145px;pointer-events:none;overflow:hidden;opacity:0}.weather-layer i{position:absolute;left:calc(13% + var(--n)*14%);top:-22px;width:1px;height:18px;background:#bed3cf66;animation:window-rain 2.8s linear infinite;animation-delay:calc(var(--n)*-.43s)}.scene[data-weather="rain"] .weather-layer{opacity:.7}.scene[data-weather="mist"]:after{content:"";position:absolute;inset:80px 0 120px;pointer-events:none;background:radial-gradient(ellipse at 30% 65%,#d2ddcc17,transparent 65%);filter:blur(12px)}.scene[data-weather="breeze"] .plant-sway{animation:soft-breeze 6s ease-in-out infinite}.scene.watered .plant-sway{animation:sway 1.25s ease-in-out}.scene.night-room{background:radial-gradient(ellipse at 75% 20%,#bca36a19,transparent 52%),linear-gradient(145deg,#15272a,#0b171b)}.night-room .glass-lines{color:#769c9d;opacity:.26}.night-room .room-light{background:#e8d399;box-shadow:0 0 35px #e3bd6359}.night-room .room-stars{opacity:.9}.night-room .room-stars i{width:4px;height:4px;background:#deebaf;box-shadow:0 0 10px #deebaf;animation:firefly 6s ease-in-out infinite}.night-room .room-stars i:nth-child(2){animation-delay:-2s}.night-room .room-stars i:nth-child(3){animation-delay:-4s}.night-room .room-stars i:nth-child(4){animation-delay:-1s}.visitor-button{position:absolute;z-index:4;right:28px;bottom:28px;width:78px;height:69px;border:0;border-radius:16px;background:transparent;padding:0;color:#d6ddbc;transform:rotate(-4deg);transition:transform .2s,background .2s}.visitor-button svg{width:100%;height:100%}.visitor-button:hover,.visitor-button:focus-visible{transform:translateY(-4px) rotate(2deg);background:#bbd09b12}.visitor-button[data-kind="moth"]{right:17%;top:100px;bottom:auto;transform:rotate(12deg)}.visitor-button[data-kind="ladybird"]{left:20px;right:auto;bottom:30px;width:61px;height:55px}.visitor-button[data-kind="cat"]{right:21px;bottom:30px;width:88px;height:74px}.visitor-button.greeted:after{content:"";position:absolute;right:9px;top:9px;width:5px;height:5px;border-radius:50%;background:#d7dfa3;box-shadow:0 0 9px #d7dfa333}.scene-bottom{right:123px}.guestbook{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;border:1px solid #354733;border-radius:15px;margin-top:17px;padding:20px 23px;background:#16261b}.guest-kicker{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#839c77;margin:0 0 10px}.guestbook h2{font-size:15px;font-weight:400;letter-spacing:.5px;margin:0 0 9px;color:#d9e1c5}.visitor-note{font-size:12px;line-height:1.9;color:#aabb9b;margin:0;min-height:45px}.visitor-note.revealed{color:#d9dfbb}.guest-stamps{display:flex;gap:9px;justify-content:flex-end;align-items:center}.guest-stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;width:69px;min-height:91px;gap:4px;border:1px dashed #3e5138;border-radius:10px;background:transparent;color:#819075;font-size:9px;padding:4px}.guest-stamp svg{width:52px;height:42px;opacity:.22}.guest-stamp.found{border-style:solid;border-color:#657853;color:#d1d9ba;background:#263822}.guest-stamp.found svg{opacity:1}.guest-stamp.found:hover{background:#30452a}.guest-progress{font-size:10px;color:#97ad87;text-align:right;margin:9px 0 0}.guest-hint{font-size:10px;color:#829477;margin:10px 0 0}.discovery-btn[aria-pressed="true"]{color:#eddaa2;background:#29392a}
+@keyframes window-rain{to{transform:translate(-55px,290px)}}@keyframes soft-breeze{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(2deg)}}@keyframes firefly{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(14px,-12px);opacity:1}}
+@media(max-width:900px){.guestbook{grid-template-columns:1fr 1fr;padding:19px;gap:14px}.guest-stamps{gap:6px}.guest-stamp{width:58px;font-size:8px}.weather-badge{right:20px}}
+@media(max-width:700px){.guestbook{grid-template-columns:1fr;gap:17px;padding:20px}.guest-stamps{justify-content:space-between;gap:9px}.guest-stamp{width:100%;font-size:10px;min-height:90px}.guest-progress{text-align:left}.visitor-note{min-height:0}.weather-badge{top:51px;font-size:9px}.visitor-button[data-kind="moth"]{top:82px;right:13%}.visitor-button{right:17px;bottom:27px;width:67px;height:57px}.visitor-button[data-kind="cat"]{right:15px;bottom:25px;width:74px;height:65px}.visitor-button[data-kind="ladybird"]{left:12px;bottom:27px;width:55px;height:47px}.scene-bottom{right:100px;gap:8px;letter-spacing:.5px}.scene-bottom span:last-child{font-size:7px}}
+
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.water-drops{display:none}}
 </style>
 </head>
@@ -27,13 +34,16 @@
   <main class="main-grid" aria-label="日期植物">
     <section class="scene" id="scene" aria-label="小温室里的植物">
       <svg class="glass-lines" viewBox="0 0 720 510" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="currentColor"><path d="M-50 188 360 17 770 188" stroke-width="2"/><path d="M-50 206 360 35 770 206M0 185H720M0 222H720M110 132V415M235 79V415M360 35V415M485 79V415M610 132V415" stroke-width="1"/><path d="M35 390H685M35 410H685" stroke-width="1"/></g></svg>
+      <div class="weather-layer" aria-hidden="true"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i><i style="--n:5"></i></div>
       <div class="room-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <span class="scene-label">A QUIET PLACE TO GROW</span><span class="room-badge"><i class="room-light" aria-hidden="true"></i><span id="room-label">晨光温室</span></span>
+      <span class="weather-badge">日历天气 <b id="weather-label">—</b></span>
       <div class="floor-glow" aria-hidden="true"></div><div class="bench" aria-hidden="true"></div>
       <button class="neighbor left" id="neighbor-left" type="button" aria-label="看看前一天"><span id="neighbor-left-art"></span><span class="neighbor-caption">前一天</span></button>
       <div class="plant-display" id="plant-display"><p class="loading-note">正在打开温室…</p></div>
       <button class="neighbor right" id="neighbor-right" type="button" aria-label="看看后一天"><span id="neighbor-right-art"></span><span class="neighbor-caption">后一天</span></button>
       <div class="water-drops" aria-hidden="true"><i></i><i></i><i></i></div>
+      <button class="visitor-button" id="visitor-button" type="button" aria-label="和温室里的小客人打招呼"><span id="visitor-art"></span></button>
       <div class="scene-bottom"><span id="scene-date">ONE DATE. ONE LITTLE PLANT.</span><span id="scene-note">TAKE YOUR TIME.</span></div>
     </section>
     <section class="specimen" id="specimen" aria-label="植物卡">
@@ -42,11 +52,15 @@
       <h2 class="plant-name" id="plant-name">—</h2><p class="latin-name" id="plant-english"></p><p class="plant-line" id="plant-line"></p>
       <div class="leaf-label"><span>这一天的叶片</span><b id="leaf-value">— / 6</b></div><div class="leaf-meter" id="leaf-meter" role="meter" aria-label="这一天的叶片" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
       <div class="seed-row"><span>这一盆的日历种子</span><code class="seed-id" id="seed-id">—</code></div>
-      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg width="15" height="17" viewBox="0 0 16 20" fill="none" aria-hidden="true"><path d="M8 1C6 4 2 8 2 12a6 6 0 0 0 12 0C14 8 10 4 8 1Z" stroke="currentColor" stroke-width="1.4"/><path d="M5 12a3 3 0 0 0 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> 浇一点水</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">放上窗台 ＋</button></div>
+      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg aria-hidden="true" width="15" height="17" viewBox="0 0 16 20" fill="none"><path d="M8 1C6 5 2 9 2 13a6 6 0 0 0 12 0C14 9 10 5 8 1Z" stroke="currentColor" stroke-width="1.4"/></svg> 浇一点水</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">放上窗台 ＋</button></div>
       <p class="care-note">浇水会让叶子轻轻晃动，种子和叶片数不会改变。</p>
     </section>
   </main>
-  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button></div>
+  <section class="guestbook" aria-labelledby="guest-title">
+    <div><p class="guest-kicker">LITTLE VISITORS, LITTLE LETTERS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
+    <div><div class="guest-stamps" id="guest-stamps" aria-label="四位温室小客人的印章"></div><p class="guest-progress" id="guest-progress">相遇 0 / 4 · 点击亮起的印章，可以重访那一天。</p></div>
+  </section>
+  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="night-button" type="button" aria-pressed="false"><span aria-hidden="true">✧</span><span id="night-text">等到天黑</span></button></div>
   <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
   <section class="sill" id="window-sill" aria-labelledby="sill-title">
     <div class="sill-heading"><div><h2 id="sill-title">我的小窗台</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span></div>
@@ -84,7 +98,7 @@
   }
 
   function sha256(message) {
-    // Both private namespaces contain ASCII only; no browser crypto or network is needed.
+    // Calendar seed namespaces contain ASCII only; no browser crypto or network is needed.
     var bytes = Array.from(message, function (character) { return character.charCodeAt(0); });
     var bitLength = bytes.length * 8;
     bytes.push(0x80);
@@ -179,6 +193,31 @@
     };
   }
 
+  function atmosphereForDate(iso) {
+    parseDate(iso);
+    // A separate seed lets the room change without changing any existing plant cards.
+    var digest = sha256("daily-green-atmosphere-v1:" + iso);
+    var weather = ["clear", "rain", "mist", "breeze"];
+    var weatherLabels = ["晴光", "小雨", "薄雾", "微风"];
+    var visitors = ["snail", "moth", "ladybird", "cat"];
+    var visitorLabels = ["慢递员蜗牛", "夜航小飞蛾", "七星巡逻员", "路过的猫"];
+    var notes = [
+      ["今天的快递是一颗露珠，正在慢慢送来。", "蜗牛说：走得慢，也能把今天走完。", "叶子上的小路，刚刚多了一条银色脚印。"],
+      ["飞蛾把一小片夜色，轻轻放在窗边。", "它不是迷路了，只是想多看一眼发亮的叶子。", "今晚的航线：从一盏小灯，到另一颗星。"],
+      ["七星巡逻员检查过了，今天的叶子很安全。", "一位穿圆点外套的访客，申请在叶尖休息。", "它数了数身上的星星，决定借一颗给今天。"],
+      ["猫路过窗台，留下一小块暖和的安静。", "它假装只是路过，其实已经看了很久。", "窗边的位置暂时被占领了，请轻声经过。"]
+    ];
+    var weatherIndex = digest[0] % weather.length;
+    var visitorIndex = digest[1] % visitors.length;
+    return {
+      weather: weather[weatherIndex],
+      weatherLabel: weatherLabels[weatherIndex],
+      visitor: visitors[visitorIndex],
+      visitorLabel: visitorLabels[visitorIndex],
+      note: notes[visitorIndex][digest[2] % notes[visitorIndex].length]
+    };
+  }
+
   function todayInShanghai(now) {
     if (now === undefined) now = new Date();
     if (!(now instanceof Date) || !Number.isFinite(now.getTime())) throw new RangeError("当前时间无效。");
@@ -212,6 +251,7 @@
 
   return Object.freeze({
     cardForDate: cardForDate,
+    atmosphereForDate: atmosphereForDate,
     parseDate: parseDate,
     shiftDate: shiftDate,
     todayInShanghai: todayInShanghai,
@@ -390,16 +430,97 @@
   return Object.freeze({ renderPlant: renderPlant });
 });
 </script>
+<script data-source="visitor-art.js">
+/* Tiny greenhouse visitors, drawn entirely with local SVG paths. */
+(function (root, factory) {
+  'use strict';
+  var art = factory();
+  if (typeof module === 'object' && module.exports) module.exports = art;
+  root.GreenhouseVisitors = art;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  var visitors = {
+    snail: {
+      name: '慢慢走的小蜗牛',
+      art: '<ellipse cx="48" cy="69" rx="36" ry="4" fill="#07180e" opacity=".18"/>' +
+        '<path d="M13 62Q20 56 43 56H65Q69 55 71 46Q72 39 78 41Q85 44 81 55L78 61Q88 62 89 66Q74 72 20 68Q9 68 13 62Z" fill="#aabd82"/>' +
+        '<path d="M23 65Q40 62 60 65" fill="none" stroke="#d7ddb0" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<circle cx="43" cy="46" r="23" fill="#bd916a"/>' +
+        '<path d="M44 63C18 65 20 27 44 29C65 30 62 56 44 56C30 56 30 37 44 38C53 39 53 50 44 49" fill="none" stroke="#795f46" stroke-width="2" stroke-linecap="round"/>' +
+        '<path d="M73 45 70 33M79 44 84 32" fill="none" stroke="#aabd82" stroke-width="2.5" stroke-linecap="round"/>' +
+        '<circle cx="70" cy="32" r="2.5" fill="#dbe0b7"/><circle cx="84" cy="31" r="2.5" fill="#dbe0b7"/>' +
+        '<circle cx="70.5" cy="32" r="1.1" fill="#263e2b"/><circle cx="84.5" cy="31" r="1.1" fill="#263e2b"/>' +
+        '<path d="M75 52q2 2 4 0" fill="none" stroke="#61794e" stroke-width="1.2" stroke-linecap="round"/>'
+    },
+    moth: {
+      name: '借月光的小飞蛾',
+      art: '<path d="M47 40C35 13 13 14 15 34C16 47 30 51 46 48Z" fill="#d8d6a7"/>' +
+        '<path d="M53 40C65 13 87 14 85 34C84 47 70 51 54 48Z" fill="#e8e3bb"/>' +
+        '<path d="M46 45C22 44 23 68 36 67Q46 66 49 49Z" fill="#afb98a"/>' +
+        '<path d="M54 45C78 44 77 68 64 67Q54 66 51 49Z" fill="#c6cd9d"/>' +
+        '<path d="M22 30Q35 31 43 42M78 30Q65 31 57 42M31 57l12-8M69 57l-12-8" fill="none" stroke="#85976e" stroke-width="1.2" stroke-opacity=".65" stroke-linecap="round"/>' +
+        '<ellipse cx="29" cy="35" rx="4" ry="5" fill="#9ba781"/><ellipse cx="71" cy="35" rx="4" ry="5" fill="#acb18c"/>' +
+        '<ellipse cx="50" cy="45" rx="4" ry="16" fill="#a09670"/><circle cx="50" cy="29" r="5" fill="#d5c99a"/>' +
+        '<path d="M48 25q-1-9-7-10M52 25q1-9 7-10" fill="none" stroke="#c7c79c" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<circle cx="48" cy="29" r=".9" fill="#354733"/><circle cx="52" cy="29" r=".9" fill="#354733"/>'
+    },
+    ladybird: {
+      name: '停在叶边的小瓢虫',
+      art: '<ellipse cx="50" cy="66" rx="24" ry="4" fill="#07180e" opacity=".18"/>' +
+        '<path d="M32 38 23 33m9 15-11 1m16 8-10 8M68 38l9-5M68 48l11 1M63 57l10 8" fill="none" stroke="#758266" stroke-width="2.2" stroke-linecap="round"/>' +
+        '<ellipse cx="50" cy="44" rx="23" ry="24" fill="#b9795e"/>' +
+        '<path d="M50 24v43" fill="none" stroke="#684e3c" stroke-width="2"/>' +
+        '<path d="M31 35Q33 25 43 24" fill="none" stroke="#e2b18a" stroke-width="2.2" stroke-linecap="round" opacity=".65"/>' +
+        '<g fill="#5e5940"><circle cx="38" cy="37" r="4"/><circle cx="63" cy="37" r="4"/><circle cx="37" cy="52" r="3.4"/><circle cx="63" cy="52" r="3.4"/><circle cx="44" cy="61" r="2.6"/><circle cx="56" cy="61" r="2.6"/></g>' +
+        '<path d="M42 24q-5-7-8-7M58 24q5-7 8-7" fill="none" stroke="#8e9d76" stroke-width="1.8" stroke-linecap="round"/>' +
+        '<ellipse cx="50" cy="25" rx="12" ry="10" fill="#697859"/>' +
+        '<circle cx="45" cy="23" r="2.5" fill="#e5e3bc"/><circle cx="55" cy="23" r="2.5" fill="#e5e3bc"/>' +
+        '<circle cx="45" cy="23.5" r="1.2" fill="#273d2a"/><circle cx="55" cy="23.5" r="1.2" fill="#273d2a"/>'
+    },
+    cat: {
+      name: '来窗边打盹的小猫',
+      art: '<ellipse cx="50" cy="70" rx="35" ry="4" fill="#07180e" opacity=".18"/>' +
+        '<path d="M72 64Q96 66 89 44Q85 36 80 43Q79 47 84 50Q90 61 72 58" fill="#c6ae85"/>' +
+        '<path d="M29 68Q20 51 33 42Q47 33 65 44Q79 51 74 67Z" fill="#d4bd93"/>' +
+        '<path d="M33 41 27 19Q37 19 43 26M55 26Q63 18 70 19L66 42" fill="#d4bd93"/>' +
+        '<path d="m31 24 3 12 7-6M65 24l-3 12-6-6" fill="#b98d79"/>' +
+        '<path d="M29 35Q32 25 48 26Q66 24 69 37Q73 52 50 55Q26 54 29 35Z" fill="#e0caa4"/>' +
+        '<path d="m43 27 2 7m4-8 1 7m5-6-2 7" stroke="#a68b65" stroke-width="2" stroke-linecap="round"/>' +
+        '<path d="M35 40q4-5 8 0M55 40q4-5 8 0" fill="none" stroke="#4f6349" stroke-width="1.8" stroke-linecap="round"/>' +
+        '<path d="m47 44 3 3 3-3Z" fill="#ac8270"/><path d="M50 47q-3 4-6 1m6-1q3 4 6 1" fill="none" stroke="#8d7557" stroke-width="1" stroke-linecap="round"/>' +
+        '<path d="m35 46-12-2m12 6-11 2M64 46l12-2m-12 6 11 2" stroke="#b29d78" stroke-width="1" stroke-linecap="round"/>' +
+        '<path d="M40 57v11m16-11v11" stroke="#b39a73" stroke-width="1.4" stroke-linecap="round"/>' +
+        '<path d="M31 68q7-5 14 0m5 0q7-5 14 0" fill="none" stroke="#eee0be" stroke-width="3" stroke-linecap="round"/>'
+    }
+  };
+
+  function renderVisitor(kind) {
+    if (typeof kind !== 'string' || !Object.prototype.hasOwnProperty.call(visitors, kind)) {
+      throw new RangeError('未知的温室访客。');
+    }
+    var visitor = visitors[kind];
+    return '<svg xmlns="http://www.w3.org/2000/svg" class="visitor-art" viewBox="0 0 100 80" width="100" height="80" role="img" aria-label="' + visitor.name + '" data-visitor="' + kind + '"><title>' + visitor.name + '</title>' + visitor.art + '</svg>';
+  }
+
+  return Object.freeze({ renderVisitor: renderVisitor });
+});
+</script>
 <script>
 (() => {
  'use strict';
  const Core = globalThis.GreenhouseCore;
  const Art = globalThis.GreenhouseArt;
+ const Visitors = globalThis.GreenhouseVisitors;
  const $ = id => document.getElementById(id);
  const names = ['Mint','Clover','Cactus','Sunflower','Lily of the valley','Sensitive plant'];
  const lines = ['清清凉凉，把忙碌的一天放慢一点。','小小的三片叶子，也有自己的好运气。','不着急喝水，也会认真长大。','把脸转向有光的地方。','安静的小铃铛，等一阵风经过。','轻轻碰碰，日子也会有一点回应。'];
  const STORE = 'daily-green-greenhouse-v1';
  const MAX_SAVED = 48;
+ const GUEST_STORE = 'daily-green-visitors-v1';
+ const kinds = ['snail','moth','ladybird','cat'];
+ const guestNames = ['慢递员蜗牛','夜航小飞蛾','七星巡逻员','路过的猫'];
+ let encounters = [], atmosphere = null, night = false;
  let current = null, saved = [], persistent = true, waterTimer = null;
  function notify(text, error = false) { $('notice').textContent = text; $('notice').classList.toggle('error', error); }
  function validDate(text) { try { Core.parseDate(text); return true; } catch { return false; } }
@@ -414,6 +535,70 @@
    try { localStorage.setItem(STORE, JSON.stringify({version:1,dates:saved})); }
    catch { persistent = false; }
    if (!persistent) $('storage-note').textContent = '当前浏览器未开放本地保存，收藏仅保留在本次页面中。仍然可以离线游玩。';
+ }
+ function storageNotice() { if (!persistent) $('storage-note').textContent = '当前浏览器未开放本地保存，收藏和访客印章仅保留在本次页面中。'; }
+ function loadEncounters() {
+   try {
+     const raw = localStorage.getItem(GUEST_STORE);
+     const data = raw ? JSON.parse(raw) : null;
+     if (data && data.version === 1 && Array.isArray(data.dates)) {
+       const seen = new Set();
+       for (const day of data.dates.slice(0, 100)) {
+         if (typeof day !== 'string' || !validDate(day)) continue;
+         const kind = Core.atmosphereForDate(day).visitor;
+         if (!seen.has(kind)) { seen.add(kind); encounters.push(day); }
+         if (encounters.length === 4) break;
+       }
+     }
+   } catch { persistent = false; }
+ }
+ function renderEncounters() {
+   $('guest-stamps').replaceChildren();
+   for (let index = 0; index < kinds.length; index++) {
+     const kind = kinds[index];
+     const day = encounters.find(date => Core.atmosphereForDate(date).visitor === kind);
+     const stamp = document.createElement(day ? 'button' : 'div');
+     stamp.className = 'guest-stamp' + (day ? ' found' : '');
+     const picture = document.createElement('span'); picture.innerHTML = Visitors.renderVisitor(kind); picture.setAttribute('aria-hidden','true');
+     const label = document.createElement('span'); label.textContent = day ? guestNames[index] : '还没相遇';
+     stamp.append(picture,label);
+     if(day) { stamp.type='button';stamp.setAttribute('aria-label',`重访 ${day} 的${guestNames[index]}`);stamp.addEventListener('click',()=>{showDate(day);greetVisitor();$('visitor-button').focus();}); }
+     $('guest-stamps').append(stamp);
+   }
+   $('guest-progress').textContent = `相遇 ${encounters.length} / 4 · 点击亮起的印章，可以重访那一天。`;
+ }
+ function renderRoom() {
+   $('scene').classList.toggle('night-room',night);
+   $('room-label').textContent=night?'晚灯温室':current.moonlight?'月光温室':'晨光温室';
+   $('night-button').setAttribute('aria-pressed',String(night));
+   $('night-text').textContent=night?'让天亮起来':'等到天黑';
+   $('scene-note').textContent=night?'STAY A LITTLE LONGER.':current.moonlight?'A LITTLE PIECE OF MOONLIGHT.':'TAKE YOUR TIME.';
+ }
+ function showAtmosphere(day) {
+   atmosphere=Core.atmosphereForDate(day);
+   $('scene').dataset.weather=atmosphere.weather;
+   $('weather-label').textContent=atmosphere.weatherLabel;
+   $('visitor-art').innerHTML=Visitors.renderVisitor(atmosphere.visitor);
+   $('visitor-button').dataset.kind=atmosphere.visitor;
+   $('visitor-button').classList.toggle('greeted',encounters.some(date=>Core.atmosphereForDate(date).visitor===atmosphere.visitor));
+   $('visitor-button').setAttribute('aria-label','和温室里的'+atmosphere.visitorLabel+'打招呼');
+   $('guest-title').textContent='角落里，好像有谁来过。';
+   $('visitor-note').textContent='找找温室里的小客人，轻轻点一下。';
+   $('visitor-note').classList.remove('revealed');
+   renderRoom(); renderEncounters();
+ }
+ function greetVisitor() {
+   const first = !encounters.some(day=>Core.atmosphereForDate(day).visitor===atmosphere.visitor);
+   if(first) {
+     encounters.push(current.date);
+     try { localStorage.setItem(GUEST_STORE,JSON.stringify({version:1,dates:encounters})); } catch { persistent=false; }
+     storageNotice();renderEncounters();
+   }
+   $('visitor-button').classList.add('greeted');
+   $('guest-title').textContent=atmosphere.visitorLabel+'留了一张便笺';
+   $('visitor-note').textContent='「'+atmosphere.note+'」';$('visitor-note').classList.add('revealed');
+   const greeting=first ? `第一次遇见${atmosphere.visitorLabel}，留下一枚小印章。${persistent?'':'印章暂存在本次页面。'}` : '又见面啦。';
+   notify(greeting+' 它说：'+atmosphere.note);
  }
  function neighbor(day, direction, buttonId, artId) {
    try {
@@ -484,16 +669,18 @@
    $('leaf-meter').replaceChildren(); for(let i=0;i<6;i++){const leaf=document.createElement('span');if(i<next.leaves)leaf.className='filled';leaf.setAttribute('aria-hidden','true');$('leaf-meter').append(leaf);}
    neighbor(day,-1,'neighbor-left','neighbor-left-art'); neighbor(day,1,'neighbor-right','neighbor-right-art');
    $('previous-day').disabled = $('neighbor-left').disabled; $('next-day').disabled = $('neighbor-right').disabled;
-   updateSaveButton(); renderCollection();
+   updateSaveButton(); renderCollection(); showAtmosphere(day);
    notify(`${day}，遇见了一盆${next.species}。`);
  }
  function shift(direction) { try { showDate(Core.shiftDate(current.date,direction)); } catch { notify('这一页已经到日历边界啦。'); } }
- function toToday() { if(!Core||!Art){notify('温室文件不完整，请把整个 garden 文件夹放在一起打开。',true);return;} showDate(Core.todayInShanghai()); notify('回来啦，这是今天的那一盆。'); }
+ function toToday() { if(!Core||!Art||!Visitors){notify('温室文件不完整，请把整个 garden 文件夹放在一起打开。',true);return;} showDate(Core.todayInShanghai()); notify('回来啦，这是今天的那一盆。'); }
  $('previous-day').addEventListener('click',()=>shift(-1)); $('next-day').addEventListener('click',()=>shift(1));
  $('neighbor-left').addEventListener('click',()=>shift(-1)); $('neighbor-right').addEventListener('click',()=>shift(1));
  $('today-button').addEventListener('click',toToday);
  document.querySelector('.brand').addEventListener('click',event=>{event.preventDefault();toToday();});
  $('plant-date').addEventListener('change',event=>showDate(event.target.value));
+ $('visitor-button').addEventListener('click',greetVisitor);
+ $('night-button').addEventListener('click',()=>{night=!night;renderRoom();notify(night?'把白天轻轻合上，留一盏灯，等几只萤火虫。':'窗子又亮起来了，小客人还在原来的地方。');});
  $('water-button').addEventListener('click',()=>{
    clearTimeout(waterTimer); $('scene').classList.remove('watered'); void $('scene').offsetWidth; $('scene').classList.add('watered');
    notify(current.speciesIndex===5 ? '轻轻浇一点水，含羞草也探了探头。' : '刚刚浇了点水，叶子开心地晃了晃。');
@@ -515,11 +702,11 @@
    if(day){showDate(day);notify('找到了。这一盆，借了一点月亮的光。');}else notify('这段日历里还没遇见月光叶，再换个日期走走吧。');
  });
  try {
-   if(!Core||!Art) throw new Error('missing local files');
-   loadSaved();
+   if(!Core||!Art||!Visitors) throw new Error('missing local files');
+   loadSaved(); loadEncounters();
    const requested=new URLSearchParams(location.search).get('date');
    showDate(requested && validDate(requested) ? requested : Core.todayInShanghai());
-   if(!persistent)$('storage-note').textContent='当前浏览器未开放本地保存，收藏仅保留在本次页面中。仍然可以离线游玩。';
+   storageNotice();
  } catch { $('plant-display').innerHTML='<p class="loading-note">温室暂时没有打开。</p>';notify('请把整个 garden 文件夹放在一起，再打开 index.html。',true);document.querySelectorAll('button').forEach(button=>button.disabled=true);$('plant-date').disabled=true;document.querySelector('.brand').setAttribute('aria-disabled','true'); }
 })();
 </script>
