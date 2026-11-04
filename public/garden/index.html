@@ -19,11 +19,14 @@
 @media(max-width:900px){.guestbook{grid-template-columns:1fr 1fr;padding:19px;gap:14px}.guest-stamps{gap:6px}.guest-stamp{width:58px;font-size:8px}.weather-badge{right:20px}}
 @media(max-width:700px){.guestbook{grid-template-columns:1fr;gap:17px;padding:20px}.guest-stamps{justify-content:space-between;gap:9px}.guest-stamp{width:100%;font-size:10px;min-height:90px}.guest-progress{text-align:left}.visitor-note{min-height:0}.weather-badge{top:51px;font-size:9px}.visitor-button[data-kind="moth"]{top:82px;right:13%}.visitor-button{right:17px;bottom:27px;width:67px;height:57px}.visitor-button[data-kind="cat"]{right:15px;bottom:25px;width:74px;height:65px}.visitor-button[data-kind="ladybird"]{left:12px;bottom:27px;width:55px;height:47px}.scene-bottom{right:100px;gap:8px;letter-spacing:.5px}.scene-bottom span:last-child{font-size:7px}}
 
+
+.treasure{margin-top:17px;padding:24px;border:1px solid #536747;border-radius:17px;background:linear-gradient(125deg,#233a26,#18291d);display:grid;grid-template-columns:minmax(160px,.8fr) minmax(0,2fr);gap:24px}.treasure-heading .eyebrow{margin-bottom:10px}.treasure-heading h2{font-size:18px;font-weight:500;margin:0 0 9px;color:#e5ead3}.treasure-heading p{font-size:11px;line-height:1.8;color:#9fb294;margin:0}.treasure-progress{display:inline-block;margin-top:13px;color:#cbdcad;font:11px ui-monospace,monospace}.treasure-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.treasure-task{min-width:0;min-height:117px;border:1px solid #435c3d;border-radius:12px;padding:13px;background:#10201788;display:flex;flex-direction:column;align-items:flex-start;gap:9px}.treasure-task.done{background:#344a2e;border-color:#829863}.treasure-number{font:9px ui-monospace,monospace;color:#adc799;letter-spacing:1px}.treasure-label{font-size:12px;line-height:1.5;color:#e2e9d2}.treasure-hint{margin-top:auto;padding:4px 0;border:0;background:none;color:#b4cda1;font-size:11px;text-align:left}.treasure-hint:hover{color:#fff}.treasure-hint:disabled{opacity:1;color:#d4dfb9}.treasure-result{grid-column:1/-1;min-height:1.6em;font-size:11px;color:#b8cba8;margin:0;line-height:1.7}@media(max-width:700px){.treasure{grid-template-columns:1fr;gap:16px;padding:20px}.treasure-list{gap:7px}.treasure-task{padding:10px;min-height:126px}.treasure-label{font-size:11px}.treasure-hint{min-height:35px}.treasure-result{grid-column:auto}}
+
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.water-drops{display:none}}
 </style>
 </head>
 <body>
-<noscript><p class="noscript">小温室需要启用 JavaScript。所有计算都在本地进行，不连接 GitHub 或其他服务。</p></noscript>
+<noscript><p class="noscript">小温室需要启用 JavaScript。所有日期计算都在本地进行，不连接外部服务。</p></noscript>
 <div class="shell" id="greenhouse-app">
   <header class="topbar">
     <a class="brand" href="#" aria-label="每日一盆，回到今天"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">每日一盆</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
@@ -60,16 +63,20 @@
     <div><p class="guest-kicker">LITTLE VISITORS, LITTLE LETTERS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
     <div><div class="guest-stamps" id="guest-stamps" aria-label="四位温室小客人的印章"></div><p class="guest-progress" id="guest-progress">相遇 0 / 4 · 点击亮起的印章，可以重访那一天。</p></div>
   </section>
+  <section class="treasure" aria-labelledby="treasure-title">
+    <div class="treasure-heading"><div class="eyebrow">A LITTLE SCAVENGER HUNT</div><h2 id="treasure-title">今天，去日历里寻宝</h2><p>翻翻不同的日子，找齐三件温室里的小事。</p><span class="treasure-progress" id="treasure-progress">0 / 3 已发现</span><p>进度留在当前页面，刷新后重新开始。</p></div>
+    <div><div class="treasure-list" id="treasure-list"></div><p class="treasure-result" id="treasure-result" role="status" aria-live="polite">挑一张线索，去日历里走走吧。</p></div>
+  </section>
   <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="night-button" type="button" aria-pressed="false"><span aria-hidden="true">✧</span><span id="night-text">等到天黑</span></button></div>
   <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
   <section class="sill" id="window-sill" aria-labelledby="sill-title">
     <div class="sill-heading"><div><h2 id="sill-title">我的小窗台</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span></div>
     <div class="album" id="album"></div><div class="saved-dates" id="saved-dates" aria-label="已收藏的日期"></div><p class="empty-note" id="empty-note">窗台还空着。收藏一盆薄荷，或者去日历里寻找一片月光。</p>
   </section>
-  <footer class="footer"><p id="storage-note">收藏只保存在当前浏览器。这里的浇水和收藏都不会改动 GitHub 记录。</p><a class="signature" href="/">← 回到博客</a></footer>
+  <footer class="footer"><p id="storage-note">收藏与访客印章只保存在当前浏览器，不会上传。</p><a class="signature" href="/">← 回到博客</a></footer>
 </div>
 <script data-source="garden-core.js">
-/* Offline calendar seeds. Keep the v1 namespaces aligned with the Python cards. */
+/* Offline calendar seeds. Versioned namespaces keep existing plants reproducible. */
 (function (root, factory) {
   "use strict";
   var api = factory();
@@ -522,6 +529,49 @@
  const guestNames = ['慢递员蜗牛','夜航小飞蛾','七星巡逻员','路过的猫'];
  let encounters = [], atmosphere = null, night = false;
  let current = null, saved = [], persistent = true, waterTimer = null;
+ let treasureDay = null, treasureTasks = [], treasureFound = new Set();
+ const weatherWords = {clear:'晴光',rain:'小雨',mist:'薄雾',breeze:'微风'};
+ const plantWords = ['薄荷','三叶草','仙人掌','向日葵','铃兰','含羞草'];
+ function ensureTreasure() {
+   const today = Core.todayInShanghai();
+   if(treasureDay === today) return;
+   treasureDay=today; treasureFound=new Set();
+   const month=Number(today.slice(5,7)), day=Number(today.slice(8,10));
+   const plant=(month+day)%6, weather=['clear','rain','mist','breeze'][(day*7+month)%4], visitor=kinds[(day+month*3)%4];
+   treasureTasks=[
+     {id:'plant',label:`找到一盆${plantWords[plant]}`,match:(card,room)=>card.speciesIndex===plant},
+     {id:'weather',label:`遇见${weather}天`.replace(weather,weatherWords[weather]),match:(card,room)=>room.weather===weather},
+     {id:'visitor',label:`拜访${guestNames[kinds.indexOf(visitor)]}`,match:(card,room)=>room.visitor===visitor}
+   ];
+ }
+ function renderTreasure() {
+   ensureTreasure();
+   const room=Core.atmosphereForDate(current.date);
+   for(const task of treasureTasks) if(task.match(current,room)) treasureFound.add(task.id);
+   $('treasure-progress').textContent=`${treasureFound.size} / 3 已发现`;
+   $('treasure-list').replaceChildren();
+   treasureTasks.forEach((task,index)=>{
+     const tile=document.createElement('div');tile.className='treasure-task'+(treasureFound.has(task.id)?' done':'');
+     const number=document.createElement('span');number.className='treasure-number';number.textContent=`CLUE 0${index+1}`;
+     const label=document.createElement('span');label.className='treasure-label';label.textContent=task.label;
+     const button=document.createElement('button');button.type='button';button.className='treasure-hint';
+     button.textContent=treasureFound.has(task.id)?'已发现 ✓':'给点线索 →';button.disabled=treasureFound.has(task.id);
+     button.setAttribute('aria-label',treasureFound.has(task.id)?`${task.label}，已发现`:`${task.label}，给点线索`);
+     button.addEventListener('click',()=>hintTreasure(task));tile.append(number,label,button);$('treasure-list').append(tile);
+   });
+   $('treasure-result').textContent=treasureFound.size===3?'三件小事都找到了！今天的温室寻宝完成。':'挑一张线索，去日历里走走吧。';
+ }
+ function hintTreasure(task) {
+   // Bounded and on demand; searching never touches the network or stored collections.
+   for(let distance=1;distance<=90;distance++) for(const direction of [-1,1]) {
+     let day;try{day=Core.shiftDate(current.date,direction*distance);}catch{continue;}
+     if(task.match(Core.cardForDate(day),Core.atmosphereForDate(day))) {
+       $('treasure-result').textContent=`${task.label}：试试往${direction<0?'前':'后'}翻 ${distance} 天。`;return;
+     }
+   }
+   $('treasure-result').textContent='附近暂时没有找到，换个日期再来寻找吧。';
+ }
+
  function notify(text, error = false) { $('notice').textContent = text; $('notice').classList.toggle('error', error); }
  function validDate(text) { try { Core.parseDate(text); return true; } catch { return false; } }
  function loadSaved() {
@@ -669,7 +719,7 @@
    $('leaf-meter').replaceChildren(); for(let i=0;i<6;i++){const leaf=document.createElement('span');if(i<next.leaves)leaf.className='filled';leaf.setAttribute('aria-hidden','true');$('leaf-meter').append(leaf);}
    neighbor(day,-1,'neighbor-left','neighbor-left-art'); neighbor(day,1,'neighbor-right','neighbor-right-art');
    $('previous-day').disabled = $('neighbor-left').disabled; $('next-day').disabled = $('neighbor-right').disabled;
-   updateSaveButton(); renderCollection(); showAtmosphere(day);
+   updateSaveButton(); renderCollection(); showAtmosphere(day); renderTreasure();
    notify(`${day}，遇见了一盆${next.species}。`);
  }
  function shift(direction) { try { showDate(Core.shiftDate(current.date,direction)); } catch { notify('这一页已经到日历边界啦。'); } }
