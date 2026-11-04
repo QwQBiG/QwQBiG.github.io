@@ -557,7 +557,12 @@
      const button=document.createElement('button');button.type='button';button.className='treasure-hint';
      button.textContent=treasureFound.has(task.id)?'已发现 ✓':'给点线索 →';button.disabled=treasureFound.has(task.id);
      button.setAttribute('aria-label',treasureFound.has(task.id)?`${task.label}，已发现`:`${task.label}，给点线索`);
-     button.addEventListener('click',()=>hintTreasure(task));tile.append(number,label,button);$('treasure-list').append(tile);
+     let suggestedDay=null;
+     button.addEventListener('click',()=>{
+       if(suggestedDay){const target=suggestedDay;showDate(target);notify(`沿着线索，来到了 ${target}。`);return;}
+       suggestedDay=hintTreasure(task);
+       if(suggestedDay){button.textContent='去看看 →';button.setAttribute('aria-label',`${task.label}，前往线索日期`);}
+     });tile.append(number,label,button);$('treasure-list').append(tile);
    });
    $('treasure-result').textContent=treasureFound.size===3?'三件小事都找到了！今天的温室寻宝完成。':'挑一张线索，去日历里走走吧。';
  }
@@ -566,10 +571,10 @@
    for(let distance=1;distance<=90;distance++) for(const direction of [-1,1]) {
      let day;try{day=Core.shiftDate(current.date,direction*distance);}catch{continue;}
      if(task.match(Core.cardForDate(day),Core.atmosphereForDate(day))) {
-       $('treasure-result').textContent=`${task.label}：试试往${direction<0?'前':'后'}翻 ${distance} 天。`;return;
+       $('treasure-result').textContent=`${task.label}：试试往${direction<0?'前':'后'}翻 ${distance} 天。`;return day;
      }
    }
-   $('treasure-result').textContent='附近暂时没有找到，换个日期再来寻找吧。';
+   $('treasure-result').textContent='附近暂时没有找到，换个日期再来寻找吧。';return null;
  }
 
  function notify(text, error = false) { $('notice').textContent = text; $('notice').classList.toggle('error', error); }
