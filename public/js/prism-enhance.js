@@ -58,6 +58,7 @@
    * 增强代码块的语法高亮
    */
   function enhanceSyntaxHighlighting(codeBlocks = document.querySelectorAll('pre code')) {
+    if (document.body.dataset.pageCode !== 'true') return;
     codeBlocks.forEach(code => {
       // 处理关键字
       enhanceKeywords(code);
@@ -259,13 +260,15 @@
       }
     });
 
-    observer.observe(document.body, {
+    observer.observe(document.documentElement, {
       childList: true,
       subtree: true,
       attributes: true,
       attributeFilter: ['class']
     });
   }
+
+  document.addEventListener('astro:page-load', () => enhanceSyntaxHighlighting());
 
   // 初始化
   function init() {

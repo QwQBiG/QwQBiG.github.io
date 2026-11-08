@@ -1,0 +1,62 @@
+#waline {
+  --waline-bg-color: #fff;
+  --waline-bg-color-light: #fff5f7;
+  --waline-bg-color-hover: #fce4ec;
+  --waline-theme-color: #e84a7a;
+  --waline-active-color: #ff6b9d;
+  --waline-color: #2d3436;
+  --waline-dark-grey: #636e72;
+  --waline-border-color: rgba(232, 74, 122, 0.2);
+  --waline-info-color: #b2bec3;
+  --waline-info-bg-color: #fff0f5;
+  --waline-font-size: 14px;
+  --waline-avatar-size: 36px;
+  --waline-avatar-radius: 50%;
+  margin-top: 0;
+}
+
+#waline .wl-emoji { display: none !important; }
+
+#waline .wl-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(232, 74, 122, 0.15);
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(232, 74, 122, 0.06);
+}
+
+#waline .wl-btn {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+#waline .wl-btn.primary:not(:disabled) {
+  background: linear-gradient(135deg, #e84a7a 0%, #ff6b9d 100%) !important;
+  border: none !important;
+  color: white !important;
+}
+
+#waline .wl-btn.primary:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(232, 74, 122, 0.4);
+}
+
+#waline .wl-input {
+  border: 1px solid rgba(232, 74, 122, 0.2) !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+#waline .wl-input:focus {
+  border-color: #e84a7a !important;
+  box-shadow: 0 0 0 3px rgba(232, 74, 122, 0.2) !important;
+}
+
+#waline .wl-panel {
+  border-radius: 12px !important;
+  border: 1px solid rgba(232, 74, 122, 0.15) !important;
+}
+
+#waline .wl-separator { border-color: rgba(232, 74, 122, 0.15) !important; }

@@ -6,114 +6,163 @@ tags: ["Windows", "Sandbox", "虚拟化", "安全", "Hyper-V"]
 categories: ["技术探索"]
 ---
 
-# Windows Sandbox 硬核解析：不是虚拟机，胜似虚拟机
+# Windows Sandbox 解析：原理、安全边界与 .wsb 配置
 
-> 当你点击那个蓝色图标时，你启动的不仅仅是一个"干净的环境"，而是微软 Hyper-V 技术栈的集大成之作。
+Windows Sandbox（Windows 沙盒）提供了一套临时的 Windows 桌面。你可以在里面安装软件、运行脚本、修改设置，用完关闭，丢弃这次环境。
 
-Windows Sandbox（Windows 沙盒）并非传统的虚拟机（如 VMware 或 VirtualBox），它采用了更轻量、更底层的架构。下面我将从技术实现、安全机制和隐私问题三个维度为你硬核拆解 Windows Sandbox。
+它省去了准备安装映像、安装系统和维护虚拟机的过程。背后仍然是基于 Hyper-V 的虚拟化隔离，只是微软围绕临时使用做了优化：复用系统文件、减少内存占用，让启动和资源调度更轻便。
 
----
+下面从它的实现原理讲起，再看看哪些设置会影响安全与隐私，以及如何用 `.wsb` 文件准备自己的测试环境。
 
-## 一、核心技术实现 (How it works)
+## 一、它为什么能保持轻量
 
-Windows Sandbox 的本质是基于 **Hyper-V 容器技术 (Hyper-V Containers)** 的轻量级微型虚拟机。它与传统 VM 最大的区别在于资源共享和动态映像。
+### 为什么账户叫 WDAGUtilityAccount？
 
-### 1. 为什么账户叫 WDAGUtilityAccount？
+进入沙盒后，默认使用的账户是 `WDAGUtilityAccount`。名称中的 WDAG 来自 Windows Defender Application Guard，后者曾用于隔离浏览器等应用。Windows Sandbox 与它使用相关的容器和虚拟化技术。
 
-- **前身与技术栈**：`WDAG` 代表 **Windows Defender Application Guard**。微软最初开发这项技术是为了在隔离的硬件环境中运行 Edge 浏览器（防止恶意网页攻击宿主机）。后来，微软将这项底层隔离技术开放出来，做成了完整的桌面环境，也就是 Windows Sandbox。
-- **账户权限**：这是一个内置的、动态生成的本地管理员账户。虽然它在沙盒内部有管理员权限（方便你安装测试软件），但它的权限被严格限制在虚拟化边界内。
+这个账户在沙盒内具备安装软件所需的管理权限，方便你测试程序、修改环境。它的权限作用于沙盒中的 Windows。
 
-### 2. 为什么显示有近 80GB 空间，但启动却很快？
+### 为什么显示近 80 GB，实际却没占那么多空间？
 
-- **动态基础映像 (Dynamic Base Image)**：如果你用 VMware 装 Windows，你需要一个完整的 ISO 文件并占用几十 GB 硬盘。但 Sandbox 不需要下载或复制独立的 Windows 映像。
-- **文件系统重定向 (NTFS 链接)**：它直接利用你宿主机 (Host) 现有的 `C:\Windows` 系统文件。它通过操作系统层面的特殊文件链接技术，将宿主机上未被修改的系统文件"映射"到沙盒中，沙盒只对自己修改过的文件进行 **写时复制 (Copy-on-Write)** 存储。
-- **显示的空间**：这 80GB 并不是真正在你硬盘上划走了一块空间，而是分配给沙盒的一个虚拟磁盘上限 (VHDX)，实际占用的物理空间极小（通常只有几十 MB 到一百多 MB 的差异文件）。
+沙盒中的磁盘容量和宿主实际消耗的磁盘空间是两回事。看到接近 80 GB 的卷容量，不代表它已经从宿主硬盘上占用了同样大小的空间。
 
-### 3. 内存与调度的黑科技
+Windows Sandbox 使用“动态基础映像”。它利用宿主现有的 Windows 系统文件，把可以共享的、不变的文件与需要独立保存的干净副本组合起来，构成一套可启动的系统。沙盒运行期间产生的修改另外保存。
 
-- **智能内存管理 (Smart Memory Management)**：宿主机和沙盒会共享相同的物理内存页。例如，宿主机和沙盒都在运行 `ntdll.dll`，内存中只会保留一份该文件的只读副本，双方共享。这极大地减少了内存开销。
-- **集成调度器 (Integrated Scheduler)**：传统虚拟机由 Hypervisor 进行粗粒度的 CPU 时间片分配。而 Sandbox 允许宿主机的内核调度器直接将沙盒中的虚拟处理器当作宿主机的线程来调度。这意味着沙盒能极其高效地抢占和释放 CPU 资源。
+这样就不用再下载一份 Windows 安装映像，也不用为每次测试维护一套完整的客体系统。实际占用会随着安装软件和写入文件而增加。
 
----
+### 内存和 CPU 怎样分配？
 
-## 二、安全隔离机制 (Security)
+内存也能复用。例如，宿主和沙盒都需要加载 `ntdll.dll`，相同的系统二进制内容可以映射到同一组物理内存页，减少重复占用。宿主内存紧张时，还能通过动态内存管理收回沙盒的一部分内存。
 
-作为 CS 学生，如果你想用它来做恶意软件分析 (Malware Analysis) 或测试不安全代码，你需要了解它的安全边界：
+CPU 方面，Windows Sandbox 使用集成内核调度器。宿主参与沙盒虚拟处理器的调度，方式类似调度进程中的线程。两边争用资源时，宿主上优先级较高的任务可以抢占沙盒中优先级较低的工作。
 
-- **硬件级隔离**：它依赖于现代 CPU 的虚拟化扩展（Intel VT-x 或 AMD-V）以及 SLAT（二级地址转换）。通过 Hyper-V 的 Type-1 虚拟机监视器，沙盒与宿主机在物理硬件层面被强制隔离。
-- **绝对的无状态性 (Ephemeral State)**：沙盒关闭时，所有的状态、文件、注册表更改、内存数据会瞬间全部销毁。没有任何持久化存储（除非你配置了特定的映射文件夹）。
-- **虚拟化图形处理 (vGPU)**：为了让沙盒内的动画和渲染流畅，它利用了硬件加速，但它不是直接访问你的显卡，而是通过宿主机的 WDDM（Windows 显示驱动程序模型）进行安全的 vGPU 代理渲染，防止恶意软件通过 GPU 驱动漏洞逃逸。
-- **网络隔离 (vSwitch)**：它通过一个虚拟交换机 (Default Switch) 桥接到宿主机的网络。沙盒位于一个隔离的 NAT 子网中。
+启动速度则还受益于快照与克隆：利用预先准备好的系统状态恢复实例，减少每次从头启动 Windows 的开销。
 
-> **安全警告**：虽然极难（虚拟机逃逸漏洞非常昂贵且罕见），但理论上 0-day 的 Hyper-V 虚拟机逃逸漏洞是有可能穿透沙盒的。对于极度危险的内核级病毒（如针对底层硬件固件的破坏性勒索软件），使用专用的物理隔离机（Air-gapped machine）才是最安全的。
+## 二、安全隔离具体体现在哪里
 
----
+### 独立内核与硬件虚拟化
 
-## 三、隐私问题 (Privacy)
+Windows Sandbox 通过微软的虚拟机监控程序运行独立内核，利用处理器的硬件虚拟化能力与宿主隔离。程序在沙盒中安装服务、修改注册表或改变系统设置，影响的是里面那套 Windows。
 
-使用沙盒时，需要注意以下隐私相关的边界：
+关闭并确认结束沙盒后，本次环境中的软件和系统改动会被丢弃。Windows 11 22H2 起，在沙盒内部重启可以保留本次会话的状态，方便完成需要重启的安装过程。
 
-- **剪贴板共享**：默认情况下，宿主机和沙盒之间的剪贴板是互通的。如果在宿主机复制了密码，在沙盒中是可以粘贴的。这在运行不受信任的代码时是一个隐私风险点（恶意代码可以监听沙盒内的剪贴板获取你宿主机的敏感信息）。
-- **网络流量暴露**：因为沙盒使用的是 NAT 网络，沙盒发出的所有网络请求（例如下载、访问网页、甚至恶意软件向外发送数据），在路由器和 ISP 看来，都是从你的宿主机 IP 发出的。沙盒只能隔离本地破坏，不能匿名网络流量。
-- **微软的遥测数据 (Telemetry)**：沙盒运行的依然是正版 Windows 内核。它同样会遵循宿主机的隐私设置，可能会向微软发送系统崩溃日志或基础遥测数据。
-- **宿主机可见性**：宿主机可以监控到沙盒的整体资源占用（如你在任务管理器中看到的），但通常无法轻易"看透"沙盒内部正在运行的具体进程，除非使用专门的 Hyper-V 调试工具。反过来，沙盒绝对无法看到宿主机的进程和文件系统。
+### 图形加速
 
----
+沙盒可以通过 DirectX 和 WDDM 图形虚拟化使用宿主的 GPU 资源，让界面和图形程序运行得更流畅。
 
-## CS 学生的进阶玩法：使用 .wsb 配置文件
+如果测试不需要图形加速，可以关闭 vGPU，改用 WARP 软件渲染。这样减少了向沙盒开放的图形功能，代价是图形性能可能下降。
 
-不用只通过点击图标来启动沙盒。你可以通过编写 XML 格式的 `.wsb` (Windows Sandbox Configuration) 文件来定制沙盒的行为。
+### 网络连接
 
-创建一个文本文件，命名为 `test.wsb`，写入以下代码：
+沙盒默认通过 Hyper-V 的虚拟交换机联网，共用宿主的网络连接。联网后，里面的程序也可能接触到可达的内网设备。
+
+测试一个不需要联网的未知程序时，直接关闭网络通常更合适。正式分析高风险恶意样本，则应使用专门准备的隔离实验环境。
+
+## 三、使用时要留意的隐私边界
+
+### 剪贴板默认共享
+
+宿主与沙盒默认可以互相复制粘贴文字和文件。这很方便，但宿主刚复制过的密码、令牌等内容，也可能暴露给沙盒中的程序。
+
+运行未知程序前，可以通过配置文件关闭剪贴板共享。需要传入的文件则放进一个专用的只读目录。
+
+### 共享目录里的文件仍然属于宿主
+
+映射文件夹让沙盒直接访问指定的宿主目录。这里要分清两种权限：
+
+- **只读**：沙盒可以读取文件，不能通过该映射修改文件。目录中仍然只应放本次需要提供的内容。
+- **可写**：沙盒中的修改会写回宿主，包括编辑、删除文件，以及生成新的文件。
+
+因此，可写共享目录中的改动会在沙盒关闭后保留。测试时，如果只是想提供安装包或脚本，用只读映射就够了。
+
+### 联网不会隐藏身份
+
+沙盒通常与宿主共用网络出口。访问网站、登录账号、上传文件时，对应服务仍然能记录这些活动。
+
+Windows 本身也有与 Sandbox 有关的诊断事件，例如基础映像的创建和更新。结束临时桌面，并不意味着所有相关记录都会随之消失。
+
+### 宿主仍然负责管理沙盒
+
+沙盒的运行和资源分配由宿主管理。如果某些内容需要对宿主管理员保密，就不适合放在这台机器的沙盒中。
+
+## 四、用 .wsb 文件准备测试环境
+
+除了从开始菜单启动，还可以用 `.wsb` 文件指定沙盒的行为。文件内容是 XML，双击后就会按其中的配置启动。
+
+下面准备一个离线测试环境：关闭网络、GPU 加速和剪贴板共享，把宿主上的代码目录以只读方式放到沙盒桌面上。
+
+先创建宿主目录，将需要测试的文件放进去。保存以下内容为 `test.wsb`，并把 `YourName` 替换成实际用户名：
 
 ```xml
 <Configuration>
-  <vGPU>Disable</vGPU> <!-- 禁用显卡加速，纯CPU运行 -->
-  <Networking>Disable</Networking> <!-- 拔掉网线，彻底断网，适合测试病毒 -->
+  <vGPU>Disable</vGPU>
+  <Networking>Disable</Networking>
+  <ClipboardRedirection>Disable</ClipboardRedirection>
+
   <MappedFolders>
     <MappedFolder>
-      <HostFolder>C:\Users\YourName\Downloads\TestScripts</HostFolder> <!-- 将宿主机的代码文件夹映射进去 -->
+      <HostFolder>C:\Users\YourName\Downloads\TestScripts</HostFolder>
       <SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\Scripts</SandboxFolder>
-      <ReadOnly>true</ReadOnly> <!-- 设置为只读，防止沙盒内的代码修改宿主机源码 -->
+      <ReadOnly>true</ReadOnly>
     </MappedFolder>
   </MappedFolders>
+
   <LogonCommand>
-    <Command>explorer.exe C:\Users\WDAGUtilityAccount\Desktop\Scripts</Command> <!-- 启动时自动打开该文件夹 -->
+    <Command>explorer.exe C:\Users\WDAGUtilityAccount\Desktop\Scripts</Command>
   </LogonCommand>
 </Configuration>
 ```
 
-双击这个 `.wsb` 文件，你就会得到一个：
-- 没有网络
-- 不能使用 GPU 加速
-- 桌面上放着你的测试代码（且只能读不能写）
+注意文件扩展名应当是 `.wsb`，不要保存成 `test.wsb.txt`。
 
-的安全靶场环境。这非常适合用来跑脚本、测试依赖库或者分析未知的 `.exe` 文件。
+双击后，沙盒会自动打开桌面上的 `Scripts` 文件夹。此时：
 
-### 更多配置选项
+- 沙盒没有网络连接；
+- 图形使用软件渲染；
+- 宿主与沙盒之间不能通过共享剪贴板传递内容；
+- `Scripts` 中的文件可以读取，但不能通过这个映射修改。
 
-| 配置项 | 说明 | 可选值 |
-|--------|------|--------|
-| `<vGPU>` | 是否启用 GPU 加速 | Enable / Disable |
-| `<Networking>` | 网络连接 | Enable / Disable / Default |
-| `<AudioInput>` | 音频输入 | Enable / Disable |
-| `<VideoInput>` | 视频输入（摄像头） | Enable / Disable |
-| `<ProtectedClient>` | 增强保护模式 | Enable / Disable |
-| `<PrinterRedirection>` | 打印机重定向 | Enable / Disable |
-| `<ClipboardRedirection>` | 剪贴板共享 | Enable / Disable |
+有些程序会向自身所在目录写入配置或日志。如果它在只读目录中运行失败，可以先把文件复制到沙盒内部的另一个目录，再从那里运行。
 
-### 实用场景示例
+### 常用配置项
 
-**场景 1：安全测试可疑软件**
+下面这些开关都支持 `Enable`、`Disable` 和 `Default`。其中，`Default` 表示使用系统默认行为。
+
+| 配置项 | 用途 |
+|---|---|
+| `vGPU` | GPU 图形加速 |
+| `Networking` | 网络连接 |
+| `AudioInput` | 向沙盒提供麦克风等音频输入 |
+| `VideoInput` | 向沙盒提供摄像头输入 |
+| `ProtectedClient` | 为沙盒连接增加隔离保护 |
+| `PrinterRedirection` | 向沙盒提供打印机 |
+| `ClipboardRedirection` | 宿主与沙盒之间的剪贴板共享 |
+
+例如，不需要麦克风时，可以在 `<Configuration>` 中加入：
+
+```xml
+<AudioInput>Disable</AudioInput>
+```
+
+### 场景一：临时测试未知程序
+
+如果不需要自动映射文件夹，可以使用一份更简单的配置：
+
 ```xml
 <Configuration>
   <Networking>Disable</Networking>
   <vGPU>Disable</vGPU>
   <ClipboardRedirection>Disable</ClipboardRedirection>
+  <AudioInput>Disable</AudioInput>
 </Configuration>
 ```
 
-**场景 2：临时开发环境**
+这份配置关闭了网络、GPU 加速、剪贴板共享和音频输入。需要从宿主传入文件时，再按前面的示例添加只读目录。
+
+### 场景二：临时开发环境
+
+如果想把工具和依赖装在沙盒里，同时继续编辑宿主上的项目，可以使用可写映射：
+
 ```xml
 <Configuration>
   <MappedFolders>
@@ -123,22 +172,27 @@ Windows Sandbox 的本质是基于 **Hyper-V 容器技术 (Hyper-V Containers)**
       <ReadOnly>false</ReadOnly>
     </MappedFolder>
   </MappedFolders>
+
   <LogonCommand>
-    <Command>powershell.exe -Command "Set-Location C:\Projects; code ."</Command>
+    <Command>explorer.exe C:\Projects</Command>
   </LogonCommand>
 </Configuration>
 ```
 
----
+使用前确认宿主上的 `D:\Projects` 已存在。启动后，沙盒会打开映射进来的项目目录，接着可以在里面安装编辑器和本次需要的开发工具。
 
-## 总结
+这里将 `ReadOnly` 设为了 `false`，编辑器保存的代码、构建产生的文件，以及删除操作，都会影响宿主上的项目目录。
 
-Windows Sandbox 是微软在虚拟化领域的一次优雅创新。它不是传统意义上的"虚拟机"，而是一种**轻量级、瞬时性、硬件隔离**的安全容器。对于开发者、安全研究人员和普通用户来说，它提供了一个完美的"试毒"环境——既不需要像 VMware 那样占用大量资源，又比 Docker Desktop 更适合运行完整的 Windows 应用程序。
+如果只想试验一组依赖，不准备改动现有项目，就使用只读映射，再把项目复制到沙盒内部工作。需要保留的结果在结束前另行保存。
 
-下次当你需要测试一个来路不明的 `.exe` 文件，或者想在一个干净的环境中复现 Bug 时，不妨试试这个系统自带的"时光机"。
+## 结语
 
----
+Windows Sandbox 适合试装软件、运行脚本和复现问题这类短期任务。它省去了单独安装和维护系统的麻烦，也让清理测试环境变得简单。
 
-**参考链接：**
-- [Microsoft Docs: Windows Sandbox](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview)
-- [Windows Sandbox Config File](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-configure-using-wsb-file)
+准备一份符合用途的 `.wsb` 文件，把联网、文件共享和需要保留的结果安排好，下次就能直接复用这套配置。
+
+## 参考链接
+
+- [Windows Sandbox 概览](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/)
+- [Windows Sandbox 架构](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-architecture)
+- [Windows Sandbox 配置文件](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-configure-using-wsb-file)

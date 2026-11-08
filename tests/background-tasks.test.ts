@@ -174,6 +174,25 @@ test('explicit cancellation still aborts a running download and cannot remove it
   assert.equal(await replacement.done, 'ready');
 });
 
+test('canceling work that cannot abort releases a slot for the next page', async () => {
+  const env = setup();
+  env.scheduler.setReady(true);
+  const jobs = Array.from({ length: 4 }, (_, index) => env.scheduler.schedule({
+    key: `old-import-${index}`,
+    priority: 'prefetch',
+    run: () => new Promise<void>(() => {}),
+  }));
+  await env.flush();
+  let started = false;
+  const nextPage = env.scheduler.schedule({ key: 'next-comments', priority: 'prefetch', run: async () => { started = true; return 'ready'; } });
+  await env.flush();
+  assert.equal(started, false);
+  jobs[0].cancel();
+  await env.flush();
+  assert.equal(await nextPage.done, 'ready');
+  env.scheduler.dispose();
+});
+
 test('aborted lifetime, rejected tasks and synchronous errors leave the queue usable', async () => {
   const env = setup(), lifetime = new AbortController();
   let starts = 0;

@@ -7,6 +7,7 @@
   'use strict';
 
   function fixXMLHighlighting() {
+    if (document.body.dataset.pageCode !== 'true') return;
     // 查找所有 XML 代码块
     const xmlBlocks = document.querySelectorAll('code.language-xml, code.language-markup');
     
@@ -61,4 +62,5 @@
   if (window.Prism) {
     Prism.hooks.add('after-highlight', fixXMLHighlighting);
   }
+  document.addEventListener('astro:page-load', fixXMLHighlighting);
 })();

@@ -6,7 +6,7 @@ const isNavActive = (href: string) =>
   currentPath === href || currentPath.startsWith(href);
 ---
 
-<div id="floatingNavCard" class="fixed top-4 left-4 z-50">
+<div id="floatingNavCard" class="fixed top-4 left-4 z-50" transition:persist="content-navigation">
   <!-- 完全复制主界面 GlassCard 结构和样式 -->
   <div
     class="glass-card relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/60 rounded-[2rem] p-3 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out cursor-pointer"
@@ -67,7 +67,7 @@ const isNavActive = (href: string) =>
       <!-- 横向布局，紧凑排列 -->
       <div class="flex flex-row items-center gap-2">
         <!-- 头像 - 2rem (32px) 与主界面转换后一致 -->
-        <a href="/?homeReturnMotion=1" data-astro-prefetch="hover" class="flex-shrink-0" data-home-return-link style="pointer-events: auto;">
+        <a href="/?homeReturnMotion=1" data-astro-prefetch="hover" data-astro-reload class="flex-shrink-0" data-home-return-link style="pointer-events: auto;">
           <div class="nav-avatar relative w-8 h-8">
             <img
               src="/generated/site/avatar-160.webp"
@@ -183,18 +183,14 @@ const isNavActive = (href: string) =>
 <script>
   import '../../scripts/navigation-prefetch';
   // Mark avatar navigation so the home page can play the return animation.
-  const homeReturnLink = document.querySelector('[data-home-return-link]');
-
-  homeReturnLink?.addEventListener('click', (event) => {
-    const mouseEvent = event as MouseEvent;
-
+  function markHomeReturn(event: MouseEvent) {
     if (
-      mouseEvent.defaultPrevented ||
-      mouseEvent.button !== 0 ||
-      mouseEvent.metaKey ||
-      mouseEvent.ctrlKey ||
-      mouseEvent.shiftKey ||
-      mouseEvent.altKey
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
     ) {
       return;
     }
@@ -204,5 +200,24 @@ const isNavActive = (href: string) =>
     } catch {
       // Navigation still works when sessionStorage is unavailable.
     }
-  });
+  }
+
+  function initializeFloatingNavigation() {
+    const navigation = document.getElementById('floatingNavCard');
+    const homeReturnLink = navigation?.querySelector<HTMLAnchorElement>('[data-home-return-link]');
+    if (homeReturnLink && homeReturnLink.dataset.returnReady !== 'true') {
+      homeReturnLink.dataset.returnReady = 'true';
+      homeReturnLink.addEventListener('click', markHomeReturn);
+    }
+    navigation?.querySelectorAll<HTMLAnchorElement>('.nav-link-item').forEach(link => {
+      const href = new URL(link.href).pathname;
+      const active = window.location.pathname === href || window.location.pathname.startsWith(href);
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  initializeFloatingNavigation();
+  document.addEventListener('astro:page-load', initializeFloatingNavigation);
 </script>

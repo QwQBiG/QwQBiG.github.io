@@ -288,10 +288,11 @@
    * 初始化所有代码块的彩虹括号
    */
   function initRainbowBrackets() {
+    if (document.body.dataset.pageCode !== 'true') return;
     const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
     codeBlocks.forEach(pre => {
       // 避免重复处理
-      if (pre.dataset.rainbowProcessed === 'true') return;
+      if (pre.dataset.rainbowProcessed === 'true' || pre.dataset.processed !== 'true') return;
 
       processRainbowBrackets(pre);
       pre.dataset.rainbowProcessed = 'true';
@@ -328,9 +329,12 @@
     }
   });
 
-  observer.observe(document.body, {
+  observer.observe(document.documentElement, {
     childList: true,
     subtree: true
   });
+
+  document.addEventListener('astro:page-load', initRainbowBrackets);
+  document.addEventListener('site:code-blocks-ready', initRainbowBrackets);
 
 })();

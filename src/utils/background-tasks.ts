@@ -61,6 +61,9 @@ export function createBackgroundTaskScheduler(environment: SchedulerEnvironment 
     task.cancelled = true;
     remove(task);
     task.controller?.abort();
+    // Imports and stylesheet loads may not reject when aborted. A canceled task
+    // must release its queue slot even while that optional work settles later.
+    running.delete(task);
     task.finish(undefined);
     pump();
   }

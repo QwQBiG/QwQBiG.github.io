@@ -61,4 +61,4 @@ wsl --install --from-file .\noble-wsl-amd64.wsl --name Ubuntu-24.04
 
 ## 6.撒花！
 根据提示建一个用户就可以玩啦！
-并且，他会有“欢迎使用WSL”的弹窗，里面会有一些介绍哒~
+并且，他会有“欢迎使用 WSL ”的弹窗，里面会有一些介绍哒~

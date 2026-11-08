@@ -249,51 +249,5 @@ const pageTitle = `${title} - QwQBiG's World`;
 </Layout>
 
 <script>
-  // Highlight current TOC item on scroll
-  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc a[href^="#"]');
-  const headings = document.querySelectorAll<HTMLElement>('h2[id], h3[id]');
-  const linksById = new Map(Array.from(tocLinks, link => [link.getAttribute('href')!.slice(1), link] as const));
-  let activeLink: HTMLAnchorElement | undefined;
-  let tocFrame = 0;
-
-  function highlightTOC() {
-    tocFrame = 0;
-    const scrollPos = window.scrollY + 100;
-    let nextLink: HTMLAnchorElement | undefined;
-    let matchedHeading = false;
-
-    headings.forEach(heading => {
-      const top = heading.offsetTop;
-      const bottom = top + heading.offsetHeight;
-
-      if (scrollPos >= top && scrollPos < bottom) {
-        matchedHeading = true;
-        nextLink = linksById.get(heading.id);
-      }
-    });
-
-    if (matchedHeading && nextLink !== activeLink) {
-      activeLink?.classList.remove('active');
-      nextLink?.classList.add('active');
-      activeLink = nextLink;
-    }
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!tocFrame) tocFrame = requestAnimationFrame(highlightTOC);
-  }, { passive: true });
-  window.addEventListener('pagehide', () => {
-    cancelAnimationFrame(tocFrame);
-    tocFrame = 0;
-  });
-  highlightTOC();
-
-  // Smooth scroll for TOC links
-  tocLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = document.querySelector(link.getAttribute('href'));
-      target?.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
+  import '../../scripts/article-toc';
 </script>

@@ -12,10 +12,10 @@
    * 为代码块添加行交互
    */
   function initLineInteractions(codeBlocks = document.querySelectorAll('pre[class*="language-"]')) {
+    if (document.body.dataset.pageCode !== 'true') return;
     codeBlocks.forEach(pre => {
       // 检查是否已初始化
       if (pre.dataset.lineInteractions) return;
-      pre.dataset.lineInteractions = 'true';
 
       const code = pre.querySelector('code');
       if (!code) return;
@@ -23,6 +23,7 @@
       // 获取所有行
       const lines = code.querySelectorAll('.line');
       if (lines.length === 0) return;
+      pre.dataset.lineInteractions = 'true';
 
       lines.forEach((line) => {
         // 鼠标悬停高亮
@@ -305,6 +306,7 @@
    */
   function initSelectionHighlight() {
     document.addEventListener('mouseup', () => {
+      if (document.body.dataset.pageCode !== 'true') return;
       const selection = window.getSelection();
       if (selection.toString().length > 0) {
         // 选中文本时添加自定义样式
@@ -322,6 +324,7 @@
    */
   function initShortcuts() {
     document.addEventListener('keydown', (e) => {
+      if (document.body.dataset.pageCode !== 'true') return;
       // Ctrl/Cmd + Shift + F 打开搜索（避免与浏览器默认搜索冲突）
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'F') {
         e.preventDefault();
@@ -372,11 +375,20 @@
       }
     });
 
-    observer.observe(document.body, {
+    observer.observe(document.documentElement, {
       childList: true,
       subtree: true
     });
   }
+
+  document.addEventListener('astro:page-load', () => initLineInteractions());
+  document.addEventListener('site:code-blocks-ready', () => initLineInteractions());
+  document.addEventListener('astro:before-swap', () => {
+    closeSearch();
+    searchOverlay?.remove();
+    searchOverlay = null;
+    window.currentSearchCodeBlock = null;
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

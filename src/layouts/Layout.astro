@@ -4,6 +4,8 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import katexStyles from 'katex/dist/katex.min.css?url';
 import { getPageFeatures } from '../utils/page-features';
+import ContentNavigation from '../components/content/ContentNavigation.astro';
+import { isContentNavigationPath } from '../utils/content-navigation';
 
 export interface Props {
   title: string;
@@ -30,6 +32,7 @@ const ogImage = new URL(image, Astro.site || 'https://iqwqi.win');
 // Render once so resource loading follows actual content, including nested components.
 const content = await Astro.slots.render('default');
 const { hasCode, hasMath } = getPageFeatures(content);
+const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
 ---
 
 <!DOCTYPE html>
@@ -78,6 +81,7 @@ const { hasCode, hasMath } = getPageFeatures(content);
     
     <!-- Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
+    {useContentNavigation && <ContentNavigation />}
     {hasCode && <>
       <!-- 少女心代码高亮主题 (Catppuccin Latte) -->
       <link rel="stylesheet" href="/styles/prism-catppuccin.css" />
@@ -90,7 +94,7 @@ const { hasCode, hasMath } = getPageFeatures(content);
     </>}
     {hasMath && <link rel="stylesheet" href={katexStyles} />}
 </head>
-<body class={`site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
+<body data-page-code={String(hasCode)} class={`site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 ${gradientBg ? 'gradient-bg' : 'bg-bg-primary text-text-primary'}`}>
     <Fragment set:html={content} />
 
     {hasCode && <>
@@ -110,12 +114,18 @@ const { hasCode, hasMath } = getPageFeatures(content);
     
     <!-- Mermaid 图表支持 -->
     <script>
-      async function renderMermaidDiagrams() {
+      let diagramLifetime: AbortController | undefined;
+      let diagramBody: HTMLElement | undefined;
+      let diagramPage = 0;
+
+      async function renderMermaidDiagrams(signal: AbortSignal) {
         const mermaidBlocks = document.querySelectorAll('pre.language-mermaid, pre[class*="mermaid"]');
         if (mermaidBlocks.length === 0) return;
 
         // 图表库只在有图块的页面加载，模块由站点构建提供。
         const { default: mermaid } = await import('mermaid');
+        if (signal.aborted) return;
+        const page = ++diagramPage;
       
         // 初始化 Mermaid - 禁用自动宽度限制，确保完整显示。
         mermaid.initialize({
@@ -145,11 +155,13 @@ const { hasCode, hasMath } = getPageFeatures(content);
       
         // 手动渲染所有 Mermaid 代码块。
         mermaidBlocks.forEach((block, index) => {
+          if (block.hasAttribute('data-mermaid-rendered')) return;
           const code = block.querySelector('code');
           if (!code) return;
+          block.setAttribute('data-mermaid-rendered', 'true');
           
           const graphDefinition = code.textContent;
-          const id = 'mermaid-' + index;
+          const id = `mermaid-${page}-${index}`;
           
           // 创建外层容器 - 模仿代码块样式
           const wrapper = document.createElement('div');
@@ -229,6 +241,7 @@ const { hasCode, hasMath } = getPageFeatures(content);
           
           // 渲染图表
           mermaid.render(id, graphDefinition).then(({ svg }) => {
+            if (signal.aborted || !wrapper.isConnected) return;
             content.innerHTML = svg;
             
             // 确保SVG完整显示
@@ -264,8 +277,9 @@ const { hasCode, hasMath } = getPageFeatures(content);
             }
             
             // 初始化交互功能
-            initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn);
+            initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn, signal);
           }).catch(err => {
+            if (signal.aborted || !wrapper.isConnected) return;
             console.error('Mermaid 渲染失败:', err);
             content.innerHTML = '<div style="color: red; padding: 20px;">图表渲染失败</div>';
           });
@@ -273,7 +287,7 @@ const { hasCode, hasMath } = getPageFeatures(content);
       }
       
       // 初始化图表交互功能
-      function initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn) {
+      function initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn, signal) {
         let scale = 1;
         let isDragging = false;
         let startX, startY, offsetX = 0, offsetY = 0;
@@ -288,6 +302,7 @@ const { hasCode, hasMath } = getPageFeatures(content);
         const svgElement = content.querySelector('svg');
         if (svgElement) {
           requestAnimationFrame(() => {
+            if (signal.aborted || !svgElement.isConnected) return;
             const bbox = svgElement.getBBox();
             const clientRect = svgElement.getBoundingClientRect();
 
@@ -375,7 +390,7 @@ const { hasCode, hasMath } = getPageFeatures(content);
             wrapper.classList.remove('mermaid-fullscreen');
             fullscreenBtn.title = '全屏';
           }
-        });
+        }, { signal });
         
         // 鼠标拖动
         container.addEventListener('mousedown', (e) => {
@@ -392,12 +407,12 @@ const { hasCode, hasMath } = getPageFeatures(content);
           offsetX = e.clientX - startX;
           offsetY = e.clientY - startY;
           updateTransform();
-        });
+        }, { signal });
         
         document.addEventListener('mouseup', () => {
           isDragging = false;
           container.style.cursor = 'grab';
-        });
+        }, { signal });
         
         // 鼠标滚轮缩放
         container.addEventListener('wheel', (e) => {
@@ -409,7 +424,11 @@ const { hasCode, hasMath } = getPageFeatures(content);
       }
       
       const renderDiagrams = () => {
-        void renderMermaidDiagrams().catch((error) => {
+        if (diagramBody === document.body) return;
+        diagramLifetime?.abort();
+        diagramBody = document.body;
+        diagramLifetime = new AbortController();
+        void renderMermaidDiagrams(diagramLifetime.signal).catch((error) => {
           console.error('Mermaid 加载失败:', error);
         });
       };
@@ -420,6 +439,11 @@ const { hasCode, hasMath } = getPageFeatures(content);
       } else {
         renderDiagrams();
       }
+      document.addEventListener('astro:page-load', renderDiagrams);
+      document.addEventListener('astro:before-swap', () => {
+        diagramLifetime?.abort();
+        diagramBody = undefined;
+      });
     </script>
     
     <style is:global>

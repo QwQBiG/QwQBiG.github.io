@@ -279,6 +279,7 @@
    * 处理单个代码块
    */
   function processCodeBlock(pre) {
+    if (document.body.dataset.pageCode !== 'true') return;
     if (pre.dataset.processed === 'true') return;
 
     // 跳过 Mermaid 图表代码块
@@ -309,6 +310,7 @@
   function initCodeBlocks() {
     const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
     codeBlocks.forEach(processCodeBlock);
+    document.dispatchEvent(new Event('site:code-blocks-ready'));
   }
 
   // 初始化
@@ -334,9 +336,11 @@
     });
   });
 
-  observer.observe(document.body, {
+  observer.observe(document.documentElement, {
     childList: true,
     subtree: true
   });
+
+  document.addEventListener('astro:page-load', initCodeBlocks);
 
 })();

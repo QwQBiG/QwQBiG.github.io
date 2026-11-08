@@ -150,6 +150,11 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
     preparePrimaryNavigation();
   });
   document.addEventListener('astro:before-swap', stop);
+  document.addEventListener('astro:page-load', () => {
+    if (lifetime.signal.aborted) lifetime = new AbortController();
+    resetIntent();
+    preparePrimaryNavigation();
+  });
   preparePrimaryNavigation();
 
   return (intent: NavigationIntent) => beginIntent(intent.link, true);

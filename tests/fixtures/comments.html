@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>评论交互本地预览</title>
+    <link rel="stylesheet" href="http://127.0.0.1:4321/node_modules/@waline/client/dist/waline.css">
+    <link rel="stylesheet" href="http://127.0.0.1:4321/styles/global.css">
+    <link rel="stylesheet" href="http://127.0.0.1:4321/src/styles/waline-theme.css">
+    <link rel="stylesheet" href="http://127.0.0.1:4321/src/styles/waline-enhancements.css">
+    <style>
+      body { min-height: 100dvh; margin: 0; padding: 32px 18px 80px; background: linear-gradient(135deg, #f4deec, #e4e4ff, #d9eeff); }
+      main { width: min(860px, 100%); margin: auto; }
+      h1 { margin: 0 0 12px; font-size: 24px; color: #5c4a66; }
+      .preview-note { margin-bottom: 30px; color: #716479; line-height: 1.8; }
+      .preview-glass { padding: 28px; border: 1px solid rgba(255,255,255,.8); border-radius: 28px; background: rgba(255,255,255,.55); backdrop-filter: blur(20px); }
+      @media (max-width:640px) { .preview-glass { padding:18px; } body { padding:24px 12px 60px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>评论交互本地预览</h1>
+      <p class="preview-note">以下为示例评论，用来体验头像预览、身份标识、长回复折叠和手机编辑抽屉。输入框可试写，发送按钮已停用。</p>
+      <section class="preview-glass" aria-label="示例评论区">
+        <div id="waline" data-path="/local-comment-preview/">
+          <div data-waline>
+            <div class="wl-comment">
+              <div class="wl-login-info">
+                <div class="wl-avatar"><a class="wl-login-nick" href="#profile"><img src="http://127.0.0.1:4321/generated/site/avatar-160.webp" alt="示例账号头像"></a></div>
+                <span class="wl-login-nick">示例账号</span>
+              </div>
+              <div class="wl-panel">
+                <textarea class="wl-editor" id="wl-edit" placeholder="试着写几句话，关闭抽屉后内容会保留" aria-label="示例评论内容"></textarea>
+                <div class="wl-footer"><div class="wl-actions"><span>Markdown</span></div><div class="wl-info"><button class="wl-btn primary" disabled type="button">发送</button></div></div>
+              </div>
+            </div>
+            <div class="wl-meta-head"><div class="wl-count">2 条示例评论</div></div>
+            <div class="wl-cards">
+              <div class="wl-card-item" id="preview-admin">
+                <div class="wl-user" aria-hidden="true">
+                  <img class="wl-user-avatar" src="http://127.0.0.1:4321/generated/site/avatar-160.webp" alt="">
+                  <svg class="administrator-icon" viewBox="0 0 16 16" width="14" height="14"><circle cx="8" cy="8" r="7" fill="#e84a7a"></circle></svg>
+                </div>
+                <div class="wl-card">
+                  <div class="wl-head"><span class="wl-nick">管理员示例</span><span class="wl-time">刚刚</span></div>
+                  <div class="wl-content">
+                    <p>这是一条用于检查阅读体验的长回复。</p>
+                    <p>技术笔记里经常会出现较长的解释。前几段先交代问题发生的条件、实际观察到的现象，以及已经尝试过的方法，让读者能判断自己的情况是否相同。</p>
+                    <p>接下来记录排查过程。一次失败的尝试同样值得留下，因为它说明了哪些假设没有得到验证，也能帮助后来的人避免重复走一遍同样的路。</p>
+                    <p>如果涉及命令或代码，可以把关键片段单独列出，并写清楚运行环境和预期结果。这样即使几个月以后重新打开文章，也能很快找回当时的思路。</p>
+                    <p>阅读长回复时，可以先浏览前面的内容，需要细节时再展开全文。展开和收起只影响这里的显示，回复的文字仍然完整保留。</p>
+                    <p>最后补上验证结果，说明修复后观察到了什么，以及还没有覆盖到哪些情况。这样一条回复就能成为文章内容的有益补充。</p>
+                    <p>这段示例还用于测试窄屏：在手机宽度下，文字应自然换行，展开按钮应能轻松点到，头像预览和输入面板也应保留足够空间。</p>
+                    <p>如果你在试写时关闭编辑抽屉，再次打开后应看到刚才的内容。这里使用的是同一个输入框。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="wl-card-item" id="preview-member">
+                <div class="wl-user" aria-hidden="true">
+                  <img class="wl-user-avatar" src="http://127.0.0.1:4321/generated/site/gallery-cover-640.webp" alt="">
+                  <svg class="verified-icon" viewBox="0 0 16 16" width="14" height="14"><circle cx="8" cy="8" r="7" fill="#9183ba"></circle></svg>
+                </div>
+                <div class="wl-card">
+                  <div class="wl-head"><span class="wl-nick">读者示例</span><span class="wl-time">刚刚</span></div>
+                  <div class="wl-content"><p>这是一条短回复。可以点击头像查看预览，也可以切换到手机宽度体验编辑面板。</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module">
+      import { enhanceCommentInteractions } from 'http://127.0.0.1:4321/src/scripts/waline-interactions.ts';
+      enhanceCommentInteractions(document.getElementById('waline'));
+    </script>
+  </body>
+</html>
