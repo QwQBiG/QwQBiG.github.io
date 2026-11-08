@@ -11,7 +11,15 @@ export default defineConfig({
   base: '/',
   output: 'static',
   prefetch: true,
-  integrations: [mdx(), sitemap(), tailwind({
+  integrations: [{
+    name: 'separate-dev-build-cache',
+    hooks: {
+      // Build-time content sync also starts Vite, so use Astro's command here.
+      'astro:config:setup': ({ command, updateConfig }) => {
+        updateConfig({ vite: { cacheDir: `node_modules/.vite/${command}` } });
+      },
+    },
+  }, mdx(), sitemap(), tailwind({
     configFile: './tailwind.config.mjs',
   }), react()],
   markdown: {
