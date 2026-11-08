@@ -4,7 +4,6 @@ import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import { friendSites, thisSite } from '../data/friends';
 
 const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像：${thisSite.avatar}`;
-const hasExamples = friendSites.some((site) => site.example);
 ---
 
 <LightLayout title="友链 - QwQBiG's World" description="友链与本站资料">
@@ -30,13 +29,12 @@ const hasExamples = friendSites.some((site) => site.example);
               href={site.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`访问${site.name}${site.example ? '（示例站点）' : ''}，在新窗口打开`}
+              aria-label={`访问${site.name}，在新窗口打开`}
             >
               <span class="friend-monogram" aria-hidden="true">{site.monogram}</span>
               <div class="friend-info">
                 <div class="friend-title">
                   <h2>{site.name}</h2>
-                  {site.example && <span class="example-badge">示例</span>}
                 </div>
                 <p class="friend-description">{site.description}</p>
                 <span class="friend-domain">{new URL(site.url).hostname}</span>
@@ -50,7 +48,6 @@ const hasExamples = friendSites.some((site) => site.example);
           ))}
           {friendSites.length === 0 && <p class="empty-message">暂未添加友链。</p>}
         </div>
-        {hasExamples && <p class="preview-note">卡片示例，尚未添加正式友链。</p>}
       </section>
 
       <aside class="site-card" aria-labelledby="site-card-title">
@@ -174,13 +171,12 @@ const hasExamples = friendSites.some((site) => site.example);
   .friend-info { min-width: 0; }
   .friend-title { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
   .friend-title h2 { font-size: 19px; line-height: 1.4; font-weight: 600; }
-  .example-badge { padding: 1px 7px; border: 1px solid rgba(143, 111, 162, .22); border-radius: 6px; background: rgba(255, 255, 255, .26); color: #80618f; font-size: 10px; line-height: 1.6; white-space: nowrap; }
   .friend-description { margin-top: 5px; color: #66596f; font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
   .friend-domain { display: inline-block; margin-top: 7px; color: #75637f; font-size: 12px; letter-spacing: .02em; overflow-wrap: anywhere; }
   .external-arrow { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid rgba(255, 255, 255, .68); border-radius: 50%; background: rgba(255, 255, 255, .2); color: #8c6a9e; }
   .external-arrow svg { width: 17px; height: 17px; transition: transform .25s ease; }
   .friend-card:hover .external-arrow svg { transform: translate(2px, -2px); }
-  .preview-note, .empty-message { margin: 16px 3px 0; color: #7c6c86; font-size: 12px; }
+  .empty-message { margin: 16px 3px 0; color: #7c6c86; font-size: 12px; }
 
   .site-card {
     padding: 26px 24px 18px;
