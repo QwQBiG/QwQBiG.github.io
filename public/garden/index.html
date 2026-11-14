@@ -23,18 +23,18 @@
   font-synthesis: none;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 108px; }
 body { margin: 0; background: radial-gradient(ellipse at 8% 10%, #ffffff88, transparent 50%), var(--bg); }
 button, input { font: inherit; }
 button { cursor: pointer; touch-action: manipulation; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
 button:disabled { cursor: default; opacity: .45; }
-button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #ad7d52; outline-offset: 4px; }
+button:focus-visible, a:focus-visible, input:focus-visible, .visitor-note:focus-visible, .scene:focus-visible { outline: 3px solid #ad7d52; outline-offset: 4px; }
 button svg { pointer-events: none; }
 a { color: inherit; }
 [hidden] { display: none !important; }
 .shell { max-width: 1320px; margin: auto; padding: 0 48px 30px; }
-.topbar { display: flex; justify-content: space-between; align-items: center; gap: 22px; min-height: 88px; border-bottom: 1px solid #cdd2c3; }
+.topbar { position: sticky; top: 0; z-index: 20; background: #f4f1e8f2; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center; gap: 22px; min-height: 88px; border-bottom: 1px solid #cdd2c3; }
 .brand { min-height: 44px; display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand-mark { width: 43px; height: 43px; display: grid; place-items: center; border: 1px solid #91a18a; border-radius: 50%; color: #3d5a43; background: linear-gradient(140deg, #fdfcf7, #e1e7d6); box-shadow: inset 0 0 0 4px #f6f6eb, 0 2px 3px #31422c0d; }
 .brand-title { font: 600 19px "Songti SC", "STSong", Georgia, serif; letter-spacing: 3px; }
@@ -61,7 +61,7 @@ a { color: inherit; }
 .text-button { min-width: 44px; min-height: 44px; background: transparent; border: 0; border-bottom: 1px solid #9daf8b; padding: 7px 8px; color: #546a45; font-size: 11px; }
 .day-label { color: #66765c; font-size: 11px; letter-spacing: 1px; }
 .main-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(315px, .95fr); background: #e8e9dd; border: 1px solid #d2d8c5; border-radius: 30px; box-shadow: 0 25px 40px -29px #2c453d55, inset 0 1px 0 #fff; padding: 13px; gap: 13px; }
-.scene { position: relative; min-height: 552px; overflow: hidden; border-radius: 22px 5px 5px 22px; background: linear-gradient(140deg, #e6e5d6, #bcc8b1); isolation: isolate; }
+.scene { scroll-margin-top: 12px; position: relative; min-height: 552px; overflow: hidden; border-radius: 22px 5px 5px 22px; background: linear-gradient(140deg, #e6e5d6, #bcc8b1); isolation: isolate; }
 .glass-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
 .scene-label { position: absolute; top: 25px; left: 27px; z-index: 2; font-size: 10px; letter-spacing: 1.5px; color: #4f6851; }
 .scene-label:before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 8px; border-radius: 50%; background: #6b8e55; }
@@ -110,6 +110,7 @@ a { color: inherit; }
 .visitor-button.greeted:after { content: ""; position: absolute; right: 7px; top: 5px; width: 5px; height: 5px; border-radius: 50%; background: #6b8e55; box-shadow: 0 0 0 2px #fff9de; }
 .specimen { position: relative; display: flex; flex-direction: column; padding: 31px 29px 26px; border: 1px solid #e4e1d2; border-radius: 5px 21px 21px 5px; background: repeating-linear-gradient(0deg, #c2b89807 0 1px, transparent 1px 4px), #fcfaf3; box-shadow: inset 2px 0 3px #5d5a3410; min-width: 0; }
 .specimen-kicker { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 25px; font-size: 11px; color: #667259; letter-spacing: 1px; }
+.specimen-date { color: #5f7250; font: 10px ui-monospace, monospace; letter-spacing: 0; white-space: nowrap; }
 .specimen-kicker span:last-child { color: #a16f54; font: 10px ui-monospace, monospace; }
 .variant { display: inline-flex; align-items: center; align-self: flex-start; gap: 6px; padding: 6px 10px; border-radius: 4px; background: #e5ead9; color: #526e3e; font-size: 11px; margin-bottom: 12px; }
 .variant-dot { width: 4px; height: 4px; background: #63814c; border-radius: 50%; }
@@ -184,6 +185,10 @@ a { color: inherit; }
 .sill-heading h2 { font: 600 26px/1.5 "Songti SC", "STSong", Georgia, serif; letter-spacing: 1px; margin: 0 0 7px; }
 .sill-heading p { font-size: 11px; color: #5b6c4f; margin: 0; }
 .sill-heading .section-kicker { font-size: 9px; color: #7c5e43; margin-bottom: 10px; }
+.sill-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.return-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 7px 0; color: #526b40; text-decoration: none; font-size: 11px; }
+.return-link:hover { color: #905e3c; }
+.return-link svg { width: 14px; height: 14px; }
 .sill-progress { white-space: nowrap; font-size: 10px; color: #5d7347; }
 .album { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding: 20px 17px 13px; border: 1px solid #d4d8c6; border-radius: 15px; background: radial-gradient(ellipse at 50% 10%, #f0f3e5, transparent 70%), #e2e7d7; box-shadow: inset 0 2px 5px #4c5d3b08; }
 .album:after { content: ""; position: absolute; left: 22px; right: 22px; top: 155px; height: 10px; border-radius: 3px; background: linear-gradient(#c8b295, #b69b79); box-shadow: 0 3px 0 #97856555, 0 7px 8px #4e493b12; pointer-events: none; }
@@ -346,13 +351,14 @@ a { color: inherit; }
   .treasure-task { min-height: 130px; }
 }
 @media (max-width: 700px) {
+  html { scroll-padding-top: 96px; }
   .shell { padding: 0 18px 22px; }
   .topbar { min-height: 79px; }
   .brand-title { font-size: 17px; letter-spacing: 2px; }
   .brand-mark { width: 37px; height: 37px; }
   .brand-sub { font-size: 7px; }
   .top-links { gap: 15px; font-size: 11px; }
-  .top-links .nav-guest { display: none; }
+  .top-links .nav-guest, .top-links .nav-play { display: none; }
   .intro { padding: 29px 0 27px; }
   .intro h1 { font-size: 33px; line-height: 1.5; letter-spacing: 1px; }
   .intro p { font-size: 12px; line-height: 1.9; margin-top: 13px; }
@@ -411,6 +417,8 @@ a { color: inherit; }
   .treasure-result { font-size: 10px; }
   .sill { margin-top: 30px; }
   .sill-heading { display: block; }
+  .sill-meta { flex-direction: row; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .sill-meta .sill-progress { margin: 0; }
   .sill-heading h2 { font-size: 23px; }
   .sill-heading p { font-size: 10px; }
   .sill-progress { display: block; margin-top: 12px; white-space: normal; font-size: 9px; line-height: 1.7; }
@@ -433,7 +441,6 @@ a { color: inherit; }
   .shell { padding-left: 13px; padding-right: 13px; }
   .intro h1 { font-size: 29px; }
   .top-links { gap: 11px; }
-  .top-links .nav-play { display: none; }
   .day-label { display: none; }
   .date-input { width: 135px; }
   .scene { min-height: 412px; }
@@ -470,12 +477,12 @@ a { color: inherit; }
 <div class="shell" id="greenhouse-app">
   <header class="topbar">
     <a class="brand" href="#" aria-label="每日一盆，回到今天"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">每日一盆</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
-    <nav class="top-links" aria-label="温室导航"><a class="nav-guest" href="#guest-title">小客人</a><a class="nav-play" href="#treasure-title">去寻宝</a><a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a></nav>
+    <nav class="top-links" aria-label="温室导航"><a class="nav-scene" href="#scene" aria-label="回到当前日期的植物">看植物</a><a class="nav-guest" href="#guest-title">小客人</a><a class="nav-play" href="#treasure-title">去寻宝</a><a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a></nav>
   </header>
   <div class="intro"><div><div class="eyebrow">THE WINDOWSILL COLLECTION · 一日一盆</div><h1>把普通日子，<br><em>养得有声有色。</em></h1><p>一扇窗，六种植物，几位偶尔路过的朋友。<br>挑个日子，看看它为你长出了什么。</p></div><div class="intro-doodle" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="46" stroke="#a69a78" stroke-width=".8"/><circle cx="60" cy="60" r="40" stroke="#c5b996" stroke-width=".6" stroke-dasharray="2 4"/><path d="M52 93Q74 62 62 29" stroke="#75845d" stroke-width="2" stroke-linecap="round"/><path d="M63 77Q41 77 36 59Q57 56 63 77Z" fill="#99ab79"/><path d="M66 61Q86 61 88 43Q68 42 66 61Z" fill="#647f58"/><path d="M65 47Q46 46 45 30Q61 29 65 47Z" fill="#b4bf8c"/><path d="m41 63 20 12m9-17 13-10M49 34l14 11" stroke="#e5e6c4" stroke-width="1"/><circle cx="47" cy="89" r="2" fill="#b78e65"/><circle cx="78" cy="80" r="1.5" fill="#b78e65"/></svg><span class="local-note">一点日光，<br>一点慢慢生长的时间。</span></div></div>
   <div class="date-bar"><div class="date-group"><span class="date-label">翻到这一天</span><button class="date-nav" id="previous-day" type="button" aria-label="前一天">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">植物日期</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="植物日期"></label><button class="date-nav" id="next-day" type="button" aria-label="后一天">→</button><button class="text-button" id="today-button" type="button">今天</button></div><span class="day-label" id="day-label"></span></div>
   <main class="main-grid" aria-label="日期植物">
-    <section class="scene" id="scene" aria-label="小温室里的植物">
+    <section class="scene" id="scene" tabindex="-1" aria-label="小温室里的植物">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" preserveAspectRatio="none" width="720" height="520" class="glass-lines greenhouse-stage" aria-hidden="true" fill="none">
   <defs>
     <linearGradient id="stage-plaster" x1="78" y1="0" x2="647" y2="520" gradientUnits="userSpaceOnUse">
@@ -613,7 +620,7 @@ a { color: inherit; }
       <div class="scene-bottom"><span id="scene-date">ONE DATE. ONE LITTLE PLANT.</span><span id="scene-note">TAKE YOUR TIME.</span></div>
     </section>
     <section class="specimen" id="specimen" aria-label="植物卡">
-      <div class="specimen-kicker"><span>今日植物观察日记</span><span id="specimen-no">NO. 01</span></div>
+      <div class="specimen-kicker"><span>植物观察日记</span><time class="specimen-date" id="specimen-date">—</time><span id="specimen-no">NO. 01</span></div>
       <div class="variant" id="variant"><i class="variant-dot" aria-hidden="true"></i><span id="variant-text">晨绿叶 · 常规款</span></div>
       <h2 class="plant-name" id="plant-name">—</h2><p class="latin-name" id="plant-english"></p><p class="plant-line" id="plant-line"></p>
       <div class="leaf-label"><span>这一天的叶片</span><b id="leaf-value">— / 6</b></div><div class="leaf-meter" id="leaf-meter" role="meter" aria-label="这一天的叶片" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
@@ -626,7 +633,7 @@ a { color: inherit; }
   <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
   <div class="little-corners">
   <section class="guestbook" aria-labelledby="guest-title">
-    <div><p class="guest-kicker">POSTCARDS FROM LITTLE FRIENDS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
+    <div><p class="guest-kicker">POSTCARDS FROM LITTLE FRIENDS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note" tabindex="-1">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
     <div><div class="guest-stamps" id="guest-stamps" aria-label="四位温室小客人的印章"></div><p class="guest-progress" id="guest-progress">相遇 0 / 4 · 点击亮起的印章，可以重访那一天。</p></div>
   </section>
   <section class="treasure" aria-labelledby="treasure-title">
@@ -635,7 +642,7 @@ a { color: inherit; }
   </section>
   </div>
   <section class="sill" id="window-sill" aria-labelledby="sill-title">
-    <div class="sill-heading"><div><p class="section-kicker">MY LITTLE WINDOWSILL</p><h2 id="sill-title">收藏一整个窗边的四季。</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span></div>
+    <div class="sill-heading"><div><p class="section-kicker">MY LITTLE WINDOWSILL</p><h2 id="sill-title">收藏一整个窗边的四季。</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><div class="sill-meta"><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span><a class="return-link" href="#scene" aria-label="回到当前日期的植物">回到温室<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3m-4 4 4-4 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></div>
     <div class="album" id="album"></div><div class="saved-dates" id="saved-dates" aria-label="已收藏的日期"></div><p class="empty-note" id="empty-note">窗台还空着。收藏一盆薄荷，或者去日历里寻找一片月光。</p>
   </section>
   <footer class="footer"><p id="storage-note">收藏与访客印章只保存在当前浏览器，不会上传。</p><a class="signature" href="/">← 回到博客</a></footer>
@@ -1206,7 +1213,7 @@ a { color: inherit; }
      const label = document.createElement('span'); label.className = 'guest-label'; label.textContent = guestNames[index];
      const caption = document.createElement('span'); caption.className = 'guest-caption'; caption.textContent = day ? '已相遇' : '待相遇';
      stamp.append(picture,label,caption);
-     if(day) { stamp.type='button';stamp.setAttribute('aria-label',`重访 ${day} 的${guestNames[index]}`);stamp.addEventListener('click',()=>{showDate(day);greetVisitor();$('visitor-button').focus();}); }
+     if(day) { stamp.type='button';stamp.setAttribute('aria-label',`重访 ${day} 的${guestNames[index]}`);stamp.addEventListener('click',()=>{showDate(day);greetVisitor();$('visitor-note').focus();}); }
      $('guest-stamps').append(stamp);
    }
    $('guest-progress').textContent = `相遇 ${encounters.length} / 4 · 点击亮起的印章，可以重访那一天。`;
@@ -1242,7 +1249,7 @@ a { color: inherit; }
    $('guest-title').textContent=atmosphere.visitorLabel+'留了一张便笺';
    $('visitor-note').textContent='「'+atmosphere.note+'」';$('visitor-note').classList.add('revealed');
    const greeting=first ? `第一次遇见${atmosphere.visitorLabel}，留下一枚小印章。${persistent?'':'印章暂存在本次页面。'}` : '又见面啦。';
-   notify(greeting+' 它说：'+atmosphere.note);
+   notify(greeting);
  }
  function neighbor(day, direction, buttonId, artId) {
    try {
@@ -1254,7 +1261,7 @@ a { color: inherit; }
  }
  function updateSaveButton() {
    const selected = saved.includes(current.date);
-   $('save-button').textContent = selected ? '已在窗台 ✓' : '放上窗台 ＋';
+   $('save-button').textContent = selected ? '从窗台收起' : '放上窗台 ＋';
    $('save-button').classList.toggle('saved', selected);
    $('save-button').classList.toggle('primary', !selected);
    $('save-button').setAttribute('aria-pressed', String(selected));
@@ -1307,6 +1314,7 @@ a { color: inherit; }
    $('variant').classList.toggle('rare',next.moonlight); $('specimen').classList.toggle('rare-card',next.moonlight); $('scene').classList.toggle('moonlight',next.moonlight);
    $('room-label').textContent = next.moonlight ? '月光温室' : '晨光温室';
    $('scene-date').textContent = day;
+   $('specimen-date').textContent = day; $('specimen-date').setAttribute('datetime',day);
    $('scene-note').textContent = next.moonlight ? 'A LITTLE PIECE OF MOONLIGHT.' : 'TAKE YOUR TIME.';
    $('plant-display').innerHTML = Art.renderPlant(next);
    $('scene').setAttribute('aria-label',`${day} 的${next.species}，${next.variant}，叶片 ${next.leaves}/6`);
@@ -1325,7 +1333,7 @@ a { color: inherit; }
  $('today-button').addEventListener('click',toToday);
  document.querySelector('.brand').addEventListener('click',event=>{event.preventDefault();toToday();});
  $('plant-date').addEventListener('change',event=>showDate(event.target.value));
- $('visitor-button').addEventListener('click',greetVisitor);
+ $('visitor-button').addEventListener('click',()=>{greetVisitor();$('visitor-note').focus();});
  $('night-button').addEventListener('click',()=>{night=!night;renderRoom();notify(night?'把白天轻轻合上，留一盏灯，等几只萤火虫。':'窗子又亮起来了，小客人还在原来的地方。');});
  $('water-button').addEventListener('click',()=>{
    clearTimeout(waterTimer); $('scene').classList.remove('watered'); void $('scene').offsetWidth; $('scene').classList.add('watered');
