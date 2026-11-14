@@ -4,25 +4,344 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
-<meta name="color-scheme" content="dark">
-<title>每日一盆 · 进温室坐坐</title>
+<meta name="color-scheme" content="light">
+<title>每日一盆 · 今天也要好好长大</title>
 <style>
-:root{--bg:#0b1712;--green:#d2e3b2;--text:#eeeedd;--soft:#a4b79d;--line:#2d4132;--paper:#ecebdc;--ink:#28452f;--terra:#bd8c66;font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:var(--bg);font-synthesis:none}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 25% 0%,#1b3021 0,transparent 50%),var(--bg)}button,input{font:inherit}button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:default;opacity:.4}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d1e0a7;outline-offset:4px}a{color:inherit}button{touch-action:manipulation}button svg{pointer-events:none}.shell{max-width:1240px;margin:auto;padding:0 38px 44px}.topbar{height:96px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px;text-decoration:none}.brand-mark{width:39px;height:39px;display:grid;place-items:center;border:1px solid #607951;border-radius:12px;color:#c1d49b}.brand-title{font-size:15px;letter-spacing:3px}.brand-sub{font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:1.8px;color:var(--soft);margin-top:4px}.sill-link{font-size:13px;color:#bfceb5;text-decoration:none;display:flex;gap:9px;align-items:center}.sill-link b{font-weight:400;border:1px solid #41543c;border-radius:20px;min-width:26px;padding:4px 7px;text-align:center;font-size:11px}.intro{padding:34px 0 25px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#b8c697;margin:0 0 13px}.intro h1{font-size:30px;font-weight:500;letter-spacing:1.5px;margin:0 0 10px;line-height:1.45}.intro p{font-size:13px;line-height:1.8;color:var(--soft);margin:0}.local-note{font-size:11px;color:#83977d;white-space:nowrap;margin-bottom:5px}.local-note:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#b4ca8a;margin-right:8px}.date-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.date-group{display:flex;align-items:center;gap:9px}.date-label{font-size:12px;color:#b6c6ad;margin-right:8px}.date-nav{height:36px;width:36px;border:1px solid #3b503a;border-radius:9px;background:transparent;color:#dce7cc;display:grid;place-items:center}.date-input{color:#dce7ce;background:transparent;border:0;min-width:140px;padding:8px 5px;font:13px ui-monospace,SFMono-Regular,monospace;max-width:158px}.text-button{background:transparent;color:#acbe9e;border:0;font-size:12px;padding:9px 11px;border-radius:8px}.text-button:hover{background:#233525;color:#e0e9cf}.day-label{font-size:12px;color:#97ad8f}.main-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,.85fr);gap:21px;align-items:stretch}.scene{position:relative;min-height:493px;overflow:hidden;border:1px solid #354a36;border-radius:23px;background:radial-gradient(ellipse at 50% 35%,#35523555,transparent 70%),linear-gradient(145deg,#1e3524,#101f17);transition:background .3s}.scene.moonlight{background:radial-gradient(ellipse at 50% 25%,#444e5c66,transparent 65%),linear-gradient(145deg,#1c2a30,#111d22)}.glass-lines{position:absolute;width:100%;height:100%;inset:0;color:#80966e;opacity:.45}.scene-label{position:absolute;top:25px;left:27px;font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#a5bc93}.room-badge{position:absolute;right:25px;top:22px;font-size:11px;color:#cfdec1;display:flex;align-items:center;gap:8px}.room-light{width:22px;height:22px;border-radius:50%;background:#dde2b0;box-shadow:0 0 34px #d9dc9d22}.moonlight .room-light{box-shadow:inset -7px -4px 0 #243238;background:#e4e7cc}.floor-glow{position:absolute;left:12%;right:12%;bottom:69px;height:40px;border-radius:50%;background:#090f0b66;filter:blur(9px)}.bench{position:absolute;left:8%;right:8%;height:13px;bottom:93px;background:linear-gradient(#617254,#475d41);border-radius:4px;box-shadow:0 3px 0 #102217}.bench:before,.bench:after{content:"";position:absolute;top:13px;width:12px;height:37px;background:#3b5136}.bench:before{left:24px}.bench:after{right:24px}.plant-display{position:absolute;left:50%;bottom:72px;width:285px;height:304px;transform:translateX(-50%);z-index:2;pointer-events:none}.plant-display svg{width:100%;height:100%;overflow:visible}.plant-sway{transform-box:view-box;transform-origin:150px 228px}.watered .plant-sway{animation:sway 1.25s ease-in-out}.neighbor{position:absolute;width:100px;height:108px;bottom:94px;border:0;padding:0;color:#9db28d;background:none;opacity:.76;z-index:1;transition:opacity .2s}.neighbor:hover{opacity:1}.neighbor svg{width:100%;height:100%;overflow:visible}.neighbor.left{left:7%}.neighbor.right{right:7%}.neighbor-caption{position:absolute;bottom:-23px;left:0;right:0;font-size:10px;letter-spacing:1px}.scene-bottom{position:absolute;bottom:19px;left:27px;right:27px;display:flex;justify-content:space-between;gap:12px;font:10px ui-monospace,SFMono-Regular,monospace;letter-spacing:1.5px;color:#8da281}.scene-bottom span:last-child{color:#c0cba0}.water-drops{position:absolute;left:50%;bottom:300px;width:120px;height:72px;transform:translateX(-50%);pointer-events:none;z-index:3;opacity:0}.water-drops i{position:absolute;top:0;width:6px;height:12px;border-radius:60% 40% 60% 40%;transform:rotate(25deg);background:#bddde2}.water-drops i:nth-child(1){left:22px;animation-delay:0s}.water-drops i:nth-child(2){left:58px;animation-delay:.12s}.water-drops i:nth-child(3){left:93px;animation-delay:.23s}.watered .water-drops{opacity:1}.watered .water-drops i{animation:drop .75s ease-out both}.room-stars{position:absolute;inset:0;pointer-events:none;opacity:.28}.room-stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#d6e3b7}.room-stars i:nth-child(1){top:18%;left:22%}.room-stars i:nth-child(2){top:31%;left:72%;width:2px;height:2px}.room-stars i:nth-child(3){top:16%;left:60%;width:2px;height:2px}.room-stars i:nth-child(4){top:45%;left:85%}.moonlight .room-stars{opacity:.9}.specimen{background:var(--paper);border:1px solid #eeeede;border-radius:21px;color:var(--ink);padding:27px 27px 22px;display:flex;flex-direction:column;min-width:0;box-shadow:0 9px 35px #030d0722}.specimen-kicker{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#698063;display:flex;justify-content:space-between;gap:10px}.variant{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;background:#dbe2cb;border-radius:6px;font-size:11px;color:#4b6845;margin:24px 0 13px}.variant.rare{background:#dddde9;color:#595b80}.variant-dot{width:5px;height:5px;background:#809d69;border-radius:50%}.rare .variant-dot{background:#8a85ab}.plant-name{font-size:40px;font-weight:500;letter-spacing:2px;line-height:1.2;margin:0 0 8px}.latin-name{font:italic 17px Georgia,serif;color:#698264;margin:0}.plant-line{font-size:12px;line-height:1.9;color:#63745c;margin:22px 0 23px;min-height:23px}.leaf-label{font-size:11px;display:flex;justify-content:space-between;color:#607159;gap:10px}.leaf-label b{font-weight:500;font-variant-numeric:tabular-nums;color:#365830}.leaf-meter{display:flex;gap:7px;margin:12px 0 24px}.leaf-meter span{height:8px;flex:1;border-radius:3px;background:#d2d8c5}.leaf-meter span.filled{background:#7b9b63}.rare-card .leaf-meter span.filled{background:#9898b1}.seed-row{border-top:1px solid #cbd2bc;padding-top:16px;margin-top:auto;display:flex;gap:6px;flex-direction:column}.seed-row span{font-size:10px;color:#75846b}.seed-id{font:11px ui-monospace,SFMono-Regular,monospace;letter-spacing:.35px;color:#536a4a;overflow-wrap:anywhere}.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:22px}.card-action{border:1px solid #c2ccb4;background:transparent;color:#3e5b37;border-radius:10px;padding:12px 9px;font-size:12px;display:flex;justify-content:center;align-items:center;gap:7px;min-height:43px}.card-action.primary{background:#36552f;color:#f0f0de;border-color:#36552f}.card-action:hover{filter:brightness(.96)}.card-action.saved{background:#dde4cf;color:#3d5c36;border-color:#bccdaf}.card-action:focus-visible{outline-color:#54734b}.care-note{font-size:10px;color:#7b876f;line-height:1.7;margin:12px 0 0;text-align:center}.discovery-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:19px 0 12px;flex-wrap:wrap}.discovery-btn{background:none;border:0;color:#b8c9aa;padding:9px 12px;font-size:12px;border-radius:9px;display:flex;gap:8px;align-items:center}.discovery-btn:hover{background:#233827}.discovery-divider{width:1px;height:13px;background:#3a4d36}.notice{min-height:25px;color:#c6d6b6;text-align:center;font-size:12px;line-height:1.7;margin:3px 0 0}.notice.error{color:#e4bb9d}.sill{padding-top:29px;margin-top:11px;border-top:1px solid var(--line);scroll-margin-top:24px}.sill-heading{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:20px}.sill-heading h2{font-size:19px;font-weight:500;letter-spacing:1px;margin:0 0 7px}.sill-heading p{font-size:11px;color:#99ae8e;margin:0}.sill-progress{font:11px ui-monospace,SFMono-Regular,monospace;color:#bbcea7;white-space:nowrap}.album{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:13px}.album-slot{min-width:0;min-height:178px;border:1px dashed #3b5036;border-radius:14px;background:#132119;color:#93a38a;padding:12px 7px 13px;position:relative;text-align:center}.album-slot.unlocked{background:#1e3223;border:1px solid #506847;color:#d2dfc1}.album-slot.unlocked:hover{background:#273c2a}.album-art{height:118px;max-width:138px;margin:auto;opacity:.26}.unlocked .album-art{opacity:1}.album-art svg{width:100%;height:100%;overflow:visible}.album-name{font-size:12px;letter-spacing:.6px}.album-sub{font-size:10px;color:#7f9577;margin-top:6px}.unlocked .album-sub{color:#9db78b}.album-moon{position:absolute;top:10px;right:10px;color:#d2cfe7;font-size:11px}.saved-dates{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}.date-chip{font:10px ui-monospace,SFMono-Regular,monospace;color:#aabd9d;background:transparent;border:1px solid #354b34;border-radius:20px;padding:7px 11px}.date-chip.current{background:#30472d;color:#e1e7ce;border-color:#69875b}.date-chip:hover{border-color:#769065}.empty-note{color:#7f9577;font-size:11px;line-height:1.9;margin:17px 0 0}.footer{display:flex;align-items:center;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding-top:20px;margin-top:30px;font-size:10px;line-height:1.8;color:#7e9476}.footer p{margin:0}.footer .signature{font:italic 14px Georgia,serif;color:#9caf88;white-space:nowrap}.noscript{padding:20px;background:#253d26;color:#e6efd8}.loading-note{padding:120px 20px;text-align:center;color:#b8c9aa}
-@keyframes sway{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}42%{transform:rotate(4deg)}65%{transform:rotate(-2deg)}82%{transform:rotate(1deg)}}@keyframes drop{0%{transform:translateY(-20px) rotate(25deg);opacity:0}20%{opacity:1}100%{transform:translateY(85px) rotate(25deg);opacity:0}}
-@media(max-width:900px){.shell{padding:0 24px 32px}.main-grid{grid-template-columns:minmax(0,1.35fr) minmax(270px,1fr);gap:14px}.scene{min-height:468px}.specimen{padding:24px 20px 20px}.plant-name{font-size:35px}.plant-display{width:250px;height:267px;bottom:76px}.neighbor{width:80px;height:86px;bottom:96px}.neighbor.left{left:4%}.neighbor.right{right:4%}.album{gap:9px}.album-slot{min-height:153px;padding:10px 5px}.album-art{height:98px}}
-@media(max-width:700px){.shell{padding:0 17px 26px}.topbar{height:78px}.brand-title{font-size:13px;letter-spacing:2px}.brand-sub{font-size:9px}.brand-mark{width:34px;height:34px}.intro{padding:27px 0 23px}.intro h1{font-size:23px;letter-spacing:1px}.intro p{font-size:12px}.local-note{display:none}.date-bar{align-items:center;flex-wrap:wrap}.date-label{display:none}.date-group{gap:5px}.date-nav{height:44px;width:44px}.date-input{min-width:130px;width:130px;font-size:16px}.day-label{font-size:11px}.text-button{padding:8px 5px;min-height:44px}.main-grid{grid-template-columns:1fr;gap:14px}.scene{min-height:390px}.plant-display{width:240px;height:256px;bottom:58px}.bench{bottom:74px;left:7%;right:7%}.neighbor{bottom:78px;width:76px;height:81px}.neighbor.left{left:5%}.neighbor.right{right:5%}.scene-label{top:22px;left:22px;font-size:9px}.scene-bottom{left:20px;right:20px;bottom:15px;font-size:8px;letter-spacing:1px}.room-badge{top:19px;right:20px}.specimen{padding:23px;display:grid;grid-template-columns:1fr auto;column-gap:20px}.specimen-kicker{grid-column:1/-1}.variant{grid-column:1/-1;margin:17px 0 12px}.plant-name,.latin-name,.plant-line,.leaf-label,.leaf-meter,.seed-row,.card-actions,.care-note{grid-column:1/-1}.plant-name{font-size:34px}.plant-line{margin:15px 0 17px}.leaf-meter{margin-bottom:20px}.seed-row{margin-top:0}.card-actions{margin-top:18px}.care-note{font-size:10px}.sill{padding-top:25px}.album{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.album-slot{min-height:155px}.album-art{height:105px}.sill-heading h2{font-size:17px}.footer{align-items:start}.footer p{max-width:230px}.footer .signature{font-size:12px}.water-drops{bottom:250px}.sill-progress{font-size:10px}}
-
-/* A little weather, a visitor, and an evening with no clock to keep. */
-.weather-badge{position:absolute;right:25px;top:58px;font-size:10px;color:#a8bd9b;z-index:3}.weather-badge b{font-weight:400;color:#d2dfbc;margin-left:7px}.weather-layer{position:absolute;inset:60px 0 145px;pointer-events:none;overflow:hidden;opacity:0}.weather-layer i{position:absolute;left:calc(13% + var(--n)*14%);top:-22px;width:1px;height:18px;background:#bed3cf66;animation:window-rain 2.8s linear infinite;animation-delay:calc(var(--n)*-.43s)}.scene[data-weather="rain"] .weather-layer{opacity:.7}.scene[data-weather="mist"]:after{content:"";position:absolute;inset:80px 0 120px;pointer-events:none;background:radial-gradient(ellipse at 30% 65%,#d2ddcc17,transparent 65%);filter:blur(12px)}.scene[data-weather="breeze"] .plant-sway{animation:soft-breeze 6s ease-in-out infinite}.scene.watered .plant-sway{animation:sway 1.25s ease-in-out}.scene.night-room{background:radial-gradient(ellipse at 75% 20%,#bca36a19,transparent 52%),linear-gradient(145deg,#15272a,#0b171b)}.night-room .glass-lines{color:#769c9d;opacity:.26}.night-room .room-light{background:#e8d399;box-shadow:0 0 35px #e3bd6359}.night-room .room-stars{opacity:.9}.night-room .room-stars i{width:4px;height:4px;background:#deebaf;box-shadow:0 0 10px #deebaf;animation:firefly 6s ease-in-out infinite}.night-room .room-stars i:nth-child(2){animation-delay:-2s}.night-room .room-stars i:nth-child(3){animation-delay:-4s}.night-room .room-stars i:nth-child(4){animation-delay:-1s}.visitor-button{position:absolute;z-index:4;right:28px;bottom:28px;width:78px;height:69px;border:0;border-radius:16px;background:transparent;padding:0;color:#d6ddbc;transform:rotate(-4deg);transition:transform .2s,background .2s}.visitor-button svg{width:100%;height:100%}.visitor-button:hover,.visitor-button:focus-visible{transform:translateY(-4px) rotate(2deg);background:#bbd09b12}.visitor-button[data-kind="moth"]{right:17%;top:100px;bottom:auto;transform:rotate(12deg)}.visitor-button[data-kind="ladybird"]{left:20px;right:auto;bottom:30px;width:61px;height:55px}.visitor-button[data-kind="cat"]{right:21px;bottom:30px;width:88px;height:74px}.visitor-button.greeted:after{content:"";position:absolute;right:9px;top:9px;width:5px;height:5px;border-radius:50%;background:#d7dfa3;box-shadow:0 0 9px #d7dfa333}.scene-bottom{right:123px}.guestbook{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;border:1px solid #354733;border-radius:15px;margin-top:17px;padding:20px 23px;background:#16261b}.guest-kicker{font:9px ui-monospace,SFMono-Regular,monospace;letter-spacing:2px;color:#839c77;margin:0 0 10px}.guestbook h2{font-size:15px;font-weight:400;letter-spacing:.5px;margin:0 0 9px;color:#d9e1c5}.visitor-note{font-size:12px;line-height:1.9;color:#aabb9b;margin:0;min-height:45px}.visitor-note.revealed{color:#d9dfbb}.guest-stamps{display:flex;gap:9px;justify-content:flex-end;align-items:center}.guest-stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;width:69px;min-height:91px;gap:4px;border:1px dashed #3e5138;border-radius:10px;background:transparent;color:#819075;font-size:9px;padding:4px}.guest-stamp svg{width:52px;height:42px;opacity:.22}.guest-stamp.found{border-style:solid;border-color:#657853;color:#d1d9ba;background:#263822}.guest-stamp.found svg{opacity:1}.guest-stamp.found:hover{background:#30452a}.guest-progress{font-size:10px;color:#97ad87;text-align:right;margin:9px 0 0}.guest-hint{font-size:10px;color:#829477;margin:10px 0 0}.discovery-btn[aria-pressed="true"]{color:#eddaa2;background:#29392a}
-@keyframes window-rain{to{transform:translate(-55px,290px)}}@keyframes soft-breeze{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(2deg)}}@keyframes firefly{0%,100%{transform:translate(0,0);opacity:.3}50%{transform:translate(14px,-12px);opacity:1}}
-@media(max-width:900px){.guestbook{grid-template-columns:1fr 1fr;padding:19px;gap:14px}.guest-stamps{gap:6px}.guest-stamp{width:58px;font-size:8px}.weather-badge{right:20px}}
-@media(max-width:700px){.guestbook{grid-template-columns:1fr;gap:17px;padding:20px}.guest-stamps{justify-content:space-between;gap:9px}.guest-stamp{width:100%;font-size:10px;min-height:90px}.guest-progress{text-align:left}.visitor-note{min-height:0}.weather-badge{top:51px;font-size:9px}.visitor-button[data-kind="moth"]{top:82px;right:13%}.visitor-button{right:17px;bottom:27px;width:67px;height:57px}.visitor-button[data-kind="cat"]{right:15px;bottom:25px;width:74px;height:65px}.visitor-button[data-kind="ladybird"]{left:12px;bottom:27px;width:55px;height:47px}.scene-bottom{right:100px;gap:8px;letter-spacing:.5px}.scene-bottom span:last-child{font-size:7px}}
-
-
-.treasure{margin-top:17px;padding:24px;border:1px solid #536747;border-radius:17px;background:linear-gradient(125deg,#233a26,#18291d);display:grid;grid-template-columns:minmax(160px,.8fr) minmax(0,2fr);gap:24px}.treasure-heading .eyebrow{margin-bottom:10px}.treasure-heading h2{font-size:18px;font-weight:500;margin:0 0 9px;color:#e5ead3}.treasure-heading p{font-size:11px;line-height:1.8;color:#9fb294;margin:0}.treasure-progress{display:inline-block;margin-top:13px;color:#cbdcad;font:11px ui-monospace,monospace}.treasure-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.treasure-task{min-width:0;min-height:117px;border:1px solid #435c3d;border-radius:12px;padding:13px;background:#10201788;display:flex;flex-direction:column;align-items:flex-start;gap:9px}.treasure-task.done{background:#344a2e;border-color:#829863}.treasure-number{font:9px ui-monospace,monospace;color:#adc799;letter-spacing:1px}.treasure-label{font-size:12px;line-height:1.5;color:#e2e9d2}.treasure-hint{margin-top:auto;padding:4px 0;border:0;background:none;color:#b4cda1;font-size:11px;text-align:left}.treasure-hint:hover{color:#fff}.treasure-hint:disabled{opacity:1;color:#d4dfb9}.treasure-result{grid-column:1/-1;min-height:1.6em;font-size:11px;color:#b8cba8;margin:0;line-height:1.7}@media(max-width:700px){.treasure{grid-template-columns:1fr;gap:16px;padding:20px}.treasure-list{gap:7px}.treasure-task{padding:10px;min-height:126px}.treasure-label{font-size:11px}.treasure-hint{min-height:35px}.treasure-result{grid-column:auto}}
-
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.water-drops{display:none}}
+:root {
+  --bg: #faf6ec;
+  --paper: #fffdf6;
+  --text: #39483b;
+  --soft: #75806e;
+  --line: #dedecb;
+  --green: #4e7353;
+  --ink: #39483b;
+  --terra: #c38b72;
+  font-family: ui-rounded, "Hiragino Maru Gothic ProN", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background-image: radial-gradient(#c5cbb744 .8px, transparent .8px); background-size: 18px 18px; }
+button, input { font: inherit; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; touch-action: manipulation; }
+button:disabled { cursor: default; opacity: .45; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #678a64; outline-offset: 4px; }
+a { color: inherit; }
+button svg { pointer-events: none; }
+[hidden] { display: none !important; }
+.shell { max-width: 1236px; padding: 0 38px 28px; margin: auto; }
+.topbar { display: flex; justify-content: space-between; align-items: center; min-height: 96px; gap: 24px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand-mark { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 17px 17px 13px 13px; color: #567755; background: #e8edd9; border: 1.5px solid #bbc9a9; transform: rotate(-7deg); }
+.brand-title { font-size: 19px; font-weight: 700; letter-spacing: 2px; }
+.brand-sub { display: block; color: #6b775f; font-size: 9px; letter-spacing: 2px; margin-top: 3px; }
+.top-links { display: flex; align-items: center; gap: 24px; font-size: 13px; }
+.top-links a { text-decoration: none; }
+.top-links a:hover { color: #45754f; }
+.sill-link { display: flex; align-items: center; gap: 9px; padding: 9px 13px; border: 1px solid #ccd3bb; border-radius: 24px; background: #fffdf5; min-height: 42px; }
+.sill-link b { display: grid; place-items: center; font-size: 11px; min-width: 22px; height: 22px; background: #e7edd9; border-radius: 50%; font-weight: 600; }
+.intro { position: relative; padding: 43px 0 36px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.eyebrow { color: #718566; font-size: 10px; letter-spacing: 2px; font-weight: 600; margin: 0 0 16px; }
+.intro h1 { font-size: clamp(30px, 3.2vw, 43px); font-weight: 700; line-height: 1.55; letter-spacing: 1px; margin: 0 0 12px; }
+.intro h1 em { font-style: normal; position: relative; color: #557a54; white-space: nowrap; }
+.intro h1 em:after { content: ""; position: absolute; left: 0; right: -4px; bottom: -3px; height: 9px; border: solid #c4d4a6; border-width: 0 0 3px; border-radius: 0 0 50% 40%; transform: rotate(-2deg); }
+.intro p { margin: 0; color: #65725e; font-size: 14px; line-height: 1.9; }
+.intro-doodle { display: flex; align-items: center; gap: 18px; padding-right: 24px; transform: rotate(5deg); }
+.intro-doodle svg { width: 110px; height: 116px; overflow: visible; }
+.local-note { font-size: 12px; color: #6d765e; line-height: 1.9; max-width: 100px; }
+.date-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 17px; margin-bottom: 20px; background: #f0f0e2; border: 1px solid #dce0c9; border-radius: 18px; }
+.date-group { display: flex; align-items: center; gap: 9px; }
+.date-label { font-size: 12px; color: #6b785e; margin-right: 8px; }
+.date-nav { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #d4dcc2; border-radius: 12px; background: #fffdf6; color: #597251; transition: transform .18s, background .18s; }
+.date-nav:hover { background: #e3eacb; transform: translateY(-2px); }
+.date-input { border: 0; background: transparent; color: #445d40; font: 14px ui-monospace, monospace; padding: 7px 3px; width: 150px; min-width: 0; }
+.text-button { border: 0; border-radius: 11px; padding: 9px 14px; color: #5c7251; background: #e1e8cf; font-size: 12px; min-height: 38px; }
+.text-button:hover { background: #d6e0c1; }
+.day-label { font-size: 12px; color: #657159; }
+.main-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, .95fr); align-items: stretch; gap: 25px; }
+.scene { min-height: 480px; position: relative; overflow: hidden; border: 1.5px solid #c4ccb2; border-radius: 30px; background: #e7ecdc; isolation: isolate; transition: background .4s; }
+.glass-lines { position: absolute; inset: 0; width: 100%; height: 100%; color: #b8c4a5; }
+.scene-label { position: absolute; top: 24px; left: 26px; font-size: 11px; letter-spacing: 1px; color: #536c49; padding: 6px 10px; border: 1px solid #cbd4b9; border-radius: 20px; background: #f9faebc9; z-index: 2; }
+.room-badge { position: absolute; right: 25px; top: 25px; display: flex; align-items: center; gap: 7px; font-size: 11px; color: #526748; z-index: 2; }
+.room-light { width: 19px; height: 19px; border-radius: 50%; background: #e7b96b; border: 1.5px solid #d2ac6b; box-shadow: 0 0 0 5px #f2d99c44; }
+.weather-badge { position: absolute; right: 25px; top: 62px; color: #596e4f; font-size: 10px; z-index: 2; }
+.weather-badge b { font-weight: 500; color: #4b6748; margin-left: 6px; }
+.scene-sticker { position: absolute; top: 105px; left: 30px; font: italic 14px Georgia, serif; line-height: 1.6; color: #839077; transform: rotate(-12deg); z-index: 1; }
+.bench { position: absolute; left: 6%; right: 6%; bottom: 89px; height: 17px; border: 1.5px solid #ae9477; border-radius: 5px; background: #dac5a6; box-shadow: 0 5px 0 #c4ad8d; }
+.bench:before, .bench:after { content: ""; position: absolute; top: 20px; width: 12px; height: 23px; background: #c4ad8d; border: 1px solid #ae9477; border-top: 0; border-radius: 0 0 4px 4px; }
+.bench:before { left: 24px; }
+.bench:after { right: 24px; }
+.floor-glow { position: absolute; left: 15%; right: 15%; bottom: 69px; height: 28px; border-radius: 50%; background: #afbaa537; filter: blur(7px); }
+.plant-display { position: absolute; width: 355px; height: 379px; left: 50%; bottom: 58px; transform: translateX(-50%); z-index: 2; pointer-events: none; }
+.plant-display svg { width: 100%; height: 100%; overflow: visible; }
+.plant-sway { transform-box: view-box; transform-origin: 150px 228px; }
+.neighbor { position: absolute; width: 99px; height: 106px; bottom: 88px; border: 0; background: transparent; color: #526d45; padding: 0; z-index: 1; transition: transform .2s; }
+.neighbor:hover { transform: translateY(-5px) rotate(-3deg); }
+.neighbor svg { width: 100%; height: 100%; overflow: visible; }
+.neighbor.left { left: 6%; transform: rotate(-5deg); }
+.neighbor.right { right: 6%; transform: rotate(5deg); }
+.neighbor-caption { position: absolute; bottom: -26px; left: 0; right: 0; font-size: 10px; }
+.scene-bottom { position: absolute; left: 25px; right: 123px; bottom: 22px; display: flex; align-items: center; gap: 15px; justify-content: space-between; color: #5d7051; font-size: 9px; letter-spacing: .7px; }
+.scene-bottom span:first-child { font: 11px ui-monospace, monospace; }
+.room-stars { position: absolute; inset: 0; pointer-events: none; opacity: .6; }
+.room-stars i { position: absolute; width: 5px; height: 5px; background: #faf2bc; border-radius: 2px; transform: rotate(45deg); }
+.room-stars i:nth-child(1) { top: 25%; left: 31%; }
+.room-stars i:nth-child(2) { top: 37%; left: 74%; width: 4px; height: 4px; }
+.room-stars i:nth-child(3) { top: 19%; left: 59%; }
+.room-stars i:nth-child(4) { top: 48%; left: 20%; width: 4px; height: 4px; }
+.water-drops { position: absolute; left: 50%; bottom: 300px; width: 120px; height: 72px; transform: translateX(-50%); pointer-events: none; z-index: 3; opacity: 0; }
+.water-drops i { position: absolute; top: 0; width: 7px; height: 13px; border-radius: 60% 40% 60% 40%; transform: rotate(25deg); background: #84b8be; }
+.water-drops i:nth-child(1) { left: 22px; }
+.water-drops i:nth-child(2) { left: 58px; animation-delay: .12s; }
+.water-drops i:nth-child(3) { left: 93px; animation-delay: .23s; }
+.watered .water-drops { opacity: 1; }
+.watered .water-drops i { animation: drop .75s ease-out both; }
+.scene.watered .plant-sway { animation: sway 1.25s ease-in-out; }
+.weather-layer { position: absolute; inset: 65px 13% 150px; overflow: hidden; pointer-events: none; opacity: 0; }
+.weather-layer i { position: absolute; left: calc(9% + var(--n)*16%); top: -22px; width: 2px; height: 15px; border-radius: 4px; background: #8aa8ad70; animation: window-rain 3.2s linear infinite; animation-delay: calc(var(--n)*-.53s); }
+.scene[data-weather="rain"] .weather-layer { opacity: .65; }
+.scene[data-weather="breeze"] .plant-sway { animation: soft-breeze 6s ease-in-out infinite; }
+.scene[data-weather="mist"]:after { content: ""; position: absolute; inset: 90px 0 125px; background: radial-gradient(ellipse at 30% 65%, #ffffff66, transparent 65%); pointer-events: none; }
+.scene.moonlight { background: #e8e5ee; border-color: #c7c1d3; }
+.moonlight .glass-lines { filter: hue-rotate(55deg) saturate(.65); }
+.moonlight .room-light { background: #f8f0d7; border-color: #b9b2cb; box-shadow: inset -6px -3px 0 #c2b6d1; }
+.visitor-button { position: absolute; right: 25px; bottom: 23px; width: 78px; height: 68px; padding: 0; border: 0; border-radius: 18px; background: transparent; z-index: 4; transform: rotate(-5deg); transition: transform .2s; }
+.visitor-button svg { width: 100%; height: 100%; }
+.visitor-button:hover, .visitor-button:focus-visible { transform: translateY(-5px) rotate(4deg); }
+.visitor-button[data-kind="moth"] { right: 15%; top: 110px; bottom: auto; transform: rotate(12deg); }
+.visitor-button[data-kind="ladybird"] { left: 20px; right: auto; bottom: 26px; width: 64px; height: 57px; }
+.visitor-button[data-kind="cat"] { right: 23px; bottom: 24px; width: 86px; height: 75px; }
+.visitor-button.greeted:after { content: ""; position: absolute; right: 7px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: #9bad74; border: 1px solid #f9f7df; }
+.specimen { position: relative; background: #fffdf4; color: var(--ink); border: 1.5px solid #e0d8c2; border-radius: 8px 24px 24px 24px; padding: 28px; box-shadow: 4px 5px 0 #e6dfcc66; display: flex; flex-direction: column; min-width: 0; }
+.specimen:before { content: ""; position: absolute; top: -10px; left: 36%; width: 92px; height: 23px; transform: rotate(-4deg); background: #d1dbbba6; border-left: 2px dotted #bdc8a76b; border-right: 2px dotted #bdc8a76b; }
+.specimen-kicker { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #6d7c5a; font-size: 10px; letter-spacing: 1px; margin-bottom: 23px; }
+.specimen-kicker span:last-child { color: #ab866e; border: 1px solid #e5d6bb; border-radius: 50%; padding: 6px; font: 9px ui-monospace, monospace; transform: rotate(9deg); }
+.variant { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border-radius: 20px; background: #e9efda; padding: 6px 11px; font-size: 10px; color: #688053; margin: 0 0 13px; }
+.variant-dot { width: 5px; height: 5px; background: #91aa6c; border-radius: 50%; }
+.variant.rare { background: #ede8f4; color: #897698; }
+.rare .variant-dot { background: #a590b5; }
+.plant-name { font-size: 43px; letter-spacing: 4px; font-weight: 700; line-height: 1.25; margin: 0 0 5px; }
+.latin-name { font: italic 17px Georgia, serif; color: #6d8058; margin: 0; }
+.plant-line { font-size: 12px; line-height: 1.9; color: #68725c; margin: 18px 0 23px; }
+.leaf-label { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: #68745a; }
+.leaf-label b { font-weight: 500; color: #536a42; font-variant-numeric: tabular-nums; }
+.leaf-meter { display: flex; gap: 10px; margin: 12px 0 23px; }
+.leaf-meter span { width: 29px; height: 14px; border-radius: 80% 4px 80% 4px; background: #e9e9da; transform: rotate(-12deg); }
+.leaf-meter span.filled { background: #a3bc81; }
+.rare-card .leaf-meter span.filled { background: #b7a4c8; }
+.seed-row { margin-top: auto; padding-top: 16px; border-top: 1px dashed #dddcc7; display: flex; flex-direction: column; gap: 6px; }
+.seed-row span { color: #6d755e; font-size: 10px; }
+.seed-id { color: #5d704f; font: 10px ui-monospace, monospace; overflow-wrap: anywhere; }
+.card-actions { display: grid; grid-template-columns: 1fr 1.1fr; gap: 9px; margin-top: 20px; }
+.card-action { display: flex; justify-content: center; align-items: center; gap: 6px; min-height: 46px; border: 1px solid #d4dfcf; background: #edf2e7; color: #55754c; padding: 11px 7px; font-size: 12px; border-radius: 13px; transition: transform .18s, box-shadow .18s; }
+.card-action svg { width: 16px; height: 18px; }
+.card-action.primary { color: #fffdf0; border-color: #658257; background: #6c8c5d; box-shadow: 0 3px 0 #526e45; }
+.card-action:hover { transform: translateY(-2px); }
+.card-action:active { transform: translateY(1px); box-shadow: none; }
+.card-action.saved { background: #e3ebd0; color: #587348; border-color: #bccdaa; }
+.care-note { font-size: 10px; line-height: 1.8; color: #67715b; text-align: center; margin: 13px 0 0; }
+.discovery-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 11px; margin: 22px 0 10px; }
+.discovery-btn { display: flex; align-items: center; gap: 7px; min-height: 43px; color: #6e785f; background: #f6f1e5; padding: 9px 16px; border: 1px solid #e1dfcb; border-radius: 24px; font-size: 12px; transition: background .2s, transform .2s; }
+.discovery-btn:hover { background: #e9eedc; transform: translateY(-2px); }
+.discovery-btn[aria-pressed="true"] { background: #e6e0ed; color: #7d6b90; border-color: #cfc4dc; }
+.discovery-divider { display: none; }
+.notice { text-align: center; color: #6f785f; font-size: 11px; line-height: 1.9; min-height: 25px; margin: 0 0 28px; }
+.notice.error { color: #a4664b; }
+.little-corners { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.guestbook, .treasure { border: 1px solid #e2d9c8; border-radius: 22px; min-width: 0; padding: 24px; position: relative; }
+.guestbook { background: #f8f0e4; }
+.section-kicker, .guest-kicker { color: #7b6853; font-size: 9px; letter-spacing: 1.6px; margin: 0 0 10px; }
+.section-title, .guestbook h2, .treasure h2 { font-size: 19px; font-weight: 650; margin: 0 0 9px; letter-spacing: .4px; }
+.visitor-note { font-size: 12px; line-height: 1.9; color: #786c58; min-height: 44px; margin: 0; }
+.visitor-note.revealed { color: #786654; }
+.guest-hint { font-size: 10px; color: #7c725e; margin: 9px 0 19px; }
+.guest-stamps { display: flex; justify-content: space-between; gap: 11px; }
+.guest-stamp { width: 25%; min-width: 0; min-height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: #fffbef; border: 1.5px dashed #d8cbb1; border-radius: 12px; color: #76745d; padding: 7px 3px; font-size: 9px; transform: rotate(-3deg); }
+.guest-stamp:nth-child(2n) { transform: rotate(3deg); }
+.guest-stamp svg { width: 58px; height: 47px; opacity: .4; }
+.guest-stamp.found { border-style: solid; background: #edf0dd; color: #6b8050; border-color: #b7c69b; }
+.guest-stamp.found svg { opacity: 1; }
+.guest-stamp.found:hover { transform: rotate(0) translateY(-3px); }
+.guest-progress { font-size: 10px; color: #796d58; line-height: 1.8; margin: 16px 0 0; }
+.treasure { background: #eef0e0; border-color: #d8ddc5; }
+.treasure .eyebrow { font-size: 9px; letter-spacing: 1.6px; color: #687751; margin-bottom: 10px; }
+.treasure-heading { position: relative; padding-bottom: 18px; }
+.treasure-heading h2 { padding-right: 70px; }
+.treasure-heading p { font-size: 11px; color: #6d7859; line-height: 1.8; margin: 0; }
+.treasure-progress { display: block; color: #566e39; background: #e0e7ca; font-size: 10px; padding: 6px 9px; border-radius: 10px; position: absolute; right: 0; top: 25px; transform: rotate(4deg); }
+.treasure-heading p:last-child { font-size: 9px; margin-top: 3px; }
+.treasure-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.treasure-task { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; min-height: 123px; padding: 13px 11px; gap: 11px; border: 1px solid #d8dcca; border-radius: 12px; background: #fffdf1; box-shadow: 0 3px 0 #dfe4cf; }
+.treasure-task:nth-child(2) { background: #f8ece4; border-color: #e7d9ca; box-shadow: 0 3px 0 #e7ddcd; }
+.treasure-task:nth-child(3) { background: #efedf5; border-color: #ddd7e6; box-shadow: 0 3px 0 #dcd8e4; }
+.treasure-task.done { background: #dfe8cc; border-color: #b7c79d; box-shadow: 0 3px 0 #c8d6b3; }
+.treasure-number { font: 9px ui-monospace, monospace; color: #75825b; letter-spacing: .7px; }
+.treasure-label { font-size: 12px; line-height: 1.6; color: #657258; }
+.treasure-hint { color: #5c7046; font-size: 10px; background: transparent; border: 0; margin-top: auto; padding: 7px 0; text-align: left; min-height: 32px; }
+.treasure-hint:hover { color: #3e613f; }
+.treasure-hint:disabled { opacity: 1; color: #738458; }
+.treasure-result { color: #6e7958; font-size: 10px; line-height: 1.8; margin: 15px 0 0; min-height: 1.8em; }
+.sill { scroll-margin-top: 28px; margin-top: 36px; padding-top: 29px; border-top: 1px dashed #cdd4ba; }
+.sill-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; margin-bottom: 22px; }
+.sill-heading h2 { margin: 0 0 8px; font-size: 23px; letter-spacing: 1px; font-weight: 650; }
+.sill-heading p { font-size: 12px; color: #68745a; margin: 0; }
+.sill-progress { font-size: 11px; color: #596f42; padding: 7px 11px; border-radius: 16px; background: #eaf0db; white-space: nowrap; }
+.album { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 13px; }
+.album-slot { position: relative; min-width: 0; min-height: 188px; padding: 13px 7px 17px; text-align: center; border: 1px dashed #d7ddc5; border-radius: 16px; background: #f4f4e8; color: #647653; }
+.album-slot:nth-child(3n+2) { background: #f8eee5; border-color: #e3d9c7; }
+.album-slot:nth-child(3n+3) { background: #f0edf3; border-color: #ddd7e4; }
+.album-slot.unlocked { border-style: solid; color: #617751; background: #edf1de; }
+.album-slot.unlocked:hover { transform: translateY(-4px) rotate(-2deg); }
+.album-art { height: 126px; max-width: 148px; margin: auto; opacity: .36; }
+.album-art svg { width: 100%; height: 100%; overflow: visible; }
+.unlocked .album-art { opacity: 1; }
+.album-name { font-size: 12px; }
+.album-sub { font-size: 9px; margin-top: 7px; color: #6f7b60; }
+.unlocked .album-sub { color: #617749; }
+.album-moon { position: absolute; top: 10px; right: 10px; color: #9c8eb5; }
+.saved-dates { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 17px; }
+.date-chip { border: 1px solid #d5ddc5; background: #fffdf6; color: #61764a; border-radius: 20px; padding: 8px 12px; font: 10px ui-monospace, monospace; min-height: 34px; }
+.date-chip.current { border-color: #a8bd8f; background: #e5edcf; color: #647c4c; }
+.empty-note { margin: 18px 0 0; color: #697758; font-size: 11px; line-height: 1.9; }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid #e1e2d0; margin-top: 32px; padding-top: 20px; font-size: 10px; line-height: 1.8; color: #68765d; }
+.footer p { margin: 0; }
+.footer .signature { color: #6b7f50; font: italic 14px Georgia, serif; white-space: nowrap; }
+.noscript { margin: 20px; padding: 20px; border: 1px solid #c4d2ae; border-radius: 14px; background: #e4ecd5; }
+.loading-note { text-align: center; padding-top: 140px; color: #8b9e76; font-size: 12px; }
+.scene.night-room { background: #3d4f51; border-color: #6e7c76; }
+.night-room .glass-lines { opacity: .35; }
+.night-room .scene-label { background: #4e605ce6; color: #d5dfc0; border-color: #718273; }
+.night-room .room-badge, .night-room .weather-badge, .night-room .weather-badge b { color: #e3dcb5; }
+.night-room .scene-sticker, .night-room .scene-bottom, .night-room .neighbor { color: #bdcbae; }
+.night-room .room-light { background: #f1d99e; border-color: #dec586; box-shadow: 0 0 25px #e5d09788; }
+.night-room .bench { background: #9f9d83; border-color: #81856f; box-shadow: 0 5px 0 #747f6a; }
+.night-room .room-stars { opacity: 1; }
+.night-room .room-stars i { background: #ebedbe; border-radius: 50%; box-shadow: 0 0 8px #f1eeba; animation: firefly 7s ease-in-out infinite; }
+.night-room .room-stars i:nth-child(2) { animation-delay: -2s; }
+.night-room .room-stars i:nth-child(3) { animation-delay: -4s; }
+.night-room .room-stars i:nth-child(4) { animation-delay: -1s; }
+@keyframes sway { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-5deg); } 42% { transform: rotate(4deg); } 65% { transform: rotate(-2deg); } 82% { transform: rotate(1deg); } }
+@keyframes drop { 0% { transform: translateY(-20px) rotate(25deg); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(85px) rotate(25deg); opacity: 0; } }
+@keyframes window-rain { to { transform: translate(-40px, 290px); } }
+@keyframes soft-breeze { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(2deg); } }
+@keyframes firefly { 0%,100% { transform: translate(0,0); opacity: .3; } 50% { transform: translate(14px,-12px); opacity: 1; } }
+@media (max-width: 1000px) {
+  .shell { padding: 0 25px 24px; }
+  .main-grid { grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr); gap: 19px; }
+  .scene { min-height: 479px; }
+  .plant-display { width: 272px; height: 290px; bottom: 68px; }
+  .neighbor { width: 82px; height: 87px; }
+  .neighbor.left { left: 4%; }
+  .neighbor.right { right: 4%; }
+  .specimen { padding: 25px 23px; }
+  .intro-doodle { padding-right: 0; }
+  .intro-doodle svg { width: 86px; }
+  .little-corners { gap: 19px; }
+  .guestbook, .treasure { padding: 21px; }
+  .treasure-list { gap: 7px; }
+  .treasure-task { padding: 11px 8px; }
+  .album { gap: 10px; }
+  .album-art { height: 109px; }
+  .album-slot { min-height: 172px; }
+}
+@media (max-width: 760px) {
+  .shell { padding: 0 20px 24px; }
+  .topbar { min-height: 83px; }
+  .brand-title { font-size: 17px; }
+  .brand-mark { width: 39px; height: 39px; }
+  .brand-sub { font-size: 8px; }
+  .top-links { gap: 12px; font-size: 12px; }
+  .nav-guest { display: none; }
+  .intro { padding: 32px 0 29px; }
+  .intro h1 { font-size: 31px; }
+  .intro p { font-size: 12px; }
+  .intro-doodle { display: none; }
+  .eyebrow { font-size: 9px; margin-bottom: 13px; }
+  .date-bar { padding: 10px; gap: 8px; flex-wrap: wrap; border-radius: 15px; }
+  .date-label { display: none; }
+  .date-group { gap: 4px; }
+  .date-nav { width: 44px; height: 44px; }
+  .date-input { width: 142px; font-size: 16px; }
+  .text-button { min-height: 44px; padding: 10px; }
+  .day-label { font-size: 10px; margin-left: auto; padding: 0 3px; }
+  .main-grid { grid-template-columns: 1fr; gap: 21px; }
+  .scene { min-height: 426px; border-radius: 25px; }
+  .plant-display { width: 285px; height: 304px; bottom: 59px; }
+  .bench { bottom: 82px; }
+  .neighbor { bottom: 81px; width: 87px; height: 93px; }
+  .neighbor.left { left: 4%; }
+  .neighbor.right { right: 4%; }
+  .scene-label { left: 20px; top: 21px; font-size: 10px; }
+  .room-badge { right: 20px; top: 25px; font-size: 10px; }
+  .weather-badge { right: 20px; top: 57px; font-size: 9px; }
+  .scene-sticker { left: 23px; top: 87px; font-size: 12px; }
+  .scene-bottom { left: 20px; bottom: 17px; right: 112px; font-size: 8px; }
+  .scene-bottom span:first-child { font-size: 10px; }
+  .visitor-button { right: 20px; bottom: 17px; width: 73px; height: 63px; }
+  .visitor-button[data-kind="moth"] { top: 90px; right: 11%; }
+  .visitor-button[data-kind="cat"] { bottom: 18px; right: 15px; width: 77px; height: 66px; }
+  .visitor-button[data-kind="ladybird"] { bottom: 19px; left: 13px; width: 58px; height: 52px; }
+  .water-drops { bottom: 270px; }
+  .specimen { padding: 25px; }
+  .specimen-kicker { margin-bottom: 18px; }
+  .plant-name { font-size: 38px; }
+  .plant-line { margin: 14px 0 20px; }
+  .seed-row { padding-top: 13px; }
+  .card-actions { margin-top: 17px; }
+  .card-action { min-height: 49px; font-size: 13px; }
+  .discovery-row { gap: 7px; margin-top: 21px; }
+  .discovery-btn { min-height: 44px; padding: 9px 12px; font-size: 11px; }
+  .notice { font-size: 10px; margin-bottom: 22px; }
+  .little-corners { grid-template-columns: 1fr; gap: 17px; }
+  .guestbook, .treasure { padding: 23px; }
+  .guest-stamps { gap: 10px; }
+  .guest-stamp { min-height: 96px; }
+  .guest-stamp svg { width: 57px; }
+  .treasure-list { gap: 8px; }
+  .treasure-task { min-height: 132px; padding: 12px 9px; }
+  .treasure-hint { min-height: 44px; }
+  .sill { margin-top: 27px; padding-top: 25px; }
+  .sill-heading { align-items: flex-start; gap: 12px; }
+  .sill-heading h2 { font-size: 21px; }
+  .sill-heading p { font-size: 11px; }
+  .sill-progress { font-size: 9px; padding: 7px 8px; }
+  .album { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .album-slot { min-height: 168px; padding: 10px 5px 15px; }
+  .album-art { height: 111px; }
+  .date-chip { min-height: 44px; }
+  .footer { align-items: flex-start; font-size: 9px; gap: 16px; }
+  .footer p { max-width: 220px; }
+  .footer .signature { font-size: 12px; }
+}
+@media (max-width: 390px) {
+  .shell { padding-left: 14px; padding-right: 14px; }
+  .intro h1 { font-size: 28px; }
+  .top-links { gap: 9px; }
+  .sill-link { padding: 8px 10px; font-size: 11px; }
+  .nav-play { display: none; }
+  .day-label { display: none; }
+  .scene { min-height: 395px; }
+  .plant-display { width: 259px; height: 276px; }
+  .neighbor { width: 70px; height: 75px; }
+  .scene-sticker { font-size: 10px; }
+  .scene-bottom span:last-child { display: none; }
+  .guestbook, .treasure { padding: 19px; }
+  .guest-stamp { font-size: 8px; }
+  .guest-stamp svg { width: 48px; }
+  .treasure-heading h2 { font-size: 17px; }
+  .treasure-task { padding: 11px 8px; }
+  .treasure-label { font-size: 11px; }
+  .treasure-hint { font-size: 9px; }
+  .sill-progress { max-width: 116px; white-space: normal; line-height: 1.6; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *:before, *:after { animation: none !important; transition: none !important; }
+}
 </style>
 </head>
 <body>
@@ -30,16 +349,16 @@
 <div class="shell" id="greenhouse-app">
   <header class="topbar">
     <a class="brand" href="#" aria-label="每日一盆，回到今天"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">每日一盆</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
-    <a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a>
+    <nav class="top-links" aria-label="温室导航"><a class="nav-guest" href="#guest-title">小客人</a><a class="nav-play" href="#treasure-title">去寻宝</a><a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a></nav>
   </header>
-  <div class="intro"><div><div class="eyebrow">SOME DAYS DESERVE A LITTLE GREEN.</div><h1>把日子，养得有一点不一样。</h1><p>进来坐坐。每个日期，都藏着一粒自己的种子。</p></div><span class="local-note">日历里的小温室</span></div>
-  <div class="date-bar"><div class="date-group"><span class="date-label">逛一天</span><button class="date-nav" id="previous-day" type="button" aria-label="前一天">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">植物日期</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="植物日期"></label><button class="date-nav" id="next-day" type="button" aria-label="后一天">→</button><button class="text-button" id="today-button" type="button">今天</button></div><span class="day-label" id="day-label"></span></div>
+  <div class="intro"><div><div class="eyebrow">A TINY GREENHOUSE, A LITTLE EVERY DAY.</div><h1>今天也要，<em>好好长大。</em></h1><p>翻一页日历，养一盆小小的开心。<br>每个平常日子，都有自己的绿意。</p></div><div class="intro-doodle" aria-hidden="true"><svg viewBox="0 0 110 116" fill="none"><path d="m23 12 64 5 5 88-70-5Z" fill="#f7ead0" stroke="#b7a884" stroke-width="1.6" stroke-linejoin="round"/><path d="m23 12 7 15 56 4 1-14M25 84l64 5" stroke="#c6b58e" stroke-width="1.4"/><rect x="35" y="42" width="42" height="34" rx="17" fill="#e4e9cd"/><path d="M56 70V50m0 11C42 61 42 50 44 49c9 0 13 5 12 12m0-7c0-9 7-12 13-11 0 8-5 13-13 13" fill="#9cb27e" stroke="#6d8c5a" stroke-width="1.4" stroke-linecap="round"/><path d="m8 32-5-3m96 28 7 1M94 6l4-5M5 76l5-4" stroke="#b9c59d" stroke-width="2" stroke-linecap="round"/><path d="m72 91 3 3 6-5" stroke="#b78f70" stroke-width="1.5" stroke-linecap="round"/></svg><span class="local-note">日历里的小温室<br>慢慢来，也很好。</span></div></div>
+  <div class="date-bar"><div class="date-group"><span class="date-label">翻到这一天</span><button class="date-nav" id="previous-day" type="button" aria-label="前一天">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">植物日期</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="植物日期"></label><button class="date-nav" id="next-day" type="button" aria-label="后一天">→</button><button class="text-button" id="today-button" type="button">今天</button></div><span class="day-label" id="day-label"></span></div>
   <main class="main-grid" aria-label="日期植物">
     <section class="scene" id="scene" aria-label="小温室里的植物">
-      <svg class="glass-lines" viewBox="0 0 720 510" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="currentColor"><path d="M-50 188 360 17 770 188" stroke-width="2"/><path d="M-50 206 360 35 770 206M0 185H720M0 222H720M110 132V415M235 79V415M360 35V415M485 79V415M610 132V415" stroke-width="1"/><path d="M35 390H685M35 410H685" stroke-width="1"/></g></svg>
+      <svg class="glass-lines" viewBox="0 0 720 510" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M0 400H720V510H0Z" fill="#dfdfc8"/><path d="M151 385V201a209 169 0 0 1 418 0v184Z" fill="#f7f8e9" stroke="#b7c4a6" stroke-width="10"/><path d="M167 381V201a193 153 0 0 1 386 0v180Z" fill="#d5e6d6"/><path d="M168 317c80-71 135-52 190-4 77-98 139-67 195-24v92H168Z" fill="#c4d8b5"/><path d="M168 355c99-61 156-11 220-24 79-15 117-15 165 17v33H168Z" fill="#d6e0bd"/><path d="M360 43V384M166 221H553" fill="none" stroke="#c3ceb3" stroke-width="7"/><path d="M151 388h418" stroke="#b3c29f" stroke-width="13" stroke-linecap="round"/><g fill="#f4f6e7"><path d="M210 153c-18-19 6-34 19-22 1-20 31-20 33-1 21-8 34 17 15 23Z"/><path d="M432 112c-13-17 8-31 21-18 3-20 31-19 33 0 21-6 31 17 14 18Z"/></g><g fill="none" stroke="#b6c3a5" stroke-width="1.5" stroke-linecap="round"><path d="M46 217v37m-8-29 8 7 8-7M660 225v33m-7-24 7 7 7-7"/><path d="M44 193c-6-7 4-12 7-5 6-3 9 5 3 7M654 204c-5-6 3-11 6-5 7-3 10 5 4 8"/></g></svg>
       <div class="weather-layer" aria-hidden="true"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i><i style="--n:5"></i></div>
       <div class="room-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <span class="scene-label">A QUIET PLACE TO GROW</span><span class="room-badge"><i class="room-light" aria-hidden="true"></i><span id="room-label">晨光温室</span></span>
+      <span class="scene-label">一日一盆 · 慢慢生长</span><span class="scene-sticker" aria-hidden="true">hello,<br>little leaf.</span><span class="room-badge"><i class="room-light" aria-hidden="true"></i><span id="room-label">晨光温室</span></span>
       <span class="weather-badge">日历天气 <b id="weather-label">—</b></span>
       <div class="floor-glow" aria-hidden="true"></div><div class="bench" aria-hidden="true"></div>
       <button class="neighbor left" id="neighbor-left" type="button" aria-label="看看前一天"><span id="neighbor-left-art"></span><span class="neighbor-caption">前一天</span></button>
@@ -50,27 +369,29 @@
       <div class="scene-bottom"><span id="scene-date">ONE DATE. ONE LITTLE PLANT.</span><span id="scene-note">TAKE YOUR TIME.</span></div>
     </section>
     <section class="specimen" id="specimen" aria-label="植物卡">
-      <div class="specimen-kicker"><span>BOTANICAL NOTES</span><span id="specimen-no">NO. 01</span></div>
+      <div class="specimen-kicker"><span>今日植物观察日记</span><span id="specimen-no">NO. 01</span></div>
       <div class="variant" id="variant"><i class="variant-dot" aria-hidden="true"></i><span id="variant-text">晨绿叶 · 常规款</span></div>
       <h2 class="plant-name" id="plant-name">—</h2><p class="latin-name" id="plant-english"></p><p class="plant-line" id="plant-line"></p>
       <div class="leaf-label"><span>这一天的叶片</span><b id="leaf-value">— / 6</b></div><div class="leaf-meter" id="leaf-meter" role="meter" aria-label="这一天的叶片" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
       <div class="seed-row"><span>这一盆的日历种子</span><code class="seed-id" id="seed-id">—</code></div>
-      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg aria-hidden="true" width="15" height="17" viewBox="0 0 16 20" fill="none"><path d="M8 1C6 5 2 9 2 13a6 6 0 0 0 12 0C14 9 10 5 8 1Z" stroke="currentColor" stroke-width="1.4"/></svg> 浇一点水</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">放上窗台 ＋</button></div>
-      <p class="care-note">浇水会让叶子轻轻晃动，种子和叶片数不会改变。</p>
+      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg aria-hidden="true" viewBox="0 0 18 22" fill="none"><path d="M9 2C7 6 3 10 3 14a6 6 0 0 0 12 0c0-4-4-8-6-12Z" fill="#a9cbd1" stroke="#789ba4" stroke-width="1.3"/><path d="M6 14c0 2 1 3 3 3" stroke="#f5ffff" stroke-width="1.5" stroke-linecap="round"/></svg> 浇一点水</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">放上窗台 ＋</button></div>
+      <p class="care-note">浇一点水，让小叶子和你打个招呼。</p>
     </section>
   </main>
+  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="night-button" type="button" aria-pressed="false"><span aria-hidden="true">✧</span><span id="night-text">等到天黑</span></button></div>
+  <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
+  <div class="little-corners">
   <section class="guestbook" aria-labelledby="guest-title">
-    <div><p class="guest-kicker">LITTLE VISITORS, LITTLE LETTERS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
+    <div><p class="guest-kicker">POSTCARDS FROM LITTLE FRIENDS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
     <div><div class="guest-stamps" id="guest-stamps" aria-label="四位温室小客人的印章"></div><p class="guest-progress" id="guest-progress">相遇 0 / 4 · 点击亮起的印章，可以重访那一天。</p></div>
   </section>
   <section class="treasure" aria-labelledby="treasure-title">
-    <div class="treasure-heading"><div class="eyebrow">A LITTLE SCAVENGER HUNT</div><h2 id="treasure-title">今天，去日历里寻宝</h2><p>翻翻不同的日子，找齐三件温室里的小事。</p><span class="treasure-progress" id="treasure-progress">0 / 3 已发现</span><p>进度留在当前页面，刷新后重新开始。</p></div>
+    <div class="treasure-heading"><div class="eyebrow">THREE LITTLE THINGS TO FIND</div><h2 id="treasure-title">今天，去日历里寻宝</h2><p>翻翻不同的日子，找齐三件温室里的小事。</p><span class="treasure-progress" id="treasure-progress">0 / 3 已发现</span><p>进度留在当前页面，刷新后重新开始。</p></div>
     <div><div class="treasure-list" id="treasure-list"></div><p class="treasure-result" id="treasure-result" role="status" aria-live="polite">挑一张线索，去日历里走走吧。</p></div>
   </section>
-  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="night-button" type="button" aria-pressed="false"><span aria-hidden="true">✧</span><span id="night-text">等到天黑</span></button></div>
-  <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
+  </div>
   <section class="sill" id="window-sill" aria-labelledby="sill-title">
-    <div class="sill-heading"><div><h2 id="sill-title">我的小窗台</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span></div>
+    <div class="sill-heading"><div><p class="section-kicker">MY LITTLE WINDOWSILL</p><h2 id="sill-title">把喜欢的日子，留一盆。</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span></div>
     <div class="album" id="album"></div><div class="saved-dates" id="saved-dates" aria-label="已收藏的日期"></div><p class="empty-note" id="empty-note">窗台还空着。收藏一盆薄荷，或者去日历里寻找一片月光。</p>
   </section>
   <footer class="footer"><p id="storage-note">收藏与访客印章只保存在当前浏览器，不会上传。</p><a class="signature" href="/">← 回到博客</a></footer>
@@ -294,12 +615,18 @@
     var species = typeof card.species === 'string' && card.species.length < 100 ? card.species : names[kind];
     var label = escapeText(species + ' · ' + (moon ? '月光叶' : '晨绿叶'));
     var p = moon ? {
-      stem: '#a9bd8c', dark: '#a5be94', leaf: '#cad8ae', light: '#e2e7c1', vein: '#f0efd2',
-      flower: '#efebca', center: '#c4b77e', soil: '#454431', clay: '#ae9670', rim: '#d6c29b'
+      stem: '#81908e', dark: '#9caaa1', leaf: '#c2cdbb', light: '#e0e4c4', vein: '#f8f2d9',
+      flower: '#e8dfb6', center: '#f5e8b8', soil: '#887666', clay: '#ebe4f0', rim: '#f7eff4', ink: '#6d776a'
     } : {
-      stem: '#6f9657', dark: '#4e8450', leaf: '#83ad66', light: '#b1ca81', vein: '#c4d793',
-      flower: '#d9b86a', center: '#94713f', soil: '#423a2b', clay: '#b17b56', rim: '#d5a378'
+      stem: '#6c8762', dark: '#89a778', leaf: '#aac58d', light: '#cad9a4', vein: '#edf2d2',
+      flower: '#eac776', center: '#f6e4a7', soil: '#93816a', clay: '#f4d2bf', rim: '#ffead8', ink: '#6c785c'
     };
+
+    function face(x, y, scale, sleepy) {
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + scale + ')" fill="none" stroke="#725d50" stroke-width="2.4" stroke-linecap="round">' +
+        (sleepy ? '<path d="M-12-1q3 4 6 0m12 0q3 4 6 0"/>' : '<path d="M-9-2v3m18-3v3"/>') +
+        '<path d="M-3 5q3 3 6 0" stroke-width="1.7"/><g fill="#df9e94" stroke="none" opacity=".7"><ellipse cx="-15" cy="5" rx="4" ry="2.2"/><ellipse cx="15" cy="5" rx="4" ry="2.2"/></g></g>';
+    }
 
     function stem(d, width) {
       return '<path d="' + d + '" fill="none" stroke="' + p.stem + '" stroke-width="' + (width || 3) + '" stroke-linecap="round" stroke-linejoin="round"/>';
@@ -307,12 +634,12 @@
 
     function leaf(x, y, scale, angle, fill, mirrored) {
       return '<g transform="translate(' + x + ' ' + y + ') rotate(' + angle + ') scale(' + (mirrored ? -scale : scale) + ' ' + scale + ')">' +
-        '<path d="M0 0C-8-19-26-23-37-12C-36 3-17 10 0 0Z" fill="' + fill + '"/>' +
+        '<path d="M0 0C-8-19-26-23-37-12C-36 3-17 10 0 0Z" fill="' + fill + '" stroke="' + p.ink + '" stroke-width="1.5"/>' +
         (mini ? '' : '<path d="M-3-1Q-18-9-32-11M-15-6L-19-15M-23-9L-30-4" fill="none" stroke="' + p.vein + '" stroke-opacity=".38" stroke-width=".8" stroke-linecap="round"/>') + '</g>';
     }
 
     function sparkle(x, y, size) {
-      return '<path d="M' + x + ' ' + (y - size) + 'Q' + x + ' ' + y + ' ' + (x + size) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + size) + 'Q' + x + ' ' + y + ' ' + (x - size) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - size) + 'Z" fill="#e7e8bc"/>';
+      return '<path d="M' + x + ' ' + (y - size) + 'Q' + x + ' ' + y + ' ' + (x + size) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + size) + 'Q' + x + ' ' + y + ' ' + (x - size) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - size) + 'Z" fill="#d6b56b"/>';
     }
 
     function mint() {
@@ -326,7 +653,7 @@
     function cloverHead(x, y, scale, fill) {
       var petals = '';
       for (var i = 0; i < 3; i++) {
-        petals += '<g transform="rotate(' + (i * 120) + ')"><path d="M0 2C-19-1-27-20-15-27C-7-32-1-26 0-21C4-31 14-30 20-23C30-10 16 1 0 2Z" fill="' + fill + '"/>' +
+        petals += '<g transform="rotate(' + (i * 120) + ')"><path d="M0 2C-19-1-27-20-15-27C-7-32-1-26 0-21C4-31 14-30 20-23C30-10 16 1 0 2Z" fill="' + fill + '" stroke="' + p.ink + '" stroke-width="1.5"/>' +
           (mini ? '' : '<path d="M0-2 0-19" stroke="' + p.vein + '" stroke-width="1" stroke-opacity=".42"/>') + '</g>';
       }
       return '<g transform="translate(' + x + ' ' + y + ') scale(' + scale + ')">' + petals + '</g>';
@@ -338,9 +665,9 @@
     }
 
     function cactus() {
-      var art = '<path d="M134 191H108Q78 191 78 161V145Q78 132 91 132Q104 132 104 145V159Q104 169 115 169H134Z" fill="' + p.dark + '"/>' +
-        '<path d="M170 164H187Q217 164 217 134V119Q217 106 204 106Q191 106 191 119V132Q191 141 180 141H170Z" fill="' + p.leaf + '"/>' +
-        '<rect x="127" y="80" width="47" height="151" rx="23.5" fill="' + p.leaf + '"/>' +
+      var art = '<path d="M134 191H108Q78 191 78 161V145Q78 132 91 132Q104 132 104 145V159Q104 169 115 169H134Z" fill="' + p.dark + '" stroke="' + p.ink + '" stroke-width="1.8"/>' +
+        '<path d="M170 164H187Q217 164 217 134V119Q217 106 204 106Q191 106 191 119V132Q191 141 180 141H170Z" fill="' + p.leaf + '" stroke="' + p.ink + '" stroke-width="1.8"/>' +
+        '<rect x="127" y="80" width="47" height="151" rx="23.5" fill="' + p.leaf + '" stroke="' + p.ink + '" stroke-width="1.8"/>' +
         '<path d="M143 91Q138 142 140 218M158 91Q165 146 160 220" fill="none" stroke="' + p.light + '" stroke-width="2.2" stroke-opacity=".57"/>';
       if (!mini) {
         for (var y = 112; y < 216; y += 22) {
@@ -348,7 +675,7 @@
         }
         art += '<path d="M86 147h9m-4-4v8M199 120h9m-4-4v8" stroke="' + p.vein + '" stroke-width="1" stroke-opacity=".7"/>';
       }
-      return art + '<g transform="translate(151 81)"><ellipse cy="-7" rx="5" ry="8" fill="' + (moon ? '#e8e3be' : '#dbada1') + '"/><ellipse cx="-6" cy="-2" rx="7" ry="4" fill="' + (moon ? '#efebca' : '#e7bcad') + '"/><ellipse cx="6" cy="-2" rx="7" ry="4" fill="' + (moon ? '#efebca' : '#e7bcad') + '"/><circle r="3" fill="' + p.center + '"/></g>';
+      return art + face(151, 136, .7, false) + '<g transform="translate(151 81)"><ellipse cy="-7" rx="5" ry="8" fill="' + (moon ? '#ddd5eb' : '#e8acb6') + '"/><ellipse cx="-6" cy="-2" rx="7" ry="4" fill="' + (moon ? '#eee6f2' : '#f3c7cc') + '"/><ellipse cx="6" cy="-2" rx="7" ry="4" fill="' + (moon ? '#eee6f2' : '#f3c7cc') + '"/><circle r="3" fill="' + p.center + '"/></g>';
     }
 
     function sunflower() {
@@ -356,21 +683,13 @@
       for (var i = 0; i < 12; i++) {
         petals += '<ellipse cx="150" cy="69" rx="9.5" ry="20" fill="' + (i % 2 ? p.flower : (moon ? '#e5e4bb' : '#e4c579')) + '" transform="rotate(' + (i * 30) + ' 150 100)"/>';
       }
-      var seeds = '';
-      if (!mini) {
-        for (var j = 0; j < 8; j++) {
-          var a = j * Math.PI / 4;
-          seeds += '<circle cx="' + (150 + Math.cos(a) * 13).toFixed(2) + '" cy="' + (100 + Math.sin(a) * 13).toFixed(2) + '" r="1.5" fill="#d2b77a" opacity=".7"/>';
-        }
-      }
       return stem('M151 229C153 188 145 145 150 102', 4) +
         leaf(150, 190, 1.37, -12, p.dark) + leaf(150, 165, 1.24, -2, p.leaf, true) + petals +
-        '<circle cx="150" cy="100" r="24" fill="' + p.center + '"/><circle cx="150" cy="100" r="17" fill="' + (moon ? '#9b996b' : '#685634') + '"/>' + seeds +
-        '<circle cx="150" cy="100" r="5" fill="' + p.center + '"/>';
+        '<circle cx="150" cy="100" r="24" fill="' + p.center + '" stroke="#b89763" stroke-width="1.8"/>' + face(150, 99, .8, false);
     }
 
     function bell(x, y, scale) {
-      return '<g transform="translate(' + x + ' ' + y + ') scale(' + scale + ')"><path d="M-10 1C-11-11-5-18 0-18C6-18 11-10 10 1Q6-1 3 3Q0 0-3 3Q-6-1-10 1Z" fill="' + (moon ? '#f1edce' : '#ece9cb') + '"/>' +
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + scale + ')"><path d="M-10 1C-11-11-5-18 0-18C6-18 11-10 10 1Q6-1 3 3Q0 0-3 3Q-6-1-10 1Z" fill="' + (moon ? '#f2eaf7' : '#fff4de') + '"/>' +
         '<path d="M-3-12Q-5-7-5-3" fill="none" stroke="#fff9df" stroke-opacity=".65" stroke-width="1.2" stroke-linecap="round"/><circle cy="4" r="1.6" fill="' + p.center + '"/></g>';
     }
 
@@ -402,7 +721,7 @@
         frond(150, 195, 91, 163, p.dark) + frond(151, 182, 209, 157, p.leaf) +
         frond(154, 160, 112, 126, p.leaf) + frond(157, 145, 200, 114, p.light) +
         frond(158, 126, 151, 89, p.light);
-      var puffColor = moon ? '#e5e5bd' : '#d6a2af';
+      var puffColor = moon ? '#ccc3df' : '#deaab8';
       for (var n = 0; n < 2; n++) {
         var cx = 130 + n * 42, cy = 112 - n * 16;
         art += stem('M157 145Q' + cx + ' 124 ' + cx + ' ' + cy, 1.2);
@@ -417,19 +736,19 @@
 
     var foliage = [mint, clover, cactus, sunflower, lily, mimosa][kind]();
     var growth = .82 + (leaves - 2) * .045;
-    var pot = '<g class="plant-pot"><ellipse cx="150" cy="285" rx="60" ry="8" fill="#050e08" opacity=".24"/>' +
-      '<path d="M103 228H197L187 276Q150 291 113 276Z" fill="' + p.clay + '"/>' +
-      '<path d="M113 234 121 273Q151 283 180 274" fill="none" stroke="#efd0a0" stroke-opacity=".18" stroke-width="2" stroke-linecap="round"/>' +
-      '<path d="M184 235 178 272" stroke="#704f39" stroke-opacity=".23" stroke-width="4" stroke-linecap="round"/>' +
-      '<ellipse cx="150" cy="229" rx="51" ry="12" fill="' + p.rim + '"/>' +
-      '<ellipse cx="150" cy="226" rx="43" ry="7" fill="' + p.soil + '"/>' +
-      (mini ? '' : '<g fill="#a1956c" opacity=".5"><circle cx="128" cy="226" r="1.2"/><circle cx="164" cy="228" r="1"/><circle cx="177" cy="224" r="1.2"/><circle cx="142" cy="223" r="1"/></g>') +
-      '<path d="M143 254Q151 246 157 254Q151 263 143 254Z" fill="none" stroke="#edc89a" stroke-width="1.5" stroke-opacity=".65"/><path d="M147 257 154 251" stroke="#edc89a" stroke-width="1" stroke-opacity=".6"/>' +
-      '<path d="M100 231Q150 246 200 231" fill="none" stroke="' + p.rim + '" stroke-width="5" stroke-linecap="round"/></g>';
+    var pot = '<g class="plant-pot"><ellipse cx="150" cy="287" rx="56" ry="7" fill="#897463" opacity=".13"/>' +
+      '<path d="M104 231H196L188 271Q186 283 173 284H127Q114 283 112 271Z" fill="' + p.clay + '" stroke="#a88570" stroke-width="2.1" stroke-linejoin="round"/>' +
+      '<path d="M117 241 122 268Q123 275 129 276" fill="none" stroke="#fff5e6" stroke-width="4" stroke-linecap="round" opacity=".65"/>' +
+      '<path d="M183 245 178 274" stroke="#d8aa91" stroke-width="2" stroke-linecap="round" opacity=".45"/>' +
+      '<ellipse cx="150" cy="231" rx="49" ry="12" fill="' + p.rim + '" stroke="#a88570" stroke-width="2"/>' +
+      '<ellipse cx="150" cy="228" rx="41" ry="7" fill="' + p.soil + '"/>' +
+      (mini ? '' : '<g fill="#e1c7a6"><circle cx="127" cy="228" r="1.3"/><circle cx="170" cy="228" r="1.2"/><circle cx="141" cy="225" r="1"/></g>') +
+      face(150, 256, .85, kind === 4 || moon) +
+      '<path d="M107 235Q150 248 193 235" fill="none" stroke="' + p.rim + '" stroke-width="4" stroke-linecap="round"/></g>';
 
     return '<svg xmlns="http://www.w3.org/2000/svg" class="plant-art" viewBox="0 0 300 320" width="300" height="320" role="img" aria-label="' + label + '" data-species="' + kind + '">' +
       '<title>' + label + '</title><desc>装饰性的盆栽插画；植物长势由这一天固定的日历种子决定。</desc>' +
-      (moon ? '<ellipse cx="150" cy="159" rx="92" ry="105" fill="#d6e2b7" opacity=".045"/>' : '') +
+      (moon ? '<ellipse cx="150" cy="159" rx="92" ry="105" fill="#d8d0e9" opacity=".18"/>' : '') +
       pot + '<g class="plant-sway" style="transform-origin:150px 228px"><g transform="translate(150 228) scale(' + growth.toFixed(3) + ') translate(-150 -228)">' + foliage + '</g></g>' +
       (moon ? '<g class="plant-sparkles" aria-hidden="true">' + sparkle(76, 108, 5) + sparkle(225, 173, 4) + sparkle(209, 74, 3) + '</g>' : '') + '</svg>';
   }
@@ -450,55 +769,60 @@
   var visitors = {
     snail: {
       name: '慢慢走的小蜗牛',
-      art: '<ellipse cx="48" cy="69" rx="36" ry="4" fill="#07180e" opacity=".18"/>' +
-        '<path d="M13 62Q20 56 43 56H65Q69 55 71 46Q72 39 78 41Q85 44 81 55L78 61Q88 62 89 66Q74 72 20 68Q9 68 13 62Z" fill="#aabd82"/>' +
-        '<path d="M23 65Q40 62 60 65" fill="none" stroke="#d7ddb0" stroke-width="1.5" stroke-linecap="round"/>' +
-        '<circle cx="43" cy="46" r="23" fill="#bd916a"/>' +
-        '<path d="M44 63C18 65 20 27 44 29C65 30 62 56 44 56C30 56 30 37 44 38C53 39 53 50 44 49" fill="none" stroke="#795f46" stroke-width="2" stroke-linecap="round"/>' +
-        '<path d="M73 45 70 33M79 44 84 32" fill="none" stroke="#aabd82" stroke-width="2.5" stroke-linecap="round"/>' +
-        '<circle cx="70" cy="32" r="2.5" fill="#dbe0b7"/><circle cx="84" cy="31" r="2.5" fill="#dbe0b7"/>' +
-        '<circle cx="70.5" cy="32" r="1.1" fill="#263e2b"/><circle cx="84.5" cy="31" r="1.1" fill="#263e2b"/>' +
-        '<path d="M75 52q2 2 4 0" fill="none" stroke="#61794e" stroke-width="1.2" stroke-linecap="round"/>'
+      art: '<ellipse cx="49" cy="70" rx="36" ry="4" fill="#a9987b" opacity=".14"/>' +
+        '<path d="M12 62Q19 57 47 58H64Q69 56 70 47Q70 39 78 40Q87 41 83 54L80 61Q89 62 90 66Q76 72 20 68Q9 68 12 62Z" fill="#c5d6a4" stroke="#78866b" stroke-width="1.5"/>' +
+        '<path d="M24 65Q40 63 59 65" fill="none" stroke="#eff0cd" stroke-width="2" stroke-linecap="round"/>' +
+        '<circle cx="42" cy="46" r="23" fill="#e3bba4" stroke="#aa826d" stroke-width="1.5"/>' +
+        '<path d="M43 63C19 64 19 28 43 29C64 30 63 56 44 56C31 56 30 38 43 38C53 38 54 49 44 49" fill="none" stroke="#b88b75" stroke-width="2" stroke-linecap="round"/>' +
+        '<path d="M28 33q6-5 12-4" fill="none" stroke="#ffe6d0" stroke-width="2.5" stroke-linecap="round"/>' +
+        '<path d="M73 44 70 32M80 44l5-12" fill="none" stroke="#8b9b77" stroke-width="2" stroke-linecap="round"/>' +
+        '<g fill="#fff8e8" stroke="#78866b" stroke-width="1"><circle cx="70" cy="31" r="3.5"/><circle cx="85" cy="31" r="3.5"/></g>' +
+        '<g fill="#695e50"><circle cx="70.5" cy="31.5" r="1.2"/><circle cx="85.5" cy="31.5" r="1.2"/></g>' +
+        '<path d="M75 51q3 4 6 0" fill="none" stroke="#6f755b" stroke-width="1.3" stroke-linecap="round"/>' +
+        '<ellipse cx="73" cy="49" rx="2.5" ry="1.6" fill="#e2a199"/><ellipse cx="83" cy="49" rx="2.5" ry="1.6" fill="#e2a199"/>'
     },
     moth: {
       name: '借月光的小飞蛾',
-      art: '<path d="M47 40C35 13 13 14 15 34C16 47 30 51 46 48Z" fill="#d8d6a7"/>' +
-        '<path d="M53 40C65 13 87 14 85 34C84 47 70 51 54 48Z" fill="#e8e3bb"/>' +
-        '<path d="M46 45C22 44 23 68 36 67Q46 66 49 49Z" fill="#afb98a"/>' +
-        '<path d="M54 45C78 44 77 68 64 67Q54 66 51 49Z" fill="#c6cd9d"/>' +
-        '<path d="M22 30Q35 31 43 42M78 30Q65 31 57 42M31 57l12-8M69 57l-12-8" fill="none" stroke="#85976e" stroke-width="1.2" stroke-opacity=".65" stroke-linecap="round"/>' +
-        '<ellipse cx="29" cy="35" rx="4" ry="5" fill="#9ba781"/><ellipse cx="71" cy="35" rx="4" ry="5" fill="#acb18c"/>' +
-        '<ellipse cx="50" cy="45" rx="4" ry="16" fill="#a09670"/><circle cx="50" cy="29" r="5" fill="#d5c99a"/>' +
-        '<path d="M48 25q-1-9-7-10M52 25q1-9 7-10" fill="none" stroke="#c7c79c" stroke-width="1.5" stroke-linecap="round"/>' +
-        '<circle cx="48" cy="29" r=".9" fill="#354733"/><circle cx="52" cy="29" r=".9" fill="#354733"/>'
+      art: '<path d="M46 39C33 10 11 16 15 35C17 48 32 52 47 47Z" fill="#ded5e9" stroke="#9d91ac" stroke-width="1.3"/>' +
+        '<path d="M54 39C67 10 89 16 85 35C83 48 68 52 53 47Z" fill="#ece2ef" stroke="#9d91ac" stroke-width="1.3"/>' +
+        '<path d="M45 44C22 43 23 69 37 67Q46 65 49 49Z" fill="#c3c9dc" stroke="#9d91ac" stroke-width="1.3"/>' +
+        '<path d="M55 44C78 43 77 69 63 67Q54 65 51 49Z" fill="#d4d5e6" stroke="#9d91ac" stroke-width="1.3"/>' +
+        '<g fill="#f8edcf"><ellipse cx="28" cy="32" rx="5" ry="6" transform="rotate(-28 28 32)"/><ellipse cx="72" cy="32" rx="5" ry="6" transform="rotate(28 72 32)"/><circle cx="35" cy="56" r="3"/><circle cx="65" cy="56" r="3"/></g>' +
+        '<path d="M23 42q10 5 17 0m20 0q7 5 17 0" fill="none" stroke="#b2a4c3" stroke-width="1.2" stroke-linecap="round"/>' +
+        '<ellipse cx="50" cy="46" rx="5" ry="15" fill="#d7bd9c" stroke="#ab967f" stroke-width="1.2"/>' +
+        '<circle cx="50" cy="30" r="7" fill="#f7e3be" stroke="#ab967f" stroke-width="1.2"/>' +
+        '<path d="M47 24q-1-8-7-9m13 9q1-8 7-9" fill="none" stroke="#a997ae" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<g fill="#685c53"><circle cx="47.5" cy="29.5" r="1"/><circle cx="52.5" cy="29.5" r="1"/></g>' +
+        '<path d="M48 33q2 2 4 0" fill="none" stroke="#8d7866" stroke-width=".9" stroke-linecap="round"/><g fill="#e6b2af"><circle cx="45" cy="32" r="1.4"/><circle cx="55" cy="32" r="1.4"/></g>'
     },
     ladybird: {
       name: '停在叶边的小瓢虫',
-      art: '<ellipse cx="50" cy="66" rx="24" ry="4" fill="#07180e" opacity=".18"/>' +
-        '<path d="M32 38 23 33m9 15-11 1m16 8-10 8M68 38l9-5M68 48l11 1M63 57l10 8" fill="none" stroke="#758266" stroke-width="2.2" stroke-linecap="round"/>' +
-        '<ellipse cx="50" cy="44" rx="23" ry="24" fill="#b9795e"/>' +
-        '<path d="M50 24v43" fill="none" stroke="#684e3c" stroke-width="2"/>' +
-        '<path d="M31 35Q33 25 43 24" fill="none" stroke="#e2b18a" stroke-width="2.2" stroke-linecap="round" opacity=".65"/>' +
-        '<g fill="#5e5940"><circle cx="38" cy="37" r="4"/><circle cx="63" cy="37" r="4"/><circle cx="37" cy="52" r="3.4"/><circle cx="63" cy="52" r="3.4"/><circle cx="44" cy="61" r="2.6"/><circle cx="56" cy="61" r="2.6"/></g>' +
-        '<path d="M42 24q-5-7-8-7M58 24q5-7 8-7" fill="none" stroke="#8e9d76" stroke-width="1.8" stroke-linecap="round"/>' +
-        '<ellipse cx="50" cy="25" rx="12" ry="10" fill="#697859"/>' +
-        '<circle cx="45" cy="23" r="2.5" fill="#e5e3bc"/><circle cx="55" cy="23" r="2.5" fill="#e5e3bc"/>' +
-        '<circle cx="45" cy="23.5" r="1.2" fill="#273d2a"/><circle cx="55" cy="23.5" r="1.2" fill="#273d2a"/>'
+      art: '<ellipse cx="50" cy="69" rx="25" ry="4" fill="#a9987b" opacity=".14"/>' +
+        '<path d="M31 38 23 33m8 15-11 1m16 9-9 7M69 38l8-5M69 48l11 1M64 58l9 7" fill="none" stroke="#857c69" stroke-width="2" stroke-linecap="round"/>' +
+        '<ellipse cx="50" cy="45" rx="24" ry="25" fill="#eaa096" stroke="#a97b6d" stroke-width="1.5"/>' +
+        '<path d="M50 25v44" stroke="#aa7c70" stroke-width="1.5"/>' +
+        '<path d="M32 35q3-9 11-9" fill="none" stroke="#ffe1c7" stroke-width="3" stroke-linecap="round"/>' +
+        '<g fill="#9e7c6e"><circle cx="37" cy="39" r="4"/><circle cx="63" cy="39" r="4"/><circle cx="37" cy="54" r="3.5"/><circle cx="63" cy="54" r="3.5"/><circle cx="44" cy="63" r="2.3"/><circle cx="56" cy="63" r="2.3"/></g>' +
+        '<path d="M42 24q-4-8-9-8m25 8q4-8 9-8" fill="none" stroke="#8d957c" stroke-width="1.8" stroke-linecap="round"/>' +
+        '<ellipse cx="50" cy="25" rx="12" ry="10" fill="#acba96" stroke="#78866b" stroke-width="1.3"/>' +
+        '<g fill="#665d50"><circle cx="46" cy="24" r="1.4"/><circle cx="54" cy="24" r="1.4"/></g>' +
+        '<path d="M48 29q2 2 4 0" fill="none" stroke="#6e725c" stroke-width="1.1" stroke-linecap="round"/>' +
+        '<g fill="#e3a9a0"><ellipse cx="42" cy="28" rx="2.2" ry="1.5"/><ellipse cx="58" cy="28" rx="2.2" ry="1.5"/></g>'
     },
     cat: {
       name: '来窗边打盹的小猫',
-      art: '<ellipse cx="50" cy="70" rx="35" ry="4" fill="#07180e" opacity=".18"/>' +
-        '<path d="M72 64Q96 66 89 44Q85 36 80 43Q79 47 84 50Q90 61 72 58" fill="#c6ae85"/>' +
-        '<path d="M29 68Q20 51 33 42Q47 33 65 44Q79 51 74 67Z" fill="#d4bd93"/>' +
-        '<path d="M33 41 27 19Q37 19 43 26M55 26Q63 18 70 19L66 42" fill="#d4bd93"/>' +
-        '<path d="m31 24 3 12 7-6M65 24l-3 12-6-6" fill="#b98d79"/>' +
-        '<path d="M29 35Q32 25 48 26Q66 24 69 37Q73 52 50 55Q26 54 29 35Z" fill="#e0caa4"/>' +
-        '<path d="m43 27 2 7m4-8 1 7m5-6-2 7" stroke="#a68b65" stroke-width="2" stroke-linecap="round"/>' +
-        '<path d="M35 40q4-5 8 0M55 40q4-5 8 0" fill="none" stroke="#4f6349" stroke-width="1.8" stroke-linecap="round"/>' +
-        '<path d="m47 44 3 3 3-3Z" fill="#ac8270"/><path d="M50 47q-3 4-6 1m6-1q3 4 6 1" fill="none" stroke="#8d7557" stroke-width="1" stroke-linecap="round"/>' +
-        '<path d="m35 46-12-2m12 6-11 2M64 46l12-2m-12 6 11 2" stroke="#b29d78" stroke-width="1" stroke-linecap="round"/>' +
-        '<path d="M40 57v11m16-11v11" stroke="#b39a73" stroke-width="1.4" stroke-linecap="round"/>' +
-        '<path d="M31 68q7-5 14 0m5 0q7-5 14 0" fill="none" stroke="#eee0be" stroke-width="3" stroke-linecap="round"/>'
+      art: '<ellipse cx="50" cy="71" rx="35" ry="4" fill="#a9987b" opacity=".14"/>' +
+        '<path d="M72 64Q96 67 90 45Q87 37 81 42Q77 47 84 51Q88 60 73 58" fill="#e4c6a4" stroke="#b09278" stroke-width="1.5"/>' +
+        '<path d="M28 68Q20 50 34 42Q50 34 66 45Q79 53 74 68Z" fill="#ecd5b5" stroke="#b09278" stroke-width="1.5"/>' +
+        '<path d="M29 38 27 18Q36 17 43 26M55 26Q63 17 71 18L69 39" fill="#f5e2c6" stroke="#b09278" stroke-width="1.5" stroke-linejoin="round"/>' +
+        '<path d="m31 23 3 12 7-6m25-6-3 12-6-6" fill="#e9b4ab"/>' +
+        '<path d="M28 36Q30 26 48 26Q67 24 70 37Q74 55 50 57Q25 55 28 36Z" fill="#f8e6cc" stroke="#b09278" stroke-width="1.5"/>' +
+        '<path d="m43 28 2 6m5-7v6m6-5-2 6" stroke="#cbaa88" stroke-width="2.4" stroke-linecap="round"/>' +
+        '<path d="M35 41q4-5 8 0M55 41q4-5 8 0" fill="none" stroke="#756551" stroke-width="1.7" stroke-linecap="round"/>' +
+        '<g fill="#e4aea5"><ellipse cx="34" cy="46" rx="4" ry="2.3"/><ellipse cx="65" cy="46" rx="4" ry="2.3"/></g>' +
+        '<path d="m47 45 3 3 3-3Z" fill="#c9968d"/><path d="M50 48q-3 4-6 1m6-1q3 4 6 1" fill="none" stroke="#9c8168" stroke-width="1" stroke-linecap="round"/>' +
+        '<path d="m34 46-11-2m11 6-10 2m42-6 11-2m-11 6 10 2" stroke="#b99d7d" stroke-width="1" stroke-linecap="round"/>' +
+        '<path d="M38 59v10m21-10v10" stroke="#c4a88b" stroke-width="1.3" stroke-linecap="round"/><path d="M32 69q6-4 12 0m10 0q6-4 12 0" fill="none" stroke="#fff1da" stroke-width="3" stroke-linecap="round"/>'
     }
   };
 
