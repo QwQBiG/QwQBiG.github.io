@@ -45,7 +45,7 @@ a { color: inherit; }
 .sill-link { display: flex; align-items: center; gap: 9px; }
 .sill-link b { display: grid; place-items: center; min-width: 23px; height: 23px; padding: 0 5px; border-radius: 50%; background: #dce4d1; font-size: 10px; font-weight: 500; box-shadow: inset 0 1px 2px #4d633817; }
 .intro { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 29px 0 24px; }
-.eyebrow { font-size: 9px; letter-spacing: 2px; color: #697b5c; font-weight: 500; margin: 0 0 18px; }
+.eyebrow { font-size: 9px; letter-spacing: 2px; color: #5c6e4d; font-weight: 500; margin: 0 0 18px; }
 .intro h1 { margin: 0; font: 600 clamp(30px, 3vw, 41px)/1.4 "Songti SC", "STSong", Georgia, serif; letter-spacing: 2px; }
 .intro h1 em { font-style: normal; color: #7e8e67; }
 .intro p { font-size: 13px; color: #65735f; line-height: 1.9; margin: 12px 0 0; }
@@ -116,7 +116,7 @@ a { color: inherit; }
 .variant.rare { background: #e8e3ed; color: #776084; }
 .rare .variant-dot { background: #a18bb4; }
 .plant-name { font: 600 50px/1.3 "Songti SC", "STSong", Georgia, serif; letter-spacing: 6px; margin: 0 0 3px; }
-.latin-name { color: #73835e; font: italic 18px Georgia, serif; margin: 0; }
+.latin-name { color: #61744c; font: italic 18px Georgia, serif; margin: 0; }
 .plant-line { font-size: 13px; color: #64715a; line-height: 2; margin: 21px 0 26px; }
 .leaf-label { display: flex; justify-content: space-between; gap: 12px; color: #6b765f; font-size: 11px; }
 .leaf-label b { font: 11px ui-monospace, monospace; color: #4c6840; }
@@ -125,7 +125,7 @@ a { color: inherit; }
 .leaf-meter span.filled { background: linear-gradient(150deg, #a5b87e, #6f8a56); box-shadow: inset 0 1px 1px #e4ebc755; }
 .rare-card .leaf-meter span.filled { background: linear-gradient(150deg, #b8a9c9, #8b7b9c); }
 .seed-row { margin-top: auto; border-top: 1px solid #dedfce; padding-top: 17px; display: flex; flex-direction: column; gap: 6px; }
-.seed-row span { color: #727a64; font-size: 10px; }
+.seed-row span { color: #606d53; font-size: 10px; }
 .seed-id { color: #637854; font: 10px ui-monospace, monospace; overflow-wrap: anywhere; }
 .card-actions { display: grid; grid-template-columns: 1fr 1.12fr; gap: 9px; margin-top: 23px; }
 .card-action { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 47px; padding: 11px 7px; border-radius: 9px; border: 1px solid #cdd6bf; color: #456242; background: linear-gradient(#fffdf7, #efefe2); font-size: 12px; box-shadow: 0 2px 3px #33452609; transition: transform .2s, box-shadow .2s; }
@@ -134,34 +134,38 @@ a { color: inherit; }
 .card-action.saved { background: #e0e7d0; color: #49633c; }
 .card-action:hover { transform: translateY(-2px); box-shadow: 0 4px 8px #273e2b19; }
 .card-action:active { transform: translateY(1px); }
-.care-note { text-align: center; color: #737c65; font-size: 10px; line-height: 1.8; margin: 14px 0 0; }
+.care-note { text-align: center; color: #606d53; font-size: 10px; line-height: 1.8; margin: 14px 0 0; }
 .discovery-row { display: flex; justify-content: center; align-items: center; gap: 17px; flex-wrap: wrap; margin: 20px 0 7px; }
 .discovery-btn { display: flex; align-items: center; gap: 8px; min-height: 44px; background: transparent; border: 0; color: #526747; font-size: 12px; padding: 9px 11px; border-radius: 8px; }
 .discovery-btn:hover { background: #e6eadb; }
 .discovery-btn[aria-pressed="true"] { background: #e3dce8; color: #705b7e; }
 .discovery-divider { width: 1px; height: 13px; background: #ccd3bf; }
-.notice { text-align: center; color: #6e7b62; font-size: 10px; line-height: 1.9; min-height: 24px; margin: 0 0 31px; }
+.notice { text-align: center; color: #5b6c4f; font-size: 10px; line-height: 1.9; min-height: 24px; margin: 0 0 31px; }
 .notice.error { color: #a56243; }
 .little-corners { display: block; }
 .guestbook { display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: 30px; border-top: 1px solid #cdd3c2; padding: 32px 4px; }
-.guest-kicker, .section-kicker { color: #906e50; font-size: 9px; letter-spacing: 1.7px; margin: 0 0 11px; }
+.guest-kicker, .section-kicker { color: #7c5e43; font-size: 9px; letter-spacing: 1.7px; margin: 0 0 11px; }
 .guestbook h2 { font: 600 23px/1.5 "Songti SC", "STSong", Georgia, serif; margin: 0 0 10px; letter-spacing: 1px; }
-.visitor-note { margin: 0; color: #6c7662; font-size: 12px; line-height: 1.9; min-height: 23px; }
-.visitor-note.revealed { color: #665b45; }
-.guest-hint { font-size: 10px; color: #767f68; margin: 10px 0 0; }
+.visitor-note { position: relative; margin: 15px 0 0; padding: 14px 18px; color: #59664f; font-size: 13px; line-height: 24px; min-height: 78px; border: 1px solid #ded9c7; border-left: 3px solid #bac6a1; border-radius: 2px 10px 10px 2px; background: repeating-linear-gradient(transparent 0 23px, #ddd7c333 23px 24px), #fcf9ef; background-position: 0 14px; box-shadow: 2px 4px 8px #544b3210; }
+.visitor-note:after { content: ""; position: absolute; right: 0; top: 0; width: 18px; height: 18px; border-radius: 0 9px 0 4px; background: linear-gradient(225deg, #eee9d9 49%, #dcd5c1 50%, #fffaf0 56%); pointer-events: none; }
+.visitor-note.revealed { color: #62513c; border-left-color: #b78d60; background-color: #fffaf0; }
+.guest-hint { font-size: 11px; color: #58664d; margin: 10px 0 0; }
 .guest-stamps { display: flex; gap: 12px; justify-content: flex-end; }
-.guest-stamp { position: relative; width: 91px; min-height: 98px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 8px 4px; color: #647455; font-size: 9px; border: 1px solid #d8d9c9; border-radius: 4px; background: #fbf8ee; box-shadow: 1px 3px 4px #4f513510; transform: rotate(-4deg); }
+.guest-stamp { position: relative; width: 98px; min-height: 115px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 8px 4px; color: #506546; font-size: 10px; border: 1px solid #d8d9c9; border-radius: 4px; background: #fbf8ee; box-shadow: 1px 3px 4px #4f513510; transform: rotate(-4deg); }
 .guest-stamp:nth-child(2n) { transform: rotate(4deg); }
 .guest-stamp:before { content: ""; position: absolute; inset: 4px; border: 1px dashed #dddcc7; pointer-events: none; }
-.guest-stamp svg { width: 56px; height: 45px; opacity: .42; }
+.guest-stamp svg { width: 58px; height: 47px; opacity: .5; }
+.guest-label { font-size: 10px; line-height: 1.5; white-space: nowrap; }
+.guest-caption { font-size: 9px; color: #58664d; line-height: 1.5; }
+.found .guest-caption { color: #4e623d; }
 .guest-stamp.found { background: #e5ebd6; border-color: #a7ba8b; color: #496b3a; }
 .guest-stamp.found svg { opacity: 1; }
 .guest-stamp.found:hover { transform: rotate(0) translateY(-3px); }
-.guest-progress { color: #707b61; font-size: 9px; line-height: 1.9; margin: 13px 0 0; text-align: right; }
+.guest-progress { color: #56664a; font-size: 10px; line-height: 1.9; margin: 13px 0 0; text-align: right; }
 .treasure { display: grid; grid-template-columns: .85fr 1.6fr; align-items: center; gap: 35px; background: #e5e9d9; padding: 29px 31px; border: 1px solid #d1dbc1; border-radius: 17px; box-shadow: inset 0 1px 0 #fff9; }
-.treasure .eyebrow { font-size: 9px; margin-bottom: 11px; color: #637752; }
+.treasure .eyebrow { font-size: 9px; margin-bottom: 11px; color: #56664a; }
 .treasure-heading h2 { font: 600 22px/1.5 "Songti SC", "STSong", Georgia, serif; letter-spacing: 1px; margin: 0 0 8px; }
-.treasure-heading p { font-size: 11px; color: #69785a; line-height: 1.9; margin: 0; }
+.treasure-heading p { font-size: 11px; color: #56664a; line-height: 1.9; margin: 0; }
 .treasure-heading p:last-child { font-size: 9px; margin-top: 6px; }
 .treasure-progress { display: inline-block; margin-top: 12px; font: 10px ui-monospace, monospace; padding: 5px 8px; color: #4f6c3c; border: 1px solid #b7c79c; border-radius: 4px; }
 .treasure-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -169,35 +173,37 @@ a { color: inherit; }
 .treasure-task:nth-child(2) { background: #f4efe3; }
 .treasure-task:nth-child(3) { background: #eeeced; }
 .treasure-task.done { background: #d9e4c5; border-color: #aabc8a; }
-.treasure-number { color: #7b8964; font: 9px ui-monospace, monospace; letter-spacing: 1px; }
+.treasure-number { color: #56664a; font: italic 18px Georgia, serif; letter-spacing: .5px; }
 .treasure-label { font-size: 13px; line-height: 1.7; color: #3f593c; }
-.treasure-hint { min-height: 36px; margin-top: auto; background: transparent; padding: 6px 0; border: 0; color: #607d47; font-size: 10px; text-align: left; }
+.treasure-hint { min-height: 36px; margin-top: auto; background: transparent; padding: 6px 0; border: 0; color: #4d653e; font-size: 11px; text-align: left; }
 .treasure-hint:hover { color: #2e5431; }
-.treasure-hint:disabled { opacity: 1; color: #5a7242; }
-.treasure-result { color: #647753; font-size: 10px; line-height: 1.9; min-height: 19px; margin: 12px 0 0; }
+.treasure-hint:disabled { opacity: 1; color: #4b623d; }
+.treasure-result { color: #56664a; font-size: 11px; line-height: 1.9; min-height: 19px; margin: 12px 0 0; }
 .sill { margin-top: 42px; scroll-margin-top: 30px; }
 .sill-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 23px; }
 .sill-heading h2 { font: 600 26px/1.5 "Songti SC", "STSong", Georgia, serif; letter-spacing: 1px; margin: 0 0 7px; }
-.sill-heading p { font-size: 11px; color: #6a775e; margin: 0; }
-.sill-heading .section-kicker { font-size: 9px; color: #906e50; margin-bottom: 10px; }
+.sill-heading p { font-size: 11px; color: #5b6c4f; margin: 0; }
+.sill-heading .section-kicker { font-size: 9px; color: #7c5e43; margin-bottom: 10px; }
 .sill-progress { white-space: nowrap; font-size: 10px; color: #5d7347; }
 .album { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding: 20px 17px 13px; border: 1px solid #d4d8c6; border-radius: 15px; background: radial-gradient(ellipse at 50% 10%, #f0f3e5, transparent 70%), #e2e7d7; box-shadow: inset 0 2px 5px #4c5d3b08; }
 .album:after { content: ""; position: absolute; left: 22px; right: 22px; top: 155px; height: 10px; border-radius: 3px; background: linear-gradient(#c8b295, #b69b79); box-shadow: 0 3px 0 #97856555, 0 7px 8px #4e493b12; pointer-events: none; }
 .album-slot { position: relative; z-index: 1; min-width: 0; padding: 3px 6px 8px; text-align: center; border: 0; background: transparent; border-radius: 8px; color: #5e7250; }
 .album-slot.unlocked:hover { background: #faf8ec88; transform: translateY(-3px); }
-.album-art { height: 149px; margin: 0 auto 14px; max-width: 160px; opacity: .32; filter: saturate(.6); }
+.album-art { height: 149px; margin: 0 auto 14px; max-width: 160px; opacity: .48; filter: saturate(.6); }
 .album-art svg { width: 100%; height: 100%; overflow: visible; }
 .unlocked .album-art { opacity: 1; filter: none; }
-.album-name { font-size: 12px; }
-.album-sub { color: #748266; font-size: 9px; margin-top: 7px; }
+.album-name { display: inline-block; min-width: 80px; padding: 5px 11px; border: 1px solid #d5d1bb; border-radius: 3px; color: #4e633e; background: linear-gradient(#fcfaf1, #f2eddf); box-shadow: 0 2px 2px #4b4a3010; font-size: 12px; line-height: 1.4; }
+.unlocked .album-name { border-color: #acbd90; background: linear-gradient(#f7faed, #e3ebd2); }
+.album-sub { color: #56664a; font-size: 10px; line-height: 1.6; margin-top: 8px; }
 .album-moon { position: absolute; top: 8px; right: 13px; color: #8b789c; font-size: 13px; }
 .saved-dates { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 17px; }
 .date-chip { min-height: 35px; border: 1px solid #cad5bb; background: #f8f8ed; color: #60774d; padding: 8px 12px; border-radius: 6px; font: 10px ui-monospace, monospace; }
-.date-chip.current { background: #e0e8d0; border-color: #a3b88a; }
-.empty-note { color: #6e7c60; font-size: 11px; line-height: 1.9; margin: 17px 0 0; }
-.footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid #cdd3c1; padding-top: 20px; margin-top: 36px; color: #6c785f; font-size: 9px; line-height: 1.9; }
+.date-chip.current { color: #fff9e8; background: linear-gradient(#58744c, #405d3c); border-color: #4f6847; box-shadow: inset 0 1px 0 #91a67c77, 0 2px 3px #33442617; }
+.date-chip.current:before { content: ""; display: inline-block; vertical-align: 1px; width: 4px; height: 4px; margin-right: 6px; background: currentColor; border-radius: 50%; }
+.empty-note { color: #5b6c4f; font-size: 11px; line-height: 1.9; margin: 17px 0 0; }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid #cdd3c1; padding-top: 20px; margin-top: 36px; color: #5b6c4f; font-size: 10px; line-height: 1.9; }
 .footer p { margin: 0; }
-.footer .signature { font: italic 13px Georgia, serif; color: #6e7f58; white-space: nowrap; }
+.footer .signature { font: italic 13px Georgia, serif; color: #5c7148; white-space: nowrap; }
 .loading-note { text-align: center; padding-top: 140px; color: #5c7551; font-size: 12px; }
 .noscript { margin: 20px; padding: 20px; border-radius: 12px; background: #e0e8d1; border: 1px solid #b8c9a3; }
 .moonlight .room-light { background: #eee4f3; box-shadow: inset -5px -3px 0 #afa0c0, 0 0 16px #fff7df66; }
@@ -332,7 +338,7 @@ a { color: inherit; }
   .plant-name { font-size: 43px; }
   .guestbook { grid-template-columns: 1fr 1.05fr; gap: 20px; }
   .guestbook h2 { font-size: 20px; }
-  .guest-stamp { width: 25%; min-height: 92px; font-size: 8px; }
+  .guest-stamp { width: 25%; min-height: 115px; font-size: 10px; }
   .guest-stamp svg { width: 48px; }
   .treasure { grid-template-columns: 1fr; gap: 19px; }
   .treasure-heading { position: relative; }
@@ -390,7 +396,7 @@ a { color: inherit; }
   .guestbook h2 { font-size: 22px; }
   .visitor-note { font-size: 12px; }
   .guest-stamps { justify-content: space-between; gap: 12px; padding: 0 5px; }
-  .guest-stamp { min-height: 101px; width: 25%; font-size: 9px; }
+  .guest-stamp { min-height: 115px; width: 25%; font-size: 10px; }
   .guest-stamp svg { width: 53px; }
   .guest-progress { text-align: left; margin-top: 16px; }
   .treasure { padding: 24px 20px; border-radius: 13px; gap: 18px; }
@@ -400,21 +406,24 @@ a { color: inherit; }
   .treasure-list { gap: 8px; }
   .treasure-task { min-height: 141px; padding: 13px 10px 7px; gap: 11px; }
   .treasure-label { font-size: 12px; }
-  .treasure-number { font-size: 8px; }
+  .treasure-number { font-size: 17px; }
   .treasure-hint { min-height: 44px; font-size: 10px; }
-  .treasure-result { font-size: 9px; }
+  .treasure-result { font-size: 10px; }
   .sill { margin-top: 30px; }
   .sill-heading { display: block; }
   .sill-heading h2 { font-size: 23px; }
   .sill-heading p { font-size: 10px; }
   .sill-progress { display: block; margin-top: 12px; white-space: normal; font-size: 9px; line-height: 1.7; }
-  .album { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 15px; padding: 18px 10px 13px; }
+  .album { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 0; row-gap: 20px; padding: 18px 10px 13px; }
   .album-art { height: 122px; margin-bottom: 11px; }
   .album:after { display: none; }
   .album-slot { padding: 2px 3px 7px; }
-  .album-slot:before { content: ""; position: absolute; left: -2px; right: -2px; top: 112px; height: 7px; border-radius: 2px; background: linear-gradient(#c8b295, #b69b79); box-shadow: 0 2px 0 #a58f7155; z-index: -1; }
-  .album-name { font-size: 11px; }
-  .album-sub { font-size: 8px; }
+  .album-slot.unlocked:hover { transform: none; }
+  .album-slot:before { content: ""; position: absolute; left: -1px; right: -1px; top: 112px; height: 8px; border-radius: 0; background: linear-gradient(#c8b295, #b69b79); box-shadow: 0 2px 0 #a58f7155; z-index: -1; }
+  .album-name { min-width: 68px; padding: 4px 7px; font-size: 11px; }
+  .album-slot:nth-child(3n+1):before { border-radius: 3px 0 0 3px; }
+  .album-slot:nth-child(3n):before { border-radius: 0 3px 3px 0; }
+  .album-sub { font-size: 10px; }
   .date-chip { min-height: 44px; }
   .footer { align-items: flex-start; font-size: 9px; margin-top: 27px; gap: 12px; }
   .footer p { max-width: 195px; }
@@ -433,13 +442,23 @@ a { color: inherit; }
   .scene-bottom span:last-child { display: none; }
   .specimen { padding: 24px 20px 20px; }
   .guest-stamps { gap: 9px; }
-  .guest-stamp { font-size: 8px; }
+  .guest-stamp { font-size: 10px; }
   .guest-stamp svg { width: 46px; }
   .treasure { padding: 21px 15px; }
   .treasure-heading h2 { font-size: 19px; }
   .treasure-progress { font-size: 8px; top: 11px; }
   .treasure-task { padding: 12px 8px 6px; }
 }
+@media (max-width: 420px) {
+  .treasure-list { grid-template-columns: 1fr; gap: 8px; }
+  .treasure-task { display: grid; grid-template-columns: 24px minmax(0, 1fr) 86px; align-items: center; min-height: 66px; gap: 8px; padding: 10px 12px; }
+  .treasure-number { font-size: 17px; line-height: 1; }
+  .treasure-label { font-size: 12px; }
+  .treasure-hint { min-height: 44px; margin: 0; padding: 7px 8px; text-align: center; border: 1px solid #b9c5a4; border-radius: 6px; background: #fffdf3; font-size: 10px; }
+  .treasure-hint:disabled { border-color: #b5c697; background: #d1dfbb; }
+}
+.night-room .scene-label, .night-room .room-badge, .night-room .weather-badge { padding: 4px 6px; border-radius: 4px; color: #fff6df; background: #243b2eb8; }
+.night-room .scene-bottom span { padding: 3px 5px; border-radius: 3px; color: #fff6df; background: #243b2ec2; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *:before, *:after { animation: none !important; transition: none !important; }
@@ -1121,7 +1140,7 @@ a { color: inherit; }
    $('treasure-list').replaceChildren();
    treasureTasks.forEach((task,index)=>{
      const tile=document.createElement('div');tile.className='treasure-task'+(treasureFound.has(task.id)?' done':'');
-     const number=document.createElement('span');number.className='treasure-number';number.textContent=`CLUE 0${index+1}`;
+     const number=document.createElement('span');number.className='treasure-number';number.textContent=`0${index+1}`;
      const label=document.createElement('span');label.className='treasure-label';label.textContent=task.label;
      const button=document.createElement('button');button.type='button';button.className='treasure-hint';
      button.textContent=treasureFound.has(task.id)?'已发现 ✓':'给点线索 →';button.disabled=treasureFound.has(task.id);
@@ -1184,8 +1203,9 @@ a { color: inherit; }
      const stamp = document.createElement(day ? 'button' : 'div');
      stamp.className = 'guest-stamp' + (day ? ' found' : '');
      const picture = document.createElement('span'); picture.innerHTML = Visitors.renderVisitor(kind); picture.setAttribute('aria-hidden','true');
-     const label = document.createElement('span'); label.textContent = day ? guestNames[index] : '还没相遇';
-     stamp.append(picture,label);
+     const label = document.createElement('span'); label.className = 'guest-label'; label.textContent = guestNames[index];
+     const caption = document.createElement('span'); caption.className = 'guest-caption'; caption.textContent = day ? '已相遇' : '待相遇';
+     stamp.append(picture,label,caption);
      if(day) { stamp.type='button';stamp.setAttribute('aria-label',`重访 ${day} 的${guestNames[index]}`);stamp.addEventListener('click',()=>{showDate(day);greetVisitor();$('visitor-button').focus();}); }
      $('guest-stamps').append(stamp);
    }
@@ -1267,7 +1287,9 @@ a { color: inherit; }
    }
    $('saved-dates').replaceChildren();
    for (const day of saved) {
-     const chip = document.createElement('button'); chip.type = 'button'; chip.className = `date-chip${current && current.date === day ? ' current' : ''}`;
+     const selected = current && current.date === day;
+     const chip = document.createElement('button'); chip.type = 'button'; chip.className = `date-chip${selected ? ' current' : ''}`;
+     chip.setAttribute('aria-current', selected ? 'date' : 'false');
      chip.textContent = day; chip.setAttribute('aria-label', `查看收藏的 ${day}`); chip.addEventListener('click', () => { showDate(day); $('plant-date').focus(); }); $('saved-dates').append(chip);
    }
  }
