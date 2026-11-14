@@ -24,7 +24,7 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: radial-gradient(ellipse at 8% 10%, #ffffff88, transparent 50%), repeating-linear-gradient(0deg, #a2957306 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, #b2a88a09 0 .5px, transparent .5px 6px), var(--bg); }
+body { margin: 0; background: radial-gradient(ellipse at 8% 10%, #ffffff88, transparent 50%), var(--bg); }
 button, input { font: inherit; }
 button { cursor: pointer; touch-action: manipulation; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
@@ -34,31 +34,31 @@ button svg { pointer-events: none; }
 a { color: inherit; }
 [hidden] { display: none !important; }
 .shell { max-width: 1320px; margin: auto; padding: 0 48px 30px; }
-.topbar { display: flex; justify-content: space-between; align-items: center; gap: 22px; min-height: 102px; border-bottom: 1px solid #cdd2c3; }
-.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 22px; min-height: 88px; border-bottom: 1px solid #cdd2c3; }
+.brand { min-height: 44px; display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand-mark { width: 43px; height: 43px; display: grid; place-items: center; border: 1px solid #91a18a; border-radius: 50%; color: #3d5a43; background: linear-gradient(140deg, #fdfcf7, #e1e7d6); box-shadow: inset 0 0 0 4px #f6f6eb, 0 2px 3px #31422c0d; }
 .brand-title { font: 600 19px "Songti SC", "STSong", Georgia, serif; letter-spacing: 3px; }
 .brand-sub { display: block; color: #61715a; font-size: 8px; letter-spacing: 2.2px; margin-top: 4px; }
 .top-links { display: flex; align-items: center; gap: 28px; font-size: 12px; }
-.top-links a { text-decoration: none; padding: 9px 0; }
+.top-links a { white-space: nowrap; display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; padding: 9px 0; }
 .top-links a:hover { color: #a46a4c; }
 .sill-link { display: flex; align-items: center; gap: 9px; }
 .sill-link b { display: grid; place-items: center; min-width: 23px; height: 23px; padding: 0 5px; border-radius: 50%; background: #dce4d1; font-size: 10px; font-weight: 500; box-shadow: inset 0 1px 2px #4d633817; }
-.intro { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 47px 0 35px; }
+.intro { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 29px 0 24px; }
 .eyebrow { font-size: 9px; letter-spacing: 2px; color: #697b5c; font-weight: 500; margin: 0 0 18px; }
-.intro h1 { margin: 0; font: 600 clamp(30px, 3.2vw, 45px)/1.5 "Songti SC", "STSong", Georgia, serif; letter-spacing: 2px; }
+.intro h1 { margin: 0; font: 600 clamp(30px, 3vw, 41px)/1.4 "Songti SC", "STSong", Georgia, serif; letter-spacing: 2px; }
 .intro h1 em { font-style: normal; color: #7e8e67; }
-.intro p { font-size: 13px; color: #65735f; line-height: 2; margin: 17px 0 0; }
+.intro p { font-size: 13px; color: #65735f; line-height: 1.9; margin: 12px 0 0; }
 .intro-doodle { position: relative; display: flex; align-items: center; gap: 23px; padding-right: 15px; }
-.intro-doodle svg { width: 106px; height: 106px; opacity: .9; }
+.intro-doodle svg { width: 92px; height: 92px; opacity: .9; }
 .local-note { width: 150px; font-size: 11px; color: #717760; line-height: 2; }
 .date-bar { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 18px; padding: 0 2px; }
 .date-group { display: flex; align-items: center; gap: 8px; }
 .date-label { font-size: 11px; color: #69765f; margin-right: 10px; }
-.date-nav { width: 39px; height: 39px; border: 1px solid #cdd5c1; background: #fcfaf3; color: #4a674c; border-radius: 50%; box-shadow: 0 2px 3px #344c2b08; transition: background .2s, transform .2s; }
+.date-nav { width: 44px; height: 44px; border: 1px solid #cdd5c1; background: #fcfaf3; color: #4a674c; border-radius: 50%; box-shadow: 0 2px 3px #344c2b08; transition: background .2s, transform .2s; }
 .date-nav:hover { background: #e2e9d5; transform: translateY(-2px); }
-.date-input { width: 150px; border: 0; padding: 8px 5px; background: transparent; color: #344f39; font: 14px ui-monospace, monospace; }
-.text-button { background: transparent; border: 0; border-bottom: 1px solid #9daf8b; padding: 7px 8px; color: #546a45; font-size: 11px; }
+.date-input { width: 150px; min-height: 44px; border: 0; padding: 8px 5px; background: transparent; color: #344f39; font: 14px ui-monospace, monospace; }
+.text-button { min-width: 44px; min-height: 44px; background: transparent; border: 0; border-bottom: 1px solid #9daf8b; padding: 7px 8px; color: #546a45; font-size: 11px; }
 .day-label { color: #66765c; font-size: 11px; letter-spacing: 1px; }
 .main-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(315px, .95fr); background: #e8e9dd; border: 1px solid #d2d8c5; border-radius: 30px; box-shadow: 0 25px 40px -29px #2c453d55, inset 0 1px 0 #fff; padding: 13px; gap: 13px; }
 .scene { position: relative; min-height: 552px; overflow: hidden; border-radius: 22px 5px 5px 22px; background: linear-gradient(140deg, #e6e5d6, #bcc8b1); isolation: isolate; }
@@ -79,7 +79,7 @@ a { color: inherit; }
 .neighbor.right { right: 5%; }
 .neighbor:hover { transform: translateY(-5px); }
 .neighbor svg { width: 100%; height: 100%; overflow: visible; }
-.neighbor-caption { position: absolute; left: 0; right: 0; bottom: -17px; text-align: center; font-size: 9px; }
+.neighbor-caption { position: absolute; left: 50%; bottom: -18px; transform: translateX(-50%); white-space: nowrap; padding: 4px 7px; border-radius: 4px; border: 1px solid #c5b59399; background: #faf5e7ed; color: #49613e; text-align: center; font-size: 9px; line-height: 1.2; box-shadow: 0 1px 2px #5c4c3010; }
 .scene-bottom { position: absolute; left: 27px; right: 122px; bottom: 24px; display: flex; justify-content: space-between; gap: 12px; color: #5b6a4f; font-size: 8px; letter-spacing: 1px; z-index: 2; }
 .scene-bottom span:first-child { font: 10px ui-monospace, monospace; }
 .room-stars { position: absolute; inset: 0; pointer-events: none; opacity: .4; }
@@ -109,23 +109,23 @@ a { color: inherit; }
 .visitor-button[data-kind="cat"] { width: 88px; height: 76px; bottom: 23px; }
 .visitor-button.greeted:after { content: ""; position: absolute; right: 7px; top: 5px; width: 5px; height: 5px; border-radius: 50%; background: #6b8e55; box-shadow: 0 0 0 2px #fff9de; }
 .specimen { position: relative; display: flex; flex-direction: column; padding: 31px 29px 26px; border: 1px solid #e4e1d2; border-radius: 5px 21px 21px 5px; background: repeating-linear-gradient(0deg, #c2b89807 0 1px, transparent 1px 4px), #fcfaf3; box-shadow: inset 2px 0 3px #5d5a3410; min-width: 0; }
-.specimen-kicker { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 31px; font-size: 10px; color: #667259; letter-spacing: 1px; }
+.specimen-kicker { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 25px; font-size: 11px; color: #667259; letter-spacing: 1px; }
 .specimen-kicker span:last-child { color: #a16f54; font: 10px ui-monospace, monospace; }
-.variant { display: inline-flex; align-items: center; align-self: flex-start; gap: 6px; padding: 6px 10px; border-radius: 4px; background: #e5ead9; color: #526e3e; font-size: 10px; margin-bottom: 12px; }
+.variant { display: inline-flex; align-items: center; align-self: flex-start; gap: 6px; padding: 6px 10px; border-radius: 4px; background: #e5ead9; color: #526e3e; font-size: 11px; margin-bottom: 12px; }
 .variant-dot { width: 4px; height: 4px; background: #63814c; border-radius: 50%; }
 .variant.rare { background: #e8e3ed; color: #776084; }
 .rare .variant-dot { background: #a18bb4; }
 .plant-name { font: 600 50px/1.3 "Songti SC", "STSong", Georgia, serif; letter-spacing: 6px; margin: 0 0 3px; }
 .latin-name { color: #73835e; font: italic 18px Georgia, serif; margin: 0; }
-.plant-line { font-size: 12px; color: #64715a; line-height: 2; margin: 21px 0 26px; }
-.leaf-label { display: flex; justify-content: space-between; gap: 12px; color: #6b765f; font-size: 10px; }
+.plant-line { font-size: 13px; color: #64715a; line-height: 2; margin: 21px 0 26px; }
+.leaf-label { display: flex; justify-content: space-between; gap: 12px; color: #6b765f; font-size: 11px; }
 .leaf-label b { font: 11px ui-monospace, monospace; color: #4c6840; }
 .leaf-meter { display: flex; gap: 9px; margin: 13px 0 29px; }
 .leaf-meter span { width: 28px; height: 13px; border-radius: 80% 2px 80% 2px; transform: rotate(-17deg); background: #e2e3d3; box-shadow: inset 0 1px 2px #33472c0d; }
 .leaf-meter span.filled { background: linear-gradient(150deg, #a5b87e, #6f8a56); box-shadow: inset 0 1px 1px #e4ebc755; }
 .rare-card .leaf-meter span.filled { background: linear-gradient(150deg, #b8a9c9, #8b7b9c); }
 .seed-row { margin-top: auto; border-top: 1px solid #dedfce; padding-top: 17px; display: flex; flex-direction: column; gap: 6px; }
-.seed-row span { color: #727a64; font-size: 9px; }
+.seed-row span { color: #727a64; font-size: 10px; }
 .seed-id { color: #637854; font: 10px ui-monospace, monospace; overflow-wrap: anywhere; }
 .card-actions { display: grid; grid-template-columns: 1fr 1.12fr; gap: 9px; margin-top: 23px; }
 .card-action { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 47px; padding: 11px 7px; border-radius: 9px; border: 1px solid #cdd6bf; color: #456242; background: linear-gradient(#fffdf7, #efefe2); font-size: 12px; box-shadow: 0 2px 3px #33452609; transition: transform .2s, box-shadow .2s; }
@@ -134,9 +134,9 @@ a { color: inherit; }
 .card-action.saved { background: #e0e7d0; color: #49633c; }
 .card-action:hover { transform: translateY(-2px); box-shadow: 0 4px 8px #273e2b19; }
 .card-action:active { transform: translateY(1px); }
-.care-note { text-align: center; color: #737c65; font-size: 9px; line-height: 1.8; margin: 14px 0 0; }
+.care-note { text-align: center; color: #737c65; font-size: 10px; line-height: 1.8; margin: 14px 0 0; }
 .discovery-row { display: flex; justify-content: center; align-items: center; gap: 17px; flex-wrap: wrap; margin: 20px 0 7px; }
-.discovery-btn { display: flex; align-items: center; gap: 8px; min-height: 42px; background: transparent; border: 0; color: #526747; font-size: 11px; padding: 9px 11px; border-radius: 8px; }
+.discovery-btn { display: flex; align-items: center; gap: 8px; min-height: 44px; background: transparent; border: 0; color: #526747; font-size: 12px; padding: 9px 11px; border-radius: 8px; }
 .discovery-btn:hover { background: #e6eadb; }
 .discovery-btn[aria-pressed="true"] { background: #e3dce8; color: #705b7e; }
 .discovery-divider { width: 1px; height: 13px; background: #ccd3bf; }
@@ -170,7 +170,7 @@ a { color: inherit; }
 .treasure-task:nth-child(3) { background: #eeeced; }
 .treasure-task.done { background: #d9e4c5; border-color: #aabc8a; }
 .treasure-number { color: #7b8964; font: 9px ui-monospace, monospace; letter-spacing: 1px; }
-.treasure-label { font-size: 12px; line-height: 1.7; color: #3f593c; }
+.treasure-label { font-size: 13px; line-height: 1.7; color: #3f593c; }
 .treasure-hint { min-height: 36px; margin-top: auto; background: transparent; padding: 6px 0; border: 0; color: #607d47; font-size: 10px; text-align: left; }
 .treasure-hint:hover { color: #2e5431; }
 .treasure-hint:disabled { opacity: 1; color: #5a7242; }
@@ -200,10 +200,8 @@ a { color: inherit; }
 .footer .signature { font: italic 13px Georgia, serif; color: #6e7f58; white-space: nowrap; }
 .loading-note { text-align: center; padding-top: 140px; color: #5c7551; font-size: 12px; }
 .noscript { margin: 20px; padding: 20px; border-radius: 12px; background: #e0e8d1; border: 1px solid #b8c9a3; }
-.scene.moonlight .glass-lines { filter: hue-rotate(45deg) saturate(.65); }
 .moonlight .room-light { background: #eee4f3; box-shadow: inset -5px -3px 0 #afa0c0, 0 0 16px #fff7df66; }
 .scene.night-room { background: #2d4039; }
-.night-room .glass-lines { filter: brightness(.49) saturate(.65) hue-rotate(15deg); }
 .night-room .scene-label, .night-room .room-badge, .night-room .weather-badge, .night-room .scene-sticker, .night-room .scene-bottom, .night-room .neighbor { color: #d7dfc1; }
 .night-room .room-light { background: radial-gradient(circle at 35% 30%, #fff6c7, #d1a15b); box-shadow: 0 0 25px #eed09877; }
 .night-room .room-stars { opacity: 1; }
@@ -211,6 +209,95 @@ a { color: inherit; }
 .night-room .room-stars i:nth-child(2) { animation-delay: -2s; }
 .night-room .room-stars i:nth-child(3) { animation-delay: -4s; }
 .night-room .room-stars i:nth-child(4) { animation-delay: -1s; }
+/* Each surface keeps its own light and color through the evening transition. */
+.scene {
+  --stage-wall-top: #faf6ec;
+  --stage-wall-middle: #eae5d6;
+  --stage-wall-bottom: #d7d1bd;
+  --stage-reveal-dark: #aeb6a4;
+  --stage-reveal-middle: #d0d5be;
+  --stage-reveal-light: #f5f1df;
+  --stage-frame-light: #e2e8d1;
+  --stage-frame-middle: #bdcbb2;
+  --stage-frame-dark: #869b82;
+  --stage-sky-top: #a6c3c2;
+  --stage-sky-middle: #cbdac5;
+  --stage-sky-bottom: #e1dfb9;
+  --stage-hill-back-top: #95ad93;
+  --stage-hill-back-bottom: #b4c39c;
+  --stage-hill-middle-top: #698a73;
+  --stage-hill-middle-bottom: #9bb187;
+  --stage-hill-front: #9dad87;
+  --stage-glass-reflection: #fffbed;
+  --stage-sunbeam: #fff0c5;
+  --stage-floor-top: #c8c7ae;
+  --stage-floor-middle: #e1dbc5;
+  --stage-floor-bottom: #eee6d3;
+  --stage-wood-top-light: #ddc4a0;
+  --stage-wood-top-middle: #d1ad7e;
+  --stage-wood-top-dark: #b58a5f;
+  --stage-wood-face-top: #ac8055;
+  --stage-wood-face-middle: #b68b5e;
+  --stage-wood-face-bottom: #98714d;
+  --stage-wood-leg-dark: #826f51;
+  --stage-wood-leg-light: #bda176;
+  --stage-wood-leg-middle: #a38961;
+  --stage-arch-highlight: #f7f2e3;
+  --stage-frame-edge: #ecedda;
+  --stage-sill-edge: #c1c9ad;
+  --stage-cloud-color: #f3f2d9;
+  --stage-grain-opacity: .1;
+}
+.scene.moonlight:not(.night-room) {
+  --stage-sky-top: #b4c2cf;
+  --stage-sky-middle: #d5d9d4;
+  --stage-sky-bottom: #e6e0cd;
+  --stage-glass-reflection: #fff7ef;
+}
+.scene.night-room {
+  --stage-wall-top: #9ba797;
+  --stage-wall-middle: #788773;
+  --stage-wall-bottom: #536c5c;
+  --stage-reveal-dark: #3b5651;
+  --stage-reveal-middle: #75836d;
+  --stage-reveal-light: #b7bea1;
+  --stage-frame-light: #a1ad8a;
+  --stage-frame-middle: #7a8c6c;
+  --stage-frame-dark: #4b695b;
+  --stage-sky-top: #1f3c48;
+  --stage-sky-middle: #43636a;
+  --stage-sky-bottom: #7a8a76;
+  --stage-hill-back-top: #536f65;
+  --stage-hill-back-bottom: #6b806b;
+  --stage-hill-middle-top: #304f48;
+  --stage-hill-middle-bottom: #4c6953;
+  --stage-hill-front: #4b6652;
+  --stage-glass-reflection: #d3ece9;
+  --stage-sunbeam: #dce9cf;
+  --stage-floor-top: #516953;
+  --stage-floor-middle: #798568;
+  --stage-floor-bottom: #979476;
+  --stage-wood-top-light: #ccb17e;
+  --stage-wood-top-middle: #ad8d5d;
+  --stage-wood-top-dark: #897049;
+  --stage-wood-face-top: #816542;
+  --stage-wood-face-middle: #957648;
+  --stage-wood-face-bottom: #6c583b;
+  --stage-wood-leg-dark: #5d5740;
+  --stage-wood-leg-light: #9b8557;
+  --stage-wood-leg-middle: #756844;
+  --stage-arch-highlight: #a6af93;
+  --stage-frame-edge: #c1c7a2;
+  --stage-sill-edge: #9dac84;
+  --stage-cloud-color: #b7c8bb;
+  --stage-grain-opacity: .06;
+}
+.stage-night-sky, .stage-interior-light, .stage-clouds, .stage-sunbeam { transition: opacity .55s ease; }
+.scene.night-room .stage-night-sky { opacity: 1; }
+.scene.night-room .stage-interior-light { opacity: 1; }
+.scene.night-room .stage-clouds { opacity: .22; }
+.scene.night-room .stage-sunbeam { opacity: .14; }
+
 @keyframes sway { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-5deg); } 42% { transform: rotate(4deg); } 65% { transform: rotate(-2deg); } 82% { transform: rotate(1deg); } }
 @keyframes drop { 0% { transform: translateY(-20px) rotate(25deg); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(85px) rotate(25deg); opacity: 0; } }
 @keyframes window-rain { to { transform: translate(-40px, 290px); } }
@@ -259,7 +346,7 @@ a { color: inherit; }
   .brand-mark { width: 37px; height: 37px; }
   .brand-sub { font-size: 7px; }
   .top-links { gap: 15px; font-size: 11px; }
-  .nav-guest { display: none; }
+  .top-links .nav-guest { display: none; }
   .intro { padding: 29px 0 27px; }
   .intro h1 { font-size: 33px; line-height: 1.5; letter-spacing: 1px; }
   .intro p { font-size: 12px; line-height: 1.9; margin-top: 13px; }
@@ -312,9 +399,9 @@ a { color: inherit; }
   .treasure-progress { font-size: 9px; padding: 5px 7px; top: 12px; }
   .treasure-list { gap: 8px; }
   .treasure-task { min-height: 141px; padding: 13px 10px 7px; gap: 11px; }
-  .treasure-label { font-size: 11px; }
+  .treasure-label { font-size: 12px; }
   .treasure-number { font-size: 8px; }
-  .treasure-hint { min-height: 44px; font-size: 9px; }
+  .treasure-hint { min-height: 44px; font-size: 10px; }
   .treasure-result { font-size: 9px; }
   .sill { margin-top: 30px; }
   .sill-heading { display: block; }
@@ -337,7 +424,7 @@ a { color: inherit; }
   .shell { padding-left: 13px; padding-right: 13px; }
   .intro h1 { font-size: 29px; }
   .top-links { gap: 11px; }
-  .nav-play { display: none; }
+  .top-links .nav-play { display: none; }
   .day-label { display: none; }
   .date-input { width: 135px; }
   .scene { min-height: 412px; }
@@ -366,47 +453,47 @@ a { color: inherit; }
     <a class="brand" href="#" aria-label="每日一盆，回到今天"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">每日一盆</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
     <nav class="top-links" aria-label="温室导航"><a class="nav-guest" href="#guest-title">小客人</a><a class="nav-play" href="#treasure-title">去寻宝</a><a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a></nav>
   </header>
-  <div class="intro"><div><div class="eyebrow">THE WINDOWSILL COLLECTION · 一日一盆</div><h1>把普通日子，<br><em>养得有声有色。</em></h1><p>一扇窗，六种植物，几位偶尔路过的朋友。<br>挑个日子，看看它为你长出了什么。</p></div><div class="intro-doodle" aria-hidden="true"><svg viewBox="0 0 110 116" fill="none"><path d="m23 12 64 5 5 88-70-5Z" fill="#f7ead0" stroke="#b7a884" stroke-width="1.6" stroke-linejoin="round"/><path d="m23 12 7 15 56 4 1-14M25 84l64 5" stroke="#c6b58e" stroke-width="1.4"/><rect x="35" y="42" width="42" height="34" rx="17" fill="#e4e9cd"/><path d="M56 70V50m0 11C42 61 42 50 44 49c9 0 13 5 12 12m0-7c0-9 7-12 13-11 0 8-5 13-13 13" fill="#9cb27e" stroke="#6d8c5a" stroke-width="1.4" stroke-linecap="round"/><path d="m8 32-5-3m96 28 7 1M94 6l4-5M5 76l5-4" stroke="#b9c59d" stroke-width="2" stroke-linecap="round"/><path d="m72 91 3 3 6-5" stroke="#b78f70" stroke-width="1.5" stroke-linecap="round"/></svg><span class="local-note">日历里的小温室<br>把一点绿意，留在窗边。</span></div></div>
+  <div class="intro"><div><div class="eyebrow">THE WINDOWSILL COLLECTION · 一日一盆</div><h1>把普通日子，<br><em>养得有声有色。</em></h1><p>一扇窗，六种植物，几位偶尔路过的朋友。<br>挑个日子，看看它为你长出了什么。</p></div><div class="intro-doodle" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="46" stroke="#a69a78" stroke-width=".8"/><circle cx="60" cy="60" r="40" stroke="#c5b996" stroke-width=".6" stroke-dasharray="2 4"/><path d="M52 93Q74 62 62 29" stroke="#75845d" stroke-width="2" stroke-linecap="round"/><path d="M63 77Q41 77 36 59Q57 56 63 77Z" fill="#99ab79"/><path d="M66 61Q86 61 88 43Q68 42 66 61Z" fill="#647f58"/><path d="M65 47Q46 46 45 30Q61 29 65 47Z" fill="#b4bf8c"/><path d="m41 63 20 12m9-17 13-10M49 34l14 11" stroke="#e5e6c4" stroke-width="1"/><circle cx="47" cy="89" r="2" fill="#b78e65"/><circle cx="78" cy="80" r="1.5" fill="#b78e65"/></svg><span class="local-note">一点日光，<br>一点慢慢生长的时间。</span></div></div>
   <div class="date-bar"><div class="date-group"><span class="date-label">翻到这一天</span><button class="date-nav" id="previous-day" type="button" aria-label="前一天">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">植物日期</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="植物日期"></label><button class="date-nav" id="next-day" type="button" aria-label="后一天">→</button><button class="text-button" id="today-button" type="button">今天</button></div><span class="day-label" id="day-label"></span></div>
   <main class="main-grid" aria-label="日期植物">
     <section class="scene" id="scene" aria-label="小温室里的植物">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" preserveAspectRatio="none" width="720" height="520" class="glass-lines greenhouse-stage" aria-hidden="true" fill="none">
   <defs>
     <linearGradient id="stage-plaster" x1="78" y1="0" x2="647" y2="520" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fcf8ee"/><stop offset=".48" stop-color="#eee8d8"/><stop offset="1" stop-color="#d6d2bf"/>
+      <stop stop-color="var(--stage-wall-top, #faf6ec)"/><stop offset=".48" stop-color="var(--stage-wall-middle, #eae5d6)"/><stop offset="1" stop-color="var(--stage-wall-bottom, #d7d1bd)"/>
     </linearGradient>
     <linearGradient id="stage-reveal" x1="164" y1="69" x2="558" y2="396" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#b5b5a2"/><stop offset=".42" stop-color="#d5d4c0"/><stop offset="1" stop-color="#fbf5e5"/>
+      <stop stop-color="var(--stage-reveal-dark, #aeb6a4)"/><stop offset=".42" stop-color="var(--stage-reveal-middle, #d0d5be)"/><stop offset="1" stop-color="var(--stage-reveal-light, #f5f1df)"/>
     </linearGradient>
     <linearGradient id="stage-frame-paint" x1="176" y1="54" x2="520" y2="402" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#e4e5cf"/><stop offset=".48" stop-color="#bfc8ad"/><stop offset="1" stop-color="#8e9c82"/>
+      <stop stop-color="var(--stage-frame-light, #e2e8d1)"/><stop offset=".48" stop-color="var(--stage-frame-middle, #bdcbb2)"/><stop offset="1" stop-color="var(--stage-frame-dark, #869b82)"/>
     </linearGradient>
     <linearGradient id="stage-sky-paint" x1="366" y1="62" x2="366" y2="398" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#adc1ae"/><stop offset=".54" stop-color="#cfdbbf"/><stop offset="1" stop-color="#e2e1bd"/>
+      <stop stop-color="var(--stage-sky-top, #a6c3c2)"/><stop offset=".54" stop-color="var(--stage-sky-middle, #cbdac5)"/><stop offset="1" stop-color="var(--stage-sky-bottom, #e1dfb9)"/>
     </linearGradient>
     <linearGradient id="stage-distance" x1="355" y1="262" x2="355" y2="407" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#9caf94"/><stop offset="1" stop-color="#bec7a0"/>
+      <stop stop-color="var(--stage-hill-back-top, #95ad93)"/><stop offset="1" stop-color="var(--stage-hill-back-bottom, #b4c39c)"/>
     </linearGradient>
     <linearGradient id="stage-leaves-paint" x1="360" y1="281" x2="360" y2="414" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#738d73"/><stop offset="1" stop-color="#a1b28a"/>
+      <stop stop-color="var(--stage-hill-middle-top, #698a73)"/><stop offset="1" stop-color="var(--stage-hill-middle-bottom, #9bb187)"/>
     </linearGradient>
     <linearGradient id="stage-glass-glint" x1="252" y1="140" x2="458" y2="303" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fffced" stop-opacity=".37"/><stop offset="1" stop-color="#fffced" stop-opacity="0"/>
+      <stop stop-color="var(--stage-glass-reflection, #fffbed)" stop-opacity=".37"/><stop offset="1" stop-color="var(--stage-glass-reflection, #fffbed)" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="stage-sun-paint" x1="548" y1="120" x2="340" y2="442" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fff2ca" stop-opacity=".57"/><stop offset="1" stop-color="#fff2ca" stop-opacity="0"/>
+      <stop stop-color="var(--stage-sunbeam, #fff0c5)" stop-opacity=".40"/><stop offset="1" stop-color="var(--stage-sunbeam, #fff0c5)" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="stage-floor-paint" x1="360" y1="407" x2="360" y2="520" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#d1ceb7"/><stop offset=".4" stop-color="#e6dfca"/><stop offset="1" stop-color="#f1e9d8"/>
+      <stop stop-color="var(--stage-floor-top, #c8c7ae)"/><stop offset=".4" stop-color="var(--stage-floor-middle, #e1dbc5)"/><stop offset="1" stop-color="var(--stage-floor-bottom, #eee6d3)"/>
     </linearGradient>
     <linearGradient id="stage-board-top" x1="358" y1="396" x2="358" y2="424" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#dbc3a0"/><stop offset=".42" stop-color="#d6b78c"/><stop offset="1" stop-color="#bc966c"/>
+      <stop stop-color="var(--stage-wood-top-light, #ddc4a0)"/><stop offset=".42" stop-color="var(--stage-wood-top-middle, #d1ad7e)"/><stop offset="1" stop-color="var(--stage-wood-top-dark, #b58a5f)"/>
     </linearGradient>
     <linearGradient id="stage-board-face" x1="357" y1="423" x2="357" y2="442" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#b48b5e"/><stop offset=".34" stop-color="#b89165"/><stop offset="1" stop-color="#9f7d57"/>
+      <stop stop-color="var(--stage-wood-face-top, #ac8055)"/><stop offset=".34" stop-color="var(--stage-wood-face-middle, #b68b5e)"/><stop offset="1" stop-color="var(--stage-wood-face-bottom, #98714d)"/>
     </linearGradient>
     <linearGradient id="stage-leg-paint" x1="91" y1="439" x2="113" y2="487" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8e7657"/><stop offset=".44" stop-color="#bfa27a"/><stop offset="1" stop-color="#a88b64"/>
+      <stop stop-color="var(--stage-wood-leg-dark, #826f51)"/><stop offset=".44" stop-color="var(--stage-wood-leg-light, #bda176)"/><stop offset="1" stop-color="var(--stage-wood-leg-middle, #a38961)"/>
     </linearGradient>
     <linearGradient id="stage-vase-paint" x1="38" y1="378" x2="66" y2="413" gradientUnits="userSpaceOnUse">
       <stop stop-color="#e2b594"/><stop offset=".45" stop-color="#c78f70"/><stop offset="1" stop-color="#9f6b50"/>
@@ -424,6 +511,8 @@ a { color: inherit; }
       <feBlend in="SourceGraphic" mode="multiply"/>
     </filter>
     <clipPath id="stage-window-cutout"><path d="M170 399V226a190 168 0 0 1 380 0v173Z"/></clipPath>
+    <radialGradient id="stage-moon-glow"><stop stop-color="#f3ead0" stop-opacity=".22"/><stop offset="1" stop-color="#dce8d9" stop-opacity="0"/></radialGradient>
+    <radialGradient id="stage-lamplight" cx=".5" cy=".5" r=".5"><stop stop-color="#f7d99a" stop-opacity=".40"/><stop offset=".65" stop-color="#e4bf79" stop-opacity=".10"/><stop offset="1" stop-color="#dbaf66" stop-opacity="0"/></radialGradient>
   </defs>
   <path d="M0 0H720V520H0Z" fill="url(#stage-plaster)"/>
   <g opacity=".42" stroke="#c9c5b3" stroke-width=".6">
@@ -432,15 +521,22 @@ a { color: inherit; }
   <path d="M0 414H720V520H0Z" fill="url(#stage-floor-paint)"/>
   <path d="M0 414H720" stroke="#c8c4af" stroke-width="1"/>
   <ellipse cx="355" cy="468" rx="286" ry="18" fill="#7a7158" opacity=".16" filter="url(#stage-soft-shadow)"/>
-  <path d="M141 405V226a219 196 0 0 1 438 0v179Z" fill="#f7f2e3" filter="url(#stage-recess-shadow)"/>
+  <path d="M141 405V226a219 196 0 0 1 438 0v179Z" fill="var(--stage-arch-highlight, #f7f2e3)" filter="url(#stage-recess-shadow)"/>
   <path d="M151 402V227a209 184 0 0 1 418 0v175Z" class="stage-frame" fill="url(#stage-reveal)"/>
   <path d="M164 399V226a196 171 0 0 1 392 0v173Z" fill="#677964" opacity=".58"/>
   <path d="M170 399V226a190 168 0 0 1 380 0v173Z" class="stage-sky" fill="url(#stage-sky-paint)"/>
   <g clip-path="url(#stage-window-cutout)">
+    <g class="stage-night-sky" opacity="0">
+      <circle cx="470" cy="116" r="51" fill="url(#stage-moon-glow)"/>
+      <path d="M475 94a24 24 0 1 0 16 41 27 27 0 0 1-16-41Z" fill="#f2e7bf"/>
+      <g fill="#ede7c9"><circle cx="263" cy="109" r="1.4"/><circle cx="319" cy="88" r="1"/><circle cx="408" cy="90" r="1.2"/><circle cx="514" cy="180" r="1.1"/><circle cx="234" cy="203" r="1.2"/><circle cx="405" cy="196" r=".8"/></g>
+      <path d="M289 157v7m-3.5-3.5h7m130-15v5m-2.5-2.5h5" stroke="#eee8ce" stroke-width=".9" stroke-linecap="round"/>
+    </g>
+
     <path d="M135 325Q226 233 329 292T583 281V420H135Z" class="stage-hill stage-hill-back" fill="url(#stage-distance)"/>
     <path d="M144 369Q253 286 357 342Q457 269 583 348V421H144Z" class="stage-hill" fill="url(#stage-leaves-paint)"/>
-    <path d="M169 391Q256 345 342 382Q436 339 551 381V414H169Z" class="stage-hill stage-hill-front" fill="#9dad87"/>
-    <g fill="#f3f2d9" opacity=".62">
+    <path d="M169 391Q256 345 342 382Q436 339 551 381V414H169Z" class="stage-hill stage-hill-front" fill="var(--stage-hill-front, #9dad87)"/>
+    <g class="stage-clouds" fill="var(--stage-cloud-color, #f3f2d9)" opacity=".62">
       <path d="M205 166q-6-12 6-16q8-3 14 5q7-14 22-10q13 3 13 15q19-5 24 6Z"/>
       <path d="M414 122q-4-10 7-13q8-3 13 4q8-12 21-6q8 3 9 12q12-3 19 5Z"/>
     </g>
@@ -453,20 +549,21 @@ a { color: inherit; }
   </g>
   <path d="M360 58V399" stroke="#6d7e68" stroke-opacity=".32" stroke-width="12"/>
   <path d="M357 58V399" class="stage-frame" stroke="url(#stage-frame-paint)" stroke-width="8"/>
-  <path d="M354 64V395" stroke="#ecedda" stroke-opacity=".7" stroke-width="1.5"/>
+  <path d="M354 64V395" stroke="var(--stage-frame-edge, #ecedda)" stroke-opacity=".7" stroke-width="1.5"/>
   <path d="M170 237H550" stroke="#65765f" stroke-opacity=".25" stroke-width="10"/>
   <path d="M170 234H550" stroke="url(#stage-frame-paint)" stroke-width="7"/>
-  <path d="M172 231H548" stroke="#edf0dd" stroke-opacity=".65" stroke-width="1.2"/>
+  <path d="M172 231H548" stroke="var(--stage-frame-edge, #edf0dd)" stroke-opacity=".65" stroke-width="1.2"/>
   <path d="M160 399V225a200 177 0 0 1 400 0v174" class="stage-frame" stroke="url(#stage-frame-paint)" stroke-width="11"/>
-  <path d="M154 397V227a206 183 0 0 1 412 0v170" stroke="#f9f7e7" stroke-opacity=".7" stroke-width="2"/>
+  <path d="M154 397V227a206 183 0 0 1 412 0v170" stroke="var(--stage-frame-edge, #f9f7e7)" stroke-opacity=".7" stroke-width="2"/>
   <path d="M174 399V226a186 164 0 0 1 372 0v173" stroke="#60735b" stroke-opacity=".26" stroke-width="1.2"/>
   <path d="M149 404H571" stroke="#6e7e61" stroke-opacity=".22" stroke-width="13" stroke-linecap="round"/>
-  <path d="M147 399H573" stroke="#c1c9ad" stroke-width="10" stroke-linecap="round"/>
-  <path d="M148 396H572" stroke="#e9ecd4" stroke-width="2" stroke-linecap="round"/>
+  <path d="M147 399H573" stroke="var(--stage-sill-edge, #c1c9ad)" stroke-width="10" stroke-linecap="round"/>
+  <path d="M148 396H572" stroke="var(--stage-frame-edge, #e9ecd4)" stroke-width="2" stroke-linecap="round"/>
   <path d="M467 150 313 431H392L538 175Z" class="stage-sunbeam" fill="url(#stage-sun-paint)" opacity=".45"/>
   <g opacity=".58" fill="#a89d80">
     <circle cx="32" cy="104" r=".8"/><circle cx="117" cy="153" r=".55"/><circle cx="99" cy="373" r=".65"/><circle cx="584" cy="348" r=".7"/><circle cx="677" cy="207" r=".75"/><circle cx="608" cy="178" r=".55"/><circle cx="53" cy="286" r=".7"/><circle cx="636" cy="81" r=".5"/><circle cx="126" cy="320" r=".7"/><circle cx="52" cy="381" r=".5"/><circle cx="648" cy="393" r=".6"/>
   </g>
+  <ellipse class="stage-interior-light" cx="531" cy="330" rx="235" ry="220" fill="url(#stage-lamplight)" opacity="0"/>
   <path d="m83 438 4 45q0 6 7 6h13q5 0 5-6l-3-45Z" fill="url(#stage-leg-paint)"/>
   <path d="m609 438-3 45q0 6 6 6h14q6 0 6-6l5-45Z" fill="url(#stage-leg-paint)"/>
   <path d="M87 441 91 482M613 441l-3 41" stroke="#d4bc94" stroke-opacity=".48" stroke-width="2"/>
@@ -482,7 +579,7 @@ a { color: inherit; }
   <path d="M44 395q-5 9 0 13" stroke="#f3ceb0" stroke-width="2.2" stroke-linecap="round" opacity=".63"/>
   <path d="M50 383v-29m0 17q-12-3-13-12m13 6q9-2 11-11" stroke="#667858" stroke-width="1.7" stroke-linecap="round"/>
   <path d="M37 358q-5-8-13-4q2 8 13 8m23-8q10-9 17-5q-4 9-17 9" fill="#8c9d74"/>
-  <path d="M0 0H720V520H0Z" fill="#9e8e71" opacity=".1" filter="url(#stage-paper-grain)" style="mix-blend-mode:multiply"/>
+  <path d="M0 0H720V520H0Z" fill="#9e8e71" opacity="var(--stage-grain-opacity, .1)" filter="url(#stage-paper-grain)" style="mix-blend-mode:multiply"/>
 </svg>
       <div class="weather-layer" aria-hidden="true"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i><i style="--n:5"></i></div>
       <div class="room-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -1031,7 +1128,7 @@ a { color: inherit; }
      button.setAttribute('aria-label',treasureFound.has(task.id)?`${task.label}，已发现`:`${task.label}，给点线索`);
      let suggestedDay=null;
      button.addEventListener('click',()=>{
-       if(suggestedDay){const target=suggestedDay;showDate(target);notify(`沿着线索，来到了 ${target}。`);return;}
+       if(suggestedDay){const target=suggestedDay;showDate(target);$('plant-date').focus();notify(`沿着线索，来到了 ${target}。`);return;}
        suggestedDay=hintTreasure(task);
        if(suggestedDay){button.textContent='去看看 →';button.setAttribute('aria-label',`${task.label}，前往线索日期`);}
      });tile.append(number,label,button);$('treasure-list').append(tile);
@@ -1171,7 +1268,7 @@ a { color: inherit; }
    $('saved-dates').replaceChildren();
    for (const day of saved) {
      const chip = document.createElement('button'); chip.type = 'button'; chip.className = `date-chip${current && current.date === day ? ' current' : ''}`;
-     chip.textContent = day; chip.setAttribute('aria-label', `查看收藏的 ${day}`); chip.addEventListener('click', () => showDate(day)); $('saved-dates').append(chip);
+     chip.textContent = day; chip.setAttribute('aria-label', `查看收藏的 ${day}`); chip.addEventListener('click', () => { showDate(day); $('plant-date').focus(); }); $('saved-dates').append(chip);
    }
  }
  function showDate(day) {
