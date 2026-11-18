@@ -4,6 +4,7 @@ export type NavigationAsset = {
   bytes: number;
   sources?: { url: string; width: number }[];
   sizes?: string;
+  mimeType?: string;
 };
 export type NavigationManifest = { version: 1; assets: NavigationAsset[]; routes: Record<string, number[]> };
 export type NavigationConnection = { saveData?: boolean; effectiveType?: string } | undefined;
@@ -65,11 +66,10 @@ export function selectNavigationAssets(
   return result;
 }
 
-// Native image preloads use the browser's own viewport and DPR selection. A
-// fetch of the fallback URL would warm the wrong file for smaller cards.
+// Let the browser choose the same width and format as the destination. A
+// detached picture only fills the cache and never enters the page layout.
 function preloadResponsiveImage(asset: NavigationAsset, signal: AbortSignal, priority: RequestPriority): Promise<boolean> {
-  const hint = document.createElement('link');
-  if (!('imageSrcset' in hint) || !hint.relList.supports('preload') || signal.aborted || !Array.isArray(asset.sources)) {
+  if (typeof HTMLPictureElement === 'undefined' || signal.aborted || !Array.isArray(asset.sources)) {
     return Promise.resolve(false);
   }
   const urls: string[] = [];
@@ -81,24 +81,33 @@ function preloadResponsiveImage(asset: NavigationAsset, signal: AbortSignal, pri
     urls.push(`${url.href} ${source.width}w`);
   }
   if (!urls.length) return Promise.resolve(false);
-  hint.rel = 'preload';
-  hint.as = 'image';
-  hint.imageSizes = asset.sizes || '100vw';
-  hint.imageSrcset = urls.join(', ');
-  hint.fetchPriority = priority;
+  const picture = document.createElement('picture');
+  const source = document.createElement('source');
+  source.type = asset.mimeType ?? '';
+  source.sizes = asset.sizes || '100vw';
+  source.srcset = urls.join(', ');
+  const image = new Image();
+  image.fetchPriority = priority;
+  image.decoding = 'async';
+  picture.append(source, image);
   return new Promise(resolve => {
     const finish = (loaded: boolean) => {
       signal.removeEventListener('abort', cancel);
-      hint.onload = null;
-      hint.onerror = null;
-      hint.remove();
+      image.onload = null;
+      image.onerror = null;
       resolve(loaded);
     };
-    const cancel = () => finish(false);
-    hint.onload = () => finish(true);
-    hint.onerror = cancel;
+    const cancel = () => {
+      image.removeAttribute('src');
+      source.removeAttribute('srcset');
+      finish(false);
+    };
+    image.onload = () => finish(!image.currentSrc.startsWith('data:'));
+    image.onerror = () => finish(false);
     signal.addEventListener('abort', cancel, { once: true });
-    document.head.append(hint);
+    // An unsupported MIME type still settles the scheduler slot without
+    // requesting an image the destination cannot display.
+    image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   });
 }
 
@@ -126,7 +135,7 @@ export async function fetchNavigationAsset(
   };
   if (!types[asset.type]) return false;
   // Consume the response so a complete file is available in the HTTP cache.
-  // Never import, evaluate, apply styles, or decode images on the current page.
+  // The response is cached without inserting the asset into the page.
   const body = await response.arrayBuffer();
   return !signal.aborted && body.byteLength > 0;
 }

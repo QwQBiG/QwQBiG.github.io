@@ -1,13 +1,20 @@
 ---
 import { portraitSources } from '../data/portrait-images.mjs';
 const portrait = portraitSources('Smile');
+const avif = portraitSources('Smile', 'avif');
 ---
 
 <character-portrait class="portrait" data-expression="Smile">
   <div class="portrait-ambient" aria-hidden="true"></div>
-  <img class="portrait-image is-visible" {...portrait} width="760" height="760"
-    alt="QwQBiG's character" decoding="async" fetchpriority="high" draggable="false" />
-  <img class="portrait-image" width="760" height="760" alt="" decoding="async" draggable="false" />
+  <picture>
+    <source type="image/avif" srcset={avif.srcset} sizes={avif.sizes} />
+    <img class="portrait-image is-visible" {...portrait} width="760" height="760"
+      alt="QwQBiG's character" decoding="async" fetchpriority="high" draggable="false" />
+  </picture>
+  <picture>
+    <source type="image/avif" />
+    <img class="portrait-image" width="760" height="760" alt="" decoding="async" draggable="false" />
+  </picture>
   <button type="button" class="portrait-expression-button" title="Click to change expression"
     aria-label="Current expression: Smile. Click to change expression" aria-busy="false">
     <span class="portrait-expression-hint" aria-hidden="true">Tap to change</span>
@@ -21,7 +28,22 @@ const portrait = portraitSources('Smile');
   import { portraitSources } from '../data/portrait-images.mjs';
 
   const expressions = ['Smile', 'Happy', 'Wink', 'Shy'];
-  const sources = expressions.map(portraitSources);
+  const sources = expressions.map(expression => ({
+    avif: portraitSources(expression, 'avif'),
+    webp: portraitSources(expression),
+  }));
+
+  // Set the preferred source before the fallback so cold clicks and warmups
+  // use the same browser-selected file as the visible crossfade layer.
+  function setPortraitImage(image: HTMLImageElement, index: number) {
+    const { avif, webp } = sources[index];
+    const source = image.previousElementSibling as HTMLSourceElement;
+    source.sizes = avif.sizes;
+    source.srcset = avif.srcset;
+    image.sizes = webp.sizes;
+    image.srcset = webp.srcset;
+    image.src = webp.src;
+  }
 
   class CharacterPortrait extends HTMLElement {
     private cleanup?: () => void;
@@ -43,7 +65,11 @@ const portrait = portraitSources('Smile');
       const loadingImages = new Map<number, HTMLImageElement>();
       const cache = createPortraitCache<HTMLImageElement>((index, signal) => (
         new Promise((resolve, reject) => {
+          const picture = document.createElement('picture');
+          const source = document.createElement('source');
+          source.type = 'image/avif';
           const image = new Image();
+          picture.append(source, image);
           loadingImages.set(index, image);
           image.decoding = 'async';
           image.fetchPriority = 'low';
@@ -57,6 +83,7 @@ const portrait = portraitSources('Smile');
             clear();
             image.removeAttribute('src');
             image.removeAttribute('srcset');
+            source.removeAttribute('srcset');
             reject(new Error('Portrait removed'));
           };
           image.onload = () => {
@@ -67,9 +94,7 @@ const portrait = portraitSources('Smile');
           };
           image.onerror = () => { clear(); reject(new Error('Portrait image unavailable')); };
           signal.addEventListener('abort', abort, { once: true });
-          image.sizes = sources[index].sizes;
-          image.srcset = sources[index].srcset;
-          image.src = sources[index].src;
+          setPortraitImage(image, index);
         })
       ));
 
@@ -90,7 +115,7 @@ const portrait = portraitSources('Smile');
         backgroundImages.add(index);
         let ready = false;
         const task = scheduleBackgroundTask({
-          key: `portrait:${sources[index].src}`,
+          key: `portrait:${expressions[index]}`,
           priority: 'image',
           signal: lifetime.signal,
           // Keep an image already being decoded available to an expression click.
@@ -115,11 +140,9 @@ const portrait = portraitSources('Smile');
         count: expressions.length,
         initial,
         load: loadForInteraction,
-        prepare: async (image) => {
+        prepare: async (_image, index) => {
           const nextImage = 1 - activeImage;
-          images[nextImage].sizes = image.sizes;
-          images[nextImage].srcset = image.srcset;
-          images[nextImage].src = image.src;
+          setPortraitImage(images[nextImage], index);
           await decodePortrait(images[nextImage], lifetime.signal);
         },
         fade: (index) => {

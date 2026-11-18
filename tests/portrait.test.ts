@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { setImmediate } from 'node:timers/promises';
 import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
+import { portraitSources, portraitWidths } from '../src/data/portrait-images.mjs';
 import { createPortraitCache, createPortraitSwitcher, decodePortrait } from '../src/utils/portrait.ts';
 
 function deferred<T = void>() {
@@ -9,6 +12,26 @@ function deferred<T = void>() {
   const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; });
   return { promise, resolve, reject };
 }
+
+test('every expression offers matching AVIF and WebP sizes with transparent edges', async () => {
+  for (const expression of ['Smile', 'Happy', 'Wink', 'Shy']) {
+    const fallback = portraitSources(expression);
+    const avif = portraitSources(expression, 'avif');
+    assert.equal(avif.sizes, fallback.sizes);
+    for (const sources of [avif, fallback]) {
+      const candidates = sources.srcset.split(', ').map(candidate => candidate.split(' '));
+      assert.deepEqual(candidates.map(([, width]) => width), portraitWidths.map(width => width + 'w'));
+      assert.equal(sources.src, candidates.at(-1)![0]);
+      for (const [url, width] of candidates) {
+        const image = await sharp(fileURLToPath(new URL('../public' + url, import.meta.url))).metadata();
+        assert.equal(image.width, Number.parseInt(width));
+        assert.equal(image.height, image.width);
+        assert.equal(image.hasAlpha, true);
+        assert.equal(image.format, sources === avif ? 'heif' : 'webp');
+      }
+    }
+  }
+});
 
 test('a ready newer expression does not wait for a superseded slow image', async () => {
   const slow = deferred<string>();

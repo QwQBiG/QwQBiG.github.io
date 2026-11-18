@@ -7,10 +7,14 @@ import MusicWidget from '../components/widgets/MusicWidget.astro';
 import { portraitSources } from '../data/portrait-images.mjs';
 import { loadContent } from '../utils/load-content';
 import { createContentIndex, getPostUrl, getTagUrl } from '../utils/content';
+import '../assets/home-fonts/faces.css';
+import homeSans from '../assets/home-fonts/home-sans.woff2?no-inline&url';
+import homeSerif from '../assets/home-fonts/home-serif.woff2?no-inline&url';
+import homeItalic from '../assets/home-fonts/home-serif-italic.woff2?no-inline&url';
 
 const { csPosts, poetryPosts, series, tags, latestPosts } = await loadContent();
 const popularTags = createContentIndex({ cs: csPosts }).tags;
-const firstPortrait = portraitSources('Smile');
+const firstPortrait = portraitSources('Smile', 'avif');
 const statistics = [
   { label: 'posts', count: csPosts.length, href: '/cs/', description: '已发布的笔记与文章' },
   { label: 'series', count: series.length, href: '/series/', description: '文章合集' },
@@ -51,37 +55,13 @@ const statistics = [
 
   <!-- 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 -->
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
-  <link rel="preload" as="image" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
+  <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
   <link rel="preload" href="/generated/site/gallery-cover-640.webp" as="image" media="(min-width: 924px)" fetchpriority="low">
-  <link rel="preload" href="/fonts/quicksand-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/cormorant-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href={homeSans} as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href={homeSerif} as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href={homeItalic} as="font" type="font/woff2" crossorigin>
 
   <style>
-    @font-face {
-      font-family: 'Quicksand';
-      src: url('/fonts/quicksand-latin.woff2') format('woff2');
-      font-style: normal;
-      font-weight: 300 700;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Cormorant Garamond';
-      src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
-      font-style: normal;
-      font-weight: 400 700;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Cormorant Garamond';
-      src: url('/fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
-      font-style: italic;
-      font-weight: 400 500;
-      font-display: swap;
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -89,7 +69,7 @@ const statistics = [
     }
 
     body {
-      font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Home Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       /* 使用 dvh 单位避免移动端地址栏影响 */
       min-height: 100dvh;
       min-height: 100vh; /* 回退 */
@@ -694,21 +674,21 @@ const statistics = [
         <div class="order-1 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:translate-y-4 welcome-card-offset">
           <GlassCard padding="medium" tilt={true} class="w-full max-w-[92vw] [@media(min-width:924px)]:max-w-sm">
             <div class="flex flex-col">
-              <span class="inline-block px-3 py-1.5 bg-gradient-to-r from-purple-100/80 to-pink-100/80 rounded-full text-xs font-medium text-purple-700 mb-3 w-fit border border-purple-200/50 font-['Quicksand']">
+              <span class="inline-block px-3 py-1.5 bg-gradient-to-r from-purple-100/80 to-pink-100/80 rounded-full text-xs font-medium text-purple-700 mb-3 w-fit border border-purple-200/50 font-['Home_Sans']">
                 welcome to my world
               </span>
               <h2 class="text-3xl font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent mb-2 font-['Cormorant_Garamond'] italic">iqwqi's world</h2>
-              <p class="text-sm text-gray-500 mb-4 font-['Quicksand'] font-light">explore · create · share</p>
+              <p class="text-sm text-gray-500 mb-4 font-['Home_Sans'] font-light">explore · create · share</p>
               <div class="flex flex-wrap gap-3">
                 <!-- 主按钮 - 优雅的渐变填充 -->
-                <a href="/cs/" data-astro-prefetch="viewport" class="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-500/90 to-pink-500/90 text-white rounded-2xl font-medium text-sm tracking-wide hover:shadow-xl hover:shadow-purple-300/30 transition-all duration-300 hover:-translate-y-0.5 font-['Quicksand'] backdrop-blur-sm border border-white/20">
+                <a href="/cs/" data-astro-prefetch="viewport" class="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-500/90 to-pink-500/90 text-white rounded-2xl font-medium text-sm tracking-wide hover:shadow-xl hover:shadow-purple-300/30 transition-all duration-300 hover:-translate-y-0.5 font-['Home_Sans'] backdrop-blur-sm border border-white/20">
                   <span>enter</span>
                   <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                   </svg>
                 </a>
                 <!-- 次按钮 - 极简描边风格 -->
-                <a href="/series/" data-astro-prefetch="hover" class="group inline-flex items-center px-5 py-2.5 bg-white/40 text-purple-700 rounded-2xl font-medium text-sm tracking-wide hover:bg-white/60 hover:shadow-lg transition-all duration-300 border border-purple-200/50 font-['Quicksand']">
+                <a href="/series/" data-astro-prefetch="hover" class="group inline-flex items-center px-5 py-2.5 bg-white/40 text-purple-700 rounded-2xl font-medium text-sm tracking-wide hover:bg-white/60 hover:shadow-lg transition-all duration-300 border border-purple-200/50 font-['Home_Sans']">
                   <span>series</span>
                   <svg class="w-3.5 h-3.5 ml-1.5 text-purple-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -726,7 +706,7 @@ const statistics = [
               {statistics.map(({ label, count, href, description }) => (
                 <a href={href} title={description} aria-label={`${description}：${count}`} data-stat={label} class="text-center flex flex-col items-center rounded-xl transition-colors hover:bg-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400">
                   <span class="stat-number font-['Cormorant_Garamond'] font-semibold">{count}</span>
-                  <span class="text-xs text-gray-500 mt-0.5 font-['Quicksand']">{label}</span>
+                  <span class="text-xs text-gray-500 mt-0.5 font-['Home_Sans']">{label}</span>
                 </a>
               ))}
             </div>
@@ -837,44 +817,44 @@ const statistics = [
 
                 <!-- 右侧：导航链接 -->
                 <nav class="nav-links flex flex-col gap-2">
-                  <a href="/cs/" class="nav-link font-['Quicksand']">
+                  <a href="/cs/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                     </svg>
                     <span>posts</span>
                   </a>
-                  <a href="/series/" class="nav-link font-['Quicksand']">
+                  <a href="/series/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5m-18 4 9 5 9-5"></path>
                     </svg>
                     <span>series</span>
                   </a>
-                  <a href="/tags/" class="nav-link font-['Quicksand']">
+                  <a href="/tags/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                     </svg>
                     <span>tags</span>
                   </a>
-                  <a href="/archives/" class="nav-link font-['Quicksand']">
+                  <a href="/archives/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                     <span>archives</span>
                   </a>
-                  <a href="/poetry/" class="nav-link font-['Quicksand']">
+                  <a href="/poetry/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4h5a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H4a2 2 0 0 0-2 2V6a2 2 0 0 1 2-2Z"></path>
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 4h-5a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h5a2 2 0 0 1 2 2V6a2 2 0 0 0-2-2Z"></path>
                     </svg>
                     <span>poetry</span>
                   </a>
-                  <a href="/friends/" class="nav-link font-['Quicksand']" aria-label="友链">
+                  <a href="/friends/" class="nav-link font-['Home_Sans']" aria-label="友链">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.72 1.71m2.72 6.36a5 5 0 00-7.07 0l-3 3A5 5 0 0011 21.07l1.71-1.71"></path>
                     </svg>
                     <span>friends</span>
                   </a>
-                  <a href="/search/" class="nav-link font-['Quicksand']">
+                  <a href="/search/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -1007,7 +987,7 @@ const statistics = [
                   </svg>
                   latest post
                 </h3>
-                <a href="/archives/" class="text-xs text-purple-600 hover:text-purple-700 font-['Quicksand']">all →</a>
+                <a href="/archives/" class="text-xs text-purple-600 hover:text-purple-700 font-['Home_Sans']">all →</a>
               </div>
               {latestPosts.slice(0, 1).map((post) => (
                 <a href={getPostUrl(post)} class="post-item block group flex-1 min-w-0" data-latest-posts>
@@ -1022,7 +1002,7 @@ const statistics = [
                       <time datetime={post.data.date.toISOString()} class="text-[10px] text-gray-400">
                         {post.data.date.toLocaleDateString('en-US', { timeZone: 'Asia/Shanghai', month: 'short', day: 'numeric', year: 'numeric' })}
                       </time>
-                      <span class="text-[10px] text-purple-500 group-hover:translate-x-1 transition-transform font-['Quicksand']">
+                      <span class="text-[10px] text-purple-500 group-hover:translate-x-1 transition-transform font-['Home_Sans']">
                         read →
                       </span>
                     </div>
