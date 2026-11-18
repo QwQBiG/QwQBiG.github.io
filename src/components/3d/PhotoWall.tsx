@@ -468,6 +468,8 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
       >
         <div className="relative overflow-hidden">
           <img
+            sizes={photo.sizes}
+            srcSet={photo.srcset}
             src={photo.src}
             alt={photo.alt}
             className="w-full h-auto object-cover pointer-events-none"

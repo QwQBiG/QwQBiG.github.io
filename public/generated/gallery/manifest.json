@@ -5,6 +5,7 @@
     "width": 2560,
     "height": 1600,
     "thumb2x": "/generated/gallery/2025-08-720.webp",
+    "srcset": "/generated/gallery/2025-08-w180.webp 180w, /generated/gallery/2025-08-w256.webp 256w, /generated/gallery/2025-08-w360.webp 360w, /generated/gallery/2025-08-720.webp 720w",
     "preview": "/generated/gallery/2025-08-1920.webp"
   },
   {
@@ -13,6 +14,7 @@
     "width": 564,
     "height": 750,
     "thumb2x": "/generated/gallery/AIcard-720.webp",
+    "srcset": "/generated/gallery/AIcard-w180.webp 180w, /generated/gallery/AIcard-w256.webp 256w, /generated/gallery/AIcard-w360.webp 360w, /generated/gallery/AIcard-720.webp 541w",
     "preview": "/generated/gallery/AIcard-1920.webp"
   },
   {
@@ -21,6 +23,7 @@
     "width": 1920,
     "height": 1080,
     "thumb2x": "/generated/gallery/hahaha-720.webp",
+    "srcset": "/generated/gallery/hahaha-w180.webp 180w, /generated/gallery/hahaha-w256.webp 256w, /generated/gallery/hahaha-w360.webp 360w, /generated/gallery/hahaha-720.webp 720w",
     "preview": "/generated/gallery/hahaha-1920.webp"
   },
   {
@@ -29,6 +32,7 @@
     "width": 3840,
     "height": 2160,
     "thumb2x": "/generated/gallery/Kafka-720.webp",
+    "srcset": "/generated/gallery/Kafka-w180.webp 180w, /generated/gallery/Kafka-w256.webp 256w, /generated/gallery/Kafka-w360.webp 360w, /generated/gallery/Kafka-720.webp 720w",
     "preview": "/generated/gallery/Kafka-1920.webp"
   },
   {
@@ -37,6 +41,7 @@
     "width": 403,
     "height": 403,
     "thumb2x": "/generated/gallery/ZhenXun-720.webp",
+    "srcset": "/generated/gallery/ZhenXun-w180.webp 180w, /generated/gallery/ZhenXun-w256.webp 256w, /generated/gallery/ZhenXun-w360.webp 360w, /generated/gallery/ZhenXun-720.webp 403w",
     "preview": "/generated/gallery/ZhenXun-1920.webp"
   }
 ]

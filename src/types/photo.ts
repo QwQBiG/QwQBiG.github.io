@@ -1,6 +1,8 @@
 export interface PhotoItem {
   id: string;
   src: string;
+  srcset?: string;
+  sizes?: string;
   preview?: string;
   alt: string;
   caption?: string;

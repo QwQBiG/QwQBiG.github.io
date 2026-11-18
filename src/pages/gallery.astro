@@ -12,6 +12,7 @@ interface GalleryManifestEntry {
   width: number;
   height: number;
   thumb2x: string;
+  srcset: string;
   preview: string;
 }
 
@@ -21,15 +22,20 @@ const manifestPath = path.join(process.cwd(), 'public', 'generated', 'gallery', 
 const entries = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as GalleryManifestEntry[];
 const halfSizeFiles = new Set(['ZhenXun.jpg', 'AIcard.png']);
 
-const photos: PhotoItem[] = entries.map((entry, index) => ({
-  id: String(index + 1),
-  src: entry.thumb2x,
-  preview: entry.preview,
-  alt: entry.alt,
-  width: entry.width,
-  height: entry.height,
-  scale: halfSizeFiles.has(entry.file) ? 0.5 : undefined,
-}));
+const photos: PhotoItem[] = entries.map((entry, index) => {
+  const scale = halfSizeFiles.has(entry.file) ? 0.5 : 1;
+  return {
+    id: String(index + 1),
+    src: entry.thumb2x,
+    preview: entry.preview,
+    alt: entry.alt,
+    width: entry.width,
+    height: entry.height,
+    scale,
+    srcset: entry.srcset,
+    sizes: `(width < 480px) ${120 * scale}px, (width < 768px) ${150 * scale}px, ${360 * scale}px`,
+  };
+});
 
 const photoScales = Object.fromEntries(photos.map((photo) => [photo.id, photo.scale ?? 1]));
 
@@ -45,7 +51,7 @@ const initialPositions = [
 <Layout title={pageTitle} description={pageDescription}>
   <Fragment slot="head">
     {photos.map((photo) => (
-      <link rel="preload" as="image" href={photo.src} type="image/webp" />
+      <link rel="preload" as="image" imagesrcset={photo.srcset} imagesizes={photo.sizes} type="image/webp" />
     ))}
     <script is:inline define:vars={{ photoScales }}>
       (() => {
@@ -103,6 +109,8 @@ const initialPositions = [
           >
             <div class="static-photo-frame">
               <img
+                srcset={photo.srcset}
+                sizes={photo.sizes}
                 src={photo.src}
                 alt=""
                 width={photo.width}

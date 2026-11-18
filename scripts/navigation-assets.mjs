@@ -21,19 +21,36 @@ function localAsset(value, type, route) {
 function candidates(html, route) {
   const result = [];
   const seen = new Set();
-  function add(value, type) {
+  function add(value, type, extra = {}) {
     const url = localAsset(value, type, route);
-    if (url && !seen.has(url)) {
-      seen.add(url);
-      result.push({ url, type });
+    const asset = { url, type, ...extra };
+    const key = JSON.stringify(asset);
+    if (url && !seen.has(key)) {
+      seen.add(key);
+      result.push(asset);
     }
   }
   function visit(node) {
     const attrs = Object.fromEntries((node.attrs ?? []).map(({ name, value }) => [name, value]));
     if (node.tagName === 'link') {
       const rel = (attrs.rel ?? '').toLowerCase().split(/\s+/);
-      if (rel.includes('stylesheet') && !('disabled' in attrs) && (!attrs.media || attrs.media === 'all' || attrs.media === 'screen')) add(attrs.href, 'style');
-      if (rel.includes('preload') && attrs.fetchpriority !== 'low' && (attrs.as === 'image' || attrs.as === 'font')) add(attrs.href, attrs.as);
+      const allScreens = !attrs.media || attrs.media === 'all' || attrs.media === 'screen';
+      if (rel.includes('stylesheet') && !('disabled' in attrs) && allScreens) add(attrs.href, 'style');
+      if (rel.includes('preload') && allScreens && attrs.fetchpriority !== 'low' && (attrs.as === 'image' || attrs.as === 'font')) {
+        if (attrs.as === 'image' && attrs.imagesrcset) {
+          // Keep the same width candidates as the destination, including on retina displays.
+          const sources = attrs.imagesrcset.split(',').map(candidate => {
+            const match = /^(\S+)\s+([1-9]\d*)w$/.exec(candidate.trim());
+            const url = match && localAsset(match[1], 'image', route);
+            return url && { url, width: Number(match[2]) };
+          });
+          if (sources.every(Boolean)) {
+            add(attrs.href || sources.at(-1).url, 'image', { sources, sizes: attrs.imagesizes || '100vw' });
+          }
+        } else {
+          add(attrs.href, attrs.as);
+        }
+      }
       if (rel.includes('modulepreload')) add(attrs.href, 'script');
     }
     if (node.tagName === 'script' && attrs.src && (attrs.type === 'module' || 'defer' in attrs)) add(attrs.src, 'script');
@@ -59,10 +76,11 @@ export async function buildNavigationManifest(pages, assetSize) {
     for (const candidate of candidates(html, route)) {
       const size = await assetSize(candidate.url);
       if (!Number.isSafeInteger(size) || size <= 0) continue;
-      let index = assetIndexes.get(candidate.url);
+      const key = JSON.stringify(candidate);
+      let index = assetIndexes.get(key);
       if (index === undefined) {
         index = assets.length;
-        assetIndexes.set(candidate.url, index);
+        assetIndexes.set(key, index);
         assets.push({ ...candidate, bytes: size });
       }
       selected.push(index);

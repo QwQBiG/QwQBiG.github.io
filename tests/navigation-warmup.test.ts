@@ -305,3 +305,15 @@ test('large valid startup resources can warm at an explicit navigation priority'
   }, 'high'), true);
   assert.equal(priority, 'high');
 });
+
+test('responsive warmup keeps the destination sizes and only same-origin width candidates', async () => {
+  const html = `<link rel="preload" as="image" imagesrcset="small.webp 180w, large.webp 720w" imagesizes="(max-width: 480px) 120px, 360px">
+    <link rel="preload" as="image" imagesrcset="a.webp 180w, https://other.test/b.webp 720w">
+    <link rel="preload" as="image" href="desktop-only.webp" media="(min-width: 924px)">`;
+  const manifest = await buildNavigationManifest([{ route: '/gallery/', html }], async () => 1000);
+  assert.deepEqual(manifest.assets, [{
+    url: '/gallery/large.webp', bytes: 1000, type: 'image',
+    sources: [{ url: '/gallery/small.webp', width: 180 }, { url: '/gallery/large.webp', width: 720 }],
+    sizes: '(max-width: 480px) 120px, 360px',
+  }]);
+});
