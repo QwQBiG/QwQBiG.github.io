@@ -100,7 +100,7 @@
   /**
    * 创建代码块头部
    */
-  function createCodeHeader(pre, code) {
+  function createCodeHeader(pre, sourceText) {
     const header = document.createElement('div');
     header.className = 'code-header';
 
@@ -139,7 +139,7 @@
     buttonsContainer.appendChild(searchBtn);
 
     // 折叠按钮（代码超过 15 行才显示）
-    const lines = code.textContent.split('\n').length;
+    const lines = sourceText.split('\n').length;
     if (lines > 15) {
       const foldBtn = document.createElement('button');
       foldBtn.className = 'code-fold-toggle';
@@ -157,7 +157,7 @@
     const copyBtn = document.createElement('button');
     copyBtn.className = 'custom-copy-code';
     copyBtn.textContent = 'copy';
-    copyBtn.addEventListener('click', () => copyCode(code, copyBtn));
+    copyBtn.addEventListener('click', () => copyCode(sourceText, copyBtn));
     buttonsContainer.appendChild(copyBtn);
 
     header.appendChild(buttonsContainer);
@@ -203,21 +203,9 @@
   /**
    * 复制代码
    */
-  async function copyCode(code, btn) {
+  async function copyCode(sourceText, btn) {
     try {
-      // 获取纯文本代码（去除行号）
-      const lines = code.querySelectorAll('.line');
-      const text = Array.from(lines)
-        .map(line => {
-          // 克隆行内容，移除行号
-          const clone = line.cloneNode(true);
-          const num = clone.querySelector('.line-number');
-          if (num) num.remove();
-          return clone.textContent;
-        })
-        .join('\n');
-
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(sourceText);
 
       // 显示成功反馈
       btn.textContent = 'okkk';
@@ -239,7 +227,7 @@
   /**
    * 添加行号和行包装
    */
-  function addLineNumbers(pre, code) {
+  function addLineNumbers(code) {
     const lines = code.innerHTML.split('\n');
     
     // 移除最后一个空行（如果存在）
@@ -247,32 +235,33 @@
       lines.pop();
     }
     
-    const wrappedLines = lines.map((line, index) => {
-      const lineNum = index + 1;
-      return `<span class="line-number">${lineNum}</span><span class="line-content">${line}</span>`;
-    });
-
-    // 创建内容容器
     const contentDiv = document.createElement('div');
     contentDiv.className = 'code-content';
-
-    // 重新构建代码，每行包装
-    code.innerHTML = wrappedLines.map(line =>
-      `<div class="line">${line}</div>`
+    code.replaceWith(contentDiv);
+    code.innerHTML = lines.map((line, index) =>
+      `<div class="line"><span class="line-number">${index + 1}</span><span class="line-content">${line}</span></div>`
     ).join('');
+    contentDiv.appendChild(code);
+  }
 
-    contentDiv.appendChild(code.cloneNode(true));
-    code.parentNode.replaceChild(contentDiv, code);
+  function bindLineInteractions(code) {
+    let highlightedLine = null;
+    function updateHover(event) {
+      const line = event.target.closest('.line');
+      if (!line || (event.relatedTarget instanceof Node && line.contains(event.relatedTarget))) return;
+      line.classList.toggle('line-current', event.type === 'mouseover');
+    }
+    code.addEventListener('mouseover', updateHover);
+    code.addEventListener('mouseout', updateHover);
 
-    // 将原始 code 移回 content 中
-    const newContent = pre.querySelector('.code-content');
-    const newCode = document.createElement('code');
-    newCode.className = code.className;
-    newCode.innerHTML = code.innerHTML;
-    newContent.innerHTML = '';
-    newContent.appendChild(newCode);
-
-    return newCode;
+    code.addEventListener('click', (event) => {
+      const line = event.target.closest('.line');
+      if (!line) return;
+      const previousLine = highlightedLine;
+      previousLine?.classList.remove('line-highlight');
+      highlightedLine = line === previousLine ? null : line;
+      highlightedLine?.classList.add('line-highlight');
+    });
   }
 
   /**
@@ -293,11 +282,12 @@
     if (!code) return;
 
     // 创建头部
-    const header = createCodeHeader(pre, code);
+    const header = createCodeHeader(pre, code.textContent);
     pre.insertBefore(header, pre.firstChild);
 
     // 添加行号
-    addLineNumbers(pre, code);
+    addLineNumbers(code);
+    bindLineInteractions(code);
 
     // 标记已处理
     pre.dataset.processed = 'true';
