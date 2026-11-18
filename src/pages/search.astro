@@ -9,6 +9,7 @@ const pageDescription = "搜索博客文章";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
+  <link slot="head" rel="preload" as="fetch" href="/posts.json" crossorigin="anonymous" />
   <FloatingNavCard />
   
   <main class="flex-1 py-12">
@@ -50,97 +51,9 @@ const pageDescription = "搜索博客文章";
 </Layout>
 
 <script>
-  // Simple client-side search
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  const searchResults = document.getElementById('search-results');
-  
-  let posts: Array<{
-    title: string;
-    description?: string;
-    slug: string;
-    collection: string;
-    date: string;
-    tags: string[];
-  }> = [];
-  
-  // Load posts data
-  async function loadPosts() {
-    try {
-      const response = await fetch('/posts.json');
-      posts = await response.json();
-      // The visitor may have typed while the index was still loading.
-      search(searchInput?.value ?? '');
-    } catch (error) {
-      console.error('Failed to load posts:', error);
-    }
-  }
-  
-  // Search function
-  function search(query: string) {
-    if (!query.trim()) {
-      searchResults!.innerHTML = `
-        <div class="text-center text-text-muted py-12">
-          输入关键词开始搜索
-        </div>
-      `;
-      return;
-    }
-    
-    const lowerQuery = query.toLowerCase();
-    const results = posts.filter(post => 
-      post.title.toLowerCase().includes(lowerQuery) ||
-      post.description?.toLowerCase().includes(lowerQuery) ||
-      post.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-    );
-    
-    if (results.length === 0) {
-      searchResults!.innerHTML = `
-        <div class="text-center text-text-muted py-12">
-          没有找到相关文章
-        </div>
-      `;
-      return;
-    }
-    
-    searchResults!.innerHTML = results.map(post => `
-      <a href="/${post.collection}/${post.slug}/" class="search-result-item block">
-        <h3 class="search-result-title">${highlightMatch(post.title, query)}</h3>
-        ${post.description ? `<p class="search-result-excerpt">${highlightMatch(post.description, query)}</p>` : ''}
-        <div class="search-result-meta">
-          <span>${post.date}</span>
-          ${post.tags?.length ? `<span>${post.tags.slice(0, 3).join(', ')}</span>` : ''}
-        </div>
-      </a>
-    `).join('');
-  }
-  
-  // Highlight matching text
-  function highlightMatch(text: string, query: string): string {
-    const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
-    return text.replace(regex, '<mark class="bg-primary/20 text-primary px-1 rounded">$1</mark>');
-  }
-  
-  function escapeRegex(string: string): string {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-  
-  // Debounce function
-  function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
-    let timeout: ReturnType<typeof setTimeout>;
-    return (...args: Parameters<T>) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  }
-  
-  // Event listeners
-  const debouncedSearch = debounce(search, 300);
-  
-  searchInput?.addEventListener('input', (e) => {
-    const query = (e.target as HTMLInputElement).value;
-    debouncedSearch(query);
-  });
-  
-  // Initialize
-  loadPosts();
+  import { initializePostSearch } from '../scripts/post-search';
+
+  const input = document.querySelector<HTMLInputElement>('#search-input');
+  const results = document.querySelector<HTMLElement>('#search-results');
+  if (input && results) initializePostSearch(input, results);
 </script>
