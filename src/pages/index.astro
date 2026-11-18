@@ -4,11 +4,13 @@ import CharacterPortrait from '../components/CharacterPortrait.astro';
 import ClockWidget from '../components/widgets/ClockWidget.astro';
 import CalendarWidget from '../components/widgets/CalendarWidget.astro';
 import MusicWidget from '../components/widgets/MusicWidget.astro';
+import { portraitSources } from '../data/portrait-images.mjs';
 import { loadContent } from '../utils/load-content';
 import { createContentIndex, getPostUrl, getTagUrl } from '../utils/content';
 
 const { csPosts, poetryPosts, series, tags, latestPosts } = await loadContent();
 const popularTags = createContentIndex({ cs: csPosts }).tags;
+const firstPortrait = portraitSources('Smile');
 const statistics = [
   { label: 'posts', count: csPosts.length, href: '/cs/', description: '已发布的笔记与文章' },
   { label: 'series', count: series.length, href: '/series/', description: '文章合集' },
@@ -49,8 +51,8 @@ const statistics = [
 
   <!-- 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 -->
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
-  <link rel="preload" href="/generated/site/portrait-smile.webp" as="image" fetchpriority="high">
-  <link rel="preload" href="/generated/site/gallery-cover-640.webp" as="image" fetchpriority="low">
+  <link rel="preload" as="image" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
+  <link rel="preload" href="/generated/site/gallery-cover-640.webp" as="image" media="(min-width: 924px)" fetchpriority="low">
   <link rel="preload" href="/fonts/quicksand-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>

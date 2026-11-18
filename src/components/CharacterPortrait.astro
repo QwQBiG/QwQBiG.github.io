@@ -1,10 +1,11 @@
 ---
-const portrait = '/generated/site/portrait-smile.webp';
+import { portraitSources } from '../data/portrait-images.mjs';
+const portrait = portraitSources('Smile');
 ---
 
 <character-portrait class="portrait" data-expression="Smile">
   <div class="portrait-ambient" aria-hidden="true"></div>
-  <img class="portrait-image is-visible" src={portrait} width="760" height="760"
+  <img class="portrait-image is-visible" {...portrait} width="760" height="760"
     alt="QwQBiG's character" decoding="async" fetchpriority="high" draggable="false" />
   <img class="portrait-image" width="760" height="760" alt="" decoding="async" draggable="false" />
   <button type="button" class="portrait-expression-button" title="Click to change expression"
@@ -17,9 +18,10 @@ const portrait = '/generated/site/portrait-smile.webp';
 <script>
   import { scheduleBackgroundTask } from '../utils/background-tasks';
   import { createPortraitCache, createPortraitSwitcher, decodePortrait } from '../utils/portrait';
+  import { portraitSources } from '../data/portrait-images.mjs';
 
   const expressions = ['Smile', 'Happy', 'Wink', 'Shy'];
-  const portraitURL = (index: number) => `/generated/site/portrait-${expressions[index].toLowerCase()}.webp`;
+  const sources = expressions.map(portraitSources);
 
   class CharacterPortrait extends HTMLElement {
     private cleanup?: () => void;
@@ -54,6 +56,7 @@ const portrait = '/generated/site/portrait-smile.webp';
           const abort = () => {
             clear();
             image.removeAttribute('src');
+            image.removeAttribute('srcset');
             reject(new Error('Portrait removed'));
           };
           image.onload = () => {
@@ -64,7 +67,9 @@ const portrait = '/generated/site/portrait-smile.webp';
           };
           image.onerror = () => { clear(); reject(new Error('Portrait image unavailable')); };
           signal.addEventListener('abort', abort, { once: true });
-          image.src = portraitURL(index);
+          image.sizes = sources[index].sizes;
+          image.srcset = sources[index].srcset;
+          image.src = sources[index].src;
         })
       ));
 
@@ -85,7 +90,7 @@ const portrait = '/generated/site/portrait-smile.webp';
         backgroundImages.add(index);
         let ready = false;
         const task = scheduleBackgroundTask({
-          key: `portrait:${portraitURL(index)}`,
+          key: `portrait:${sources[index].src}`,
           priority: 'image',
           signal: lifetime.signal,
           // Keep an image already being decoded available to an expression click.
@@ -112,6 +117,8 @@ const portrait = '/generated/site/portrait-smile.webp';
         load: loadForInteraction,
         prepare: async (image) => {
           const nextImage = 1 - activeImage;
+          images[nextImage].sizes = image.sizes;
+          images[nextImage].srcset = image.srcset;
           images[nextImage].src = image.src;
           await decodePortrait(images[nextImage], lifetime.signal);
         },
@@ -162,13 +169,9 @@ const portrait = '/generated/site/portrait-smile.webp';
       const remaining = Array.from({ length: expressions.length - 1 }, (_, offset) => (
         (initial + offset + 1) % expressions.length
       ));
-      const initialReady = () => {
-        void decodePortrait(images[activeImage], lifetime.signal).catch(() => {})
-          .then(() => lifetime.signal.aborted ? undefined : cache.load(initial).catch(() => {}))
-          .then(() => remaining.forEach(warm));
-      };
-      if (images[activeImage].complete) initialReady();
-      else images[activeImage].addEventListener('load', initialReady, { ...listenerOptions, once: true });
+      void decodePortrait(images[activeImage], lifetime.signal).catch(() => {}).then(() => {
+        if (!lifetime.signal.aborted) remaining.forEach(warm);
+      });
 
       this.cleanup = () => {
         switcher.dispose();

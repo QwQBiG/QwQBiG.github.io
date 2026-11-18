@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
+import { portraitFile, portraitWidths } from '../src/data/portrait-images.mjs';
 
 const root = process.cwd();
 const gallerySourceDir = path.join(root, 'src', 'assets', 'gallery');
@@ -23,7 +24,7 @@ async function optimizeGallery() {
     const previewName = `${stem}-1920.webp`;
 
     const pipeline = sharp(sourcePath).rotate();
-    await Promise.all([
+    const [thumbnail] = await Promise.all([
       pipeline.clone()
         .resize({ width: 720, height: 720, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 78, effort: 5, smartSubsample: true })
@@ -34,12 +35,24 @@ async function optimizeGallery() {
         .toFile(path.join(galleryOutputDir, previewName)),
     ]);
 
+    const smallerThumbnails = await Promise.all(
+      [180, 256, 360].filter((width) => width < thumbnail.width).map(async (width) => {
+        const name = `${stem}-w${width}.webp`;
+        await pipeline.clone().resize({ width })
+          .webp({ quality: 78, effort: 5, smartSubsample: true })
+          .toFile(path.join(galleryOutputDir, name));
+        return `/generated/gallery/${name} ${width}w`;
+      }),
+    );
+    // The original 720px bounding box can yield a narrower portrait thumbnail.
+    const fallback = `/generated/gallery/${thumbName}`;
     manifest.push({
       file,
       alt: path.parse(file).name,
       width: metadata.width,
       height: metadata.height,
-      thumb2x: `/generated/gallery/${thumbName}`,
+      thumb2x: fallback,
+      srcset: [...smallerThumbnails, `${fallback} ${thumbnail.width}w`].join(', '),
       preview: `/generated/gallery/${previewName}`,
     });
   }
@@ -105,10 +118,10 @@ async function optimizePortraits() {
       }
     }
 
-    await sharp(data, { raw: info })
-      .resize(640, 640)
+    await Promise.all(portraitWidths.map(width => sharp(data, { raw: info })
+      .resize(width, width)
       .webp({ quality: 90, alphaQuality: 100, effort: 5, smartSubsample: true })
-      .toFile(path.join(siteDir, `portrait-${expression}.webp`));
+      .toFile(path.join(siteDir, portraitFile(expression, width)))));
   }
 }
 

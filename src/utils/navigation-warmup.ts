@@ -1,4 +1,10 @@
-export type NavigationAsset = { url: string; type: 'style' | 'script' | 'image' | 'font'; bytes: number };
+export type NavigationAsset = {
+  url: string;
+  type: 'style' | 'script' | 'image' | 'font';
+  bytes: number;
+  sources?: { url: string; width: number }[];
+  sizes?: string;
+};
 export type NavigationManifest = { version: 1; assets: NavigationAsset[]; routes: Record<string, number[]> };
 export type NavigationConnection = { saveData?: boolean; effectiveType?: string } | undefined;
 
@@ -59,12 +65,50 @@ export function selectNavigationAssets(
   return result;
 }
 
+// Native image preloads use the browser's own viewport and DPR selection. A
+// fetch of the fallback URL would warm the wrong file for smaller cards.
+function preloadResponsiveImage(asset: NavigationAsset, signal: AbortSignal, priority: RequestPriority): Promise<boolean> {
+  const hint = document.createElement('link');
+  if (!('imageSrcset' in hint) || !hint.relList.supports('preload') || signal.aborted || !Array.isArray(asset.sources)) {
+    return Promise.resolve(false);
+  }
+  const urls: string[] = [];
+  for (const source of asset.sources) {
+    if (!source || typeof source.url !== 'string' || !Number.isSafeInteger(source.width) || source.width < 1) return Promise.resolve(false);
+    let url: URL;
+    try { url = new URL(source.url, asset.url); } catch { return Promise.resolve(false); }
+    if (url.origin !== location.origin || url.username || url.password || /[,\s]/.test(url.href)) return Promise.resolve(false);
+    urls.push(`${url.href} ${source.width}w`);
+  }
+  if (!urls.length) return Promise.resolve(false);
+  hint.rel = 'preload';
+  hint.as = 'image';
+  hint.imageSizes = asset.sizes || '100vw';
+  hint.imageSrcset = urls.join(', ');
+  hint.fetchPriority = priority;
+  return new Promise(resolve => {
+    const finish = (loaded: boolean) => {
+      signal.removeEventListener('abort', cancel);
+      hint.onload = null;
+      hint.onerror = null;
+      hint.remove();
+      resolve(loaded);
+    };
+    const cancel = () => finish(false);
+    hint.onload = () => finish(true);
+    hint.onerror = cancel;
+    signal.addEventListener('abort', cancel, { once: true });
+    document.head.append(hint);
+  });
+}
+
 export async function fetchNavigationAsset(
   asset: NavigationAsset,
   signal: AbortSignal,
   request: typeof fetch = fetch,
   priority: RequestPriority = 'low',
 ): Promise<boolean> {
+  if (asset.type === 'image' && asset.sources) return preloadResponsiveImage(asset, signal, priority);
   const response = await request(asset.url, {
     signal,
     cache: 'force-cache',

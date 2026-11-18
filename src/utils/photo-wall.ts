@@ -18,7 +18,7 @@ export function resolvePhotoWallSize(
 
 // Keep the static wall visible until every thumbnail has either decoded or failed.
 export const preloadPhotos = (
-  photos: readonly Pick<PhotoItem, 'src'>[],
+  photos: readonly Pick<PhotoItem, 'src' | 'srcset' | 'sizes'>[],
   createImage: () => HTMLImageElement = () => new Image(),
 ) => Promise.all(photos.map((photo) => new Promise<void>((resolve) => {
   const image = createImage();
@@ -39,6 +39,8 @@ export const preloadPhotos = (
 
   image.onload = decode;
   image.onerror = finish;
+  if (photo.sizes) image.sizes = photo.sizes;
+  if (photo.srcset) image.srcset = photo.srcset;
   image.src = photo.src;
   if (image.complete) decode();
 })));
