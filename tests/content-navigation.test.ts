@@ -137,8 +137,8 @@ test('TOC binds each current article once, handles numeric heading IDs and clean
 });
 
 test('a late diagram import cannot initialize a departed article and the next page initializes once', async () => {
-  const source = await readFile(new URL('../src/layouts/Layout.astro', import.meta.url), 'utf8');
-  const script = source.match(/<!-- Mermaid 图表支持 -->\s*<script>([\s\S]*?)<\/script>/)![1];
+  const source = await readFile(new URL('../src/components/content/MermaidDiagrams.astro', import.meta.url), 'utf8');
+  const script = source.match(/<script>([\s\S]*?)<\/script>/)![1];
   const code = stripTypeScriptTypes(script).replace("import('mermaid')", 'loadMermaid()');
   const document = new EventTarget() as EventTarget & Record<string, any>;
   let blocks: unknown[] = [];

@@ -1,0 +1,73 @@
+/* Mermaid 全屏模式样式 */
+.mermaid-wrapper.mermaid-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  overflow: auto !important;
+}
+
+.mermaid-wrapper.mermaid-fullscreen .mermaid-content-wrapper {
+  min-height: calc(100vh - 40px);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mermaid-wrapper.mermaid-fullscreen .mermaid-container {
+  min-height: calc(100vh - 80px);
+  width: auto !important;
+  max-width: 100%;
+}
+
+/* 确保SVG文本完整显示 */
+.mermaid-wrapper svg {
+  overflow: visible !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+}
+
+.mermaid-wrapper svg text {
+  paint-order: stroke fill;
+  overflow: visible;
+}
+
+.mermaid-wrapper svg g {
+  overflow: visible !important;
+}
+
+.mermaid-wrapper svg foreignObject {
+  overflow: visible !important;
+}
+
+.mermaid-wrapper svg .nodeLabel {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+/* Mermaid内容区域，确保不会被截断 */
+.mermaid-content-wrapper {
+  overflow: visible !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+.mermaid-container {
+  overflow: visible !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.mermaid-content {
+  overflow: visible !important;
+  width: auto !important;
+  min-width: 0 !important;
+  background: transparent !important;
+}
