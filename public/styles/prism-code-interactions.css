@@ -95,7 +95,7 @@ pre[class*="language-"] .line.line-highlight .line-number {
   font-size: 13px;
   font-weight: 600;
   color: #4c4f69;
-  font-family: 'Noto Sans SC Variable', sans-serif;
+  font-family: var(--site-sans);
 }
 
 .code-search-close {
@@ -136,7 +136,7 @@ pre[class*="language-"] .line.line-highlight .line-number {
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 13px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--site-mono);
   color: #4c4f69;
   background: #fafafa;
   outline: none;
@@ -166,7 +166,7 @@ pre[class*="language-"] .line.line-highlight .line-number {
 .code-search-count {
   font-size: 12px;
   color: #8c8fa1;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--site-mono);
   background: #f0f0f5;
   padding: 4px 10px;
   border-radius: 12px;

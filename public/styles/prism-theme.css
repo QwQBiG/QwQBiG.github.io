@@ -75,7 +75,7 @@
   width: max-content;
   min-height: 100%;
   border-radius: 0;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--site-mono);
   font-size: 1.1rem;
   line-height: 1.4;
   color: #2d3436;
@@ -137,7 +137,7 @@
 .prose pre[class*="language-"] .custom-copy-code {
   height: 24px;
   padding: 0 10px;
-  font-family: 'Noto Sans SC Variable', sans-serif;
+  font-family: var(--site-sans);
   font-size: 12px;
   font-weight: 600;
   color: #e84a7a;
@@ -164,7 +164,7 @@
   height: 24px;
   width: 24px;
   padding: 0;
-  font-family: 'Noto Sans SC Variable', sans-serif;
+  font-family: var(--site-sans);
   font-size: 12px;
   font-weight: 600;
   color: #e84a7a;
@@ -193,7 +193,7 @@
 .prose pre[class*="language-"] .code-fold-toggle {
   height: 24px;
   padding: 0 10px;
-  font-family: 'Noto Sans SC Variable', sans-serif;
+  font-family: var(--site-sans);
   font-size: 12px;
   font-weight: 600;
   color: #e84a7a;
@@ -229,7 +229,7 @@
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Noto Sans SC Variable', sans-serif;
+  font-family: var(--site-sans);
   font-size: 1rem;
   font-weight: 600;
   color: #e84a7a;
@@ -244,7 +244,7 @@
 .prose pre[class*="language-"] .code-lang-btn {
   height: 40px;
   padding: 0 16px;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--site-mono);
   font-size: 13px;
   font-weight: 600;
   color: #e84a7a;

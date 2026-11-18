@@ -1,5 +1,4 @@
 ---
-import '@fontsource-variable/noto-sans-sc';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import katexStyles from 'katex/dist/katex.min.css?url';
@@ -36,7 +35,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
 ---
 
 <!DOCTYPE html>
-<html lang="zh-cn" data-theme="light" class="scroll-smooth" style="color-scheme: only light">
+<html lang="zh-cn" data-theme="light" class="reading-fonts scroll-smooth" style="color-scheme: only light">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -178,7 +177,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
           langContainer.style.cssText = 'display: flex; align-items: center;';
           const langLabel = document.createElement('span');
           langLabel.textContent = 'Mermaid';
-          langLabel.style.cssText = 'height: 40px; padding: 0 16px; font-family: "JetBrains Mono", "Fira Code", monospace; font-size: 13px; font-weight: 600; color: #e84a7a; display: flex; align-items: center;';
+          langLabel.style.cssText = 'height: 40px; padding: 0 16px; font-family: var(--site-mono); font-size: 13px; font-weight: 600; color: #e84a7a; display: flex; align-items: center;';
           langContainer.appendChild(langLabel);
           
           // 右侧：按钮组 - 模仿代码块按钮样式
@@ -190,7 +189,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
             const btn = document.createElement('button');
             btn.className = className;
             btn.title = title;
-            btn.style.cssText = 'height: 24px; padding: 0 10px; font-family: "Noto Sans SC Variable", sans-serif; font-size: 12px; font-weight: 600; color: #e84a7a; background: rgba(232, 74, 122, 0.1); border: 1px solid rgba(232, 74, 122, 0.3); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
+            btn.style.cssText = 'height: 24px; padding: 0 10px; font-family: var(--site-sans); font-size: 12px; font-weight: 600; color: #e84a7a; background: rgba(232, 74, 122, 0.1); border: 1px solid rgba(232, 74, 122, 0.3); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;';
             return btn;
           };
           
@@ -542,7 +541,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
         color: #e84a7a;
         border-bottom: 2px solid rgba(232, 74, 122, 0.2);
         border-right: 2px solid rgba(232, 74, 122, 0.15);
-        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-family: var(--site-mono);
         font-size: 14px;
       }
 
@@ -585,7 +584,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
         color: #e84a7a;
         padding: 2px 6px;
         border-radius: 4px;
-        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-family: var(--site-mono);
         font-size: 12px;
       }
 
@@ -605,7 +604,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
         font-weight: 600;
         color: #e84a7a;
         text-align: center;
-        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-family: var(--site-mono);
         font-size: 14px;
         border-bottom: 2px solid rgba(232, 74, 122, 0.2);
       }
@@ -616,7 +615,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
         padding: 8px 16px;
         background: linear-gradient(135deg, #fff5f7 0%, #fff0f5 100%);
         border-bottom: 1px solid rgba(232, 74, 122, 0.1);
-        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-family: var(--site-mono);
         font-size: 12px;
         color: #e84a7a;
       }
@@ -686,7 +685,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
       }
 
       .ip-cell.tcp-flags .flag-row span {
-        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-family: var(--site-mono);
         font-size: 11px;
         font-weight: 600;
         color: #e84a7a;
