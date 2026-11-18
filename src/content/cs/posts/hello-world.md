@@ -1,5 +1,5 @@
 ---
-title: "史诗级 ”Hello World“：如何从0到1（划掉）搭建个人技博（技术博客）"
+title: "史诗级 “Hello World”：如何从0到1（划掉）搭建个人技博（技术博客）"
 date: 2025-11-13T21:00:00+08:00
 draft: false
 tags: ["建站", "Hugo", "GitHub Pages", "Windows", "指南", "教程"]
