@@ -40,7 +40,7 @@ body:has(.about-film) {
   color: var(--film-ink);
   background: transparent;
   isolation: isolate;
-  font-family: "Noto Sans SC Variable", system-ui, sans-serif;
+  font-family: var(--site-sans);
 }
 
 .living-paint,
@@ -941,7 +941,7 @@ body:has(.about-film) {
   line-height: 1.95;
 }
 
-.hero-copy strong { color: var(--film-rose); font-family: "JetBrains Mono", monospace; }
+.hero-copy strong { color: var(--film-rose); font-family: var(--site-mono); }
 
 .scene-prologue .memory-word {
   top: 52%;

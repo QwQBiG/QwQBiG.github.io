@@ -10,7 +10,7 @@ code[class*="language-"],
 pre[class*="language-"] {
   color: #4c4f69;
   background: none;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--site-mono);
   font-size: 1em;
   text-align: left;
   white-space: pre;

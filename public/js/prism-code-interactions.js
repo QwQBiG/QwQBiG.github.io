@@ -1,51 +1,10 @@
 /**
  * 代码块交互功能
- * 实现行高亮、当前行指示、搜索匹配等功能
+ * 实现代码搜索、选区高亮与快捷键
  */
 
 (function() {
   'use strict';
-
-  // ==================== 行高亮功能 ====================
-
-  /**
-   * 为代码块添加行交互
-   */
-  function initLineInteractions(codeBlocks = document.querySelectorAll('pre[class*="language-"]')) {
-    if (document.body.dataset.pageCode !== 'true') return;
-    codeBlocks.forEach(pre => {
-      // 检查是否已初始化
-      if (pre.dataset.lineInteractions) return;
-
-      const code = pre.querySelector('code');
-      if (!code) return;
-
-      // 获取所有行
-      const lines = code.querySelectorAll('.line');
-      if (lines.length === 0) return;
-      pre.dataset.lineInteractions = 'true';
-
-      lines.forEach((line) => {
-        // 鼠标悬停高亮
-        line.addEventListener('mouseenter', () => {
-          line.classList.add('line-current');
-        });
-
-        line.addEventListener('mouseleave', () => {
-          line.classList.remove('line-current');
-        });
-
-        // 点击高亮（持久）
-        line.addEventListener('click', () => {
-          const wasHighlighted = line.classList.contains('line-highlight');
-          // 移除其他行的高亮
-          lines.forEach(l => l.classList.remove('line-highlight'));
-          // 再次点击当前行时取消，否则切换到当前行。
-          if (!wasHighlighted) line.classList.add('line-highlight');
-        });
-      });
-    });
-  }
 
   // ==================== 搜索功能 ====================
 
@@ -340,60 +299,13 @@
 
   // ==================== 初始化 ====================
 
-  function init() {
-    initLineInteractions();
-    initSelectionHighlight();
-    initShortcuts();
-
-    // 仅新增代码块时处理，评论和搜索浮层的普通 DOM 变化不触发全文扫描。
-    const pendingBlocks = new Set();
-    let updateTimer = null;
-    const preSelector = 'pre[class*="language-"]';
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach(mutation => {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeType !== Node.ELEMENT_NODE) return;
-          if (node.matches(preSelector)) {
-            pendingBlocks.add(node);
-          } else if (node.matches('code')) {
-            const pre = node.closest(preSelector);
-            if (pre) pendingBlocks.add(pre);
-          }
-          node.querySelectorAll(`${preSelector}, ${preSelector} code`).forEach(element => {
-            pendingBlocks.add(element.matches(preSelector) ? element : element.closest(preSelector));
-          });
-        });
-      });
-
-      if (pendingBlocks.size > 0 && updateTimer === null) {
-        updateTimer = setTimeout(() => {
-          updateTimer = null;
-          const codeBlocks = Array.from(pendingBlocks).filter(pre => pre.isConnected);
-          pendingBlocks.clear();
-          initLineInteractions(codeBlocks);
-        }, 0);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  document.addEventListener('astro:page-load', () => initLineInteractions());
-  document.addEventListener('site:code-blocks-ready', () => initLineInteractions());
+  initSelectionHighlight();
+  initShortcuts();
   document.addEventListener('astro:before-swap', () => {
     closeSearch();
     searchOverlay?.remove();
     searchOverlay = null;
     window.currentSearchCodeBlock = null;
   });
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    setTimeout(init, 100);
-  }
 
 })();

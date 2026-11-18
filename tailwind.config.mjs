@@ -24,8 +24,8 @@ export default {
         'border-color': 'var(--border-color)',
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
-        sans: ['Noto Sans SC Variable', 'system-ui', 'sans-serif'],
+        mono: ["var(--site-mono, 'JetBrains Mono', 'Courier New', monospace)"],
+        sans: ['var(--site-sans, system-ui, sans-serif)'],
       },
       typography: {
         DEFAULT: {
