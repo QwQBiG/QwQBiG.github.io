@@ -50,7 +50,10 @@ function prefetchNavigation(event: MouseEvent) {
   }
 }
 
-document.addEventListener('pointerdown', prefetchNavigation, { capture: true, passive: true });
+document.addEventListener('pointerdown', event => {
+  // A finger landing on a link often starts a scroll. A completed tap also fires click.
+  if (event.pointerType !== 'touch') prefetchNavigation(event);
+}, { capture: true, passive: true });
 document.addEventListener('click', prefetchNavigation, { capture: true, passive: true });
 window.addEventListener('pagehide', () => { pendingIntent = undefined; });
 document.addEventListener('visibilitychange', () => {

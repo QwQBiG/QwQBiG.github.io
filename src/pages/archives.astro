@@ -1,4 +1,5 @@
 ---
+import { readingListPrefetch } from '../utils/content-navigation';
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
@@ -32,7 +33,7 @@ const pageDescription = "按时间顺序浏览所有文章";
 
       <!-- Archives by Year -->
       <div class="space-y-12">
-        {Array.from(postsByYear.entries()).map(([year, posts]) => (
+        {Array.from(postsByYear.entries()).map(([year, posts], yearIndex) => (
           <section class="archive-year">
             <h2 class="archive-year-title">
               {year}
@@ -40,13 +41,13 @@ const pageDescription = "按时间顺序浏览所有文章";
             </h2>
             
             <div class="archive-list">
-              {posts.map((post) => {
+              {posts.map((post, index) => {
                 const collection = post.collection;
                 const url = `/${collection}/${post.slug}/`;
                 const series = post.collection === 'cs' ? post.data.series : undefined;
                 
                 return (
-                  <a href={url} class="archive-item group">
+                  <a href={url} data-astro-prefetch={yearIndex === 0 ? readingListPrefetch(index) : undefined} class="archive-item group">
                     <span class="archive-date font-mono">
                       {formatDate(post.data.date).slice(5)}
                     </span>
