@@ -7,6 +7,21 @@
       "source": "https://fontsource.org/fonts/jetbrains-mono",
       "license": "OFL-1.1",
       "licenseFile": "jetbrains-mono-OFL.txt"
+    },
+    {
+      "family": "Cormorant Garamond",
+      "version": "4.001",
+      "source": "https://github.com/google/fonts/tree/7af0d90b4d532ffa4b041937b560c6df4e7b1e95/ofl/cormorantgaramond",
+      "license": "OFL-1.1",
+      "licenseFile": "cormorant-garamond-OFL.txt"
+    },
+    {
+      "family": "Quicksand",
+      "version": "3.006",
+      "subsetFamily": "Home Sans",
+      "source": "https://github.com/google/fonts/tree/7af0d90b4d532ffa4b041937b560c6df4e7b1e95/ofl/quicksand",
+      "license": "OFL-1.1",
+      "licenseFile": "quicksand-OFL.txt"
     }
   ]
 }

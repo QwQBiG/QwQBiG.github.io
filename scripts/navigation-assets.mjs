@@ -45,7 +45,9 @@ function candidates(html, route) {
             return url && { url, width: Number(match[2]) };
           });
           if (sources.every(Boolean)) {
-            add(attrs.href || sources.at(-1).url, 'image', { sources, sizes: attrs.imagesizes || '100vw' });
+            const variant = { sources, sizes: attrs.imagesizes || '100vw' };
+            if (attrs.type) variant.mimeType = attrs.type;
+            add(attrs.href || sources.at(-1).url, 'image', variant);
           }
         } else {
           add(attrs.href, attrs.as);

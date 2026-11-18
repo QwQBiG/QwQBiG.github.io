@@ -118,10 +118,15 @@ async function optimizePortraits() {
       }
     }
 
-    await Promise.all(portraitWidths.map(width => sharp(data, { raw: info })
-      .resize(width, width)
-      .webp({ quality: 90, alphaQuality: 100, effort: 5, smartSubsample: true })
-      .toFile(path.join(siteDir, portraitFile(expression, width)))));
+    await Promise.all(portraitWidths.map(async width => {
+      const portrait = sharp(data, { raw: info }).resize(width, width);
+      await Promise.all([
+        portrait.clone().webp({ quality: 90, alphaQuality: 100, effort: 5, smartSubsample: true })
+          .toFile(path.join(siteDir, portraitFile(expression, width))),
+        portrait.clone().avif({ quality: 75, effort: 4, chromaSubsampling: '4:4:4' })
+          .toFile(path.join(siteDir, portraitFile(expression, width, 'avif'))),
+      ]);
+    }));
   }
 }
 
