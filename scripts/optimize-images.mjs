@@ -49,8 +49,8 @@ async function optimizeGallery() {
     manifest.push({
       file,
       alt: path.parse(file).name,
-      width: metadata.width,
-      height: metadata.height,
+      width: metadata.autoOrient.width,
+      height: metadata.autoOrient.height,
       thumb2x: fallback,
       srcset: [...smallerThumbnails, `${fallback} ${thumbnail.width}w`].join(', '),
       preview: `/generated/gallery/${previewName}`,

@@ -5,6 +5,56 @@ interface PhotoWallSize {
   height: number;
 }
 
+// Ordered exactly like an HTML sizes list: use the first matching viewport.
+export const photoWallTiers = [
+  { width: 120, belowWidth: 480 },
+  { width: 150, belowWidth: 768 },
+  { width: 150, belowWidth: 1024, belowHeight: 480 },
+] as const;
+export const desktopPhotoWidth = 360;
+
+export function photoWallMedia(tier: typeof photoWallTiers[number]) {
+  const width = `(width < ${tier.belowWidth}px)`;
+  return 'belowHeight' in tier ? `${width} and (height < ${tier.belowHeight}px)` : width;
+}
+
+export function photoWallSizes(scale: number) {
+  return [...photoWallTiers.map(tier => `${photoWallMedia(tier)} ${tier.width * scale}px`),
+    `${desktopPhotoWidth * scale}px`].join(', ');
+}
+
+export function photoWallCardWidth(viewport: PhotoWallSize) {
+  return photoWallTiers.find(tier => viewport.width < tier.belowWidth
+    && (!('belowHeight' in tier) || viewport.height < tier.belowHeight))?.width ?? desktopPhotoWidth;
+}
+
+export function photoAnchorY(width: number) {
+  // Stored y is relative to this original anchor, rather than the geometric center.
+  return width < 250 ? width * 0.6 : 100;
+}
+
+export function photoFrameHeightRatio(photo: Pick<PhotoItem, 'width' | 'height'>) {
+  return photo.width && photo.height ? photo.height / photo.width : 1;
+}
+
+export function photoPositionBounds(wall: PhotoWallSize, cardWidth: number, ratio: number, rotation: number) {
+  const cardHeight = 8 + (cardWidth - 8) * ratio; // 4px white frame on each edge
+  const angle = rotation * Math.PI / 180;
+  const cos = Math.abs(Math.cos(angle));
+  const sin = Math.abs(Math.sin(angle));
+  const maxX = Math.max(0, (wall.width - cardWidth * cos - cardHeight * sin) / 2 - 12);
+  const radiusY = Math.max(0, (wall.height - cardWidth * sin - cardHeight * cos) / 2 - 12);
+  const centerY = photoAnchorY(cardWidth) - cardHeight / 2;
+  return { minX: -maxX, maxX, minY: centerY - radiusY, maxY: centerY + radiusY };
+}
+
+export function fitPhotoPosition(point: { x: number; y: number }, bounds: ReturnType<typeof photoPositionBounds>) {
+  return {
+    x: Math.max(bounds.minX, Math.min(bounds.maxX, point.x)),
+    y: Math.max(bounds.minY, Math.min(bounds.maxY, point.y)),
+  };
+}
+
 export function resolvePhotoWallSize(
   container: PhotoWallSize | null | undefined,
   main: PhotoWallSize | null | undefined,
