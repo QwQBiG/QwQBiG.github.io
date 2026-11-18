@@ -80,6 +80,8 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
     <!-- Favicon -->
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
     
+    <slot name="head" />
+
     <!-- Styles -->
     <link rel="stylesheet" href="/styles/global.css" />
     {useContentNavigation && <ContentNavigation />}
