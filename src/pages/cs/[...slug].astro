@@ -1,4 +1,5 @@
 ---
+import { readingListPrefetch } from '../../utils/content-navigation';
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
@@ -137,6 +138,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                 {collectionPosts.map((collectionPost, index) => (
                   <a
                     href={`/cs/${collectionPost.slug}/`}
+                    data-astro-prefetch={readingListPrefetch(index)}
                     class="group flex items-center gap-4 p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
                   >
                     <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
@@ -168,6 +170,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                 {prevPost ? (
                   <a
                     href={`/cs/${prevPost.slug}/`}
+                    data-astro-prefetch="viewport"
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
                   >
                     <span class="text-xs text-text-muted uppercase tracking-wide">上一篇</span>
@@ -182,6 +185,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                 {nextPost ? (
                   <a
                     href={`/cs/${nextPost.slug}/`}
+                    data-astro-prefetch="viewport"
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"
                   >
                     <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span>

@@ -1,4 +1,5 @@
 ---
+import { readingListPrefetch } from '../../utils/content-navigation';
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import PostCard from '../../components/content/PostCard.astro';
@@ -40,8 +41,8 @@ const pageDescription = "计算机科学相关文章，包括算法、编程语�
             独立文章
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {standalonePosts.map((post) => (
-              <PostCard post={post} collection="cs" />
+            {standalonePosts.map((post, index) => (
+              <PostCard post={post} collection="cs" prefetch={readingListPrefetch(index)} />
             ))}
           </div>
         </section>

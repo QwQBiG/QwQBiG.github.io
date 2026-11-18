@@ -166,7 +166,9 @@ test('the lightweight bootstrap prefetches immediately and replays the first int
     loadOptionalModule: () => optionalModule,
   });
   const event = { target: new Link(), button: 0 };
-  handlers.get('pointerdown')!(event);
+  handlers.get('pointerdown')!({ ...event, pointerType: 'touch' });
+  assert.deepEqual(prefetched, [], 'starting a swipe should not request a page');
+  handlers.get('pointerdown')!({ ...event, pointerType: 'mouse' });
   assert.deepEqual(prefetched, ['https://example.test/cs/']);
   assert.equal(replayed.length, 0);
   now = 1030;
@@ -177,9 +179,14 @@ test('the lightweight bootstrap prefetches immediately and replays the first int
   assert.equal(replayed[0].href, 'https://example.test/cs/');
   assert.equal(replayed[0].startedAt, 1000);
   now = 1100;
-  handlers.get('click')!(event);
+  handlers.get('pointerdown')!({ ...event, pointerType: 'touch' });
+  assert.equal(replayed.length, 1);
+  handlers.get('click')!({ ...event, pointerType: 'touch' });
   assert.equal(replayed.length, 2);
   assert.equal(replayed[1].startedAt, 1100);
+  now = 1150;
+  handlers.get('click')!({ ...event, detail: 0 });
+  assert.equal(replayed.length, 3, 'keyboard activation still warms the destination');
 });
 
 test('build manifest shares assets and only includes declared startup resources', async () => {
