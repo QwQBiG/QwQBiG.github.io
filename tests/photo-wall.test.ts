@@ -1,6 +1,45 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { listenForPointerDrag, preloadPhotos, resolvePhotoWallSize } from '../src/utils/photo-wall.ts';
+import { fitPhotoPosition, listenForPointerDrag, photoAnchorY, photoPositionBounds, photoWallCardWidth, photoWallSizes, preloadPhotos, resolvePhotoWallSize } from '../src/utils/photo-wall.ts';
+
+test('thumbnail sizing follows exact viewport boundaries and short phone landscape', () => {
+  for (const [width, height, expected] of [
+    [320, 568, 120], [479.9, 844, 120], [480, 844, 150], [767.9, 900, 150],
+    [768, 1024, 360], [844, 390, 150], [1023.9, 479.9, 150],
+    [844, 480, 360], [1024, 390, 360], [1440, 900, 360],
+  ]) {
+    assert.equal(photoWallCardWidth({ width, height }), expected, `${width} × ${height}`);
+  }
+  assert.equal(photoWallSizes(0.5),
+    '(width < 480px) 60px, (width < 768px) 75px, (width < 1024px) and (height < 480px) 75px, 180px');
+});
+
+test('edge drops and old positions keep rotated corners inside narrow and rotated walls', () => {
+  for (const wall of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
+    for (const [scale, ratio, rotation] of [[1, 9 / 16, -7], [0.5, 750 / 564, 8], [1, 1.4, 22]]) {
+      const width = photoWallCardWidth(wall) * scale;
+      const height = 8 + (width - 8) * ratio;
+      const bounds = photoPositionBounds(wall, width, ratio, rotation);
+      const angle = rotation * Math.PI / 180;
+      assert.deepEqual(fitPhotoPosition({ x: 0, y: 0 }, bounds), { x: 0, y: 0 });
+      for (const x of [-1000, 1000]) {
+        for (const y of [-1000, 1000]) {
+          const position = fitPhotoPosition({ x, y }, bounds);
+          const centerX = wall.width / 2 + position.x;
+          const centerY = wall.height / 2 + position.y - photoAnchorY(width) + height / 2;
+          for (const dx of [-width / 2, width / 2]) {
+            for (const dy of [-height / 2, height / 2]) {
+              const cornerX = centerX + dx * Math.cos(angle) - dy * Math.sin(angle);
+              const cornerY = centerY + dx * Math.sin(angle) + dy * Math.cos(angle);
+              assert.ok(cornerX >= 11.999 && cornerX <= wall.width - 11.999);
+              assert.ok(cornerY >= 11.999 && cornerY <= wall.height - 11.999);
+            }
+          }
+        }
+      }
+    }
+  }
+});
 
 test('a zero-height island measures the main instead of keeping desktop defaults', () => {
   assert.deepEqual(resolvePhotoWallSize(

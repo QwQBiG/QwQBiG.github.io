@@ -1,0 +1,28 @@
+---
+import { wrapArticleTables } from '../../utils/article-tables';
+
+const html = await Astro.slots.render('default');
+---
+<div class="prose prose-lg max-w-none" set:html={wrapArticleTables(html)} />
+
+<style>
+  .prose :global(.article-table-scroll) {
+    display: contents;
+  }
+
+  @media (max-width: 1023px) {
+    .prose :global(.article-table-scroll) {
+      display: block;
+      max-width: 100%;
+      margin: 1.5em 0;
+      overflow-x: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(232, 74, 122, 0.08), 0 8px 32px rgba(232, 74, 122, 0.05);
+    }
+
+    .prose :global(.article-table-scroll > table) {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+</style>

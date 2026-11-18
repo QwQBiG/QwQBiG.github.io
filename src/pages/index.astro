@@ -334,6 +334,7 @@ const statistics = [
     }
 
     .floating-ring {
+      touch-action: pan-y pinch-zoom;
       transition: transform 0.3s ease-out;
     }
 
@@ -362,8 +363,8 @@ const statistics = [
       transform-origin: center;
     }
 
-    .ring-text-rotate:hover {
-      animation-play-state: paused;
+    @media (hover: hover) {
+      .ring-text-rotate:hover { animation-play-state: paused; }
     }
 
     /* 导航栏优雅动效 - 流畅的位置移动 + 弹性布局转换 */
@@ -1039,26 +1040,6 @@ const statistics = [
     </div>
   </div>
 
-  <!-- 视口高度修复 - 解决移动端地址栏导致的布局问题 -->
-  <script is:inline>
-    (function() {
-      // 设置视口高度 CSS 变量
-      function setVH() {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', vh + 'px');
-      }
-
-      // 初始化并监听 resize
-      setVH();
-      window.addEventListener('resize', setVH);
-
-      // 监听方向变化
-      window.addEventListener('orientationchange', function() {
-        setTimeout(setVH, 100);
-      });
-    })();
-  </script>
-
   <!-- 环形文字交互脚本 -->
   <script is:inline>
     (function() {
@@ -1069,7 +1050,7 @@ const statistics = [
       // 检测是否为触摸设备
       const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
-      let isInteracting = false;
+      let activePointer = null;
       let animationId = null;
       let currentRotateX = 0;
       let currentRotateY = 0;
@@ -1121,7 +1102,7 @@ const statistics = [
         }
         const rotateX = `${currentRotateX.toFixed(2)}deg`;
         const rotateY = `${currentRotateY.toFixed(2)}deg`;
-        const translateZ = isInteracting ? '30px' : '0px';
+        const translateZ = activePointer !== null ? '30px' : '0px';
         if (rotateX !== lastRotateX) ring.style.setProperty('--rotateX', rotateX);
         if (rotateY !== lastRotateY) ring.style.setProperty('--rotateY', rotateY);
         if (translateZ !== lastTranslateZ) ring.style.setProperty('--translateZ', translateZ);
@@ -1162,54 +1143,37 @@ const statistics = [
         scheduleRingUpdate();
       }
 
-      // 鼠标进入
-      ring.addEventListener('mouseenter', function() {
-        isInteracting = true;
+      // On touchscreens pointerenter also fires when the finger first makes contact.
+      ring.addEventListener('pointerenter', (event) => {
+        if (!event.isPrimary) return;
+        activePointer = event.pointerId;
         ring.classList.add('interacting');
         scheduleRingUpdate();
       });
 
-      // 鼠标移动
-      ring.addEventListener('mousemove', function(e) {
-        handleMove(e.clientX, e.clientY);
-      });
+      ring.addEventListener('pointermove', (event) => {
+        if (event.pointerId === activePointer) handleMove(event.clientX, event.clientY);
+      }, { passive: true });
 
-      // 鼠标离开
-      ring.addEventListener('mouseleave', function() {
-        isInteracting = false;
+      function endRingInteraction(event) {
+        if (event.pointerId !== activePointer) return;
+        activePointer = null;
         ring.classList.remove('interacting');
         targetRotateX = 0;
         targetRotateY = 0;
         scheduleRingUpdate();
-      });
+      }
 
-      // 触摸事件支持
-      ring.addEventListener('touchstart', function(e) {
-        isInteracting = true;
-        ring.classList.add('interacting');
-        scheduleRingUpdate();
-        e.preventDefault();
-      }, { passive: false });
-
-      ring.addEventListener('touchmove', function(e) {
-        if (e.touches.length > 0) {
-          handleMove(e.touches[0].clientX, e.touches[0].clientY);
-        }
-        e.preventDefault();
-      }, { passive: false });
-
-      ring.addEventListener('touchend', function() {
-        isInteracting = false;
-        ring.classList.remove('interacting');
-        targetRotateX = 0;
-        targetRotateY = 0;
-        scheduleRingUpdate();
+      ring.addEventListener('pointerleave', endRingInteraction);
+      ring.addEventListener('pointercancel', endRingInteraction);
+      ring.addEventListener('pointerup', (event) => {
+        if (event.pointerType === 'touch') endRingInteraction(event);
       });
 
       // 设备方向支持 (移动端)
       if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', function(e) {
-          if (!isInteracting && e.beta !== null && e.gamma !== null) {
+          if (activePointer === null && e.beta !== null && e.gamma !== null) {
             // beta: 前后倾斜 (-180 到 180), gamma: 左右倾斜 (-90 到 90)
             targetRotateX = Math.max(-15, Math.min(15, e.beta * 0.3));
             targetRotateY = Math.max(-15, Math.min(15, e.gamma * 0.3));

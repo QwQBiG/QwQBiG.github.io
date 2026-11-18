@@ -5,6 +5,7 @@ import Layout from '../layouts/LightLayout.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import PhotoWall from '../components/3d/PhotoWall.tsx';
 import type { PhotoItem } from '../types/photo';
+import { desktopPhotoWidth, photoAnchorY, photoFrameHeightRatio, photoWallMedia, photoWallSizes, photoWallTiers } from '../utils/photo-wall';
 
 interface GalleryManifestEntry {
   file: string;
@@ -33,11 +34,26 @@ const photos: PhotoItem[] = entries.map((entry, index) => {
     height: entry.height,
     scale,
     srcset: entry.srcset,
-    sizes: `(width < 480px) ${120 * scale}px, (width < 768px) ${150 * scale}px, ${360 * scale}px`,
+    sizes: photoWallSizes(scale),
   };
 });
 
-const photoScales = Object.fromEntries(photos.map((photo) => [photo.id, photo.scale ?? 1]));
+const photoIds = photos.map(photo => photo.id);
+const compactScreens = photoWallTiers.map(photoWallMedia).join(', ');
+const galleryBreakpoints = [
+  `:root { --gallery-card-size: ${desktopPhotoWidth}px; }`,
+  ...[...photoWallTiers].reverse().map(tier =>
+    `@media ${photoWallMedia(tier)} { :root { --gallery-card-size: ${tier.width}px; } }`),
+  `@media ${compactScreens} {
+    .gallery-main { height: 100dvh; flex: none; }
+    body:has(.gallery-main) { min-height: 100dvh; }
+    .static-photo-wall .static-photo-card[data-photo-id] {
+      --anchor-y: calc(var(--frame-width) * .6);
+      left: clamp(var(--min-left), var(--resolved-left), var(--max-left));
+      top: clamp(var(--min-top), var(--resolved-top), var(--max-top));
+    }
+  }`,
+].join('');
 
 const initialPositions = [
   { left: '10%', top: '18%', rotate: '-7deg' },
@@ -50,50 +66,34 @@ const initialPositions = [
 
 <Layout title={pageTitle} description={pageDescription}>
   <Fragment slot="head">
+    <style is:inline set:html={galleryBreakpoints} />
     {photos.map((photo) => (
       <link rel="preload" as="image" imagesrcset={photo.srcset} imagesizes={photo.sizes} type="image/webp" />
     ))}
-    <script is:inline define:vars={{ photoScales }}>
-      (() => {
-        const root = document.documentElement;
+    <script is:inline define:vars={{ photoIds }}>
+      for (const id of photoIds) {
         try {
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
-          const baseWidth = viewportWidth < 480 ? 120 : viewportWidth < 768 ? 150 : 360;
-          const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-          Object.entries(photoScales).forEach(([id, scaleValue]) => {
-            const saved = JSON.parse(localStorage.getItem('photo-wall-' + id) || 'null');
-            if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return;
-            const width = baseWidth * (Number(scaleValue) || 1);
-            const verticalOffset = width < 250 ? width * 0.6 : 100;
-            const minX = 12 + width / 2 - viewportWidth / 2;
-            const maxX = viewportWidth / 2 - 12 - width / 2;
-            const minY = 12 + verticalOffset - viewportHeight / 2;
-            const maxY = viewportHeight / 2 - 12 - verticalOffset;
-            const x = clamp(saved.x, minX, maxX);
-            const y = clamp(saved.y, minY, maxY);
-            const rotation = Number.isFinite(saved.rotation) ? saved.rotation : 0;
-            const zIndex = Number.isFinite(saved.zIndex) ? saved.zIndex : Number(id);
-            if (x !== saved.x || y !== saved.y) {
-              localStorage.setItem('photo-wall-' + id, JSON.stringify({ ...saved, x, y }));
-            }
-            root.style.setProperty('--photo-' + id + '-left', '50%');
-            root.style.setProperty('--photo-' + id + '-top', '50%');
-            root.style.setProperty(
-              '--photo-' + id + '-transform',
-              'translate3d(' + (x - width / 2) + 'px,' + (y - verticalOffset) + 'px,0) rotate(' + rotation + 'deg)',
-            );
-            root.style.setProperty('--photo-' + id + '-z', String(zIndex));
-          });
-        } catch {}
-        root.classList.add('photo-wall-state-ready');
-      })();
+          const saved = JSON.parse(localStorage.getItem('photo-wall-' + id) || 'null');
+          if (!saved || !Number.isFinite(saved.x) || !Number.isFinite(saved.y)) continue;
+          const rotation = Number.isFinite(saved.rotation) ? saved.rotation : 0;
+          const angle = rotation * Math.PI / 180;
+          const style = document.documentElement.style;
+          const prefix = '--photo-' + id + '-';
+          style.setProperty(prefix + 'cos', Math.abs(Math.cos(angle)));
+          style.setProperty(prefix + 'sin', Math.abs(Math.sin(angle)));
+          style.setProperty(prefix + 'rotation', rotation + 'deg');
+          style.setProperty(prefix + 'z', Number.isFinite(saved.zIndex) ? saved.zIndex : Number(id));
+          // Keep the original center-relative coordinates as the viewport rotates.
+          style.setProperty(prefix + 'x', saved.x + 'px');
+          style.setProperty(prefix + 'y', saved.y + 'px');
+        } catch { /* Other photos still restore if this entry is unreadable. */ }
+      }
     </script>
   </Fragment>
 
   <FloatingNavCard />
 
-  <main class="flex-1 h-screen relative overflow-hidden">
+  <main class="gallery-main flex-1 h-screen relative overflow-hidden">
     <div class="absolute inset-0 gradient-bg -z-10"></div>
 
     <!-- React/Framer 加载前显示同样的拍立得墙，图片是清晰缩略图，不使用模糊占位。 -->
@@ -101,11 +101,25 @@ const initialPositions = [
       {photos.map((photo, index) => {
         const position = initialPositions[index % initialPositions.length];
         const scale = photo.scale ?? 1;
+        const angle = parseFloat(position.rotate) * Math.PI / 180;
+        const prefix = `--photo-${photo.id}-`;
         return (
           <div
             class="static-photo-card"
             data-photo-id={photo.id}
-            style={`--left:${position.left};--top:${position.top};--rotate:${position.rotate};--desktop-width:${360 * scale}px;--tablet-width:${150 * scale}px;--phone-width:${120 * scale}px;--resolved-left:var(--photo-${photo.id}-left,var(--left));--resolved-top:var(--photo-${photo.id}-top,var(--top));--resolved-transform:var(--photo-${photo.id}-transform,rotate(var(--rotate)));--resolved-z:var(--photo-${photo.id}-z,${index})`}
+            style={{
+              '--scale': scale,
+              '--ratio': photoFrameHeightRatio(photo),
+              '--desktop-anchor': `${photoAnchorY(desktopPhotoWidth * scale)}px`,
+              '--cos': `var(${prefix}cos, ${Math.abs(Math.cos(angle))})`,
+              '--sin': `var(${prefix}sin, ${Math.abs(Math.sin(angle))})`,
+              '--saved-x': `var(${prefix}x)`,
+              '--saved-y': `var(${prefix}y)`,
+              '--default-left': position.left,
+              '--default-top': position.top,
+              '--rotation': `var(${prefix}rotation, ${position.rotate})`,
+              'z-index': `var(${prefix}z, ${index})`,
+            }}
           >
             <div class="static-photo-frame">
               <img
@@ -175,9 +189,22 @@ const initialPositions = [
     position: absolute;
     left: var(--resolved-left);
     top: var(--resolved-top);
-    width: var(--desktop-width);
-    transform: var(--resolved-transform);
-    z-index: var(--resolved-z);
+    --frame-width: calc(var(--gallery-card-size) * var(--scale));
+    --frame-height: calc((var(--frame-width) - 8px) * var(--ratio) + 8px);
+    --anchor-y: var(--desktop-anchor);
+    --restored-left: clamp(var(--min-left), calc(50% + var(--saved-x) - var(--frame-width) / 2), var(--max-left));
+    --restored-top: clamp(var(--min-top), calc(50% + var(--saved-y) - var(--anchor-y)), var(--max-top));
+    --resolved-left: var(--restored-left, var(--default-left));
+    --resolved-top: var(--restored-top, var(--default-top));
+    /* Match the rotated rectangle used for dragging, including its white frame. */
+    --inset-x: calc(12px + (var(--frame-width) * (var(--cos) - 1) + var(--frame-height) * var(--sin)) / 2);
+    --inset-y: calc(12px + (var(--frame-height) * (var(--cos) - 1) + var(--frame-width) * var(--sin)) / 2);
+    --min-left: min(var(--inset-x), (100% - var(--frame-width)) / 2);
+    --min-top: min(var(--inset-y), (100% - var(--frame-height)) / 2);
+    --max-left: calc(100% - var(--frame-width) - var(--inset-x));
+    --max-top: calc(100% - var(--frame-height) - var(--inset-y));
+    width: var(--frame-width);
+    transform: rotate(var(--rotation));
   }
 
   .static-photo-frame {
@@ -194,11 +221,4 @@ const initialPositions = [
     object-fit: cover;
   }
 
-  @media (max-width: 768px) {
-    .static-photo-card { width: var(--tablet-width); }
-  }
-
-  @media (max-width: 480px) {
-    .static-photo-card { width: var(--phone-width); }
-  }
 </style>

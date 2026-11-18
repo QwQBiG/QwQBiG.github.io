@@ -36,7 +36,7 @@ async function optimizeGallery() {
     ]);
 
     const smallerThumbnails = await Promise.all(
-      [180, 256, 360].filter((width) => width < thumbnail.width).map(async (width) => {
+      [120, 180, 256, 360].filter((width) => width < thumbnail.width).map(async (width) => {
         const name = `${stem}-w${width}.webp`;
         await pipeline.clone().resize({ width })
           .webp({ quality: 78, effort: 5, smartSubsample: true })
@@ -49,8 +49,8 @@ async function optimizeGallery() {
     manifest.push({
       file,
       alt: path.parse(file).name,
-      width: metadata.width,
-      height: metadata.height,
+      width: metadata.autoOrient.width,
+      height: metadata.autoOrient.height,
       thumb2x: fallback,
       srcset: [...smallerThumbnails, `${fallback} ${thumbnail.width}w`].join(', '),
       preview: `/generated/gallery/${previewName}`,
