@@ -84,54 +84,113 @@ test('floating navigation preserves native actions and continues the existing ba
   assert.equal('astroReload' in links[0].dataset, true);
 });
 
-test('TOC binds each current article once, handles numeric heading IDs and cleans old listeners', async () => {
-  class ClassList {
-    values = new Set<string>();
-    add(name: string) { this.values.add(name); }
-    remove(name: string) { this.values.delete(name); }
-  }
+test('the TOC follows the current section across scroll jumps, layout shifts and page swaps', async () => {
   class Link extends EventTarget {
-    classList = new ClassList();
-    readonly href: string;
-    constructor(href: string) { super(); this.href = href; }
-    getAttribute() { return this.href; }
+    attributes = new Map<string, string>();
+    classList = { add: (name: string) => this.classes.add(name), remove: (name: string) => this.classes.delete(name) };
+    classes = new Set<string>();
+    constructor(id: string) { super(); this.attributes.set('href', '#' + id); }
+    getAttribute(name: string) { return this.attributes.get(name); }
+    setAttribute(name: string, value: string) { this.attributes.set(name, value); }
+    removeAttribute(name: string) { this.attributes.delete(name); }
   }
-  const first = new Link('#1-heading');
-  const second = new Link('#next');
-  let links = [first];
-  let scrolled = '';
-  let headings = [{ id: '1-heading', offsetTop: 100, offsetHeight: 40 }];
-  const document = new EventTarget() as EventTarget & Record<string, any>;
-  document.querySelectorAll = (selector: string) => selector.startsWith('.toc') ? links : headings;
-  document.getElementById = (id: string) => ({ scrollIntoView() { scrolled = id; } });
-  const window = new EventTarget() as EventTarget & { scrollY: number };
-  window.scrollY = 0;
-  let nextFrame = 0;
+  let offset = 0;
+  let layoutReads = 0;
+  const article = {};
+  function fixture(ids: string[]) {
+    const links = ids.map(id => new Link(id));
+    const headings = new Map(ids.map((id, index) => [id, {
+      top: 250 + 500 * index,
+      closest: () => article,
+      getBoundingClientRect() { layoutReads++; return { top: this.top - offset }; },
+    }]));
+    const toc = { parentElement: null as EventTarget | null, querySelectorAll: () => links };
+    return { links, headings, toc };
+  }
+
+  const original = fixture(Array.from({ length: 50 }, (_, i) => i === 25 ? '1-网络' : 'section-' + i));
+  const mobile = Object.assign(new EventTarget(), { open: false });
+  let page = original;
+  const document = Object.assign(new EventTarget(), {
+    querySelector: (selector: string) => selector === '[data-article-toc]' ? page.toc : mobile,
+    getElementById: (id: string) => page.headings.get(id),
+  });
+  const window = new EventTarget();
   const frames = new Map<number, () => void>();
+  const observers = new Set<() => void>();
+  let sequence = 0;
+  class ResizeObserver {
+    callback: () => void;
+    constructor(callback: () => void) { this.callback = callback; }
+    observe(el: unknown) { assert.equal(el, article); observers.add(this.callback); }
+    disconnect() { observers.delete(this.callback); }
+  }
+  function flush(event = 'scroll') {
+    window.dispatchEvent(new Event(event));
+    assert.equal(frames.size, 1);
+    const [callback] = frames.values();
+    frames.clear();
+    layoutReads = 0;
+    callback();
+    assert.ok(layoutReads <= 6, 'a 50-entry TOC needs at most six heading positions');
+  }
+  function active() {
+    const activeLinks = page.links.filter(link => link.classes.has('active'));
+    assert.deepEqual(activeLinks, page.links.filter(link => link.getAttribute('aria-current') === 'location'));
+    return activeLinks.map(link => link.getAttribute('href'));
+  }
+
   const code = stripTypeScriptTypes(await readFile(new URL('../src/scripts/article-toc.ts', import.meta.url), 'utf8'));
   runInNewContext(code, {
-    document, window, AbortController,
-    requestAnimationFrame: (callback: () => void) => { frames.set(++nextFrame, callback); return nextFrame; },
+    document, window, AbortController, ResizeObserver,
+    requestAnimationFrame: (callback: () => void) => { frames.set(++sequence, callback); return sequence; },
     cancelAnimationFrame: (id: number) => frames.delete(id),
   });
-  assert.equal(first.classList.values.has('active'), true);
-  first.dispatchEvent(new Event('click', { cancelable: true }));
-  assert.equal(scrolled, '1-heading');
-  document.dispatchEvent(new Event('astro:page-load'));
+  assert.deepEqual(active(), []);
+  offset = page.headings.get('1-网络')!.top + 250; // Well inside the section, past the heading text.
+  window.dispatchEvent(new Event('scroll'));
+  flush();
+  assert.deepEqual(active(), ['#1-网络']);
+  assert.equal(page.links[25].dispatchEvent(new Event('click', { cancelable: true })), true);
+
+  // At the same scroll position a taller code block pushes this heading below the reading line.
+  page.headings.get('1-网络')!.top += 400;
+  for (const callback of observers) callback();
+  flush('resize');
+  assert.deepEqual(active(), ['#section-24']);
+  offset = 99999;
+  flush();
+  assert.deepEqual(active(), ['#section-49']);
+  offset = 0;
+  flush('pageshow');
+  assert.deepEqual(active(), []);
+
+  page.toc.parentElement = mobile;
+  offset = 1400;
+  window.dispatchEvent(new Event('scroll'));
+  assert.equal(frames.size, 0, 'scrolling with a closed mobile TOC schedules no geometry work');
+  mobile.open = true;
+  mobile.dispatchEvent(new Event('toggle'));
+  flush();
+  assert.deepEqual(active(), ['#section-2']);
+  page.toc.parentElement = null;
+
   document.dispatchEvent(new Event('astro:page-load'));
   assert.equal(getEventListeners(window, 'scroll').length, 1);
   window.dispatchEvent(new Event('scroll'));
-  assert.equal(frames.size, 1);
+  window.dispatchEvent(new Event('pagehide'));
+  assert.equal(frames.size, 0);
+  window.dispatchEvent(new Event('scroll'));
   document.dispatchEvent(new Event('astro:before-swap'));
   assert.equal(frames.size, 0);
+  assert.equal(observers.size, 0);
   assert.equal(getEventListeners(window, 'scroll').length, 0);
-  assert.equal(getEventListeners(first, 'click').length, 0);
-  links = [second];
-  headings = [{ id: 'next', offsetTop: 100, offsetHeight: 40 }];
+
+  page = fixture(['1-heading']);
+  offset = 150;
   document.dispatchEvent(new Event('astro:page-load'));
-  assert.equal(second.classList.values.has('active'), true);
-  links = [];
-  document.dispatchEvent(new Event('astro:before-swap'));
+  assert.deepEqual(active(), ['#1-heading']);
+  page = fixture([]);
   document.dispatchEvent(new Event('astro:page-load'));
   assert.equal(getEventListeners(window, 'scroll').length, 0);
 });

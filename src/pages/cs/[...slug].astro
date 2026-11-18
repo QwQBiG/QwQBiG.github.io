@@ -21,6 +21,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
+const tocHeadings = headings.filter(heading => heading.depth <= 3);
 
 const { title, description, date, series, hidden } = post.data;
 const tags = getPostTags(post);
@@ -116,6 +117,13 @@ const pageTitle = `${title} - QwQBiG's World`;
             </div>
           </header>
 
+          {tocHeadings.length > 0 && (
+            <details class="toc article-mobile-toc lg:hidden" data-mobile-toc>
+              <summary class="toc-title">目录</summary>
+              <a href="#article:contents" data-toc-fallback data-astro-reload>查看完整目录</a>
+            </details>
+          )}
+
           <!-- Post Content -->
           <ArticleBody>
             <Content />
@@ -198,21 +206,24 @@ const pageTitle = `${title} - QwQBiG's World`;
         <aside class="lg:col-span-3">
           <div class="sticky top-24 space-y-6">
             <!-- TOC -->
-            {headings.length > 0 && (
-              <div class="toc">
+            {tocHeadings.length > 0 && (
+              <div class="toc" id="article:contents" data-toc-sidebar>
                 <div class="toc-title">目录</div>
-                <ul>
-                  {headings.filter(h => h.depth <= 3).map((heading) => (
-                    <li>
-                      <a
-                        href={`#${heading.slug}`}
-                        class={`h${heading.depth}`}
-                      >
-                        {heading.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <nav aria-label="文章目录" data-article-toc>
+                  <ul>
+                    {tocHeadings.map((heading) => (
+                      <li>
+                        <a
+                          href={`#${heading.slug}`}
+                          data-astro-reload
+                          class={`h${heading.depth}`}
+                        >
+                          {heading.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
               </div>
             )}
 
@@ -251,4 +262,61 @@ const pageTitle = `${title} - QwQBiG's World`;
 
 <script>
   import '../../scripts/article-toc';
+
+  const desktop = window.matchMedia('(min-width: 1024px)');
+  function placeContents() {
+    const mobile = document.querySelector<HTMLDetailsElement>('[data-mobile-toc]');
+    const sidebar = document.querySelector<HTMLElement>('[data-toc-sidebar]');
+    const nav = document.querySelector<HTMLElement>('[data-article-toc]');
+    if (!mobile || !sidebar || !nav) return;
+
+    const container = desktop.matches ? sidebar : mobile;
+    if (nav.parentElement !== container) container.append(nav);
+    sidebar.hidden = !desktop.matches;
+    mobile.querySelector('[data-toc-fallback]')?.remove();
+    if (desktop.matches) mobile.open = false;
+  }
+
+  placeContents();
+  desktop.addEventListener('change', placeContents);
+  document.addEventListener('astro:after-swap', placeContents);
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target instanceof Element && event.target.closest('[data-article-toc] a');
+    const mobile = link && link.closest<HTMLDetailsElement>('[data-mobile-toc]');
+    if (mobile) mobile.open = false;
+  });
 </script>
+
+<style>
+  [data-toc-sidebar] {
+    scroll-margin-top: 6rem;
+  }
+
+  @media (max-width: 1023px) {
+    .toc.article-mobile-toc {
+      position: static;
+      max-height: none;
+      margin: 0 0 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .article-mobile-toc summary {
+      margin: 0;
+      padding-block: 0.65rem;
+      cursor: pointer;
+    }
+
+    .article-mobile-toc [data-article-toc] {
+      max-height: min(50vh, 24rem);
+      overflow-y: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .article-mobile-toc [data-article-toc] a {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+</style>
