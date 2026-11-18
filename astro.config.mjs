@@ -32,6 +32,12 @@ export default defineConfig({
     format: 'directory',
   },
   vite: {
+    build: {
+      // Let the browser fetch only the font subsets used on the current page.
+      assetsInlineLimit(filePath) {
+        if (filePath.includes('/@fontsource/jetbrains-mono/') && /\.woff2?$/.test(filePath)) return false;
+      },
+    },
     css: {
       postcss: './postcss.config.mjs',
     },

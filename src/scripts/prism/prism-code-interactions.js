@@ -103,35 +103,32 @@
       return;
     }
 
+    const pattern = new RegExp(escapeRegex(query), 'gi');
     const codeBlocks = document.querySelectorAll('pre[class*="language-"] code');
-    currentMatches = [];
 
-    codeBlocks.forEach(code => {
-      const textNodes = getTextNodes(code);
-
-      textNodes.forEach(node => {
-        const text = node.textContent;
-        const regex = new RegExp(escapeRegex(query), 'gi');
-        let match;
-
-        while ((match = regex.exec(text)) !== null) {
-          const range = document.createRange();
-          range.setStart(node, match.index);
-          range.setEnd(node, match.index + match[0].length);
-
+    for (const code of codeBlocks) {
+      for (const node of getTextNodes(code)) {
+        const text = node.data;
+        let fragment;
+        let start = 0;
+        // Collect every match against the original text before replacing this node.
+        for (const match of text.matchAll(pattern)) {
+          fragment ??= document.createDocumentFragment();
+          if (match.index > start) fragment.append(text.slice(start, match.index));
           const highlight = document.createElement('span');
           highlight.className = 'token search-match';
           highlight.dataset.matchIndex = currentMatches.length;
-
-          try {
-            range.surroundContents(highlight);
-            currentMatches.push(highlight);
-          } catch (e) {
-            // 跨节点匹配时跳过
-          }
+          highlight.textContent = match[0];
+          fragment.append(highlight);
+          currentMatches.push(highlight);
+          start = match.index + match[0].length;
         }
-      });
-    });
+        if (fragment) {
+          if (start < text.length) fragment.append(text.slice(start));
+          node.replaceWith(fragment);
+        }
+      }
+    }
 
     updateSearchCount();
 
@@ -173,12 +170,12 @@
    * 清除搜索结果
    */
   function clearSearch() {
-    const matches = document.querySelectorAll('.search-match');
-    matches.forEach(match => {
-      const parent = match.parentNode;
-      parent.replaceChild(document.createTextNode(match.textContent), match);
-      parent.normalize();
-    });
+    const parents = new Set();
+    for (const match of currentMatches) {
+      if (match.parentNode) parents.add(match.parentNode);
+      match.replaceWith(match.textContent);
+    }
+    for (const parent of parents) parent.normalize();
     currentMatches = [];
     currentMatchIndex = -1;
   }
