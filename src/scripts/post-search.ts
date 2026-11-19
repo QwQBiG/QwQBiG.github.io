@@ -22,13 +22,13 @@ function highlight(text: string, pattern: RegExp) {
   ).join('');
 }
 
-function resultCard(post: SearchPost, pattern: RegExp) {
+function resultCard(post: SearchPost, pattern: RegExp, visibleTags: string[]) {
   return `<a href="/${escapeHtml(post.collection)}/${escapeHtml(post.slug)}/" class="search-result-item block">
     <h3 class="search-result-title">${highlight(post.title, pattern)}</h3>
     ${post.description ? `<p class="search-result-excerpt">${highlight(post.description, pattern)}</p>` : ''}
     <div class="search-result-meta">
       <time datetime="${escapeHtml(post.date)}">${formatDisplayDate(new Date(post.date))}</time>
-      ${post.tags?.length ? `<span>${escapeHtml(post.tags.slice(0, 3).join(', '))}</span>` : ''}
+      ${visibleTags.length ? `<span>${visibleTags.map(tag => highlight(tag, pattern)).join(', ')}</span>` : ''}
     </div>
   </a>`;
 }
@@ -58,8 +58,8 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
   let frame: number | undefined;
 
   function render() {
-    const query = input.value;
-    if (!query.trim()) {
+    const query = input.value.trim();
+    if (!query) {
       results.innerHTML = message('Type to search.');
     } else if (failed) {
       results.innerHTML = message('Couldn’t load the posts. <button type="button" class="underline">Try again</button>');
@@ -68,15 +68,18 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
       results.innerHTML = message('Loading posts…');
     } else {
       const lowerQuery = query.toLowerCase();
-      const matches = posts.filter(post =>
-        post.title.toLowerCase().includes(lowerQuery) ||
-        post.description?.toLowerCase().includes(lowerQuery) ||
-        post.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-      );
       const pattern = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      results.innerHTML = matches.length
-        ? matches.map(post => resultCard(post, pattern)).join('')
-        : message('No matching posts.');
+      const cards: string[] = [];
+      for (const post of posts) {
+        const tags = post.tags ?? [];
+        const matchedTags = tags.filter(tag => tag.toLowerCase().includes(lowerQuery));
+        if (!matchedTags.length && !post.title.toLowerCase().includes(lowerQuery) &&
+            !post.description?.toLowerCase().includes(lowerQuery)) continue;
+
+        const visibleTags = [...new Set([...matchedTags, ...tags])].slice(0, 3);
+        cards.push(resultCard(post, pattern, visibleTags));
+      }
+      results.innerHTML = cards.length ? cards.join('') : message('No matching posts.');
     }
   }
 
