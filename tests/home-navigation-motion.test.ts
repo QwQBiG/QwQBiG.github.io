@@ -26,9 +26,10 @@ function homePage(touch = false, search = '', storedReturn = false) {
   const storage = new Map<string, string>();
   if (storedReturn) storage.set('home-return-motion', '1');
   const dataset: { homeReturnMotion?: string } = {};
+  const avatarPreload = { media: '(min-width: 924px)' };
   const document = Object.assign(new EventTarget(), {
     documentElement: { dataset, removeAttribute() { delete dataset.homeReturnMotion; } },
-    getElementById: (id: string) => id === 'navCard' ? card : null,
+    getElementById: (id: string) => id === 'navCard' ? card : id === 'home-avatar-preload' ? avatarPreload : null,
     querySelector: () => null, querySelectorAll: () => [link],
   });
   const context = {
@@ -48,7 +49,7 @@ function homePage(touch = false, search = '', storedReturn = false) {
     const e = Object.assign(new Event('click', { cancelable: true }), { button: 0 }, props);
     return link.dispatchEvent(e); // true leaves the link's native navigation in charge
   }
-  return { preference, location, link, flags, timers, frames, click, dataset };
+  return { preference, location, link, flags, timers, frames, click, dataset, avatarPreload };
 }
 
 test('a live reduced-motion preference keeps the native link, while normal clicks retain their animation', () => {
@@ -116,4 +117,11 @@ test('ordinary homepage links keep their query and anchor, including a storage-o
   assert.equal(stored.dataset.homeReturnMotion, '1');
   while (stored.frames.length) stored.frames.shift()!();
   assert.equal(stored.location.href, 'https://example.test/' + suffix);
+});
+
+test('the offscreen mobile avatar gets its early preload back for a compact avatar return', () => {
+  assert.equal(homePage(true).avatarPreload.media, '(min-width: 924px)');
+  for (const marker of ['#home-return-motion', '?homeReturnMotion=1']) {
+    assert.equal(homePage(true, marker).avatarPreload.media, 'all');
+  }
 });

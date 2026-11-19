@@ -46,17 +46,18 @@ const statistics = [
   <meta name="description" content="Notes on computer science, algorithms, programming, and embedded systems.">
   <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp">
 
+  <link id="home-avatar-preload" rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high" media="(min-width: 924px)">
   {/* Keep avatar returns in the compact state before the first paint. */}
   <script is:inline>
     if (window.location.hash === '#home-return-motion' || new URLSearchParams(window.location.search).has('homeReturnMotion')) {
       document.documentElement.dataset.homeReturnMotion = '1';
+      document.getElementById('home-avatar-preload').media = 'all';
     }
   </script>
 
   <link rel="preload" as="script" href="/js/vanilla-tilt.js" media="(pointer: fine), (any-hover: hover)">
 
   {/* 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 */}
-  <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
   <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
   <link rel="preload" as="image" type="image/avif" imagesrcset={avifCoverSrcset} imagesizes={coverSizes} media="(min-width: 924px)" fetchpriority="low">
   <link rel="preload" href={homeSans} as="font" type="font/woff2" crossorigin>
@@ -816,6 +817,7 @@ const statistics = [
                   <div class="nav-avatar relative w-14 h-14 [@media(min-width:924px)]:w-16 [@media(min-width:924px)]:h-16 translate-x-2 translate-y-2">
                     <img
                       src="/generated/site/avatar-160.webp"
+                      loading="lazy" width="160" height="160"
                       alt="iqwqi"
                       class="w-full h-full object-cover rounded-[1rem] border-2 border-white/60 shadow-md"
                     />
