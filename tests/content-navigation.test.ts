@@ -16,6 +16,12 @@ test('client navigation stays within content routes and leaves presentation page
   }
 });
 
+test('instant content swaps opt out of the root snapshot before the browser captures it', async () => {
+  const component = await readFile(new URL('../src/components/content/ContentNavigation.astro', import.meta.url), 'utf8');
+  assert.match(component, /:root\[data-astro-transition\]\s*\{\s*view-transition-name: none;/);
+  assert.match(component, /<ClientRouter fallback="swap"/);
+});
+
 test('floating navigation preserves native actions and continues the existing background animation', async () => {
   const handlers = new Map<string, (event: any) => void>();
   const navigation: string[] = [];
@@ -34,9 +40,16 @@ test('floating navigation preserves native actions and continues the existing ba
   const links = [new Link('/cs/posts/next/'), new Link('/about/'), new Link('/#home-return-motion')];
   const cleanup: Array<() => void> = [];
   let clock = 1000;
-  let animation = { animationName: 'gradientShift', currentTime: 2500 };
+  let animationReads = 0;
+  const body = {
+    classList: { contains: (name: string) => name === 'gradient-bg' },
+    getAnimations() {
+      animationReads++;
+      return [{ animationName: 'gradientShift', startTime: 250 }];
+    },
+  };
   const document = {
-    body: { getAnimations: () => [animation] },
+    body, timeline: { get currentTime() { return clock; } },
     addEventListener: (name: string, handler: (event: unknown) => void) => handlers.set(name, handler),
   };
   const code = stripTypeScriptTypes(await readFile(new URL('../src/scripts/content-navigation.ts', import.meta.url), 'utf8'))
@@ -45,7 +58,6 @@ test('floating navigation preserves native actions and continues the existing ba
     document,
     window: { location: { href: 'https://example.test/cs/', origin: 'https://example.test', pathname: '/cs/', search: '' } },
     Element: Link, URL, setTimeout: (cb: () => void) => cleanup.push(cb),
-    performance: { now: () => clock },
     isContentNavigationPath,
     isTransitionBeforeSwapEvent: (event: { type: string }) => event.type === 'astro:before-swap',
     navigate: (href: string) => { navigation.push(href); return Promise.resolve(); },
@@ -72,13 +84,17 @@ test('floating navigation preserves native actions and continues the existing ba
     assert.equal(click(link, options).defaultPrevented, false, link.href);
   }
   assert.equal(navigation.length, 1);
-  let skipped = false;
-  handlers.get('astro:before-swap')!({ type: 'astro:before-swap', viewTransition: { skipTransition() { skipped = true; } } });
-  animation = { animationName: 'gradientShift', currentTime: 0 };
-  clock = 1016;
-  handlers.get('astro:after-swap')!({});
-  assert.equal(skipped, true);
-  assert.equal(animation.currentTime, 2516);
+  const incoming = { classList: body.classList, style: { animationDelay: '' } };
+  const swap = () => handlers.get('astro:before-swap')!({ type: 'astro:before-swap', newDocument: { body: incoming } });
+  swap();
+  assert.equal(incoming.style.animationDelay, '-750ms');
+  clock = 1060;
+  swap();
+  assert.equal(incoming.style.animationDelay, '-810ms');
+  const started = { startTime: 1110 };
+  handlers.get('animationstart')!({ target: body, animationName: 'gradientShift', animation: started });
+  assert.equal(started.startTime, 1060, 'a slow swap still paints the correct animation phase');
+  assert.equal(animationReads, 1, 'successive swaps reuse the original timeline');
   assert.equal(links[1].dataset.astroReload, '');
   assert.equal(links[2].dataset.astroReload, '');
   const inserted = new Link('/gallery/');

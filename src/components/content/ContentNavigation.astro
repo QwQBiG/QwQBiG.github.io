@@ -4,6 +4,14 @@ import { ClientRouter } from 'astro:transitions';
 
 <ClientRouter fallback="swap" />
 
+<style is:global>
+  /* Reading pages swap immediately. Exclude the outgoing page before the
+     browser captures it, so no full-screen image or crossfade is created. */
+  :root[data-astro-transition] {
+    view-transition-name: none;
+  }
+</style>
+
 <script>
   import '../../scripts/content-navigation';
 </script>
