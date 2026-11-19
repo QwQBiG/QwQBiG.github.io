@@ -41,19 +41,6 @@ const statistics = [
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="only light">
-  <script is:inline>
-    (() => {
-      const root = document.documentElement;
-      root.setAttribute('data-theme', 'light');
-      root.classList.remove('dark');
-      root.style.colorScheme = 'only light';
-      try {
-        localStorage.setItem('theme', 'light');
-      } catch {
-        // 浅色模式不依赖本地存储权限。
-      }
-    })();
-  </script>
   <title>QwQBiG's World</title>
   <meta name="description" content="Notes on computer science, algorithms, programming, and embedded systems.">
   <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp">
