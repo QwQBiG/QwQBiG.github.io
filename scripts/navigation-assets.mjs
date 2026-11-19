@@ -3,6 +3,7 @@ import { readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'parse5';
+import { init, parse as parseModule } from 'es-module-lexer';
 
 const origin = 'https://navigation.invalid';
 
@@ -18,7 +19,22 @@ function localAsset(value, type, route) {
   }
 }
 
+// Only compiled, same-origin modules have a known build-time dependency graph.
+function compiledModule(value, from) {
+  const url = localAsset(value, 'script', from);
+  return url?.startsWith('/_astro/') ? url : null;
+}
+
+function staticImports(source, from) {
+  const [imports] = parseModule(source);
+  return imports.filter(item => item.d === -1 && /^(?:\.{1,2}\/|\/)/.test(item.n))
+    .map(item => compiledModule(item.n, from)).filter(Boolean);
+}
+
 function candidates(html, route) {
+  const entries = new Set();
+  const deferredDiscovery = new Set();
+  const alreadyLinked = new Set();
   const result = [];
   const seen = new Set();
   function add(value, type, extra = {}) {
@@ -53,29 +69,48 @@ function candidates(html, route) {
           add(attrs.href, attrs.as);
         }
       }
-      if (rel.includes('modulepreload')) add(attrs.href, 'script');
+      if (rel.includes('modulepreload')) {
+        if (allScreens) alreadyLinked.add(compiledModule(attrs.href, route));
+        add(attrs.href, 'script');
+      }
     }
     if (node.tagName === 'script' && attrs.src && (attrs.type === 'module' || 'defer' in attrs)) add(attrs.src, 'script');
+    if (node.tagName === 'script' && attrs.type === 'module') {
+      if (attrs.src) {
+        const entry = compiledModule(attrs.src, route);
+        if (entry) entries.add(entry);
+      } else {
+        for (const url of staticImports(node.childNodes.map(child => child.value).join(''), route)) deferredDiscovery.add(url);
+      }
+    }
     if (node.tagName === 'astro-island' && (attrs.client === 'load' || attrs.client === 'idle')) {
       add(attrs['component-url'], 'script');
       add(attrs['renderer-url'], 'script');
+      if (attrs.client === 'load') {
+        for (const value of [attrs['component-url'], attrs['renderer-url']]) {
+          const entry = compiledModule(value, route);
+          if (entry) deferredDiscovery.add(entry);
+        }
+      }
     }
     for (const child of node.childNodes ?? []) visit(child);
   }
   visit(parse(html));
   const order = { style: 0, image: 1, font: 2, script: 3 };
-  return result.sort((a, b) => order[a.type] - order[b.type]);
+  const assets = result.sort((a, b) => order[a.type] - order[b.type]);
+  return { assets, entries, deferredDiscovery, alreadyLinked };
 }
 
 // Keep only resources the destination already declares as immediately useful.
-// Fetching these files never executes its scripts or follows a module import graph.
+// The build resolves static imports. Runtime warming only fetches the manifest's listed files.
 export async function buildNavigationManifest(pages, assetSize) {
   const assets = [];
   const assetIndexes = new Map();
   const routes = Object.create(null);
-  for (const { route, html } of pages) {
+  await init;
+  for (const { route, html, pageAssets } of pages) {
     const selected = [];
-    for (const candidate of candidates(html, route)) {
+    for (const candidate of pageAssets ?? candidates(html, route).assets) {
       const size = await assetSize(candidate.url);
       if (!Number.isSafeInteger(size) || size <= 0) continue;
       const key = JSON.stringify(candidate);
@@ -103,20 +138,51 @@ async function listPages(root, relative = '') {
 }
 
 export async function generateNavigationManifest(root) {
+  await init;
   const files = await listPages(root);
+  function diskPath(url) {
+    try {
+      const file = path.resolve(root, '.' + decodeURIComponent(new URL(url, origin).pathname));
+      return file.startsWith(path.resolve(root) + path.sep) ? file : null;
+    } catch {
+      return null;
+    }
+  }
+
+  const imports = new Map();
+  function dependencies(url) {
+    if (!imports.has(url)) {
+      const file = diskPath(url);
+      if (!file?.startsWith(path.resolve(root, '_astro') + path.sep)) return null;
+      imports.set(url, readFile(file, 'utf8').then(text => staticImports(text, url), () => null));
+    }
+    return imports.get(url);
+  }
   const pages = await Promise.all(files.map(async (file) => {
     const urlPath = file.split(path.sep).map(encodeURIComponent).join('/');
     const route = '/' + urlPath.replace(/(?:^|\/)index\.html$/, (value) => value.startsWith('/') ? '/' : '');
-    return { file, route, html: await readFile(path.join(root, file), 'utf8') };
+    const source = await readFile(path.join(root, file), 'utf8');
+    const html = source.replace(/<link\b[^>]*\bdata-navigation-(?:module|assets)(?:="[^"]*")?[^>]*>/g, '');
+    const { assets, entries, deferredDiscovery, alreadyLinked } = candidates(html, route);
+    const reachable = new Set([...entries, ...deferredDiscovery]);
+    const hints = [];
+    for (const url of reachable) {
+      const children = await dependencies(url);
+      if (!children) continue;
+      children.forEach(child => reachable.add(child));
+      if (entries.has(url) || alreadyLinked.has(url)) continue;
+      hints.push(url);
+      if (!assets.some(asset => asset.url === url && asset.type === 'script')) assets.push({ url, type: 'script' });
+    }
+    return { file, route, html, hints, pageAssets: assets };
   }));
   const sizes = new Map();
   const manifest = await buildNavigationManifest(pages, async (url) => {
     if (!sizes.has(url)) {
       let size = 0;
       try {
-        const pathname = decodeURIComponent(new URL(url, origin).pathname);
-        const resolved = path.resolve(root, '.' + pathname);
-        if (resolved.startsWith(path.resolve(root) + path.sep)) {
+        const resolved = diskPath(url);
+        if (resolved) {
           const info = await stat(resolved);
           if (info.isFile()) size = info.size;
         }
@@ -129,9 +195,10 @@ export async function generateNavigationManifest(root) {
   const hash = createHash('sha256').update(json).digest('hex').slice(0, 12);
   const href = `/navigation-assets.${hash}.json`;
   await writeFile(path.join(root, href.slice(1)), json);
-  for (const { file, html } of pages) {
-    const clean = html.replace(/<link\b[^>]*\bdata-navigation-assets(?:="[^"]*")?[^>]*>/g, '');
-    await writeFile(path.join(root, file), clean.replace('</head>', `<link rel="navigation-assets" href="${href}" data-navigation-assets></head>`));
+  for (const { file, html, hints } of pages) {
+    // Styles and primary images retain their place before the script hints.
+    const links = hints.map(url => `<link rel="modulepreload" href="${url.replaceAll('&', '&amp;')}" media="(scripting: enabled)" fetchpriority="low" data-navigation-module>`).join('');
+    await writeFile(path.join(root, file), html.replace('</head>', `${links}<link rel="navigation-assets" href="${href}" data-navigation-assets></head>`));
   }
   return { href, pages: pages.length, assets: manifest.assets.length, bytes: Buffer.byteLength(json) };
 }

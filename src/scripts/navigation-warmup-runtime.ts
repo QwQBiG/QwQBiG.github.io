@@ -15,7 +15,7 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
   const connection = () => (navigator as Navigator & { connection?: NavigationConnection }).connection;
   const canWarm = () => allowNavigationAssets(connection(), navigator.onLine);
   const knownAssets = new Set<string>();
-  for (const element of document.querySelectorAll<HTMLLinkElement | HTMLScriptElement>('link[rel="stylesheet"][href], link[rel="preload"][href], script[src]')) {
+  for (const element of document.querySelectorAll<HTMLLinkElement | HTMLScriptElement>('link[rel="stylesheet"][href], link[rel="preload"][href], link[rel="modulepreload"][href], script[src]')) {
     knownAssets.add(element instanceof HTMLLinkElement ? element.href : element.src);
   }
 
