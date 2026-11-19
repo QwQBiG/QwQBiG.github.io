@@ -13,6 +13,7 @@ function initialize() {
   const body = document.body;
   const pending = new Map();
   const registered = new WeakMap();
+  let keyboardNavigation = false;
   const lifetime = new AbortController();
   const listeners = { capture: true, signal: lifetime.signal };
   const viewport = typeof IntersectionObserver === 'function'
@@ -21,6 +22,10 @@ function initialize() {
         if (nearby.length) decorateAll(nearby);
       }, { rootMargin: '600px 0px' })
     : null;
+
+  function prepareToolbar(pre) {
+    if (pre.dataset.processed !== 'true' && pre.matches('[class*="language-"]')) prepareCodeBlock(pre);
+  }
 
   function decorate(pre) {
     const code = pending.get(pre);
@@ -31,6 +36,7 @@ function initialize() {
       registered.delete(pre);
       return;
     }
+    prepareToolbar(pre);
     if (pre.dataset.processed === 'true') prepareCodeLines(code);
     fixXMLHighlighting(code);
     enhanceSyntaxHighlighting(code);
@@ -46,8 +52,9 @@ function initialize() {
     const code = pre.querySelector('code');
     if (!code || registered.get(pre) === code) return;
     registered.set(pre, code);
-    // The unwrapped source uses the same line height and gutter as decorated rows.
-    if (pre.matches('[class*="language-"]')) prepareCodeBlock(pre);
+    // Static blocks already reserve space for the toolbar. Custom blocks still
+    // need their scroll container and dimensions as soon as they are inserted.
+    if (keyboardNavigation || !code.hasAttribute('data-code-lines')) prepareToolbar(pre);
     pending.set(pre, code);
     if (viewport) viewport.observe(pre);
     else decorate(pre);
@@ -64,6 +71,14 @@ function initialize() {
 
   body.addEventListener('pointerdown', decorateTarget, listeners);
   body.addEventListener('focusin', decorateTarget, listeners);
+  function prepareTabOrder(event) {
+    if (event.key !== 'Tab') return;
+    keyboardNavigation = true;
+    body.removeEventListener('keydown', prepareTabOrder, true);
+    // Include offscreen buttons in the browser's native forward and reverse tab order.
+    for (const pre of pending.keys()) prepareToolbar(pre);
+  }
+  body.addEventListener('keydown', prepareTabOrder, listeners);
   window.addEventListener('beforeprint', finishDecorating, { signal: lifetime.signal });
 
   function discover(records) {

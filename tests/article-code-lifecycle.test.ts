@@ -6,7 +6,7 @@ import { runInNewContext } from 'node:vm';
 test('article code decorates nearby blocks once, prepares matching blocks for search and ignores stale viewport callbacks', async () => {
   function article(...ids: string[]) {
     const blocks = ids.map(id => {
-      const code = { id };
+      const code = { id, hasAttribute: (name: string) => name === 'data-code-lines' && id !== 'custom' };
       return Object.assign(new EventTarget(), {
         id, className: 'language-rust', dataset: { processed: 'false' },
         matches: () => true, querySelector: () => code,
@@ -21,7 +21,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   type Block = ReturnType<typeof article>['blocks'][number];
   type Entries = { target: Block; isIntersecting: boolean }[];
 
-  const first = article('near', 'far', 'unrelated');
+  const first = article('near', 'far', 'unrelated', 'custom');
   const window = new EventTarget();
   const document = Object.assign(new EventTarget(), { body: first.body });
   const callbacks: Array<(entries: Entries) => void> = [];
@@ -44,7 +44,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   const { prepareCodeSearch: prepareSearch, whenCodeReady } = runInNewContext(source.replace(/^import .*;$/gm, '').replaceAll('export function', 'function') + '\n({ prepareCodeSearch, whenCodeReady })', context);
 
   document.dispatchEvent(new Event('astro:page-load'));
-  assert.deepEqual(prepared, ['near', 'far', 'unrelated']);
+  assert.deepEqual(prepared, ['custom'], 'only custom blocks need immediate toolbar layout');
   assert.deepEqual(decorated, []);
   assert.deepEqual(numbered, []);
   assert.equal(callbacks.length, 1);
@@ -52,6 +52,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   const [near, far] = first.blocks;
   notify([{ target: near, isIntersecting: true }, { target: far, isIntersecting: false }]);
   notify([{ target: near, isIntersecting: true }]);
+  assert.deepEqual(prepared, ['custom', 'near']);
   assert.deepEqual(decorated, ['near']);
   const painted: string[] = [];
   const firstQuery = new AbortController();
@@ -65,6 +66,10 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   prepareSearch([far]);
   assert.deepEqual(painted, ['visible', 'current query']);
   assert.deepEqual(decorated, ['near', 'far']);
+  const tab = Object.assign(new Event('keydown'), { key: 'Tab', shiftKey: true });
+  first.body.dispatchEvent(tab);
+  assert.deepEqual(prepared, ['custom', 'near', 'far', 'unrelated'], 'Tab can reach offscreen tools');
+  assert.deepEqual(numbered, ['near', 'far'], 'Tab leaves offscreen syntax and rows deferred');
 
   document.dispatchEvent(new Event('astro:before-swap'));
   const outgoing = article('print', 'appendix');
@@ -80,7 +85,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   stale([outgoing.blocks[0], next.blocks[0]].map(target => ({ target, isIntersecting: true })));
   assert.deepEqual(decorated, ['near', 'far', 'print', 'appendix']);
   document.dispatchEvent(new Event('astro:page-load'));
-  assert.deepEqual(prepared, ['near', 'far', 'unrelated', 'print', 'appendix', 'next']);
+  assert.deepEqual(prepared, ['custom', 'near', 'far', 'unrelated', 'print', 'appendix', 'next']);
   assert.deepEqual(decorated, ['near', 'far', 'print', 'appendix', 'next'], 'without a viewport observer blocks enhance immediately');
   assert.deepEqual(numbered, decorated);
 });
