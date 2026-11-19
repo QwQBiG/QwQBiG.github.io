@@ -301,6 +301,32 @@ test('runtime skips current resources, deduplicates and rejects external or malf
   assert.deepEqual(selectNavigationAssets(manifest, new URL('/unknown/', current), current, new Set()), []);
 });
 
+test('warm only explicitly preloaded local JSON with normal cache freshness', async () => {
+  const preload = (attributes: string) => `<link rel="preload" as="fetch" ${attributes}>`;
+  const html = [
+    preload('href="/posts.json" type="application/json" crossorigin="anonymous"'),
+    preload('href="/missing-type.json" crossorigin="anonymous"'),
+    preload('href="/credentials.json" type="application/json" crossorigin="use-credentials"'),
+    preload('href="/other-mode.json" type="application/json"'),
+    preload('href="https://other.test/external.json" type="application/json" crossorigin'),
+    preload('href="/profile" type="application/json" crossorigin'),
+  ].join('');
+  const manifest = await buildNavigationManifest([{ route: '/search/', html }], async () => 123);
+  assert.deepEqual(manifest.assets, [{ url: '/posts.json', bytes: 123, type: 'json' }]);
+  const destination = new URL('/search/', current);
+  const assets = selectNavigationAssets(readNavigationManifest(manifest)!, destination, current, new Set());
+  assert.equal(assets.length, 1);
+  const signal = new AbortController().signal;
+  const fetchJSON = (type: string): typeof fetch => async (url, init) => {
+    assert.equal(url, new URL('/posts.json', current).href);
+    assert.equal(init?.cache, 'default');
+    assert.equal(init?.credentials, 'same-origin');
+    return new Response('[]', { headers: { 'Content-Type': type } });
+  };
+  assert.ok(await fetchNavigationAsset(assets[0], signal, fetchJSON('application/json; charset=utf-8')));
+  assert.equal(await fetchNavigationAsset(assets[0], signal, fetchJSON('text/html')), false);
+});
+
 test('runtime prepares every declared startup resource without connection or byte budgets', () => {
   const manifest: NavigationManifest = {
     version: 1,

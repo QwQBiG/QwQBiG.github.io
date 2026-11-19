@@ -9,7 +9,7 @@ const pageDescription = "Search posts and poems by title, description, or tag.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <link slot="head" rel="preload" as="fetch" href="/posts.json" crossorigin="anonymous" />
+  <link slot="head" rel="preload" as="fetch" type="application/json" href="/posts.json" crossorigin="anonymous" />
   <FloatingNavCard />
   
   <main class="flex-1 py-12">

@@ -1,6 +1,6 @@
 export type NavigationAsset = {
   url: string;
-  type: 'style' | 'script' | 'image' | 'font';
+  type: 'style' | 'script' | 'image' | 'font' | 'json';
   bytes: number;
   sources?: { url: string; width: number }[];
   sizes?: string;
@@ -33,7 +33,7 @@ export function readNavigationManifest(value: unknown): NavigationManifest | nul
   if (data.version !== 1 || !Array.isArray(data.assets) ||
     !data.routes || typeof data.routes !== 'object' || Array.isArray(data.routes)) return null;
   if (!data.assets.every((asset) => asset && typeof asset.url === 'string' &&
-    ['style', 'script', 'image', 'font'].includes(asset.type) && Number.isSafeInteger(asset.bytes) &&
+    ['style', 'script', 'image', 'font', 'json'].includes(asset.type) && Number.isSafeInteger(asset.bytes) &&
     asset.bytes > 0)) return null;
   return data as NavigationManifest;
 }
@@ -58,7 +58,7 @@ export function selectNavigationAssets(
     let url: URL;
     try { url = new URL(asset.url, location); } catch { continue; }
     if (url.origin !== location.origin || url.username || url.password || seen.has(url.href)) continue;
-    const extension = { style: /\.css$/i, script: /\.m?js$/i, image: /\.(?:avif|webp|png|jpe?g|gif|svg)$/i, font: /\.woff2?$/i };
+    const extension = { style: /\.css$/i, script: /\.m?js$/i, image: /\.(?:avif|webp|png|jpe?g|gif|svg)$/i, font: /\.woff2?$/i, json: /\.json$/i };
     if (!extension[asset.type].test(url.pathname)) continue;
     seen.add(url.href);
     result.push({ ...asset, url: url.href });
@@ -120,7 +120,8 @@ export async function fetchNavigationAsset(
   if (asset.type === 'image' && asset.sources) return preloadResponsiveImage(asset, signal, priority);
   const response = await request(asset.url, {
     signal,
-    cache: 'force-cache',
+    // Search data has a stable URL: revalidate expired entries just like the search page.
+    cache: asset.type === 'json' ? 'default' : 'force-cache',
     credentials: 'same-origin',
     mode: 'cors',
     priority,
@@ -128,6 +129,7 @@ export async function fetchNavigationAsset(
   if (signal.aborted || response.status !== 200 || response.headers.has('content-range')) return false;
   const type = (response.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
   const types = {
+    json: type === 'application/json',
     style: type === 'text/css',
     script: /^(?:text|application)\/(?:javascript|ecmascript)$/.test(type),
     image: type.startsWith('image/'),

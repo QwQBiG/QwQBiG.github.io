@@ -11,7 +11,7 @@ function localAsset(value, type, route) {
   if (!value) return null;
   try {
     const url = new URL(value, new URL(route, origin));
-    const extensions = { style: /\.css$/i, script: /\.m?js$/i, image: /\.(?:avif|webp|png|jpe?g|gif|svg)$/i, font: /\.woff2?$/i };
+    const extensions = { style: /\.css$/i, script: /\.m?js$/i, image: /\.(?:avif|webp|png|jpe?g|gif|svg)$/i, font: /\.woff2?$/i, json: /\.json$/i };
     if (url.origin !== origin || url.username || url.password || !extensions[type].test(url.pathname)) return null;
     return url.pathname + url.search;
   } catch {
@@ -69,6 +69,11 @@ function candidates(html, route) {
           add(attrs.href, attrs.as);
         }
       }
+      // Only include JSON explicitly preloaded with the same credentials as a normal same-origin fetch.
+      if (rel.includes('preload') && allScreens && attrs.fetchpriority !== 'low' &&
+        attrs.as === 'fetch' && attrs.type === 'application/json' && ['', 'anonymous'].includes(attrs.crossorigin)) {
+        add(attrs.href, 'json');
+      }
       if (rel.includes('modulepreload')) {
         if (allScreens) alreadyLinked.add(compiledModule(attrs.href, route));
         add(attrs.href, 'script');
@@ -96,7 +101,7 @@ function candidates(html, route) {
     for (const child of node.childNodes ?? []) visit(child);
   }
   visit(parse(html));
-  const order = { style: 0, image: 1, font: 2, script: 3 };
+  const order = { style: 0, image: 1, font: 2, script: 3, json: 4 };
   const assets = result.sort((a, b) => order[a.type] - order[b.type]);
   return { assets, entries, deferredDiscovery, alreadyLinked };
 }
