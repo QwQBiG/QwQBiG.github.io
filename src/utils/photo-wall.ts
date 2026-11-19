@@ -10,15 +10,19 @@ interface PhotoWallSize {
 // Ordered exactly like an HTML sizes list: use the first matching viewport.
 export const photoWallTiers = [
   { width: 120, belowWidth: 480 },
+  { width: 120, belowWidth: 768, belowHeight: 400 },
   { width: 150, belowWidth: 768 },
-  { width: 150, belowWidth: 1024, belowHeight: 480 },
-  { width: 240, belowWidth: 1024 },
+  { width: 150, belowHeight: 560 },
+  { width: 240, belowWidth: 1200 },
+  { width: 240, belowHeight: 800 },
 ] as const;
 export const desktopPhotoWidth = 360;
 
 export function photoWallMedia(tier: typeof photoWallTiers[number]) {
-  const width = `(width < ${tier.belowWidth}px)`;
-  return 'belowHeight' in tier ? `${width} and (height < ${tier.belowHeight}px)` : width;
+  const conditions = [];
+  if ('belowWidth' in tier) conditions.push(`(width < ${tier.belowWidth}px)`);
+  if ('belowHeight' in tier) conditions.push(`(height < ${tier.belowHeight}px)`);
+  return conditions.join(' and ');
 }
 
 export function photoWallSizes(scale: number) {
@@ -46,7 +50,7 @@ export function photoWallBreakpoints() {
 }
 
 export function photoCardStyle(photo: Pick<GalleryPhoto, 'id' | 'scale'> & PhotoDimensions, index: number, count: number) {
-  const direction = (index / count - .25) * Math.PI * 2;
+  const direction = (index * 360 / count - 81) * Math.PI / 180;
   const rotation = [-5, 6, -4, 5, -6][index % 5];
   const radians = rotation * Math.PI / 180;
   const scale = photo.scale ?? 1;

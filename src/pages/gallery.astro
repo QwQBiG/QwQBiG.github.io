@@ -11,9 +11,7 @@ import '../styles/gallery-entrance.css';
 import '../styles/gallery-interactions.css';
 
 const manifest = path.join(process.cwd(), 'public/generated/gallery/manifest.json');
-const entries: GalleryPhoto[] = JSON.parse(readFileSync(manifest, 'utf8'));
-const halfSize = new Set(['ZhenXun.jpg', 'AIcard.png']);
-const photos = entries.map(entry => ({ ...entry, scale: halfSize.has(entry.file) ? 0.5 : 1 }));
+const photos: GalleryPhoto[] = JSON.parse(readFileSync(manifest, 'utf8'));
 // Keep the last photo within a second of the first, even as the collection grows.
 const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
 ---
@@ -28,7 +26,7 @@ const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
     <div class="absolute inset-0 gradient-bg -z-10"></div>
     <div class="photo-wall" data-photo-wall>
       {photos.map((photo, index) => {
-        const sizes = photoWallSizes(photo.scale);
+        const sizes = photoWallSizes(photo.scale ?? 1);
         return (
           <a
             class="photo-card"

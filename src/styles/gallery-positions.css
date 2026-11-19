@@ -22,7 +22,7 @@
   /* Unmoved cards follow equal angles on an ellipse sized to the wall. */
   --ring-x: calc(var(--ring-cos) * min(var(--wall-width) * .39, 470px));
   /* Leave room at the top for the floating navigation before filling the vertical arc. */
-  --ring-y: calc(44px + var(--ring-sin) * min((var(--wall-height) - 88px) * .32, 310px));
+  --ring-y: calc(44px + var(--ring-sin) * min((var(--wall-height) - 88px) * .44, 310px));
   --desired-left: calc(var(--wall-width) / 2 + var(--initial-x, var(--ring-x)) - var(--frame-width) / 2);
   /* A saved y is relative to the old wall anchor. Ring positions use the frame center. */
   --desired-top: calc(var(--wall-height) / 2 + var(--initial-y, calc(var(--ring-y) + var(--anchor-y) - var(--frame-height) / 2)) - var(--anchor-y));
