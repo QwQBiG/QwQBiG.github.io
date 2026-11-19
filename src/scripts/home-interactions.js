@@ -210,7 +210,8 @@
     navCard.classList.remove('gpu-accelerated', 'nav-card-layout-change');
   }
 
-  let shouldPlayHomeReturnMotion = new URLSearchParams(window.location.search).has('homeReturnMotion');
+  const hasUrlReturnMarker = document.documentElement.dataset.homeReturnMotion === '1';
+  let shouldPlayHomeReturnMotion = hasUrlReturnMarker;
   try {
     shouldPlayHomeReturnMotion = shouldPlayHomeReturnMotion || sessionStorage.getItem('home-return-motion') === '1';
   } catch {
@@ -240,7 +241,6 @@
   // 获取所有会跳转的链接
   // Avatar navigation is a normal link, so reproduce the history-return starting state.
   if (shouldPlayHomeReturnMotion) {
-    const hasUrlReturnMarker = new URLSearchParams(window.location.search).has('homeReturnMotion');
     if (!hasUrlReturnMarker) {
       prepareNavCardForReturn();
     }
@@ -260,8 +260,11 @@
           // Ignore unavailable sessionStorage.
         }
 
-        if (window.location.search) {
-          window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.hash}`);
+        if (hasUrlReturnMarker) {
+          const url = new URL(window.location.href);
+          if (url.hash === '#home-return-motion') url.hash = '';
+          if (url.searchParams.has('homeReturnMotion')) url.searchParams.delete('homeReturnMotion');
+          window.history.replaceState(window.history.state, '', url.href);
         }
 
       });
