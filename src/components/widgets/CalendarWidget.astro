@@ -2,7 +2,7 @@
 // CalendarWidget.astro - 优化版迷你日历组件
 ---
 
-<div class="calendar-widget w-full h-full flex flex-col" style="position: relative; z-index: 50;">
+<home-calendar class="calendar-widget w-full h-full flex flex-col" style="position: relative; z-index: 50;">
   <!-- 月份标题 -->
   <div class="calendar-header flex items-center justify-between mb-2 md:mb-3" style="position: relative; z-index: 51;">
     <button id="prev-month" type="button" aria-label="Previous month" class="calendar-nav-btn p-1.5 rounded-lg hover:bg-white/50 transition-colors flex-shrink-0" style="position: relative; z-index: 100; pointer-events: auto; cursor: pointer;">
@@ -31,7 +31,7 @@
   <div id="calendar-days" class="calendar-days grid grid-cols-7 gap-0.5 md:gap-1 flex-1">
     <!-- 由 JS 动态生成 -->
   </div>
-</div>
+</home-calendar>
 
 <style is:global>
   /* 日历组件样式 - 使用 is:global 确保动态生成的元素也能应用样式 */
@@ -134,156 +134,93 @@
 </style>
 
 <script>
-  class CalendarWidget {
-    constructor() {
-      this.currentDate = new Date();
-      this.today = new Date();
-      this.monthYearEl = document.getElementById('calendar-month-year');
-      this.daysContainer = document.getElementById('calendar-days');
-      this.prevBtn = document.getElementById('prev-month');
-      this.nextBtn = document.getElementById('next-month');
-      
-      this.init();
-    }
-    
-    init() {
-      this.render();
-      this.bindEvents();
-    }
-    
-    bindEvents() {
-      // 限制在当年范围内（当前年份的前后6个月）
-      const currentYear = this.today.getFullYear();
-      const minDate = new Date(currentYear, 0, 1); // 当年1月
-      const maxDate = new Date(currentYear, 11, 31); // 当年12月
-      
-      // 使用箭头函数绑定到实例
-      const self = this;
-      
-      if (this.prevBtn) {
-        // 直接设置 onclick 属性，绕过事件冒泡
-        this.prevBtn.onclick = function(e) {
-          if (e) e.stopPropagation();
-          const newDate = new Date(self.currentDate);
-          newDate.setMonth(newDate.getMonth() - 1);
-          // 限制不能早于当年1月
-          if (newDate >= minDate) {
-            self.currentDate = newDate;
-            self.render();
-          }
-          return false;
-        };
-      }
-      
-      if (this.nextBtn) {
-        // 直接设置 onclick 属性，绕过事件冒泡
-        this.nextBtn.onclick = function(e) {
-          if (e) e.stopPropagation();
-          const newDate = new Date(self.currentDate);
-          newDate.setMonth(newDate.getMonth() + 1);
-          // 限制不能晚于当年12月
-          if (newDate <= maxDate) {
-            self.currentDate = newDate;
-            self.render();
-          }
-          return false;
-        };
-      }
-    }
-    
-    render() {
-      const year = this.currentDate.getFullYear();
-      const month = this.currentDate.getMonth();
-      const currentYear = this.today.getFullYear();
-      
-      // 更新月份标题
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      if (this.monthYearEl) {
-        this.monthYearEl.textContent = `${monthNames[month]} ${year}`;
-      }
-      
-      // 更新按钮状态（当年范围内可翻页）
-      if (this.prevBtn) {
-        const isFirstMonth = year === currentYear && month === 0;
-        this.prevBtn.style.opacity = isFirstMonth ? '0.3' : '1';
-        this.prevBtn.style.cursor = isFirstMonth ? 'not-allowed' : 'pointer';
-      }
-      
-      if (this.nextBtn) {
-        const isLastMonth = year === currentYear && month === 11;
-        this.nextBtn.style.opacity = isLastMonth ? '0.3' : '1';
-        this.nextBtn.style.cursor = isLastMonth ? 'not-allowed' : 'pointer';
-      }
-      
-      // 获取当月第一天和最后一天
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-      const daysInMonth = lastDay.getDate();
-      
-      // 获取第一天是星期几 (0=周日, 1=周一...)
-      let startingDay = firstDay.getDay();
-      // 调整为周一开始 (0=周一, 6=周日)
-      startingDay = startingDay === 0 ? 6 : startingDay - 1;
-      
-      // 获取上个月的天数
-      const prevMonthLastDay = new Date(year, month, 0).getDate();
-      
-      let html = '';
-      
-      // 上个月的日期
-      for (let i = startingDay - 1; i >= 0; i--) {
-        const day = prevMonthLastDay - i;
-        html += `<div class="calendar-day other-month">${day}</div>`;
-      }
-      
-      // 当月的日期
-      for (let day = 1; day <= daysInMonth; day++) {
-        const isToday = 
-          day === this.today.getDate() && 
-          month === this.today.getMonth() && 
-          year === this.today.getFullYear();
-        
-        // 判断是否是周末
-        const date = new Date(year, month, day);
-        const dayOfWeek = date.getDay();
-        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-        
-        let className = 'calendar-day';
-        if (isToday) {
-          className += ' today';
-        } else if (isWeekend) {
-          className += ' weekend';
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  class HomeCalendar extends HTMLElement {
+    private dispose?: () => void;
+
+    connectedCallback() {
+      const title = this.querySelector<HTMLElement>('#calendar-month-year')!;
+      const days = this.querySelector<HTMLElement>('#calendar-days')!;
+      const previous = this.querySelector<HTMLButtonElement>('#prev-month')!;
+      const next = this.querySelector<HTMLButtonElement>('#next-month')!;
+      const lifetime = new AbortController();
+      const options = { signal: lifetime.signal };
+      let today = new Date();
+      let month = today.getMonth();
+      let suspended = false;
+      let midnightTimer: number | undefined;
+
+      function render() {
+        const year = today.getFullYear();
+        title.textContent = `${monthNames[month]} ${year}`;
+        for (const [button, atLimit] of [[previous, month === 0], [next, month === 11]] as const) {
+          button.disabled = atLimit;
+          button.style.opacity = atLimit ? '0.3' : '1';
+          button.style.cursor = atLimit ? 'not-allowed' : 'pointer';
         }
-        
-        html += `<div class="${className}">${day}</div>`;
+
+        // Start the week on Monday and include adjacent dates to complete each row.
+        const leading = (new Date(year, month, 1).getDay() + 6) % 7;
+        const previousMonthEnd = new Date(year, month, 0).getDate();
+        const monthEnd = new Date(year, month + 1, 0).getDate();
+        const cellCount = Math.ceil((leading + monthEnd) / 7) * 7;
+        const highlight = month === today.getMonth() ? today.getDate() : 0;
+        let html = '';
+        for (let cell = 0; cell < cellCount; cell++) {
+          const day = cell - leading + 1;
+          if (day < 1 || day > monthEnd) {
+            const adjacentDay = day < 1 ? previousMonthEnd + day : day - monthEnd;
+            html += `<div class="calendar-day other-month">${adjacentDay}</div>`;
+          } else {
+            const state = day === highlight ? ' today' : cell % 7 >= 5 ? ' weekend' : '';
+            html += `<div class="calendar-day${state}">${day}</div>`;
+          }
+        }
+        days.innerHTML = html;
       }
-      
-      // 下个月的日期（填充剩余格子）
-      const totalCells = Math.ceil((startingDay + daysInMonth) / 7) * 7;
-      const remainingCells = totalCells - (startingDay + daysInMonth);
-      
-      for (let day = 1; day <= remainingCells; day++) {
-        html += `<div class="calendar-day other-month">${day}</div>`;
+
+      function syncDay() {
+        window.clearTimeout(midnightTimer);
+        if (document.hidden || suspended) return;
+
+        const now = new Date();
+        if (now.toDateString() !== today.toDateString()) {
+          // Follow today across months unless the reader is browsing another month of this year.
+          const follow = now.getFullYear() !== today.getFullYear() || month === today.getMonth();
+          today = now;
+          if (follow) month = now.getMonth();
+          if (follow || month === now.getMonth()) render();
+        }
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        midnightTimer = window.setTimeout(syncDay, midnight.getTime() - now.getTime());
       }
-      
-      if (this.daysContainer) {
-        this.daysContainer.innerHTML = html;
+
+      function turn(delta: number, event: Event) {
+        event.stopPropagation();
+        const target = month + delta;
+        if (target < 0 || target > 11) return;
+        month = target;
+        render();
       }
+
+      previous.addEventListener('click', event => turn(-1, event), options);
+      next.addEventListener('click', event => turn(1, event), options);
+      document.addEventListener('visibilitychange', syncDay, options);
+      window.addEventListener('pagehide', () => { suspended = true; syncDay(); }, options);
+      window.addEventListener('pageshow', () => { suspended = false; syncDay(); }, options);
+      render();
+      syncDay();
+      this.dispose = () => {
+        lifetime.abort();
+        window.clearTimeout(midnightTimer);
+      };
+    }
+
+    disconnectedCallback() {
+      this.dispose?.();
     }
   }
-  
-  // 初始化日历
-  function initCalendar() {
-    new CalendarWidget();
-  }
-  
-  // 页面加载时初始化
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCalendar);
-  } else {
-    initCalendar();
-  }
-  
-  // Astro ViewTransitions 兼容
-  document.addEventListener('astro:page-load', initCalendar);
+
+  if (!customElements.get('home-calendar')) customElements.define('home-calendar', HomeCalendar);
 </script>
