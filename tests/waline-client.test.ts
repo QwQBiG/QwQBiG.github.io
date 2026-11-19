@@ -39,9 +39,12 @@ test('the deferred comment client formats the first render and cleans up a faile
 test('far comments wait for proximity or interaction and still load without a visibility observer', async () => {
   const source = stripTypeScriptTypes(await readFile(new URL('../src/scripts/waline-runtime.ts', import.meta.url), 'utf8'))
     .replace(/^import .*;$/gm, '');
-  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'restored', 'interrupted']) {
+  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'restored', 'interrupted', 'footer-stay', 'footer-leave', 'footer-cancel', 'footer-focus']) {
     let rendered = false;
     let scrolled = false;
+    let dwell: (() => void) | undefined;
+    const link = {};
+    const footer = { contains: (node: unknown) => node === link };
     const card = { scrollIntoView() { scrolled = true; } };
     const element = Object.assign(new EventTarget(), {
       id: 'waline', isConnected: true, dataset: {}, setAttribute() {}, querySelector: () => null,
@@ -49,7 +52,7 @@ test('far comments wait for proximity or interaction and still load without a vi
     });
     const document = Object.assign(new EventTarget(), {
       getElementById: (id: string) => id === 'waline' ? element : id === '1' || (id === '9' && rendered) ? card : null,
-      querySelector: () => null,
+      querySelector: (selector: string) => selector.includes('data-post-navigation') && trigger.startsWith('footer-') ? footer : null,
       createElement: () => ({ dataset: {} }),
       head: { append() {} },
     });
@@ -71,17 +74,45 @@ test('far comments wait for proximity or interaction and still load without a vi
     const hash = trigger === 'waline' ? '#waline' : trigger === 'section' ? '#1'
       : ['rss', 'restored', 'interrupted'].includes(trigger) ? '#9' : '';
     const window = Object.assign(new EventTarget(), { location: { hash, search: trigger === 'token' ? '?token=sample' : '' } });
+    Object.assign(window, {
+      scrollY: 600,
+      setTimeout(callback: () => void) { dwell = callback; return 1; },
+      clearTimeout() { dwell = undefined; },
+    });
     if (trigger !== 'fallback') Object.assign(window, { IntersectionObserver });
     const priorities: string[] = [];
     const history = { state: trigger === 'section' ? null : { scrollY: trigger === 'restored' ? 400 : 0 }, scrollRestoration: 'manual' };
     runInNewContext(source, {
       document, window, IntersectionObserver, MutationObserver, AbortController, URL, URLSearchParams,
-      history,
+      history, queueMicrotask,
       scheduleBackgroundTask(options: { priority: string }) {
         priorities.push(options.priority);
         return { done: new Promise(() => {}), cancel() {} };
       },
     });
+    if (trigger.startsWith('footer-')) {
+      visibility!([{ isIntersecting: true }]);
+      assert.deepEqual(priorities, []);
+      assert.ok(dwell);
+      if (trigger === 'footer-focus') element.dispatchEvent(new Event('focusin'));
+      else if (trigger === 'footer-stay') dwell();
+      else {
+        const navigation = new AbortController();
+        document.dispatchEvent(Object.assign(new Event('astro:before-preparation'), { sourceElement: link, signal: navigation.signal }));
+        visibility!([{ isIntersecting: true }]);
+        assert.equal(dwell, undefined);
+        if (trigger === 'footer-leave') {
+          document.dispatchEvent(new Event('astro:before-swap'));
+          navigation.abort();
+          assert.equal(dwell, undefined);
+          assert.deepEqual(priorities, []);
+          continue;
+        }
+        navigation.abort();
+        assert.ok(dwell);
+        (dwell as () => void)();
+      }
+    }
     if (trigger === 'fallback') {
       assert.deepEqual(priorities, ['prefetch']);
       continue;
