@@ -29,11 +29,11 @@ test('saved photos use their legacy wall offsets and damaged or unavailable entr
   for (const id of ['2','3','5']) assert.ok(pose(id).every(value => value === undefined));
 });
 
-test('unsaved frames follow deterministic, equally spaced clockwise angles starting at the top', () => {
+test('unsaved frames follow deterministic, equally spaced clockwise angles starting near the top', () => {
   for (const count of [2, 5, 7]) {
     for (let i = 0; i < count; i++) {
       const style = photoCardStyle({ id: String(i + 1) }, i, count);
-      const radians = i * 2 * Math.PI / count - Math.PI / 2;
+      const radians = i * 2 * Math.PI / count - 81 * Math.PI / 180;
       assert.ok(Math.abs(style['--ring-cos'] - Math.cos(radians)) < .000001);
       assert.ok(Math.abs(style['--ring-sin'] - Math.sin(radians)) < .000001);
     }
@@ -45,10 +45,10 @@ test('unsaved frames follow deterministic, equally spaced clockwise angles start
 test('thumbnail sizing follows exact viewport boundaries and short phone landscape', () => {
   const css = photoWallBreakpoints();
   const cascade = [...css.matchAll(/--gallery-card-size: (\d+)px/g)].map(match => Number(match[1]));
-  assert.deepEqual(cascade, [360, 240, 150, 150, 120], 'smaller breakpoints override the broader rules');
-  assert.ok(css.includes('@media (width < 1024px) and (height < 480px) { :root { --gallery-card-size: 150px; } }'));
+  assert.deepEqual(cascade, [360, 240, 240, 150, 150, 120, 120], 'smaller breakpoints override the broader rules');
+  assert.ok(css.includes('@media (width < 768px) and (height < 400px) { :root { --gallery-card-size: 120px; } }'));
   assert.equal(photoWallSizes(0.5),
-    '(width < 480px) 60px, (width < 768px) 75px, (width < 1024px) and (height < 480px) 75px, (width < 1024px) 120px, 180px');
+    '(width < 480px) 60px, (width < 768px) and (height < 400px) 60px, (width < 768px) 75px, (height < 560px) 75px, (width < 1200px) 120px, (height < 800px) 120px, 180px');
 });
 
 test('edge drops and old positions keep rotated corners inside narrow and rotated walls', () => {

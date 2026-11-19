@@ -1,5 +1,21 @@
 [
   {
+    "file": "LongLong.png",
+    "id": "file-TG9uZ0xvbmcucG5n",
+    "scale": 0.5,
+    "placeholder": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAACQBACdASoUABQAPt1orFEopaQiqAgBEBuJZwAAIR0ijeJrwRSjquHx0mhAgQAA/vTfgol8T9OFVYE9N6PM3vWrorEYowHEyzQn/Al2+Oc/HhKwqfQ1KJ6AcphBe9bPMd6250rNlzI/mDCcbi1RkXYP6n5NWsmCh28vp0tb70rFuVjJXM0Kt8B7QsoqcgAA",
+    "alt": "A sketch of a purple-eyed girl with white hair, striped horns, and small lavender dragon wings.",
+    "width": 1254,
+    "height": 1254,
+    "thumb2x": "/generated/gallery/LongLong-720.webp",
+    "srcset": "/generated/gallery/LongLong-w120.webp 120w, /generated/gallery/LongLong-w180.webp 180w, /generated/gallery/LongLong-w256.webp 256w, /generated/gallery/LongLong-w360.webp 360w, /generated/gallery/LongLong-720.webp 720w",
+    "avifSrcset": "/generated/gallery/LongLong-w120.avif 120w, /generated/gallery/LongLong-w180.avif 180w, /generated/gallery/LongLong-w256.avif 256w, /generated/gallery/LongLong-w360.avif 360w, /generated/gallery/LongLong-720.avif 720w",
+    "preview": "/generated/gallery/LongLong-1920.webp",
+    "previewWidth": 1254,
+    "previewHeight": 1254,
+    "previewSrcset": "/generated/gallery/LongLong-preview-480.webp 480w, /generated/gallery/LongLong-preview-800.webp 800w, /generated/gallery/LongLong-preview-1200.webp 1200w, /generated/gallery/LongLong-1920.webp 1254w"
+  },
+  {
     "file": "2025-08.png",
     "id": "1",
     "placeholder": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAADQAwCdASoUAA0APt1apkyopSOiMAgBEBuJaACdEf/gGrE9rghW64AA/jGIT09ErfVL9eVXgrHeaw3A4OCI6EvAiY/ZPC3pXqQ5fz6mrspWmVI3V+/72TSpSLv6EFGbxzBsY/UMMoQyXVCgwH34TV85VZ+cNXzOhw3kT4z9M2voAAAA",
@@ -17,6 +33,7 @@
   {
     "file": "AIcard.png",
     "id": "2",
+    "scale": 0.5,
     "placeholder": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAADwAwCdASoPABQAPt1apkyopSOiMAgBEBuJbACdMoR3ACTahQi3dmtAAP4ZvXQLPmRKvvGZgwudcKaY8MlLgTYBdx438AFlCD54Yu+ba9s/rsE0O4zbYUSO4ZM+SBW9db3N8JKmCv3Z5gvSTP/e/u/4btyRPjjFSVo/d2b9RNYpwoAQ0oipPj6cjcxZzUeC+o+l5mqW1AAAAA==",
     "alt": "A silver-haired figure in profile against the dark grid of a blue-lit window.",
     "width": 564,
@@ -28,6 +45,38 @@
     "previewWidth": 564,
     "previewHeight": 750,
     "previewSrcset": "/generated/gallery/AIcard-1920.webp 564w"
+  },
+  {
+    "file": "ChengLong.png",
+    "id": "file-Q2hlbmdMb25nLnBuZw",
+    "scale": 0.5,
+    "placeholder": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAADwAwCdASoNABQAPt1cpkyopSOiMAgBEBuJYwDImBu1NAPTOMxfhzJwAP38ZInLA4i6kHnaOFvhqnjlz3Y7pQFvhrI+ur6GYhNAxmqW4QzW75rtwcLlKtniec80WW3s0cnNt5Ie8+BEl/vqwly+fQgYfp3Dz8UL3cxVqU6tvcxQZUaTGCvqbM5aqHwAZtmOAAA=",
+    "alt": "In a two-panel comic, a white-haired dragon girl searches Google and looks puzzled when Jackie Chan movies fill the screen.",
+    "width": 1024,
+    "height": 1536,
+    "thumb2x": "/generated/gallery/ChengLong-720.webp",
+    "srcset": "/generated/gallery/ChengLong-w120.webp 120w, /generated/gallery/ChengLong-w180.webp 180w, /generated/gallery/ChengLong-w256.webp 256w, /generated/gallery/ChengLong-w360.webp 360w, /generated/gallery/ChengLong-720.webp 480w",
+    "avifSrcset": "/generated/gallery/ChengLong-w120.avif 120w, /generated/gallery/ChengLong-w180.avif 180w, /generated/gallery/ChengLong-w256.avif 256w, /generated/gallery/ChengLong-w360.avif 360w, /generated/gallery/ChengLong-720.avif 480w",
+    "preview": "/generated/gallery/ChengLong-1920.webp",
+    "previewWidth": 1024,
+    "previewHeight": 1536,
+    "previewSrcset": "/generated/gallery/ChengLong-preview-480.webp 480w, /generated/gallery/ChengLong-preview-800.webp 800w, /generated/gallery/ChengLong-1920.webp 1024w"
+  },
+  {
+    "file": "ZhenXun.jpg",
+    "id": "5",
+    "scale": 0.5,
+    "placeholder": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAABwAwCdASoUABQAPt1gp04opaMiKA1REBuJQAAIQF9T5hDtKoAA/u8bWdMy3XUIn09aeaOwrwtjbtwydt45JKAr8ubC8Or2S7C/F+ID9y97mn0h8meMKxhcl0nM0tUdHecp3DJJKrpmGl8BoedYDTqBtAwV7PZ7kfAAAA==",
+    "alt": "A pink-haired anime character smiles at the viewer with clasped hands.",
+    "width": 403,
+    "height": 403,
+    "thumb2x": "/generated/gallery/ZhenXun-720.webp",
+    "srcset": "/generated/gallery/ZhenXun-w120.webp 120w, /generated/gallery/ZhenXun-w180.webp 180w, /generated/gallery/ZhenXun-w256.webp 256w, /generated/gallery/ZhenXun-w360.webp 360w, /generated/gallery/ZhenXun-720.webp 403w",
+    "avifSrcset": "/generated/gallery/ZhenXun-w120.avif 120w, /generated/gallery/ZhenXun-w180.avif 180w, /generated/gallery/ZhenXun-w256.avif 256w, /generated/gallery/ZhenXun-w360.avif 360w, /generated/gallery/ZhenXun-720.avif 403w",
+    "preview": "/generated/gallery/ZhenXun-1920.webp",
+    "previewWidth": 403,
+    "previewHeight": 403,
+    "previewSrcset": "/generated/gallery/ZhenXun-1920.webp 403w"
   },
   {
     "file": "hahaha.png",
@@ -58,20 +107,5 @@
     "previewWidth": 1920,
     "previewHeight": 1080,
     "previewSrcset": "/generated/gallery/Kafka-preview-480.webp 480w, /generated/gallery/Kafka-preview-800.webp 800w, /generated/gallery/Kafka-preview-1200.webp 1200w, /generated/gallery/Kafka-1920.webp 1920w"
-  },
-  {
-    "file": "ZhenXun.jpg",
-    "id": "5",
-    "placeholder": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAABwAwCdASoUABQAPt1gp04opaMiKA1REBuJQAAIQF9T5hDtKoAA/u8bWdMy3XUIn09aeaOwrwtjbtwydt45JKAr8ubC8Or2S7C/F+ID9y97mn0h8meMKxhcl0nM0tUdHecp3DJJKrpmGl8BoedYDTqBtAwV7PZ7kfAAAA==",
-    "alt": "A pink-haired anime character smiles at the viewer with clasped hands.",
-    "width": 403,
-    "height": 403,
-    "thumb2x": "/generated/gallery/ZhenXun-720.webp",
-    "srcset": "/generated/gallery/ZhenXun-w120.webp 120w, /generated/gallery/ZhenXun-w180.webp 180w, /generated/gallery/ZhenXun-w256.webp 256w, /generated/gallery/ZhenXun-w360.webp 360w, /generated/gallery/ZhenXun-720.webp 403w",
-    "avifSrcset": "/generated/gallery/ZhenXun-w120.avif 120w, /generated/gallery/ZhenXun-w180.avif 180w, /generated/gallery/ZhenXun-w256.avif 256w, /generated/gallery/ZhenXun-w360.avif 360w, /generated/gallery/ZhenXun-720.avif 403w",
-    "preview": "/generated/gallery/ZhenXun-1920.webp",
-    "previewWidth": 403,
-    "previewHeight": 403,
-    "previewSrcset": "/generated/gallery/ZhenXun-1920.webp 403w"
   }
 ]

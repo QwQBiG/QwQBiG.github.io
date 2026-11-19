@@ -9,13 +9,15 @@ const gallerySourceDir = path.join(root, 'src', 'assets', 'gallery');
 const generatedDir = path.join(root, 'public', 'generated');
 const galleryOutputDir = path.join(generatedDir, 'gallery');
 const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif']);
-// Preserve the five numeric keys used by visitors who already arranged their wall.
+// Clockwise order on the wall. Keep the original numeric IDs for visitors' saved positions.
 const galleryEntries = {
+  'LongLong.png': { scale: 0.5, alt: 'A sketch of a purple-eyed girl with white hair, striped horns, and small lavender dragon wings.' },
   '2025-08.png': { id: '1', alt: 'Two Minecraft players stand on a flower-lined path outside a wooden house.' },
-  'AIcard.png': { id: '2', alt: 'A silver-haired figure in profile against the dark grid of a blue-lit window.' },
+  'AIcard.png': { id: '2', scale: 0.5, alt: 'A silver-haired figure in profile against the dark grid of a blue-lit window.' },
+  'ChengLong.png': { scale: 0.5, alt: 'In a two-panel comic, a white-haired dragon girl searches Google and looks puzzled when Jackie Chan movies fill the screen.' },
+  'ZhenXun.jpg': { id: '5', scale: 0.5, alt: 'A pink-haired anime character smiles at the viewer with clasped hands.' },
   'hahaha.png': { id: '3', alt: 'Four cartoon bandmates play guitars and drums in pink, yellow, red, and blue panels.' },
   'Kafka.png': { id: '4', alt: 'Kafka stands beneath dark umbrellas in the rain, with red threads crossing the scene.' },
-  'ZhenXun.jpg': { id: '5', alt: 'A pink-haired anime character smiles at the viewer with clasped hands.' },
 };
 
 async function writeGalleryThumbnail(image, stem) {
@@ -33,9 +35,13 @@ async function writeGalleryThumbnail(image, stem) {
 
 async function optimizeGallery() {
   await fs.mkdir(galleryOutputDir, { recursive: true });
-  const files = (await fs.readdir(gallerySourceDir))
+  const sourceFiles = (await fs.readdir(gallerySourceDir))
     .filter((file) => imageExtensions.has(path.extname(file).toLowerCase()))
     .sort((a, b) => a.localeCompare(b, 'en'));
+  const files = [
+    ...Object.keys(galleryEntries).filter(file => sourceFiles.includes(file)),
+    ...sourceFiles.filter(file => !Object.hasOwn(galleryEntries, file)),
+  ];
   const manifest = [];
 
   for (const file of files) {
@@ -77,6 +83,7 @@ async function optimizeGallery() {
     manifest.push({
       file,
       id: galleryEntries[file]?.id ?? `file-${Buffer.from(file).toString('base64url')}`,
+      scale: galleryEntries[file]?.scale,
       placeholder: `data:image/webp;base64,${placeholder.toString('base64')}`,
       alt: galleryEntries[file]?.alt ?? `Gallery image ${manifest.length + 1}`,
       width: metadata.autoOrient.width,
