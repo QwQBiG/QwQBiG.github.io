@@ -38,6 +38,7 @@ function initialize() {
       decorateBrackets(code);
       pre.dataset.rainbowProcessed = 'true';
     }
+    pre.dispatchEvent(new Event('article-code-ready'));
   }
 
   function register(pre) {
@@ -113,7 +114,7 @@ function initialize() {
   watch();
 
   page = {
-    body, decorateAll,
+    body, decorateAll, pending, register,
     dispose() {
       additions.disconnect();
       viewport?.disconnect();
@@ -122,6 +123,14 @@ function initialize() {
       page = undefined;
     },
   };
+}
+
+// Mark search results after the normal viewport/print decoration has finished
+// replacing syntax nodes. A new query cancels listeners for the previous one.
+export function whenCodeReady(pre, render, signal) {
+  page?.register(pre);
+  if (page?.pending.has(pre)) pre.addEventListener('article-code-ready', render, { once: true, signal });
+  else render();
 }
 
 export function prepareCodeSearch(blocks) {

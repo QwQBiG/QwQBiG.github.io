@@ -1,4 +1,4 @@
-import { prepareCodeSearch } from './article-code.js';
+import { prepareCodeSearch, whenCodeReady } from './article-code.js';
 import { markCodeMatches } from './code-search-matches.js';
 
 /**
@@ -13,6 +13,7 @@ import { markCodeMatches } from './code-search-matches.js';
 
   let searchOverlay = null;
   let currentMatches = [];
+  let searchLifetime;
   let currentMatchIndex = -1;
 
   /**
@@ -107,18 +108,18 @@ import { markCodeMatches } from './code-search-matches.js';
     }
 
     const pattern = new RegExp(escapeRegex(query), 'gi');
-    const hits = [];
+    searchLifetime = new AbortController();
     for (const code of document.querySelectorAll('pre[class*="language-"] code')) {
-      // Source text includes the original line breaks, independent of syntax colors.
       const matches = Array.from(code.textContent.matchAll(pattern));
-      if (matches.length) hits.push({ code, matches });
-    }
+      if (!matches.length) continue;
 
-    // Line and bracket decoration preserves the text, but can replace its nodes.
-    // Finish it for matching blocks before attaching highlights to their tokens.
-    if (hits.length) prepareCodeSearch(hits.map(({ code }) => code.closest('pre')));
-    for (const { code, matches } of hits) {
-      for (const pieces of markCodeMatches(code, matches, currentMatches.length)) currentMatches.push(pieces);
+      // Count all occurrences now. Their spans are only needed when the reader
+      // sees this block or uses the controls to jump directly to one of its hits.
+      const block = { pre: code.closest('pre'), first: currentMatches.length, marks: [] };
+      for (let i = 0; i < matches.length; i++) currentMatches.push(block);
+      whenCodeReady(block.pre, () => {
+        block.marks = markCodeMatches(code, matches, block.first);
+      }, searchLifetime.signal);
     }
 
     if (currentMatches.length) {
@@ -140,8 +141,11 @@ import { markCodeMatches } from './code-search-matches.js';
    * 清除搜索结果
    */
   function clearSearch() {
+    searchLifetime?.abort();
+    searchLifetime = undefined;
     const parents = new Set();
-    for (const pieces of currentMatches) {
+    for (let i = 0; i < currentMatches.length; i++) {
+      const pieces = matchPieces(i);
       for (const mark of pieces) {
         if (mark.parentNode) parents.add(mark.parentNode);
         mark.replaceWith(mark.textContent);
@@ -172,7 +176,7 @@ import { markCodeMatches } from './code-search-matches.js';
 
     // 移除当前高亮
     if (currentMatchIndex >= 0) {
-      for (const mark of currentMatches[currentMatchIndex]) mark.classList.remove('current');
+      for (const mark of matchPieces(currentMatchIndex)) mark.classList.remove('current');
     }
 
     // 计算新索引
@@ -186,15 +190,22 @@ import { markCodeMatches } from './code-search-matches.js';
     highlightCurrentMatch();
   }
 
+  function matchPieces(index) {
+    const block = currentMatches[index];
+    return block.marks[index - block.first] ?? [];
+  }
+
   /**
    * 高亮当前匹配
    */
   function highlightCurrentMatch() {
     if (currentMatchIndex < 0 || currentMatchIndex >= currentMatches.length) return;
 
-    const pieces = currentMatches[currentMatchIndex];
+    const block = currentMatches[currentMatchIndex];
+    if (!block.marks.length) prepareCodeSearch([block.pre]);
+    const pieces = matchPieces(currentMatchIndex);
     for (const mark of pieces) mark.classList.add('current');
-    pieces[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    pieces[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     updateSearchCount();
   }
 
