@@ -1,6 +1,7 @@
+import { whenGalleryFullReady } from './gallery-images';
 import { fitPhotoPosition, listenForPointerDrag, photoPositionFromCenter, photoPositionBounds, photoPreviewSize } from '../utils/photo-wall';
 
-function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, onClose: () => void) {
+function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, full: HTMLImageElement, onClose: () => void) {
   const dialog = document.createElement('dialog');
   dialog.className = 'gallery-preview';
   dialog.setAttribute('aria-label', thumbnail.alt || 'Photo preview');
@@ -15,29 +16,40 @@ function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, onClo
   const desktop = photoPreviewSize(dimensions, false);
   closeButton.style.setProperty('--preview-compact-width', compact);
   closeButton.style.setProperty('--preview-width', desktop);
-  const immediate = new Image(dimensions.previewWidth, dimensions.previewHeight);
-  immediate.alt = thumbnail.alt;
-  const placeholder = thumbnail.closest('picture')?.style.getPropertyValue('--photo-placeholder');
-  if (placeholder) closeButton.style.backgroundImage = placeholder;
-  immediate.onload = () => { closeButton.style.removeProperty('background-image'); };
-  immediate.src = thumbnail.currentSrc || thumbnail.src;
-  const sharp = new Image();
-  sharp.alt = '';
-  sharp.setAttribute('aria-hidden', 'true');
-  sharp.decoding = 'async';
-  sharp.onload = () => {
-    closeButton.style.removeProperty('background-image');
+  closeButton.style.aspectRatio = `${dimensions.previewWidth} / ${dimensions.previewHeight}`;
+
+  const holder = full.parentElement!;
+  const previousPriority = full.fetchPriority;
+  full.fetchPriority = 'high';
+  const alreadyDecoded = full.hasAttribute('data-decoded');
+  let fade: Animation | undefined;
+
+  function showThumbnail() {
+    const backing = thumbnail.closest('picture')?.style.getPropertyValue('--photo-placeholder');
+    const current = thumbnail.currentSrc;
+    // The backing stays underneath even if the thumbnail has not painted yet.
+    closeButton.style.backgroundImage = [
+      current && `url(${JSON.stringify(current)})`,
+      backing,
+    ].filter(Boolean).join(', ');
+  }
+
+  if (alreadyDecoded) {
     closeButton.dataset.sharp = '';
-  };
-  sharp.sizes = `(width < 768px) ${compact}, ${desktop}`;
-  if (card.dataset.previewSrcset) sharp.srcset = card.dataset.previewSrcset;
-  sharp.src = card.href;
-  closeButton.append(immediate, sharp);
+  } else {
+    showThumbnail();
+    thumbnail.addEventListener('load', showThumbnail, { once: true });
+  }
+  closeButton.append(full);
   dialog.append(closeButton);
 
   function dispose() {
     if (!dialog.isConnected) return;
     if (dialog.open) dialog.close();
+    thumbnail.removeEventListener('load', showThumbnail);
+    fade?.cancel();
+    full.fetchPriority = previousPriority;
+    holder.append(full);
     dialog.remove();
     onClose();
   }
@@ -55,6 +67,21 @@ function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, onClo
   dialog.addEventListener('cancel', event => { event.preventDefault(); dismiss(); });
   document.body.append(dialog);
   dialog.showModal();
+
+  if (!alreadyDecoded) {
+    void whenGalleryFullReady(full, { retryFailedLoad: true }).then(ready => {
+      if (!ready || !dialog.open || dialog.hasAttribute('data-closing')) return;
+      thumbnail.removeEventListener('load', showThumbnail);
+      closeButton.dataset.sharp = '';
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches || !full.animate) {
+        closeButton.style.removeProperty('background-image');
+        return;
+      }
+      // Only the decoded image fades in. The existing pixels stay fully visible underneath.
+      fade = full.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 140, easing: 'ease-out' });
+      void fade.finished.then(() => closeButton.style.removeProperty('background-image'), () => {});
+    });
+  }
   return dispose;
 }
 
@@ -177,11 +204,12 @@ export function initializeGalleryInteractions(wall: HTMLElement) {
       suppressClick = undefined;
       return;
     }
-    const image = card.querySelector('img');
-    if (!image || typeof HTMLDialogElement === 'undefined' || !HTMLDialogElement.prototype.showModal) return;
+    const image = card.querySelector<HTMLImageElement>('picture img');
+    const full = card.querySelector<HTMLImageElement>('[data-gallery-full]');
+    if (!image || !full || typeof HTMLDialogElement === 'undefined' || !HTMLDialogElement.prototype.showModal) return;
     event.preventDefault();
     disposePreview?.();
-    disposePreview = openPreview(card, image, () => { disposePreview = undefined; });
+    disposePreview = openPreview(card, image, full, () => { disposePreview = undefined; });
   }, options);
 
   return () => {
