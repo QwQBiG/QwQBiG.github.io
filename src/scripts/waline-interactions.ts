@@ -43,11 +43,12 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   }
 
   function prepareAvatar(image: HTMLImageElement, author: string) {
+    const label = `预览${author || '评论者'}的头像`;
+    if (image.getAttribute('aria-label') !== label) image.setAttribute('aria-label', label);
     if (image.dataset.commentAvatar === 'ready') return;
     image.dataset.commentAvatar = 'ready';
     image.setAttribute('role', 'button');
     image.tabIndex = 0;
-    image.setAttribute('aria-label', `预览${author || '评论者'}的头像`);
     image.title = '预览头像';
     const wrapper = image.parentElement;
     if (wrapper?.classList.contains('wl-user')) {
@@ -181,7 +182,11 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       if (avatar) prepareAvatar(avatar, text(head?.querySelector('.wl-nick')?.textContent ?? ''));
       const identity = item.querySelector(':scope > .wl-user > .administrator-icon') ? '管理员'
         : item.querySelector(':scope > .wl-user > .verified-icon') ? '注册用户' : '';
-      if (identity && head && !head.querySelector('[data-comment-identity]')) {
+      const existingBadge = head?.querySelector('[data-comment-identity]');
+      if (existingBadge) {
+        if (!identity) existingBadge.remove();
+        else if (existingBadge.textContent !== identity) existingBadge.textContent = identity;
+      } else if (identity && head) {
         const badge = document.createElement('span');
         badge.className = 'comment-identity';
         badge.dataset.commentIdentity = '';
@@ -208,6 +213,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       folds.set(body, button);
     }
     container.querySelectorAll<HTMLElement>('.wl-comment').forEach(prepareEditor);
+    // The controls above are fully initialized. Their insertions need no second pass.
+    observer.takeRecords();
   }
 
   container.addEventListener('click', event => {
@@ -278,8 +285,18 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   window.visualViewport?.addEventListener('scroll', updateViewport, options);
   window.addEventListener('resize', scheduleRefresh, options);
   void document.fonts?.ready.then(scheduleRefresh);
-  container.addEventListener('load', scheduleRefresh, { ...options, capture: true });
-  const observer = new MutationObserver(scheduleRefresh);
+  function affectsCommentList(node: Node) {
+    const element = node instanceof Element ? node : node.parentElement;
+    // Waline updates its word count and Markdown preview inside the editor panel
+    // on each keystroke. Account details and the reply list are outside it.
+    return !element?.closest('.wl-comment > .wl-panel, .comment-sheet-header, [data-comment-fold]');
+  }
+  container.addEventListener('load', event => {
+    if (event.target instanceof Node && affectsCommentList(event.target)) scheduleRefresh();
+  }, { ...options, capture: true });
+  const observer = new MutationObserver(changes => {
+    if (changes.some(change => affectsCommentList(change.target))) scheduleRefresh();
+  });
   observer.observe(container, { subtree: true, childList: true, characterData: true });
   refresh();
 
