@@ -324,3 +324,44 @@ test('responsive warmup keeps the destination format and sizes and only same-ori
     sizes: '(max-width: 480px) 120px, 360px',
   }]);
 });
+
+test('startup module hints flatten static imports and immediate islands without warming dynamic code', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'navigation-module-hints-'));
+  try {
+    await mkdir(path.join(root, '_astro'));
+    const files = {
+      'entry.js': 'import "./shared.js"; import("./late.js"); import("https://other.test/later.js");',
+      'shared.js': 'export * from "./leaf.js";',
+      'leaf.js': 'import "./shared.js";',
+      'photo.js': 'import "./shared.js";',
+      'react.js': 'import "./leaf.js";',
+      'inline.js': 'export const value = 1;',
+      'idle.js': 'import "./idle-only.js";',
+      'idle-only.js': '', 'visible.js': '', 'late.js': '', 'classic.js': 'void import("./late.js");',
+    };
+    await Promise.all(Object.entries(files).map(([name, code]) => writeFile(path.join(root, '_astro', name), code)));
+    const html = '<html><head><link rel="preload" as="image" href="/cover.webp">' +
+      '<link rel="modulepreload" href="/_astro/leaf.js"><script type="module" src="/_astro/entry.js"></script>' +
+      '<script type="module">import "/_astro/inline.js"; import("/_astro/late.js");</script>' +
+      '<script defer src="/_astro/classic.js"></script></head><body>' +
+      '<astro-island client="load" component-url="/_astro/photo.js" renderer-url="/_astro/react.js"></astro-island>' +
+      '<astro-island client="idle" component-url="/_astro/idle.js"></astro-island>' +
+      '<astro-island client="visible" component-url="/_astro/visible.js"></astro-island></body></html>';
+    await writeFile(path.join(root, 'index.html'), html);
+    await writeFile(path.join(root, 'other.html'), '<html><head></head><body>plain page</body></html>');
+    const { href } = await generateNavigationManifest(root);
+    const output = await readFile(path.join(root, 'index.html'), 'utf8');
+    const hints = [...output.matchAll(/<link rel="modulepreload" href="([^"]+)"[^>]* data-navigation-module>/g)]
+      .map(match => match[1]).sort();
+    assert.deepEqual(hints, ['/_astro/inline.js', '/_astro/photo.js', '/_astro/react.js', '/_astro/shared.js']);
+    const manifest = JSON.parse(await readFile(path.join(root, href.slice(1)), 'utf8'));
+    assert.ok(hints.every(url => manifest.assets.some((asset: { url: string }) => asset.url === url)));
+    assert.equal(output.includes('fetchpriority="low"'), true);
+    assert.ok(output.indexOf('as="image"') < output.indexOf('data-navigation-module'));
+    assert.ok(!(await readFile(path.join(root, 'other.html'), 'utf8')).includes('modulepreload'));
+    assert.equal((await generateNavigationManifest(root)).href, href);
+    assert.equal(await readFile(path.join(root, 'index.html'), 'utf8'), output);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
