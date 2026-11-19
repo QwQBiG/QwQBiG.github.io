@@ -60,6 +60,7 @@ const musicSources = [
       </div>
       {/* 进度滑块 */}
       <div id="progress-thumb" class="progress-thumb absolute w-3 h-3 md:w-3.5 md:h-3.5 rounded-full shadow-md" style="left: 0%"></div>
+      <input id="track-position" type="range" min="0" max="0" value="0" step="1" disabled aria-label="Track position" />
     </div>
   </div>
 
@@ -252,6 +253,27 @@ const musicSources = [
     border-color: rgba(221, 214, 254, 0.8);
   }
 
+  #track-position {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    appearance: none;
+    opacity: 0;
+    cursor: inherit;
+    touch-action: pan-y;
+  }
+
+  /* The visible thumb spans the whole track, including its two endpoints. */
+  #track-position::-webkit-slider-thumb { appearance: none; width: 1px; height: 1rem; }
+  #track-position::-moz-range-thumb { border: 0; width: 1px; height: 1rem; }
+
+  .progress-wrapper:has(#track-position:focus-visible) .progress-track {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 3px;
+  }
+
   /* 导航按钮 */
   .nav-btn {
     transition: all 0.2s ease;
@@ -298,7 +320,7 @@ const musicSources = [
     const listeners = { signal: lifetime.signal };
     const progressFill = document.getElementById('progress-fill');
     const progressThumb = document.getElementById('progress-thumb');
-    const progressContainer = document.getElementById('progress-container');
+    const seek = document.querySelector<HTMLInputElement>('#track-position');
     const timeDisplay = document.getElementById('time-display');
     const volumeBtn = document.getElementById('volume-btn');
     const volumeSlider = document.querySelector<HTMLElement>('.volume-slider');
@@ -321,12 +343,21 @@ const musicSources = [
       return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
     }
 
+    let previewingSeek = false;
     function updateProgress() {
-      if (!Number.isFinite(audio!.duration) || audio!.duration <= 0) return;
-      const percent = (audio!.currentTime / audio!.duration) * 100;
+      const duration = Number.isFinite(audio!.duration) ? audio!.duration : 0;
+      if (!duration) previewingSeek = false;
+      const position = previewingSeek && seek ? Math.min(seek.valueAsNumber, duration) : audio!.currentTime;
+      const percent = duration ? position / duration * 100 : 0;
       if (progressFill) progressFill.style.width = `${percent}%`;
       if (progressThumb) progressThumb.style.left = `${percent}%`;
-      if (timeDisplay) timeDisplay.textContent = `${formatTime(audio!.currentTime)} / ${formatTime(audio!.duration)}`;
+      if (timeDisplay) timeDisplay.textContent = `${formatTime(position)} / ${formatTime(duration)}`;
+      if (seek) {
+        seek.disabled = !duration;
+        seek.max = String(Math.ceil(duration));
+        if (!previewingSeek) seek.valueAsNumber = position >= duration ? Math.ceil(duration) : Math.round(position);
+        seek.setAttribute('aria-valuetext', `${formatTime(position)} of ${formatTime(duration)}`);
+      }
     }
 
     function checkTextOverflow() {
@@ -443,13 +474,23 @@ const musicSources = [
       event.stopPropagation();
       playback.toggle();
     }, listeners);
-    for (const event of ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked']) {
+    for (const event of ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked', 'emptied']) {
       audio.addEventListener(event, updateProgress, listeners);
     }
-    progressContainer?.addEventListener('click', event => {
-      if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
-      const rect = progressContainer.getBoundingClientRect();
-      audio.currentTime = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)) * audio.duration;
+    seek?.addEventListener('input', () => {
+      previewingSeek = true;
+      updateProgress();
+    }, listeners);
+    seek?.addEventListener('change', () => {
+      previewingSeek = false;
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        audio.currentTime = Math.min(seek.valueAsNumber, audio.duration);
+      }
+      updateProgress();
+    }, listeners);
+    seek?.addEventListener('pointercancel', () => {
+      previewingSeek = false;
+      updateProgress();
     }, listeners);
 
     function updateVolume() {
