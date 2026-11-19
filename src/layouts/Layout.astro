@@ -3,6 +3,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
 import CodeBlockScripts from '../components/content/CodeBlockScripts.astro';
 import MermaidDiagrams from '../components/content/MermaidDiagrams.astro';
+import readingStyles from '../styles/reading-page.css?url';
 import mermaidStyles from '../styles/mermaid-diagrams.css?inline';
 import codeStyles from '../styles/code-blocks.css?url';
 import katexStyles from 'katex/dist/katex.min.css?url';
@@ -85,7 +86,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
     <slot name="head" />
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/styles/global.css" />
+    <link rel="stylesheet" href={readingStyles} />
     {useContentNavigation && <ContentNavigation />}
     {hasCode && <link rel="stylesheet" href={codeStyles} />}
     {hasMermaid && <style is:inline set:html={mermaidStyles} />}

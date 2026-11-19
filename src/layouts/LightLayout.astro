@@ -1,4 +1,6 @@
 ---
+import readingStyles from '../styles/reading-page.css?url';
+
 export interface Props {
   title: string;
   description?: string;
@@ -36,7 +38,7 @@ const siteURL = new URL(canonicalURL, Astro.site || 'https://iqwqi.win');
     <meta name="description" content={description} />
     <link rel="canonical" href={siteURL} />
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
-    <link rel="stylesheet" href="/styles/global.css" />
+    <link rel="stylesheet" href={readingStyles} />
     <slot name="head" />
   </head>
   <body class="site-page-shell min-h-[100dvh] min-h-screen flex flex-col transition-colors duration-300 gradient-bg">
