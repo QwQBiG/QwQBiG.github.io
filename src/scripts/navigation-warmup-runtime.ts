@@ -22,8 +22,8 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   }
   rememberPageAssets();
 
-  let nextObserver: IntersectionObserver | undefined;
-  let warmedNext: HTMLAnchorElement | undefined;
+  let postObserver: IntersectionObserver | undefined;
+  let observedNav: HTMLElement | undefined;
   let manifest: NavigationManifest | null = null;
   let lifetime = new AbortController();
   let currentIntent: { href: string; link: HTMLAnchorElement; committed: boolean } | undefined;
@@ -117,24 +117,28 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
     // Keep a started download: returning to this link can reuse the same request/cache.
   }
 
-  function watchNextPost() {
-    const link = document.querySelector<HTMLAnchorElement>('article nav a[rel~="next"][href]');
-    if (!link || link === warmedNext || typeof IntersectionObserver !== 'function') return;
-    const destination = navigationDestination(link.href, window.location.href);
-    if (!destination) return;
-    nextObserver?.disconnect();
+  function watchPostNavigation() {
+    const nav = document.querySelector<HTMLElement>('article nav[data-post-navigation]');
+    if (!nav || typeof IntersectionObserver !== 'function') return;
+    if (nav === observedNav && !postObserver) return;
+    postObserver?.disconnect();
+    observedNav = nav;
     const signal = lifetime.signal;
-    nextObserver = new IntersectionObserver((entries, observer) => {
-      if (observer !== nextObserver || signal.aborted || !link.isConnected || document.hidden || !canWarm()) return;
+    postObserver = new IntersectionObserver((entries, observer) => {
+      if (observer !== postObserver || signal.aborted || !nav.isConnected || document.hidden || !canWarm()) return;
       if (!entries.some(entry => entry.isIntersecting)) return;
       observer.disconnect();
-      nextObserver = undefined;
-      warmedNext = link;
-      // Match the ClientRouter fetch and reuse Astro's URL deduplication.
-      prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
-      void warmDestination(destination, 'prefetch', signal);
+      postObserver = undefined;
+      // Both links share one footer. Start the forward route first when both exist.
+      for (const relation of ['next', 'prev']) {
+        const link = nav.querySelector<HTMLAnchorElement>(`a[rel~="${relation}"][href]`);
+        const destination = link && navigationDestination(link.href, window.location.href);
+        if (!destination) continue;
+        prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
+        void warmDestination(destination, 'prefetch', signal);
+      }
     }, { rootMargin: `0px 0px ${window.innerHeight}px 0px` });
-    nextObserver.observe(link);
+    postObserver.observe(nav);
   }
 
   function preparePrimaryNavigation() {
@@ -142,7 +146,7 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
     // Read the small shared manifest immediately after load, before the first hover.
     void loadManifest('prefetch', lifetime.signal).catch(() => {});
     if (window.location.pathname !== '/') {
-      watchNextPost();
+      watchPostNavigation();
       return;
     }
     const links = [...document.querySelectorAll<HTMLAnchorElement>('#navCard a[href], a[href="/gallery/"]')];
@@ -160,9 +164,9 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   }
 
   function stop() {
-    nextObserver?.disconnect();
-    nextObserver = undefined;
-    warmedNext = undefined;
+    postObserver?.disconnect();
+    postObserver = undefined;
+    observedNav = undefined;
     lifetime.abort();
     resetIntent();
   }

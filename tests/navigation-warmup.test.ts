@@ -32,7 +32,12 @@ async function setupRuntime(readyState = 'complete', route = '/') {
   }
   const links = ['/about/', '/cs/', '/gallery/', '/cs/'].map(route => new Link(new URL(route, current).href));
   const hint = new Link(current + 'navigation-assets.test.json');
-  const article = { next: links[1], styles: [] as Link[] };
+  const article = {
+    next: links[1] as Link | undefined,
+    prev: undefined as Link | undefined,
+    styles: [] as Link[],
+    nav: { isConnected: true, querySelector: (selector: string): Link | undefined => selector.includes('"next"') ? article.next : article.prev },
+  };
   const navigator = { onLine: true, connection: { effectiveType: '2g', saveData: false } };
   class Observer {
     target?: Link;
@@ -73,7 +78,7 @@ async function setupRuntime(readyState = 'complete', route = '/') {
   };
   const document = {
     readyState, hidden: false,
-    querySelector: (selector: string) => selector.includes('rel~="next"') ? article.next : hint,
+    querySelector: (selector: string) => selector.includes('data-post-navigation') ? article.nav : hint,
     querySelectorAll: (selector: string) => selector.startsWith('#navCard') ? links : article.styles,
     getElementById: () => null,
     addEventListener: (name: string, handler: (event: unknown) => void) => record(documentHandlers, name, handler),
@@ -148,12 +153,12 @@ test('automatic preparation waits for load and resumes unfinished work after pag
   runtime.scheduler.dispose();
 });
 
-test('series navigation only prepares the next post near the article end and replaces the observer on navigation', async () => {
+test('series navigation prepares both available posts near the article end and discards the old observer', async () => {
   const runtime = await setupRuntime('complete', '/article/');
   const { observers, article } = runtime;
   await runtime.flush();
   assert.equal(runtime.html.length, 0);
-  assert.equal(observers[0].target, article.next);
+  assert.equal(observers[0].target, article.nav);
   assert.equal(observers[0].options.rootMargin, '0px 0px 844px 0px');
   observers[0].near(false);
   runtime.navigator.connection.saveData = true;
@@ -167,17 +172,29 @@ test('series navigation only prepares the next post near the article end and rep
   runtime.emitDocument('astro:before-swap');
   const old = observers[0];
   article.next = runtime.links[2];
+  article.prev = runtime.links[1];
   article.styles.push(Object.assign(runtime.links[0], { href: current + 'shared.css' }));
   runtime.emitDocument('astro:page-load');
   const next = observers.at(-1)!;
   old.near();
   assert.equal(runtime.html.length, 0);
-  assert.equal(next.target, article.next);
+  assert.equal(next.target, article.nav);
   next.near();
   next.near();
   await runtime.flush();
-  assert.deepEqual(runtime.html, [current + 'gallery/']);
-  assert.deepEqual(runtime.requests, [current + 'navigation-assets.test.json', current + 'gallery.webp']);
+  assert.deepEqual(runtime.html, [current + 'gallery/', current + 'cs/']);
+  assert.deepEqual(runtime.requests, [current + 'navigation-assets.test.json', current + 'gallery.webp', current + 'cs.js']);
+  runtime.scheduler.dispose();
+});
+
+test('the last post can warm the previous article without a forward link', async () => {
+  const runtime = await setupRuntime('complete', '/article/');
+  runtime.article.next = undefined;
+  runtime.article.prev = runtime.links[1];
+  runtime.observers.at(-1)!.near();
+  await runtime.flush();
+  assert.deepEqual(runtime.html, [current + 'cs/']);
+  assert(runtime.requests.includes(current + 'cs.js'));
   runtime.scheduler.dispose();
 });
 
