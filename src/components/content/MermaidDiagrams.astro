@@ -3,11 +3,145 @@
   let diagramBody: HTMLElement | undefined;
   let diagramPage = 0;
 
-  async function renderMermaidDiagrams(signal: AbortSignal) {
-    const mermaidBlocks = document.querySelectorAll('pre.language-mermaid, pre[class*="mermaid"]');
-    if (mermaidBlocks.length === 0) return;
+  type RenderDiagram = (block: HTMLElement) => Promise<void>;
 
-    // 图表库只在有图块的页面加载，模块由站点构建提供。
+  function observeDiagrams(blocks: NodeListOf<HTMLElement>, signal: AbortSignal) {
+    if (!blocks.length) return;
+    const margin = 600;
+    const nearby = new Set<HTMLElement>();
+    let observer: IntersectionObserver | undefined;
+    let render: RenderDiagram | undefined;
+    let running = false;
+    let frame: number | undefined;
+
+    const fragment = watchDiagramFragment(blocks[0].closest('article'), signal,
+      () => running || frame !== undefined || nearby.size > 0,
+      () => { if (frame === undefined) void runNext(); });
+
+    function nearest() {
+      if (!observer) return nearby.values().next().value;
+      let next: HTMLElement | undefined;
+      let shortest = Infinity;
+      for (const block of nearby) {
+        // Scroll and layout can change while an import or another diagram is pending.
+        const rect = block.getBoundingClientRect();
+        const distance = Math.max(0, rect.top - window.innerHeight, -rect.bottom);
+        if (distance > margin) nearby.delete(block);
+        else if (distance < shortest) {
+          next = block;
+          shortest = distance;
+        }
+      }
+      return next;
+    }
+
+    async function runNext() {
+      frame = undefined;
+      if (signal.aborted || fragment?.travelling() || running || !nearby.size) return;
+      running = true;
+      try {
+        render ??= await loadRenderer(signal);
+        if (signal.aborted || fragment?.travelling() || !render) return;
+        const block = nearest();
+        if (!block) return;
+        nearby.delete(block);
+        observer?.unobserve(block);
+        await render(block);
+      } catch (error) {
+        if (!signal.aborted) console.error('Mermaid 加载失败:', error);
+        if (!render) nearby.clear();
+      } finally {
+        running = false;
+        if (!signal.aborted && !fragment?.travelling() && nearby.size) frame = requestAnimationFrame(runNext);
+      }
+    }
+
+    if (typeof IntersectionObserver === 'function') {
+      observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          const block = entry.target as HTMLElement;
+          if (entry.isIntersecting) nearby.add(block);
+          else nearby.delete(block);
+        }
+        if (frame === undefined) void runNext();
+      }, { rootMargin: `${margin}px 0px` });
+      blocks.forEach(block => observer!.observe(block));
+    } else {
+      blocks.forEach(block => nearby.add(block));
+      void runNext();
+    }
+    signal.addEventListener('abort', () => {
+      observer?.disconnect();
+      nearby.clear();
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    }, { once: true });
+  }
+
+  // Let native fragment scrolling pass intervening diagrams before resolving any new layouts.
+  function watchDiagramFragment(article: HTMLElement | null, signal: AbortSignal, busy: () => boolean, resume: () => void) {
+    if (!article) return;
+    let heading: HTMLElement | undefined;
+    let travelling = false;
+    let timer: number | undefined;
+    const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(align) : undefined;
+    const options = { signal, passive: true };
+    function clear() {
+      window.clearTimeout(timer);
+      resize?.disconnect();
+      heading = undefined;
+      travelling = false;
+    }
+    function cancel() {
+      const paused = travelling;
+      clear();
+      if (paused && !signal.aborted) resume();
+    }
+    function align() {
+      if (!heading || travelling) return;
+      const margin = parseFloat(getComputedStyle(heading).scrollMarginTop) || 0;
+      const offset = heading.getBoundingClientRect().top - margin;
+      if (Math.abs(offset) > 2) heading.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+    function finish() {
+      travelling = false;
+      align();
+      resume();
+      // A near diagram may still be downloading or applying its final SVG size.
+      function releaseWhenIdle() {
+        if (!busy()) clear();
+        else timer = window.setTimeout(releaseWhenIdle, 250);
+      }
+      timer = window.setTimeout(releaseWhenIdle, 250);
+    }
+    function waitForScroll() {
+      if (!travelling) return;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(finish, 160);
+    }
+    function follow(hash: string) {
+      let id: string;
+      try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+      const target = document.getElementById(id);
+      if (!target || !article!.contains(target) || !target.matches('h1, h2, h3, h4, h5, h6')) return;
+      clear();
+      heading = target;
+      travelling = true;
+      resize?.observe(article!);
+      waitForScroll();
+    }
+    document.addEventListener('click', event => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (link?.hash && !link.target && !link.hasAttribute('download')) follow(link.hash);
+    }, { signal, capture: true });
+    window.addEventListener('scroll', waitForScroll, options);
+    for (const name of ['wheel', 'touchstart', 'pointerdown', 'keydown']) window.addEventListener(name, cancel, options);
+    signal.addEventListener('abort', clear, { once: true });
+    if (location.hash && !history.state?.scrollY) follow(location.hash);
+    return { travelling: () => travelling };
+  }
+
+  async function loadRenderer(signal: AbortSignal): Promise<RenderDiagram | undefined> {
     const { default: mermaid } = await import('mermaid');
     if (signal.aborted) return;
     const page = ++diagramPage;
@@ -38,15 +172,15 @@
       }
     });
 
-    // 手动渲染所有 Mermaid 代码块。
-    mermaidBlocks.forEach((block, index) => {
+    let index = 0;
+    return async block => {
       if (block.hasAttribute('data-mermaid-rendered')) return;
       const code = block.querySelector('code');
       if (!code) return;
       block.setAttribute('data-mermaid-rendered', 'true');
 
-      const graphDefinition = code.textContent;
-      const id = `mermaid-${page}-${index}`;
+      const graphDefinition = code.textContent ?? '';
+      const id = `mermaid-${page}-${++index}`;
 
       // 创建外层容器 - 模仿代码块样式
       const wrapper = document.createElement('div');
@@ -120,14 +254,12 @@
       wrapper.appendChild(header);
       wrapper.appendChild(contentWrapper);
 
-      // 替换代码块
-      block.parentNode.insertBefore(wrapper, block);
-      block.style.display = 'none';
-
-      // 渲染图表
-      mermaid.render(id, graphDefinition).then(({ svg }) => {
-        if (signal.aborted || !wrapper.isConnected) return;
+      try {
+        const { svg } = await mermaid.render(id, graphDefinition);
+        if (signal.aborted || !block.isConnected) return;
         content.innerHTML = svg;
+        block.before(wrapper);
+        block.style.display = 'none';
 
         // 确保SVG完整显示
         const svgElement = content.querySelector('svg');
@@ -138,9 +270,6 @@
           svgElement.style.height = 'auto';
           svgElement.style.display = 'block';
           svgElement.style.overflow = 'visible';
-
-          // 保存原始viewBox信息用于后续计算
-          const originalViewBox = svgElement.getAttribute('viewBox');
 
           // 修复foreignObject问题，确保多行文本显示完整
           const foreignObjects = svgElement.querySelectorAll('foreignObject');
@@ -163,12 +292,13 @@
 
         // 初始化交互功能
         initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn, signal);
-      }).catch(err => {
-        if (signal.aborted || !wrapper.isConnected) return;
+      } catch (err) {
+        if (signal.aborted || !block.isConnected) return;
         console.error('Mermaid 渲染失败:', err);
         content.innerHTML = '<div style="color: red; padding: 20px;">图表渲染失败</div>';
-      });
-    });
+        if (!wrapper.isConnected) block.before(wrapper);
+      }
+    };
   }
 
   // 初始化图表交互功能
@@ -313,9 +443,8 @@
     diagramLifetime?.abort();
     diagramBody = document.body;
     diagramLifetime = new AbortController();
-    void renderMermaidDiagrams(diagramLifetime.signal).catch((error) => {
-      console.error('Mermaid 加载失败:', error);
-    });
+    const blocks = document.querySelectorAll<HTMLElement>('pre.language-mermaid, pre[class*="mermaid"]');
+    observeDiagrams(blocks, diagramLifetime.signal);
   };
 
   // 页面加载完成后渲染。
