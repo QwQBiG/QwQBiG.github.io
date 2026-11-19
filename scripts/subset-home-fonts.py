@@ -22,7 +22,7 @@ OUTPUT = ROOT / "src/assets/home-fonts"
 # weight instances use "Home Sans"; the original keeps its embedded names.
 FACES = [
     ("quicksand-latin", "home-sans", "Home Sans", "normal", "300 700",
-     "".join(chr(n) for n in range(32, 127)) + "·•©"),
+     "".join(chr(n) for n in range(32, 127)) + "·•©…"),
     ("cormorant-garamond-latin", "home-serif", "Cormorant Garamond", "normal", "400 700",
      "0123456789MTWFS "),
     ("cormorant-garamond-italic-latin", "home-serif-italic", "Cormorant Garamond", "italic", "400 500",
