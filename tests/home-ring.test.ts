@@ -8,10 +8,14 @@ const script = await readFile(new URL('../src/scripts/home-interactions.js', imp
 
 function ringInteraction() {
   const values = new Map<string, string>();
+  let reads = 0;
   const ring = Object.assign(new EventTarget(), {
     classList: { add() {}, remove() {} },
     style: { setProperty: (name: string, value: string) => values.set(name, value) },
-    getBoundingClientRect: () => ({ left: 0, top: 0, width: 270, height: 270 }),
+    getBoundingClientRect() {
+      reads++;
+      return { left: 0, top: 0, width: 270, height: 270 };
+    },
   });
   const frames: Array<(time: number) => void> = [];
   let time = 0;
@@ -24,15 +28,37 @@ function ringInteraction() {
     requestAnimationFrame: (callback: (time: number) => void) => frames.push(callback),
     IntersectionObserver: class { observe() {} },
   });
-  function pointer(type: string, pointerType = 'touch', pointerId = 1) {
+  function send(type: string, pointerType = 'touch', pointerId = 1, clientX = 270) {
     const event = Object.assign(new Event(type, { cancelable: true }), {
-      pointerType, pointerId, isPrimary: pointerId === 1, clientX: 270, clientY: 135,
+      pointerType, pointerId, isPrimary: pointerId === 1, clientX, clientY: 135,
     });
     assert.equal(ring.dispatchEvent(event), true, 'native gestures must remain available');
+  }
+  function flush() {
     while (frames.length) frames.shift()!(time += 20);
   }
-  return { pointer, values };
+  function pointer(type: string, pointerType = 'touch', pointerId = 1) {
+    send(type, pointerType, pointerId);
+    flush();
+  }
+  return { pointer, values, send, flush, reads: () => reads };
 }
+
+test('pointer samples share a frame measurement and cancellation discards the last sample', () => {
+  const ring = ringInteraction();
+  ring.send('pointerenter');
+  for (let x = 0; x <= 270; x++) ring.send('pointermove', 'touch', 1, x);
+  assert.equal(ring.reads(), 0);
+  ring.flush();
+  assert.equal(ring.reads(), 1);
+  assert.equal(ring.values.get('--rotateY'), '15.00deg');
+
+  ring.send('pointermove', 'touch', 1, 0);
+  ring.send('pointercancel');
+  ring.flush();
+  assert.equal(ring.reads(), 1);
+  assert.equal(ring.values.get('--rotateY'), '0.00deg');
+});
 
 test('the ring permits native scrolling and pinching, resets after touch cancellation or lift', () => {
   assert.match(page, /\.floating-ring\s*\{[^}]*touch-action:\s*pan-y pinch-zoom/);
