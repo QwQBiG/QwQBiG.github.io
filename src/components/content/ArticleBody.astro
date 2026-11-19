@@ -5,7 +5,7 @@ import { markArticleCodeBlocks } from '../../utils/article-code-lines';
 const content = await Astro.slots.render('default');
 const html = markArticleCodeBlocks(wrapArticleTables(content));
 ---
-<div class="prose prose-lg max-w-none" set:html={html} />
+<div lang="zh-CN" class="prose prose-lg max-w-none" set:html={html} />
 
 <style>
   .prose :global(:is(h1, h2, h3)[id]) {

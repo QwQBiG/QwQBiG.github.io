@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light">
-<title>每日一盆 · 窗边的小温室</title>
+<title>Daily Plant · Tiny Greenhouse</title>
 <style>
 :root {
   --bg: #f4f1e8;
@@ -473,16 +473,16 @@ a { color: inherit; }
 </style>
 </head>
 <body>
-<noscript><p class="noscript">小温室需要启用 JavaScript。所有日期计算都在本地进行，不连接外部服务。</p></noscript>
+<noscript><p class="noscript">Enable JavaScript to open the greenhouse. The calendar works entirely on your device.</p></noscript>
 <div class="shell" id="greenhouse-app">
   <header class="topbar">
-    <a class="brand" href="#" aria-label="每日一盆，回到今天"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">每日一盆</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
-    <nav class="top-links" aria-label="温室导航"><a class="nav-scene" href="#scene" aria-label="回到当前日期的植物">看植物</a><a class="nav-guest" href="#guest-title">小客人</a><a class="nav-play" href="#treasure-title">去寻宝</a><a class="sill-link" href="#window-sill">我的窗台 <b id="saved-count">0</b></a></nav>
+    <a class="brand" href="#" aria-label="Daily Plant, back to today"><span class="brand-mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M12 14C5 15 3 10 4 6c5 0 8 2 8 6M12 10c0-5 4-7 8-7 1 5-2 9-8 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="brand-title">Daily Plant</span><span class="brand-sub" style="display:block">TINY GREENHOUSE</span></span></a>
+    <nav class="top-links" aria-label="Greenhouse navigation"><a class="nav-scene" href="#scene" aria-label="Back to the selected plant">Plant</a><a class="nav-guest" href="#guest-title">Visitors</a><a class="nav-play" href="#treasure-title">Treasure hunt</a><a class="sill-link" href="#window-sill">My windowsill <b id="saved-count">0</b></a></nav>
   </header>
-  <div class="intro"><div><div class="eyebrow">THE WINDOWSILL COLLECTION · 一日一盆</div><h1>把普通日子，<br><em>养得有声有色。</em></h1><p>一扇窗，六种植物，几位偶尔路过的朋友。<br>挑个日子，看看它为你长出了什么。</p></div><div class="intro-doodle" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="46" stroke="#a69a78" stroke-width=".8"/><circle cx="60" cy="60" r="40" stroke="#c5b996" stroke-width=".6" stroke-dasharray="2 4"/><path d="M52 93Q74 62 62 29" stroke="#75845d" stroke-width="2" stroke-linecap="round"/><path d="M63 77Q41 77 36 59Q57 56 63 77Z" fill="#99ab79"/><path d="M66 61Q86 61 88 43Q68 42 66 61Z" fill="#647f58"/><path d="M65 47Q46 46 45 30Q61 29 65 47Z" fill="#b4bf8c"/><path d="m41 63 20 12m9-17 13-10M49 34l14 11" stroke="#e5e6c4" stroke-width="1"/><circle cx="47" cy="89" r="2" fill="#b78e65"/><circle cx="78" cy="80" r="1.5" fill="#b78e65"/></svg><span class="local-note">一点日光，<br>一点慢慢生长的时间。</span></div></div>
-  <div class="date-bar"><div class="date-group"><span class="date-label">翻到这一天</span><button class="date-nav" id="previous-day" type="button" aria-label="前一天">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">植物日期</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="植物日期"></label><button class="date-nav" id="next-day" type="button" aria-label="后一天">→</button><button class="text-button" id="today-button" type="button">今天</button></div><span class="day-label" id="day-label"></span></div>
-  <main class="main-grid" aria-label="日期植物">
-    <section class="scene" id="scene" tabindex="-1" aria-label="小温室里的植物">
+  <div class="intro"><div><div class="eyebrow">THE WINDOWSILL COLLECTION</div><h1 lang="zh-CN">把普通日子，<br><em>养得有声有色。</em></h1><p lang="zh-CN">一扇窗，六种植物，几位偶尔路过的朋友。<br>挑个日子，看看它为你长出了什么。</p></div><div class="intro-doodle" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="46" stroke="#a69a78" stroke-width=".8"/><circle cx="60" cy="60" r="40" stroke="#c5b996" stroke-width=".6" stroke-dasharray="2 4"/><path d="M52 93Q74 62 62 29" stroke="#75845d" stroke-width="2" stroke-linecap="round"/><path d="M63 77Q41 77 36 59Q57 56 63 77Z" fill="#99ab79"/><path d="M66 61Q86 61 88 43Q68 42 66 61Z" fill="#647f58"/><path d="M65 47Q46 46 45 30Q61 29 65 47Z" fill="#b4bf8c"/><path d="m41 63 20 12m9-17 13-10M49 34l14 11" stroke="#e5e6c4" stroke-width="1"/><circle cx="47" cy="89" r="2" fill="#b78e65"/><circle cx="78" cy="80" r="1.5" fill="#b78e65"/></svg><span class="local-note" lang="zh-CN">一点日光，<br>一点慢慢生长的时间。</span></div></div>
+  <div class="date-bar"><div class="date-group"><span class="date-label">Choose a date</span><button class="date-nav" id="previous-day" type="button" aria-label="Previous day">←</button><label><span class="date-label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Plant date</span><input class="date-input" id="plant-date" type="date" min="0001-01-01" max="9999-12-31" aria-label="Plant date"></label><button class="date-nav" id="next-day" type="button" aria-label="Next day">→</button><button class="text-button" id="today-button" type="button">Today</button></div><span class="day-label" id="day-label"></span></div>
+  <main class="main-grid" aria-label="Daily plant">
+    <section class="scene" id="scene" tabindex="-1" aria-label="Plant in the greenhouse">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" preserveAspectRatio="none" width="720" height="520" class="glass-lines greenhouse-stage" aria-hidden="true" fill="none">
   <defs>
     <linearGradient id="stage-plaster" x1="78" y1="0" x2="647" y2="520" gradientUnits="userSpaceOnUse">
@@ -609,43 +609,43 @@ a { color: inherit; }
 </svg>
       <div class="weather-layer" aria-hidden="true"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i><i style="--n:5"></i></div>
       <div class="room-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      <span class="scene-label">一日一盆 · 慢慢生长</span><span class="scene-sticker" aria-hidden="true">hello,<br>little leaf.</span><span class="room-badge"><i class="room-light" aria-hidden="true"></i><span id="room-label">晨光温室</span></span>
-      <span class="weather-badge">日历天气 <b id="weather-label">—</b></span>
+      <span class="scene-label">One plant a day</span><span class="scene-sticker" aria-hidden="true">hello,<br>little leaf.</span><span class="room-badge"><i class="room-light" aria-hidden="true"></i><span id="room-label">Morning light</span></span>
+      <span class="weather-badge">Weather <b id="weather-label">—</b></span>
       <div class="floor-glow" aria-hidden="true"></div><div class="bench" aria-hidden="true"></div>
-      <button class="neighbor left" id="neighbor-left" type="button" aria-label="看看前一天"><span id="neighbor-left-art"></span><span class="neighbor-caption">前一天</span></button>
-      <div class="plant-display" id="plant-display"><p class="loading-note">正在打开温室…</p></div>
-      <button class="neighbor right" id="neighbor-right" type="button" aria-label="看看后一天"><span id="neighbor-right-art"></span><span class="neighbor-caption">后一天</span></button>
+      <button class="neighbor left" id="neighbor-left" type="button" aria-label="See the previous day’s plant"><span id="neighbor-left-art"></span><span class="neighbor-caption">Previous day</span></button>
+      <div class="plant-display" id="plant-display"><p class="loading-note">Opening the greenhouse…</p></div>
+      <button class="neighbor right" id="neighbor-right" type="button" aria-label="See the next day’s plant"><span id="neighbor-right-art"></span><span class="neighbor-caption">Next day</span></button>
       <div class="water-drops" aria-hidden="true"><i></i><i></i><i></i></div>
-      <button class="visitor-button" id="visitor-button" type="button" aria-label="和温室里的小客人打招呼"><span id="visitor-art"></span></button>
+      <button class="visitor-button" id="visitor-button" type="button" aria-label="Greet the greenhouse visitor"><span id="visitor-art"></span></button>
       <div class="scene-bottom"><span id="scene-date">ONE DATE. ONE LITTLE PLANT.</span><span id="scene-note">TAKE YOUR TIME.</span></div>
     </section>
-    <section class="specimen" id="specimen" aria-label="植物卡">
-      <div class="specimen-kicker"><span>植物观察日记</span><time class="specimen-date" id="specimen-date">—</time><span id="specimen-no">NO. 01</span></div>
-      <div class="variant" id="variant"><i class="variant-dot" aria-hidden="true"></i><span id="variant-text">晨绿叶 · 常规款</span></div>
-      <h2 class="plant-name" id="plant-name">—</h2><p class="latin-name" id="plant-english"></p><p class="plant-line" id="plant-line"></p>
-      <div class="leaf-label"><span>这一天的叶片</span><b id="leaf-value">— / 6</b></div><div class="leaf-meter" id="leaf-meter" role="meter" aria-label="这一天的叶片" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
-      <div class="seed-row"><span>这一盆的日历种子</span><code class="seed-id" id="seed-id">—</code></div>
-      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg aria-hidden="true" viewBox="0 0 18 22" fill="none"><path d="M9 2C7 6 3 10 3 14a6 6 0 0 0 12 0c0-4-4-8-6-12Z" fill="#a9cbd1" stroke="#789ba4" stroke-width="1.3"/><path d="M6 14c0 2 1 3 3 3" stroke="#f5ffff" stroke-width="1.5" stroke-linecap="round"/></svg> 浇一点水</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">放上窗台 ＋</button></div>
-      <p class="care-note">浇一点水，让小叶子和你打个招呼。</p>
+    <section class="specimen" id="specimen" aria-label="Plant card">
+      <div class="specimen-kicker"><span>Field notes</span><time class="specimen-date" id="specimen-date">—</time><span id="specimen-no">NO. 01</span></div>
+      <div class="variant" id="variant"><i class="variant-dot" aria-hidden="true"></i><span id="variant-text">Morning green · Common</span></div>
+      <h2 class="plant-name" id="plant-name">—</h2><p class="latin-name" id="botanical-name"></p><p class="plant-line" id="plant-line" lang="zh-CN"></p>
+      <div class="leaf-label"><span>Leaf count</span><b id="leaf-value">— / 6</b></div><div class="leaf-meter" id="leaf-meter" role="meter" aria-label="Leaf count" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"></div>
+      <div class="seed-row"><span>Calendar seed</span><code class="seed-id" id="seed-id">—</code></div>
+      <div class="card-actions"><button type="button" class="card-action" id="water-button"><svg aria-hidden="true" viewBox="0 0 18 22" fill="none"><path d="M9 2C7 6 3 10 3 14a6 6 0 0 0 12 0c0-4-4-8-6-12Z" fill="#a9cbd1" stroke="#789ba4" stroke-width="1.3"/><path d="M6 14c0 2 1 3 3 3" stroke="#f5ffff" stroke-width="1.5" stroke-linecap="round"/></svg> Water plant</button><button type="button" class="card-action primary" id="save-button" aria-pressed="false">Save plant +</button></div>
+      <p class="care-note">Water the plant to see its leaves move.</p>
     </section>
   </main>
-  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> 随便逛一天</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> 借一束月光</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="night-button" type="button" aria-pressed="false"><span aria-hidden="true">✧</span><span id="night-text">等到天黑</span></button></div>
-  <p class="notice" id="notice" role="status" aria-live="polite">这是你的日历小花园。先给今天这盆浇一点水吧。</p>
+  <div class="discovery-row"><button class="discovery-btn" id="wander-button" type="button"><span aria-hidden="true">↝</span> Random day</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="moon-button" type="button"><span aria-hidden="true">☾</span> Find a rare plant</button><span class="discovery-divider" aria-hidden="true"></span><button class="discovery-btn" id="night-button" type="button" aria-pressed="false"><span aria-hidden="true">✧</span><span id="night-text">Nightfall</span></button></div>
+  <p class="notice" id="notice" role="status" aria-live="polite">Try watering today’s plant.</p>
   <div class="little-corners">
   <section class="guestbook" aria-labelledby="guest-title">
-    <div><p class="guest-kicker">POSTCARDS FROM LITTLE FRIENDS.</p><h2 id="guest-title">角落里，好像有谁来过。</h2><p class="visitor-note" id="visitor-note" tabindex="-1">找找温室里的小客人，轻轻点一下。</p><p class="guest-hint">每个日期有一位小客人，藏在不同的角落。</p></div>
-    <div><div class="guest-stamps" id="guest-stamps" aria-label="四位温室小客人的印章"></div><p class="guest-progress" id="guest-progress">相遇 0 / 4 · 点击亮起的印章，可以重访那一天。</p></div>
+    <div><p class="guest-kicker">POSTCARDS FROM LITTLE FRIENDS.</p><h2 id="guest-title">Who’s visiting?</h2><p class="visitor-note" id="visitor-note" tabindex="-1">Tap the visitor in the greenhouse to read its note.</p><p class="guest-hint">One visitor hides in the greenhouse each day.</p></div>
+    <div><div class="guest-stamps" id="guest-stamps" aria-label="Stamps from the four greenhouse visitors"></div><p class="guest-progress" id="guest-progress">0 of 4 visitors met. Select a stamp to revisit that day.</p></div>
   </section>
   <section class="treasure" aria-labelledby="treasure-title">
-    <div class="treasure-heading"><div class="eyebrow">THREE LITTLE THINGS TO FIND</div><h2 id="treasure-title">今天，去日历里寻宝</h2><p>翻翻不同的日子，找齐三件温室里的小事。</p><span class="treasure-progress" id="treasure-progress">0 / 3 已发现</span><p>进度留在当前页面，刷新后重新开始。</p></div>
-    <div><div class="treasure-list" id="treasure-list"></div><p class="treasure-result" id="treasure-result" role="status" aria-live="polite">挑一张线索，去日历里走走吧。</p></div>
+    <div class="treasure-heading"><div class="eyebrow">THREE LITTLE THINGS TO FIND</div><h2 id="treasure-title">Today’s treasure hunt</h2><p>Explore different days to find all three.</p><span class="treasure-progress" id="treasure-progress">0 of 3 found</span><p>The hunt starts over when you reload this page.</p></div>
+    <div><div class="treasure-list" id="treasure-list"></div><p class="treasure-result" id="treasure-result" role="status" aria-live="polite">Pick a clue to find out where to look.</p></div>
   </section>
   </div>
   <section class="sill" id="window-sill" aria-labelledby="sill-title">
-    <div class="sill-heading"><div><p class="section-kicker">MY LITTLE WINDOWSILL</p><h2 id="sill-title">收藏一整个窗边的四季。</h2><p id="sill-description">喜欢哪一盆，就把它留在这里。</p></div><div class="sill-meta"><span class="sill-progress" id="album-progress">认识了 0 / 6 种植物</span><a class="return-link" href="#scene" aria-label="回到当前日期的植物">回到温室<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3m-4 4 4-4 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></div>
-    <div class="album" id="album"></div><div class="saved-dates" id="saved-dates" aria-label="已收藏的日期"></div><p class="empty-note" id="empty-note">窗台还空着。收藏一盆薄荷，或者去日历里寻找一片月光。</p>
+    <div class="sill-heading"><div><p class="section-kicker">MY LITTLE WINDOWSILL</p><h2 id="sill-title">Your plant collection</h2><p id="sill-description">Save a plant to keep it on your windowsill.</p></div><div class="sill-meta"><span class="sill-progress" id="album-progress">0 of 6 species collected</span><a class="return-link" href="#scene" aria-label="Back to the selected plant">Back to the greenhouse<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3m-4 4 4-4 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></div>
+    <div class="album" id="album"></div><div class="saved-dates" id="saved-dates" aria-label="Saved dates"></div><p class="empty-note" id="empty-note">Your windowsill is empty. Look for mint or try finding a moonlit plant.</p>
   </section>
-  <footer class="footer"><p id="storage-note">收藏与访客印章只保存在当前浏览器，不会上传。</p><a class="signature" href="/">← 回到博客</a></footer>
+  <footer class="footer"><p id="storage-note">Your plants and visitor stamps are saved in this browser.</p><a class="signature" href="/">← Back to the blog</a></footer>
 </div>
 <script data-source="garden-core.js">
 /* Offline calendar seeds. Versioned namespaces keep existing plants reproducible. */
@@ -657,10 +657,8 @@ a { color: inherit; }
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  var PLANTS = [
-    ["", "薄荷"], ["", "三叶草"], ["", "仙人掌"],
-    ["", "向日葵"], ["", "铃兰"], ["", "含羞草"]
-  ];
+  var plantNames = Object.freeze(["Mint", "Clover", "Cactus", "Sunflower", "Lily of the valley", "Sensitive plant"]);
+  var visitorNames = Object.freeze(["Snail courier", "Night moth", "Ladybird scout", "Window cat"]);
   var ROUND = [
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -724,7 +722,7 @@ a { color: inherit; }
 
   function parseDate(iso) {
     if (typeof iso !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
-      throw new RangeError("日期应为 YYYY-MM-DD。");
+      throw new RangeError("Use the date format YYYY-MM-DD.");
     }
     var year = Number(iso.slice(0, 4));
     var month = Number(iso.slice(5, 7));
@@ -734,16 +732,16 @@ a { color: inherit; }
     parsed.setUTCHours(0, 0, 0, 0);
     parsed.setUTCFullYear(year, month - 1, day);
     if (year < 1 || parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1
-        || parsed.getUTCDate() !== day) throw new RangeError("日期不存在。");
+        || parsed.getUTCDate() !== day) throw new RangeError("This date does not exist.");
     return parsed;
   }
 
   function shiftDate(iso, deltaDays) {
     var shifted = parseDate(iso);
-    if (!Number.isSafeInteger(deltaDays)) throw new RangeError("天数必须是整数。");
+    if (!Number.isSafeInteger(deltaDays)) throw new RangeError("Enter a whole number of days.");
     shifted.setUTCDate(shifted.getUTCDate() + deltaDays);
     if (!Number.isFinite(shifted.getTime()) || shifted.getUTCFullYear() < 1
-        || shifted.getUTCFullYear() > 9999) throw new RangeError("日期超出可预览范围。");
+        || shifted.getUTCFullYear() > 9999) throw new RangeError("This date is outside the calendar range.");
     return shifted.toISOString().slice(0, 10);
   }
 
@@ -757,16 +755,16 @@ a { color: inherit; }
   function cardForDate(iso) {
     parseDate(iso);
     var digest = sha256("daily-green-garden-v1:" + iso);
-    var speciesIndex = firstEightModulo(digest, PLANTS.length);
+    var speciesIndex = firstEightModulo(digest, plantNames.length);
     var moonlight = digest[8] % 32 === 0;
     var prefix = Array.from(digest.slice(0, 3), function (byte) { return byte.toString(16).padStart(2, "0"); }).join("");
     return {
       date: iso,
-      emoji: PLANTS[speciesIndex][0],
-      species: PLANTS[speciesIndex][1],
+      emoji: "",
+      species: plantNames[speciesIndex],
       speciesIndex: speciesIndex,
       moonlight: moonlight,
-      variant: moonlight ? "月光叶" : "晨绿叶",
+      variant: moonlight ? "Moonlit" : "Morning green",
       leaves: 2 + firstEightModulo(sha256("daily-green-v1:" + iso), 5),
       id: "DG-" + iso.replace(/-/g, "") + "-" + prefix
     };
@@ -777,9 +775,8 @@ a { color: inherit; }
     // A separate seed lets the room change without changing any existing plant cards.
     var digest = sha256("daily-green-atmosphere-v1:" + iso);
     var weather = ["clear", "rain", "mist", "breeze"];
-    var weatherLabels = ["晴光", "小雨", "薄雾", "微风"];
+    var weatherLabels = ["Sunshine", "Light rain", "Mist", "Breeze"];
     var visitors = ["snail", "moth", "ladybird", "cat"];
-    var visitorLabels = ["慢递员蜗牛", "夜航小飞蛾", "七星巡逻员", "路过的猫"];
     var notes = [
       ["今天的快递是一颗露珠，正在慢慢送来。", "蜗牛说：走得慢，也能把今天走完。", "叶子上的小路，刚刚多了一条银色脚印。"],
       ["飞蛾把一小片夜色，轻轻放在窗边。", "它不是迷路了，只是想多看一眼发亮的叶子。", "今晚的航线：从一盏小灯，到另一颗星。"],
@@ -792,14 +789,14 @@ a { color: inherit; }
       weather: weather[weatherIndex],
       weatherLabel: weatherLabels[weatherIndex],
       visitor: visitors[visitorIndex],
-      visitorLabel: visitorLabels[visitorIndex],
+      visitorLabel: visitorNames[visitorIndex],
       note: notes[visitorIndex][digest[2] % notes[visitorIndex].length]
     };
   }
 
   function todayInShanghai(now) {
     if (now === undefined) now = new Date();
-    if (!(now instanceof Date) || !Number.isFinite(now.getTime())) throw new RangeError("当前时间无效。");
+    if (!(now instanceof Date) || !Number.isFinite(now.getTime())) throw new RangeError("Invalid time.");
     var formatter = new Intl.DateTimeFormat("en-GB", {
       timeZone: "Asia/Shanghai", calendar: "gregory", numberingSystem: "latn",
       year: "numeric", month: "2-digit", day: "2-digit"
@@ -816,7 +813,7 @@ a { color: inherit; }
     if (direction === undefined) direction = -1;
     if (limit === undefined) limit = 120;
     if ((direction !== -1 && direction !== 1) || !Number.isSafeInteger(limit) || limit < 0 || limit > 366) {
-      throw new RangeError("寻找方向应为 -1 或 1，天数应为 0–366。");
+      throw new RangeError("Choose a direction of -1 or 1 and a range of 0 to 366 days.");
     }
     var candidate = fromIso;
     // Start with the adjacent date so repeated clicks can explore another moonlight plant.
@@ -829,6 +826,8 @@ a { color: inherit; }
   }
 
   return Object.freeze({
+    plantNames: plantNames,
+    visitorNames: visitorNames,
     cardForDate: cardForDate,
     atmosphereForDate: atmosphereForDate,
     parseDate: parseDate,
@@ -848,7 +847,7 @@ a { color: inherit; }
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  var names = ['薄荷', '三叶草', '仙人掌', '向日葵', '铃兰', '含羞草'];
+  var names = ['Mint', 'Clover', 'Cactus', 'Sunflower', 'Lily of the valley', 'Sensitive plant'];
 
   function escapeText(value) {
     return String(value).replace(/[&<>"']/g, function (character) {
@@ -864,7 +863,7 @@ a { color: inherit; }
     var leaves = Number.isInteger(card.leaves) && card.leaves >= 2 && card.leaves <= 6 ? card.leaves : 4;
     var moon = card.moonlight === true;
     var species = typeof card.species === 'string' && card.species.length < 100 ? card.species : names[kind];
-    var label = escapeText(species + ' · ' + (moon ? '月光叶' : '晨绿叶'));
+    var label = escapeText(species + ' · ' + (moon ? 'Moonlit' : 'Morning green'));
     var p = moon ? {
       stem: '#648a7a', dark: '#638a78', leaf: '#91b59c', light: '#d8dfaa', vein: '#f6f3d3',
       flower: '#e0d6a2', center: '#efdfab', soil: '#65543f', clay: '#c5b5ce', rim: '#e3d5e4', ink: '#527362'
@@ -1011,7 +1010,7 @@ a { color: inherit; }
       '<path d="M101 233Q150 249 199 233" fill="none" stroke="' + p.rim + '" stroke-width="4" stroke-linecap="round"/></g>';
 
     return '<svg xmlns="http://www.w3.org/2000/svg" class="plant-art" viewBox="0 0 300 320" width="300" height="320" role="img" aria-label="' + label + '" data-species="' + kind + '">' +
-      '<title>' + label + '</title><desc>装饰性的盆栽插画；植物长势由这一天固定的日历种子决定。</desc>' +
+      '<title>' + label + '</title><desc>A potted plant drawn from the calendar seed for this date.</desc>' +
       (moon ? '<ellipse cx="150" cy="159" rx="92" ry="105" fill="#d8d0e9" opacity=".18"/>' : '') +
       pot + '<g class="plant-sway" style="transform-origin:150px 228px"><g transform="translate(150 228) scale(' + growth.toFixed(3) + ') translate(-150 -228)">' + foliage + '</g></g>' +
       (moon ? '<g class="plant-sparkles" aria-hidden="true">' + sparkle(76, 108, 5) + sparkle(225, 173, 4) + sparkle(209, 74, 3) + '</g>' : '') + '</svg>';
@@ -1032,7 +1031,7 @@ a { color: inherit; }
 
   var visitors = {
     snail: {
-      name: '慢慢走的小蜗牛',
+      name: 'A snail on its way',
       art: '<ellipse cx="49" cy="70" rx="36" ry="4" fill="#34503a" opacity=".16"/>' +
         '<path d="M12 62Q19 57 47 58H64Q69 56 70 47Q70 39 78 40Q87 41 83 54L80 61Q89 62 90 66Q76 72 20 68Q9 68 12 62Z" fill="#9fbb85" stroke="#52704c" stroke-width="1.5"/>' +
         '<path d="M18 65Q51 70 80 62" fill="none" stroke="#648654" stroke-width="2" opacity=".5"/>' +
@@ -1048,7 +1047,7 @@ a { color: inherit; }
         '<ellipse cx="73" cy="49" rx="2.5" ry="1.6" fill="#e2a199"/><ellipse cx="83" cy="49" rx="2.5" ry="1.6" fill="#e2a199"/>'
     },
     moth: {
-      name: '借月光的小飞蛾',
+      name: 'A moth in the moonlight',
       art: '<path d="M46 39C33 10 11 16 15 35C17 48 32 52 47 47Z" fill="#93b0a3" stroke="#587a6b" stroke-width="1.3"/>' +
         '<path d="M54 39C67 10 89 16 85 35C83 48 68 52 53 47Z" fill="#bfd0b7" stroke="#587a6b" stroke-width="1.3"/>' +
         '<path d="M45 44C22 43 23 69 37 67Q46 65 49 49Z" fill="#72978c" stroke="#587a6b" stroke-width="1.3"/>' +
@@ -1064,7 +1063,7 @@ a { color: inherit; }
         '<path d="M48 33q2 2 4 0" fill="none" stroke="#8d7866" stroke-width=".9" stroke-linecap="round"/><g fill="#e6b2af"><circle cx="45" cy="32" r="1.4"/><circle cx="55" cy="32" r="1.4"/></g>'
     },
     ladybird: {
-      name: '停在叶边的小瓢虫',
+      name: 'A ladybird resting on a leaf',
       art: '<ellipse cx="50" cy="69" rx="25" ry="4" fill="#34503a" opacity=".16"/>' +
         '<path d="M31 38 23 33m8 15-11 1m16 9-9 7M69 38l8-5M69 48l11 1M64 58l9 7" fill="none" stroke="#857c69" stroke-width="2" stroke-linecap="round"/>' +
         '<ellipse cx="50" cy="45" rx="24" ry="25" fill="#c66e55" stroke="#8d4d3c" stroke-width="1.5"/>' +
@@ -1079,7 +1078,7 @@ a { color: inherit; }
         '<g fill="#e3a9a0"><ellipse cx="42" cy="28" rx="2.2" ry="1.5"/><ellipse cx="58" cy="28" rx="2.2" ry="1.5"/></g>'
     },
     cat: {
-      name: '来窗边打盹的小猫',
+      name: 'A cat napping on the sill',
       art: '<ellipse cx="50" cy="71" rx="35" ry="4" fill="#34503a" opacity=".16"/>' +
         '<path d="M72 64Q96 67 90 45Q87 37 81 42Q77 47 84 51Q88 60 73 58" fill="#c29a68" stroke="#98764b" stroke-width="1.5"/>' +
         '<path d="M28 68Q20 50 34 42Q50 34 66 45Q79 53 74 68Z" fill="#d2ae79" stroke="#98764b" stroke-width="1.5"/>' +
@@ -1099,7 +1098,7 @@ a { color: inherit; }
 
   function renderVisitor(kind) {
     if (typeof kind !== 'string' || !Object.prototype.hasOwnProperty.call(visitors, kind)) {
-      throw new RangeError('未知的温室访客。');
+      throw new RangeError('Unknown greenhouse visitor.');
     }
     var visitor = visitors[kind];
     return '<svg xmlns="http://www.w3.org/2000/svg" class="visitor-art" viewBox="0 0 100 80" width="100" height="80" role="img" aria-label="' + visitor.name + '" data-visitor="' + kind + '"><title>' + visitor.name + '</title>' + visitor.art + '</svg>';
@@ -1115,18 +1114,17 @@ a { color: inherit; }
  const Art = globalThis.GreenhouseArt;
  const Visitors = globalThis.GreenhouseVisitors;
  const $ = id => document.getElementById(id);
- const names = ['Mint','Clover','Cactus','Sunflower','Lily of the valley','Sensitive plant'];
+ const botanicalNames = ['Mentha','Trifolium','Cactaceae','Helianthus','Convallaria','Mimosa pudica'];
  const lines = ['清清凉凉，把忙碌的一天放慢一点。','小小的三片叶子，也有自己的好运气。','不着急喝水，也会认真长大。','把脸转向有光的地方。','安静的小铃铛，等一阵风经过。','轻轻碰碰，日子也会有一点回应。'];
  const STORE = 'daily-green-greenhouse-v1';
  const MAX_SAVED = 48;
  const GUEST_STORE = 'daily-green-visitors-v1';
  const kinds = ['snail','moth','ladybird','cat'];
- const guestNames = ['慢递员蜗牛','夜航小飞蛾','七星巡逻员','路过的猫'];
  let encounters = [], atmosphere = null, night = false;
  let current = null, saved = [], persistent = true, waterTimer = null;
  let treasureDay = null, treasureTasks = [], treasureFound = new Set();
- const weatherWords = {clear:'晴光',rain:'小雨',mist:'薄雾',breeze:'微风'};
- const plantWords = ['薄荷','三叶草','仙人掌','向日葵','铃兰','含羞草'];
+ const weatherClues = {clear:'a sunny day',rain:'a rainy day',mist:'a misty day',breeze:'a breezy day'};
+ const plantClues = ['Find some mint','Find a pot of clover','Find a cactus','Find a sunflower','Find lily of the valley','Find a sensitive plant'];
  function ensureTreasure() {
    const today = Core.todayInShanghai();
    if(treasureDay === today) return;
@@ -1134,41 +1132,41 @@ a { color: inherit; }
    const month=Number(today.slice(5,7)), day=Number(today.slice(8,10));
    const plant=(month+day)%6, weather=['clear','rain','mist','breeze'][(day*7+month)%4], visitor=kinds[(day+month*3)%4];
    treasureTasks=[
-     {id:'plant',label:`找到一盆${plantWords[plant]}`,match:(card,room)=>card.speciesIndex===plant},
-     {id:'weather',label:`遇见${weather}天`.replace(weather,weatherWords[weather]),match:(card,room)=>room.weather===weather},
-     {id:'visitor',label:`拜访${guestNames[kinds.indexOf(visitor)]}`,match:(card,room)=>room.visitor===visitor}
+     {id:'plant',label:plantClues[plant],match:(card,room)=>card.speciesIndex===plant},
+     {id:'weather',label:`Find ${weatherClues[weather]}`,match:(card,room)=>room.weather===weather},
+     {id:'visitor',label:`Meet the ${Core.visitorNames[kinds.indexOf(visitor)].toLowerCase()}`,match:(card,room)=>room.visitor===visitor}
    ];
  }
  function renderTreasure() {
    ensureTreasure();
    for(const task of treasureTasks) if(task.match(current,atmosphere)) treasureFound.add(task.id);
-   $('treasure-progress').textContent=`${treasureFound.size} / 3 已发现`;
+   $('treasure-progress').textContent=`${treasureFound.size} of 3 found`;
    $('treasure-list').replaceChildren();
    treasureTasks.forEach((task,index)=>{
      const tile=document.createElement('div');tile.className='treasure-task'+(treasureFound.has(task.id)?' done':'');
      const number=document.createElement('span');number.className='treasure-number';number.textContent=`0${index+1}`;
      const label=document.createElement('span');label.className='treasure-label';label.textContent=task.label;
      const button=document.createElement('button');button.type='button';button.className='treasure-hint';
-     button.textContent=treasureFound.has(task.id)?'已发现 ✓':'给点线索 →';button.disabled=treasureFound.has(task.id);
-     button.setAttribute('aria-label',treasureFound.has(task.id)?`${task.label}，已发现`:`${task.label}，给点线索`);
+     button.textContent=treasureFound.has(task.id)?'Found ✓':'Get a clue →';button.disabled=treasureFound.has(task.id);
+     button.setAttribute('aria-label',treasureFound.has(task.id)?`${task.label} (found)`:`Get a clue: ${task.label}`);
      let suggestedDay=null;
      button.addEventListener('click',()=>{
-       if(suggestedDay){const target=suggestedDay;showDate(target);$('plant-date').focus();notify(`沿着线索，来到了 ${target}。`);return;}
+       if(suggestedDay){const target=suggestedDay;showDate(target);$('plant-date').focus();notify(`The clue led you to ${target}.`);return;}
        suggestedDay=hintTreasure(task);
-       if(suggestedDay){button.textContent='去看看 →';button.setAttribute('aria-label',`${task.label}，前往线索日期`);}
+       if(suggestedDay){button.textContent='Go there →';button.setAttribute('aria-label',`Follow the clue: ${task.label}`);}
      });tile.append(number,label,button);$('treasure-list').append(tile);
    });
-   $('treasure-result').textContent=treasureFound.size===3?'三件小事都找到了！今天的温室寻宝完成。':'挑一张线索，去日历里走走吧。';
+   $('treasure-result').textContent=treasureFound.size===3?'You found all three. Today’s hunt is complete!':'Pick a clue to find out where to look.';
  }
  function hintTreasure(task) {
    // Bounded and on demand; searching never touches the network or stored collections.
    for(let distance=1;distance<=90;distance++) for(const direction of [-1,1]) {
      let day;try{day=Core.shiftDate(current.date,direction*distance);}catch{continue;}
      if(task.match(Core.cardForDate(day),Core.atmosphereForDate(day))) {
-       $('treasure-result').textContent=`${task.label}：试试往${direction<0?'前':'后'}翻 ${distance} 天。`;return day;
+       $('treasure-result').textContent=`${task.label}. Try ${distance} ${distance === 1 ? 'day' : 'days'} ${direction < 0 ? 'earlier' : 'later'}.`;return day;
      }
    }
-   $('treasure-result').textContent='附近暂时没有找到，换个日期再来寻找吧。';return null;
+   $('treasure-result').textContent='No match nearby. Try a different date.';return null;
  }
 
  function notify(text, error = false) { $('notice').textContent = text; $('notice').classList.toggle('error', error); }
@@ -1183,9 +1181,9 @@ a { color: inherit; }
  function persist() {
    try { localStorage.setItem(STORE, JSON.stringify({version:1,dates:saved})); }
    catch { persistent = false; }
-   if (!persistent) $('storage-note').textContent = '当前浏览器未开放本地保存，收藏仅保留在本次页面中。仍然可以离线游玩。';
+   if (!persistent) $('storage-note').textContent = 'Local storage is unavailable. Your plants will stay on this page until you close or reload it.';
  }
- function storageNotice() { if (!persistent) $('storage-note').textContent = '当前浏览器未开放本地保存，收藏和访客印章仅保留在本次页面中。'; }
+ function storageNotice() { if (!persistent) $('storage-note').textContent = 'Local storage is unavailable. Your plants and stamps will stay on this page until you close or reload it.'; }
  function loadEncounters() {
    try {
      const raw = localStorage.getItem(GUEST_STORE);
@@ -1209,19 +1207,19 @@ a { color: inherit; }
      const stamp = document.createElement(day ? 'button' : 'div');
      stamp.className = 'guest-stamp' + (day ? ' found' : '');
      const picture = document.createElement('span'); picture.innerHTML = Visitors.renderVisitor(kind); picture.setAttribute('aria-hidden','true');
-     const label = document.createElement('span'); label.className = 'guest-label'; label.textContent = guestNames[index];
-     const caption = document.createElement('span'); caption.className = 'guest-caption'; caption.textContent = day ? '已相遇' : '待相遇';
+     const label = document.createElement('span'); label.className = 'guest-label'; label.textContent = Core.visitorNames[index];
+     const caption = document.createElement('span'); caption.className = 'guest-caption'; caption.textContent = day ? 'Met' : 'Not yet met';
      stamp.append(picture,label,caption);
-     if(day) { stamp.type='button';stamp.setAttribute('aria-label',`重访 ${day} 的${guestNames[index]}`);stamp.addEventListener('click',()=>{showDate(day);greetVisitor();$('visitor-note').focus();}); }
+     if(day) { stamp.type='button';stamp.setAttribute('aria-label',`Revisit the ${Core.visitorNames[index].toLowerCase()} on ${day}`);stamp.addEventListener('click',()=>{showDate(day);greetVisitor();$('visitor-note').focus();}); }
      $('guest-stamps').append(stamp);
    }
-   $('guest-progress').textContent = `相遇 ${encounters.length} / 4 · 点击亮起的印章，可以重访那一天。`;
+   $('guest-progress').textContent = `${encounters.length} of 4 visitors met. Select a stamp to revisit that day.`;
  }
  function renderRoom() {
    $('scene').classList.toggle('night-room',night);
-   $('room-label').textContent=night?'晚灯温室':current.moonlight?'月光温室':'晨光温室';
+   $('room-label').textContent=night?'Lamplight':current.moonlight?'Moonlight':'Morning light';
    $('night-button').setAttribute('aria-pressed',String(night));
-   $('night-text').textContent=night?'让天亮起来':'等到天黑';
+   $('night-text').textContent=night?'Daylight':'Nightfall';
    $('scene-note').textContent=night?'STAY A LITTLE LONGER.':current.moonlight?'A LITTLE PIECE OF MOONLIGHT.':'TAKE YOUR TIME.';
  }
  function showAtmosphere(day) {
@@ -1231,10 +1229,10 @@ a { color: inherit; }
    $('visitor-art').innerHTML=Visitors.renderVisitor(atmosphere.visitor);
    $('visitor-button').dataset.kind=atmosphere.visitor;
    $('visitor-button').classList.toggle('greeted',encounters.some(date=>Core.atmosphereForDate(date).visitor===atmosphere.visitor));
-   $('visitor-button').setAttribute('aria-label','和温室里的'+atmosphere.visitorLabel+'打招呼');
-   $('guest-title').textContent='角落里，好像有谁来过。';
-   $('visitor-note').textContent='找找温室里的小客人，轻轻点一下。';
-   $('visitor-note').classList.remove('revealed');
+   $('visitor-button').setAttribute('aria-label',`Greet the ${atmosphere.visitorLabel.toLowerCase()}`);
+   $('guest-title').textContent='Who’s visiting?';
+   $('visitor-note').textContent='Tap the visitor in the greenhouse to read its note.';
+   $('visitor-note').removeAttribute('lang'); $('visitor-note').classList.remove('revealed');
    renderRoom();
  }
  function greetVisitor() {
@@ -1245,9 +1243,9 @@ a { color: inherit; }
      storageNotice();renderEncounters();
    }
    $('visitor-button').classList.add('greeted');
-   $('guest-title').textContent=atmosphere.visitorLabel+'留了一张便笺';
-   $('visitor-note').textContent='「'+atmosphere.note+'」';$('visitor-note').classList.add('revealed');
-   const greeting=first ? `第一次遇见${atmosphere.visitorLabel}，留下一枚小印章。${persistent?'':'印章暂存在本次页面。'}` : '又见面啦。';
+   $('guest-title').textContent=`A note from the ${atmosphere.visitorLabel.toLowerCase()}`;
+   $('visitor-note').setAttribute('lang','zh-CN'); $('visitor-note').textContent='「'+atmosphere.note+'」';$('visitor-note').classList.add('revealed');
+   const greeting=first ? `You met the ${atmosphere.visitorLabel.toLowerCase()} and earned a stamp.${persistent ? '' : ' The stamp is saved for this visit only.'}` : 'Welcome back.';
    notify(greeting);
  }
  function neighbor(day, direction, buttonId, artId) {
@@ -1260,11 +1258,11 @@ a { color: inherit; }
  }
  function updateSaveButton() {
    const selected = saved.includes(current.date);
-   $('save-button').textContent = selected ? '从窗台收起' : '放上窗台 ＋';
+   $('save-button').textContent = selected ? 'Remove plant' : 'Save plant +';
    $('save-button').classList.toggle('saved', selected);
    $('save-button').classList.toggle('primary', !selected);
    $('save-button').setAttribute('aria-pressed', String(selected));
-   $('save-button').setAttribute('aria-label', selected ? '从窗台收起这一天' : '收藏这一天到窗台');
+   $('save-button').setAttribute('aria-label', selected ? 'Remove this plant from your windowsill' : 'Save this plant to your windowsill');
  }
  function markDateChip(chip, selected) {
    if (!chip) return;
@@ -1275,8 +1273,8 @@ a { color: inherit; }
    const cards = saved.map(day => Core.cardForDate(day));
    const species = new Set(cards.map(card => card.speciesIndex));
    $('saved-count').textContent = String(saved.length);
-   $('album-progress').textContent = `认识了 ${species.size} / 6 种植物`;
-   $('sill-description').textContent = saved.length ? `留住了 ${saved.length} 盆属于不同日期的绿意。` : '喜欢哪一盆，就把它留在这里。';
+   $('album-progress').textContent = `${species.size} of 6 species collected`;
+   $('sill-description').textContent = saved.length ? `${saved.length} ${saved.length === 1 ? 'plant' : 'plants'} on your windowsill.` : 'Save a plant to keep it on your windowsill.';
    $('empty-note').hidden = saved.length !== 0;
    $('album').replaceChildren();
    for (let index = 0; index < 6; index++) {
@@ -1285,14 +1283,14 @@ a { color: inherit; }
      const slot = document.createElement(card ? 'button' : 'div');
      slot.className = `album-slot${card ? ' unlocked' : ''}`;
      const illustration = document.createElement('div'); illustration.className = 'album-art';
-     illustration.innerHTML = Art.renderPlant(card || {speciesIndex:index,species:['薄荷','三叶草','仙人掌','向日葵','铃兰','含羞草'][index],moonlight:false,leaves:4}, {mini:true});
-     const label = document.createElement('div'); label.className = 'album-name'; label.textContent = card ? card.species : ['薄荷','三叶草','仙人掌','向日葵','铃兰','含羞草'][index];
-     const detail = document.createElement('div'); detail.className = 'album-sub'; detail.textContent = card ? `窗台上有 ${found.length} 盆` : '还未相遇';
+     illustration.innerHTML = Art.renderPlant(card || {speciesIndex:index,species:Core.plantNames[index],moonlight:false,leaves:4}, {mini:true});
+     const label = document.createElement('div'); label.className = 'album-name'; label.textContent = card ? card.species : Core.plantNames[index];
+     const detail = document.createElement('div'); detail.className = 'album-sub'; detail.textContent = card ? `${found.length} saved` : 'Not collected';
      slot.append(illustration, label, detail);
      if (card) {
-       slot.type = 'button'; slot.setAttribute('aria-label', `查看收藏的${card.species}，${card.date}`);
-       slot.addEventListener('click', () => { showDate(card.date); notify(`又见面啦，${card.date} 的${card.species}。`); $('plant-date').focus(); });
-       if (found.some(item => item.moonlight)) { const star = document.createElement('span'); star.className = 'album-moon'; star.textContent = '☾'; star.setAttribute('aria-label','收藏过月光叶'); slot.append(star); }
+       slot.type = 'button'; slot.setAttribute('aria-label', `View the ${card.species.toLowerCase()} saved on ${card.date}`);
+       slot.addEventListener('click', () => { showDate(card.date); notify(`Here’s your ${card.species.toLowerCase()} from ${card.date}.`); $('plant-date').focus(); });
+       if (found.some(item => item.moonlight)) { const star = document.createElement('span'); star.className = 'album-moon'; star.textContent = '☾'; star.setAttribute('aria-label','Moonlit plant collected'); slot.append(star); }
      }
      $('album').append(slot);
    }
@@ -1301,11 +1299,11 @@ a { color: inherit; }
      const chip = document.createElement('button'); chip.type = 'button'; chip.className = 'date-chip';
      chip.id = 'saved-date-' + day;
      markDateChip(chip, current?.date === day);
-     chip.textContent = day; chip.setAttribute('aria-label', `查看收藏的 ${day}`); chip.addEventListener('click', () => { showDate(day); $('plant-date').focus(); }); $('saved-dates').append(chip);
+     chip.textContent = day; chip.setAttribute('aria-label', `View the plant saved on ${day}`); chip.addEventListener('click', () => { showDate(day); $('plant-date').focus(); }); $('saved-dates').append(chip);
    }
  }
  function showDate(day) {
-   let next; try { next = Core.cardForDate(day); } catch { notify('选一个完整、有效的日期，再来种下这一盆。',true); if(current) $('plant-date').value = current.date; return; }
+   let next; try { next = Core.cardForDate(day); } catch { notify('Choose a valid date to see its plant.',true); if(current) $('plant-date').value = current.date; return; }
    if (current && current.date !== day) {
      markDateChip($('saved-date-' + current.date), false);
      markDateChip($('saved-date-' + day), true);
@@ -1313,55 +1311,55 @@ a { color: inherit; }
    current = next;
    clearTimeout(waterTimer); $('scene').classList.remove('watered');
    $('plant-date').value = day;
-   $('day-label').textContent = new Intl.DateTimeFormat('zh-CN',{weekday:'long',timeZone:'UTC'}).format(Core.parseDate(day));
+   $('day-label').textContent = new Intl.DateTimeFormat('en',{weekday:'long',timeZone:'UTC'}).format(Core.parseDate(day));
    $('plant-name').textContent = next.species;
-   $('plant-english').textContent = names[next.speciesIndex];
+   $('botanical-name').textContent = botanicalNames[next.speciesIndex];
    $('plant-line').textContent = next.moonlight ? '像借来的一小束月光，安安静静地发亮。' : lines[next.speciesIndex];
    $('specimen-no').textContent = `NO. 0${next.speciesIndex + 1}`;
-   $('variant-text').textContent = next.moonlight ? '月光叶 · 特别款' : '晨绿叶 · 常规款';
+   $('variant-text').textContent = next.moonlight ? 'Moonlit · Rare' : 'Morning green · Common';
    $('variant').classList.toggle('rare',next.moonlight); $('specimen').classList.toggle('rare-card',next.moonlight); $('scene').classList.toggle('moonlight',next.moonlight);
-   $('room-label').textContent = next.moonlight ? '月光温室' : '晨光温室';
+   $('room-label').textContent = next.moonlight ? 'Moonlight' : 'Morning light';
    $('scene-date').textContent = day;
    $('specimen-date').textContent = day; $('specimen-date').setAttribute('datetime',day);
    $('scene-note').textContent = next.moonlight ? 'A LITTLE PIECE OF MOONLIGHT.' : 'TAKE YOUR TIME.';
    $('plant-display').innerHTML = Art.renderPlant(next);
-   $('scene').setAttribute('aria-label',`${day} 的${next.species}，${next.variant}，叶片 ${next.leaves}/6`);
+   $('scene').setAttribute('aria-label',`${day}, ${next.species.toLowerCase()}, ${next.variant.toLowerCase()}, ${next.leaves} of 6 leaves`);
    $('seed-id').textContent = next.id;
    $('leaf-value').textContent = `${next.leaves} / 6`; $('leaf-meter').setAttribute('aria-valuenow',String(next.leaves));
    $('leaf-meter').replaceChildren(); for(let i=0;i<6;i++){const leaf=document.createElement('span');if(i<next.leaves)leaf.className='filled';leaf.setAttribute('aria-hidden','true');$('leaf-meter').append(leaf);}
    neighbor(day,-1,'neighbor-left','neighbor-left-art'); neighbor(day,1,'neighbor-right','neighbor-right-art');
    $('previous-day').disabled = $('neighbor-left').disabled; $('next-day').disabled = $('neighbor-right').disabled;
    updateSaveButton(); showAtmosphere(day); renderTreasure();
-   notify(`${day}，遇见了一盆${next.species}。`);
+   notify(`${next.species} grows here on ${day}.`);
  }
- function shift(direction) { try { showDate(Core.shiftDate(current.date,direction)); } catch { notify('这一页已经到日历边界啦。'); } }
- function toToday() { if(!Core||!Art||!Visitors){notify('温室文件不完整，请把整个 garden 文件夹放在一起打开。',true);return;} showDate(Core.todayInShanghai()); notify('回来啦，这是今天的那一盆。'); }
+ function shift(direction) { try { showDate(Core.shiftDate(current.date,direction)); } catch { notify('You’ve reached the edge of the calendar.'); } }
+ function toToday() { if(!Core||!Art||!Visitors){notify('The greenhouse couldn’t load. Reload the page to try again.',true);return;} showDate(Core.todayInShanghai()); notify('Here’s today’s plant.'); }
  $('previous-day').addEventListener('click',()=>shift(-1)); $('next-day').addEventListener('click',()=>shift(1));
  $('neighbor-left').addEventListener('click',()=>shift(-1)); $('neighbor-right').addEventListener('click',()=>shift(1));
  $('today-button').addEventListener('click',toToday);
  document.querySelector('.brand').addEventListener('click',event=>{event.preventDefault();toToday();});
  $('plant-date').addEventListener('change',event=>showDate(event.target.value));
  $('visitor-button').addEventListener('click',()=>{greetVisitor();$('visitor-note').focus();});
- $('night-button').addEventListener('click',()=>{night=!night;renderRoom();notify(night?'把白天轻轻合上，留一盏灯，等几只萤火虫。':'窗子又亮起来了，小客人还在原来的地方。');});
+ $('night-button').addEventListener('click',()=>{night=!night;renderRoom();notify(night?'Night has fallen. Watch for fireflies.':'It’s daylight again. Your visitor is still here.');});
  $('water-button').addEventListener('click',()=>{
    clearTimeout(waterTimer); $('scene').classList.remove('watered'); void $('scene').offsetWidth; $('scene').classList.add('watered');
-   notify(current.speciesIndex===5 ? '轻轻浇一点水，含羞草也探了探头。' : '刚刚浇了点水，叶子开心地晃了晃。');
+   notify(current.speciesIndex===5 ? 'The sensitive plant stirred as you watered it.' : 'You watered the plant. Its leaves sway.');
    waterTimer=setTimeout(()=>$('scene').classList.remove('watered'),1300);
  });
  $('save-button').addEventListener('click',()=>{
    const exists=saved.includes(current.date);
-   if(!exists && saved.length>=MAX_SAVED){notify('窗台已经住着 48 盆啦。先收起一盆，再留住新的日子。');return;}
+   if(!exists && saved.length>=MAX_SAVED){notify('Your windowsill holds 48 plants. Remove one to make room for another.');return;}
    saved=exists?saved.filter(day=>day!==current.date):[current.date,...saved]; persist(); updateSaveButton(); renderCollection();
-   notify(exists ? '先把这一天收起来，日历里随时还能找到它。' : `${current.species}已放上窗台${persistent ? '，下次回来还在。' : '，本次页面中会留着。'}`);
+   notify(exists ? 'Plant removed. You can still find it on the calendar.' : `${current.species} added to your windowsill${persistent ? '.' : ' for this visit.'}`);
  });
  $('wander-button').addEventListener('click',()=>{
    const first=Core.parseDate('2025-11-15').getTime(),last=Core.parseDate(Core.todayInShanghai()).getTime();
    const count=Math.max(0,Math.floor((last-first)/86400000));const offset=Math.floor(Math.random()*(count+1));
-   showDate(Core.shiftDate('2025-11-15',offset));notify('在日历里拐了个弯，遇见了这一盆。');
+   showDate(Core.shiftDate('2025-11-15',offset));notify('Here’s a plant from a day picked at random.');
  });
  $('moon-button').addEventListener('click',()=>{
    const day=Core.findMoonlightDate(current.date,-1,120)||Core.findMoonlightDate(current.date,1,120);
-   if(day){showDate(day);notify('找到了。这一盆，借了一点月亮的光。');}else notify('这段日历里还没遇见月光叶，再换个日期走走吧。');
+   if(day){showDate(day);notify('You found a moonlit plant.');}else notify('No moonlit plants nearby. Try a different date.');
  });
  try {
    if(!Core||!Art||!Visitors) throw new Error('missing local files');
@@ -1369,7 +1367,7 @@ a { color: inherit; }
    const requested=new URLSearchParams(location.search).get('date');
    showDate(requested && validDate(requested) ? requested : Core.todayInShanghai());
    renderCollection(); renderEncounters(); storageNotice();
- } catch { $('plant-display').innerHTML='<p class="loading-note">温室暂时没有打开。</p>';notify('请把整个 garden 文件夹放在一起，再打开 index.html。',true);document.querySelectorAll('button').forEach(button=>button.disabled=true);$('plant-date').disabled=true;document.querySelector('.brand').setAttribute('aria-disabled','true'); }
+ } catch { $('plant-display').innerHTML='<p class="loading-note">The greenhouse couldn’t open.</p>';notify('Reload the page to try again.',true);document.querySelectorAll('button').forEach(button=>button.disabled=true);$('plant-date').disabled=true;document.querySelector('.brand').setAttribute('aria-disabled','true'); }
 })();
 </script>
 </body>

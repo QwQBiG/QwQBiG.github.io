@@ -5,11 +5,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: '归档', url: '/archives/' },
-  { name: '合集', url: '/series/' },
-  { name: '标签', url: '/tags/' },
-  { name: '友链', url: '/friends/' },
-  { name: '搜索', url: '/search/' },
+  { name: 'Archives', url: '/archives/' },
+  { name: 'Series', url: '/series/' },
+  { name: 'Tags', url: '/tags/' },
+  { name: 'Friends', url: '/friends/' },
+  { name: 'Search', url: '/search/' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -48,7 +48,9 @@ const currentPath = Astro.url.pathname;
         <button
           id="mobile-menu-toggle"
           class="md:hidden p-2 rounded-lg text-text-secondary hover:text-primary hover:bg-primary/10 transition-all duration-200"
-          aria-label="打开菜单"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
         >
           <svg class="w-6 h-6 menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -93,7 +95,10 @@ const currentPath = Astro.url.pathname;
   const closeIcon = mobileMenuToggle?.querySelector('.close-icon');
   
   mobileMenuToggle?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+    if (!mobileMenu) return;
+    const closed = mobileMenu.classList.toggle('hidden');
+    mobileMenuToggle.setAttribute('aria-label', closed ? 'Open menu' : 'Close menu');
+    mobileMenuToggle.setAttribute('aria-expanded', String(!closed));
     menuIcon?.classList.toggle('hidden');
     closeIcon?.classList.toggle('hidden');
   });

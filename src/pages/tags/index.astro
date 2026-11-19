@@ -8,8 +8,8 @@ import { getTagUrl } from '../../utils/content';
 
 const { tags: sortedTags } = await loadContent();
 
-const pageTitle = "标签 - QwQBiG's World";
-const pageDescription = "按标签浏览文章";
+const pageTitle = "Tags - QwQBiG's World";
+const pageDescription = "Browse posts by tag.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -20,10 +20,10 @@ const pageDescription = "按标签浏览文章";
       <!-- Page Header -->
       <div class="text-center mb-12">
         <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
-          <ContentIcon name="tag" />标签
+          <ContentIcon name="tag" />Tags
         </h1>
         <p class="font-sans text-lg text-text-secondary">
-          共 {sortedTags.length} 个标签
+          {sortedTags.length} {sortedTags.length === 1 ? 'tag' : 'tags'}
         </p>
       </div>
 

@@ -12,7 +12,7 @@ test('matches emoji presentation, variation, flags, keycaps and joined sequences
     cp(0x1f3f4, 0xe0067, 0xe0062, 0xe0065, 0xe006e, 0xe0067, 0xe007f),
   ]) {
     assert.deepEqual(findEmoji(value), [{ value, index: 0 }]);
-    assert.equal(replaceEmoji(`a${value}b`), 'a[表情]b');
+    assert.equal(replaceEmoji(`a${value}b`), 'a[emoji]b');
   }
 });
 
@@ -23,7 +23,7 @@ test('retains ordinary symbols and explicit text presentation', () => {
 });
 
 test('replaces a consecutive emoji run once and preserves surrounding text', () => {
-  assert.equal(replaceEmoji(`很好${cp(0x1f600, 0x1f44d)}继续`), '很好[表情]继续');
+  assert.equal(replaceEmoji(`很好${cp(0x1f600, 0x1f44d)}继续`), '很好[emoji]继续');
 });
 
 test('decodes numeric entities and JavaScript code points and surrogate pairs', () => {

@@ -100,6 +100,7 @@ function getLangName(lang) {
 function createCodeHeader(pre, lineCount, readSource) {
   const header = document.createElement('div');
   header.className = 'code-header';
+  header.lang = 'en';
 
   // 获取语言
   const langClass = Array.from(pre.classList).find(c => c.startsWith('language-'));
@@ -113,7 +114,7 @@ function createCodeHeader(pre, lineCount, readSource) {
   const langBtn = document.createElement('button');
   langBtn.className = 'code-lang-btn';
   langBtn.textContent = langName;
-  langBtn.title = '点击切换行号显示';
+  langBtn.title = 'Toggle line numbers';
   langBtn.addEventListener('click', () => toggleLineNumbers(pre));
 
   langContainer.appendChild(langBtn);
@@ -131,7 +132,7 @@ function createCodeHeader(pre, lineCount, readSource) {
       <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
     </svg>
   `;
-  searchBtn.title = '搜索代码 (Ctrl+Shift+F)';
+  searchBtn.title = 'Find in code (Ctrl/Cmd+Shift+F)';
   searchBtn.addEventListener('click', () => openCodeSearch(pre));
   buttonsContainer.appendChild(searchBtn);
 
@@ -144,7 +145,7 @@ function createCodeHeader(pre, lineCount, readSource) {
         <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
       </svg>
     `;
-    foldBtn.title = '折叠/展开';
+    foldBtn.title = 'Collapse code';
     foldBtn.addEventListener('click', () => toggleFold(pre, foldBtn));
     buttonsContainer.appendChild(foldBtn);
   }
@@ -152,7 +153,7 @@ function createCodeHeader(pre, lineCount, readSource) {
   // 复制按钮
   const copyBtn = document.createElement('button');
   copyBtn.className = 'custom-copy-code';
-  copyBtn.textContent = 'copy';
+  copyBtn.textContent = 'Copy';
   copyBtn.addEventListener('click', () => copyCode(readSource(), copyBtn));
   buttonsContainer.appendChild(copyBtn);
 
@@ -175,13 +176,15 @@ function toggleLineNumbers(pre) {
 function toggleFold(pre, btn) {
   const isFolded = pre.classList.toggle('folded');
   btn.classList.toggle('folded', isFolded);
+  btn.title = isFolded ? 'Expand code' : 'Collapse code';
 
   // 显示/隐藏折叠提示
   let hint = pre.querySelector('.code-fold-hint');
   if (!hint) {
     hint = document.createElement('div');
     hint.className = 'code-fold-hint';
-    hint.textContent = '当前内容已折叠呐~';
+    hint.lang = 'en';
+    hint.textContent = 'Code collapsed';
     pre.appendChild(hint);
   }
   hint.style.display = isFolded ? 'block' : 'none';
@@ -195,18 +198,18 @@ async function copyCode(sourceText, btn) {
     await navigator.clipboard.writeText(sourceText);
 
     // 显示成功反馈
-    btn.textContent = 'okkk';
+    btn.textContent = 'Copied';
     btn.classList.add('copied');
 
     setTimeout(() => {
-      btn.textContent = 'copy';
+      btn.textContent = 'Copy';
       btn.classList.remove('copied');
     }, 1500);
   } catch (err) {
     console.error('复制失败:', err);
-    btn.textContent = 'fail';
+    btn.textContent = 'Copy failed';
     setTimeout(() => {
-      btn.textContent = 'copy';
+      btn.textContent = 'Copy';
     }, 1500);
   }
 }

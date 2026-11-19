@@ -20,8 +20,8 @@ interface GalleryManifestEntry {
   previewSrcset: string;
 }
 
-const pageTitle = "画廊 - QwQBiG's World";
-const pageDescription = "3D 散落照片墙 - 拖拽探索，点击查看大图";
+const pageTitle = "Gallery - QwQBiG's World";
+const pageDescription = "Drag photos around the gallery or select one for a closer look.";
 const manifestPath = path.join(process.cwd(), 'public', 'generated', 'gallery', 'manifest.json');
 const entries = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as GalleryManifestEntry[];
 const halfSizeFiles = new Set(['ZhenXun.jpg', 'AIcard.png']);

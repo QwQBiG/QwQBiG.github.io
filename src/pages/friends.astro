@@ -3,10 +3,10 @@ import LightLayout from '../layouts/LightLayout.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import { friendSites, thisSite } from '../data/friends';
 
-const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像：${thisSite.avatar}`;
+const siteDetails = `Site name: ${thisSite.name}\nWebsite: ${thisSite.url}\nAvatar: ${thisSite.avatar}`;
 ---
 
-<LightLayout title="友链 - QwQBiG's World" description="友链与本站资料">
+<LightLayout title="Blogroll - QwQBiG's World" description="Friends’ websites and details for linking to this blog.">
   <FloatingNavCard />
 
   <main class="friends-page">
@@ -14,11 +14,11 @@ const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像
       <section class="friends-collection" aria-labelledby="friends-title">
         <header class="friends-header">
           <p class="eyebrow">FRIENDS</p>
-          <h1 id="friends-title">友链</h1>
+          <h1 id="friends-title">Blogroll</h1>
         </header>
 
         <div class="collection-heading">
-          <span>站点收藏</span>
+          <span>Friends’ sites</span>
           <span class="collection-rule" aria-hidden="true"></span>
         </div>
 
@@ -29,7 +29,7 @@ const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像
               href={site.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`访问${site.name}，在新窗口打开`}
+              aria-label={`Visit ${site.name} (opens in a new tab)`}
             >
               <span class="friend-monogram" aria-hidden="true">{site.monogram}</span>
               <div class="friend-info">
@@ -46,14 +46,14 @@ const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像
               </span>
             </a>
           ))}
-          {friendSites.length === 0 && <p class="empty-message">暂未添加友链。</p>}
+          {friendSites.length === 0 && <p class="empty-message">No sites listed yet.</p>}
         </div>
       </section>
 
       <aside class="site-card" aria-labelledby="site-card-title">
-        <p class="site-card-label">本站名片</p>
+        <p class="site-card-label">Link to this blog</p>
         <div class="site-identity">
-          <img class="site-avatar" src="/generated/site/avatar-160.webp" alt="iqwqi 的头像" width="56" height="56" decoding="async" />
+          <img class="site-avatar" src="/generated/site/avatar-160.webp" alt="iqwqi’s avatar" width="56" height="56" decoding="async" />
           <div>
             <h2 id="site-card-title">{thisSite.name}</h2>
             <a class="site-address" href={thisSite.url}>{new URL(thisSite.url).hostname}</a>
@@ -65,19 +65,19 @@ const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像
             <rect x="8" y="8" width="12" height="12" rx="2" />
             <path d="M16 8V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4" />
           </svg>
-          <span data-copy-label>复制本站资料</span>
+          <span data-copy-label>Copy site details</span>
         </button>
         <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
 
         <details class="site-details" data-site-details>
           <summary>
-            <span>完整资料</span>
+            <span>Site details</span>
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5" /></svg>
           </summary>
           <dl>
-            <div><dt>名称</dt><dd>{thisSite.name}</dd></div>
-            <div><dt>网址</dt><dd>{thisSite.url}</dd></div>
-            <div><dt>头像</dt><dd>{thisSite.avatar}</dd></div>
+            <div><dt>Site name</dt><dd>{thisSite.name}</dd></div>
+            <div><dt>Website</dt><dd>{thisSite.url}</dd></div>
+            <div><dt>Avatar</dt><dd>{thisSite.avatar}</dd></div>
           </dl>
         </details>
       </aside>
@@ -99,14 +99,14 @@ const siteDetails = `名称：${thisSite.name}\n网址：${thisSite.url}\n头像
     clearTimeout(resetTimer);
     try {
       await navigator.clipboard.writeText(text);
-      copyLabel.textContent = '已复制';
-      copyStatus.textContent = '本站资料已复制。';
+      copyLabel.textContent = 'Copied';
+      copyStatus.textContent = 'Site details copied.';
     } catch {
       if (siteDetails) siteDetails.open = true;
-      copyStatus.textContent = '可选中下方资料手动复制。';
+      copyStatus.textContent = 'Select and copy the details below.';
     }
     resetTimer = setTimeout(() => {
-      copyLabel.textContent = '复制本站资料';
+      copyLabel.textContent = 'Copy site details';
       copyStatus.textContent = '';
     }, 3000);
   });

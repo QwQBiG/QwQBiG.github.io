@@ -9,7 +9,7 @@ const { path } = Astro.props;
 ---
 
 <div id="waline" data-path={path} aria-busy="true"></div>
-<p class="comment-load-state" data-comment-load-state role="status">正在准备评论...</p>
+<p class="comment-load-state" data-comment-load-state role="status">Loading comments…</p>
 
 <script>
   import '../scripts/waline-runtime';

@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import ContentIcon from '../../components/ui/ContentIcon.astro';
+import { formatDisplayDate } from '../../utils/date';
 import { getPoetryListing } from '../../utils/content';
 import { loadContent } from '../../utils/load-content';
 
@@ -13,8 +14,8 @@ const { poetryPosts: sortedPosts } = await loadContent();
 const allGenres = [...new Set(sortedPosts.map(p => p.data.genre))];
 const allMoods = [...new Set(sortedPosts.flatMap(p => p.data.mood))];
 
-const pageTitle = "诗歌 - QwQBiG's World";
-const pageDescription = "我的诗歌创作空间";
+const pageTitle = "Poetry - QwQBiG's World";
+const pageDescription = "A collection of original poems.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -25,10 +26,10 @@ const pageDescription = "我的诗歌创作空间";
       <!-- Page Header -->
       <div class="text-center mb-12">
         <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
-          <ContentIcon name="poetry" />诗歌
+          <ContentIcon name="poetry" />Poetry
         </h1>
         <p class="font-sans text-lg text-text-secondary">
-          共 {sortedPosts.length} 首诗歌
+          {sortedPosts.length} {sortedPosts.length === 1 ? 'poem' : 'poems'}
         </p>
       </div>
 
@@ -37,7 +38,7 @@ const pageDescription = "我的诗歌创作空间";
         <div class="mb-8 flex flex-wrap gap-4 justify-center">
           {allGenres.length > 0 && (
             <div class="flex flex-wrap gap-2 items-center">
-              <span class="text-sm text-text-secondary">体裁：</span>
+              <span class="text-sm text-text-secondary">Genres</span>
               {allGenres.map(genre => (
                 <span class="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full">
                   {genre}
@@ -47,7 +48,7 @@ const pageDescription = "我的诗歌创作空间";
           )}
           {allMoods.length > 0 && (
             <div class="flex flex-wrap gap-2 items-center">
-              <span class="text-sm text-text-secondary">主题：</span>
+              <span class="text-sm text-text-secondary">Themes</span>
               {allMoods.map(mood => (
                 <span class="px-3 py-1 text-sm bg-secondary/10 text-secondary rounded-full">
                   {mood}
@@ -74,7 +75,7 @@ const pageDescription = "我的诗歌创作空间";
                   </h2>
                   {post.data.pin && (
                     <span class="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-primary">
-                      <ContentIcon name="pin" class="h-3 w-3" />置顶
+                      <ContentIcon name="pin" class="h-3 w-3" />Pinned
                     </span>
                   )}
                 </div>
@@ -93,12 +94,7 @@ const pageDescription = "我的诗歌创作空间";
               
               <div class="flex items-center justify-between text-xs text-text-muted">
                 <time datetime={post.data.date.toISOString()}>
-                  {post.data.date.toLocaleDateString('zh-CN', {
-                    timeZone: 'Asia/Shanghai',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+                  {formatDisplayDate(post.data.date)}
                 </time>
                 
                 {post.data.mood && post.data.mood.length > 0 && (
@@ -116,10 +112,7 @@ const pageDescription = "我的诗歌创作空间";
         </div>
       ) : (
         <div class="text-center py-16">
-          <p class="text-text-secondary mb-4">暂无诗歌</p>
-          <p class="text-text-muted text-sm">
-            在 <code>src/content/poetry/posts/</code> 目录下创建 Markdown 文件来添加诗歌
-          </p>
+          <p class="text-text-secondary">No poems yet.</p>
         </div>
       )}
     </div>

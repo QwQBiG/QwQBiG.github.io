@@ -26,7 +26,7 @@ FACES = [
     ("cormorant-garamond-latin", "home-serif", "Cormorant Garamond", "normal", "400 700",
      "0123456789MTWFS "),
     ("cormorant-garamond-italic-latin", "home-serif-italic", "Cormorant Garamond", "italic", "400 500",
-     "iqwqi's world • cs learner • code lover • embedded explorer • dreamer • creator • popular tags latest post"),
+     "iqwqi's world • cs learner • code lover • embedded explorer • dreamer • creator • Popular tags Latest post"),
 ]
 
 

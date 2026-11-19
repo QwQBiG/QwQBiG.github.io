@@ -1,3 +1,14 @@
+const displayDate = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Shanghai',
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+export function formatDisplayDate(date: Date): string {
+  return displayDate.format(date);
+}
+
 export function formatDate(date: Date): string {
   return date.toLocaleDateString('zh-CN', {
     timeZone: 'Asia/Shanghai',
@@ -8,7 +19,7 @@ export function formatDate(date: Date): string {
 }
 
 export function formatDateTime(date: Date): string {
-  return date.toLocaleString('zh-CN', {
+  return date.toLocaleString('en-US', {
     timeZone: 'Asia/Shanghai',
     year: 'numeric',
     month: '2-digit',

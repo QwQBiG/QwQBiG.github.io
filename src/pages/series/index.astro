@@ -9,8 +9,8 @@ import { loadContent } from '../../utils/load-content';
 
 const { series: allSeries } = await loadContent();
 
-const pageTitle = "合集 - QwQBiG's World";
-const pageDescription = "按合集浏览文章";
+const pageTitle = "Series - QwQBiG's World";
+const pageDescription = "Browse posts by series.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -21,10 +21,10 @@ const pageDescription = "按合集浏览文章";
       <!-- Page Header -->
       <div class="text-center mb-12">
         <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
-          <ContentIcon name="archive" />合集
+          <ContentIcon name="archive" />Series
         </h1>
         <p class="font-sans text-lg text-text-secondary">
-          共 {allSeries.length} 个合集
+          {allSeries.length} series
         </p>
       </div>
 
@@ -43,7 +43,7 @@ const pageDescription = "按合集浏览文章";
         </div>
       ) : (
         <div class="text-center py-16">
-          <p class="text-text-secondary">暂无合集</p>
+          <p class="text-text-secondary">No series yet.</p>
         </div>
       )}
     </div>

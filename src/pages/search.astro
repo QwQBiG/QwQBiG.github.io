@@ -4,8 +4,8 @@ import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import ContentIcon from '../components/ui/ContentIcon.astro';
 
-const pageTitle = "搜索 - QwQBiG's World";
-const pageDescription = "搜索博客文章";
+const pageTitle = "Search - QwQBiG's World";
+const pageDescription = "Search posts and poems by title, description, or tag.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -17,23 +17,24 @@ const pageDescription = "搜索博客文章";
       <!-- Page Header -->
       <div class="text-center mb-12">
         <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
-          <ContentIcon name="search" />搜索
+          <ContentIcon name="search" />Search
         </h1>
         <p class="font-sans text-lg text-text-secondary">
-          输入关键词搜索文章
+          Search by title, description, or tag.
         </p>
       </div>
 
       <!-- Search Input -->
       <div class="search-input-wrapper">
-        <svg class="search-input-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="search-input-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
         <input 
           type="text" 
           id="search-input"
           class="search-input"
-          placeholder="输入关键词..."
+          placeholder="Search posts"
+          aria-label="Search posts"
           autocomplete="off"
         />
       </div>
@@ -41,7 +42,7 @@ const pageDescription = "搜索博客文章";
       <!-- Search Results -->
       <div id="search-results" class="search-results">
         <div class="text-center text-text-muted py-12">
-          输入关键词开始搜索
+          Type to search.
         </div>
       </div>
     </div>
