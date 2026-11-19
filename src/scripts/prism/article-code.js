@@ -57,8 +57,6 @@ function initialize() {
     if (pending.has(pre)) decorateAll([pre]);
   }
 
-  // A full-text search keeps references to its matching text spans. Finish
-  // decorations before the first query can insert any of those spans.
   function finishDecorating() {
     if (pending.size) decorateAll(pending.keys());
   }
@@ -115,7 +113,7 @@ function initialize() {
   watch();
 
   page = {
-    body, finishDecorating,
+    body, decorateAll,
     dispose() {
       additions.disconnect();
       viewport?.disconnect();
@@ -126,8 +124,8 @@ function initialize() {
   };
 }
 
-export function prepareCodeSearch() {
-  page?.finishDecorating();
+export function prepareCodeSearch(blocks) {
+  page?.decorateAll(blocks);
 }
 
 initialize();

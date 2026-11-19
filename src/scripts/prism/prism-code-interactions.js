@@ -1,4 +1,5 @@
 import { prepareCodeSearch } from './article-code.js';
+import { markCodeMatches } from './code-search-matches.js';
 
 /**
  * 代码块交互功能
@@ -105,61 +106,27 @@ import { prepareCodeSearch } from './article-code.js';
       return;
     }
 
-    prepareCodeSearch();
     const pattern = new RegExp(escapeRegex(query), 'gi');
-    const codeBlocks = document.querySelectorAll('pre[class*="language-"] code');
-
-    for (const code of codeBlocks) {
-      for (const node of getTextNodes(code)) {
-        const text = node.data;
-        let fragment;
-        let start = 0;
-        // Collect every match against the original text before replacing this node.
-        for (const match of text.matchAll(pattern)) {
-          fragment ??= document.createDocumentFragment();
-          if (match.index > start) fragment.append(text.slice(start, match.index));
-          const highlight = document.createElement('span');
-          highlight.className = 'token search-match';
-          highlight.dataset.matchIndex = currentMatches.length;
-          highlight.textContent = match[0];
-          fragment.append(highlight);
-          currentMatches.push(highlight);
-          start = match.index + match[0].length;
-        }
-        if (fragment) {
-          if (start < text.length) fragment.append(text.slice(start));
-          node.replaceWith(fragment);
-        }
-      }
+    const hits = [];
+    for (const code of document.querySelectorAll('pre[class*="language-"] code')) {
+      // Source text includes the original line breaks, independent of syntax colors.
+      const matches = Array.from(code.textContent.matchAll(pattern));
+      if (matches.length) hits.push({ code, matches });
     }
 
-    updateSearchCount();
+    // Line and bracket decoration preserves the text, but can replace its nodes.
+    // Finish it for matching blocks before attaching highlights to their tokens.
+    if (hits.length) prepareCodeSearch(hits.map(({ code }) => code.closest('pre')));
+    for (const { code, matches } of hits) {
+      for (const pieces of markCodeMatches(code, matches, currentMatches.length)) currentMatches.push(pieces);
+    }
 
-    if (currentMatches.length > 0) {
+    if (currentMatches.length) {
       currentMatchIndex = 0;
       highlightCurrentMatch();
+    } else {
+      updateSearchCount();
     }
-  }
-
-  /**
-   * 获取所有文本节点
-   */
-  function getTextNodes(element) {
-    const textNodes = [];
-    const walker = document.createTreeWalker(
-      element,
-      NodeFilter.SHOW_TEXT,
-      null,
-      false
-    );
-
-    let node;
-    while (node = walker.nextNode()) {
-      if (node.parentElement.classList.contains('search-match')) continue;
-      textNodes.push(node);
-    }
-
-    return textNodes;
   }
 
   /**
@@ -174,9 +141,11 @@ import { prepareCodeSearch } from './article-code.js';
    */
   function clearSearch() {
     const parents = new Set();
-    for (const match of currentMatches) {
-      if (match.parentNode) parents.add(match.parentNode);
-      match.replaceWith(match.textContent);
+    for (const pieces of currentMatches) {
+      for (const mark of pieces) {
+        if (mark.parentNode) parents.add(mark.parentNode);
+        mark.replaceWith(mark.textContent);
+      }
     }
     for (const parent of parents) parent.normalize();
     currentMatches = [];
@@ -203,7 +172,7 @@ import { prepareCodeSearch } from './article-code.js';
 
     // 移除当前高亮
     if (currentMatchIndex >= 0) {
-      currentMatches[currentMatchIndex].classList.remove('current');
+      for (const mark of currentMatches[currentMatchIndex]) mark.classList.remove('current');
     }
 
     // 计算新索引
@@ -223,9 +192,9 @@ import { prepareCodeSearch } from './article-code.js';
   function highlightCurrentMatch() {
     if (currentMatchIndex < 0 || currentMatchIndex >= currentMatches.length) return;
 
-    const match = currentMatches[currentMatchIndex];
-    match.classList.add('current');
-    match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const pieces = currentMatches[currentMatchIndex];
+    for (const mark of pieces) mark.classList.add('current');
+    pieces[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
     updateSearchCount();
   }
 
@@ -254,8 +223,9 @@ import { prepareCodeSearch } from './article-code.js';
     if (searchOverlay) {
       searchOverlay.style.display = 'none';
       searchOverlay.querySelector('.code-search-input').value = '';
+      clearSearch();
+      updateSearchCount();
     }
-    clearSearch();
   }
 
   // ==================== 文本选择高亮 ====================
