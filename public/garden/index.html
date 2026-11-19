@@ -1141,8 +1141,7 @@ a { color: inherit; }
  }
  function renderTreasure() {
    ensureTreasure();
-   const room=Core.atmosphereForDate(current.date);
-   for(const task of treasureTasks) if(task.match(current,room)) treasureFound.add(task.id);
+   for(const task of treasureTasks) if(task.match(current,atmosphere)) treasureFound.add(task.id);
    $('treasure-progress').textContent=`${treasureFound.size} / 3 已发现`;
    $('treasure-list').replaceChildren();
    treasureTasks.forEach((task,index)=>{
@@ -1236,7 +1235,7 @@ a { color: inherit; }
    $('guest-title').textContent='角落里，好像有谁来过。';
    $('visitor-note').textContent='找找温室里的小客人，轻轻点一下。';
    $('visitor-note').classList.remove('revealed');
-   renderRoom(); renderEncounters();
+   renderRoom();
  }
  function greetVisitor() {
    const first = !encounters.some(day=>Core.atmosphereForDate(day).visitor===atmosphere.visitor);
@@ -1267,6 +1266,11 @@ a { color: inherit; }
    $('save-button').setAttribute('aria-pressed', String(selected));
    $('save-button').setAttribute('aria-label', selected ? '从窗台收起这一天' : '收藏这一天到窗台');
  }
+ function markDateChip(chip, selected) {
+   if (!chip) return;
+   chip.classList.toggle('current',selected);
+   chip.setAttribute('aria-current',selected ? 'date' : 'false');
+ }
  function renderCollection() {
    const cards = saved.map(day => Core.cardForDate(day));
    const species = new Set(cards.map(card => card.speciesIndex));
@@ -1294,14 +1298,18 @@ a { color: inherit; }
    }
    $('saved-dates').replaceChildren();
    for (const day of saved) {
-     const selected = current && current.date === day;
-     const chip = document.createElement('button'); chip.type = 'button'; chip.className = `date-chip${selected ? ' current' : ''}`;
-     chip.setAttribute('aria-current', selected ? 'date' : 'false');
+     const chip = document.createElement('button'); chip.type = 'button'; chip.className = 'date-chip';
+     chip.id = 'saved-date-' + day;
+     markDateChip(chip, current?.date === day);
      chip.textContent = day; chip.setAttribute('aria-label', `查看收藏的 ${day}`); chip.addEventListener('click', () => { showDate(day); $('plant-date').focus(); }); $('saved-dates').append(chip);
    }
  }
  function showDate(day) {
    let next; try { next = Core.cardForDate(day); } catch { notify('选一个完整、有效的日期，再来种下这一盆。',true); if(current) $('plant-date').value = current.date; return; }
+   if (current && current.date !== day) {
+     markDateChip($('saved-date-' + current.date), false);
+     markDateChip($('saved-date-' + day), true);
+   }
    current = next;
    clearTimeout(waterTimer); $('scene').classList.remove('watered');
    $('plant-date').value = day;
@@ -1323,7 +1331,7 @@ a { color: inherit; }
    $('leaf-meter').replaceChildren(); for(let i=0;i<6;i++){const leaf=document.createElement('span');if(i<next.leaves)leaf.className='filled';leaf.setAttribute('aria-hidden','true');$('leaf-meter').append(leaf);}
    neighbor(day,-1,'neighbor-left','neighbor-left-art'); neighbor(day,1,'neighbor-right','neighbor-right-art');
    $('previous-day').disabled = $('neighbor-left').disabled; $('next-day').disabled = $('neighbor-right').disabled;
-   updateSaveButton(); renderCollection(); showAtmosphere(day); renderTreasure();
+   updateSaveButton(); showAtmosphere(day); renderTreasure();
    notify(`${day}，遇见了一盆${next.species}。`);
  }
  function shift(direction) { try { showDate(Core.shiftDate(current.date,direction)); } catch { notify('这一页已经到日历边界啦。'); } }
@@ -1360,7 +1368,7 @@ a { color: inherit; }
    loadSaved(); loadEncounters();
    const requested=new URLSearchParams(location.search).get('date');
    showDate(requested && validDate(requested) ? requested : Core.todayInShanghai());
-   storageNotice();
+   renderCollection(); renderEncounters(); storageNotice();
  } catch { $('plant-display').innerHTML='<p class="loading-note">温室暂时没有打开。</p>';notify('请把整个 garden 文件夹放在一起，再打开 index.html。',true);document.querySelectorAll('button').forEach(button=>button.disabled=true);$('plant-date').disabled=true;document.querySelector('.brand').setAttribute('aria-disabled','true'); }
 })();
 </script>
