@@ -6,7 +6,10 @@
     "height": 1600,
     "thumb2x": "/generated/gallery/2025-08-720.webp",
     "srcset": "/generated/gallery/2025-08-w120.webp 120w, /generated/gallery/2025-08-w180.webp 180w, /generated/gallery/2025-08-w256.webp 256w, /generated/gallery/2025-08-w360.webp 360w, /generated/gallery/2025-08-720.webp 720w",
-    "preview": "/generated/gallery/2025-08-1920.webp"
+    "preview": "/generated/gallery/2025-08-1920.webp",
+    "previewWidth": 1920,
+    "previewHeight": 1200,
+    "previewSrcset": "/generated/gallery/2025-08-preview-480.webp 480w, /generated/gallery/2025-08-preview-800.webp 800w, /generated/gallery/2025-08-preview-1200.webp 1200w, /generated/gallery/2025-08-1920.webp 1920w"
   },
   {
     "file": "AIcard.png",
@@ -15,7 +18,10 @@
     "height": 750,
     "thumb2x": "/generated/gallery/AIcard-720.webp",
     "srcset": "/generated/gallery/AIcard-w120.webp 120w, /generated/gallery/AIcard-w180.webp 180w, /generated/gallery/AIcard-w256.webp 256w, /generated/gallery/AIcard-w360.webp 360w, /generated/gallery/AIcard-720.webp 541w",
-    "preview": "/generated/gallery/AIcard-1920.webp"
+    "preview": "/generated/gallery/AIcard-1920.webp",
+    "previewWidth": 564,
+    "previewHeight": 750,
+    "previewSrcset": "/generated/gallery/AIcard-1920.webp 564w"
   },
   {
     "file": "hahaha.png",
@@ -24,7 +30,10 @@
     "height": 1080,
     "thumb2x": "/generated/gallery/hahaha-720.webp",
     "srcset": "/generated/gallery/hahaha-w120.webp 120w, /generated/gallery/hahaha-w180.webp 180w, /generated/gallery/hahaha-w256.webp 256w, /generated/gallery/hahaha-w360.webp 360w, /generated/gallery/hahaha-720.webp 720w",
-    "preview": "/generated/gallery/hahaha-1920.webp"
+    "preview": "/generated/gallery/hahaha-1920.webp",
+    "previewWidth": 1920,
+    "previewHeight": 1080,
+    "previewSrcset": "/generated/gallery/hahaha-preview-480.webp 480w, /generated/gallery/hahaha-preview-800.webp 800w, /generated/gallery/hahaha-preview-1200.webp 1200w, /generated/gallery/hahaha-1920.webp 1920w"
   },
   {
     "file": "Kafka.png",
@@ -33,7 +42,10 @@
     "height": 2160,
     "thumb2x": "/generated/gallery/Kafka-720.webp",
     "srcset": "/generated/gallery/Kafka-w120.webp 120w, /generated/gallery/Kafka-w180.webp 180w, /generated/gallery/Kafka-w256.webp 256w, /generated/gallery/Kafka-w360.webp 360w, /generated/gallery/Kafka-720.webp 720w",
-    "preview": "/generated/gallery/Kafka-1920.webp"
+    "preview": "/generated/gallery/Kafka-1920.webp",
+    "previewWidth": 1920,
+    "previewHeight": 1080,
+    "previewSrcset": "/generated/gallery/Kafka-preview-480.webp 480w, /generated/gallery/Kafka-preview-800.webp 800w, /generated/gallery/Kafka-preview-1200.webp 1200w, /generated/gallery/Kafka-1920.webp 1920w"
   },
   {
     "file": "ZhenXun.jpg",
@@ -42,6 +54,9 @@
     "height": 403,
     "thumb2x": "/generated/gallery/ZhenXun-720.webp",
     "srcset": "/generated/gallery/ZhenXun-w120.webp 120w, /generated/gallery/ZhenXun-w180.webp 180w, /generated/gallery/ZhenXun-w256.webp 256w, /generated/gallery/ZhenXun-w360.webp 360w, /generated/gallery/ZhenXun-720.webp 403w",
-    "preview": "/generated/gallery/ZhenXun-1920.webp"
+    "preview": "/generated/gallery/ZhenXun-1920.webp",
+    "previewWidth": 403,
+    "previewHeight": 403,
+    "previewSrcset": "/generated/gallery/ZhenXun-1920.webp 403w"
   }
 ]

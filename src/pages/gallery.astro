@@ -15,6 +15,9 @@ interface GalleryManifestEntry {
   thumb2x: string;
   srcset: string;
   preview: string;
+  previewWidth: number;
+  previewHeight: number;
+  previewSrcset: string;
 }
 
 const pageTitle = "画廊 - QwQBiG's World";
@@ -29,6 +32,9 @@ const photos: PhotoItem[] = entries.map((entry, index) => {
     id: String(index + 1),
     src: entry.thumb2x,
     preview: entry.preview,
+    previewWidth: entry.previewWidth,
+    previewHeight: entry.previewHeight,
+    previewSrcset: entry.previewSrcset,
     alt: entry.alt,
     width: entry.width,
     height: entry.height,
@@ -144,12 +150,6 @@ const initialPositions = [
   </main>
 </Layout>
 
-<script is:inline>
-  window.addEventListener('photo-wall-ready', () => {
-    document.documentElement.classList.add('photo-wall-ready');
-  }, { once: true });
-</script>
-
 <style>
   .font-handwriting {
     font-family: 'Caveat', 'Dancing Script', cursive;
@@ -170,19 +170,13 @@ const initialPositions = [
     opacity: 1;
   }
 
-  :global(html.photo-wall-ready) .static-photo-wall {
-    opacity: 0;
-    visibility: hidden;
-  }
-
   .photo-wall-runtime {
     position: relative;
     z-index: 2;
-    opacity: 0;
   }
 
-  :global(html.photo-wall-ready) .photo-wall-runtime {
-    opacity: 1;
+  .photo-wall-runtime :global(.photo-card:not([data-photo-ready])) {
+    visibility: hidden;
   }
 
   .static-photo-card {
