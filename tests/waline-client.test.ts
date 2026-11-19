@@ -39,10 +39,16 @@ test('the deferred comment client formats the first render and cleans up a faile
 test('far comments wait for proximity or interaction and still load without a visibility observer', async () => {
   const source = stripTypeScriptTypes(await readFile(new URL('../src/scripts/waline-runtime.ts', import.meta.url), 'utf8'))
     .replace(/^import .*;$/gm, '');
-  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback']) {
-    const element = Object.assign(new EventTarget(), { isConnected: true, dataset: {}, setAttribute() {} });
+  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'restored', 'interrupted']) {
+    let rendered = false;
+    let scrolled = false;
+    const card = { scrollIntoView() { scrolled = true; } };
+    const element = Object.assign(new EventTarget(), {
+      id: 'waline', isConnected: true, dataset: {}, setAttribute() {}, querySelector: () => null,
+      contains: (node: unknown) => node === card,
+    });
     const document = Object.assign(new EventTarget(), {
-      getElementById: (id: string) => id === 'waline' ? element : null,
+      getElementById: (id: string) => id === 'waline' ? element : id === '1' || (id === '9' && rendered) ? card : null,
       querySelector: () => null,
       createElement: () => ({ dataset: {} }),
       head: { append() {} },
@@ -56,11 +62,21 @@ test('far comments wait for proximity or interaction and still load without a vi
       observe(target: unknown) { assert.equal(target, element); }
       disconnect() {}
     }
-    const window = new EventTarget();
+    let mutation: (() => void) | undefined;
+    class MutationObserver {
+      constructor(callback: () => void) { mutation = callback; }
+      observe() {}
+      disconnect() { mutation = undefined; }
+    }
+    const hash = trigger === 'waline' ? '#waline' : trigger === 'section' ? '#1'
+      : ['rss', 'restored', 'interrupted'].includes(trigger) ? '#9' : '';
+    const window = Object.assign(new EventTarget(), { location: { hash, search: trigger === 'token' ? '?token=sample' : '' } });
     if (trigger !== 'fallback') Object.assign(window, { IntersectionObserver });
     const priorities: string[] = [];
+    const history = { state: trigger === 'section' ? null : { scrollY: trigger === 'restored' ? 400 : 0 }, scrollRestoration: 'manual' };
     runInNewContext(source, {
-      document, window, IntersectionObserver, AbortController, URL,
+      document, window, IntersectionObserver, MutationObserver, AbortController, URL, URLSearchParams,
+      history,
       scheduleBackgroundTask(options: { priority: string }) {
         priorities.push(options.priority);
         return { done: new Promise(() => {}), cancel() {} };
@@ -70,10 +86,29 @@ test('far comments wait for proximity or interaction and still load without a vi
       assert.deepEqual(priorities, ['prefetch']);
       continue;
     }
-    visibility!([{ isIntersecting: false }]);
-    assert.deepEqual(priorities, []);
-    if (trigger === 'proximity') visibility!([{ isIntersecting: true }]);
-    else element.dispatchEvent(new Event(trigger));
+    if (trigger === 'section') {
+      assert.deepEqual(priorities, [], 'static numeric chapter IDs belong to the article');
+      assert.equal(history.scrollRestoration, 'auto');
+      continue;
+    }
+    if (trigger === 'change') {
+      assert.equal(priorities.length, 0);
+      window.location.hash = '#9';
+      window.dispatchEvent(new Event('hashchange'));
+    }
+    if (['rss', 'change', 'restored', 'interrupted'].includes(trigger)) {
+      if (trigger === 'interrupted') window.dispatchEvent(new Event('wheel'));
+      rendered = true;
+      mutation?.();
+      assert.equal(scrolled, trigger === 'rss' || trigger === 'change');
+      assert.equal(mutation, undefined);
+    }
+    if (['proximity', 'focusin', 'pointerenter'].includes(trigger)) {
+      visibility!([{ isIntersecting: false }]);
+      assert.deepEqual(priorities, []);
+      if (trigger === 'proximity') visibility!([{ isIntersecting: true }]);
+      else element.dispatchEvent(new Event(trigger));
+    }
     assert.deepEqual(priorities, ['navigation']);
     document.dispatchEvent(new Event('astro:before-swap'));
     element.dispatchEvent(new Event('focusin'));
