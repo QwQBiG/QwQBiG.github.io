@@ -196,7 +196,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     }
     for (const info of container.querySelectorAll<HTMLElement>('.wl-login-info')) {
       if (!info.querySelector('.wl-avatar img') || info.querySelector('[data-comment-current-avatar]')) continue;
-      const preview = createButton('comment-current-avatar', 'View profile picture');
+      const preview = createButton('comment-current-avatar', 'View');
+      preview.setAttribute('aria-label', 'View profile picture');
       preview.dataset.commentCurrentAvatar = '';
       info.append(preview);
     }
