@@ -235,6 +235,8 @@ class MemoryThread {
   private context: CanvasRenderingContext2D;
   private dpr = 1;
   private dprLimit: number;
+  private sampledY = new Float64Array(97);
+  private lastStillFrame?: FilmState;
 
   static create(canvas: HTMLCanvasElement | null, dprLimit = 1.5): MemoryThread | null {
     if (!canvas) return null;
@@ -251,13 +253,25 @@ class MemoryThread {
   }
 
   resize(): void {
-    this.dpr = Math.min(window.devicePixelRatio || 1, this.dprLimit);
-    this.canvas.width = Math.max(1, Math.round(window.innerWidth * this.dpr));
-    this.canvas.height = Math.max(1, Math.round(window.innerHeight * this.dpr));
-    this.context.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    const dpr = Math.min(window.devicePixelRatio || 1, this.dprLimit);
+    const width = Math.max(1, Math.round(window.innerWidth * dpr));
+    const height = Math.max(1, Math.round(window.innerHeight * dpr));
+    if (this.canvas.width === width && this.canvas.height === height && this.dpr === dpr) return;
+    this.dpr = dpr;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.lastStillFrame = undefined;
   }
 
-  render(state: FilmState): void {
+  render(state: FilmState, reducedMotion: boolean): void {
+    if (reducedMotion) {
+      const last = this.lastStillFrame;
+      if (last && last.scene === state.scene && last.scroll === state.scroll
+        && last.pointerX === state.pointerX && last.pointerY === state.pointerY
+        && Math.max(.08, last.pulse) === Math.max(.08, state.pulse)) return;
+      this.lastStillFrame = { ...state };
+    }
     const context = this.context;
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -270,14 +284,14 @@ class MemoryThread {
     context.clearRect(0, 0, width, height);
     context.globalCompositeOperation = darkScene ? 'screen' : 'multiply';
 
-    const sampleY = (x: number, offset: number) => {
+    const sampleY = (x: number) => {
       const normalized = x / Math.max(width, 1);
       const primary = Math.sin(normalized * Math.PI * 1.8 + phase) * height * .034;
       const secondary = Math.sin(normalized * Math.PI * 4.2 - phase * .38) * height * .014;
       const pointerDistance = (x - pointerX) / Math.max(width * .24, 1);
       const pointerInfluence = Math.exp(-(pointerDistance * pointerDistance) * 2.4);
       const pointerPull = (pointerY - height * .58) * .035 * pointerInfluence;
-      return height * .64 + primary + secondary + pointerPull + offset;
+      return height * .64 + primary + secondary + pointerPull;
     };
 
     const ink = darkScene ? '255, 184, 213' : '187, 55, 111';
@@ -288,11 +302,15 @@ class MemoryThread {
       { width: .8, alpha: .52, offset: 0, blur: 0 },
     ];
 
+    // All four strokes follow the same curve with a constant vertical offset.
+    for (let step = 0; step < this.sampledY.length; step++) {
+      this.sampledY[step] = sampleY(width * (step / 96));
+    }
     const traceThread = (offset: number) => {
       context.beginPath();
       for (let step = 0; step <= 96; step += 1) {
         const x = width * (step / 96);
-        const y = sampleY(x, offset);
+        const y = this.sampledY[step] + offset;
         if (step === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
@@ -325,7 +343,7 @@ class MemoryThread {
 
     for (let node = 0; node < 6; node += 1) {
       const x = width * (.1 + node * .16);
-      const y = sampleY(x, 0);
+      const y = sampleY(x);
       const distance = Math.abs(state.scene - node);
       const active = Math.max(0, 1 - distance);
       const visited = node <= scenePosition + .02;
@@ -346,7 +364,7 @@ class MemoryThread {
       }
     }
 
-    const travellingY = sampleY(progressX, 0);
+    const travellingY = sampleY(progressX);
     const glow = context.createRadialGradient(progressX, travellingY, 0, progressX, travellingY, 24);
     glow.addColorStop(0, `rgba(${highlight}, .48)`);
     glow.addColorStop(.22, `rgba(${highlight}, .16)`);
@@ -792,13 +810,13 @@ function setupAboutFilm(): (() => void) | undefined {
     if (time - lastCanvasFrame >= canvasFrameInterval) {
       lastCanvasFrame = time;
       paint?.render(state);
-      thread?.render(state);
+      thread?.render(state, reduced);
     }
   };
 
   gsap.ticker.add(tick);
   paint?.render(state);
-  thread?.render(state);
+  thread?.render(state, reduced);
   requestAnimationFrame(() => ScrollTrigger.refresh());
 
   return () => {
