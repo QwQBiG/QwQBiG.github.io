@@ -79,3 +79,22 @@ test('re-entering cancels the previous reset and touch cards do not track hover'
   assert.equal(touch.frames.size + touch.timers.size, 0);
   assert.equal(touch.style.transform, resting);
 });
+
+test('the homepage starts tilt only when a hover-capable pointer is available', async () => {
+  const page = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+  const script = [...page.matchAll(/<script is:inline>([\s\S]*?)<\/script>/g)]
+    .map(match => match[1]).find(source => source.includes('function loadHomeTilt'))!;
+  for (const startsWithMouse of [false, true]) {
+    const pointer = Object.assign(new EventTarget(), { matches: startsWithMouse });
+    const loaded: string[] = [];
+    runInNewContext(script, {
+      window: { matchMedia: () => pointer },
+      document: { createElement: () => ({}), head: { append: (node: { src: string }) => loaded.push(node.src) } },
+    });
+    assert.equal(loaded.length, startsWithMouse ? 1 : 0);
+    pointer.matches = true;
+    pointer.dispatchEvent(new Event('change'));
+    pointer.dispatchEvent(new Event('change'));
+    assert.deepEqual(loaded, ['/js/vanilla-tilt.js']);
+  }
+});

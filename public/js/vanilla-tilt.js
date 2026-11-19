@@ -12,7 +12,7 @@ class VanillaTilt {
       ...settings
     };
 
-    this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    this.isTouchDevice = window.matchMedia('(pointer: coarse) and (any-hover: none)').matches;
     this.rafId = null;
     this.latestMove = null;
     this.resetTimer = null;

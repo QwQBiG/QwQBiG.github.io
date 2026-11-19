@@ -53,6 +53,8 @@ const statistics = [
     }
   </script>
 
+  <link rel="preload" as="script" href="/js/vanilla-tilt.js" media="(pointer: fine), (any-hover: hover)">
+
   {/* 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 */}
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
   <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
@@ -755,6 +757,7 @@ const statistics = [
             class="glass-card relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/60 rounded-[2rem] p-5 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out cursor-pointer w-full max-w-[85vw] [@media(min-width:924px)]:w-auto"
             data-tilt="true"
             style="
+              transform: perspective(1200px);
               transform-style: preserve-3d;
               will-change: transform;
               box-shadow:
@@ -1030,6 +1033,18 @@ const statistics = [
   <script>
     import '../scripts/navigation-prefetch';
   </script>
-  <script src="/js/vanilla-tilt.js" defer></script>
+  <script is:inline>
+    // A mouse or trackpad may be connected after the homepage has opened.
+    const tiltPointer = window.matchMedia('(pointer: fine), (any-hover: hover)');
+    function loadHomeTilt() {
+      if (!tiltPointer.matches) return;
+      tiltPointer.removeEventListener('change', loadHomeTilt);
+      const script = document.createElement('script');
+      script.src = '/js/vanilla-tilt.js';
+      document.head.append(script);
+    }
+    tiltPointer.addEventListener('change', loadHomeTilt);
+    loadHomeTilt();
+  </script>
 </body>
 </html>

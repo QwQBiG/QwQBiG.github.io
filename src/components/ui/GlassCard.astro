@@ -39,7 +39,7 @@ const hoverClasses = hover
     ${className}
   `}
   data-tilt={tilt ? 'true' : undefined}
-  style="
+  style={`
     transform-style: preserve-3d;
     will-change: transform;
     box-shadow: 
@@ -47,10 +47,9 @@ const hoverClasses = hover
       0 40px 60px -20px rgba(0, 0, 0, 0.05),
       inset 0 1px 1px 0 rgba(255, 255, 255, 0.7),
       inset 0 -1px 1px 0 rgba(255, 255, 255, 0.3);
-    /* GPU 加速 */
-    transform: translateZ(0);
+    transform: ${tilt ? 'perspective(1200px)' : 'translateZ(0)'};
     backface-visibility: hidden;
-  "
+  `}
 >
   {/* 顶部边缘高光 - 模拟玻璃反光 */}
   <div class="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none z-[1]"></div>
