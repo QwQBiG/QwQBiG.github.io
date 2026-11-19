@@ -6,21 +6,23 @@ import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { render } from 'astro:content';
 import { loadContent } from '../../utils/load-content';
 import { formatDisplayDate } from '../../utils/date';
-import { getPostTags } from '../../utils/content';
+import { getPostTags, getTagKey } from '../../utils/content';
 import WalineComments from '../../components/WalineComments.astro';
 
 export async function getStaticPaths() {
-  const { publishedPoetry: poetryPosts } = await loadContent();
+  const { publishedPoetry: poetryPosts, tagUrls } = await loadContent();
 
   return poetryPosts.map(post => ({
     params: { slug: post.slug },
-    props: { post },
+    props: {
+      post,
+      tags: getPostTags(post).map(label => ({ label, href: tagUrls.get(getTagKey(label)) })),
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, tags } = Astro.props;
 const { Content } = await render(post);
-const tags = getPostTags(post);
 const poemLanguage = post.data.genre === '英文诗' ? 'en' : 'zh-CN';
 
 const pageTitle = `${post.data.title} - Poetry - QwQBiG's World`;
@@ -56,11 +58,14 @@ const pageTitle = `${post.data.title} - Poetry - QwQBiG's World`;
 
           {tags.length > 0 && (
             <div class="flex flex-wrap justify-center gap-2 mt-4">
-              {tags.map(tag => (
-                <span class="px-2 py-1 text-sm bg-bg-secondary text-text-secondary rounded-full">
-                  #{tag}
-                </span>
-              ))}
+              {tags.map(({ label, href }) => {
+                const Tag = href ? 'a' : 'span';
+                return (
+                  <Tag href={href} class="px-2 py-1 text-sm bg-bg-secondary text-text-secondary rounded-full">
+                    #{label}
+                  </Tag>
+                );
+              })}
             </div>
           )}
         </header>
