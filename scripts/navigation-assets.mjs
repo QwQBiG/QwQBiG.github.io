@@ -46,25 +46,33 @@ function candidates(html, route) {
       result.push(asset);
     }
   }
+  function addResponsiveImage(srcset, sizes, mimeType, href) {
+    // Reuse the destination's format and width candidates, including on retina displays.
+    const sources = srcset.split(',').map(candidate => {
+      const match = /^(\S+)\s+([1-9]\d*)w$/.exec(candidate.trim());
+      const url = match && localAsset(match[1], 'image', route);
+      return url && { url, width: Number(match[2]) };
+    });
+    if (sources.every(Boolean)) {
+      const variant = { sources, sizes: sizes || '100vw' };
+      if (mimeType) variant.mimeType = mimeType;
+      add(href || sources.at(-1).url, 'image', variant);
+    }
+  }
   function visit(node) {
     const attrs = Object.fromEntries((node.attrs ?? []).map(({ name, value }) => [name, value]));
+    const allScreens = !attrs.media || attrs.media === 'all' || attrs.media === 'screen';
+    // Marked picture sources warm navigation without forcing a separate browser preload.
+    if (node.tagName === 'source' && node.parentNode?.tagName === 'picture' &&
+        'data-navigation-image' in attrs && allScreens && attrs.srcset) {
+      addResponsiveImage(attrs.srcset, attrs.sizes, attrs.type);
+    }
     if (node.tagName === 'link') {
       const rel = (attrs.rel ?? '').toLowerCase().split(/\s+/);
-      const allScreens = !attrs.media || attrs.media === 'all' || attrs.media === 'screen';
       if (rel.includes('stylesheet') && !('disabled' in attrs) && allScreens) add(attrs.href, 'style');
       if (rel.includes('preload') && allScreens && attrs.fetchpriority !== 'low' && (attrs.as === 'image' || attrs.as === 'font')) {
         if (attrs.as === 'image' && attrs.imagesrcset) {
-          // Keep the same width candidates as the destination, including on retina displays.
-          const sources = attrs.imagesrcset.split(',').map(candidate => {
-            const match = /^(\S+)\s+([1-9]\d*)w$/.exec(candidate.trim());
-            const url = match && localAsset(match[1], 'image', route);
-            return url && { url, width: Number(match[2]) };
-          });
-          if (sources.every(Boolean)) {
-            const variant = { sources, sizes: attrs.imagesizes || '100vw' };
-            if (attrs.type) variant.mimeType = attrs.type;
-            add(attrs.href || sources.at(-1).url, 'image', variant);
-          }
+          addResponsiveImage(attrs.imagesrcset, attrs.imagesizes, attrs.type, attrs.href);
         } else {
           add(attrs.href, attrs.as);
         }

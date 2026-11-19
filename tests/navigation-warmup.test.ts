@@ -374,6 +374,20 @@ test('responsive warmup keeps the destination format and sizes and only same-ori
   }]);
 });
 
+test('a marked picture source can warm navigation without preloading both formats on the page', async () => {
+  const html = `<picture>
+    <source data-navigation-image type="image/avif" srcset="small.avif 120w, large.avif 360w" sizes="120px">
+    <source type="image/webp" srcset="fallback.webp 120w">
+    <img src="fallback.webp">
+  </picture>
+  <picture><source data-navigation-image media="print" srcset="print.avif 300w"></picture>`;
+  const manifest = await buildNavigationManifest([{ route: '/gallery/', html }], async () => 125);
+  assert.deepEqual(manifest.assets, [{
+    url: '/gallery/large.avif', type: 'image', bytes: 125, mimeType: 'image/avif', sizes: '120px',
+    sources: [{ url: '/gallery/small.avif', width: 120 }, { url: '/gallery/large.avif', width: 360 }],
+  }]);
+});
+
 test('startup module hints flatten static imports and immediate islands without warming dynamic code', async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'navigation-module-hints-'));
   try {

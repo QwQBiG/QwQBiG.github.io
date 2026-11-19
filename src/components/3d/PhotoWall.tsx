@@ -401,22 +401,25 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
         }}
       >
         <div className="relative overflow-hidden">
-          <img
-            ref={imageRef}
-            sizes={photo.sizes}
-            srcSet={photo.srcset}
-            src={photo.src}
-            alt={photo.alt}
-            width={photo.width}
-            height={photo.height}
-            className="w-full h-auto object-cover pointer-events-none"
-            style={{
-              imageRendering: 'auto',
-            }}
-            loading="eager"
-            decoding="async"
-            draggable={false}
-          />
+          <picture className="block">
+            <source type="image/avif" srcSet={photo.avifSrcset} sizes={photo.sizes} />
+            <img
+              ref={imageRef}
+              sizes={photo.sizes}
+              srcSet={photo.srcset}
+              src={photo.src}
+              alt={photo.alt}
+              width={photo.width}
+              height={photo.height}
+              className="w-full h-auto object-cover pointer-events-none"
+              style={{
+                imageRendering: 'auto',
+              }}
+              loading="eager"
+              decoding="async"
+              draggable={false}
+            />
+          </picture>
         </div>
       </div>
     </m.div>
