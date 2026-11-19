@@ -13,6 +13,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
       });
     });
     const body = Object.assign(new EventTarget(), {
+      querySelector: () => ({}),
       dataset: { pageCode: 'true' }, querySelectorAll: () => blocks,
       contains: (block: typeof blocks[number]) => blocks.includes(block),
     });
@@ -28,7 +29,13 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   const prepared: string[] = [];
   const decorated: string[] = [];
   const numbered: string[] = [];
+  let inTransit = false;
+  let settle!: () => void;
   const context = {
+    watchArticleFragment(_article: unknown, _signal: AbortSignal, _busy: () => boolean, resume: () => void) {
+      settle = resume;
+      return { travelling: () => inTransit };
+    },
     document, window, AbortController, Event,
     IntersectionObserver: class {
       constructor(callback: (entries: Entries) => void) { callbacks.push(callback); }
@@ -50,6 +57,13 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   assert.equal(callbacks.length, 1);
   const [notify] = callbacks;
   const [near, far] = first.blocks;
+  inTransit = true;
+  notify([{ target: far, isIntersecting: true }]);
+  notify([{ target: near, isIntersecting: true }, { target: far, isIntersecting: false }]);
+  assert.deepEqual(decorated, [], 'do not split syntax and lines while jumping over blocks');
+  inTransit = false;
+  settle();
+  assert.deepEqual(decorated, ['near'], 'only enhance the destination');
   notify([{ target: near, isIntersecting: true }, { target: far, isIntersecting: false }]);
   notify([{ target: near, isIntersecting: true }]);
   assert.deepEqual(prepared, ['custom', 'near']);

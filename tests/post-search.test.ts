@@ -92,6 +92,27 @@ test('pasted queries keep their input text and show matching tags even beyond th
   assert.doesNotMatch(page.results.innerHTML, /Second|Third/);
 });
 
+test('all keywords must match the same post across its fields, with complete phrases first', async () => {
+  const page = setup();
+  await page.respond(Response.json([
+    { ...posts[0], title: 'Sliding windows', slug: 'split', tags: ['A', 'B', 'C', 'C++'], description: 'Fast search' },
+    { ...posts[0], title: 'Fast C++', slug: 'phrase' },
+    { ...posts[0], title: 'Fast sorting', slug: 'incomplete', tags: [] },
+  ]));
+  page.paint();
+  page.type('fast　 c++');
+  page.paint();
+  const html = page.results.innerHTML;
+  assert.deepEqual([...html.matchAll(/href="\/cs\/(\w+)\/"/g)].map(match => match[1]), ['phrase', 'split']);
+  assert.match(html, />Fast C\+\+<\/mark>/);
+  assert.match(html, />Fast<\/mark> search/);
+  assert.match(html, />C\+\+<\/mark>, A, B/);
+  page.type('　WINDOWS　c++   search ');
+  page.paint();
+  assert.match(page.results.innerHTML, /href="\/cs\/split\/"/);
+  assert.doesNotMatch(page.results.innerHTML, /href="\/cs\/phrase\/"/);
+});
+
 test('a failed HTTP response offers a retry which uses the current input', async () => {
   const page = setup();
   page.type('old');

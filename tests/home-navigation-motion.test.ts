@@ -13,8 +13,12 @@ function homePage(touch = false, search = '', storedReturn = false) {
   const timers = new Map<number, () => void>();
   const frames: Array<() => void> = [];
   const flags = new Map<string, string>();
+  const gridProperties = new Map<string, string>();
   const card = {
-    style: {}, classList: { add() {}, remove() {} },
+    style: { position: '' },
+    parentElement: { style: { setProperty: (key: string, value: string) => gridProperties.set(key, value) } },
+    getBoundingClientRect() { return { height: this.style.position === 'fixed' ? 52 : 332.25 }; },
+    classList: { add() {}, remove() {} },
     setAttribute(key: string, value: string) { flags.set(key, value); },
     removeAttribute(key: string) { flags.delete(key); },
   };
@@ -49,7 +53,7 @@ function homePage(touch = false, search = '', storedReturn = false) {
     const e = Object.assign(new Event('click', { cancelable: true }), { button: 0 }, props);
     return link.dispatchEvent(e); // true leaves the link's native navigation in charge
   }
-  return { preference, location, link, flags, timers, frames, click, dataset, avatarPreload };
+  return { preference, location, link, flags, timers, frames, click, dataset, avatarPreload, gridProperties };
 }
 
 test('a live reduced-motion preference keeps the native link, while normal clicks retain their animation', () => {
@@ -70,6 +74,15 @@ test('a live reduced-motion preference keeps the native link, while normal click
     assert.equal(page.click(), false); // A second click cannot race the pending navigation.
     page.timers.get(delay)!();
     assert.equal(page.location.pathname, '/cs/');
+  }
+});
+
+test('the narrow homepage reserves the card’s original height before its exit animation', () => {
+  for (const narrow of [true, false]) {
+    const page = homePage(narrow);
+    page.click();
+    while (page.frames.length) page.frames.shift()!();
+    assert.equal(page.gridProperties.get('--home-nav-slot-height'), narrow ? '332.25px' : undefined);
   }
 });
 

@@ -18,3 +18,25 @@ test('the homepage ships its responsive and interactive utilities without readin
   assert.ok(selectors.has('.\\[\\@media\\(min-width\\:924px\\)\\]\\:translate-x-64')); // Avatar return.
   assert.ok(!selectors.has('.prose'));
 });
+
+test('reading and homepage styles are independent of build order', async () => {
+  const home = fileURLToPath(new URL('../src/styles/home-utilities.css', import.meta.url));
+  const site = fileURLToPath(new URL('../src/styles/site-utilities.css', import.meta.url));
+  async function compile(order: string[]) {
+    const processor = postcss([tailwindcss()]);
+    const output = new Map<string, string>();
+    for (const file of order) {
+      const input = await readFile(file, 'utf8');
+      const { css } = await processor.process(input, { from: file });
+      output.set(file, css);
+    }
+    return output;
+  }
+  const homeFirst = await compile([home, site]);
+  const siteFirst = await compile([site, home]);
+  assert.equal(homeFirst.get(site), siteFirst.get(site));
+  assert.equal(homeFirst.get(home), siteFirst.get(home));
+  assert.ok(homeFirst.get(site)!.includes('.lg\\:grid-cols-12'));
+  assert.ok(homeFirst.get(site)!.includes('.lg\\:col-span-9'));
+  assert.ok(!homeFirst.get(home)!.includes('.lg\\:grid-cols-12'));
+});

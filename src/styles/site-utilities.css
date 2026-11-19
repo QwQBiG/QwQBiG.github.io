@@ -1,0 +1,5 @@
+/* Tailwind reuses its last configuration across stylesheets in the same build. */
+@config "../../tailwind.config.mjs";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

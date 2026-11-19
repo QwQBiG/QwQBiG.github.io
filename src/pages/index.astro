@@ -91,6 +91,21 @@ const statistics = [
       transform: translateZ(0);
     }
 
+    /* During the exit motion, pin the compact navigation to the viewport. */
+    body:has(#navCard.nav-card-layout-change) {
+      transform: none;
+    }
+
+    @media (width < 924px) {
+      /* Keep the outgoing card’s slot so the link the reader tapped stays in place. */
+      #home-cards:has(> #navCard.nav-card-layout-change)::after {
+        content: '';
+        order: 7;
+        flex: none;
+        height: var(--home-nav-slot-height);
+      }
+    }
+
     /* 移动端触摸优化 */
     @media (hover: none) and (pointer: coarse) {
       * {
@@ -670,7 +685,7 @@ const statistics = [
   {/* 外层包装器 - 始终居中 */}
   <div class="min-h-screen w-full flex items-center justify-center overflow-hidden py-6 [@media(min-width:924px)]:py-8 px-4 sm:px-6 [@media(min-width:924px)]:px-12 xl:px-12">
     {/* 网格容器 - 由外层 flex 推到屏幕中心 */}
-    <div class="flex flex-col [@media(min-width:924px)]:grid [@media(min-width:924px)]:grid-cols-3 gap-6 [@media(min-width:924px)]:gap-10 relative">
+    <div id="home-cards" class="flex flex-col [@media(min-width:924px)]:grid [@media(min-width:924px)]:grid-cols-3 gap-6 [@media(min-width:924px)]:gap-10 relative">
 
         {/* ========== 移动端第1个 / 桌面端左上 ========== */}
 
