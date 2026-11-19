@@ -2,8 +2,8 @@ import { navigate } from 'astro:transitions/client';
 import { isTransitionBeforeSwapEvent } from 'astro:transitions/client';
 import { isContentNavigationPath } from '../utils/content-navigation';
 
-let gradientTime: number | undefined;
-let capturedAt = 0;
+let gradientStart: number | undefined;
+let incomingStart: number | undefined;
 
 // The floating glass card stops bubbling clicks for its tilt effect. Capture
 // supported links before that handler, preserving modifiers and native anchors.
@@ -37,18 +37,32 @@ document.addEventListener('click', (event) => {
 
 document.addEventListener('astro:before-swap', (event) => {
   if (!isTransitionBeforeSwapEvent(event)) return;
-  const gradient = document.body.getAnimations?.().find(animation => (
-    'animationName' in animation && animation.animationName === 'gradientShift'
-  ));
-  gradientTime = typeof gradient?.currentTime === 'number' ? gradient.currentTime : undefined;
-  capturedAt = performance.now();
+  const incoming = event.newDocument.body;
+  if (!incoming.classList.contains('gradient-bg') || !document.body.classList.contains('gradient-bg')) {
+    gradientStart = incomingStart = undefined;
+    return;
+  }
+  const now = document.timeline.currentTime;
+  if (typeof now !== 'number') return;
+  if (gradientStart === undefined) {
+    const gradient = document.body.getAnimations?.().find(animation => (
+      'animationName' in animation && animation.animationName === 'gradientShift'
+    ));
+    if (typeof gradient?.startTime !== 'number') return;
+    gradientStart = gradient.startTime;
+  }
+  // Seed the existing CSS animation on the detached body. Looking it up after
+  // insertion would synchronously style the new article just to read its clock.
+  incomingStart = now;
+  incoming.style.animationDelay = `${gradientStart - now}ms`;
 });
 
-document.addEventListener('astro:after-swap', () => {
-  if (gradientTime === undefined) return;
-  const gradient = document.body.getAnimations?.().find(animation => (
-    'animationName' in animation && animation.animationName === 'gradientShift'
-  ));
-  if (gradient) gradient.currentTime = gradientTime + performance.now() - capturedAt;
-  gradientTime = undefined;
+// A long swap can take more than one frame. Align the new animation with the
+// same timeline tick used for its negative delay when the browser starts it.
+document.addEventListener('animationstart', event => {
+  if (incomingStart === undefined || event.target !== document.body || event.animationName !== 'gradientShift') return;
+  const animation = (event as AnimationEvent & { animation?: Animation }).animation
+    ?? document.body.getAnimations?.().find(animation => 'animationName' in animation && animation.animationName === event.animationName);
+  if (animation) animation.startTime = incomingStart;
+  incomingStart = undefined;
 });
