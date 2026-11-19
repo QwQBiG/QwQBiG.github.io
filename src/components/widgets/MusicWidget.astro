@@ -216,6 +216,10 @@ const musicSources = [
     height: 6px;
   }
 
+  #playing-indicator.opacity-0 > span {
+    animation-play-state: paused;
+  }
+
   /* 进度条轨道 - 更柔和的灰色 */
   .progress-track {
     background: rgba(0, 0, 0, 0.06);

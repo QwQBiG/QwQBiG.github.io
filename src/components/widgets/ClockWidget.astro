@@ -2,7 +2,7 @@
 // ClockWidget.astro - 重新设计的数字时钟组件
 ---
 
-<div class="clock-widget w-full h-full flex flex-col items-center justify-center relative">
+<home-clock class="clock-widget w-full h-full flex flex-col items-center justify-center relative">
   <!-- 装饰性背景圆环 -->
   <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
     <div class="w-24 h-24 md:w-28 md:h-28 rounded-full border border-white/20 opacity-50"></div>
@@ -26,7 +26,7 @@
     <span class="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 opacity-60"></span>
     <span class="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 opacity-40"></span>
   </div>
-</div>
+</home-clock>
 
 <style>
 
@@ -103,41 +103,79 @@
   .clock-seconds {
     animation: pulse-soft 2s ease-in-out infinite;
   }
+  home-clock:not([data-ticking]) .clock-seconds {
+    animation-play-state: paused;
+  }
 </style>
 
 <script>
-  function updateClock() {
-    const now = new Date();
-    
-    // 格式化时间
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    
-    // 更新 DOM
-    const timeEl = document.getElementById('clock-time');
-    const secondsEl = document.getElementById('clock-seconds');
-    const dateEl = document.getElementById('clock-date');
-    
-    if (timeEl) timeEl.textContent = `${hours}:${minutes}`;
-    if (secondsEl) secondsEl.textContent = `:${seconds}`;
-    
-    if (dateEl) {
-      const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const weekday = weekdays[now.getDay()];
-      const month = months[now.getMonth()];
-      const day = String(now.getDate()).padStart(2, '0');
-      dateEl.textContent = `${weekday}, ${month} ${day}`;
+  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const pad = (value: number) => String(value).padStart(2, '0');
+
+  class HomeClock extends HTMLElement {
+    private dispose?: () => void;
+
+    connectedCallback() {
+      const time = this.querySelector<HTMLElement>('#clock-time')!;
+      const seconds = this.querySelector<HTMLElement>('#clock-seconds')!;
+      const date = this.querySelector<HTMLElement>('#clock-date')!;
+      const lifetime = new AbortController();
+      const options = { signal: lifetime.signal };
+      let visible = !('IntersectionObserver' in window);
+      let suspended = false;
+      let timer: number | undefined;
+
+      function paint(now: Date) {
+        const hhmm = pad(now.getHours()) + ':' + pad(now.getMinutes());
+        const ss = ':' + pad(now.getSeconds());
+        const day = weekdays[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + pad(now.getDate());
+        if (time.textContent !== hhmm) time.textContent = hhmm;
+        if (seconds.textContent !== ss) seconds.textContent = ss;
+        if (date.textContent !== day) date.textContent = day;
+      }
+
+      function tick() {
+        const now = new Date();
+        paint(now);
+        timer = window.setTimeout(tick, 1000 - now.getMilliseconds());
+      }
+
+      const sync = () => {
+        const ticking = visible && !document.hidden && !suspended;
+        this.toggleAttribute('data-ticking', ticking);
+        if (ticking && timer === undefined) tick();
+        if (!ticking) {
+          window.clearTimeout(timer);
+          timer = undefined;
+        }
+      };
+
+      // Populate the initial card even before the first intersection notification.
+      paint(new Date());
+      const observer = 'IntersectionObserver' in window ? new IntersectionObserver(([entry]) => {
+        if (lifetime.signal.aborted) return;
+        visible = entry.isIntersecting;
+        sync();
+      }) : undefined;
+      observer?.observe(this);
+      document.addEventListener('visibilitychange', sync, options);
+      window.addEventListener('pagehide', () => { suspended = true; sync(); }, options);
+      window.addEventListener('pageshow', () => { suspended = false; sync(); }, options);
+      sync();
+
+      this.dispose = () => {
+        suspended = true;
+        lifetime.abort();
+        observer?.disconnect();
+        sync();
+      };
+    }
+
+    disconnectedCallback() {
+      this.dispose?.();
     }
   }
-  
-  // 立即执行一次
-  updateClock();
-  
-  // 每秒更新
-  setInterval(updateClock, 1000);
-  
-  // Astro ViewTransitions 兼容
-  document.addEventListener('astro:page-load', updateClock);
+
+  if (!customElements.get('home-clock')) customElements.define('home-clock', HomeClock);
 </script>
