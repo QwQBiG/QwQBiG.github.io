@@ -5,6 +5,9 @@
 
 /* 代码块容器 */
 .prose pre[class*="language-"] {
+  --code-font-size: 1.1rem;
+  --code-padding-block: 16px;
+  --code-padding-inline: 20px;
   position: relative;
   margin: 1.5em 0;
   border-radius: 16px;
@@ -19,7 +22,8 @@
 }
 
 /* 代码块头部 */
-.prose pre[class*="language-"] .code-header {
+.prose pre[class*="language-"] .code-header,
+.prose pre[class*="language-"] > .code-content:first-child::before {
   position: relative;
   height: 40px;
   background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%);
@@ -29,6 +33,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 12px;
+}
+
+/* Static lines are visible before their toolbar is bound. Reserve its exact height. */
+@media (scripting: enabled) {
+  .prose pre[class*="language-"] > .code-content:first-child::before {
+    content: '';
+  }
 }
 
 /* 代码块内容区域 */
@@ -69,17 +80,55 @@
 /* 代码块主体 */
 .prose pre[class*="language-"] code {
   display: block;
-  padding: 16px 20px;
+  padding: var(--code-padding-block) var(--code-padding-inline);
   background: transparent;
   min-width: 100%;
   width: max-content;
   min-height: 100%;
   border-radius: 0;
   font-family: var(--site-mono);
-  font-size: 1.1rem;
+  font-size: var(--code-font-size);
   line-height: 1.4;
   color: #2d3436;
   text-shadow: none;
+}
+
+/* Before rows are needed, native preformatted text has the same line boxes and gutter. */
+.prose pre[class*="language-"] code[data-code-lines]:not([data-lines-ready]) {
+  line-height: 1.7;
+}
+
+.prose pre[class*="language-"]:not(.line-numbers-hidden) code[data-code-lines]:not([data-lines-ready]) {
+  padding-inline-start: calc(var(--code-padding-inline) + 2.5em);
+}
+
+/* Reserve native line heights while the browser skips offscreen syntax spans. */
+@supports (content-visibility: auto) {
+  @media screen {
+    .prose pre:not(.folded) > .code-content[data-code-spacer]:has(> code[data-code-lines]:not([data-lines-ready])) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      font-size: var(--code-font-size);
+    }
+
+    .prose pre:not(.folded) > .code-content[data-code-spacer] > code[data-code-lines]:not([data-lines-ready]) {
+      grid-area: 2 / 1;
+      content-visibility: auto;
+    }
+
+    /* Row one is reserved for the toolbar before its buttons are bound. */
+    .prose pre:not(.folded) > .code-content[data-code-spacer]:has(> code[data-code-lines]:not([data-lines-ready]))::after {
+      content: attr(data-code-spacer);
+      display: block;
+      grid-area: 2 / 1;
+      visibility: hidden;
+      pointer-events: none;
+      white-space: pre;
+      font-family: var(--site-mono);
+      line-height: 1.7;
+      padding-block: var(--code-padding-block);
+    }
+  }
 }
 
 /* 代码行 */
@@ -94,7 +143,17 @@
 }
 
 /* 行号 */
-.prose pre[class*="language-"] .line-number {
+.prose pre[class*="language-"] code[data-code-lines] {
+  counter-reset: prism-line;
+}
+
+.prose pre[class*="language-"] [data-code-lines] > .line::before {
+  counter-increment: prism-line;
+  content: counter(prism-line);
+}
+
+.prose pre[class*="language-"] .line-number,
+.prose pre[class*="language-"] :where([data-code-lines]) > .line::before {
   display: inline-block;
   width: 2.5em;
   text-align: right;
@@ -105,7 +164,8 @@
   flex-shrink: 0;
 }
 
-.prose pre[class*="language-"] .line-number.hidden {
+.prose pre[class*="language-"].line-numbers-hidden .line-number,
+.prose pre[class*="language-"].line-numbers-hidden :where([data-code-lines]) > .line::before {
   display: none;
 }
 
@@ -292,16 +352,15 @@
 /* 移动端适配 */
 @media (max-width: 768px) {
   .prose pre[class*="language-"] {
+    --code-font-size: 0.95rem;
+    --code-padding-block: 15px;
+    --code-padding-inline: 15px;
     border-radius: 12px;
     margin: 20px 0;
   }
 
-  .prose pre[class*="language-"] code {
-    padding: 15px;
-    font-size: 0.95rem;
-  }
-
-  .prose pre[class*="language-"] .code-header {
+  .prose pre[class*="language-"] .code-header,
+  .prose pre[class*="language-"] > .code-content:first-child::before {
     height: 35px;
   }
 

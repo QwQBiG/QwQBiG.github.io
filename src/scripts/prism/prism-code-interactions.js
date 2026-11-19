@@ -1,3 +1,5 @@
+import { prepareCodeSearch } from './article-code.js';
+
 /**
  * 代码块交互功能
  * 实现代码搜索、选区高亮与快捷键
@@ -103,6 +105,7 @@
       return;
     }
 
+    prepareCodeSearch();
     const pattern = new RegExp(escapeRegex(query), 'gi');
     const codeBlocks = document.querySelectorAll('pre[class*="language-"] code');
 
