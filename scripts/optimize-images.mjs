@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import { portraitFile, portraitWidths } from '../src/data/portrait-images.mjs';
+import { galleryCoverImages } from '../src/data/gallery-cover.mjs';
 
 const root = process.cwd();
 const gallerySourceDir = path.join(root, 'src', 'assets', 'gallery');
@@ -84,10 +85,11 @@ async function optimizeSiteImages() {
     sharp(path.join(root, 'public', 'ZhenXun.png')).rotate()
       .resize(160, 160, { fit: 'cover' }).webp({ quality: 82, effort: 5 })
       .toFile(path.join(siteDir, 'avatar-160.webp')),
-    sharp(path.join(gallerySourceDir, 'hahaha.png')).rotate()
-      .resize({ width: 640, height: 360, fit: 'cover' })
-      .webp({ quality: 78, effort: 5, smartSubsample: true })
-      .toFile(path.join(siteDir, 'gallery-cover-640.webp')),
+    ...galleryCoverImages.map(({ width, filename }) =>
+      sharp(path.join(gallerySourceDir, 'hahaha.png')).rotate()
+        .resize({ width, height: width * 9 / 16, fit: 'cover' })
+        .webp({ quality: 78, effort: 5, smartSubsample: true })
+        .toFile(path.join(siteDir, filename))),
     ...['character', 'character-happy', 'character-wink', 'character-shy'].map((name) =>
       sharp(path.join(root, 'src', 'assets', 'site', `${name}.png`)).rotate()
       .resize({ width: 768, height: 1152, fit: 'inside', withoutEnlargement: true })
