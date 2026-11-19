@@ -145,10 +145,17 @@ async function optimizePortraits() {
 
     await Promise.all(portraitWidths.map(async width => {
       const portrait = sharp(data, { raw: info }).resize(width, width);
+      const pixels = await portrait.clone().raw().toBuffer();
+      // Resize leaves black RGB in fully transparent pixels. Matching the white
+      // paper edge compresses better without changing any visible input pixel.
+      for (let offset = 0; offset < pixels.length; offset += 4) {
+        if (pixels[offset + 3] === 0) pixels.fill(255, offset, offset + 3);
+      }
       await Promise.all([
         portrait.clone().webp({ quality: 90, alphaQuality: 100, effort: 5, smartSubsample: true })
           .toFile(path.join(siteDir, portraitFile(expression, width))),
-        portrait.clone().avif({ quality: 75, effort: 4, chromaSubsampling: '4:4:4' })
+        sharp(pixels, { raw: { width, height: width, channels: 4 } })
+          .avif({ quality: 75, effort: 6, chromaSubsampling: '4:4:4' })
           .toFile(path.join(siteDir, portraitFile(expression, width, 'avif'))),
       ]);
     }));
