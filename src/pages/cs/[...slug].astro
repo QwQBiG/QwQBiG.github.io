@@ -70,10 +70,10 @@ const pageTitle = `${title} - QwQBiG's World`;
   <main class="flex-1 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- Main Content -->
+        {/* Main Content */}
         <article class="min-w-0 lg:col-span-9">
           <GlassContainer>
-          <!-- Post Header -->
+          {/* Post Header */}
           <header class="mb-8">
             {series && series.length > 0 && !isSeriesCollection && (
               <div class="flex flex-wrap gap-2 mb-4">
@@ -125,12 +125,12 @@ const pageTitle = `${title} - QwQBiG's World`;
             </details>
           )}
 
-          <!-- Post Content -->
+          {/* Post Content */}
           <ArticleBody>
             <Content />
           </ArticleBody>
 
-          <!-- 合集文章列表 -->
+          {/* 合集文章列表 */}
           {isSeriesCollection && collectionPosts.length > 0 && (
             <div class="mt-12 pt-8 border-t border-border-color">
               <h2 class="text-2xl font-bold text-text-primary mb-6">Posts in this series</h2>
@@ -163,7 +163,7 @@ const pageTitle = `${title} - QwQBiG's World`;
             </div>
           )}
 
-          <!-- Post Navigation -->
+          {/* Post Navigation */}
           {(prevPost || nextPost) && !isSeriesCollection && (
             <nav class="mt-12 pt-8 border-t border-border-color">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -207,10 +207,10 @@ const pageTitle = `${title} - QwQBiG's World`;
           </GlassContainer>
          </article>
 
-        <!-- Sidebar -->
+        {/* Sidebar */}
         <aside class="lg:col-span-3">
           <div class="sticky top-24 space-y-6">
-            <!-- TOC -->
+            {/* TOC */}
             {tocHeadings.length > 0 && (
               <div class="toc" id="article:contents" data-toc-sidebar>
                 <div class="toc-title">Contents</div>
@@ -232,7 +232,7 @@ const pageTitle = `${title} - QwQBiG's World`;
               </div>
             )}
 
-            <!-- Series Navigation -->
+            {/* Series Navigation */}
             {seriesPosts.length > 0 && !isSeriesCollection && (
               <div class="toc">
                 <div class="toc-title">In this series</div>

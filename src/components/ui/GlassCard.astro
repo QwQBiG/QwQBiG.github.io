@@ -52,10 +52,10 @@ const hoverClasses = hover
     backface-visibility: hidden;
   "
 >
-  <!-- 顶部边缘高光 - 模拟玻璃反光 -->
+  {/* 顶部边缘高光 - 模拟玻璃反光 */}
   <div class="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none z-[1]"></div>
   
-  <!-- 内部光晕效果 - 柔和渐变 -->
+  {/* 内部光晕效果 - 柔和渐变 */}
   <div class="absolute inset-0 rounded-[2rem] pointer-events-none z-[1]" 
     style="
       background: linear-gradient(
@@ -68,7 +68,7 @@ const hoverClasses = hover
     "
   ></div>
   
-  <!-- 底部微光 - 增加立体感 -->
+  {/* 底部微光 - 增加立体感 */}
   <div class="absolute bottom-0 left-0 right-0 h-1/3 rounded-b-[2rem] pointer-events-none z-[1]"
     style="
       background: linear-gradient(
@@ -79,7 +79,7 @@ const hoverClasses = hover
     "
   ></div>
   
-  <!-- 动态高光/反光层 - 跟随鼠标 -->
+  {/* 动态高光/反光层 - 跟随鼠标 */}
   <div class="glare absolute inset-0 rounded-[2rem] pointer-events-none z-[2] opacity-0 transition-opacity duration-500"
     style="
       background: radial-gradient(
@@ -93,7 +93,7 @@ const hoverClasses = hover
     "
   ></div>
   
-  <!-- 内容区域 - 使用最高的z-index确保点击事件不被覆盖层拦截 -->
+  {/* 内容区域 - 使用最高的z-index确保点击事件不被覆盖层拦截 */}
   <div class="relative z-[999] h-full" style="pointer-events: auto;">
     <slot />
   </div>

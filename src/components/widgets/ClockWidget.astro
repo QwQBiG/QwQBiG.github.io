@@ -3,24 +3,24 @@
 ---
 
 <home-clock class="clock-widget w-full h-full flex flex-col items-center justify-center relative">
-  <!-- 装饰性背景圆环 -->
+  {/* 装饰性背景圆环 */}
   <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
     <div class="w-24 h-24 md:w-28 md:h-28 rounded-full border border-white/20 opacity-50"></div>
     <div class="absolute w-20 h-20 md:w-24 md:h-24 rounded-full border border-white/10 opacity-30"></div>
   </div>
   
-  <!-- 时间显示区域 -->
+  {/* 时间显示区域 */}
   <div class="time-display relative flex items-baseline gap-1 z-10">
     <span id="clock-time" class="clock-digits">00:00</span>
     <span id="clock-seconds" class="clock-seconds">:00</span>
   </div>
   
-  <!-- 日期显示 -->
+  {/* 日期显示 */}
   <div id="clock-date" class="clock-date mt-2 md:mt-3 text-center px-2 z-10">
     Loading…
   </div>
   
-  <!-- 装饰性指示点 -->
+  {/* 装饰性指示点 */}
   <div class="flex gap-1.5 mt-3 z-10">
     <span class="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 opacity-80"></span>
     <span class="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 opacity-60"></span>

@@ -3,7 +3,7 @@
 ---
 
 <home-calendar class="calendar-widget w-full h-full flex flex-col" style="position: relative; z-index: 50;">
-  <!-- 月份标题 -->
+  {/* 月份标题 */}
   <div class="calendar-header flex items-center justify-between mb-2 md:mb-3" style="position: relative; z-index: 51;">
     <button id="prev-month" type="button" aria-label="Previous month" class="calendar-nav-btn p-1.5 rounded-lg hover:bg-white/50 transition-colors flex-shrink-0" style="position: relative; z-index: 100; pointer-events: auto; cursor: pointer;">
       <svg class="w-3 h-3 md:w-4 md:h-4 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,7 +18,7 @@
     </button>
   </div>
   
-  <!-- 星期标题 -->
+  {/* 星期标题 */}
   <div class="calendar-weekdays grid grid-cols-7 gap-0.5 md:gap-1 mb-1 md:mb-2">
     {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day) => (
       <div class="calendar-weekday text-center text-[10px] md:text-xs font-medium py-0.5 font-['Cormorant_Garamond']">
@@ -27,9 +27,9 @@
     ))}
   </div>
   
-  <!-- 日期网格 -->
+  {/* 日期网格 */}
   <div id="calendar-days" class="calendar-days grid grid-cols-7 gap-0.5 md:gap-1 flex-1">
-    <!-- 由 JS 动态生成 -->
+    {/* 由 JS 动态生成 */}
   </div>
 </home-calendar>
 
