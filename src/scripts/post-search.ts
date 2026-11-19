@@ -37,7 +37,13 @@ function message(text: string) {
   return `<div class="text-center text-text-muted py-12">${text}</div>`;
 }
 
-let posts: SearchPost[] | undefined;
+function indexPost(post: SearchPost) {
+  const tags = (post.tags ?? []).map(tag => tag.toLowerCase());
+  const fields = [post.title.toLowerCase(), post.description?.toLowerCase() ?? '', ...tags];
+  return { post, fields, tags };
+}
+
+let posts: ReturnType<typeof indexPost>[] | undefined;
 let pendingIndex: Promise<void> | undefined;
 
 function requestIndex() {
@@ -45,7 +51,7 @@ function requestIndex() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const index = await response.json();
     if (!Array.isArray(index)) throw new Error('Invalid article index');
-    posts = index;
+    posts = index.map(indexPost);
   }).finally(() => { pendingIndex = undefined; });
   return pendingIndex;
 }
@@ -67,19 +73,24 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
     } else if (!posts) {
       results.innerHTML = message('Loading posts…');
     } else {
-      const lowerQuery = query.toLowerCase();
-      const pattern = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      const cards: string[] = [];
-      for (const post of posts) {
-        const tags = post.tags ?? [];
-        const matchedTags = tags.filter(tag => tag.toLowerCase().includes(lowerQuery));
-        if (!matchedTags.length && !post.title.toLowerCase().includes(lowerQuery) &&
-            !post.description?.toLowerCase().includes(lowerQuery)) continue;
+      const lowerQuery = query.toLowerCase().replace(/\s+/g, ' ');
+      const terms = [...new Set(lowerQuery.split(' '))].sort((a, b) => b.length - a.length);
+      const phrases = terms.length > 1 ? [lowerQuery, ...terms] : terms;
+      const alternatives = phrases.map(term => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      const pattern = new RegExp(`(${alternatives.join('|')})`, 'gi');
+      const phraseMatches: string[] = [];
+      const otherMatches: string[] = [];
+      for (const { post, fields, tags } of posts) {
+        if (!terms.every(term => fields.some(field => field.includes(term)))) continue;
 
-        const visibleTags = [...new Set([...matchedTags, ...tags])].slice(0, 3);
+        const originalTags = post.tags ?? [];
+        const matchedTags = originalTags.filter((_, i) => terms.some(term => tags[i].includes(term)));
+        const visibleTags = [...new Set([...matchedTags, ...originalTags])].slice(0, 3);
+        const exactPhrase = terms.length === 1 || fields.some(field => field.includes(lowerQuery));
+        const cards = exactPhrase ? phraseMatches : otherMatches;
         cards.push(resultCard(post, pattern, visibleTags));
       }
-      results.innerHTML = cards.length ? cards.join('') : message('No matching posts.');
+      results.innerHTML = phraseMatches.join('') + otherMatches.join('') || message('No matching posts.');
     }
   }
 
