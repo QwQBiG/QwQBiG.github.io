@@ -8,7 +8,7 @@ let enhancement: Promise<void> | undefined;
 
 function enableEnhancement() {
   enhancement ??= import('./navigation-warmup-runtime').then(({ initializeNavigationWarmup }) => {
-    handleIntent = initializeNavigationWarmup((href) => prefetch(href, { ignoreSlowConnection: true }));
+    handleIntent = initializeNavigationWarmup(prefetch);
     if (pendingIntent?.link.isConnected && !document.hidden) handleIntent(pendingIntent);
     pendingIntent = undefined;
   }).catch(() => {

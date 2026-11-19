@@ -11,14 +11,19 @@ import type { NavigationIntent } from './navigation-prefetch';
 
 type WarmupPriority = 'navigation' | 'prefetch';
 
-export function initializeNavigationWarmup(prefetchHTML: (href: string) => void) {
+export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:prefetch').prefetch) {
   const connection = () => (navigator as Navigator & { connection?: NavigationConnection }).connection;
   const canWarm = () => allowNavigationAssets(connection(), navigator.onLine);
   const knownAssets = new Set<string>();
-  for (const element of document.querySelectorAll<HTMLLinkElement | HTMLScriptElement>('link[rel="stylesheet"][href], link[rel="preload"][href], link[rel="modulepreload"][href], script[src]')) {
-    knownAssets.add(element instanceof HTMLLinkElement ? element.href : element.src);
+  function rememberPageAssets() {
+    for (const element of document.querySelectorAll<HTMLLinkElement | HTMLScriptElement>('link[rel="stylesheet"][href], link[rel="preload"][href], link[rel="modulepreload"][href], script[src]')) {
+      knownAssets.add(element instanceof HTMLLinkElement ? element.href : element.src);
+    }
   }
+  rememberPageAssets();
 
+  let nextObserver: IntersectionObserver | undefined;
+  let warmedNext: HTMLAnchorElement | undefined;
   let manifest: NavigationManifest | null = null;
   let lifetime = new AbortController();
   let currentIntent: { href: string; link: HTMLAnchorElement; committed: boolean } | undefined;
@@ -72,7 +77,8 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
           key: `navigation-asset:${asset.url}`,
           priority,
           signal,
-          run: (attemptSignal, context) => fetchNavigationAsset(asset, attemptSignal, fetch, context.priority === 'navigation' ? 'high' : 'low'),
+          run: async (attemptSignal, context) => canWarm() &&
+            fetchNavigationAsset(asset, attemptSignal, fetch, context.priority === 'navigation' ? 'high' : 'low'),
         });
         if (await job.done) knownAssets.add(asset.url);
       }));
@@ -99,7 +105,7 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
     if (!link || hoverLink === link ||
       (currentIntent?.committed && document.getElementById('navCard')?.getAttribute('aria-busy') === 'true')) return;
     hoverLink = link;
-    prefetchHTML(link.href);
+    prefetchHTML(link.href, { ignoreSlowConnection: true });
     beginIntent(link);
   }
 
@@ -111,11 +117,34 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
     // Keep a started download: returning to this link can reuse the same request/cache.
   }
 
+  function watchNextPost() {
+    const link = document.querySelector<HTMLAnchorElement>('article nav a[rel~="next"][href]');
+    if (!link || link === warmedNext || typeof IntersectionObserver !== 'function') return;
+    const destination = navigationDestination(link.href, window.location.href);
+    if (!destination) return;
+    nextObserver?.disconnect();
+    const signal = lifetime.signal;
+    nextObserver = new IntersectionObserver((entries, observer) => {
+      if (observer !== nextObserver || signal.aborted || !link.isConnected || document.hidden || !canWarm()) return;
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      nextObserver = undefined;
+      warmedNext = link;
+      // Match the ClientRouter fetch and reuse Astro's URL deduplication.
+      prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
+      void warmDestination(destination, 'prefetch', signal);
+    }, { rootMargin: `0px 0px ${window.innerHeight}px 0px` });
+    nextObserver.observe(link);
+  }
+
   function preparePrimaryNavigation() {
     if (document.readyState !== 'complete' || document.hidden || !canWarm() || lifetime.signal.aborted) return;
     // Read the small shared manifest immediately after load, before the first hover.
     void loadManifest('prefetch', lifetime.signal).catch(() => {});
-    if (window.location.pathname !== '/') return;
+    if (window.location.pathname !== '/') {
+      watchNextPost();
+      return;
+    }
     const links = [...document.querySelectorAll<HTMLAnchorElement>('#navCard a[href], a[href="/gallery/"]')];
     const destinations = new Map<string, URL>();
     for (const link of links) {
@@ -125,12 +154,15 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
     }
     const rank = (url: URL) => url.pathname === '/cs/' ? 0 : url.pathname === '/gallery/' ? 1 : 2;
     for (const destination of [...destinations.values()].sort((a, b) => rank(a) - rank(b))) {
-      prefetchHTML(destination.href);
+      prefetchHTML(destination.href, { ignoreSlowConnection: true });
       void warmDestination(destination, 'prefetch', lifetime.signal);
     }
   }
 
   function stop() {
+    nextObserver?.disconnect();
+    nextObserver = undefined;
+    warmedNext = undefined;
     lifetime.abort();
     resetIntent();
   }
@@ -151,7 +183,10 @@ export function initializeNavigationWarmup(prefetchHTML: (href: string) => void)
   });
   document.addEventListener('astro:before-swap', stop);
   document.addEventListener('astro:page-load', () => {
-    if (lifetime.signal.aborted) lifetime = new AbortController();
+    if (lifetime.signal.aborted) {
+      lifetime = new AbortController();
+      rememberPageAssets();
+    }
     resetIntent();
     preparePrimaryNavigation();
   });
