@@ -5,6 +5,7 @@ import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { legacyCodeEntry } from './scripts/legacy-code-entry.mjs';
 
 export default defineConfig({
   site: 'https://iqwqi.win',
@@ -19,7 +20,7 @@ export default defineConfig({
         updateConfig({ vite: { cacheDir: `node_modules/.vite/${command}` } });
       },
     },
-  }, mdx(), sitemap(), tailwind({
+  }, legacyCodeEntry(), mdx(), sitemap(), tailwind({
     configFile: './tailwind.config.mjs',
   }), react()],
   markdown: {

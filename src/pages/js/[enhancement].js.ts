@@ -1,16 +1,14 @@
-import { basename } from 'node:path';
 import type { APIRoute } from 'astro';
+import { createLegacyLoader } from '../../../scripts/legacy-code-entry.mjs';
+import codeStyles from '../../styles/code-blocks.css?url';
 
-// Keep the standalone URLs usable by articles cached before these scripts were bundled.
+// Old HTML loads these five URLs as classic scripts, in some cases from separate caches.
 export function getStaticPaths() {
-  const scripts = import.meta.glob<string>('../../scripts/prism/*.js', {
-    query: '?raw', import: 'default', eager: true,
-  });
-  return Object.entries(scripts).map(([file, source]) => ({
-    params: { enhancement: basename(file, '.js') },
-    props: { source },
-  }));
+  return ['prism-code-blocks', 'prism-rainbow-brackets', 'prism-enhance', 'prism-code-interactions', 'prism-xml-fix']
+    .map(enhancement => ({ params: { enhancement } }));
 }
 
-export const GET: APIRoute = ({ props }) =>
-  new Response(props.source, { headers: { 'Content-Type': 'text/javascript; charset=utf-8' } });
+export const GET: APIRoute = () => {
+  const entry = import.meta.env.DEV ? '/src/scripts/prism/prism-code-interactions.js' : '/js/article-code-entry.js';
+  return new Response(createLegacyLoader(entry, codeStyles), { headers: { 'Content-Type': 'text/javascript; charset=utf-8' } });
+};
