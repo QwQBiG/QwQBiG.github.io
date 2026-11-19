@@ -22,6 +22,7 @@ export default defineConfig({
     },
   }, legacyCodeEntry(), mdx(), sitemap(), tailwind({
     configFile: './tailwind.config.mjs',
+    applyBaseStyles: false,
   }), react()],
   markdown: {
     // 禁用 Shiki，使用 Prism

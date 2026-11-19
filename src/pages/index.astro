@@ -1,4 +1,5 @@
 ---
+import homeUtilities from '../styles/home-utilities.css?inline';
 import { transform } from 'esbuild';
 import homeInteractions from '../scripts/home-interactions.js?raw';
 import GlassCard from '../components/ui/GlassCard.astro';
@@ -45,21 +46,25 @@ const statistics = [
   <meta name="description" content="Notes on computer science, algorithms, programming, and embedded systems.">
   <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp">
 
+  <link id="home-avatar-preload" rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high" media="(min-width: 924px)">
   {/* Keep avatar returns in the compact state before the first paint. */}
   <script is:inline>
     if (window.location.hash === '#home-return-motion' || new URLSearchParams(window.location.search).has('homeReturnMotion')) {
       document.documentElement.dataset.homeReturnMotion = '1';
+      document.getElementById('home-avatar-preload').media = 'all';
     }
   </script>
 
+  <link rel="preload" as="script" href="/js/vanilla-tilt.js" media="(pointer: fine), (any-hover: hover)">
+
   {/* 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 */}
-  <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
   <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
   <link rel="preload" as="image" type="image/avif" imagesrcset={avifCoverSrcset} imagesizes={coverSizes} media="(min-width: 924px)" fetchpriority="low">
   <link rel="preload" href={homeSans} as="font" type="font/woff2" crossorigin>
   <link rel="preload" href={homeSerif} as="font" type="font/woff2" crossorigin>
   <link rel="preload" href={homeItalic} as="font" type="font/woff2" crossorigin>
 
+  <style is:inline set:html={homeUtilities}></style>
   <style>
     * {
       margin: 0;
@@ -754,6 +759,7 @@ const statistics = [
             class="glass-card relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/60 rounded-[2rem] p-5 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out cursor-pointer w-full max-w-[85vw] [@media(min-width:924px)]:w-auto"
             data-tilt="true"
             style="
+              transform: perspective(1200px);
               transform-style: preserve-3d;
               will-change: transform;
               box-shadow:
@@ -812,6 +818,7 @@ const statistics = [
                   <div class="nav-avatar relative w-14 h-14 [@media(min-width:924px)]:w-16 [@media(min-width:924px)]:h-16 translate-x-2 translate-y-2">
                     <img
                       src="/generated/site/avatar-160.webp"
+                      loading="lazy" width="160" height="160"
                       alt="iqwqi"
                       class="w-full h-full object-cover rounded-[1rem] border-2 border-white/60 shadow-md"
                     />
@@ -1029,6 +1036,18 @@ const statistics = [
   <script>
     import '../scripts/navigation-prefetch';
   </script>
-  <script src="/js/vanilla-tilt.js" defer></script>
+  <script is:inline>
+    // A mouse or trackpad may be connected after the homepage has opened.
+    const tiltPointer = window.matchMedia('(pointer: fine), (any-hover: hover)');
+    function loadHomeTilt() {
+      if (!tiltPointer.matches) return;
+      tiltPointer.removeEventListener('change', loadHomeTilt);
+      const script = document.createElement('script');
+      script.src = '/js/vanilla-tilt.js';
+      document.head.append(script);
+    }
+    tiltPointer.addEventListener('change', loadHomeTilt);
+    loadHomeTilt();
+  </script>
 </body>
 </html>
