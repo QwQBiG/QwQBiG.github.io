@@ -13,6 +13,9 @@ class VanillaTilt {
     };
 
     this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    this.rafId = null;
+    this.latestMove = null;
+    this.resetTimer = null;
 
     if (this.isTouchDevice) {
       this.settings.max = 6;
@@ -40,6 +43,11 @@ class VanillaTilt {
   }
 
   onMouseEnter(e) {
+    if (this.resetTimer !== null) {
+      clearTimeout(this.resetTimer);
+      this.resetTimer = null;
+      this.element.style.transition = '';
+    }
     this.update(e);
     if (this.glareElement) {
       this.glareElement.style.opacity = '1';
@@ -47,22 +55,28 @@ class VanillaTilt {
   }
 
   onMouseMove(e) {
-    if (!this.rafId) {
+    this.latestMove = e;
+    if (this.rafId === null) {
       this.rafId = requestAnimationFrame(() => {
-        this.update(e);
+        this.update(this.latestMove);
+        this.latestMove = null;
         this.rafId = null;
       });
     }
   }
 
-  onMouseLeave(e) {
+  onMouseLeave() {
+    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+    this.rafId = null;
+    this.latestMove = null;
     this.element.style.transform = `perspective(${this.settings.perspective}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     this.element.style.transition = `transform ${this.settings.speed}ms cubic-bezier(0.23, 1, 0.32, 1)`;
     if (this.glareElement) {
       this.glareElement.style.opacity = '0';
     }
 
-    setTimeout(() => {
+    this.resetTimer = setTimeout(() => {
+      this.resetTimer = null;
       this.element.style.transition = '';
     }, this.settings.speed);
   }
