@@ -47,7 +47,7 @@ const statistics = [
 
   {/* Keep avatar returns in the compact state before the first paint. */}
   <script is:inline>
-    if (new URLSearchParams(window.location.search).has('homeReturnMotion')) {
+    if (window.location.hash === '#home-return-motion' || new URLSearchParams(window.location.search).has('homeReturnMotion')) {
       document.documentElement.dataset.homeReturnMotion = '1';
     }
   </script>

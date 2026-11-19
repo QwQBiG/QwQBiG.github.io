@@ -31,7 +31,7 @@ test('floating navigation preserves native actions and continues the existing ba
     closest(selector: string) { return selector === '#floatingNavCard' && !this.insideNavigation ? null : this; }
     hasAttribute(name: string) { return this.attributes.has(name) || (name === 'data-astro-reload' && 'astroReload' in this.dataset); }
   }
-  const links = [new Link('/cs/posts/next/'), new Link('/about/'), new Link('/?homeReturnMotion=1')];
+  const links = [new Link('/cs/posts/next/'), new Link('/about/'), new Link('/#home-return-motion')];
   const cleanup: Array<() => void> = [];
   let clock = 1000;
   let animation = { animationName: 'gradientShift', currentTime: 2500 };

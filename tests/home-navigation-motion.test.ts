@@ -4,8 +4,10 @@ import test from 'node:test';
 import { runInNewContext } from 'node:vm';
 
 const script = await readFile(new URL('../src/scripts/home-interactions.js', import.meta.url), 'utf8');
+const pageTemplate = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+const earlyScript = pageTemplate.match(/<script is:inline>([\s\S]*?)<\/script>/)![1];
 
-function homePage(touch = false, search = '') {
+function homePage(touch = false, search = '', storedReturn = false) {
   const preference = { matches: false };
   const location = new URL('https://example.test/' + search);
   const timers = new Map<number, () => void>();
@@ -22,12 +24,14 @@ function homePage(touch = false, search = '') {
     getAttribute() { return this.href; },
   });
   const storage = new Map<string, string>();
+  if (storedReturn) storage.set('home-return-motion', '1');
+  const dataset: { homeReturnMotion?: string } = {};
   const document = Object.assign(new EventTarget(), {
-    documentElement: { removeAttribute() {} },
+    documentElement: { dataset, removeAttribute() { delete dataset.homeReturnMotion; } },
     getElementById: (id: string) => id === 'navCard' ? card : null,
     querySelector: () => null, querySelectorAll: () => [link],
   });
-  runInNewContext(script, {
+  const context = {
     URL, URLSearchParams, document,
     window: Object.assign(new EventTarget(), { location,
       history: { replaceState(_state: unknown, _unused: string, path: string) { location.href = new URL(path, location).href; } },
@@ -37,12 +41,14 @@ function homePage(touch = false, search = '') {
     requestAnimationFrame: (run: () => void) => frames.push(run),
     setTimeout: (run: () => void, delay: number) => { timers.set(delay, run); return delay; },
     clearTimeout: (id: number) => timers.delete(id),
-  });
+  };
+  runInNewContext(earlyScript, context);
+  runInNewContext(script, context);
   function click(props = {}) {
     const e = Object.assign(new Event('click', { cancelable: true }), { button: 0 }, props);
     return link.dispatchEvent(e); // true leaves the link's native navigation in charge
   }
-  return { preference, location, link, flags, timers, frames, click };
+  return { preference, location, link, flags, timers, frames, click, dataset };
 }
 
 test('a live reduced-motion preference keeps the native link, while normal clicks retain their animation', () => {
@@ -82,12 +88,32 @@ test('modified clicks, downloads, new tabs and same-page links keep their native
   assert.equal(page.frames.length + page.timers.size, 0);
 });
 
-test('returning through the avatar still completes the home transition and clears its marker', () => {
-  const page = homePage(false, '?homeReturnMotion=1');
-  page.preference.matches = true;
-  assert.equal(page.frames.length, 1);
-  while (page.frames.length) page.frames.shift()!();
-  assert.equal(page.location.search, '');
-  assert.equal(page.click(), true);
-  assert.equal(page.timers.size, 0);
+test('avatar returns prepare the first paint and clear only their own marker', () => {
+  for (const [url, expected] of [
+    ['#home-return-motion', '/'],
+    ['?source=series#home-return-motion', '/?source=series'],
+    ['?homeReturnMotion=1&source=tags#navCard', '/?source=tags#navCard'],
+    ['?source=series&homeReturnMotion=1#home-return-motion', '/?source=series'],
+  ]) {
+    const page = homePage(false, url);
+    page.preference.matches = true;
+    assert.equal(page.dataset.homeReturnMotion, '1');
+    assert.equal(page.frames.length, 1);
+    while (page.frames.length) page.frames.shift()!();
+    assert.equal(page.dataset.homeReturnMotion, undefined);
+    assert.equal(page.location.href, 'https://example.test' + expected);
+    assert.equal(page.click(), true);
+    assert.equal(page.timers.size, 0);
+  }
+});
+
+test('ordinary homepage links keep their query and anchor, including a storage-only return', () => {
+  const suffix = '?source=posts#navCard';
+  const page = homePage(false, suffix);
+  assert.equal(page.dataset.homeReturnMotion, undefined);
+  assert.equal(page.frames.length, 0);
+  const stored = homePage(false, suffix, true);
+  assert.equal(stored.dataset.homeReturnMotion, '1');
+  while (stored.frames.length) stored.frames.shift()!();
+  assert.equal(stored.location.href, 'https://example.test/' + suffix);
 });
