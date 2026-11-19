@@ -1,6 +1,52 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fitPhotoPosition, listenForPointerDrag, photoAnchorY, photoPositionBounds, photoPreviewSize, photoWallCardWidth, photoWallSizes, resolvePhotoWallSize, whenPhotoSettles } from '../src/utils/photo-wall.ts';
+import { readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
+import { fitPhotoPosition, listenForPointerDrag, photoAnchorY, photoPositionBounds, photoPreviewSize, photoWallCardWidth, photoWallSizes, readInitialPhotoPosition, resolvePhotoWallSize, whenPhotoSettles } from '../src/utils/photo-wall.ts';
+
+const firstLayout = readFileSync(new URL('../src/scripts/gallery-first-layout.js', import.meta.url), 'utf8');
+
+test('the interactive wall uses the first paint’s scatter and saved offsets even after rotation', () => {
+  for (const firstSize of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
+    const properties = new Map<string, string>();
+    let randomCalls = 0;
+    runInNewContext(firstLayout, {
+      document: {
+        currentScript: { dataset: { photoIds: '["1","2","3","4"]', compact: 'compact' } },
+        documentElement: { style: { setProperty: (key: string, value: unknown) => properties.set(key, String(value)) } },
+      },
+      window: { innerWidth: firstSize.width, innerHeight: firstSize.height, matchMedia: () => ({ matches: firstSize.width < 480 }) },
+      localStorage: { getItem(key: string) {
+        if (key.endsWith('-1')) return '{"x":500,"y":-800,"rotation":6,"zIndex":40}';
+        if (key.endsWith('-2')) throw new Error('Storage unavailable');
+        if (key.endsWith('-3')) return '{"x":"bad","y":0}';
+        return '{"x":-8,"y":5,"rotation":"invalid","zIndex":2.1}';
+      } },
+      Math: Object.assign(Object.create(Math), { random: () => { randomCalls++; return 0.5; } }),
+    });
+    assert.equal(randomCalls, 6, 'only the two unsaved cards draw new positions');
+    for (const id of ['1', '2', '3', '4']) {
+      const property = (name: string) => properties.get(`--photo-${id}-${name}`)!;
+      const style = {
+        getPropertyValue: (name: string) => property(name.replace(/^--(?:initial-)?/, '')),
+        zIndex: property('z'),
+      } as CSSStyleDeclaration;
+      const pose = { x: parseFloat(property('x')), y: parseFloat(property('y')), rotation: parseFloat(property('rotation')), zIndex: Number(property('z')) };
+      assert.ok(Object.values(pose).every(Number.isFinite));
+      if (id === '1') assert.deepEqual(pose, { x: 500, y: -800, rotation: 6, zIndex: 40 });
+      if (id === '4') assert.deepEqual(pose, { x: -8, y: 5, rotation: 0, zIndex: 4 });
+      for (const wall of [firstSize, { width: firstSize.height, height: firstSize.width }]) {
+        assert.deepEqual(readInitialPhotoPosition(style, wall, photoWallCardWidth(wall)), pose);
+      }
+    }
+  }
+});
+
+test('hydration can also adopt the visible CSS fallback when the first-layout script did not run', () => {
+  const style = { getPropertyValue: (name: string) => name === '--rotation' ? '-7deg' : '', left: '39px', top: '152px', zIndex: '2' } as CSSStyleDeclaration;
+  assert.deepEqual(readInitialPhotoPosition(style, { width: 390, height: 844 }, 120),
+    { x: -96, y: -198, rotation: -7, zIndex: 2 });
+});
 
 test('thumbnail sizing follows exact viewport boundaries and short phone landscape', () => {
   for (const [width, height, expected] of [

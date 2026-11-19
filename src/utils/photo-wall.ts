@@ -1,4 +1,4 @@
-import type { PhotoItem } from '../types/photo';
+import type { PhotoItem, PhotoState } from '../types/photo';
 
 interface PhotoWallSize {
   width: number;
@@ -31,6 +31,18 @@ export function photoWallCardWidth(viewport: PhotoWallSize) {
 export function photoAnchorY(width: number) {
   // Stored y is relative to this original anchor, rather than the geometric center.
   return width < 250 ? width * 0.6 : 100;
+}
+
+/** Reuse the static card's initial pose, keeping raw offsets across viewport changes. */
+export function readInitialPhotoPosition(style: CSSStyleDeclaration, wall: PhotoWallSize, cardWidth: number): PhotoState {
+  const x = parseFloat(style.getPropertyValue('--initial-x'));
+  const y = parseFloat(style.getPropertyValue('--initial-y'));
+  return {
+    x: Number.isFinite(x) ? x : parseFloat(style.left) - wall.width / 2 + cardWidth / 2,
+    y: Number.isFinite(y) ? y : parseFloat(style.top) - wall.height / 2 + photoAnchorY(cardWidth),
+    rotation: parseFloat(style.getPropertyValue('--rotation')),
+    zIndex: Number(style.zIndex),
+  };
 }
 
 export function photoFrameHeightRatio(photo: Pick<PhotoItem, 'width' | 'height'>) {

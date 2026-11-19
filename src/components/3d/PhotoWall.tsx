@@ -4,57 +4,12 @@ import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import type { PhotoItem, PhotoState } from '../../types/photo';
 import {
   desktopPhotoWidth, fitPhotoPosition, listenForPointerDrag, photoAnchorY,
-  photoFrameHeightRatio, photoPositionBounds, photoPreviewSize, photoWallCardWidth, resolvePhotoWallSize, whenPhotoSettles,
+  photoFrameHeightRatio, photoPositionBounds, photoPreviewSize, photoWallCardWidth, readInitialPhotoPosition, resolvePhotoWallSize, whenPhotoSettles,
 } from '../../utils/photo-wall';
 
 interface PhotoWallProps {
   photos: PhotoItem[];
 }
-
-// 生成随机散落位置 - 相对于容器中心
-const generateRandomPosition = (index: number, total: number, containerWidth: number, containerHeight: number, isMobile: boolean): PhotoState => {
-  const angle = (index / total) * Math.PI * 2;
-
-  // 移动端特殊处理：限制Y轴范围，防止图片超出屏幕
-  const aspectRatio = containerHeight / containerWidth;
-  const isNarrowScreen = isMobile && aspectRatio > 1.5; // 长宽比过大的屏幕
-
-  // X轴范围
-  const maxRadiusX = Math.min(containerWidth * 0.35, 350);
-  const radiusX = maxRadiusX * (0.3 + Math.random() * 0.7);
-
-  // Y轴范围：窄屏时限制更小，确保图片在可视区域内
-  const yScale = isNarrowScreen ? 0.2 : (isMobile ? 0.3 : 0.4);
-  const maxRadiusY = Math.min(containerHeight * yScale, isMobile ? 200 : 400);
-  const radiusY = maxRadiusY * (0.3 + Math.random() * 0.7);
-
-  // 移动端添加向下偏移，确保图片在屏幕中间偏下位置显示
-  const yOffset = isMobile ? containerHeight * 0.05 : 0;
-
-  return {
-    x: Math.cos(angle) * radiusX,
-    y: Math.sin(angle) * radiusY + yOffset,
-    rotation: (Math.random() - 0.5) * 20, // 减小旋转角度
-    zIndex: index,
-  };
-};
-
-// 从 localStorage 读取状态
-const loadStateFromStorage = (photoId: string): PhotoState | null => {
-  if (typeof window === 'undefined') return null;
-  try {
-    const saved = localStorage.getItem(`photo-wall-${photoId}`);
-    const state = saved ? JSON.parse(saved) : null;
-    if (!state || !Number.isFinite(state.x) || !Number.isFinite(state.y)) return null;
-    return {
-      x: state.x, y: state.y,
-      rotation: Number.isFinite(state.rotation) ? state.rotation : 0,
-      zIndex: Number.isFinite(state.zIndex) ? state.zIndex : Number(photoId),
-    };
-  } catch {
-    return null;
-  }
-};
 
 // 保存状态到 localStorage
 const saveStateToStorage = (photoId: string, state: PhotoState) => {
@@ -92,19 +47,14 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
     const measuredSize = measureContainer();
     const initialStates = new Map<string, PhotoState>();
     let maxZIndex = photos.length;
-    photos.forEach((photo, index) => {
-      let savedState = loadStateFromStorage(photo.id);
-      // Keep compact positions across rotations, and fit a restored desktop card when first drawn.
-      if (savedState && measuredSize.baseWidth === desktopPhotoWidth) {
-        const cardWidth = desktopPhotoWidth * (photo.scale ?? 1);
-        const bounds = photoPositionBounds(measuredSize, cardWidth, photoFrameHeightRatio(photo), savedState.rotation);
-        savedState = { ...savedState, ...fitPhotoPosition(savedState, bounds) };
-      }
-      if (savedState) maxZIndex = Math.max(maxZIndex, savedState.zIndex);
-      initialStates.set(photo.id, savedState || generateRandomPosition(
-        index, photos.length, measuredSize.width, measuredSize.height,
-        measuredSize.baseWidth < desktopPhotoWidth,
-      ));
+    const fallbacks = containerRef.current?.closest('main')?.querySelector<HTMLElement>('[data-static-photo-wall]');
+    photos.forEach((photo) => {
+      const card = fallbacks?.querySelector<HTMLElement>(`[data-photo-id="${CSS.escape(photo.id)}"]`);
+      if (!card) return;
+      const cardWidth = measuredSize.baseWidth * (photo.scale ?? 1);
+      const state = readInitialPhotoPosition(getComputedStyle(card), measuredSize, cardWidth);
+      maxZIndex = Math.max(maxZIndex, state.zIndex);
+      initialStates.set(photo.id, state);
     });
     setPhotoStates(initialStates);
     setHighestZIndex(maxZIndex);
@@ -299,11 +249,12 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   const [hasMounted, setHasMounted] = useState(false);
   const [dragPosition, setDragPosition] = useState<{ x: number; y: number } | null>(null);
   const [isLifted, setIsLifted] = useState(false);
-  const bounds = useMemo(() => compact
-    ? photoPositionBounds(wall, cardWidth, photoFrameHeightRatio(photo), state.rotation)
-    : null, [compact, wall.width, wall.height, cardWidth, photo, state.rotation]);
-  const boundsRef = useRef(bounds);
-  boundsRef.current = bounds;
+  const [hasMoved, setHasMoved] = useState(false);
+  const bounds = useMemo(() =>
+    photoPositionBounds(wall, cardWidth, photoFrameHeightRatio(photo), state.rotation),
+    [wall.width, wall.height, cardWidth, photo, state.rotation]);
+  const boundsRef = useRef(compact ? bounds : null);
+  boundsRef.current = compact ? bounds : null;
   const dragCleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -331,7 +282,8 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
 
   // Project the remembered point into the current wall on every rotation.
   const requested = dragPosition ?? state;
-  const position = bounds ? fitPhotoPosition(requested, bounds) : requested;
+  // Until dragged, desktop cards follow the same viewport clamps as the static wall.
+  const position = compact || (!hasMoved && !dragPosition) ? fitPhotoPosition(requested, bounds) : requested;
   const pixelX = wall.width / 2 + position.x - cardWidth / 2;
   const pixelY = wall.height / 2 + position.y - photoAnchorY(cardWidth);
   const transition = hasMounted
@@ -359,7 +311,9 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
     const fit = (point: { x: number; y: number }) => boundsRef.current
       ? fitPhotoPosition(point, boundsRef.current) : point;
     const finishPosition = (point: { x: number; y: number }) => {
-      const final = point.x === initialPosX && point.y === initialPosY ? state : fit(point);
+      const moved = point.x !== initialPosX || point.y !== initialPosY;
+      const final = moved ? fit(point) : state;
+      if (moved) setHasMoved(true);
       setDragPosition(null);
       onDragEnd(final.x, final.y, state.rotation);
     };
