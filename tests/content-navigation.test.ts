@@ -16,6 +16,12 @@ test('client navigation stays within content routes and leaves presentation page
   }
 });
 
+test('instant content swaps opt out of the root snapshot before the browser captures it', async () => {
+  const component = await readFile(new URL('../src/components/content/ContentNavigation.astro', import.meta.url), 'utf8');
+  assert.match(component, /:root\[data-astro-transition\]\s*\{\s*view-transition-name: none;/);
+  assert.match(component, /<ClientRouter fallback="swap"/);
+});
+
 test('floating navigation preserves native actions and continues the existing background animation', async () => {
   const handlers = new Map<string, (event: any) => void>();
   const navigation: string[] = [];
@@ -72,12 +78,10 @@ test('floating navigation preserves native actions and continues the existing ba
     assert.equal(click(link, options).defaultPrevented, false, link.href);
   }
   assert.equal(navigation.length, 1);
-  let skipped = false;
-  handlers.get('astro:before-swap')!({ type: 'astro:before-swap', viewTransition: { skipTransition() { skipped = true; } } });
+  handlers.get('astro:before-swap')!({ type: 'astro:before-swap' });
   animation = { animationName: 'gradientShift', currentTime: 0 };
   clock = 1016;
   handlers.get('astro:after-swap')!({});
-  assert.equal(skipped, true);
   assert.equal(animation.currentTime, 2516);
   assert.equal(links[1].dataset.astroReload, '');
   assert.equal(links[2].dataset.astroReload, '');

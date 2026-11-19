@@ -37,8 +37,6 @@ document.addEventListener('click', (event) => {
 
 document.addEventListener('astro:before-swap', (event) => {
   if (!isTransitionBeforeSwapEvent(event)) return;
-  // Content previously changed without a crossfade; keep that same visual behavior.
-  event.viewTransition.skipTransition();
   const gradient = document.body.getAnimations?.().find(animation => (
     'animationName' in animation && animation.animationName === 'gradientShift'
   ));
