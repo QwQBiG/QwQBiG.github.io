@@ -1,12 +1,12 @@
 import walineStyles from '@waline/client/waline.css?url';
-import type { WalineInstance } from '@waline/client/full';
+import type { init, WalineInstance } from '@waline/client';
 import { scheduleBackgroundTask } from '../utils/background-tasks';
 import { keepCommentDisplayEmojiFree } from './waline-display';
 import { enhanceCommentInteractions } from './waline-interactions';
 
 const serverURL = 'https://waline.iqwqi.win/';
-type WalineModule = typeof import('@waline/client/full');
-let clientPromise: Promise<WalineModule> | undefined;
+type InitComments = typeof init;
+let clientPromise: Promise<InitComments> | undefined;
 let stylesPromise: Promise<void> | undefined;
 let cancelPendingStyles: (() => void) | undefined;
 let current: { element: HTMLElement; dispose: () => void } | undefined;
@@ -54,13 +54,13 @@ function loadStyles(): Promise<void> {
   return stylesPromise;
 }
 
-async function loadResources(): Promise<WalineModule> {
-  clientPromise ??= import('@waline/client/full').catch(error => {
+async function loadResources(): Promise<InitComments> {
+  clientPromise ??= import('@waline/client').then(({ init }) => init).catch(error => {
     clientPromise = undefined;
     throw error;
   });
-  const [client] = await Promise.all([clientPromise, loadStyles()]);
-  return client;
+  const [initComments] = await Promise.all([clientPromise, loadStyles()]);
+  return initComments;
 }
 
 function mountComments() {
@@ -73,7 +73,7 @@ function mountComments() {
 
   const lifetime = new AbortController();
   let instance: WalineInstance | null = null;
-  let task: ReturnType<typeof scheduleBackgroundTask<WalineModule>> | undefined;
+  let task: ReturnType<typeof scheduleBackgroundTask<InitComments>> | undefined;
   let stopInteractions: (() => void) | undefined;
   let observer: IntersectionObserver | undefined;
   let disposed = false;
@@ -103,12 +103,12 @@ function mountComments() {
       run: loadResources,
     });
     const pending = task;
-    void pending.done.then(client => {
+    void pending.done.then(initComments => {
       if (disposed || instance || !element.isConnected) return;
       if (task === pending) task = undefined;
-      if (!client) { showFailure(); return; }
+      if (!initComments) { showFailure(); return; }
       try {
-        instance = client.init({
+        instance = initComments({
           el: element,
           serverURL,
           login: 'force',
