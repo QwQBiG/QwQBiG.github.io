@@ -249,7 +249,9 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
 
 async function mermaidScript() {
   const file = await readFile(new URL('../src/components/content/MermaidDiagrams.astro', import.meta.url), 'utf8');
-  return stripTypeScriptTypes(file.match(/<script>([\s\S]*?)<\/script>/)![1]);
+  const helper = await readFile(new URL('../src/scripts/article-fragment.ts', import.meta.url), 'utf8');
+  const script = file.match(/<script>([\s\S]*?)<\/script>/)![1].replace(/^\s*import .*watchArticleFragment.*;$/m, '');
+  return stripTypeScriptTypes(helper.replace('export function', 'function') + '\n' + script);
 }
 
 test('a late diagram import cannot initialize a departed article and the next page initializes once', async () => {
@@ -358,11 +360,17 @@ test('diagrams render near the reader, recheck priority after async work, and st
   fallback.abort();
 });
 
-test('diagram articles let native heading jumps finish, then honor the scroll margin and release on reader input', async () => {
+test('diagrams and code share heading jumps, align at the scroll margin and yield to reader input', async () => {
   const script = await mermaidScript();
   const timers = new Map<number, () => void>();
   let id = 0;
+  let stopped = 0;
   const window = Object.assign(new EventTarget(), {
+    scrollX: 0, scrollY: 2710,
+    scrollTo({ left, top, behavior }: ScrollToOptions) {
+      assert.deepEqual([left, top, behavior], [0, 2710, 'instant']);
+      stopped++;
+    },
     setTimeout(callback: () => void) { timers.set(++id, callback); return id; },
     clearTimeout(id: number) { timers.delete(id); },
   });
@@ -396,7 +404,7 @@ test('diagram articles let native heading jumps finish, then honor the scroll ma
   const article = { contains: (element: unknown) => element === heading };
   const history = { state: { scrollY: 0 } };
   const hash = '#' + encodeURIComponent('应答');
-  const watch = runInNewContext(script + '\nwatchDiagramFragment', {
+  const watch = runInNewContext(script + '\nwatchArticleFragment', {
     window, document, history, location: { hash }, ResizeObserver: Resize, AbortController,
     getComputedStyle: () => ({ scrollMarginTop: '96px' }), console,
   });
@@ -404,6 +412,10 @@ test('diagram articles let native heading jumps finish, then honor the scroll ma
   let resumes = 0;
   let rendering = true;
   const fragment = watch(article, lifetime.signal, () => rendering, () => { resumes++; });
+  const code = new AbortController();
+  let codeResumes = 0;
+  assert.equal(watch(article, code.signal, () => false, () => { codeResumes++; }), fragment);
+  assert.equal(getEventListeners(window, 'scroll').length, 1, 'a mixed article shares a single active jump');
   assert.equal(fragment.travelling(), true);
   window.dispatchEvent(new Event('scroll'));
   window.dispatchEvent(new Event('scroll'));
@@ -413,6 +425,8 @@ test('diagram articles let native heading jumps finish, then honor the scroll ma
   tick();
   assert.equal(fragment.travelling(), false);
   assert.equal(resumes, 1);
+  assert.equal(codeResumes, 1);
+  code.abort();
   assert.equal(top, 96);
   tick();
   assert.equal(observing, true, 'late diagram size changes can still move the heading');
@@ -425,6 +439,7 @@ test('diagram articles let native heading jumps finish, then honor the scroll ma
   assert.equal(top, -100, 'a reader scroll cancels corrections, even with a layout pending');
   assert.equal(observing, false);
   assert.equal(timers.size, 0);
+  assert.equal(getEventListeners(window, 'scroll').length, 0, 'ordinary reading has no fragment listeners');
   history.state.scrollY = 4000;
   lifetime.abort();
   const visit = new AbortController();
@@ -438,5 +453,10 @@ test('diagram articles let native heading jumps finish, then honor the scroll ma
   tick();
   tick();
   assert.equal(observing, false, 'release as soon as nearby layouts have settled');
+  document.dispatchEvent(click);
+  window.dispatchEvent(new Event('touchstart'));
+  assert.equal(stopped, 1, 'stop the in-flight native scroll at the current reading position');
+  assert.equal(timers.size, 0);
+  assert.equal(restored.travelling(), false);
   visit.abort();
 });

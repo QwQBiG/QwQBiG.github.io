@@ -1,4 +1,6 @@
 <script>
+  import { watchArticleFragment } from '../../scripts/article-fragment';
+
   let diagramLifetime: AbortController | undefined;
   let diagramBody: HTMLElement | undefined;
   let diagramPage = 0;
@@ -14,7 +16,7 @@
     let running = false;
     let frame: number | undefined;
 
-    const fragment = watchDiagramFragment(blocks[0].closest('article'), signal,
+    const fragment = watchArticleFragment(blocks[0].closest('article'), signal,
       () => running || frame !== undefined || nearby.size > 0,
       () => { if (frame === undefined) void runNext(); });
 
@@ -75,70 +77,6 @@
       nearby.clear();
       if (frame !== undefined) cancelAnimationFrame(frame);
     }, { once: true });
-  }
-
-  // Let native fragment scrolling pass intervening diagrams before resolving any new layouts.
-  function watchDiagramFragment(article: HTMLElement | null, signal: AbortSignal, busy: () => boolean, resume: () => void) {
-    if (!article) return;
-    let heading: HTMLElement | undefined;
-    let travelling = false;
-    let timer: number | undefined;
-    const resize = typeof ResizeObserver === 'function' ? new ResizeObserver(align) : undefined;
-    const options = { signal, passive: true };
-    function clear() {
-      window.clearTimeout(timer);
-      resize?.disconnect();
-      heading = undefined;
-      travelling = false;
-    }
-    function cancel() {
-      const paused = travelling;
-      clear();
-      if (paused && !signal.aborted) resume();
-    }
-    function align() {
-      if (!heading || travelling) return;
-      const margin = parseFloat(getComputedStyle(heading).scrollMarginTop) || 0;
-      const offset = heading.getBoundingClientRect().top - margin;
-      if (Math.abs(offset) > 2) heading.scrollIntoView({ behavior: 'instant', block: 'start' });
-    }
-    function finish() {
-      travelling = false;
-      align();
-      resume();
-      // A near diagram may still be downloading or applying its final SVG size.
-      function releaseWhenIdle() {
-        if (!busy()) clear();
-        else timer = window.setTimeout(releaseWhenIdle, 250);
-      }
-      timer = window.setTimeout(releaseWhenIdle, 250);
-    }
-    function waitForScroll() {
-      if (!travelling) return;
-      window.clearTimeout(timer);
-      timer = window.setTimeout(finish, 160);
-    }
-    function follow(hash: string) {
-      let id: string;
-      try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
-      const target = document.getElementById(id);
-      if (!target || !article!.contains(target) || !target.matches('h1, h2, h3, h4, h5, h6')) return;
-      clear();
-      heading = target;
-      travelling = true;
-      resize?.observe(article!);
-      waitForScroll();
-    }
-    document.addEventListener('click', event => {
-      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
-      if (link?.hash && !link.target && !link.hasAttribute('download')) follow(link.hash);
-    }, { signal, capture: true });
-    window.addEventListener('scroll', waitForScroll, options);
-    for (const name of ['wheel', 'touchstart', 'pointerdown', 'keydown']) window.addEventListener(name, cancel, options);
-    signal.addEventListener('abort', clear, { once: true });
-    if (location.hash && !history.state?.scrollY) follow(location.hash);
-    return { travelling: () => travelling };
   }
 
   async function loadRenderer(signal: AbortSignal): Promise<RenderDiagram | undefined> {

@@ -1,3 +1,4 @@
+import { watchArticleFragment } from '../article-fragment';
 import { prepareCodeBlock, prepareCodeLines } from './prism-code-blocks.js';
 import { decorateBrackets } from './prism-rainbow-brackets.js';
 import { enhanceSyntaxHighlighting } from './prism-enhance.js';
@@ -16,12 +17,26 @@ function initialize() {
   let keyboardNavigation = false;
   const lifetime = new AbortController();
   const listeners = { capture: true, signal: lifetime.signal };
+  const passedDuringJump = new Set();
+  function decorateDestination() {
+    if (passedDuringJump.size) decorateAll(passedDuringJump);
+    passedDuringJump.clear();
+  }
   const viewport = typeof IntersectionObserver === 'function'
     ? new IntersectionObserver(entries => {
+        if (fragment?.travelling()) {
+          for (const entry of entries) {
+            if (entry.isIntersecting) passedDuringJump.add(entry.target);
+            else passedDuringJump.delete(entry.target);
+          }
+          return;
+        }
         const nearby = entries.filter(entry => entry.isIntersecting).map(entry => entry.target);
         if (nearby.length) decorateAll(nearby);
       }, { rootMargin: '600px 0px' })
     : null;
+  const fragment = viewport && watchArticleFragment(body.querySelector('article'), lifetime.signal,
+    () => false, decorateDestination);
 
   function prepareToolbar(pre) {
     if (pre.dataset.processed !== 'true' && pre.matches('[class*="language-"]')) prepareCodeBlock(pre);
