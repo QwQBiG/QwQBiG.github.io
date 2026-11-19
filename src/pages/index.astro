@@ -1314,6 +1314,8 @@ const statistics = [
           if (destination.origin !== window.location.origin ||
               (destination.pathname === window.location.pathname && destination.search === window.location.search)) return;
 
+          // Reduced-motion CSS already removes the transition. Let the link open immediately.
+          if (!isNavigating && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           e.preventDefault();
           if (isNavigating) return;
           isNavigating = true;
