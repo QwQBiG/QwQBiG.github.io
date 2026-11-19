@@ -9,12 +9,13 @@ const gallerySourceDir = path.join(root, 'src', 'assets', 'gallery');
 const generatedDir = path.join(root, 'public', 'generated');
 const galleryOutputDir = path.join(generatedDir, 'gallery');
 const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif']);
-const galleryDescriptions = {
-  '2025-08.png': 'Two Minecraft players stand on a flower-lined path outside a wooden house.',
-  'AIcard.png': 'A silver-haired figure in profile against the dark grid of a blue-lit window.',
-  'hahaha.png': 'Four cartoon bandmates play guitars and drums in pink, yellow, red, and blue panels.',
-  'Kafka.png': 'Kafka stands beneath dark umbrellas in the rain, with red threads crossing the scene.',
-  'ZhenXun.jpg': 'A pink-haired anime character smiles at the viewer with clasped hands.',
+// Preserve the five numeric keys used by visitors who already arranged their wall.
+const galleryEntries = {
+  '2025-08.png': { id: '1', alt: 'Two Minecraft players stand on a flower-lined path outside a wooden house.' },
+  'AIcard.png': { id: '2', alt: 'A silver-haired figure in profile against the dark grid of a blue-lit window.' },
+  'hahaha.png': { id: '3', alt: 'Four cartoon bandmates play guitars and drums in pink, yellow, red, and blue panels.' },
+  'Kafka.png': { id: '4', alt: 'Kafka stands beneath dark umbrellas in the rain, with red threads crossing the scene.' },
+  'ZhenXun.jpg': { id: '5', alt: 'A pink-haired anime character smiles at the viewer with clasped hands.' },
 };
 
 async function writeGalleryThumbnail(image, stem) {
@@ -44,7 +45,7 @@ async function optimizeGallery() {
     const previewName = `${stem}-1920.webp`;
 
     const pipeline = sharp(sourcePath).rotate();
-    const [thumbnail, preview] = await Promise.all([
+    const [thumbnail, preview, placeholder] = await Promise.all([
       writeGalleryThumbnail(
         pipeline.clone().resize({ width: 720, height: 720, fit: 'inside', withoutEnlargement: true }),
         `${stem}-720`,
@@ -53,6 +54,8 @@ async function optimizeGallery() {
         .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 84, effort: 5, smartSubsample: true })
         .toFile(path.join(galleryOutputDir, previewName)),
+      pipeline.clone().resize({ width: 20, height: 20, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 45 }).toBuffer(),
     ]);
 
     const smallerThumbnails = await Promise.all(
@@ -73,7 +76,9 @@ async function optimizeGallery() {
     const thumbnails = [...smallerThumbnails, thumbnail];
     manifest.push({
       file,
-      alt: galleryDescriptions[file] ?? `Gallery image ${manifest.length + 1}`,
+      id: galleryEntries[file]?.id ?? `file-${Buffer.from(file).toString('base64url')}`,
+      placeholder: `data:image/webp;base64,${placeholder.toString('base64')}`,
+      alt: galleryEntries[file]?.alt ?? `Gallery image ${manifest.length + 1}`,
       width: metadata.autoOrient.width,
       height: metadata.autoOrient.height,
       thumb2x: thumbnail.webp,

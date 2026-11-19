@@ -1,0 +1,46 @@
+.gallery-main {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-wall {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  isolation: isolate;
+}
+
+.photo-card {
+  position: absolute;
+  display: block;
+  --wall-width: 100cqw;
+  --wall-height: 100cqh;
+  --frame-width: calc(var(--gallery-card-size) * var(--scale));
+  --frame-height: calc((var(--frame-width) - 8px) * var(--ratio) + 8px);
+  --anchor-y: var(--desktop-anchor);
+
+  /* Unmoved cards follow equal angles on an ellipse sized to the wall. */
+  --ring-x: calc(var(--ring-cos) * min(var(--wall-width) * .39, 470px));
+  /* Leave room at the top for the floating navigation before filling the vertical arc. */
+  --ring-y: calc(44px + var(--ring-sin) * min((var(--wall-height) - 88px) * .32, 310px));
+  --desired-left: calc(var(--wall-width) / 2 + var(--initial-x, var(--ring-x)) - var(--frame-width) / 2);
+  /* A saved y is relative to the old wall anchor. Ring positions use the frame center. */
+  --desired-top: calc(var(--wall-height) / 2 + var(--initial-y, calc(var(--ring-y) + var(--anchor-y) - var(--frame-height) / 2)) - var(--anchor-y));
+
+  /* Keep the rotated frame inside the wall, matching photoPositionBounds for dragging. */
+  --inset-x: calc(12px + (var(--frame-width) * (var(--cos) - 1) + var(--frame-height) * var(--sin)) / 2);
+  --inset-y: calc(12px + (var(--frame-height) * (var(--cos) - 1) + var(--frame-width) * var(--sin)) / 2);
+  --rest-left: clamp(min(var(--inset-x), (var(--wall-width) - var(--frame-width)) / 2), var(--desired-left), var(--wall-width) - var(--frame-width) - var(--inset-x));
+  --rest-top: clamp(min(var(--inset-y), (var(--wall-height) - var(--frame-height)) / 2), var(--desired-top), var(--wall-height) - var(--frame-height) - var(--inset-y));
+  left: var(--rest-left);
+  top: var(--rest-top);
+  width: var(--frame-width);
+  height: var(--frame-height);
+}
+
+@supports not (width: 1cqw) {
+  .photo-card {
+    --wall-width: 100%;
+    --wall-height: 100%;
+  }
+}

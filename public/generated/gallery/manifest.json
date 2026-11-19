@@ -1,6 +1,8 @@
 [
   {
     "file": "2025-08.png",
+    "id": "1",
+    "placeholder": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAADQAwCdASoUAA0APt1apkyopSOiMAgBEBuJaACdEf/gGrE9rghW64AA/jGIT09ErfVL9eVXgrHeaw3A4OCI6EvAiY/ZPC3pXqQ5fz6mrspWmVI3V+/72TSpSLv6EFGbxzBsY/UMMoQyXVCgwH34TV85VZ+cNXzOhw3kT4z9M2voAAAA",
     "alt": "Two Minecraft players stand on a flower-lined path outside a wooden house.",
     "width": 2560,
     "height": 1600,
@@ -14,6 +16,8 @@
   },
   {
     "file": "AIcard.png",
+    "id": "2",
+    "placeholder": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAADwAwCdASoPABQAPt1apkyopSOiMAgBEBuJbACdMoR3ACTahQi3dmtAAP4ZvXQLPmRKvvGZgwudcKaY8MlLgTYBdx438AFlCD54Yu+ba9s/rsE0O4zbYUSO4ZM+SBW9db3N8JKmCv3Z5gvSTP/e/u/4btyRPjjFSVo/d2b9RNYpwoAQ0oipPj6cjcxZzUeC+o+l5mqW1AAAAA==",
     "alt": "A silver-haired figure in profile against the dark grid of a blue-lit window.",
     "width": 564,
     "height": 750,
@@ -27,6 +31,8 @@
   },
   {
     "file": "hahaha.png",
+    "id": "3",
+    "placeholder": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAADwAwCdASoUAAsAPt1cpkyopSOiMAgBEBuJbFefRhYhZgAwa6g8FWjQAP7vTCQY0MrFeW1n6FCeDxTtwvH1Eyl/stnS5Fy1EsrGL0OmijQtyahGXE8yQgHae8Y2U15P3eZSb63v21UDKgaAHiyKVzcuJ0FPjisMEKGY/b3qyej9AAAA",
     "alt": "Four cartoon bandmates play guitars and drums in pink, yellow, red, and blue panels.",
     "width": 1920,
     "height": 1080,
@@ -40,6 +46,8 @@
   },
   {
     "file": "Kafka.png",
+    "id": "4",
+    "placeholder": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADQAwCdASoUAAsAPt1apkyopSOiMAgBEBuJQBWAAiLxTYO/Cbj6FTAA/tll76YpF4U/NKSfFzaXvtmjut3Z384cGRU6fmCmDE61i0ZZ8RrP4hu0i2l9Pk/TGWKBTfG8PTWVyptnZUfIAjAmA7wa5lq60kASXFDI7IJRkXqOaAAAAA==",
     "alt": "Kafka stands beneath dark umbrellas in the rain, with red threads crossing the scene.",
     "width": 3840,
     "height": 2160,
@@ -53,6 +61,8 @@
   },
   {
     "file": "ZhenXun.jpg",
+    "id": "5",
+    "placeholder": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAABwAwCdASoUABQAPt1gp04opaMiKA1REBuJQAAIQF9T5hDtKoAA/u8bWdMy3XUIn09aeaOwrwtjbtwydt45JKAr8ubC8Or2S7C/F+ID9y97mn0h8meMKxhcl0nM0tUdHecp3DJJKrpmGl8BoedYDTqBtAwV7PZ7kfAAAA==",
     "alt": "A pink-haired anime character smiles at the viewer with clasped hands.",
     "width": 403,
     "height": 403,

@@ -1,0 +1,30 @@
+/* The frame and its image share the same footprint from the first paint. */
+.photo-frame picture {
+  display: block;
+  background: center / cover no-repeat var(--photo-placeholder);
+}
+
+.photo-frame picture[data-loaded] { background-image: none; }
+.photo-frame picture[data-failed] img { opacity: 0; }
+
+/* Moving the outer card leaves the frame's hover and drag motion independent. */
+@supports (width: 1cqw) {
+  @media (prefers-reduced-motion: no-preference) {
+    .photo-card {
+      animation: gallery-entrance 560ms cubic-bezier(.22, .78, .22, 1) var(--deal-delay, 0ms) backwards;
+    }
+
+    @keyframes gallery-entrance {
+      from {
+        visibility: hidden;
+        opacity: 0;
+        transform:
+          translate(calc(50cqw - var(--rest-left) - var(--frame-width) / 2),
+                    calc(50cqh - var(--rest-top) - var(--frame-height) / 2))
+          scale(.78) rotate(calc(0deg - var(--rotation)));
+      }
+      22% { visibility: visible; opacity: 1; }
+      to { visibility: visible; opacity: 1; transform: none; }
+    }
+  }
+}

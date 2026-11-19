@@ -1,28 +1,16 @@
-export interface PhotoItem {
+export interface GalleryPhoto {
   id: string;
-  src: string;
-  srcset?: string;
-  avifSrcset?: string;
-  sizes?: string;
-  preview?: string;
-  previewWidth?: number;
-  previewHeight?: number;
-  previewSrcset?: string;
+  file: string;
+  placeholder: string;
+  thumb2x: string;
+  srcset: string;
+  avifSrcset: string;
+  preview: string;
+  previewWidth: number;
+  previewHeight: number;
+  previewSrcset: string;
   alt: string;
-  caption?: string;
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   scale?: number;
-}
-
-export interface PhotoState {
-  x: number;
-  y: number;
-  rotation: number;
-  zIndex: number;
-}
-
-export interface PhotoWallData {
-  photos: PhotoItem[];
-  lastUpdated: number;
 }
