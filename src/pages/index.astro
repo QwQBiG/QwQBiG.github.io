@@ -7,7 +7,7 @@ import ClockWidget from '../components/widgets/ClockWidget.astro';
 import CalendarWidget from '../components/widgets/CalendarWidget.astro';
 import MusicWidget from '../components/widgets/MusicWidget.astro';
 import { portraitSources } from '../data/portrait-images.mjs';
-import { galleryCoverImages } from '../data/gallery-cover.mjs';
+import { galleryCoverSrcset } from '../data/gallery-cover.mjs';
 import { formatDisplayDate } from '../utils/date';
 import { loadContent } from '../utils/load-content';
 import { createContentIndex, getPostUrl, getTagUrl } from '../utils/content';
@@ -24,7 +24,7 @@ const interactionScript = import.meta.env.PROD
 const { csPosts, poetryPosts, series, tags, latestPosts } = await loadContent();
 const popularTags = createContentIndex({ cs: csPosts }).tags;
 const firstPortrait = portraitSources('Smile', 'avif');
-const coverSrcset = galleryCoverImages.map(({ width, filename }) => `/generated/site/${filename} ${width}w`).join(', ');
+const avifCoverSrcset = galleryCoverSrcset('avif');
 // The 16:9 source must also cover the card's fixed 128px height on narrow screens.
 const coverSizes = '(min-width: 924px) 228px, (min-width: 768px) max(228px, calc(60vw - 42px)), max(228px, calc(60vw - 34px))';
 const statistics = [
@@ -68,7 +68,7 @@ const statistics = [
   <!-- 原字体本地化：视觉不变，去掉 Google Fonts 网络等待 -->
   <link rel="preload" href="/generated/site/avatar-160.webp" as="image" fetchpriority="high">
   <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait.srcset} imagesizes={firstPortrait.sizes} fetchpriority="high">
-  <link rel="preload" as="image" imagesrcset={coverSrcset} imagesizes={coverSizes} media="(min-width: 924px)" fetchpriority="low">
+  <link rel="preload" as="image" type="image/avif" imagesrcset={avifCoverSrcset} imagesizes={coverSizes} media="(min-width: 924px)" fetchpriority="low">
   <link rel="preload" href={homeSans} as="font" type="font/woff2" crossorigin>
   <link rel="preload" href={homeSerif} as="font" type="font/woff2" crossorigin>
   <link rel="preload" href={homeItalic} as="font" type="font/woff2" crossorigin>
@@ -739,16 +739,19 @@ const statistics = [
           <a href="/gallery/" class="block" data-astro-prefetch="hover">
             <GlassCard padding="small" tilt={true} class="w-full max-w-[60vw] [@media(min-width:924px)]:w-64 rounded-2xl">
               <div class="relative overflow-hidden rounded-2xl">
-                <img
-                  src="/generated/site/gallery-cover-640.webp"
-                  srcset={coverSrcset}
-                  sizes={coverSizes}
-                  alt="Photo gallery"
-                  class="w-full h-32 object-cover rounded-2xl hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                />
+                <picture class="block">
+                  <source type="image/avif" srcset={avifCoverSrcset} sizes={coverSizes} />
+                  <img
+                    src="/generated/site/gallery-cover-640.webp"
+                    srcset={galleryCoverSrcset('webp')}
+                    sizes={coverSizes}
+                    alt="Photo gallery"
+                    class="w-full h-32 object-cover rounded-2xl hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
+                </picture>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
               </div>
             </GlassCard>

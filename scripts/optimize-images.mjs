@@ -92,11 +92,14 @@ async function optimizeSiteImages() {
     sharp(path.join(root, 'public', 'ZhenXun.png')).rotate()
       .resize(160, 160, { fit: 'cover' }).webp({ quality: 82, effort: 5 })
       .toFile(path.join(siteDir, 'avatar-160.webp')),
-    ...galleryCoverImages.map(({ width, filename }) =>
-      sharp(path.join(gallerySourceDir, 'hahaha.png')).rotate()
-        .resize({ width, height: width * 9 / 16, fit: 'cover' })
-        .webp({ quality: 78, effort: 5, smartSubsample: true })
-        .toFile(path.join(siteDir, filename))),
+    ...galleryCoverImages.map(({ width, webp, avif }) => {
+      const cover = sharp(path.join(gallerySourceDir, 'hahaha.png')).rotate()
+        .resize({ width, height: width * 9 / 16, fit: 'cover' });
+      return Promise.all([
+        cover.clone().webp({ quality: 78, effort: 5, smartSubsample: true }).toFile(path.join(siteDir, webp)),
+        cover.clone().avif({ quality: 53, effort: 6, chromaSubsampling: '4:4:4' }).toFile(path.join(siteDir, avif)),
+      ]);
+    }),
     ...['character', 'character-happy', 'character-wink', 'character-shy'].map((name) =>
       sharp(path.join(root, 'src', 'assets', 'site', `${name}.png`)).rotate()
       .resize({ width: 768, height: 1152, fit: 'inside', withoutEnlargement: true })
