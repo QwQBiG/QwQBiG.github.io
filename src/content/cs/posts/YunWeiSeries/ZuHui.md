@@ -46,7 +46,7 @@ https://qwqbig.github.io/
 
 本来我都想开始把原来做的题用 cpp 重写的，像是把这个世界用 Rust 重写一遍似的...(话说蟹教有干翻 C++ 的未来吗，不清楚)。
 
-写日记挺好玩的，我要同步到 https://qwqbig.github.io/上hhh
+写日记挺好玩的，我要同步到 <https://qwqbig.github.io/>上hhh
 
 欧克，完事了，bye~
 
