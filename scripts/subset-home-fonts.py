@@ -74,7 +74,11 @@ def generate(check_only):
         original = TTFont(path)
         font = TTFont(path, recalcTimestamp=False)
         options = subset.Options()
-        options.layout_features = ["*"]  # keep kerning, ligatures and other shaping features
+        # Preserve the default Latin shaping used by the homepage, including
+        # contextual forms, localized letters, ligatures, marks and kerning.
+        # Optional numerator, denominator and tabular/lining figures add outlines
+        # for CSS features that none of the homepage's three faces enables.
+        options.layout_features = ["calt", "ccmp", "clig", "kern", "liga", "locl", "mark", "mkmk", "rlig"]
         options.name_IDs = ["*"]
         options.name_languages = ["*"]
         options.name_legacy = True
