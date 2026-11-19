@@ -7,6 +7,7 @@
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
   let activePointer = null;
+  let pendingMove = null;
   let animationId = null;
   let currentRotateX = 0;
   let currentRotateY = 0;
@@ -46,6 +47,10 @@
     }
     lastUpdateTime = timestamp;
 
+    if (pendingMove) {
+      updatePointerTarget(pendingMove.clientX, pendingMove.clientY);
+      pendingMove = null;
+    }
     // 使用不同的插值因子：触摸设备更快响应
     const lerpFactor = isTouchDevice ? 0.15 : 0.1;
     currentRotateX = lerp(currentRotateX, targetRotateX, lerpFactor);
@@ -80,8 +85,9 @@
   });
 
   // 鼠标移动事件
-  function handleMove(clientX, clientY) {
+  function updatePointerTarget(clientX, clientY) {
     const rect = ring.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
@@ -96,7 +102,6 @@
     // 设置目标旋转角度 (最大 ±15度)
     targetRotateY = clampedX * 15;
     targetRotateX = -clampedY * 15;
-    scheduleRingUpdate();
   }
 
   // On touchscreens pointerenter also fires when the finger first makes contact.
@@ -108,12 +113,16 @@
   });
 
   ring.addEventListener('pointermove', (event) => {
-    if (event.pointerId === activePointer) handleMove(event.clientX, event.clientY);
+    if (event.pointerId !== activePointer) return;
+    // Several pointer samples can arrive before the same frame is painted.
+    pendingMove = event;
+    scheduleRingUpdate();
   }, { passive: true });
 
   function endRingInteraction(event) {
     if (event.pointerId !== activePointer) return;
     activePointer = null;
+    pendingMove = null;
     ring.classList.remove('interacting');
     targetRotateX = 0;
     targetRotateY = 0;
