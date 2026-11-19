@@ -21,7 +21,7 @@ export function findEmoji(text: string): EmojiMatch[] {
   return [...text.matchAll(emojiPattern)].map((match) => ({ value: match[0], index: match.index! }));
 }
 
-export function replaceEmoji(text: string, replacement = '[表情]'): string {
+export function replaceEmoji(text: string, replacement = '[emoji]'): string {
   return text.replace(emojiPattern, replacement);
 }
 

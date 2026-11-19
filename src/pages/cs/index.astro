@@ -11,8 +11,8 @@ const { csPosts, series: allSeries } = await loadContent();
 const seriesMembers = new Set(allSeries.flatMap(series => series.posts.map(post => post.slug)));
 const standalonePosts = csPosts.filter(post => !seriesMembers.has(post.slug));
 
-const pageTitle = "CS - 计算机科学学习笔记";
-const pageDescription = "计算机科学相关文章，包括算法、编程语言、系统运维等主题";
+const pageTitle = "Computer Science - QwQBiG's World";
+const pageDescription = "Notes on algorithms, programming languages, and systems administration.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -24,7 +24,7 @@ const pageDescription = "计算机科学相关文章，包括算法、编程语�
       <!-- Page Header -->
       <div class="text-center mb-12">
         <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
-          <ContentIcon name="code" />计算机科学
+          <ContentIcon name="code" />Computer Science
         </h1>
         <p class="font-sans text-lg text-text-secondary max-w-2xl mx-auto">
           {pageDescription}
@@ -38,7 +38,7 @@ const pageDescription = "计算机科学相关文章，包括算法、编程语�
             <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            独立文章
+            Standalone posts
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {standalonePosts.map((post, index) => (

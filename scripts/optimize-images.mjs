@@ -9,6 +9,13 @@ const gallerySourceDir = path.join(root, 'src', 'assets', 'gallery');
 const generatedDir = path.join(root, 'public', 'generated');
 const galleryOutputDir = path.join(generatedDir, 'gallery');
 const imageExtensions = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif']);
+const galleryDescriptions = {
+  '2025-08.png': 'Two Minecraft players stand on a flower-lined path outside a wooden house.',
+  'AIcard.png': 'A silver-haired figure in profile against the dark grid of a blue-lit window.',
+  'hahaha.png': 'Four cartoon bandmates play guitars and drums in pink, yellow, red, and blue panels.',
+  'Kafka.png': 'Kafka stands beneath dark umbrellas in the rain, with red threads crossing the scene.',
+  'ZhenXun.jpg': 'A pink-haired anime character smiles at the viewer with clasped hands.',
+};
 
 async function optimizeGallery() {
   await fs.mkdir(galleryOutputDir, { recursive: true });
@@ -59,7 +66,7 @@ async function optimizeGallery() {
     const fallback = `/generated/gallery/${thumbName}`;
     manifest.push({
       file,
-      alt: path.parse(file).name,
+      alt: galleryDescriptions[file] ?? `Gallery image ${manifest.length + 1}`,
       width: metadata.autoOrient.width,
       height: metadata.autoOrient.height,
       thumb2x: fallback,

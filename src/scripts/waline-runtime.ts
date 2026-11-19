@@ -88,9 +88,9 @@ function mountComments() {
     const retry = document.createElement('button');
     retry.type = 'button';
     retry.className = 'comment-retry-button';
-    retry.textContent = '重新加载';
+    retry.textContent = 'Try again';
     retry.addEventListener('click', () => start('navigation'), { once: true });
-    status.replaceChildren(document.createTextNode('评论暂时未能加载。'), retry);
+    status.replaceChildren(document.createTextNode('Couldn’t load comments. '), retry);
   };
 
   function start(priority: 'navigation' | 'prefetch' = 'prefetch') {
@@ -114,18 +114,37 @@ function mountComments() {
           login: 'force',
           path: element.dataset.path || window.location.pathname,
           dark: false,
-          lang: 'zh-CN',
+          lang: 'en-US',
           emoji: false,
           search: false,
           reaction: false,
           locale: {
-            placeholder: '写下你的评论...', login: '登录', admin: '管理员',
-            nick: '昵称', mail: '邮箱', link: '网站', reply: '回复',
-            cancelReply: '取消回复', sticky: '置顶',
-            unsticky: '取消置顶', approved: '通过', spam: '垃圾', waiting: '待审核',
-            level0: '潜水', level1: '冒泡', level2: '吐槽', level3: '活跃',
-            level4: '话痨', level5: '传说', word: '字数', anonymous: '匿名',
-            optional: '选填', uploadImage: '上传图片', emoji: '表情',
+            nick: 'Nickname',
+            nickError: 'Enter a nickname of at least 3 bytes.',
+            mail: 'Email',
+            placeholder: 'Write a comment…',
+            sofa: 'No comments yet.',
+            submit: 'Post comment',
+            login: 'Sign in',
+            logout: 'Sign out',
+            more: 'Load more comments',
+            uploadImage: 'Upload an image',
+            cancelLike: 'Unlike',
+            word: 'words',
+            sticky: 'Pinned',
+            unsticky: 'Unpin',
+            waiting: 'Pending review',
+            latest: 'Newest',
+            hottest: 'Most popular',
+            level0: 'Lurker',
+            level1: 'New voice',
+            level2: 'Commentator',
+            level3: 'Regular',
+            level4: 'Chatterbox',
+            level5: 'Legend',
+            subPostComment: 'Subscribe to comments on this post',
+            subSiteComment: 'Subscribe to all comments',
+            subscribeToReplies: 'Subscribe to replies to your comments',
           },
         });
         if (!instance) { showFailure(); return; }
@@ -135,7 +154,7 @@ function mountComments() {
         if (status) status.hidden = true;
         observer?.disconnect();
       } catch (error) {
-        console.error('评论加载失败', error);
+        console.error('Could not load comments', error);
         showFailure();
       }
     });

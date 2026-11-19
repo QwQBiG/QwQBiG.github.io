@@ -6,6 +6,7 @@ import CalendarWidget from '../components/widgets/CalendarWidget.astro';
 import MusicWidget from '../components/widgets/MusicWidget.astro';
 import { portraitSources } from '../data/portrait-images.mjs';
 import { galleryCoverImages } from '../data/gallery-cover.mjs';
+import { formatDisplayDate } from '../utils/date';
 import { loadContent } from '../utils/load-content';
 import { createContentIndex, getPostUrl, getTagUrl } from '../utils/content';
 import '../assets/home-fonts/faces.css';
@@ -20,15 +21,15 @@ const coverSrcset = galleryCoverImages.map(({ width, filename }) => `/generated/
 // The 16:9 source must also cover the card's fixed 128px height on narrow screens.
 const coverSizes = '(min-width: 924px) 228px, (min-width: 768px) max(228px, calc(60vw - 42px)), max(228px, calc(60vw - 34px))';
 const statistics = [
-  { label: 'posts', count: csPosts.length, href: '/cs/', description: '已发布的笔记与文章' },
-  { label: 'series', count: series.length, href: '/series/', description: '文章合集' },
-  { label: 'tags', count: tags.length, href: '/tags/', description: '全站文章与诗词的去重标签' },
-  { label: 'poetry', count: poetryPosts.length, href: '/poetry/', description: '已发布的诗词与随笔' },
+  { key: 'posts', label: csPosts.length === 1 ? 'post' : 'posts', count: csPosts.length, href: '/cs/', description: 'Published posts' },
+  { key: 'series', label: 'series', count: series.length, href: '/series/', description: 'Post series' },
+  { key: 'tags', label: tags.length === 1 ? 'tag' : 'tags', count: tags.length, href: '/tags/', description: 'Tags across posts and poems' },
+  { key: 'poetry', label: poetryPosts.length === 1 ? 'poem' : 'poems', count: poetryPosts.length, href: '/poetry/', description: 'Published poems' },
 ];
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light" style="color-scheme: only light">
+<html lang="en" data-theme="light" style="color-scheme: only light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +48,7 @@ const statistics = [
     })();
   </script>
   <title>QwQBiG's World</title>
-  <meta name="description" content="CS Learning Notes | Algorithms | Programming | Embedded Development">
+  <meta name="description" content="Notes on computer science, algorithms, programming, and embedded systems.">
   <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp">
 
   <!-- Keep avatar returns in the compact state before the first paint. -->
@@ -686,14 +687,14 @@ const statistics = [
               <div class="flex flex-wrap gap-3">
                 <!-- 主按钮 - 优雅的渐变填充 -->
                 <a href="/cs/" data-astro-prefetch="viewport" class="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-500/90 to-pink-500/90 text-white rounded-2xl font-medium text-sm tracking-wide hover:shadow-xl hover:shadow-purple-300/30 transition-all duration-300 hover:-translate-y-0.5 font-['Home_Sans'] backdrop-blur-sm border border-white/20">
-                  <span>enter</span>
+                  <span>Posts</span>
                   <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                   </svg>
                 </a>
                 <!-- 次按钮 - 极简描边风格 -->
                 <a href="/series/" data-astro-prefetch="hover" class="group inline-flex items-center px-5 py-2.5 bg-white/40 text-purple-700 rounded-2xl font-medium text-sm tracking-wide hover:bg-white/60 hover:shadow-lg transition-all duration-300 border border-purple-200/50 font-['Home_Sans']">
-                  <span>series</span>
+                  <span>Series</span>
                   <svg class="w-3.5 h-3.5 ml-1.5 text-purple-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                   </svg>
@@ -707,8 +708,8 @@ const statistics = [
         <div class="order-4 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-16 [@media(min-width:924px)]:-translate-y-4">
           <GlassCard padding="small" tilt={true} class="w-full max-w-[85vw] [@media(min-width:924px)]:w-[130px] [@media(min-width:924px)]:scale-95">
             <div class="grid grid-cols-2 gap-x-6 gap-y-3">
-              {statistics.map(({ label, count, href, description }) => (
-                <a href={href} title={description} aria-label={`${description}：${count}`} data-stat={label} class="text-center flex flex-col items-center rounded-xl transition-colors hover:bg-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400">
+              {statistics.map(({ key, label, count, href, description }) => (
+                <a href={href} title={description} aria-label={`${count} ${label}`} data-stat={key} class="text-center flex flex-col items-center rounded-xl transition-colors hover:bg-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400">
                   <span class="stat-number font-['Cormorant_Garamond'] font-semibold">{count}</span>
                   <span class="text-xs text-gray-500 mt-0.5 font-['Home_Sans']">{label}</span>
                 </a>
@@ -735,7 +736,7 @@ const statistics = [
                   src="/generated/site/gallery-cover-640.webp"
                   srcset={coverSrcset}
                   sizes={coverSizes}
-                  alt="Gallery Cover"
+                  alt="Photo gallery"
                   class="w-full h-32 object-cover rounded-2xl hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                   decoding="async"
@@ -810,7 +811,7 @@ const statistics = [
             <div class="relative z-[999] h-full" style="pointer-events: auto;">
               <div class="nav-container flex [@media(min-width:924px)]:flex-row flex-col gap-4">
                 <!-- 左侧：头像（桌面端）/ 上方：头像（移动端） -->
-                <a href="/about/" class="flex-shrink-0" data-astro-prefetch="hover" aria-label="关于 iqwqi" title="关于 iqwqi">
+                <a href="/about/" class="flex-shrink-0" data-astro-prefetch="hover" aria-label="About iqwqi" title="About iqwqi">
                   <div class="nav-avatar relative w-14 h-14 [@media(min-width:924px)]:w-16 [@media(min-width:924px)]:h-16 translate-x-2 translate-y-2">
                     <img
                       src="/generated/site/avatar-160.webp"
@@ -827,44 +828,44 @@ const statistics = [
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                     </svg>
-                    <span>posts</span>
+                    <span>Posts</span>
                   </a>
                   <a href="/series/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5m-18 4 9 5 9-5"></path>
                     </svg>
-                    <span>series</span>
+                    <span>Series</span>
                   </a>
                   <a href="/tags/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                     </svg>
-                    <span>tags</span>
+                    <span>Tags</span>
                   </a>
                   <a href="/archives/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
-                    <span>archives</span>
+                    <span>Archives</span>
                   </a>
                   <a href="/poetry/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4h5a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H4a2 2 0 0 0-2 2V6a2 2 0 0 1 2-2Z"></path>
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 4h-5a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h5a2 2 0 0 1 2 2V6a2 2 0 0 0-2-2Z"></path>
                     </svg>
-                    <span>poetry</span>
+                    <span>Poetry</span>
                   </a>
-                  <a href="/friends/" class="nav-link font-['Home_Sans']" aria-label="友链">
+                  <a href="/friends/" class="nav-link font-['Home_Sans']" aria-label="Friends">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.72 1.71m2.72 6.36a5 5 0 00-7.07 0l-3 3A5 5 0 0011 21.07l1.71-1.71"></path>
                     </svg>
-                    <span>friends</span>
+                    <span>Friends</span>
                   </a>
                   <a href="/search/" class="nav-link font-['Home_Sans']">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    <span>search</span>
+                    <span>Search</span>
                   </a>
                 </nav>
               </div>
@@ -962,11 +963,11 @@ const statistics = [
                 <svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                 </svg>
-                popular tags
+                Popular tags
               </h3>
               <div class="flex flex-wrap gap-1.5">
                 {popularTags.slice(0, 8).map(([tag, count]) => (
-                  <a href={getTagUrl(tag)} class="tag" title={`${count} 篇内容`} aria-label={`${tag}，${count} 篇内容`}>
+                  <a href={getTagUrl(tag)} class="tag" title={`${count} ${count === 1 ? 'post' : 'posts'}`} aria-label={`${tag}, ${count} ${count === 1 ? 'post' : 'posts'}`}>
                     {tag}
                   </a>
                 ))}
@@ -991,9 +992,9 @@ const statistics = [
                   <svg class="w-4 h-4 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
-                  latest post
+                  Latest post
                 </h3>
-                <a href="/archives/" class="text-xs text-purple-600 hover:text-purple-700 font-['Home_Sans']">all →</a>
+                <a href="/archives/" class="text-xs text-purple-600 hover:text-purple-700 font-['Home_Sans']">Archives →</a>
               </div>
               {latestPosts.slice(0, 1).map((post) => (
                 <a href={getPostUrl(post)} class="post-item block group flex-1 min-w-0" data-latest-posts>
@@ -1002,20 +1003,20 @@ const statistics = [
                       {post.data.title}
                     </h4>
                     <p class="text-xs text-gray-500 truncate mb-3 flex-1" title={post.data.description || undefined}>
-                      {post.data.description || 'No description'}
+                      {post.data.description || 'No summary available.'}
                     </p>
                     <div class="flex items-center justify-between pt-2 border-t border-gray-200/50">
                       <time datetime={post.data.date.toISOString()} class="text-[10px] text-gray-400">
-                        {post.data.date.toLocaleDateString('en-US', { timeZone: 'Asia/Shanghai', month: 'short', day: 'numeric', year: 'numeric' })}
+                        {formatDisplayDate(post.data.date)}
                       </time>
                       <span class="text-[10px] text-purple-500 group-hover:translate-x-1 transition-transform font-['Home_Sans']">
-                        read →
+                        Read →
                       </span>
                     </div>
                   </div>
                 </a>
               ))}
-              {latestPosts.length === 0 && <p class="text-xs text-gray-500 py-3">暂无文章</p>}
+              {latestPosts.length === 0 && <p class="text-xs text-gray-500 py-3">No posts yet.</p>}
             </div>
           </GlassCard>
         </div>

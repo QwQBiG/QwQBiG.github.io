@@ -10,6 +10,7 @@ test('turning the greenhouse calendar keeps the collection and visitor stamps un
   class Element extends EventTarget {
     id = '';
     value = '';
+    textContent = '';
     dataset = {};
     attributes = new Map<string, string>();
     children: Element[] = [];
@@ -23,7 +24,10 @@ test('turning the greenhouse calendar keeps the collection and visitor stamps un
   }
   const byId = new Map(Array.from(html.matchAll(/\bid="([\w-]+)"/g), match => [match[1], new Element()]));
   const get = (id: string) => byId.get(id)!;
-  const store = new Map([['daily-green-greenhouse-v1', JSON.stringify({ version: 1, dates: ['2026-11-18', '2026-11-19'] })]]);
+  const store = new Map([
+    ['daily-green-greenhouse-v1', JSON.stringify({ version: 1, dates: ['2026-11-18', '2026-11-19'] })],
+    ['daily-green-visitors-v1', JSON.stringify({ version: 1, dates: ['2026-11-18'] })],
+  ]);
   const context = createContext({
     document: {
       getElementById: (id: string) => byId.get(id) ?? get('saved-dates').children.find(chip => chip.id === id) ?? null,
@@ -38,9 +42,20 @@ test('turning the greenhouse calendar keeps the collection and visitor stamps un
   const album = get('album'), stamps = get('guest-stamps'), chips = get('saved-dates');
   const plant = album.children[0], stamp = stamps.children[0];
   const [first, second] = chips.children;
+  assert.equal(get('plant-name').textContent, 'Mint');
+  assert.equal(get('day-label').textContent, 'Wednesday');
+  const savedStamp = stamps.children.find(node => node.attributes.has('aria-label'))!;
+  assert.equal(savedStamp.attributes.get('aria-label'), 'Revisit the ladybird scout on 2026-11-18');
+  savedStamp.click();
+  assert.equal(get('visitor-note').attributes.get('lang'), 'zh-CN');
+  assert.match(get('visitor-note').textContent, /\p{Script=Han}/u);
+  assert.equal(get('guest-title').textContent, 'A note from the ladybird scout');
   assert.equal(first.attributes.get('aria-current'), 'date');
   get('next-day').click();
   assert.equal(get('plant-date').value, '2026-11-19');
+  assert.equal(get('visitor-note').attributes.has('lang'), false);
+  assert.equal(get('plant-name').textContent, 'Clover');
+  assert.equal(get('day-label').textContent, 'Thursday');
   assert.equal(album.children[0], plant);
   assert.equal(stamps.children[0], stamp);
   assert.equal(chips.children[0], first);
@@ -57,5 +72,5 @@ test('turning the greenhouse calendar keeps the collection and visitor stamps un
   const discovered = stamps.children[0];
   get('visitor-button').click();
   assert.equal(stamps.children[0], discovered);
-  assert.deepEqual(JSON.parse(store.get('daily-green-visitors-v1')!).dates, ['2026-11-19']);
+  assert.deepEqual(JSON.parse(store.get('daily-green-visitors-v1')!).dates, ['2026-11-18', '2026-11-19']);
 });

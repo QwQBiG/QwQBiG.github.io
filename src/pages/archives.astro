@@ -5,15 +5,18 @@ import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import ContentIcon from '../components/ui/ContentIcon.astro';
 import { loadContent } from '../utils/load-content';
-import { formatDate, groupByYear } from '../utils/date';
+import { groupByYear } from '../utils/date';
 
 const { csPosts: sortedPosts } = await loadContent();
 
 // Group by year
 const postsByYear = groupByYear(sortedPosts);
+const monthDay = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Shanghai', month: 'short', day: 'numeric',
+});
 
-const pageTitle = "归档 - QwQBiG's World";
-const pageDescription = "按时间顺序浏览所有文章";
+const pageTitle = "Archives - QwQBiG's World";
+const pageDescription = "Browse posts by year.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -24,10 +27,10 @@ const pageDescription = "按时间顺序浏览所有文章";
       <!-- Page Header -->
       <div class="text-center mb-12">
         <h1 class="font-sans font-bold text-3xl md:text-4xl text-text-primary mb-4 inline-flex items-center gap-3">
-          <ContentIcon name="archive" />归档
+          <ContentIcon name="archive" />Archives
         </h1>
         <p class="font-sans text-lg text-text-secondary">
-          共 {sortedPosts.length} 篇文章
+          {sortedPosts.length} {sortedPosts.length === 1 ? 'post' : 'posts'}
         </p>
       </div>
 
@@ -37,7 +40,7 @@ const pageDescription = "按时间顺序浏览所有文章";
           <section class="archive-year">
             <h2 class="archive-year-title">
               {year}
-              <span class="text-sm font-normal text-text-muted ml-2">({posts.length} 篇)</span>
+              <span class="text-sm font-normal text-text-muted ml-2">({posts.length} {posts.length === 1 ? 'post' : 'posts'})</span>
             </h2>
             
             <div class="archive-list">
@@ -48,9 +51,9 @@ const pageDescription = "按时间顺序浏览所有文章";
                 
                 return (
                   <a href={url} data-astro-prefetch={yearIndex === 0 ? readingListPrefetch(index) : undefined} class="archive-item group">
-                    <span class="archive-date font-mono">
-                      {formatDate(post.data.date).slice(5)}
-                    </span>
+                    <time class="archive-date font-mono min-w-[6ch]" datetime={post.data.date.toISOString()}>
+                      {monthDay.format(post.data.date)}
+                    </time>
                     <span class="archive-title group-hover:text-primary transition-colors">
                       {post.data.title}
                     </span>

@@ -409,8 +409,8 @@ export default function AnimeCore() {
         type="button"
         className="portrait-expression-button"
         onClick={changeExpression}
-        title={loadFailed ? 'Image unavailable. Click to retry' : 'Click to change expression'}
-        aria-label={`Current expression: ${currentLabel}. ${loadFailed ? 'Image unavailable. Click to retry' : 'Click to change expression'}`}
+        title={loadFailed ? 'Image unavailable. Try again' : 'Change expression'}
+        aria-label={`Current expression: ${currentLabel}. ${loadFailed ? 'Image unavailable. Try again' : 'Change expression'}`}
         aria-busy={isLoading}
       >
         <span className="portrait-expression-hint" aria-hidden="true">
@@ -418,7 +418,7 @@ export default function AnimeCore() {
         </span>
       </button>
       <span className="sr-only" aria-live="polite" aria-atomic="true">
-        {loadFailed ? 'Expression image unavailable. The current portrait is unchanged. Click to retry.' : `Current expression: ${currentLabel}`}
+        {loadFailed ? 'Couldn’t load the next expression. Try again.' : `Current expression: ${currentLabel}`}
       </span>
       <style>{`
         .portrait-expression-button {

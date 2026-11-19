@@ -1,3 +1,4 @@
+import { formatDisplayDate } from '../utils/date';
 import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
 
 interface SearchPost {
@@ -26,7 +27,7 @@ function resultCard(post: SearchPost, pattern: RegExp) {
     <h3 class="search-result-title">${highlight(post.title, pattern)}</h3>
     ${post.description ? `<p class="search-result-excerpt">${highlight(post.description, pattern)}</p>` : ''}
     <div class="search-result-meta">
-      <span>${escapeHtml(post.date)}</span>
+      <time datetime="${escapeHtml(post.date)}">${formatDisplayDate(new Date(post.date))}</time>
       ${post.tags?.length ? `<span>${escapeHtml(post.tags.slice(0, 3).join(', '))}</span>` : ''}
     </div>
   </a>`;
@@ -59,12 +60,12 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
   function render() {
     const query = input.value;
     if (!query.trim()) {
-      results.innerHTML = message('输入关键词开始搜索');
+      results.innerHTML = message('Type to search.');
     } else if (failed) {
-      results.innerHTML = message('文章列表加载失败。<button type="button" class="underline">重试</button>');
+      results.innerHTML = message('Couldn’t load the posts. <button type="button" class="underline">Try again</button>');
       results.querySelector('button')?.addEventListener('click', loadPosts, { once: true, signal });
     } else if (!posts) {
-      results.innerHTML = message('正在加载文章…');
+      results.innerHTML = message('Loading posts…');
     } else {
       const lowerQuery = query.toLowerCase();
       const matches = posts.filter(post =>
@@ -75,7 +76,7 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
       const pattern = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
       results.innerHTML = matches.length
         ? matches.map(post => resultCard(post, pattern)).join('')
-        : message('没有找到相关文章');
+        : message('No matching posts.');
     }
   }
 

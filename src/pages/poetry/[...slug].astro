@@ -5,6 +5,7 @@ import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import GlassContainer from '../../components/ui/GlassContainer.astro';
 import { render } from 'astro:content';
 import { loadContent } from '../../utils/load-content';
+import { formatDisplayDate } from '../../utils/date';
 import { getPostTags } from '../../utils/content';
 import WalineComments from '../../components/WalineComments.astro';
 
@@ -20,8 +21,9 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const tags = getPostTags(post);
+const poemLanguage = post.data.genre === '英文诗' ? 'en' : 'zh-CN';
 
-const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
+const pageTitle = `${post.data.title} - Poetry - QwQBiG's World`;
 ---
 
 <Layout title={pageTitle} description={post.data.description} noIndex={post.data.hidden}>
@@ -39,12 +41,7 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
 
           <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
             <time datetime={post.data.date.toISOString()}>
-              {post.data.date.toLocaleDateString('zh-CN', {
-                timeZone: 'Asia/Shanghai',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              {formatDisplayDate(post.data.date)}
             </time>
 
             {post.data.genre && (
@@ -68,7 +65,7 @@ const pageTitle = `${post.data.title} - 诗歌 - QwQBiG's World`;
           )}
         </header>
 
-        <div class="poetry-content">
+        <div class="poetry-content" lang={poemLanguage}>
           <Content />
         </div>
       </article>

@@ -3,9 +3,10 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { stripTypeScriptTypes } from 'node:module';
 import { runInNewContext } from 'node:vm';
+import { formatDisplayDate } from '../src/utils/date.ts';
 
 const script = stripTypeScriptTypes(await readFile(new URL('../src/scripts/post-search.ts', import.meta.url), 'utf8'))
-  .replace(/^export /gm, '');
+  .replace(/^import .*;$/gm, '').replace(/^export /gm, '');
 const posts = [{ title: 'C++ <示例>', description: '示例 & E', slug: 'posts/cpp', collection: 'cs', date: '2026-01-01', tags: ['基础', 'tag'] }];
 
 function setup(history = { state: {}, replaceState(value: object) { this.state = value; } }, restoreY = 0) {
@@ -18,7 +19,7 @@ function setup(history = { state: {}, replaceState(value: object) { this.state =
   const frames: Array<() => void> = [];
   const requests: Array<(value: Response) => void> = [];
   runInNewContext(script + '\ninitializePostSearch(input, results, restoreY)', {
-    input, results, AbortController, document, window, restoreY, history,
+    input, results, AbortController, document, window, restoreY, history, formatDisplayDate,
     requestAnimationFrame: (callback: () => void) => frames.push(callback),
     fetch: () => new Promise(resolve => requests.push(resolve)),
   });
@@ -42,21 +43,22 @@ test('the next paint shows the latest query, including while the article index i
   page.type('no match');
   page.type('c++');
   page.paint();
-  assert.match(page.results.innerHTML, /正在加载文章/);
+  assert.match(page.results.innerHTML, /Loading posts/);
   await page.respond(Response.json(posts));
   page.paint();
   assert.match(page.results.innerHTML, /href="\/cs\/posts\/cpp\/"/);
   assert.match(page.results.innerHTML, />C\+\+<\/mark> &lt;示例&gt;/);
   assert.match(page.results.innerHTML, /示例 &amp; E/);
+  assert.match(page.results.innerHTML, /Jan 1, 2026/);
   page.type('tag');
   page.paint();
   assert.match(page.results.innerHTML, /search-result-item/);
   page.type('missing');
   page.paint();
-  assert.match(page.results.innerHTML, /没有找到相关文章/);
+  assert.match(page.results.innerHTML, /No matching posts/);
   page.type(' ');
   page.paint();
-  assert.match(page.results.innerHTML, /输入关键词开始搜索/);
+  assert.match(page.results.innerHTML, /Type to search/);
 });
 
 test('a frame queued before IME composition and an index arrival never paint partial input', async () => {
@@ -80,12 +82,12 @@ test('a failed HTTP response offers a retry which uses the current input', async
   page.type('old');
   await page.respond(new Response(null, { status: 503 }));
   page.paint();
-  assert.match(page.results.innerHTML, /重试/);
+  assert.match(page.results.innerHTML, /Try again/);
   page.retry.dispatchEvent(new Event('click'));
   assert.equal(page.requests.length, 1);
   page.type('示例');
   page.paint();
-  assert.match(page.results.innerHTML, /正在加载文章/);
+  assert.match(page.results.innerHTML, /Loading posts/);
   await page.respond(Response.json(posts));
   page.paint();
   assert.match(page.results.innerHTML, /search-result-item/);
@@ -116,7 +118,7 @@ test('search visits share a pending index and restore results before history tra
   const frames = new Map<number, () => void>();
   let nextFrame = 1;
   runInNewContext(script + '\nstartPostSearch()', {
-    document, history, AbortController, window: new EventTarget(),
+    document, history, AbortController, formatDisplayDate, window: new EventTarget(),
     fetch() { requests++; return new Promise(resolve => { resolveIndex = resolve; }); },
     requestAnimationFrame(callback: () => void) {
       const id = nextFrame++;
@@ -187,7 +189,7 @@ test('a cold history entry restores the saved offset after loading unless the re
   for (const interacted of [false, true]) {
     const page = setup(undefined, 500);
     page.paint();
-    assert.match(page.results.innerHTML, /正在加载文章/);
+    assert.match(page.results.innerHTML, /Loading posts/);
     if (interacted) page.window.dispatchEvent(new Event('wheel'));
     await page.respond(Response.json(posts));
     page.paint();

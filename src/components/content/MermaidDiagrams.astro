@@ -190,6 +190,7 @@
       // 创建头部 - 模仿代码块头部样式
       const header = document.createElement('div');
       header.className = 'code-header';
+      header.lang = 'en';
       header.style.cssText = 'position: relative; height: 40px; background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%); border-bottom: 1px solid rgba(232, 74, 122, 0.15); z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 0 12px;';
 
       // 左侧：Mermaid 标签
@@ -213,16 +214,16 @@
         return btn;
       };
 
-      const zoomOutBtn = createBtn('mermaid-zoom-out', '缩小');
+      const zoomOutBtn = createBtn('mermaid-zoom-out', 'Zoom out');
       zoomOutBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M19 13H5v-2h14v2z"/></svg>';
 
-      const resetBtn = createBtn('mermaid-reset', '重置');
+      const resetBtn = createBtn('mermaid-reset', 'Reset view');
       resetBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>';
 
-      const zoomInBtn = createBtn('mermaid-zoom-in', '放大');
+      const zoomInBtn = createBtn('mermaid-zoom-in', 'Zoom in');
       zoomInBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>';
 
-      const fullscreenBtn = createBtn('mermaid-fullscreen', '全屏');
+      const fullscreenBtn = createBtn('mermaid-fullscreen', 'Enter full screen');
       fullscreenBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
 
       buttonsContainer.appendChild(zoomOutBtn);
@@ -295,7 +296,7 @@
       } catch (err) {
         if (signal.aborted || !block.isConnected) return;
         console.error('Mermaid 渲染失败:', err);
-        content.innerHTML = '<div style="color: red; padding: 20px;">图表渲染失败</div>';
+        content.innerHTML = '<div lang="en" style="color: red; padding: 20px;">This diagram could not be displayed.</div>';
         if (!wrapper.isConnected) block.before(wrapper);
       }
     };
@@ -385,7 +386,7 @@
         }
         isFullscreen = true;
         wrapper.classList.add('mermaid-fullscreen');
-        fullscreenBtn.title = '退出全屏';
+        fullscreenBtn.title = 'Exit full screen';
       } else {
         if (document.exitFullscreen) {
           document.exitFullscreen();
@@ -394,7 +395,7 @@
         }
         isFullscreen = false;
         wrapper.classList.remove('mermaid-fullscreen');
-        fullscreenBtn.title = '全屏';
+        fullscreenBtn.title = 'Enter full screen';
       }
     });
 
@@ -403,7 +404,7 @@
       if (!document.fullscreenElement) {
         isFullscreen = false;
         wrapper.classList.remove('mermaid-fullscreen');
-        fullscreenBtn.title = '全屏';
+        fullscreenBtn.title = 'Enter full screen';
       }
     }, { signal });
 

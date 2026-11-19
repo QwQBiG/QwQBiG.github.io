@@ -9,7 +9,7 @@ export const GET: APIRoute = async (context) => {
   
   return rss({
     title: "QwQBiG's World",
-    description: '计算机学习笔记、诗词与随笔',
+    description: 'Computer science notes, poems, and essays.',
     site: context.site?.toString() || 'https://iqwqi.win',
     items: sortedPosts.map((post) => ({
       title: post.data.title,

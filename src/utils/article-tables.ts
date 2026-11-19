@@ -1,7 +1,7 @@
 import { parseFragment } from 'parse5';
 import type { DefaultTreeAdapterTypes } from 'parse5';
 
-const scrollWrapper = '<div class="article-table-scroll" tabindex="0" role="group" aria-label="表格">';
+const scrollWrapper = '<div class="article-table-scroll" tabindex="0" role="group" aria-label="Scrollable table">';
 
 /** Give wide tables their own scroll area without rewriting the surrounding article or its islands. */
 export function wrapArticleTables(html: string): string {

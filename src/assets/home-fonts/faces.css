@@ -42,7 +42,7 @@
   font-weight: 400 500;
   font-display: swap;
   src: url('./home-serif-italic.woff2?no-inline') format('woff2');
-  unicode-range: U+20, U+27, U+61-65, U+67, U+69, U+6C-78, U+2022;
+  unicode-range: U+20, U+27, U+4C, U+50, U+61-65, U+67, U+69, U+6C-78, U+2022;
 }
 
 @font-face {
@@ -51,5 +51,5 @@
   font-weight: 400 500;
   font-display: swap;
   src: url('/fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
-  unicode-range: U+0, U+D, U+21-26, U+28-60, U+66, U+68, U+6A-6B, U+79-7E, U+A0-B4, U+B6-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+300-301, U+303-304, U+308-309, U+323, U+2002, U+2009, U+200B, U+2013-2014, U+2018-201A, U+201C-201E, U+2026, U+2032-2033, U+2039-203A, U+2044, U+20AC, U+2122, U+2191, U+2193, U+2212, U+FEFF;
+  unicode-range: U+0, U+D, U+21-26, U+28-4B, U+4D-4F, U+51-60, U+66, U+68, U+6A-6B, U+79-7E, U+A0-B4, U+B6-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+300-301, U+303-304, U+308-309, U+323, U+2002, U+2009, U+200B, U+2013-2014, U+2018-201A, U+201C-201E, U+2026, U+2032-2033, U+2039-203A, U+2044, U+20AC, U+2122, U+2191, U+2193, U+2212, U+FEFF;
 }

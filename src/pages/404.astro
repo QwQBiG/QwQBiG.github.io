@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Footer from '../components/layout/Footer.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 
-const pageTitle = "404 - 页面未找到";
-const pageDescription = "抱歉，您访问的页面不存在";
+const pageTitle = "404 - Page not found";
+const pageDescription = "The requested page could not be found.";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -14,10 +14,10 @@ const pageDescription = "抱歉，您访问的页面不存在";
     <div class="text-center px-4">
       <div class="text-8xl font-bold text-primary/20 mb-4">404</div>
       <h1 class="font-sans font-bold text-3xl text-text-primary mb-4">
-        页面未找到
+        Page not found
       </h1>
       <p class="font-sans text-lg text-text-secondary mb-8 max-w-md mx-auto">
-        抱歉，您访问的页面不存在或已被移除。
+        This page may have moved, or the link may be incorrect.
       </p>
       <div class="flex flex-wrap justify-center gap-4">
         <a 
@@ -27,7 +27,7 @@ const pageDescription = "抱歉，您访问的页面不存在";
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
           </svg>
-          返回首页
+          Go home
         </a>
         <a 
           href="/archives/"
@@ -36,7 +36,7 @@ const pageDescription = "抱歉，您访问的页面不存在";
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
           </svg>
-          浏览归档
+          Browse the archives
         </a>
       </div>
     </div>

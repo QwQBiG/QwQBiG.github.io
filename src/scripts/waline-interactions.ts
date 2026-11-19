@@ -43,13 +43,13 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   }
 
   function prepareAvatar(image: HTMLImageElement, author: string) {
-    const label = `预览${author || '评论者'}的头像`;
+    const label = author ? `View profile picture for ${author}` : 'View profile picture';
     if (image.getAttribute('aria-label') !== label) image.setAttribute('aria-label', label);
     if (image.dataset.commentAvatar === 'ready') return;
     image.dataset.commentAvatar = 'ready';
     image.setAttribute('role', 'button');
     image.tabIndex = 0;
-    image.title = '预览头像';
+    image.title = 'View profile picture';
     const wrapper = image.parentElement;
     if (wrapper?.classList.contains('wl-user')) {
       wrapper.removeAttribute('aria-hidden');
@@ -62,16 +62,16 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     if (!avatarDialog) {
       avatarDialog = document.createElement('dialog');
       avatarDialog.className = 'comment-avatar-dialog';
-      avatarDialog.setAttribute('aria-label', '头像预览');
+      avatarDialog.setAttribute('aria-label', 'Profile picture');
       const header = document.createElement('div');
       header.className = 'comment-dialog-header';
       const title = document.createElement('strong');
-      title.textContent = '头像预览';
-      const close = createButton('comment-dialog-close', '关闭');
+      title.textContent = 'Profile picture';
+      const close = createButton('comment-dialog-close', 'Close');
       close.addEventListener('click', () => avatarDialog?.close(), options);
       header.append(title, close);
       const preview = document.createElement('img');
-      preview.alt = '评论者头像';
+      preview.alt = 'Commenter’s profile picture';
       avatarDialog.append(header, preview);
       avatarDialog.addEventListener('close', () => {
         avatarDialog?.querySelector('img')?.removeAttribute('src');
@@ -138,7 +138,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     editor.setAttribute('popover', 'manual');
     editor.setAttribute('role', 'dialog');
     editor.setAttribute('aria-modal', 'true');
-    const label = editor.closest('.wl-edit-wrapper') ? '编辑评论' : editor.closest('.wl-reply-wrapper') ? '回复评论' : '写评论';
+    const label = editor.closest('.wl-edit-wrapper') ? 'Edit comment' : editor.closest('.wl-reply-wrapper') ? 'Write a reply' : 'Write a comment';
     editor.setAttribute('aria-label', label);
     editor.querySelector('.comment-sheet-header strong')!.textContent = label;
     editor.classList.add('comment-editor-sheet');
@@ -152,13 +152,13 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
 
   function prepareEditor(editor: HTMLElement) {
     if (!canPopover || editorButtons.has(editor)) return;
-    const launch = createButton('comment-open-editor', '展开编辑');
+    const launch = createButton('comment-open-editor', 'Open editor');
     launch.dataset.commentOpenEditor = '';
     const header = document.createElement('div');
     header.className = 'comment-sheet-header';
     const title = document.createElement('strong');
-    title.textContent = '写评论';
-    const done = createButton('comment-sheet-done', '完成');
+    title.textContent = 'Write a comment';
+    const done = createButton('comment-sheet-done', 'Done');
     done.dataset.commentCloseEditor = '';
     header.append(title, done);
     editor.prepend(header, launch);
@@ -180,8 +180,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       const head = item.querySelector<HTMLElement>(':scope > .wl-card > .wl-head');
       const avatar = item.querySelector<HTMLImageElement>(':scope > .wl-user > .wl-user-avatar');
       if (avatar) prepareAvatar(avatar, text(head?.querySelector('.wl-nick')?.textContent ?? ''));
-      const identity = item.querySelector(':scope > .wl-user > .administrator-icon') ? '管理员'
-        : item.querySelector(':scope > .wl-user > .verified-icon') ? '注册用户' : '';
+      const identity = item.querySelector(':scope > .wl-user > .administrator-icon') ? 'Admin'
+        : item.querySelector(':scope > .wl-user > .verified-icon') ? 'Member' : '';
       const existingBadge = head?.querySelector('[data-comment-identity]');
       if (existingBadge) {
         if (!identity) existingBadge.remove();
@@ -196,7 +196,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     }
     for (const info of container.querySelectorAll<HTMLElement>('.wl-login-info')) {
       if (!info.querySelector('.wl-avatar img') || info.querySelector('[data-comment-current-avatar]')) continue;
-      const preview = createButton('comment-current-avatar', '预览头像');
+      const preview = createButton('comment-current-avatar', 'View profile picture');
       preview.dataset.commentCurrentAvatar = '';
       info.append(preview);
     }
@@ -204,7 +204,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       if (folds.has(body) || body.scrollHeight <= 240) continue;
       const id = body.closest('.wl-card-item')?.id || `comment-${sequence++}`;
       if (!body.id) body.id = `comment-body-${sequence++}`;
-      const button = createButton('comment-fold-button', expanded.has(id) ? '收起全文' : '展开全文');
+      const button = createButton('comment-fold-button', expanded.has(id) ? 'Show less' : 'Read more');
       button.dataset.commentFold = id;
       button.setAttribute('aria-controls', body.id);
       button.setAttribute('aria-expanded', String(expanded.has(id)));
@@ -237,7 +237,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       const open = expanded.has(id);
       body.classList.toggle('comment-content-folded', !open);
       fold.setAttribute('aria-expanded', String(open));
-      fold.textContent = open ? '收起全文' : '展开全文';
+      fold.textContent = open ? 'Show less' : 'Read more';
       return;
     }
     const launch = target.closest<HTMLElement>('[data-comment-open-editor]');

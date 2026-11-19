@@ -15,8 +15,8 @@ const avif = portraitSources('Smile', 'avif');
     <source type="image/avif" />
     <img class="portrait-image" width="760" height="760" alt="" decoding="async" draggable="false" />
   </picture>
-  <button type="button" class="portrait-expression-button" title="Click to change expression"
-    aria-label="Current expression: Smile. Click to change expression" aria-busy="false">
+  <button type="button" class="portrait-expression-button" title="Change expression"
+    aria-label="Current expression: Smile. Change expression" aria-busy="false">
     <span class="portrait-expression-hint" aria-hidden="true">Tap to change</span>
   </button>
   <span class="portrait-status sr-only" aria-live="polite" aria-atomic="true">Current expression: Smile</span>
@@ -132,8 +132,8 @@ const avif = portraitSources('Smile', 'avif');
       const renderDisplayed = (index: number) => {
         this.dataset.expression = expressions[index];
         hint.textContent = `${expressions[index]} · Tap again`;
-        button.title = 'Click to change expression';
-        button.setAttribute('aria-label', `Current expression: ${expressions[index]}. Click to change expression`);
+        button.title = 'Change expression';
+        button.setAttribute('aria-label', `Current expression: ${expressions[index]}. Change expression`);
         status.textContent = `Current expression: ${expressions[index]}`;
       };
       const switcher = createPortraitSwitcher({
@@ -169,9 +169,9 @@ const avif = portraitSources('Smile', 'avif');
           this.dataset.expression = expressions[state.displayed];
           if (state.failed) {
             hint.textContent = 'Tap to retry';
-            button.title = 'Image unavailable. Click to retry';
-            button.setAttribute('aria-label', `Current expression: ${expressions[state.displayed]}. Image unavailable. Click to retry`);
-            status.textContent = 'Expression image unavailable. The current portrait is unchanged. Click to retry.';
+            button.title = 'Image unavailable. Try again';
+            button.setAttribute('aria-label', `Current expression: ${expressions[state.displayed]}. Image unavailable. Try again`);
+            status.textContent = 'Couldn’t load the next expression. Try again.';
             return;
           }
           renderDisplayed(state.displayed);

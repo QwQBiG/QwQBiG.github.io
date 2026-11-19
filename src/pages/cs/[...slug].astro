@@ -6,7 +6,7 @@ import FloatingNavCard from '../../components/layout/FloatingNavCard.astro';
 import GlassContainer from '../../components/ui/GlassContainer.astro';
 import ArticleBody from '../../components/content/ArticleBody.astro';
 import { render } from 'astro:content';
-import { formatDate } from '../../utils/date';
+import { formatDisplayDate } from '../../utils/date';
 import { loadContent } from '../../utils/load-content';
 import { getPostTags, getTagKey, isSeriesEntry } from '../../utils/content';
 import WalineComments from '../../components/WalineComments.astro';
@@ -100,7 +100,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                {formatDate(date)}
+                <time datetime={date.toISOString()}>{formatDisplayDate(date)}</time>
               </span>
 
               {tags && tags.length > 0 && (
@@ -120,8 +120,8 @@ const pageTitle = `${title} - QwQBiG's World`;
 
           {tocHeadings.length > 0 && (
             <details class="toc article-mobile-toc lg:hidden" data-mobile-toc>
-              <summary class="toc-title">目录</summary>
-              <a href="#article:contents" data-toc-fallback data-astro-reload>查看完整目录</a>
+              <summary class="toc-title">Contents</summary>
+              <a href="#article:contents" data-toc-fallback data-astro-reload>View full table of contents</a>
             </details>
           )}
 
@@ -133,7 +133,7 @@ const pageTitle = `${title} - QwQBiG's World`;
           <!-- 合集文章列表 -->
           {isSeriesCollection && collectionPosts.length > 0 && (
             <div class="mt-12 pt-8 border-t border-border-color">
-              <h2 class="text-2xl font-bold text-text-primary mb-6">合集文章</h2>
+              <h2 class="text-2xl font-bold text-text-primary mb-6">Posts in this series</h2>
               <div class="space-y-4">
                 {collectionPosts.map((collectionPost, index) => (
                   <a
@@ -173,7 +173,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                     data-astro-prefetch="viewport"
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
                   >
-                    <span class="text-xs text-text-muted uppercase tracking-wide">上一篇</span>
+                    <span class="text-xs text-text-muted uppercase tracking-wide">Previous post</span>
                     <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1">
                       {prevPost.data.title}
                     </div>
@@ -188,7 +188,7 @@ const pageTitle = `${title} - QwQBiG's World`;
                     data-astro-prefetch="viewport"
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all text-right md:text-left md:ml-auto"
                   >
-                    <span class="text-xs text-text-muted uppercase tracking-wide">下一篇</span>
+                    <span class="text-xs text-text-muted uppercase tracking-wide">Next post</span>
                     <div class="font-medium text-text-primary group-hover:text-primary transition-colors line-clamp-2 mt-1">
                       {nextPost.data.title}
                     </div>
@@ -212,8 +212,8 @@ const pageTitle = `${title} - QwQBiG's World`;
             <!-- TOC -->
             {tocHeadings.length > 0 && (
               <div class="toc" id="article:contents" data-toc-sidebar>
-                <div class="toc-title">目录</div>
-                <nav aria-label="文章目录" data-article-toc>
+                <div class="toc-title">Contents</div>
+                <nav aria-label="Table of contents" data-article-toc>
                   <ul>
                     {tocHeadings.map((heading) => (
                       <li>
@@ -234,7 +234,7 @@ const pageTitle = `${title} - QwQBiG's World`;
             <!-- Series Navigation -->
             {seriesPosts.length > 0 && !isSeriesCollection && (
               <div class="toc">
-                <div class="toc-title">系列文章</div>
+                <div class="toc-title">In this series</div>
                 <ul>
                   {seriesPosts.map((seriesPost) => (
                     <li>

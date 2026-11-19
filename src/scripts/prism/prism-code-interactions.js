@@ -30,9 +30,9 @@ import { prepareCodeSearch } from './article-code.js';
               <circle cx="10.5" cy="10.5" r="6.5"></circle>
               <path d="m16 16 4.5 4.5"></path>
             </svg>
-            Search Code
+            Find in code
           </span>
-          <button class="code-search-close" type="button" aria-label="关闭代码搜索">
+          <button class="code-search-close" type="button" aria-label="Close code search">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
               <path d="m6 6 12 12M6 18 18 6"></path>
             </svg>
@@ -40,17 +40,17 @@ import { prepareCodeSearch } from './article-code.js';
         </div>
         <div class="code-search-body">
           <div class="code-search-input-wrapper">
-            <input type="text" class="code-search-input" placeholder="Type to search..." />
+            <input type="text" class="code-search-input" aria-label="Find in code" placeholder="Enter at least 2 characters" />
           </div>
           <div class="code-search-controls">
             <span class="code-search-count">0/0</span>
             <div class="code-search-buttons">
-              <button class="code-search-prev" type="button" aria-label="上一个搜索结果">
+              <button class="code-search-prev" type="button" aria-label="Previous match">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <polyline points="18 15 12 9 6 15"></polyline>
                 </svg>
               </button>
-              <button class="code-search-next" type="button" aria-label="下一个搜索结果">
+              <button class="code-search-next" type="button" aria-label="Next match">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
