@@ -27,16 +27,19 @@ pre[class*="language-"] .line.line-highlight {
 }
 
 /* 行号样式 */
-pre[class*="language-"] .line-number {
+pre[class*="language-"] .line-number,
+pre[class*="language-"] :where([data-code-lines]) > .line::before {
   color: #8c8fa1;
   transition: color 0.2s ease;
 }
 
-pre[class*="language-"] .line:hover .line-number {
+pre[class*="language-"] .line:hover .line-number,
+pre[class*="language-"] [data-code-lines] > .line:hover::before {
   color: #ea76cb;
 }
 
-pre[class*="language-"] .line.line-highlight .line-number {
+pre[class*="language-"] .line.line-highlight .line-number,
+pre[class*="language-"] [data-code-lines] > .line.line-highlight::before {
   color: #b4a0dc;
   font-weight: 600;
 }

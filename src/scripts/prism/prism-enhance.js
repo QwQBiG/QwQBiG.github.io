@@ -4,287 +4,203 @@
  * 适用于 Astro 内置的 Prism 高亮输出
  */
 
-(function() {
-  'use strict';
+// ==================== 关键字分类 ====================
 
-  // ==================== 关键字分类 ====================
+// 访问控制关键字
+const ACCESS_KEYWORDS = ['public', 'private', 'protected', 'internal'];
 
-  // 访问控制关键字
-  const ACCESS_KEYWORDS = ['public', 'private', 'protected', 'internal'];
+// 静态/实例修饰符
+const MODIFIER_KEYWORDS = ['static', 'readonly', 'const', 'final', 'abstract', 'virtual', 'override', 'sealed', 'volatile', 'transient', 'synchronized', 'native', 'strictfp', 'inline', 'explicit', 'implicit', 'extern', 'mutable'];
 
-  // 静态/实例修饰符
-  const MODIFIER_KEYWORDS = ['static', 'readonly', 'const', 'final', 'abstract', 'virtual', 'override', 'sealed', 'volatile', 'transient', 'synchronized', 'native', 'strictfp', 'inline', 'explicit', 'implicit', 'extern', 'mutable'];
+// 异步相关
+const ASYNC_KEYWORDS = ['async', 'await', 'yield', 'Task', 'Promise', 'Future'];
 
-  // 异步相关
-  const ASYNC_KEYWORDS = ['async', 'await', 'yield', 'Task', 'Promise', 'Future'];
+// 声明关键字
+const DECLARATION_KEYWORDS = ['var', 'let', 'const', 'function', 'class', 'interface', 'enum', 'struct', 'fn', 'def', 'type', 'impl', 'mod', 'pub', 'crate', 'use', 'namespace', 'template', 'typename', 'concept', 'requires'];
 
-  // 声明关键字
-  const DECLARATION_KEYWORDS = ['var', 'let', 'const', 'function', 'class', 'interface', 'enum', 'struct', 'fn', 'def', 'type', 'impl', 'mod', 'pub', 'crate', 'use', 'namespace', 'template', 'typename', 'concept', 'requires'];
+// 模块/导入导出关键字
+const MODULE_KEYWORDS = ['import', 'export', 'from', 'module', 'require', 'package', 'include', 'using', 'extern', 'crate', 'mod', 'use', 'as'];
 
-  // 模块/导入导出关键字
-  const MODULE_KEYWORDS = ['import', 'export', 'from', 'module', 'require', 'package', 'include', 'using', 'extern', 'crate', 'mod', 'use', 'as'];
+// 控制流关键字
+const CONTROL_KEYWORDS = ['if', 'else', 'switch', 'case', 'default', 'break', 'continue', 'for', 'while', 'do', 'loop', 'match', 'goto', 'return'];
 
-  // 控制流关键字
-  const CONTROL_KEYWORDS = ['if', 'else', 'switch', 'case', 'default', 'break', 'continue', 'for', 'while', 'do', 'loop', 'match', 'goto', 'return'];
+// 异常处理关键字
+const EXCEPTION_KEYWORDS = ['try', 'catch', 'finally', 'throw', 'throws', 'except', 'raise', 'panic', 'unwrap', 'expect'];
 
-  // 异常处理关键字
-  const EXCEPTION_KEYWORDS = ['try', 'catch', 'finally', 'throw', 'throws', 'except', 'raise', 'panic', 'unwrap', 'expect'];
+// 类型相关关键字
+const TYPE_KEYWORDS = ['typeof', 'instanceof', 'in', 'of', 'as', 'is', 'new', 'this', 'super', 'self', 'Self', 'where', 'dyn', 'impl'];
 
-  // 类型相关关键字
-  const TYPE_KEYWORDS = ['typeof', 'instanceof', 'in', 'of', 'as', 'is', 'new', 'this', 'super', 'self', 'Self', 'where', 'dyn', 'impl'];
+// 布尔值和空值
+const BOOLEAN_KEYWORDS = ['true', 'false'];
+const NULL_KEYWORDS = ['null', 'undefined', 'nil', 'None', 'Option', 'Result'];
 
-  // 布尔值和空值
-  const BOOLEAN_KEYWORDS = ['true', 'false'];
-  const NULL_KEYWORDS = ['null', 'undefined', 'nil', 'None', 'Option', 'Result'];
+// Rust 特定关键字
+const RUST_KEYWORDS = ['mut', 'ref', 'box', 'move', 'unsafe', 'trait', 'impl', 'dyn', 'macro', 'derive'];
 
-  // Rust 特定关键字
-  const RUST_KEYWORDS = ['mut', 'ref', 'box', 'move', 'unsafe', 'trait', 'impl', 'dyn', 'macro', 'derive'];
+// C++ 特定关键字
+const CPP_KEYWORDS = ['auto', 'decltype', 'constexpr', 'consteval', 'constinit', 'co_await', 'co_return', 'co_yield', 'friend', 'decltype', 'noexcept', 'static_cast', 'dynamic_cast', 'reinterpret_cast', 'const_cast'];
 
-  // C++ 特定关键字
-  const CPP_KEYWORDS = ['auto', 'decltype', 'constexpr', 'consteval', 'constinit', 'co_await', 'co_return', 'co_yield', 'friend', 'decltype', 'noexcept', 'static_cast', 'dynamic_cast', 'reinterpret_cast', 'const_cast'];
+// Java 特定关键字
+const JAVA_KEYWORDS = ['extends', 'implements', 'instanceof', 'strictfp', 'assert', 'native', 'transient', 'volatile', 'synchronized', 'finally'];
 
-  // Java 特定关键字
-  const JAVA_KEYWORDS = ['extends', 'implements', 'instanceof', 'strictfp', 'assert', 'native', 'transient', 'volatile', 'synchronized', 'finally'];
+// Python 特定关键字
+const PYTHON_KEYWORDS = ['lambda', 'with', 'pass', 'assert', 'del', 'global', 'nonlocal', 'raise', 'except', 'finally', 'from', 'import', 'as', 'in', 'is', 'not', 'or', 'and'];
 
-  // Python 特定关键字
-  const PYTHON_KEYWORDS = ['lambda', 'with', 'pass', 'assert', 'del', 'global', 'nonlocal', 'raise', 'except', 'finally', 'from', 'import', 'as', 'in', 'is', 'not', 'or', 'and'];
+// 运算符符号 (需要特殊处理)
+const ARROW_OPERATORS = ['=>', '->', '<-', '::', '::'];
 
-  // 运算符符号 (需要特殊处理)
-  const ARROW_OPERATORS = ['=>', '->', '<-', '::', '::'];
+// ==================== 处理函数 ====================
 
-  // ==================== 处理函数 ====================
+/**
+ * 增强代码块的语法高亮
+ */
+export function enhanceSyntaxHighlighting(code) {
+  enhanceKeywords(code);
+  enhanceOperators(code);
+  enhanceIdentifiers(code);
+}
 
-  /**
-   * 增强代码块的语法高亮
-   */
-  function enhanceSyntaxHighlighting(codeBlocks = document.querySelectorAll('pre code')) {
-    if (document.body.dataset.pageCode !== 'true') return;
-    codeBlocks.forEach(code => {
-      // 处理关键字
-      enhanceKeywords(code);
-      // 处理运算符
-      enhanceOperators(code);
-      // 处理标识符
-      enhanceIdentifiers(code);
-    });
-  }
+/**
+ * 增强关键字处理
+ */
+function enhanceKeywords(code) {
+  // 查找所有 keyword token
+  const keywords = code.querySelectorAll('.token.keyword');
 
-  /**
-   * 增强关键字处理
-   */
-  function enhanceKeywords(code) {
-    // 查找所有 keyword token
-    const keywords = code.querySelectorAll('.token.keyword');
+  keywords.forEach(el => {
+    const text = el.textContent.trim();
 
-    keywords.forEach(el => {
-      const text = el.textContent.trim();
-
-      // 访问控制关键字
-      if (ACCESS_KEYWORDS.includes(text)) {
-        el.classList.add('access');
-      }
-      // 修饰符关键字
-      else if (MODIFIER_KEYWORDS.includes(text)) {
-        el.classList.add('modifier');
-      }
-      // 异步关键字
-      else if (ASYNC_KEYWORDS.includes(text)) {
-        el.classList.add('async');
-      }
-      // 声明关键字
-      else if (DECLARATION_KEYWORDS.includes(text)) {
-        el.classList.add('declaration');
-      }
-      // 模块关键字
-      else if (MODULE_KEYWORDS.includes(text)) {
-        el.classList.add('module');
-      }
-      // 控制流关键字
-      else if (CONTROL_KEYWORDS.includes(text)) {
-        el.classList.add('control');
-      }
-      // 异常处理关键字
-      else if (EXCEPTION_KEYWORDS.includes(text)) {
-        el.classList.add('exception');
-      }
-      // 类型关键字
-      else if (TYPE_KEYWORDS.includes(text)) {
-        el.classList.add('type-check');
-      }
-      // Rust 特定
-      else if (RUST_KEYWORDS.includes(text)) {
-        el.classList.add('rust-specific');
-      }
-      // C++ 特定
-      else if (CPP_KEYWORDS.includes(text)) {
-        el.classList.add('cpp-specific');
-      }
-      // Java 特定
-      else if (JAVA_KEYWORDS.includes(text)) {
-        el.classList.add('java-specific');
-      }
-      // Python 特定
-      else if (PYTHON_KEYWORDS.includes(text)) {
-        el.classList.add('python-specific');
-      }
-    });
-  }
-
-  /**
-   * 增强运算符处理
-   */
-  function enhanceOperators(code) {
-    // 查找所有 operator token
-    const operators = code.querySelectorAll('.token.operator');
-
-    operators.forEach(el => {
-      const text = el.textContent.trim();
-
-      // 箭头运算符
-      if (ARROW_OPERATORS.includes(text)) {
-        el.classList.add('arrow');
-      }
-      // 根据内容判断类型
-      else if (['+', '-', '*', '/', '%'].includes(text)) {
-        el.classList.add('arithmetic');
-      }
-      else if (['==', '!=', '<', '>', '<=', '>=', '===', '!=='].includes(text)) {
-        el.classList.add('comparison');
-      }
-      else if (['&&', '||', '!'].includes(text)) {
-        el.classList.add('logical');
-      }
-      else if (['&', '|', '^', '~', '<<', '>>', '>>>'].includes(text)) {
-        el.classList.add('bitwise');
-      }
-      else if (text === '=' || text.endsWith('=')) {
-        el.classList.add('assignment');
-      }
-    });
-  }
-
-  /**
-   * 增强标识符处理 (函数名、类型名等)
-   */
-  function enhanceIdentifiers(code) {
-    // 处理函数调用
-    const functions = code.querySelectorAll('.token.function');
-    functions.forEach(el => {
-      const text = el.textContent.trim();
-
-      // 构造函数
-      if (/^[A-Z]/.test(text)) {
-        el.classList.add('constructor');
-      }
-      // 方法调用判断 (后面跟着括号的)
-      else {
-        el.classList.add('call');
-      }
-    });
-
-    // 处理类型/类名
-    const classNames = code.querySelectorAll('.token.class-name');
-    classNames.forEach(el => {
-      const text = el.textContent.trim();
-
-      // Rust 的 Result, Option 等
-      if (['Result', 'Option', 'Vec', 'String', 'Box', 'Rc', 'Arc', 'RefCell'].includes(text)) {
-        el.classList.add('rust-generic');
-      }
-      // C++ 标准库类型
-      else if (['std', 'vector', 'string', 'map', 'set', 'unique_ptr', 'shared_ptr'].includes(text)) {
-        el.classList.add('cpp-std');
-      }
-      // Java 标准库类型
-      else if (['System', 'String', 'Integer', 'Object', 'Class'].includes(text)) {
-        el.classList.add('java-std');
-      }
-    });
-
-    // 处理布尔值
-    const booleans = code.querySelectorAll('.token.boolean');
-    booleans.forEach(el => {
-      el.classList.add('boolean-value');
-    });
-
-    // 处理 null
-    const nulls = code.querySelectorAll('.token.null');
-    nulls.forEach(el => {
-      el.classList.add('null-value');
-    });
-  }
-
-  /**
-   * 使用 MutationObserver 监听 DOM 变化
-   */
-  function initObserver() {
-    const pendingCodes = new Set();
-    let updateTimer = null;
-
-    function collectCodeBlocks(node) {
-      if (node.nodeType !== Node.ELEMENT_NODE) return;
-      if (node.matches('code') && node.closest('pre')) {
-        pendingCodes.add(node);
-      }
-      node.querySelectorAll('pre code').forEach(code => pendingCodes.add(code));
+    // 访问控制关键字
+    if (ACCESS_KEYWORDS.includes(text)) {
+      el.classList.add('access');
     }
+    // 修饰符关键字
+    else if (MODIFIER_KEYWORDS.includes(text)) {
+      el.classList.add('modifier');
+    }
+    // 异步关键字
+    else if (ASYNC_KEYWORDS.includes(text)) {
+      el.classList.add('async');
+    }
+    // 声明关键字
+    else if (DECLARATION_KEYWORDS.includes(text)) {
+      el.classList.add('declaration');
+    }
+    // 模块关键字
+    else if (MODULE_KEYWORDS.includes(text)) {
+      el.classList.add('module');
+    }
+    // 控制流关键字
+    else if (CONTROL_KEYWORDS.includes(text)) {
+      el.classList.add('control');
+    }
+    // 异常处理关键字
+    else if (EXCEPTION_KEYWORDS.includes(text)) {
+      el.classList.add('exception');
+    }
+    // 类型关键字
+    else if (TYPE_KEYWORDS.includes(text)) {
+      el.classList.add('type-check');
+    }
+    // Rust 特定
+    else if (RUST_KEYWORDS.includes(text)) {
+      el.classList.add('rust-specific');
+    }
+    // C++ 特定
+    else if (CPP_KEYWORDS.includes(text)) {
+      el.classList.add('cpp-specific');
+    }
+    // Java 特定
+    else if (JAVA_KEYWORDS.includes(text)) {
+      el.classList.add('java-specific');
+    }
+    // Python 特定
+    else if (PYTHON_KEYWORDS.includes(text)) {
+      el.classList.add('python-specific');
+    }
+  });
+}
 
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        const target = mutation.target;
-        if (mutation.type === 'attributes') {
-          if (target.matches('code') && target.closest('pre')) {
-            pendingCodes.add(target);
-          }
-          return;
-        }
+/**
+ * 增强运算符处理
+ */
+function enhanceOperators(code) {
+  // 查找所有 operator token
+  const operators = code.querySelectorAll('.token.operator');
 
-        // Prism/XML 修复会直接重建已有 code 内的 token，不一定新增 code。
-        const code = target.closest('code');
-        if (code && code.closest('pre')) {
-          pendingCodes.add(code);
-          return;
-        }
+  operators.forEach(el => {
+    const text = el.textContent.trim();
 
-        mutation.addedNodes.forEach(collectCodeBlocks);
-      });
+    // 箭头运算符
+    if (ARROW_OPERATORS.includes(text)) {
+      el.classList.add('arrow');
+    }
+    // 根据内容判断类型
+    else if (['+', '-', '*', '/', '%'].includes(text)) {
+      el.classList.add('arithmetic');
+    }
+    else if (['==', '!=', '<', '>', '<=', '>=', '===', '!=='].includes(text)) {
+      el.classList.add('comparison');
+    }
+    else if (['&&', '||', '!'].includes(text)) {
+      el.classList.add('logical');
+    }
+    else if (['&', '|', '^', '~', '<<', '>>', '>>>'].includes(text)) {
+      el.classList.add('bitwise');
+    }
+    else if (text === '=' || text.endsWith('=')) {
+      el.classList.add('assignment');
+    }
+  });
+}
 
-      if (pendingCodes.size > 0 && updateTimer === null) {
-        // 合并同一轮高亮/行号包装产生的变化，只处理受影响的代码块。
-        updateTimer = setTimeout(() => {
-          updateTimer = null;
-          const codeBlocks = Array.from(pendingCodes).filter(code => code.isConnected && code.closest('pre'));
-          pendingCodes.clear();
-          enhanceSyntaxHighlighting(codeBlocks);
-        }, 50);
-      }
-    });
+/**
+ * 增强标识符处理 (函数名、类型名等)
+ */
+function enhanceIdentifiers(code) {
+  // 处理函数调用
+  const functions = code.querySelectorAll('.token.function');
+  functions.forEach(el => {
+    const text = el.textContent.trim();
 
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class']
-    });
-  }
+    // 构造函数
+    if (/^[A-Z]/.test(text)) {
+      el.classList.add('constructor');
+    }
+    // 方法调用判断 (后面跟着括号的)
+    else {
+      el.classList.add('call');
+    }
+  });
 
-  document.addEventListener('astro:page-load', () => enhanceSyntaxHighlighting());
+  // 处理类型/类名
+  const classNames = code.querySelectorAll('.token.class-name');
+  classNames.forEach(el => {
+    const text = el.textContent.trim();
 
-  // 初始化
-  function init() {
-    // 初始处理
-    enhanceSyntaxHighlighting();
+    // Rust 的 Result, Option 等
+    if (['Result', 'Option', 'Vec', 'String', 'Box', 'Rc', 'Arc', 'RefCell'].includes(text)) {
+      el.classList.add('rust-generic');
+    }
+    // C++ 标准库类型
+    else if (['std', 'vector', 'string', 'map', 'set', 'unique_ptr', 'shared_ptr'].includes(text)) {
+      el.classList.add('cpp-std');
+    }
+    // Java 标准库类型
+    else if (['System', 'String', 'Integer', 'Object', 'Class'].includes(text)) {
+      el.classList.add('java-std');
+    }
+  });
 
-    // 监听 DOM 变化
-    initObserver();
-  }
+  // 处理布尔值
+  const booleans = code.querySelectorAll('.token.boolean');
+  booleans.forEach(el => {
+    el.classList.add('boolean-value');
+  });
 
-  // 页面加载完成后初始化
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    // 延迟执行，确保其他脚本已完成
-    setTimeout(init, 100);
-  }
-
-})();
+  // 处理 null
+  const nulls = code.querySelectorAll('.token.null');
+  nulls.forEach(el => {
+    el.classList.add('null-value');
+  });
+}
