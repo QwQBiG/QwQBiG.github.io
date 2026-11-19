@@ -24,7 +24,7 @@ async function optimizeGallery() {
     const previewName = `${stem}-1920.webp`;
 
     const pipeline = sharp(sourcePath).rotate();
-    const [thumbnail] = await Promise.all([
+    const [thumbnail, preview] = await Promise.all([
       pipeline.clone()
         .resize({ width: 720, height: 720, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 78, effort: 5, smartSubsample: true })
@@ -44,6 +44,16 @@ async function optimizeGallery() {
         return `/generated/gallery/${name} ${width}w`;
       }),
     );
+    const previewUrl = `/generated/gallery/${previewName}`;
+    const previewCandidates = await Promise.all(
+      [480, 800, 1200].filter(width => preview.width > 720 && width < preview.width).map(async width => {
+        const name = `${stem}-preview-${width}.webp`;
+        await pipeline.clone().resize({ width })
+          .webp({ quality: 84, effort: 5, smartSubsample: true })
+          .toFile(path.join(galleryOutputDir, name));
+        return `/generated/gallery/${name} ${width}w`;
+      }),
+    );
     // The original 720px bounding box can yield a narrower portrait thumbnail.
     const fallback = `/generated/gallery/${thumbName}`;
     manifest.push({
@@ -53,7 +63,10 @@ async function optimizeGallery() {
       height: metadata.autoOrient.height,
       thumb2x: fallback,
       srcset: [...smallerThumbnails, `${fallback} ${thumbnail.width}w`].join(', '),
-      preview: `/generated/gallery/${previewName}`,
+      preview: previewUrl,
+      previewWidth: preview.width,
+      previewHeight: preview.height,
+      previewSrcset: [...previewCandidates, `${previewUrl} ${preview.width}w`].join(', '),
     });
   }
 

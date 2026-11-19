@@ -4,7 +4,7 @@ import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import type { PhotoItem, PhotoState } from '../../types/photo';
 import {
   desktopPhotoWidth, fitPhotoPosition, listenForPointerDrag, photoAnchorY,
-  photoFrameHeightRatio, photoPositionBounds, photoWallCardWidth, preloadPhotos, resolvePhotoWallSize,
+  photoFrameHeightRatio, photoPositionBounds, photoPreviewSize, photoWallCardWidth, resolvePhotoWallSize, whenPhotoSettles,
 } from '../../utils/photo-wall';
 
 interface PhotoWallProps {
@@ -68,17 +68,15 @@ const saveStateToStorage = (photoId: string, state: PhotoState) => {
 
 export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   const [photoStates, setPhotoStates] = useState<Map<string, PhotoState>>(new Map());
-  const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<{ photo: PhotoItem; thumbnail: string } | null>(null);
   const [highestZIndex, setHighestZIndex] = useState(photos.length);
   const [containerSize, setContainerSize] = useState({ width: 800, height: 600, baseWidth: desktopPhotoWidth });
-  const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragStartTime = useRef(0);
   const dragStartPos = useRef({ x: 0, y: 0 });
 
-  // 先保留 Astro 输出的清晰静态照片墙；缩略图解码完成后再无缝接管交互。
+  // Measure once to restore the wall; cards can take over independently as their images decode.
   useEffect(() => {
-    let cancelled = false;
     const measureContainer = () => {
       const container = containerRef.current;
       const rect = container?.getBoundingClientRect();
@@ -91,62 +89,28 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
       return nextSize;
     };
 
-    const updateSize = () => {
-      measureContainer();
-    };
-    measureContainer();
-    window.addEventListener('resize', updateSize);
-    preloadPhotos(photos).then(() => {
-      if (cancelled) return;
-      const measuredSize = measureContainer();
-      const initialStates = new Map<string, PhotoState>();
-      let maxZIndex = photos.length;
-      photos.forEach((photo, index) => {
-        let savedState = loadStateFromStorage(photo.id);
-        // Compact cards fit their remembered position when drawn. Keeping that
-        // position lets a portrait arrangement return after a landscape reload.
-        if (savedState && measuredSize.baseWidth === desktopPhotoWidth) {
-          const cardWidth = desktopPhotoWidth * (photo.scale ?? 1);
-          const bounds = photoPositionBounds(measuredSize, cardWidth, photoFrameHeightRatio(photo), savedState.rotation);
-          savedState = { ...savedState, ...fitPhotoPosition(savedState, bounds) };
-        }
-        if (savedState) maxZIndex = Math.max(maxZIndex, savedState.zIndex);
-        initialStates.set(
-          photo.id,
-          savedState || generateRandomPosition(
-            index,
-            photos.length,
-            measuredSize.width,
-            measuredSize.height,
-            measuredSize.baseWidth < desktopPhotoWidth,
-          ),
-        );
-      });
-      setPhotoStates(initialStates);
-      setHighestZIndex(maxZIndex);
-      setIsLoaded(true);
+    const measuredSize = measureContainer();
+    const initialStates = new Map<string, PhotoState>();
+    let maxZIndex = photos.length;
+    photos.forEach((photo, index) => {
+      let savedState = loadStateFromStorage(photo.id);
+      // Keep compact positions across rotations, and fit a restored desktop card when first drawn.
+      if (savedState && measuredSize.baseWidth === desktopPhotoWidth) {
+        const cardWidth = desktopPhotoWidth * (photo.scale ?? 1);
+        const bounds = photoPositionBounds(measuredSize, cardWidth, photoFrameHeightRatio(photo), savedState.rotation);
+        savedState = { ...savedState, ...fitPhotoPosition(savedState, bounds) };
+      }
+      if (savedState) maxZIndex = Math.max(maxZIndex, savedState.zIndex);
+      initialStates.set(photo.id, savedState || generateRandomPosition(
+        index, photos.length, measuredSize.width, measuredSize.height,
+        measuredSize.baseWidth < desktopPhotoWidth,
+      ));
     });
-
-    return () => {
-      cancelled = true;
-      window.removeEventListener('resize', updateSize);
-    };
+    setPhotoStates(initialStates);
+    setHighestZIndex(maxZIndex);
+    window.addEventListener('resize', measureContainer);
+    return () => window.removeEventListener('resize', measureContainer);
   }, [photos]);
-  // React 卡片与静态首屏位置准备好后再一次性切换，避免空墙或二次跳动。
-  useEffect(() => {
-    if (!isLoaded || photoStates.size !== photos.length) return;
-    let secondFrame: number | undefined;
-    const firstFrame = requestAnimationFrame(() => {
-      secondFrame = requestAnimationFrame(() => {
-        window.dispatchEvent(new CustomEvent('photo-wall-ready'));
-      });
-    });
-    return () => {
-      cancelAnimationFrame(firstFrame);
-      if (secondFrame !== undefined) cancelAnimationFrame(secondFrame);
-    };
-  }, [isLoaded, photoStates.size, photos.length]);
-
 
   // 提升层级
   const bringToFront = useCallback((photoId: string) => {
@@ -186,7 +150,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   };
 
   // 处理点击（区分拖拽和点击）
-  const handlePointerUp = (photo: PhotoItem, clientX: number, clientY: number) => {
+  const handlePointerUp = (photo: PhotoItem, clientX: number, clientY: number, thumbnail: string) => {
     const dragDuration = Date.now() - dragStartTime.current;
     const dragDistance = Math.sqrt(
       Math.pow(clientX - dragStartPos.current.x, 2) +
@@ -194,7 +158,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
     );
     // 如果拖拽时间小于 200ms 且移动距离小于 10px，认为是点击
     if (dragDuration < 200 && dragDistance < 10) {
-      setSelectedPhoto(photo);
+      setSelectedPhoto({ photo, thumbnail });
     }
   };
 
@@ -206,7 +170,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   // 静态首屏和 React 使用同一套断点，避免接管时卡片尺寸改变。
   const isMobile = containerSize.width < 768;
 
-  if (!isLoaded) {
+  if (!photoStates.size) {
     return <div ref={containerRef} className="w-full h-full" />;
   }
 
@@ -232,7 +196,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
             compact={containerSize.baseWidth < desktopPhotoWidth}
             onDragStart={(x, y) => handleDragStart(photo.id, x, y)}
             onDragEnd={(x, y, rotation) => updatePhotoPosition(photo.id, x, y, rotation)}
-            onPointerUp={(x, y) => handlePointerUp(photo, x, y)}
+            onPointerUp={(x, y, thumbnail) => handlePointerUp(photo, x, y, thumbnail)}
           />
         );
       })}
@@ -267,17 +231,7 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
                 maxHeight: isMobile ? '80vh' : '90vh',
               }}
             >
-              <div className="flex items-center justify-center">
-                <img
-                  src={selectedPhoto.preview ?? selectedPhoto.src}
-                  alt={selectedPhoto.alt}
-                  className="block max-w-full h-auto object-contain pointer-events-none"
-                  style={{
-                    imageRendering: 'auto',
-                    maxHeight: isMobile ? '86vh' : '92vh',
-                  }}
-                />
-              </div>
+              <PreviewImage key={selectedPhoto.photo.id} {...selectedPhoto} mobile={isMobile} />
             </m.div>
           </m.div>
         )}
@@ -288,6 +242,36 @@ export const PhotoWall: React.FC<PhotoWallProps> = ({ photos }) => {
   );
 };
 
+function PreviewImage({ photo, thumbnail, mobile }: { photo: PhotoItem; thumbnail: string; mobile: boolean }) {
+  const [sharp, setSharp] = useState(false);
+  const size = photoPreviewSize(photo, mobile);
+  const width = photo.previewWidth ?? photo.width;
+  const height = photo.previewHeight ?? photo.height;
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: size }}>
+      <img
+        src={thumbnail}
+        width={width}
+        height={height}
+        alt={photo.alt}
+        className="block w-full h-auto object-contain pointer-events-none"
+        style={{ aspectRatio: width && height ? `${width} / ${height}` : undefined, opacity: sharp ? 0 : 1 }}
+      />
+      <img
+        sizes={size}
+        srcSet={photo.previewSrcset}
+        src={photo.preview ?? photo.src}
+        alt=""
+        aria-hidden="true"
+        onLoad={() => setSharp(true)}
+        onError={() => setSharp(false)}
+        className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+        style={{ opacity: sharp ? 1 : 0 }}
+      />
+    </div>
+  );
+}
+
 // 单个照片卡片组件
 interface PhotoCardProps {
   photo: PhotoItem;
@@ -297,7 +281,7 @@ interface PhotoCardProps {
   compact: boolean;
   onDragStart: (clientX: number, clientY: number) => void;
   onDragEnd: (x: number, y: number, rotation: number) => void;
-  onPointerUp: (clientX: number, clientY: number) => void;
+  onPointerUp: (clientX: number, clientY: number, thumbnail: string) => void;
 }
 
 const PhotoCard: React.FC<PhotoCardProps> = ({
@@ -310,6 +294,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
   onDragEnd,
   onPointerUp,
 }) => {
+  const imageRef = useRef<HTMLImageElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [dragPosition, setDragPosition] = useState<{ x: number; y: number } | null>(null);
@@ -325,6 +310,24 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
     setHasMounted(true);
     return () => dragCleanupRef.current?.();
   }, []);
+
+  useEffect(() => {
+    const image = imageRef.current;
+    const card = image?.closest<HTMLElement>('.photo-card');
+    if (!image || !card) return;
+    const fallback = card.closest('main')?.querySelector<HTMLElement>(
+      `[data-static-photo-wall] [data-photo-id="${CSS.escape(photo.id)}"]`,
+    );
+    const stop = whenPhotoSettles(image, () => {
+      card.dataset.photoReady = '';
+      if (fallback) fallback.hidden = true;
+    });
+    return () => {
+      stop();
+      delete card.dataset.photoReady;
+      if (fallback) fallback.hidden = false;
+    };
+  }, [photo.id]);
 
   // Project the remembered point into the current wall on every rotation.
   const requested = dragPosition ?? state;
@@ -377,7 +380,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
       const deltaX = upEvent.clientX - startX;
       const deltaY = upEvent.clientY - startY;
       finishPosition({ x: initialPosX + deltaX, y: initialPosY + deltaY });
-      onPointerUp(upEvent.clientX, upEvent.clientY);
+      onPointerUp(upEvent.clientX, upEvent.clientY, imageRef.current?.currentSrc || photo.src);
 
       cleanup();
     };
@@ -429,6 +432,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
         rotate: state.rotation + (Math.random() - 0.5) * 2,
         transition: { duration: 0.15, ease: 'easeOut' },
       }}
+      data-photo-id={photo.id}
       className="photo-card group"
     >
       {/* 拍立得相框样式 - 全图片无文字 */}
@@ -444,6 +448,7 @@ const PhotoCard: React.FC<PhotoCardProps> = ({
       >
         <div className="relative overflow-hidden">
           <img
+            ref={imageRef}
             sizes={photo.sizes}
             srcSet={photo.srcset}
             src={photo.src}

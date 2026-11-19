@@ -66,34 +66,38 @@ export function resolvePhotoWallSize(
   return { width: measured.width, height: measured.height };
 }
 
-// Keep the static wall visible until every thumbnail has either decoded or failed.
-export const preloadPhotos = (
-  photos: readonly Pick<PhotoItem, 'src' | 'srcset' | 'sizes'>[],
-  createImage: () => HTMLImageElement = () => new Image(),
-) => Promise.all(photos.map((photo) => new Promise<void>((resolve) => {
-  const image = createImage();
-  let decoding = false;
-  let settled = false;
-  const finish = () => {
-    if (settled) return;
-    settled = true;
-    image.onload = null;
-    image.onerror = null;
-    resolve();
-  };
-  const decode = () => {
-    if (decoding || settled) return;
-    decoding = true;
-    Promise.resolve().then(() => image.decode?.()).catch(() => {}).then(finish);
-  };
+/** A card takes over its static thumbnail as soon as its own image can paint. */
+export function whenPhotoSettles(image: HTMLImageElement, callback: () => void) {
+  let active = true;
+  function cleanup() {
+    active = false;
+    image.removeEventListener('load', loaded);
+    image.removeEventListener('error', finish);
+  }
+  function finish() {
+    if (!active) return;
+    cleanup();
+    callback();
+  }
+  function loaded() {
+    image.removeEventListener('load', loaded);
+    if (typeof image.decode === 'function') void image.decode().then(finish, finish);
+    else finish();
+  }
+  image.addEventListener('load', loaded);
+  image.addEventListener('error', finish);
+  if (image.complete) loaded();
+  return cleanup;
+}
 
-  image.onload = decode;
-  image.onerror = finish;
-  if (photo.sizes) image.sizes = photo.sizes;
-  if (photo.srcset) image.srcset = photo.srcset;
-  image.src = photo.src;
-  if (image.complete) decode();
-})));
+export function photoPreviewSize(photo: Pick<PhotoItem, 'previewWidth' | 'previewHeight' | 'width' | 'height'>, mobile: boolean) {
+  const width = photo.previewWidth ?? photo.width;
+  const height = photo.previewHeight ?? photo.height;
+  const viewportWidth = mobile ? '95vw' : '85vw';
+  if (!width || !height) return viewportWidth;
+  // Match the preview's viewport and natural-size caps before choosing a source for the screen's DPR.
+  return `min(${viewportWidth}, ${width}px, ${(mobile ? 86 : 92) * width / height}vh)`;
+}
 
 interface PointerDragCallbacks {
   onMove: (event: PointerEvent) => void;

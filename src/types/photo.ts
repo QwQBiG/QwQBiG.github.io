@@ -4,6 +4,9 @@ export interface PhotoItem {
   srcset?: string;
   sizes?: string;
   preview?: string;
+  previewWidth?: number;
+  previewHeight?: number;
+  previewSrcset?: string;
   alt: string;
   caption?: string;
   width?: number;

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fitPhotoPosition, listenForPointerDrag, photoAnchorY, photoPositionBounds, photoWallCardWidth, photoWallSizes, preloadPhotos, resolvePhotoWallSize } from '../src/utils/photo-wall.ts';
+import { fitPhotoPosition, listenForPointerDrag, photoAnchorY, photoPositionBounds, photoPreviewSize, photoWallCardWidth, photoWallSizes, resolvePhotoWallSize, whenPhotoSettles } from '../src/utils/photo-wall.ts';
 
 test('thumbnail sizing follows exact viewport boundaries and short phone landscape', () => {
   for (const [width, height, expected] of [
@@ -147,47 +147,46 @@ test('unmount cleanup is idempotent and lets the next visit bind a fresh drag', 
   assert.equal(newCallbacks, 2);
 });
 
-function mockImage(complete = false, decode?: () => Promise<void>) {
-  return {
-    src: '',
-    complete,
-    decode,
-    onload: null as (() => void) | null,
-    onerror: null as (() => void) | null,
-  };
+function imageFixture(complete = false, decode?: () => Promise<void>) {
+  return Object.assign(new EventTarget(), { complete, decode }) as unknown as HTMLImageElement;
 }
 
-test('thumbnail readiness handles cached images without the decode API', async () => {
-  const image = mockImage(true);
-  await preloadPhotos([{ src: '/cached.webp' }], () => image as unknown as HTMLImageElement);
-  assert.equal(image.src, '/cached.webp');
-  assert.equal(image.onload, null);
-  assert.equal(image.onerror, null);
-});
-
-test('a failed thumbnail or decode cannot leave the wall permanently blocked', async () => {
-  const failed = mockImage();
-  const decodeFailed = mockImage(true, () => Promise.reject(new Error('decode failed')));
-  const images = [failed, decodeFailed];
-  const ready = preloadPhotos([{ src: '/missing.webp' }, { src: '/invalid.webp' }],
-    () => images.shift() as unknown as HTMLImageElement);
-  failed.onerror?.();
-  await ready;
-  assert.equal(failed.onerror, null);
-  assert.equal(decodeFailed.onload, null);
-});
-
-test('a slow thumbnail keeps the static wall until decoding finishes', async () => {
+test('each loaded thumbnail can take over while another is still decoding', async () => {
   let finishDecode!: () => void;
-  const decoding = new Promise<void>((resolve) => { finishDecode = resolve; });
-  const image = mockImage(false, () => decoding);
-  let isReady = false;
-  const ready = preloadPhotos([{ src: '/slow.webp' }],
-    () => image as unknown as HTMLImageElement).then(() => { isReady = true; });
-  image.onload?.();
-  await Promise.resolve();
-  assert.equal(isReady, false);
+  const slow = imageFixture(false, () => new Promise(resolve => { finishDecode = resolve; }));
+  const ready: string[] = [];
+  whenPhotoSettles(slow, () => { ready.push('slow'); });
+  slow.dispatchEvent(new Event('load'));
+  whenPhotoSettles(imageFixture(true), () => { ready.push('cached'); });
+  assert.deepEqual(ready, ['cached']);
   finishDecode();
-  await ready;
-  assert.equal(isReady, true);
+  await Promise.resolve();
+  assert.deepEqual(ready, ['cached', 'slow']);
+});
+
+test('a failed source or decoder releases only its card and cleanup ignores stale callbacks', async () => {
+  for (const failDecode of [false, true]) {
+    const image = imageFixture(failDecode, () => Promise.reject(new Error('decode failed')));
+    let completed = 0;
+    const stop = whenPhotoSettles(image, () => { completed++; });
+    if (!failDecode) image.dispatchEvent(new Event('error'));
+    await Promise.resolve();
+    image.dispatchEvent(new Event('load'));
+    assert.equal(completed, 1);
+    stop();
+  }
+  const image = imageFixture(true, () => Promise.resolve());
+  let completed = false;
+  const stop = whenPhotoSettles(image, () => { completed = true; });
+  stop();
+  await Promise.resolve();
+  assert.equal(completed, false);
+});
+
+test('responsive previews retain the natural size and both original viewport caps', () => {
+  const landscape = { width: 3840, height: 2400, previewWidth: 1920, previewHeight: 1200 };
+  assert.equal(photoPreviewSize(landscape, true), 'min(95vw, 1920px, 137.6vh)');
+  assert.equal(photoPreviewSize(landscape, false), 'min(85vw, 1920px, 147.2vh)');
+  assert.equal(photoPreviewSize({ width: 403, height: 403 }, false), 'min(85vw, 403px, 92vh)');
+  assert.equal(photoPreviewSize({}, true), '95vw');
 });
