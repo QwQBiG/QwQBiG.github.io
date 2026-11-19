@@ -1,12 +1,10 @@
 import walineStyles from '@waline/client/waline.css?url';
-import type { init, WalineInstance } from '@waline/client';
 import { scheduleBackgroundTask } from '../utils/background-tasks';
-import { keepCommentDisplayEmojiFree } from './waline-display';
-import { enhanceCommentInteractions } from './waline-interactions';
+import type { mountWaline } from './waline-client';
 
 const serverURL = 'https://waline.iqwqi.win/';
-type InitComments = typeof init;
-let clientPromise: Promise<InitComments> | undefined;
+type MountWaline = typeof mountWaline;
+let clientPromise: Promise<MountWaline> | undefined;
 let stylesPromise: Promise<void> | undefined;
 let cancelPendingStyles: (() => void) | undefined;
 let current: { element: HTMLElement; dispose: () => void } | undefined;
@@ -54,13 +52,13 @@ function loadStyles(): Promise<void> {
   return stylesPromise;
 }
 
-async function loadResources(): Promise<InitComments> {
-  clientPromise ??= import('@waline/client').then(({ init }) => init).catch(error => {
+async function loadResources(): Promise<MountWaline> {
+  clientPromise ??= import('./waline-client').then(module => module.mountWaline).catch(error => {
     clientPromise = undefined;
     throw error;
   });
-  const [initComments] = await Promise.all([clientPromise, loadStyles()]);
-  return initComments;
+  const [mount] = await Promise.all([clientPromise, loadStyles()]);
+  return mount;
 }
 
 function mountComments() {
@@ -72,13 +70,11 @@ function mountComments() {
   const element = found;
 
   const lifetime = new AbortController();
-  let instance: WalineInstance | null = null;
-  let task: ReturnType<typeof scheduleBackgroundTask<InitComments>> | undefined;
-  let stopInteractions: (() => void) | undefined;
+  let unmount: (() => void) | undefined;
+  let task: ReturnType<typeof scheduleBackgroundTask<MountWaline>> | undefined;
   let observer: IntersectionObserver | undefined;
   let disposed = false;
   const status = element.parentElement?.querySelector<HTMLElement>('[data-comment-load-state]');
-  const stopFormatting = keepCommentDisplayEmojiFree(element);
   prepareConnection();
 
   const showFailure = () => {
@@ -94,7 +90,7 @@ function mountComments() {
   };
 
   function start(priority: 'navigation' | 'prefetch' = 'prefetch') {
-    if (disposed || instance || !element.isConnected) return;
+    if (disposed || unmount || !element.isConnected) return;
     element.setAttribute('aria-busy', 'true');
     task = scheduleBackgroundTask({
       key: 'waline-client-resources',
@@ -103,52 +99,13 @@ function mountComments() {
       run: loadResources,
     });
     const pending = task;
-    void pending.done.then(initComments => {
-      if (disposed || instance || !element.isConnected) return;
+    void pending.done.then(mount => {
+      if (disposed || unmount || !element.isConnected) return;
       if (task === pending) task = undefined;
-      if (!initComments) { showFailure(); return; }
+      if (!mount) { showFailure(); return; }
       try {
-        instance = initComments({
-          el: element,
-          serverURL,
-          login: 'force',
-          path: element.dataset.path || window.location.pathname,
-          dark: false,
-          lang: 'en-US',
-          emoji: false,
-          search: false,
-          reaction: false,
-          locale: {
-            nick: 'Nickname',
-            nickError: 'Enter a nickname of at least 3 bytes.',
-            mail: 'Email',
-            placeholder: 'Write a comment…',
-            sofa: 'No comments yet.',
-            submit: 'Post comment',
-            login: 'Sign in',
-            logout: 'Sign out',
-            more: 'Load more comments',
-            uploadImage: 'Upload an image',
-            cancelLike: 'Unlike',
-            word: 'words',
-            sticky: 'Pinned',
-            unsticky: 'Unpin',
-            waiting: 'Pending review',
-            latest: 'Newest',
-            hottest: 'Most popular',
-            level0: 'Lurker',
-            level1: 'New voice',
-            level2: 'Commentator',
-            level3: 'Regular',
-            level4: 'Chatterbox',
-            level5: 'Legend',
-            subPostComment: 'Subscribe to comments on this post',
-            subSiteComment: 'Subscribe to all comments',
-            subscribeToReplies: 'Subscribe to replies to your comments',
-          },
-        });
-        if (!instance) { showFailure(); return; }
-        stopInteractions = enhanceCommentInteractions(element);
+        unmount = mount(element, serverURL);
+        if (!unmount) { showFailure(); return; }
         element.dataset.commentReady = 'true';
         element.setAttribute('aria-busy', 'false');
         if (status) status.hidden = true;
@@ -178,9 +135,7 @@ function mountComments() {
       task?.cancel();
       lifetime.abort();
       observer?.disconnect();
-      stopInteractions?.();
-      stopFormatting();
-      instance?.destroy();
+      unmount?.();
       delete element.dataset.commentReady;
     },
   };
