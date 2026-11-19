@@ -15,7 +15,14 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   const connection = () => (navigator as Navigator & { connection?: NavigationConnection }).connection;
   const canWarm = () => allowNavigationAssets(connection(), navigator.onLine);
   const knownAssets = new Set<string>();
+  let neighborManifest: NavigationManifest | null = null;
   function rememberPageAssets() {
+    const hint = document.querySelector<HTMLLinkElement>('link[rel="navigation-assets"][data-article-neighbors]');
+    try {
+      neighborManifest = hint?.dataset.articleNeighbors ? readNavigationManifest(JSON.parse(hint.dataset.articleNeighbors)) : null;
+    } catch {
+      neighborManifest = null;
+    }
     for (const element of document.querySelectorAll<HTMLLinkElement | HTMLScriptElement>('link[rel="stylesheet"][href], link[rel="preload"][href], link[rel="modulepreload"][href], script[src]')) {
       knownAssets.add(element instanceof HTMLLinkElement ? element.href : element.src);
     }
@@ -69,7 +76,8 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   async function warmDestination(destination: URL, priority: WarmupPriority, signal: AbortSignal) {
     try {
       if (!canWarm() || signal.aborted) return;
-      const loaded = await loadManifest(priority, signal);
+      const loaded = neighborManifest && Object.hasOwn(neighborManifest.routes, destination.pathname)
+        ? neighborManifest : await loadManifest(priority, signal);
       if (!loaded || signal.aborted || !canWarm()) return;
       const assets = selectNavigationAssets(loaded, destination, window.location.href, knownAssets, connection());
       await Promise.all(assets.map(async (asset) => {
@@ -143,8 +151,11 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
 
   function preparePrimaryNavigation() {
     if (document.readyState !== 'complete' || document.hidden || !canWarm() || lifetime.signal.aborted) return;
-    // Read the small shared manifest immediately after load, before the first hover.
-    void loadManifest('prefetch', lifetime.signal).catch(() => {});
+    // Reading an article needs no site-wide index. Other destinations can
+    // still request it on intent; list pages retain their existing warmup.
+    if (!document.querySelector('main article .prose, main article.poetry-article')) {
+      void loadManifest('prefetch', lifetime.signal).catch(() => {});
+    }
     if (window.location.pathname !== '/') {
       watchPostNavigation();
       return;

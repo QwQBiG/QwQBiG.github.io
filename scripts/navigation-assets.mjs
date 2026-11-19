@@ -35,6 +35,8 @@ function candidates(html, route) {
   const entries = new Set();
   const deferredDiscovery = new Set();
   const alreadyLinked = new Set();
+  const neighbors = new Set();
+  const declared = new Set();
   const result = [];
   const seen = new Set();
   function add(value, type, extra = {}) {
@@ -45,6 +47,7 @@ function candidates(html, route) {
       seen.add(key);
       result.push(asset);
     }
+    return url;
   }
   function addResponsiveImage(srcset, sizes, mimeType, href) {
     // Reuse the destination's format and width candidates, including on retina displays.
@@ -59,8 +62,13 @@ function candidates(html, route) {
       add(href || sources.at(-1).url, 'image', variant);
     }
   }
-  function visit(node) {
+  function visit(node, insidePostNav = false) {
     const attrs = Object.fromEntries((node.attrs ?? []).map(({ name, value }) => [name, value]));
+    if (node.tagName === 'nav' && 'data-post-navigation' in attrs) insidePostNav = true;
+    if (insidePostNav && node.tagName === 'a' && /^(next|prev)$/.test(attrs.rel) && attrs.href) {
+      const destination = URL.parse(attrs.href, new URL(route, origin));
+      if (destination?.origin === origin && !destination.username && !destination.password) neighbors.add(destination.pathname);
+    }
     const allScreens = !attrs.media || attrs.media === 'all' || attrs.media === 'screen';
     // Marked picture sources warm navigation without forcing a separate browser preload.
     if (node.tagName === 'source' && node.parentNode?.tagName === 'picture' &&
@@ -69,7 +77,7 @@ function candidates(html, route) {
     }
     if (node.tagName === 'link') {
       const rel = (attrs.rel ?? '').toLowerCase().split(/\s+/);
-      if (rel.includes('stylesheet') && !('disabled' in attrs) && allScreens) add(attrs.href, 'style');
+      if (rel.includes('stylesheet') && !('disabled' in attrs) && allScreens) declared.add(add(attrs.href, 'style'));
       if (rel.includes('preload') && allScreens && attrs.fetchpriority !== 'low' && (attrs.as === 'image' || attrs.as === 'font')) {
         if (attrs.as === 'image' && attrs.imagesrcset) {
           addResponsiveImage(attrs.imagesrcset, attrs.imagesizes, attrs.type, attrs.href);
@@ -83,11 +91,16 @@ function candidates(html, route) {
         add(attrs.href, 'json');
       }
       if (rel.includes('modulepreload')) {
-        if (allScreens) alreadyLinked.add(compiledModule(attrs.href, route));
-        add(attrs.href, 'script');
+        const url = add(attrs.href, 'script');
+        if (allScreens) {
+          alreadyLinked.add(compiledModule(attrs.href, route));
+          declared.add(url);
+        }
       }
     }
-    if (node.tagName === 'script' && attrs.src && (attrs.type === 'module' || 'defer' in attrs)) add(attrs.src, 'script');
+    if (node.tagName === 'script' && attrs.src && (attrs.type === 'module' || 'defer' in attrs)) {
+      declared.add(add(attrs.src, 'script'));
+    }
     if (node.tagName === 'script' && attrs.type === 'module') {
       if (attrs.src) {
         const entry = compiledModule(attrs.src, route);
@@ -106,12 +119,12 @@ function candidates(html, route) {
         }
       }
     }
-    for (const child of node.childNodes ?? []) visit(child);
+    for (const child of node.childNodes ?? []) visit(child, insidePostNav);
   }
   visit(parse(html));
   const order = { style: 0, image: 1, font: 2, script: 3, json: 4 };
   const assets = result.sort((a, b) => order[a.type] - order[b.type]);
-  return { assets, entries, deferredDiscovery, alreadyLinked };
+  return { assets, entries, deferredDiscovery, alreadyLinked, neighbors, declared };
 }
 
 // Keep only resources the destination already declares as immediately useful.
@@ -138,6 +151,29 @@ export async function buildNavigationManifest(pages, assetSize) {
     routes[route] = selected;
   }
   return { version: 1, assets, routes };
+}
+
+// Adjacent articles share most of their styles and modules. Put only the
+// missing entries in this page's hint so a quick tap needs no index download.
+function articleNeighborHint(manifest, neighbors, declared) {
+  if (!neighbors.size) return '';
+  const indexes = new Map();
+  const assets = [];
+  const routes = Object.create(null);
+  for (const target of neighbors) {
+    if (!manifest.routes[target]) continue;
+    routes[target] = [];
+    for (const index of manifest.routes[target]) {
+      if (declared.has(manifest.assets[index].url)) continue;
+      if (!indexes.has(index)) {
+        indexes.set(index, assets.length);
+        assets.push(manifest.assets[index]);
+      }
+      routes[target].push(indexes.get(index));
+    }
+  }
+  const json = JSON.stringify({ version: 1, assets, routes });
+  return ` data-article-neighbors='${json.replaceAll('&', '&amp;').replaceAll("'", '&#39;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}'`;
 }
 
 async function listPages(root, relative = '') {
@@ -176,7 +212,7 @@ export async function generateNavigationManifest(root) {
     const route = '/' + urlPath.replace(/(?:^|\/)index\.html$/, (value) => value.startsWith('/') ? '/' : '');
     const source = await readFile(path.join(root, file), 'utf8');
     const html = source.replace(/<link\b[^>]*\bdata-navigation-(?:module|assets)(?:="[^"]*")?[^>]*>/g, '');
-    const { assets, entries, deferredDiscovery, alreadyLinked } = candidates(html, route);
+    const { assets, entries, deferredDiscovery, alreadyLinked, neighbors, declared } = candidates(html, route);
     const reachable = new Set([...entries, ...deferredDiscovery]);
     const hints = [];
     for (const url of reachable) {
@@ -185,9 +221,10 @@ export async function generateNavigationManifest(root) {
       children.forEach(child => reachable.add(child));
       if (entries.has(url) || alreadyLinked.has(url)) continue;
       hints.push(url);
+      declared.add(url);
       if (!assets.some(asset => asset.url === url && asset.type === 'script')) assets.push({ url, type: 'script' });
     }
-    return { file, route, html, hints, pageAssets: assets };
+    return { file, route, html, hints, neighbors, declared, pageAssets: assets };
   }));
   const sizes = new Map();
   const manifest = await buildNavigationManifest(pages, async (url) => {
@@ -208,10 +245,10 @@ export async function generateNavigationManifest(root) {
   const hash = createHash('sha256').update(json).digest('hex').slice(0, 12);
   const href = `/navigation-assets.${hash}.json`;
   await writeFile(path.join(root, href.slice(1)), json);
-  for (const { file, html, hints } of pages) {
+  for (const { file, html, hints, neighbors, declared } of pages) {
     // Styles and primary images retain their place before the script hints.
     const links = hints.map(url => `<link rel="modulepreload" href="${url.replaceAll('&', '&amp;')}" media="(scripting: enabled)" fetchpriority="low" data-navigation-module>`).join('');
-    await writeFile(path.join(root, file), html.replace('</head>', `${links}<link rel="navigation-assets" href="${href}" data-navigation-assets></head>`));
+    await writeFile(path.join(root, file), html.replace('</head>', `${links}<link rel="navigation-assets" href="${href}" data-navigation-assets${articleNeighborHint(manifest, neighbors, declared)}></head>`));
   }
   return { href, pages: pages.length, assets: manifest.assets.length, bytes: Buffer.byteLength(json) };
 }

@@ -12,7 +12,7 @@ import type { NavigationManifest } from '../src/utils/navigation-warmup.ts';
 
 const current = 'https://example.test/';
 
-async function setupRuntime(readyState = 'complete', route = '/') {
+async function setupRuntime(readyState = 'complete', route = '/', neighborHint?: string) {
   const documentHandlers = new Map<string, Array<(event: unknown) => void>>();
   const windowHandlers = new Map<string, Array<(event: unknown) => void>>();
   const record = (map: typeof documentHandlers, name: string, handler: (event: unknown) => void) => {
@@ -22,7 +22,7 @@ async function setupRuntime(readyState = 'complete', route = '/') {
   };
   class Link {
     target = '';
-    dataset = {};
+    dataset: { articleNeighbors?: string } = {};
     isConnected = true;
     href: string;
     constructor(href: string) { this.href = href; }
@@ -32,6 +32,7 @@ async function setupRuntime(readyState = 'complete', route = '/') {
   }
   const links = ['/about/', '/cs/', '/gallery/', '/cs/'].map(route => new Link(new URL(route, current).href));
   const hint = new Link(current + 'navigation-assets.test.json');
+  hint.dataset.articleNeighbors = neighborHint;
   const article = {
     next: links[1] as Link | undefined,
     prev: undefined as Link | undefined,
@@ -78,7 +79,11 @@ async function setupRuntime(readyState = 'complete', route = '/') {
   };
   const document = {
     readyState, hidden: false,
-    querySelector: (selector: string) => selector.includes('data-post-navigation') ? article.nav : hint,
+    querySelector: (selector: string) => {
+      if (selector.startsWith('main article')) return route === '/article/' ? article : null;
+      if (selector.includes('data-post-navigation')) return article.nav;
+      return hint;
+    },
     querySelectorAll: (selector: string) => selector.startsWith('#navCard') ? links : article.styles,
     getElementById: () => null,
     addEventListener: (name: string, handler: (event: unknown) => void) => record(documentHandlers, name, handler),
@@ -184,6 +189,22 @@ test('series navigation prepares both available posts near the article end and d
   await runtime.flush();
   assert.deepEqual(runtime.html, [current + 'gallery/', current + 'cs/']);
   assert.deepEqual(runtime.requests, [current + 'navigation-assets.test.json', current + 'gallery.webp', current + 'cs.js']);
+  runtime.scheduler.dispose();
+});
+
+test('article hints cover shared and new assets before any global manifest request', async () => {
+  const hints = { version: 1, assets: [{ url: '/cs.js', type: 'script', bytes: 500 }], routes: { '/cs/': [0], '/gallery/': [] } };
+  const runtime = await setupRuntime('complete', '/article/', JSON.stringify(hints));
+  await runtime.flush();
+  assert.deepEqual(runtime.requests, []);
+  runtime.article.prev = runtime.links[2];
+  runtime.observers.at(-1)!.near();
+  await runtime.flush();
+  assert.deepEqual(runtime.requests, [current + 'cs.js']);
+  runtime.begin({ link: runtime.links[0], href: runtime.links[0].href, startedAt: Date.now() });
+  await runtime.flush();
+  assert(runtime.requests.includes(current + 'navigation-assets.test.json'));
+  assert(runtime.requests.includes(current + 'about.js'));
   runtime.scheduler.dispose();
 });
 
@@ -298,6 +319,33 @@ test('generated manifest is versioned, resolves nested URLs and leaves page pres
     assert.notEqual((await generateNavigationManifest(root)).href, first.href);
   } finally {
     await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('only missing assets of the marked local article neighbors are embedded', async () => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'article-neighbor-assets-'));
+  try {
+    const head = '<html><head><link rel="stylesheet" href="/common.css">';
+    await writeFile(path.join(dir, 'common.css'), 'body{}');
+    await writeFile(path.join(dir, 'math.css'), 'math{}');
+    await writeFile(path.join(dir, 'widget.js'), 'export {};');
+    for (const [route, html] of [
+      ['one', head + '</head><body><astro-island client="idle" component-url="/widget.js"></astro-island><nav data-post-navigation><a href="../two/#heading" rel="next"></a><a href="../three/" rel="prev"></a></nav><a href="../four/" rel="next"></a></body></html>'],
+      ['two', head + '<link rel="stylesheet" href="/math.css"><script type="module" src="/widget.js"></script></head><body></body></html>'],
+      ['three', head + '</head><body></body></html>'],
+      ['four', head + '</head><body></body></html>'],
+    ]) {
+      await mkdir(path.join(dir, route));
+      await writeFile(path.join(dir, route, 'index.html'), html);
+    }
+    await generateNavigationManifest(dir);
+    const html = await readFile(path.join(dir, 'one/index.html'), 'utf8');
+    const hint = readNavigationManifest(JSON.parse(html.match(/data-article-neighbors='([^']+)'/)![1]))!;
+    assert.deepEqual(hint.routes, { '/two/': [0, 1], '/three/': [] });
+    assert.deepEqual(hint.assets.map(a => a.url), ['/math.css', '/widget.js']);
+    assert(!(await readFile(path.join(dir, 'two/index.html'), 'utf8')).includes('data-article-neighbors'));
+  } finally {
+    await rm(dir, { recursive: true, force: true });
   }
 });
 
