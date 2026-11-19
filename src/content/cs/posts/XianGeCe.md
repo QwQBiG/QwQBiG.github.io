@@ -22,22 +22,21 @@ pin: true
 
 ## 下载
 
-### 方式一：GitHub Releases（推荐，有梯子）
+### Android 下载
 
-- [GitHub Releases 页面](https://github.com/QwQBiG/XianGeCe/releases/latest)
-- [直接下载最新版 APK](https://github.com/QwQBiG/XianGeCe/releases/latest/download/xiangece.apk)
+- [下载新版体验包 · 1.0.0-preview.5](https://github.com/QwQBiG/XianGeCe-Next/releases/download/android-v1.0.0-preview.5/xiangece-android-1.0.0-preview.5-debug.apk)（Android 8.0 及以上的 ARM 手机，调试签名）
+- [下载历史版 · 0.0.1](https://github.com/QwQBiG/XianGeCe/releases/download/v0.0.1/xiangece.apk)
 
-### 方式二：国内网盘（无梯子，国内速度快）
+如果手机上已经装过弦歌册，签名不同会导致 Android 拒绝覆盖安装。换装前请先备份资料，单独导出课堂原音，确认文件能打开再卸载旧版。体验包的备份不含原音，恢复备份会清理设备上已有的课堂录音。
+
+### 历史版备用网盘
 
 - **夸克网盘**：<https://pan.quark.cn/s/92990ca1200b>
 - **百度网盘**：<https://pan.baidu.com/s/1tbVQ6AJAYNE5C4UjE_7jMw> 提取码：`MCSe`
 
-手机扫码或打开链接，下载 APK 后覆盖安装即可。
+**iPhone** 已完成真机编译，目前没有公开可安装的 IPA。想装到自己的 iPhone 上，可以参考[个人签名说明](https://github.com/QwQBiG/XianGeCe-Next/blob/main/README.md#iphone)。
 
-- 应用包名：`win.iqwqi.xiangece`
-- 当前版本：`0.0.1` · versionCode `2`
-- 最低 Android：API 26（Android 8.0），目标 SDK 37
-- 架构：`arm64-v8a`、`armeabi-v7a`
+下文记录的是历史 Android 版 `0.0.1`（`versionCode 2`，包名 `win.iqwqi.xiangece`），最低支持 Android 8.0，目标 SDK 37。新版进展见[弦歌册新版仓库](https://github.com/QwQBiG/XianGeCe-Next)。
 
 ---
 
@@ -377,7 +376,7 @@ Release 构建已启用 R8 混淆和资源压缩（`isMinifyEnabled=true`、`isS
 
 ## 开源协议
 
-弦歌册基于 **GPL-3.0** 协议开源。你可以自由使用、修改与学习源码；任何衍生作品须同样以 GPL-3.0 开源并保留版权声明。第三方组件和模型另见项目仓库中的 `THIRD_PARTY_NOTICES.md` 与 `docs/` 说明文件。
+历史 Android 版 `0.0.1` 基于 **GPL-3.0** 协议开源。你可以自由使用、修改与学习源码；任何衍生作品须同样以 GPL-3.0 开源并保留版权声明。第三方组件和模型另见项目仓库中的 `THIRD_PARTY_NOTICES.md` 与 `docs/` 说明文件。
 
 ---
 
@@ -385,8 +384,9 @@ Release 构建已启用 R8 混淆和资源压缩（`isMinifyEnabled=true`、`isS
 
 项目源码、问题反馈与隐私政策：
 
-- GitHub：[QwQBiG/XianGeCe](https://github.com/QwQBiG/XianGeCe)
+- 新版源码与反馈：[QwQBiG/XianGeCe-Next](https://github.com/QwQBiG/XianGeCe-Next)
+- 历史版源码：[QwQBiG/XianGeCe](https://github.com/QwQBiG/XianGeCe)
 - 项目说明与最新文档：本页面 <https://iqwqi.win/cs/posts/xiangece/>
-- Release 下载：[GitHub Releases](https://github.com/QwQBiG/XianGeCe/releases)
+- 新版下载：[GitHub Releases](https://github.com/QwQBiG/XianGeCe-Next/releases)
 
 版权所有 © 2026 弦歌册（iqwqi）· 本政策与说明可能随功能变化更新，重要变化会在应用或本网站中说明。
