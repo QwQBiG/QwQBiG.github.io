@@ -75,7 +75,6 @@ function mountComments() {
   let observer: IntersectionObserver | undefined;
   let disposed = false;
   const status = element.parentElement?.querySelector<HTMLElement>('[data-comment-load-state]');
-  prepareConnection();
 
   const showFailure = () => {
     element.setAttribute('aria-busy', 'false');
@@ -91,6 +90,7 @@ function mountComments() {
 
   function start(priority: 'navigation' | 'prefetch' = 'prefetch') {
     if (disposed || unmount || !element.isConnected) return;
+    prepareConnection();
     element.setAttribute('aria-busy', 'true');
     task = scheduleBackgroundTask({
       key: 'waline-client-resources',
@@ -124,9 +124,9 @@ function mountComments() {
       if (entries.some(entry => entry.isIntersecting)) start('navigation');
     }, { rootMargin: '1200px' });
     observer.observe(element);
+  } else {
+    start();
   }
-  // The queue starts after page load. The API request then overlaps reading the article.
-  start();
   current = {
     element,
     dispose() {
