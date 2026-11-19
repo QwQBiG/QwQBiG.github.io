@@ -68,3 +68,40 @@ test('bracket decoration pairs across tokens, preserving mismatches and limiting
   assert.deepEqual(click(5), [5]);
   assert.ok(brackets[5].classes.has('bracket-unmatched'));
 });
+
+test('only bare, single-bracket punctuation tokens in the line itself are reused', t => {
+  function token(overrides = {}) {
+    const classes = new Set<string>();
+    return {
+      localName: 'span', className: 'token punctuation', attributes: [{}], childNodes: [{}],
+      parentElement: { className: 'line-content' }, dataset: {}, classes,
+      classList: { add: (name: string) => classes.add(name) }, closest: () => null,
+      ...overrides,
+    };
+  }
+  const parents = [
+    token(), token({ parentElement: { className: 'token interpolation' } }),
+    token({ attributes: [{}, {}] }), token({ childNodes: [{}, {}] }),
+    token({ localName: 'a' }), token({ className: 'token punctuation special' }),
+  ];
+  const characters = ['(', ')', '[', ']', '{', '}'];
+  const replacements = new Map<number, any>();
+  const nodes = parents.map((parentElement, i) => ({
+    data: characters[i], parentElement, replaceWith: (span: any) => replacements.set(i, span),
+  }));
+  const iterator = nodes.values();
+  Object.defineProperty(globalThis, 'NodeFilter', { configurable: true, value: { SHOW_TEXT: 4 } });
+  t.after(() => Reflect.deleteProperty(globalThis, 'NodeFilter'));
+  decorateBrackets({
+    ownerDocument: {
+      createTreeWalker: () => ({ nextNode: () => iterator.next().value ?? null }),
+      createElement: () => token(),
+    },
+    addEventListener() {},
+  });
+  assert.ok(parents[0].classes.has('rainbow-bracket'));
+  assert.ok(parents[0].classes.has('rainbow-bracket-level-1'));
+  assert.deepEqual(parents[0].dataset, { bracket: '(' });
+  assert.deepEqual([...replacements.keys()], [1, 2, 3, 4, 5]);
+  assert.deepEqual([...replacements.values()].map(span => span.textContent), characters.slice(1));
+});

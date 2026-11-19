@@ -466,7 +466,7 @@ pre[class*="language-"] {
 /* ==================== 特殊符号类 ==================== */
 
 /* 标点符号 - 增强选择器 */
-.token.punctuation,
+.token.punctuation:where(:not(.rainbow-bracket)),
 .token.tag .token.punctuation,
 .token.tag > .token.punctuation {
   color: #6c6f85 !important;
@@ -944,7 +944,7 @@ pre[class*="language-"] {
 }
 
 /* XML 标点符号 < > / */
-.language-xml .token.punctuation {
+.language-xml .token.punctuation:where(:not(.rainbow-bracket)) {
   color: #6c6f85 !important;
 }
 

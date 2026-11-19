@@ -10,11 +10,15 @@ export function decorateBrackets(code) {
   const partners = new WeakMap();
   let depth = 0;
 
-  function makeBracket(char) {
-    const span = doc.createElement('span');
-    span.className = 'rainbow-bracket';
+  function makeBracket(char, token) {
+    const span = token ?? doc.createElement('span');
+    if (token) {
+      span.classList.add('rainbow-bracket');
+    } else {
+      span.className = 'rainbow-bracket';
+      span.textContent = char;
+    }
     span.dataset.bracket = char;
-    span.textContent = char;
 
     if (pending[char]) {
       const level = depth % 6 + 1;
@@ -48,7 +52,16 @@ export function decorateBrackets(code) {
     let match = brackets.exec(text);
     if (!match || original.parentElement.closest('.line-number, .rainbow-bracket')) continue;
     if (text.length === 1) {
-      original.replaceWith(makeBracket(text));
+      const token = original.parentElement;
+      // A standalone Prism punctuation span can hold the interaction itself.
+      // Keep a separate bracket inside nested syntax, links and custom markup.
+      if (token.localName === 'span' && token.className === 'token punctuation' &&
+          token.attributes.length === 1 && token.childNodes.length === 1 &&
+          token.parentElement?.className === 'line-content') {
+        makeBracket(text, token);
+      } else {
+        original.replaceWith(makeBracket(text));
+      }
       continue;
     }
     const fragment = doc.createDocumentFragment();
