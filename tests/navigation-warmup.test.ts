@@ -12,7 +12,7 @@ import type { NavigationManifest } from '../src/utils/navigation-warmup.ts';
 
 const current = 'https://example.test/';
 
-async function setupRuntime(readyState = 'complete') {
+async function setupRuntime(readyState = 'complete', route = '/') {
   const documentHandlers = new Map<string, Array<(event: unknown) => void>>();
   const windowHandlers = new Map<string, Array<(event: unknown) => void>>();
   const record = (map: typeof documentHandlers, name: string, handler: (event: unknown) => void) => {
@@ -32,6 +32,21 @@ async function setupRuntime(readyState = 'complete') {
   }
   const links = ['/about/', '/cs/', '/gallery/', '/cs/'].map(route => new Link(new URL(route, current).href));
   const hint = new Link(current + 'navigation-assets.test.json');
+  const article = { next: links[1], styles: [] as Link[] };
+  const navigator = { onLine: true, connection: { effectiveType: '2g', saveData: false } };
+  class Observer {
+    target?: Link;
+    callback: (entries: { isIntersecting: boolean }[], observer: Observer) => void;
+    options: { rootMargin: string };
+    constructor(callback: Observer['callback'], options: Observer['options']) {
+      this.callback = callback;
+      this.options = options;
+    }
+    observe(target: Link) { this.target = target; observers.push(this); }
+    disconnect() { this.target = undefined; }
+    near(intersects = true) { this.callback([{ isIntersecting: intersects }], this); }
+  }
+  const observers: Observer[] = [];
   const manifest: NavigationManifest = {
     version: 1,
     assets: [
@@ -58,8 +73,8 @@ async function setupRuntime(readyState = 'complete') {
   };
   const document = {
     readyState, hidden: false,
-    querySelector: () => hint,
-    querySelectorAll: (selector: string) => selector.startsWith('#navCard') ? links : [],
+    querySelector: (selector: string) => selector.includes('rel~="next"') ? article.next : hint,
+    querySelectorAll: (selector: string) => selector.startsWith('#navCard') ? links : article.styles,
     getElementById: () => null,
     addEventListener: (name: string, handler: (event: unknown) => void) => record(documentHandlers, name, handler),
   };
@@ -69,8 +84,9 @@ async function setupRuntime(readyState = 'complete') {
   const begin = runInNewContext(source + '\ninitializeNavigationWarmup(prefetchHTML)', {
     URL, AbortController, HTMLLinkElement: Link, Element: Link, Node: Link, PointerEvent: class {},
     document,
-    window: { location: new URL(current), addEventListener: (name: string, handler: (event: unknown) => void) => record(windowHandlers, name, handler) },
-    navigator: { onLine: true, connection: { effectiveType: '2g' } },
+    IntersectionObserver: Observer,
+    window: { location: new URL(route, current), innerHeight: 844, addEventListener: (name: string, handler: (event: unknown) => void) => record(windowHandlers, name, handler) },
+    navigator,
     fetch: request,
     scheduleBackgroundTask: scheduler.schedule,
     prioritizeNavigation: scheduler.prioritizeNavigation,
@@ -78,7 +94,7 @@ async function setupRuntime(readyState = 'complete') {
     prefetchHTML: (url: string) => html.push(url),
   }) as (intent: { link: Link; href: string; startedAt: number }) => void;
   return {
-    requests, html, links, document, scheduler, begin,
+    requests, html, links, document, scheduler, begin, article, observers, navigator,
     emitDocument(name: string, event: unknown = {}) { for (const handler of documentHandlers.get(name) ?? []) handler(event); },
     emitWindow(name: string, event: unknown = {}) { for (const handler of windowHandlers.get(name) ?? []) handler(event); },
     flush: () => new Promise<void>(resolve => setImmediate(resolve)),
@@ -129,6 +145,39 @@ test('automatic preparation waits for load and resumes unfinished work after pag
   await runtime.flush();
   assert(runtime.requests.includes(current + 'gallery.webp'));
   assert.equal(runtime.requests.filter(url => url.endsWith('shared.css')).length, 1);
+  runtime.scheduler.dispose();
+});
+
+test('series navigation only prepares the next post near the article end and replaces the observer on navigation', async () => {
+  const runtime = await setupRuntime('complete', '/article/');
+  const { observers, article } = runtime;
+  await runtime.flush();
+  assert.equal(runtime.html.length, 0);
+  assert.equal(observers[0].target, article.next);
+  assert.equal(observers[0].options.rootMargin, '0px 0px 844px 0px');
+  observers[0].near(false);
+  runtime.navigator.connection.saveData = true;
+  observers[0].near();
+  runtime.navigator.connection.saveData = false;
+  runtime.navigator.onLine = false;
+  observers[0].near();
+  runtime.navigator.onLine = true;
+  assert.equal(runtime.html.length, 0);
+
+  runtime.emitDocument('astro:before-swap');
+  const old = observers[0];
+  article.next = runtime.links[2];
+  article.styles.push(Object.assign(runtime.links[0], { href: current + 'shared.css' }));
+  runtime.emitDocument('astro:page-load');
+  const next = observers.at(-1)!;
+  old.near();
+  assert.equal(runtime.html.length, 0);
+  assert.equal(next.target, article.next);
+  next.near();
+  next.near();
+  await runtime.flush();
+  assert.deepEqual(runtime.html, [current + 'gallery/']);
+  assert.deepEqual(runtime.requests, [current + 'navigation-assets.test.json', current + 'gallery.webp']);
   runtime.scheduler.dispose();
 });
 
