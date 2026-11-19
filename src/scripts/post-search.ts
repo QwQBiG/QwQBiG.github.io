@@ -1,3 +1,5 @@
+import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
+
 interface SearchPost {
   title: string;
   description?: string;
@@ -34,9 +36,23 @@ function message(text: string) {
   return `<div class="text-center text-text-muted py-12">${text}</div>`;
 }
 
-export function initializePostSearch(input: HTMLInputElement, results: HTMLElement) {
-  let posts: SearchPost[] = [];
-  let state: 'loading' | 'ready' | 'failed' = 'loading';
+let posts: SearchPost[] | undefined;
+let pendingIndex: Promise<void> | undefined;
+
+function requestIndex() {
+  pendingIndex ??= fetch('/posts.json').then(async response => {
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const index = await response.json();
+    if (!Array.isArray(index)) throw new Error('Invalid article index');
+    posts = index;
+  }).finally(() => { pendingIndex = undefined; });
+  return pendingIndex;
+}
+
+export function initializePostSearch(input: HTMLInputElement, results: HTMLElement, restoreY = 0) {
+  const lifetime = new AbortController();
+  const { signal } = lifetime;
+  let failed = false;
   let composing = false;
   let frame: number | undefined;
 
@@ -44,11 +60,11 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
     const query = input.value;
     if (!query.trim()) {
       results.innerHTML = message('输入关键词开始搜索');
-    } else if (state === 'loading') {
-      results.innerHTML = message('正在加载文章…');
-    } else if (state === 'failed') {
+    } else if (failed) {
       results.innerHTML = message('文章列表加载失败。<button type="button" class="underline">重试</button>');
-      results.querySelector('button')?.addEventListener('click', loadPosts, { once: true });
+      results.querySelector('button')?.addEventListener('click', loadPosts, { once: true, signal });
+    } else if (!posts) {
+      results.innerHTML = message('正在加载文章…');
     } else {
       const lowerQuery = query.toLowerCase();
       const matches = posts.filter(post =>
@@ -64,37 +80,91 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
   }
 
   function scheduleRender() {
-    if (composing || frame !== undefined) return;
+    if (signal.aborted || composing || frame !== undefined) return;
     frame = requestAnimationFrame(() => {
       frame = undefined;
-      if (!composing) render();
+      if (composing) return;
+      render();
+      // A reload or a traversal with a pending index can initially have no
+      // scroll range. Restore only if the reader has not interacted meanwhile.
+      if (restoreY && posts && input.ownerDocument === document && input.isConnected) {
+        window.scrollTo({ top: restoreY, behavior: 'instant' });
+        restoreY = 0;
+      }
     });
   }
 
   async function loadPosts() {
-    state = 'loading';
+    failed = false;
     scheduleRender();
+    try { await requestIndex(); } catch { failed = true; }
+    scheduleRender();
+  }
+
+  function updateQuery() {
+    restoreY = 0;
     try {
-      const response = await fetch('/posts.json');
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const index = await response.json();
-      if (!Array.isArray(index)) throw new Error('Invalid article index');
-      posts = index;
-      state = 'ready';
+      if (history.state?.postSearchQuery !== input.value) {
+        history.replaceState({ ...history.state, postSearchQuery: input.value }, '');
+      }
     } catch {
-      state = 'failed';
+      // Browsers may rate-limit history updates while typing. Search still works.
     }
     scheduleRender();
   }
 
-  input.addEventListener('compositionstart', () => { composing = true; });
+  if (restoreY && !posts) {
+    const cancelRestore = () => { restoreY = 0; };
+    for (const name of ['pointerdown', 'wheel', 'keydown']) {
+      window.addEventListener(name, cancelRestore, { passive: true, once: true, signal });
+    }
+  } else {
+    restoreY = 0;
+  }
+
+  input.addEventListener('compositionstart', () => { composing = true; }, { signal });
   input.addEventListener('compositionend', () => {
     composing = false;
-    scheduleRender();
-  });
+    updateQuery();
+  }, { signal });
   input.addEventListener('input', event => {
-    if (!(event as InputEvent).isComposing) scheduleRender();
-  });
+    if (!composing && !(event as InputEvent).isComposing) updateQuery();
+  }, { signal });
 
-  void loadPosts();
+  if (posts) render();
+  else void loadPosts();
+
+  return () => {
+    lifetime.abort();
+    if (frame !== undefined) cancelAnimationFrame(frame);
+  };
+}
+
+export function startPostSearch() {
+  let active: HTMLInputElement | null = null;
+  let dispose: (() => void) | undefined;
+
+  function mount(doc: Document, saved: { postSearchQuery?: string; scrollY?: number } | null) {
+    const input = doc.querySelector<HTMLInputElement>('#search-input');
+    if (input === active) return;
+    dispose?.();
+    dispose = undefined;
+    active = input;
+    const results = doc.querySelector<HTMLElement>('#search-results');
+    if (!input || !results) return;
+
+    if (posts || pendingIndex) doc.querySelector('link[rel="preload"][href="/posts.json"]')?.remove();
+    input.value = typeof saved?.postSearchQuery === 'string' ? saved.postSearchQuery : '';
+    dispose = initializePostSearch(input, results, input.value ? saved?.scrollY : 0);
+  }
+
+  // On a history traversal Astro restores scrolling immediately after swapping
+  // bodies. Rebuild cached results in the incoming document before that happens.
+  document.addEventListener('astro:before-swap', event => {
+    const swap = event as TransitionBeforeSwapEvent;
+    mount(swap.newDocument, swap.navigationType === 'traverse' ? history.state : null);
+  });
+  const mountCurrent = () => mount(document, history.state);
+  mountCurrent();
+  document.addEventListener('astro:page-load', mountCurrent);
 }

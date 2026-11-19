@@ -51,9 +51,6 @@ const pageDescription = "搜索博客文章";
 </Layout>
 
 <script>
-  import { initializePostSearch } from '../scripts/post-search';
-
-  const input = document.querySelector<HTMLInputElement>('#search-input');
-  const results = document.querySelector<HTMLElement>('#search-results');
-  if (input && results) initializePostSearch(input, results);
+  import { startPostSearch } from '../scripts/post-search';
+  startPostSearch();
 </script>

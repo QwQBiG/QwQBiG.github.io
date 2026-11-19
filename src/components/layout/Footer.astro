@@ -66,25 +66,31 @@ const currentYear = new Date().getFullYear();
 </footer>
 
 <script>
-  // Back to Top functionality
-  const backToTopButton = document.getElementById('back-to-top');
-  
+  let backToTopButton: HTMLElement | null;
+  let visible: boolean | undefined;
+
   function toggleBackToTop() {
-    if (window.scrollY > 300) {
-      backToTopButton?.classList.remove('opacity-0', 'invisible');
-      backToTopButton?.classList.add('opacity-100', 'visible');
-    } else {
-      backToTopButton?.classList.add('opacity-0', 'invisible');
-      backToTopButton?.classList.remove('opacity-100', 'visible');
-    }
+    const show = window.scrollY > 300;
+    if (!backToTopButton || visible === show) return;
+    visible = show;
+    backToTopButton.classList.toggle('opacity-0', !show);
+    backToTopButton.classList.toggle('invisible', !show);
+    backToTopButton.classList.toggle('opacity-100', show);
+    backToTopButton.classList.toggle('visible', show);
   }
-  
-  window.addEventListener('scroll', toggleBackToTop);
-  
-  backToTopButton?.addEventListener('click', () => {
+
+  function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-  
-  // Initialize
-  toggleBackToTop();
+  }
+
+  function bindFooter() {
+    backToTopButton = document.getElementById('back-to-top');
+    backToTopButton?.addEventListener('click', scrollToTop);
+    visible = undefined;
+    toggleBackToTop();
+  }
+
+  bindFooter();
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  document.addEventListener('astro:after-swap', bindFooter);
 </script>

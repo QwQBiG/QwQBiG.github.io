@@ -8,10 +8,10 @@ import { test } from 'node:test';
 import { isContentNavigationPath } from '../src/utils/content-navigation.ts';
 
 test('client navigation stays within content routes and leaves presentation pages native', () => {
-  for (const pathname of ['/cs/', '/cs/posts/rustseries/rustbasics/', '/series/', '/poetry/posts/verse/', '/tags/c%2B%2B/', '/archives/']) {
+  for (const pathname of ['/cs/', '/cs/posts/rustseries/rustbasics/', '/series/', '/poetry/posts/verse/', '/tags/c%2B%2B/', '/archives/', '/search/', '/search']) {
     assert.equal(isContentNavigationPath(pathname), true, pathname);
   }
-  for (const pathname of ['/', '/about/', '/gallery/', '/search/', '/404/', '/cs-other/', '/archives/extra/']) {
+  for (const pathname of ['/', '/about/', '/gallery/', '/search/extra/', '/404/', '/cs-other/', '/archives/extra/']) {
     assert.equal(isContentNavigationPath(pathname), false, pathname);
   }
 });
