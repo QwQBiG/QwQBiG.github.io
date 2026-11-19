@@ -77,6 +77,21 @@ test('a frame queued before IME composition and an index arrival never paint par
   assert.match(page.results.innerHTML, />示例<\/mark>/);
 });
 
+test('pasted queries keep their input text and show matching tags even beyond the preview limit', async () => {
+  const history = { state: {} as { postSearchQuery?: string }, replaceState(value: object) { this.state = value; } };
+  const page = setup(history);
+  const tags = ['First', 'Second', 'Third', 'My <C++> & tools', 'C++ Primer'];
+  await page.respond(Response.json([{ ...posts[0], title: 'Notes', description: '', tags }]));
+  page.paint();
+  const query = '　c++ ';
+  page.type(query);
+  page.paint();
+  assert.equal(page.input.value, query);
+  assert.equal(history.state.postSearchQuery, query);
+  assert.match(page.results.innerHTML, /My &lt;<mark[^>]*>C\+\+<\/mark>&gt; &amp; tools, <mark[^>]*>C\+\+<\/mark> Primer, First/);
+  assert.doesNotMatch(page.results.innerHTML, /Second|Third/);
+});
+
 test('a failed HTTP response offers a retry which uses the current input', async () => {
   const page = setup();
   page.type('old');
