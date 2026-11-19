@@ -25,15 +25,17 @@ test('floating navigation preserves native actions and continues the existing ba
     dataset: Record<string, string> = {};
     attributes = new Set<string>();
     insideNavigation = true;
-    constructor(href: string) { this.href = new URL(href, 'https://example.test/cs/').href; }
+    baseURI = 'https://example.test/cs/';
+    constructor(href: string) { this.href = href; }
+    getAttribute(name: string) { return name === 'href' ? this.href : name === 'target' ? this.target : null; }
     closest(selector: string) { return selector === '#floatingNavCard' && !this.insideNavigation ? null : this; }
     hasAttribute(name: string) { return this.attributes.has(name) || (name === 'data-astro-reload' && 'astroReload' in this.dataset); }
   }
-  let links = [new Link('/cs/posts/next/'), new Link('/about/'), new Link('/?homeReturnMotion=1')];
+  const links = [new Link('/cs/posts/next/'), new Link('/about/'), new Link('/?homeReturnMotion=1')];
+  const cleanup: Array<() => void> = [];
   let clock = 1000;
   let animation = { animationName: 'gradientShift', currentTime: 2500 };
   const document = {
-    querySelectorAll: () => links,
     body: { getAnimations: () => [animation] },
     addEventListener: (name: string, handler: (event: unknown) => void) => handlers.set(name, handler),
   };
@@ -42,16 +44,14 @@ test('floating navigation preserves native actions and continues the existing ba
   runInNewContext(code, {
     document,
     window: { location: { href: 'https://example.test/cs/', origin: 'https://example.test', pathname: '/cs/', search: '' } },
-    Element: Link, URL,
+    Element: Link, URL, setTimeout: (cb: () => void) => cleanup.push(cb),
     performance: { now: () => clock },
     isContentNavigationPath,
     isTransitionBeforeSwapEvent: (event: { type: string }) => event.type === 'astro:before-swap',
     navigate: (href: string) => { navigation.push(href); return Promise.resolve(); },
   });
-  assert.equal('astroReload' in links[1].dataset, true);
-  assert.equal('astroReload' in links[2].dataset, true);
   const click = (link: Link, options: Record<string, unknown> = {}) => {
-    const event = { target: link, button: 0, defaultPrevented: false, preventDefault() { this.defaultPrevented = true; }, ...options };
+    const event = { target: link, composedPath: () => [link], button: 0, defaultPrevented: false, preventDefault() { this.defaultPrevented = true; }, ...options };
     handlers.get('click')!(event);
     return event;
   };
@@ -79,9 +79,19 @@ test('floating navigation preserves native actions and continues the existing ba
   handlers.get('astro:after-swap')!({});
   assert.equal(skipped, true);
   assert.equal(animation.currentTime, 2516);
-  links = [new Link('/gallery/')];
-  handlers.get('astro:page-load')!({});
-  assert.equal('astroReload' in links[0].dataset, true);
+  assert.equal(links[1].dataset.astroReload, '');
+  assert.equal(links[2].dataset.astroReload, '');
+  const inserted = new Link('/gallery/');
+  inserted.insideNavigation = false;
+  assert.equal(click(inserted).defaultPrevented, false);
+  assert.equal(inserted.dataset.astroReload, '');
+  cleanup.forEach(release => release());
+  assert.equal('astroReload' in inserted.dataset, false);
+  const explicit = new Link('/cs/#section');
+  explicit.dataset.astroReload = '';
+  assert.equal(click(explicit).defaultPrevented, false);
+  assert.equal(explicit.dataset.astroReload, '');
+  assert.equal(click(new Link('https://[')).defaultPrevented, false);
 });
 
 test('the TOC follows the current section across scroll jumps, layout shifts and page swaps', async () => {
