@@ -5,10 +5,13 @@ import { runInNewContext } from 'node:vm';
 
 test('article code decorates nearby blocks once, prepares matching blocks for search and ignores stale viewport callbacks', async () => {
   function article(...ids: string[]) {
-    const blocks = ids.map(id => ({
-      id, className: 'language-rust', dataset: { processed: 'false' },
-      matches: () => true, querySelector: () => ({ id }),
-    }));
+    const blocks = ids.map(id => {
+      const code = { id };
+      return Object.assign(new EventTarget(), {
+        id, className: 'language-rust', dataset: { processed: 'false' },
+        matches: () => true, querySelector: () => code,
+      });
+    });
     const body = Object.assign(new EventTarget(), {
       dataset: { pageCode: 'true' }, querySelectorAll: () => blocks,
       contains: (block: typeof blocks[number]) => blocks.includes(block),
@@ -26,7 +29,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   const decorated: string[] = [];
   const numbered: string[] = [];
   const context = {
-    document, window, AbortController,
+    document, window, AbortController, Event,
     IntersectionObserver: class {
       constructor(callback: (entries: Entries) => void) { callbacks.push(callback); }
       observe() {} unobserve() {} disconnect() {}
@@ -38,7 +41,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
     enhanceSyntaxHighlighting() {}, fixXMLHighlighting() {},
   };
   const source = await readFile(new URL('../src/scripts/prism/article-code.js', import.meta.url), 'utf8');
-  const prepareSearch = runInNewContext(source.replace(/^import .*;$/gm, '').replace('export function', 'function') + '\nprepareCodeSearch', context);
+  const { prepareCodeSearch: prepareSearch, whenCodeReady } = runInNewContext(source.replace(/^import .*;$/gm, '').replaceAll('export function', 'function') + '\n({ prepareCodeSearch, whenCodeReady })', context);
 
   document.dispatchEvent(new Event('astro:page-load'));
   assert.deepEqual(prepared, ['near', 'far', 'unrelated']);
@@ -50,8 +53,17 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   notify([{ target: near, isIntersecting: true }, { target: far, isIntersecting: false }]);
   notify([{ target: near, isIntersecting: true }]);
   assert.deepEqual(decorated, ['near']);
+  const painted: string[] = [];
+  const firstQuery = new AbortController();
+  whenCodeReady(near, () => painted.push('visible'), firstQuery.signal);
+  whenCodeReady(far, () => painted.push('stale'), firstQuery.signal);
+  assert.deepEqual(painted, ['visible']);
+  assert.deepEqual(decorated, ['near']);
+  firstQuery.abort();
+  whenCodeReady(far, () => painted.push('current query'), new AbortController().signal);
   prepareSearch([far]);
   prepareSearch([far]);
+  assert.deepEqual(painted, ['visible', 'current query']);
   assert.deepEqual(decorated, ['near', 'far']);
 
   document.dispatchEvent(new Event('astro:before-swap'));
