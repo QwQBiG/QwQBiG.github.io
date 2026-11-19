@@ -17,6 +17,19 @@ const galleryDescriptions = {
   'ZhenXun.jpg': 'A pink-haired anime character smiles at the viewer with clasped hands.',
 };
 
+async function writeGalleryThumbnail(image, stem) {
+  const webp = `${stem}.webp`;
+  const avif = `${stem}.avif`;
+  const [metadata] = await Promise.all([
+    image.clone().webp({ quality: 78, effort: 5, smartSubsample: true })
+      .toFile(path.join(galleryOutputDir, webp)),
+    image.clone().avif({ quality: 53, effort: 6, chromaSubsampling: '4:4:4' })
+      .toFile(path.join(galleryOutputDir, avif)),
+  ]);
+  // The 720px bounding box can yield a narrower portrait thumbnail.
+  return { width: metadata.width, webp: `/generated/gallery/${webp}`, avif: `/generated/gallery/${avif}` };
+}
+
 async function optimizeGallery() {
   await fs.mkdir(galleryOutputDir, { recursive: true });
   const files = (await fs.readdir(gallerySourceDir))
@@ -28,15 +41,14 @@ async function optimizeGallery() {
     const sourcePath = path.join(gallerySourceDir, file);
     const metadata = await sharp(sourcePath).metadata();
     const stem = path.parse(file).name.replace(/[^a-zA-Z0-9_-]+/g, '-');
-    const thumbName = `${stem}-720.webp`;
     const previewName = `${stem}-1920.webp`;
 
     const pipeline = sharp(sourcePath).rotate();
     const [thumbnail, preview] = await Promise.all([
-      pipeline.clone()
-        .resize({ width: 720, height: 720, fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: 78, effort: 5, smartSubsample: true })
-        .toFile(path.join(galleryOutputDir, thumbName)),
+      writeGalleryThumbnail(
+        pipeline.clone().resize({ width: 720, height: 720, fit: 'inside', withoutEnlargement: true }),
+        `${stem}-720`,
+      ),
       pipeline.clone()
         .resize({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 84, effort: 5, smartSubsample: true })
@@ -44,13 +56,9 @@ async function optimizeGallery() {
     ]);
 
     const smallerThumbnails = await Promise.all(
-      [120, 180, 256, 360].filter((width) => width < thumbnail.width).map(async (width) => {
-        const name = `${stem}-w${width}.webp`;
-        await pipeline.clone().resize({ width })
-          .webp({ quality: 78, effort: 5, smartSubsample: true })
-          .toFile(path.join(galleryOutputDir, name));
-        return `/generated/gallery/${name} ${width}w`;
-      }),
+      [120, 180, 256, 360].filter(width => width < thumbnail.width).map(width =>
+        writeGalleryThumbnail(pipeline.clone().resize({ width }), `${stem}-w${width}`),
+      ),
     );
     const previewUrl = `/generated/gallery/${previewName}`;
     const previewCandidates = await Promise.all(
@@ -62,15 +70,15 @@ async function optimizeGallery() {
         return `/generated/gallery/${name} ${width}w`;
       }),
     );
-    // The original 720px bounding box can yield a narrower portrait thumbnail.
-    const fallback = `/generated/gallery/${thumbName}`;
+    const thumbnails = [...smallerThumbnails, thumbnail];
     manifest.push({
       file,
       alt: galleryDescriptions[file] ?? `Gallery image ${manifest.length + 1}`,
       width: metadata.autoOrient.width,
       height: metadata.autoOrient.height,
-      thumb2x: fallback,
-      srcset: [...smallerThumbnails, `${fallback} ${thumbnail.width}w`].join(', '),
+      thumb2x: thumbnail.webp,
+      srcset: thumbnails.map(image => `${image.webp} ${image.width}w`).join(', '),
+      avifSrcset: thumbnails.map(image => `${image.avif} ${image.width}w`).join(', '),
       preview: previewUrl,
       previewWidth: preview.width,
       previewHeight: preview.height,

@@ -15,6 +15,7 @@ interface GalleryManifestEntry {
   height: number;
   thumb2x: string;
   srcset: string;
+  avifSrcset: string;
   preview: string;
   previewWidth: number;
   previewHeight: number;
@@ -41,6 +42,7 @@ const photos: PhotoItem[] = entries.map((entry, index) => {
     height: entry.height,
     scale,
     srcset: entry.srcset,
+    avifSrcset: entry.avifSrcset,
     sizes: photoWallSizes(scale),
   };
 });
@@ -74,9 +76,6 @@ const initialPositions = [
 <Layout title={pageTitle} description={pageDescription}>
   <Fragment slot="head">
     <style is:inline set:html={galleryBreakpoints} />
-    {photos.map((photo) => (
-      <link rel="preload" as="image" imagesrcset={photo.srcset} imagesizes={photo.sizes} type="image/webp" />
-    ))}
     <script is:inline data-photo-ids={JSON.stringify(photoIds)} data-compact={compactScreens} set:html={firstLayout} />
   </Fragment>
 
@@ -111,16 +110,19 @@ const initialPositions = [
             }}
           >
             <div class="static-photo-frame">
-              <img
-                srcset={photo.srcset}
-                sizes={photo.sizes}
-                src={photo.src}
-                alt=""
-                width={photo.width}
-                height={photo.height}
-                loading="eager"
-                decoding="async"
-              />
+              <picture class="block">
+                <source data-navigation-image type="image/avif" srcset={photo.avifSrcset} sizes={photo.sizes} />
+                <img
+                  srcset={photo.srcset}
+                  sizes={photo.sizes}
+                  src={photo.src}
+                  alt=""
+                  width={photo.width}
+                  height={photo.height}
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
             </div>
           </div>
         );

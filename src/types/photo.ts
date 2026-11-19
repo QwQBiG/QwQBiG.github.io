@@ -2,6 +2,7 @@ export interface PhotoItem {
   id: string;
   src: string;
   srcset?: string;
+  avifSrcset?: string;
   sizes?: string;
   preview?: string;
   previewWidth?: number;
