@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   createContentIndex,
+  getPoetryListing,
   getPostTags,
   getPostUrl,
   getTagKey,
@@ -65,6 +66,22 @@ test('latest articles include standalone files, nested files, and poetry without
   assert.equal(content.series.length, 1);
   assert.deepEqual(inputCS, [nested, index, standalone], 'sorting must not mutate caller arrays');
   assert.equal(getPostUrl(poem), '/poetry/posts/folder/poem/');
+});
+
+test('the poetry grid promotes only visible pins while feeds and latest articles keep publication order', () => {
+  const olderPin = poetryPost('poems/preface.md', { pin: true, date: new Date('2023-10-01T10:30:00+08:00') });
+  const newerPin = poetryPost('poems/dedication.md', { pin: true, date: new Date('2024-12-31') });
+  const newPoem = poetryPost('poems/new.md', { date: new Date('2026-06-01') });
+  const recentPoem = poetryPost('poems/recent.md', { date: new Date('2025-07-01') });
+  const hidden = poetryPost('poems/hidden.md', { pin: true, hidden: true });
+  const draft = poetryPost('poems/draft.md', { pin: true, draft: true });
+  const article = csPost('posts/newest.md', { date: new Date('2026-11-01') });
+  const index = createContentIndex({ cs: [article], poetry: [olderPin, hidden, newPoem, newerPin, draft, recentPoem] });
+
+  assert.deepEqual(getPoetryListing(index.poetryPosts), [newerPin, olderPin, newPoem, recentPoem]);
+  assert.deepEqual(index.poetryPosts, [newPoem, recentPoem, newerPin, olderPin]);
+  assert.deepEqual(index.posts, [article, newPoem, recentPoem, newerPin, olderPin]);
+  assert.deepEqual(index.latestPosts, [article, newPoem, recentPoem]);
 });
 
 test('series detection follows metadata or exact index filenames regardless of directory depth', () => {

@@ -44,6 +44,14 @@ export function compareByDate(a: Post, b: Post): number {
   return b.data.date.getTime() - a.data.date.getTime() || compareKey(a, b);
 }
 
+/** The poetry grid promotes pinned entries within its own copy of the chronological listing. */
+export function getPoetryListing(chronologicalPosts: readonly PoetryPost[]): PoetryPost[] {
+  return [
+    ...chronologicalPosts.filter(post => post.data.pin),
+    ...chronologicalPosts.filter(post => !post.data.pin),
+  ];
+}
+
 export function getPostUrl(post: Post): string {
   return `/${post.collection}/${post.slug}/`;
 }
