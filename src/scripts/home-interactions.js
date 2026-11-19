@@ -200,6 +200,9 @@
   // 页面可见性变化时重置导航栏（处理从其他页面返回的情况）
   // Prepare the home navigation card for the outbound conversion animation.
   function prepareNavCardForOutbound() {
+    if (window.matchMedia('(width < 924px)').matches) {
+      navCard.parentElement.style.setProperty('--home-nav-slot-height', `${navCard.getBoundingClientRect().height}px`);
+    }
     navCard.style.position = 'fixed';
     navCard.style.top = '16px';
     navCard.style.left = '16px';
