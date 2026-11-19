@@ -7,7 +7,7 @@ const isNavActive = (href: string) =>
 ---
 
 <div id="floatingNavCard" class="fixed top-4 left-4 z-50" transition:persist="content-navigation">
-  <!-- 完全复制主界面 GlassCard 结构和样式 -->
+  {/* 完全复制主界面 GlassCard 结构和样式 */}
   <div
     class="glass-card relative overflow-hidden bg-white/30 backdrop-blur-xl border border-white/60 rounded-[2rem] p-3 hover:scale-[1.02] hover:-translate-y-1 transition-all duration-500 ease-out cursor-pointer"
     data-tilt="true"
@@ -21,10 +21,10 @@ const isNavActive = (href: string) =>
         inset 0 -1px 1px 0 rgba(255, 255, 255, 0.3);
     "
   >
-    <!-- 顶部边缘高光 - 模拟玻璃反光 -->
+    {/* 顶部边缘高光 - 模拟玻璃反光 */}
     <div class="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none z-[1]"></div>
 
-    <!-- 内部光晕效果 - 柔和渐变 -->
+    {/* 内部光晕效果 - 柔和渐变 */}
     <div class="absolute inset-0 rounded-[2rem] pointer-events-none z-[1]"
       style="
         background: linear-gradient(
@@ -37,7 +37,7 @@ const isNavActive = (href: string) =>
       "
     ></div>
 
-    <!-- 底部微光 - 增加立体感 -->
+    {/* 底部微光 - 增加立体感 */}
     <div class="absolute bottom-0 left-0 right-0 h-1/3 rounded-b-[2rem] pointer-events-none z-[1]"
       style="
         background: linear-gradient(
@@ -48,7 +48,7 @@ const isNavActive = (href: string) =>
       "
     ></div>
 
-    <!-- 动态高光/反光层 - 跟随鼠标 -->
+    {/* 动态高光/反光层 - 跟随鼠标 */}
     <div class="glare absolute inset-0 rounded-[2rem] pointer-events-none z-[2] opacity-0 transition-opacity duration-500"
       style="
         background: radial-gradient(
@@ -62,11 +62,11 @@ const isNavActive = (href: string) =>
       "
     ></div>
 
-    <!-- 内容区域 - 与主界面转换后的导航栏完全一致 -->
+    {/* 内容区域 - 与主界面转换后的导航栏完全一致 */}
     <div class="relative z-[999] h-full" style="pointer-events: auto;">
-      <!-- 横向布局，紧凑排列 -->
+      {/* 横向布局，紧凑排列 */}
       <div class="flex flex-row items-center gap-2">
-        <!-- 头像 - 2rem (32px) 与主界面转换后一致 -->
+        {/* 头像 - 2rem (32px) 与主界面转换后一致 */}
         <a href="/?homeReturnMotion=1" data-astro-prefetch="hover" data-astro-reload class="flex-shrink-0" data-home-return-link aria-label="Home" style="pointer-events: auto;">
           <div class="nav-avatar relative w-8 h-8">
             <img
@@ -78,7 +78,7 @@ const isNavActive = (href: string) =>
           </div>
         </a>
 
-        <!-- 导航链接 - 横向排列，正方形图标按钮 2rem x 2rem -->
+        {/* 导航链接 - 横向排列，正方形图标按钮 2rem x 2rem */}
         <nav class="nav-links flex flex-row gap-1">
           <a href="/cs/" data-astro-prefetch="hover" class:list={['nav-link-item', isNavActive('/cs/') && 'is-active']} title="Posts" aria-current={isNavActive('/cs/') ? 'page' : undefined} style="pointer-events: auto;">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

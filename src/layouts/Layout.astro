@@ -45,34 +45,34 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="only light" />
-    <!-- 缓存策略：HTML使用短缓存配合ETag，静态资源由服务器配置长期缓存 -->
+    {/* 缓存策略：HTML使用短缓存配合ETag，静态资源由服务器配置长期缓存 */}
     <meta http-equiv="Cache-Control" content="public, max-age=600" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={siteURL} />
     
-    <!-- Open Graph -->
+    {/* Open Graph */}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
     <meta property="og:url" content={siteURL} />
     <meta property="og:image" content={ogImage} />
     
-    <!-- Twitter -->
+    {/* Twitter */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     
-    <!-- No index for drafts -->
+    {/* No index for drafts */}
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
     
-    <!-- Favicon -->
+    {/* Favicon */}
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
     
     <slot name="head" />
 
-    <!-- Styles -->
+    {/* Styles */}
     <link rel="stylesheet" href={readingStyles} />
     {useContentNavigation && <ContentNavigation />}
     {hasCode && <link rel="stylesheet" href={codeStyles} />}
@@ -83,7 +83,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
     <Fragment set:html={content} />
 
     {hasCode && <CodeBlockScripts />}
-    <!-- VanillaTilt 3D 倾斜效果 -->
+    {/* VanillaTilt 3D 倾斜效果 */}
     <script src="/js/vanilla-tilt.js" defer></script>
     
     {hasMermaid && <MermaidDiagrams />}
