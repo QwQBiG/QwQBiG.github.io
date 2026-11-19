@@ -2,7 +2,7 @@
 title: "弦歌册 · 大学生校园事项助手"
 date: 2026-08-01T12:00:00+08:00
 draft: false
-tags: ["安卓", "应用", "校园", "隐私", "开源", "GPL", "Kotlin", "Jetpack Compose"]
+tags: ["安卓", "应用", "校园", "隐私", "开源", "Apache-2.0", "GPL", "Kotlin", "Jetpack Compose"]
 categories: ["项目"]
 description: "一款本地优先的大学生校园事项助手——课程、收件、谛听、任务、事件、习惯、成绩、记账、桌面小部件，尽入一册。"
 pin: true
@@ -22,25 +22,15 @@ pin: true
 
 ## 下载
 
-### Android 下载
+**Android 体验版 1.0.0-preview.5** 适用于 Android 8.0 及以上的 ARM 手机。安装包的发布进度可在[弦歌册官方项目](https://github.com/QwQBiG/XianGeCe)查看。
 
-- [下载新版体验包 · 1.0.0-preview.5](https://github.com/QwQBiG/XianGeCe-Next/releases/download/android-v1.0.0-preview.5/xiangece-android-1.0.0-preview.5-debug.apk)（Android 8.0 及以上的 ARM 手机，调试签名）
-- [下载历史版 · 0.0.1](https://github.com/QwQBiG/XianGeCe/releases/download/v0.0.1/xiangece.apk)
-
-如果手机上已经装过弦歌册，签名不同会导致 Android 拒绝覆盖安装。换装前请先备份资料，单独导出课堂原音，确认文件能打开再卸载旧版。体验包的备份不含原音，恢复备份会清理设备上已有的课堂录音。
-
-### 历史版备用网盘
-
-- **夸克网盘**：<https://pan.quark.cn/s/92990ca1200b>
-- **百度网盘**：<https://pan.baidu.com/s/1tbVQ6AJAYNE5C4UjE_7jMw> 提取码：`MCSe`
-
-**iPhone** 已完成真机编译，目前没有公开可安装的 IPA。想装到自己的 iPhone 上，可以参考[个人签名说明](https://github.com/QwQBiG/XianGeCe-Next/blob/main/README.md#iphone)。
-
-下文记录的是历史 Android 版 `0.0.1`（`versionCode 2`，包名 `win.iqwqi.xiangece`），最低支持 Android 8.0，目标 SDK 37。新版进展见[弦歌册新版仓库](https://github.com/QwQBiG/XianGeCe-Next)。
+如果手机上已经装过弦歌册，请先导出资料，并在「谛听」中单独导出要保留的课堂原音。应用备份不含原音，恢复备份会清理设备上已有的课堂录音。若 Android 因签名不同拒绝覆盖安装，请确认备份和音频文件都能打开，再卸载换装。
 
 ---
 
 ## 核心功能
+
+以下功能、隐私和技术细节记录的是 Android `0.0.1`。当前体验版的功能和更新说明见[官方项目说明](https://github.com/QwQBiG/XianGeCe#readme)。
 
 底部导航共五个主页面：**今日 · 厚积 · 课程 · 百宝 · 我的**。收件和谛听作为跨页能力，分别从「我的」与「百宝」进入。
 
@@ -272,16 +262,7 @@ Android 自动云备份已被禁用。你可主动导出 `.xiangece` 备份并�
 
 ## 自动更新
 
-应用启动时会检查 GitHub Release 中的更新信息。发现新版本后会提示更新、下载 APK 并校验 SHA-256 完整性，再通过系统安装器安装；网络或服务暂时不可用时，不影响已有的本地课表和记录继续使用。
-
-更新前可选「备份后更新」，先导出 `.xiangece` 再下载安装。
-
-应用同时提供国内网盘下载备选通道：当 GitHub 下载较慢或不可达时，可在更新对话框中选择「浏览器打开网盘下载」，通过夸克网盘或百度网盘获取 APK。
-
-更新资源统一发布在 GitHub Release，文件名固定：
-
-- `update.json`：版本号、下载地址、SHA-256、最低兼容版本、发布说明、网盘下载源列表。
-- `xiangece.apk`：应用安装包。
+当前 Android 体验版的版本说明由[弦歌册官方项目](https://github.com/QwQBiG/XianGeCe)发布。旧版用户换装前，请按本文下载区的说明备份资料，并单独导出课堂原音。
 
 ---
 
@@ -376,17 +357,13 @@ Release 构建已启用 R8 混淆和资源压缩（`isMinifyEnabled=true`、`isS
 
 ## 开源协议
 
-历史 Android 版 `0.0.1` 基于 **GPL-3.0** 协议开源。你可以自由使用、修改与学习源码；任何衍生作品须同样以 GPL-3.0 开源并保留版权声明。第三方组件和模型另见项目仓库中的 `THIRD_PARTY_NOTICES.md` 与 `docs/` 说明文件。
+Android 体验版 `1.0.0-preview.5` 的自有代码采用 **Apache-2.0** 许可。原创图片由权利人保留权利。此前按 **GPL-3.0** 发布的历史版本仍适用原授权；第三方组件和模型适用各自的许可证。
 
 ---
 
 ## 联系方式
 
-项目源码、问题反馈与隐私政策：
-
-- 新版源码与反馈：[QwQBiG/XianGeCe-Next](https://github.com/QwQBiG/XianGeCe-Next)
-- 历史版源码：[QwQBiG/XianGeCe](https://github.com/QwQBiG/XianGeCe)
-- 项目说明与最新文档：本页面 <https://iqwqi.win/cs/posts/xiangece/>
-- 新版下载：[GitHub Releases](https://github.com/QwQBiG/XianGeCe-Next/releases)
+- Android 源码与问题反馈：[弦歌册官方仓库](https://github.com/QwQBiG/XianGeCe)
+- 项目主页：[弦歌册](https://iqwqi.win/cs/posts/xiangece/)
 
 版权所有 © 2026 弦歌册（iqwqi）· 本政策与说明可能随功能变化更新，重要变化会在应用或本网站中说明。
