@@ -1,4 +1,6 @@
-import type { PhotoItem, PhotoState } from '../types/photo';
+import type { GalleryPhoto } from '../types/photo';
+
+type PhotoDimensions = Partial<Pick<GalleryPhoto, 'width' | 'height'>>;
 
 interface PhotoWallSize {
   width: number;
@@ -10,6 +12,7 @@ export const photoWallTiers = [
   { width: 120, belowWidth: 480 },
   { width: 150, belowWidth: 768 },
   { width: 150, belowWidth: 1024, belowHeight: 480 },
+  { width: 240, belowWidth: 1024 },
 ] as const;
 export const desktopPhotoWidth = 360;
 
@@ -23,29 +26,47 @@ export function photoWallSizes(scale: number) {
     `${desktopPhotoWidth * scale}px`].join(', ');
 }
 
-export function photoWallCardWidth(viewport: PhotoWallSize) {
-  return photoWallTiers.find(tier => viewport.width < tier.belowWidth
-    && (!('belowHeight' in tier) || viewport.height < tier.belowHeight))?.width ?? desktopPhotoWidth;
-}
-
 export function photoAnchorY(width: number) {
   // Stored y is relative to this original anchor, rather than the geometric center.
   return width < 250 ? width * 0.6 : 100;
 }
 
-/** Reuse the static card's initial pose, keeping raw offsets across viewport changes. */
-export function readInitialPhotoPosition(style: CSSStyleDeclaration, wall: PhotoWallSize, cardWidth: number): PhotoState {
-  const x = parseFloat(style.getPropertyValue('--initial-x'));
-  const y = parseFloat(style.getPropertyValue('--initial-y'));
+export function photoWallBreakpoints() {
+  const compact = photoWallTiers.map(photoWallMedia).join(', ');
+  return [
+    `:root { --gallery-card-size: ${desktopPhotoWidth}px; }`,
+    ...[...photoWallTiers].reverse().map(tier =>
+      `@media ${photoWallMedia(tier)} { :root { --gallery-card-size: ${tier.width}px; } }`),
+    `@media ${compact} {
+      .gallery-main { height: 100dvh; flex: none; }
+      body:has(.gallery-main) { min-height: 100dvh; }
+      .photo-wall .photo-card { --anchor-y: calc(var(--frame-width) * .6); }
+    }`,
+  ].join('');
+}
+
+export function photoCardStyle(photo: Pick<GalleryPhoto, 'id' | 'scale'> & PhotoDimensions, index: number, count: number) {
+  const direction = (index / count - .25) * Math.PI * 2;
+  const rotation = [-5, 6, -4, 5, -6][index % 5];
+  const radians = rotation * Math.PI / 180;
+  const scale = photo.scale ?? 1;
+  const prefix = `--photo-${photo.id}-`;
   return {
-    x: Number.isFinite(x) ? x : parseFloat(style.left) - wall.width / 2 + cardWidth / 2,
-    y: Number.isFinite(y) ? y : parseFloat(style.top) - wall.height / 2 + photoAnchorY(cardWidth),
-    rotation: parseFloat(style.getPropertyValue('--rotation')),
-    zIndex: Number(style.zIndex),
+    '--scale': scale,
+    '--ratio': photoFrameHeightRatio(photo),
+    '--desktop-anchor': `${photoAnchorY(desktopPhotoWidth * scale)}px`,
+    '--ring-cos': count > 1 ? Number(Math.cos(direction).toFixed(6)) : 0,
+    '--ring-sin': count > 1 ? Number(Math.sin(direction).toFixed(6)) : 0,
+    '--initial-x': `var(${prefix}x)`,
+    '--initial-y': `var(${prefix}y)`,
+    '--rotation': `var(${prefix}rotation, ${rotation}deg)`,
+    '--cos': `var(${prefix}cos, ${Math.abs(Math.cos(radians))})`,
+    '--sin': `var(${prefix}sin, ${Math.abs(Math.sin(radians))})`,
+    'z-index': `var(${prefix}z, ${index})`,
   };
 }
 
-export function photoFrameHeightRatio(photo: Pick<PhotoItem, 'width' | 'height'>) {
+export function photoFrameHeightRatio(photo: PhotoDimensions) {
   return photo.width && photo.height ? photo.height / photo.width : 1;
 }
 
@@ -67,42 +88,7 @@ export function fitPhotoPosition(point: { x: number; y: number }, bounds: Return
   };
 }
 
-export function resolvePhotoWallSize(
-  container: PhotoWallSize | null | undefined,
-  main: PhotoWallSize | null | undefined,
-  viewport: PhotoWallSize,
-): PhotoWallSize {
-  const measured = [container, main].find((size) => size
-    && Number.isFinite(size.width) && size.width > 0
-    && Number.isFinite(size.height) && size.height > 0) ?? viewport;
-  return { width: measured.width, height: measured.height };
-}
-
-/** A card takes over its static thumbnail as soon as its own image can paint. */
-export function whenPhotoSettles(image: HTMLImageElement, callback: () => void) {
-  let active = true;
-  function cleanup() {
-    active = false;
-    image.removeEventListener('load', loaded);
-    image.removeEventListener('error', finish);
-  }
-  function finish() {
-    if (!active) return;
-    cleanup();
-    callback();
-  }
-  function loaded() {
-    image.removeEventListener('load', loaded);
-    if (typeof image.decode === 'function') void image.decode().then(finish, finish);
-    else finish();
-  }
-  image.addEventListener('load', loaded);
-  image.addEventListener('error', finish);
-  if (image.complete) loaded();
-  return cleanup;
-}
-
-export function photoPreviewSize(photo: Pick<PhotoItem, 'previewWidth' | 'previewHeight' | 'width' | 'height'>, mobile: boolean) {
+export function photoPreviewSize(photo: PhotoDimensions & Partial<Pick<GalleryPhoto, 'previewWidth' | 'previewHeight'>>, mobile: boolean) {
   const width = photo.previewWidth ?? photo.width;
   const height = photo.previewHeight ?? photo.height;
   const viewportWidth = mobile ? '95vw' : '85vw';
@@ -152,4 +138,12 @@ export function listenForPointerDrag(
   target.addEventListener('pointerup', end);
   target.addEventListener('pointercancel', cancel);
   return cleanup;
+}
+
+/** Convert a frame's visible center inside the wall to the original saved drag anchor. */
+export function photoPositionFromCenter(center: { x: number; y: number }, wall: PhotoWallSize, frame: PhotoWallSize) {
+  return {
+    x: center.x - wall.width / 2,
+    y: center.y - wall.height / 2 + photoAnchorY(frame.width) - frame.height / 2,
+  };
 }

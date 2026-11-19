@@ -1,203 +1,97 @@
 ---
-import fs from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import Layout from '../layouts/LightLayout.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
-import PhotoWall from '../components/3d/PhotoWall.tsx';
+import type { GalleryPhoto } from '../types/photo';
 import firstLayout from '../scripts/gallery-first-layout.js?raw';
-import type { PhotoItem } from '../types/photo';
-import { desktopPhotoWidth, photoAnchorY, photoFrameHeightRatio, photoWallMedia, photoWallSizes, photoWallTiers } from '../utils/photo-wall';
+import { photoCardStyle, photoFrameHeightRatio, photoWallBreakpoints, photoWallSizes } from '../utils/photo-wall';
+import '../styles/gallery-positions.css';
+import '../styles/gallery-entrance.css';
+import '../styles/gallery-interactions.css';
 
-interface GalleryManifestEntry {
-  file: string;
-  alt: string;
-  width: number;
-  height: number;
-  thumb2x: string;
-  srcset: string;
-  avifSrcset: string;
-  preview: string;
-  previewWidth: number;
-  previewHeight: number;
-  previewSrcset: string;
-}
-
-const pageTitle = "Gallery - QwQBiG's World";
-const pageDescription = "Drag photos around the gallery or select one for a closer look.";
-const manifestPath = path.join(process.cwd(), 'public', 'generated', 'gallery', 'manifest.json');
-const entries = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as GalleryManifestEntry[];
-const halfSizeFiles = new Set(['ZhenXun.jpg', 'AIcard.png']);
-
-const photos: PhotoItem[] = entries.map((entry, index) => {
-  const scale = halfSizeFiles.has(entry.file) ? 0.5 : 1;
-  return {
-    id: String(index + 1),
-    src: entry.thumb2x,
-    preview: entry.preview,
-    previewWidth: entry.previewWidth,
-    previewHeight: entry.previewHeight,
-    previewSrcset: entry.previewSrcset,
-    alt: entry.alt,
-    width: entry.width,
-    height: entry.height,
-    scale,
-    srcset: entry.srcset,
-    avifSrcset: entry.avifSrcset,
-    sizes: photoWallSizes(scale),
-  };
-});
-
-const photoIds = photos.map(photo => photo.id);
-const compactScreens = photoWallTiers.map(photoWallMedia).join(', ');
-const galleryBreakpoints = [
-  `:root { --gallery-card-size: ${desktopPhotoWidth}px; }`,
-  ...[...photoWallTiers].reverse().map(tier =>
-    `@media ${photoWallMedia(tier)} { :root { --gallery-card-size: ${tier.width}px; } }`),
-  `@media ${compactScreens} {
-    .gallery-main { height: 100dvh; flex: none; }
-    body:has(.gallery-main) { min-height: 100dvh; }
-    .static-photo-wall .static-photo-card[data-photo-id] {
-      --anchor-y: calc(var(--frame-width) * .6);
-      left: clamp(var(--min-left), var(--resolved-left), var(--max-left));
-      top: clamp(var(--min-top), var(--resolved-top), var(--max-top));
-    }
-  }`,
-].join('');
-
-const initialPositions = [
-  { left: '10%', top: '18%', rotate: '-7deg' },
-  { left: '58%', top: '10%', rotate: '6deg' },
-  { left: '42%', top: '54%', rotate: '-4deg' },
-  { left: '73%', top: '46%', rotate: '5deg' },
-  { left: '20%', top: '58%', rotate: '8deg' },
-];
+const manifest = path.join(process.cwd(), 'public/generated/gallery/manifest.json');
+const entries: GalleryPhoto[] = JSON.parse(readFileSync(manifest, 'utf8'));
+const halfSize = new Set(['ZhenXun.jpg', 'AIcard.png']);
+const photos = entries.map(entry => ({ ...entry, scale: halfSize.has(entry.file) ? 0.5 : 1 }));
+// Keep the last photo within a second of the first, even as the collection grows.
+const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title="Gallery - QwQBiG's World" description="Drag photos around the gallery or select one for a closer look.">
   <Fragment slot="head">
-    <style is:inline set:html={galleryBreakpoints} />
-    <script is:inline data-photo-ids={JSON.stringify(photoIds)} data-compact={compactScreens} set:html={firstLayout} />
+    <style is:inline set:html={photoWallBreakpoints()} />
+    <script is:inline data-photo-ids={JSON.stringify(photos.map(photo => photo.id))} set:html={firstLayout} />
   </Fragment>
-
   <FloatingNavCard />
-
   <main class="gallery-main flex-1 h-screen relative overflow-hidden">
     <div class="absolute inset-0 gradient-bg -z-10"></div>
-
-    <!-- React/Framer 加载前显示同样的拍立得墙，图片是清晰缩略图，不使用模糊占位。 -->
-    <div class="static-photo-wall" data-static-photo-wall aria-hidden="true">
+    <div class="photo-wall" data-photo-wall>
       {photos.map((photo, index) => {
-        const position = initialPositions[index % initialPositions.length];
-        const scale = photo.scale ?? 1;
-        const angle = parseFloat(position.rotate) * Math.PI / 180;
-        const prefix = `--photo-${photo.id}-`;
+        const sizes = photoWallSizes(photo.scale);
         return (
-          <div
-            class="static-photo-card"
+          <a
+            class="photo-card"
             data-photo-id={photo.id}
+            data-ratio={photoFrameHeightRatio(photo)}
+            data-preview-width={photo.previewWidth}
+            data-preview-height={photo.previewHeight}
+            data-preview-srcset={photo.previewSrcset}
+            href={photo.preview}
+            data-astro-prefetch="false"
+            draggable="false"
             style={{
-              '--scale': scale,
-              '--ratio': photoFrameHeightRatio(photo),
-              '--desktop-anchor': `${photoAnchorY(desktopPhotoWidth * scale)}px`,
-              '--cos': `var(${prefix}cos, ${Math.abs(Math.cos(angle))})`,
-              '--sin': `var(${prefix}sin, ${Math.abs(Math.sin(angle))})`,
-              '--initial-x': `var(${prefix}x)`,
-              '--initial-y': `var(${prefix}y)`,
-              '--default-left': position.left,
-              '--default-top': position.top,
-              '--rotation': `var(${prefix}rotation, ${position.rotate})`,
-              'z-index': `var(${prefix}z, ${index})`,
+              ...photoCardStyle(photo, index, photos.length),
+              '--deal-delay': `${index * staggerMs}ms`,
             }}
           >
-            <div class="static-photo-frame">
-              <picture class="block">
-                <source data-navigation-image type="image/avif" srcset={photo.avifSrcset} sizes={photo.sizes} />
-                <img
-                  srcset={photo.srcset}
-                  sizes={photo.sizes}
-                  src={photo.src}
-                  alt=""
-                  width={photo.width}
-                  height={photo.height}
-                  loading="eager"
-                  decoding="async"
-                />
-              </picture>
+            <div class="photo-pose">
+              <div class="photo-frame">
+                <picture style={{ '--photo-placeholder': `url("${photo.placeholder}")` }}>
+                  <source data-navigation-image type="image/avif" srcset={photo.avifSrcset} sizes={sizes} />
+                  <img
+                    srcset={photo.srcset} sizes={sizes} src={photo.thumb2x}
+                    alt={photo.alt} width={photo.width} height={photo.height}
+                    loading="eager" decoding="async" draggable="false"
+                  />
+                </picture>
+              </div>
             </div>
-          </div>
+          </a>
         );
       })}
-    </div>
-
-    <div class="h-full photo-wall-runtime">
-      <PhotoWall photos={photos} client:load />
     </div>
   </main>
 </Layout>
 
-<style>
-  .font-handwriting {
-    font-family: 'Caveat', 'Dancing Script', cursive;
-  }
+<script>
+  import { initializeGalleryInteractions } from '../scripts/gallery-interactions';
 
-  :global(.photo-wall-container) {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  const wall = document.querySelector<HTMLElement>('[data-photo-wall]');
+  if (wall) {
+    // Clear the backing image after decode so transparent pixels show the white frame.
+    for (const image of wall.querySelectorAll<HTMLImageElement>('picture > img')) {
+      const picture = image.parentElement!;
+      const showImage = async () => {
+        try { await image.decode?.(); } catch { return; }
+        picture.dataset.loaded = '';
+        delete picture.dataset.failed;
+      };
+      const showPlaceholder = () => {
+        delete picture.dataset.loaded;
+        picture.dataset.failed = '';
+      };
+      image.addEventListener('load', showImage);
+      image.addEventListener('error', showPlaceholder);
+      if (image.complete) {
+        if (image.naturalWidth) void showImage();
+        else showPlaceholder();
+      }
+    }
+    const dispose = initializeGalleryInteractions(wall);
+    // A history-cached page resumes with the same photos and event listeners.
+    window.addEventListener('pagehide', event => {
+      if (!event.persisted) dispose();
+    });
   }
-
-  .static-photo-wall {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    overflow: hidden;
-    pointer-events: none;
-    opacity: 1;
-  }
-
-  .photo-wall-runtime {
-    position: relative;
-    z-index: 2;
-  }
-
-  .photo-wall-runtime :global(.photo-card:not([data-photo-ready])) {
-    visibility: hidden;
-  }
-
-  .static-photo-card {
-    position: absolute;
-    left: var(--resolved-left);
-    top: var(--resolved-top);
-    --frame-width: calc(var(--gallery-card-size) * var(--scale));
-    --frame-height: calc((var(--frame-width) - 8px) * var(--ratio) + 8px);
-    --anchor-y: var(--desktop-anchor);
-    --initial-left: clamp(var(--min-left), calc(50% + var(--initial-x) - var(--frame-width) / 2), var(--max-left));
-    --initial-top: clamp(var(--min-top), calc(50% + var(--initial-y) - var(--anchor-y)), var(--max-top));
-    --resolved-left: var(--initial-left, var(--default-left));
-    --resolved-top: var(--initial-top, var(--default-top));
-    /* Match the rotated rectangle used for dragging, including its white frame. */
-    --inset-x: calc(12px + (var(--frame-width) * (var(--cos) - 1) + var(--frame-height) * var(--sin)) / 2);
-    --inset-y: calc(12px + (var(--frame-height) * (var(--cos) - 1) + var(--frame-width) * var(--sin)) / 2);
-    --min-left: min(var(--inset-x), (100% - var(--frame-width)) / 2);
-    --min-top: min(var(--inset-y), (100% - var(--frame-height)) / 2);
-    --max-left: calc(100% - var(--frame-width) - var(--inset-x));
-    --max-top: calc(100% - var(--frame-height) - var(--inset-y));
-    width: var(--frame-width);
-    transform: rotate(var(--rotation));
-  }
-
-  .static-photo-frame {
-    padding: 4px;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, .3), 0 4px 6px -2px rgba(0, 0, 0, .1);
-  }
-
-  .static-photo-frame img {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-
-</style>
+</script>
