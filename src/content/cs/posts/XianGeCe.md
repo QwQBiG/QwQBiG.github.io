@@ -22,7 +22,9 @@ pin: true
 
 ## 下载
 
-**Android 体验版 1.0.0-preview.5** 适用于 Android 8.0 及以上的 ARM 手机。安装包的发布进度可在[弦歌册官方项目](https://github.com/QwQBiG/XianGeCe)查看。
+[下载 Android 体验版 1.0.0-preview.5（APK）](https://github.com/QwQBiG/XianGeCe/releases/download/android-v1.0.0-preview.5/xiangece-android-1.0.0-preview.5-debug.apk)
+
+这个安装包使用调试签名，适用于 Android 8.0 及以上的 ARM 手机。体验版可以查课表、排待办、写 Markdown 笔记，也可以在课堂录音中标记片段，课后回听。
 
 如果手机上已经装过弦歌册，请先导出资料，并在「谛听」中单独导出要保留的课堂原音。应用备份不含原音，恢复备份会清理设备上已有的课堂录音。若 Android 因签名不同拒绝覆盖安装，请确认备份和音频文件都能打开，再卸载换装。
 
@@ -357,7 +359,7 @@ Release 构建已启用 R8 混淆和资源压缩（`isMinifyEnabled=true`、`isS
 
 ## 开源协议
 
-Android 体验版 `1.0.0-preview.5` 的自有代码采用 **Apache-2.0** 许可。原创图片由权利人保留权利。此前按 **GPL-3.0** 发布的历史版本仍适用原授权；第三方组件和模型适用各自的许可证。
+Android 体验版 `1.0.0-preview.5` 的自有代码采用 **Apache-2.0** 许可。原创图片由 QwQBiG 保留权利，使用范围见[美术授权说明](https://github.com/QwQBiG/XianGeCe/blob/android-v1.0.0-preview.5/docs/software-and-artwork.md)。此前按 **GPL-3.0** 发布的历史版本仍适用原授权；第三方组件和模型适用各自的许可证。
 
 ---
 
