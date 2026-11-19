@@ -31,6 +31,7 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
 
   let postObserver: IntersectionObserver | undefined;
   let observedNav: HTMLElement | undefined;
+  let previousTimer: number | undefined;
   let manifest: NavigationManifest | null = null;
   let lifetime = new AbortController();
   let currentIntent: { href: string; link: HTMLAnchorElement; committed: boolean } | undefined;
@@ -98,7 +99,10 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   function beginIntent(link: HTMLAnchorElement, committed = false) {
     const destination = navigationDestination(link.href, window.location.href);
     if (!destination) return;
-    if (committed) prioritizeNavigation();
+    if (committed) {
+      window.clearTimeout(previousTimer);
+      prioritizeNavigation();
+    }
     if (currentIntent?.href === destination.href) {
       currentIntent.committed ||= committed;
       return;
@@ -137,14 +141,25 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
       if (!entries.some(entry => entry.isIntersecting)) return;
       observer.disconnect();
       postObserver = undefined;
-      // Both links share one footer. Start the forward route first when both exist.
-      for (const relation of ['next', 'prev']) {
-        const link = nav.querySelector<HTMLAnchorElement>(`a[rel~="${relation}"][href]`);
-        const destination = link && navigationDestination(link.href, window.location.href);
-        if (!destination) continue;
+      function warmPost(link: HTMLAnchorElement) {
+        const destination = navigationDestination(link.href, window.location.href);
+        if (!destination) return;
         prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
         void warmDestination(destination, 'prefetch', signal);
       }
+      const next = nav.querySelector<HTMLAnchorElement>('a[rel~="next"][href]');
+      const prev = nav.querySelector<HTMLAnchorElement>('a[rel~="prev"][href]');
+      if (next) warmPost(next);
+      if (!prev) return;
+      if (!next) {
+        warmPost(prev);
+        return;
+      }
+      // A quick tap on Next should get the connection to itself. Readers who
+      // pause at the footer still have both directions ready before choosing.
+      previousTimer = window.setTimeout(() => {
+        if (!signal.aborted && !document.hidden && canWarm() && !currentIntent?.committed) warmPost(prev);
+      }, 180);
     }, { rootMargin: `0px 0px ${window.innerHeight}px 0px` });
     postObserver.observe(nav);
   }
@@ -175,6 +190,7 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   }
 
   function stop() {
+    window.clearTimeout(previousTimer);
     postObserver?.disconnect();
     postObserver = undefined;
     observedNav = undefined;

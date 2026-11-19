@@ -91,11 +91,18 @@ async function setupRuntime(readyState = 'complete', route = '/', neighborHint?:
   const source = stripTypeScriptTypes(await readFile(new URL('../src/scripts/navigation-warmup-runtime.ts', import.meta.url), 'utf8'))
     .replace(/import[\s\S]*?from ['"][^'"]+['"];\n/g, '')
     .replace('export function initializeNavigationWarmup', 'function initializeNavigationWarmup');
+  const timers = new Map<number, () => void>();
+  let timerId = 0;
   const begin = runInNewContext(source + '\ninitializeNavigationWarmup(prefetchHTML)', {
     URL, AbortController, HTMLLinkElement: Link, Element: Link, Node: Link, PointerEvent: class {},
     document,
     IntersectionObserver: Observer,
-    window: { location: new URL(route, current), innerHeight: 844, addEventListener: (name: string, handler: (event: unknown) => void) => record(windowHandlers, name, handler) },
+    window: {
+      location: new URL(route, current), innerHeight: 844,
+      addEventListener: (name: string, handler: (event: unknown) => void) => record(windowHandlers, name, handler),
+      setTimeout(callback: () => void) { timers.set(++timerId, callback); return timerId; },
+      clearTimeout(id?: number) { if (id !== undefined) timers.delete(id); },
+    },
     navigator,
     fetch: request,
     scheduleBackgroundTask: scheduler.schedule,
@@ -105,6 +112,7 @@ async function setupRuntime(readyState = 'complete', route = '/', neighborHint?:
   }) as (intent: { link: Link; href: string; startedAt: number }) => void;
   return {
     requests, html, links, document, scheduler, begin, article, observers, navigator,
+    runTimers() { for (const callback of timers.values()) callback(); timers.clear(); },
     emitDocument(name: string, event: unknown = {}) { for (const handler of documentHandlers.get(name) ?? []) handler(event); },
     emitWindow(name: string, event: unknown = {}) { for (const handler of windowHandlers.get(name) ?? []) handler(event); },
     flush: () => new Promise<void>(resolve => setImmediate(resolve)),
@@ -186,6 +194,8 @@ test('series navigation prepares both available posts near the article end and d
   assert.equal(next.target, article.nav);
   next.near();
   next.near();
+  assert.deepEqual(runtime.html, [current + 'gallery/']);
+  runtime.runTimers();
   await runtime.flush();
   assert.deepEqual(runtime.html, [current + 'gallery/', current + 'cs/']);
   assert.deepEqual(runtime.requests, [current + 'navigation-assets.test.json', current + 'gallery.webp', current + 'cs.js']);
@@ -205,6 +215,19 @@ test('article hints cover shared and new assets before any global manifest reque
   await runtime.flush();
   assert(runtime.requests.includes(current + 'navigation-assets.test.json'));
   assert(runtime.requests.includes(current + 'about.js'));
+  runtime.scheduler.dispose();
+});
+
+test('a quick forward tap cancels the secondary backward download', async () => {
+  const runtime = await setupRuntime('complete', '/article/');
+  runtime.article.prev = runtime.links[2];
+  runtime.observers.at(-1)!.near();
+  const next = runtime.article.next!;
+  runtime.begin({ link: next, href: next.href, startedAt: Date.now() });
+  runtime.runTimers();
+  await runtime.flush();
+  assert.deepEqual(runtime.html, [current + 'cs/']);
+  assert(!runtime.requests.includes(current + 'gallery.webp'));
   runtime.scheduler.dispose();
 });
 
