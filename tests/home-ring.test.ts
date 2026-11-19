@@ -4,8 +4,7 @@ import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
 
 const page = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
-const script = Array.from(page.matchAll(/<script is:inline>([\s\S]*?)<\/script>/g))
-  .find(([, source]) => source.includes("getElementById('interactiveRing')"))![1];
+const script = await readFile(new URL('../src/scripts/home-interactions.js', import.meta.url), 'utf8');
 
 function ringInteraction() {
   const values = new Map<string, string>();

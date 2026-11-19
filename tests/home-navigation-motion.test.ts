@@ -3,9 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { runInNewContext } from 'node:vm';
 
-const home = await readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
-const script = Array.from(home.matchAll(/<script is:inline>([\s\S]*?)<\/script>/g))
-  .find(([, source]) => source.includes('function prepareNavCardForOutbound()'))![1];
+const script = await readFile(new URL('../src/scripts/home-interactions.js', import.meta.url), 'utf8');
 
 function homePage(touch = false, search = '') {
   const preference = { matches: false };
