@@ -1,4 +1,5 @@
 /* The homepage uses the same reset and utilities as the reading pages.
    Typography components belong to the reading layouts. */
+@config "../../tailwind.home.config.mjs";
 @tailwind base;
 @tailwind utilities;

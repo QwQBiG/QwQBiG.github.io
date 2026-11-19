@@ -1,5 +1,5 @@
 ---
-import '../styles/home-utilities.css';
+import homeUtilities from '../styles/home-utilities.css?inline';
 import { transform } from 'esbuild';
 import homeInteractions from '../scripts/home-interactions.js?raw';
 import GlassCard from '../components/ui/GlassCard.astro';
@@ -64,6 +64,7 @@ const statistics = [
   <link rel="preload" href={homeSerif} as="font" type="font/woff2" crossorigin>
   <link rel="preload" href={homeItalic} as="font" type="font/woff2" crossorigin>
 
+  <style is:inline set:html={homeUtilities}></style>
   <style>
     * {
       margin: 0;
