@@ -195,10 +195,13 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
   assert.equal(getEventListeners(window, 'scroll').length, 0);
 });
 
+async function mermaidScript() {
+  const file = await readFile(new URL('../src/components/content/MermaidDiagrams.astro', import.meta.url), 'utf8');
+  return stripTypeScriptTypes(file.match(/<script>([\s\S]*?)<\/script>/)![1]);
+}
+
 test('a late diagram import cannot initialize a departed article and the next page initializes once', async () => {
-  const source = await readFile(new URL('../src/components/content/MermaidDiagrams.astro', import.meta.url), 'utf8');
-  const script = source.match(/<script>([\s\S]*?)<\/script>/)![1];
-  const code = stripTypeScriptTypes(script).replace("import('mermaid')", 'loadMermaid()');
+  const code = (await mermaidScript()).replace("import('mermaid')", 'loadMermaid()');
   const document = new EventTarget() as EventTarget & Record<string, any>;
   let blocks: unknown[] = [];
   document.readyState = 'complete';
@@ -209,7 +212,7 @@ test('a late diagram import cannot initialize a departed article and the next pa
   let initialized = 0;
   runInNewContext(code, { document, AbortController, console, loadMermaid: () => pendingImport });
   document.body = {};
-  blocks = [{ hasAttribute: () => false, querySelector: () => null }];
+  blocks = [{ closest: () => null, hasAttribute: () => false, querySelector: () => null }];
   document.dispatchEvent(new Event('astro:page-load'));
   document.dispatchEvent(new Event('astro:before-swap'));
   document.body = {};
@@ -219,10 +222,169 @@ test('a late diagram import cannot initialize a departed article and the next pa
   await setImmediate();
   assert.equal(initialized, 0);
   document.body = {};
-  blocks = [{ hasAttribute: () => false, querySelector: () => null }];
+  blocks = [{ closest: () => null, hasAttribute: () => false, querySelector: () => null }];
   document.dispatchEvent(new Event('astro:page-load'));
   await setImmediate();
   document.dispatchEvent(new Event('astro:page-load'));
   await setImmediate();
   assert.equal(initialized, 1);
+});
+
+test('diagrams render near the reader, recheck priority after async work, and stop on swap', async () => {
+  const script = await mermaidScript();
+  const document = Object.assign(new EventTarget(), { readyState: 'complete', body: {}, querySelectorAll: () => [] });
+  const block = (top: number) => ({ top, closest: () => null, getBoundingClientRect() { return { top: this.top, bottom: this.top + 100 }; } });
+  const blocks = [block(1350), block(1400), block(15), block(5500)];
+  let notify!: (entries: { target: typeof blocks[number]; isIntersecting: boolean }[]) => void;
+  const observed = new Set<typeof blocks[number]>();
+  class Observer {
+    constructor(callback: typeof notify) { notify = callback; }
+    observe(target: typeof blocks[number]) { observed.add(target); }
+    unobserve(target: typeof blocks[number]) { observed.delete(target); }
+    disconnect() { observed.clear(); }
+  }
+  let frame: FrameRequestCallback | undefined;
+  let finish!: () => void;
+  let imports = 0;
+  let finishImport!: () => void;
+  const pauseImport = new Promise<void>(resolve => { finishImport = resolve; });
+  const rendered: number[] = [];
+  const context = {
+    window: { innerHeight: 850 }, IntersectionObserver: Observer, AbortController, document, console,
+    requestAnimationFrame(fn: FrameRequestCallback) { frame = fn; return 1; },
+    cancelAnimationFrame() { frame = undefined; },
+    async load() {
+      imports++;
+      await pauseImport;
+      return async (item: typeof blocks[number]) => {
+        rendered.push(blocks.indexOf(item));
+        await new Promise<void>(resolve => { finish = resolve; });
+      };
+    },
+  };
+  const observe = runInNewContext(script + '\nloadRenderer = load; observeDiagrams', context);
+  const lifetime = new AbortController();
+  observe(blocks, lifetime.signal);
+  notify(blocks.map(target => ({ target, isIntersecting: false })));
+  assert.equal(imports, 0);
+  notify([{ target: blocks[0], isIntersecting: true }]);
+  assert.equal(imports, 1);
+  blocks[0].top = -5000; // Its observer exit may arrive later than the download.
+  notify([1, 2].map(index => ({ target: blocks[index], isIntersecting: true })));
+  finishImport();
+  await setImmediate();
+  assert.deepEqual(rendered, [2], 'prefer the visible diagram over merely nearby ones');
+  blocks[3].top = 10;
+  notify([{ target: blocks[3], isIntersecting: true }]);
+  assert.deepEqual(rendered, [2], 'only one layout in progress');
+  finish();
+  await setImmediate();
+  frame!(0);
+  frame = undefined;
+  await setImmediate();
+  assert.deepEqual(rendered, [2, 3], 'jumping deep into the article bypasses earlier offscreen diagrams');
+  lifetime.abort();
+  finish();
+  await setImmediate();
+  assert.equal(observed.size, 0);
+  assert.equal(frame, undefined);
+  assert.equal(imports, 1);
+  assert.deepEqual(rendered, [2, 3]);
+
+  // Browsers without observation still render every diagram, one at a time.
+  Reflect.deleteProperty(context, 'IntersectionObserver');
+  const fallback = new AbortController();
+  observe(blocks.slice(0, 2), fallback.signal);
+  await setImmediate();
+  finish();
+  await setImmediate();
+  frame!(0);
+  await setImmediate();
+  assert.deepEqual(rendered.slice(2), [0, 1]);
+  finish();
+  await setImmediate();
+  fallback.abort();
+});
+
+test('diagram articles let native heading jumps finish, then honor the scroll margin and release on reader input', async () => {
+  const script = await mermaidScript();
+  const timers = new Map<number, () => void>();
+  let id = 0;
+  const window = Object.assign(new EventTarget(), {
+    setTimeout(callback: () => void) { timers.set(++id, callback); return id; },
+    clearTimeout(id: number) { timers.delete(id); },
+  });
+  function tick() {
+    const callbacks = Array.from(timers.values());
+    timers.clear();
+    callbacks.forEach(run => run());
+  }
+  let top = -1722;
+  let alignments = 0;
+  const heading = {
+    matches: () => true,
+    getBoundingClientRect: () => ({ top }),
+    scrollIntoView(options: { behavior: string }) {
+      assert.equal(options.behavior, 'instant');
+      alignments++;
+      top = 96;
+    },
+  };
+  let resize!: () => void;
+  let observing = false;
+  class Resize {
+    constructor(callback: () => void) { resize = callback; }
+    observe() { observing = true; }
+    disconnect() { observing = false; }
+  }
+  const document = Object.assign(new EventTarget(), {
+    readyState: 'complete', body: {}, querySelectorAll: () => [],
+    getElementById: (name: string) => name === '应答' && heading,
+  });
+  const article = { contains: (element: unknown) => element === heading };
+  const history = { state: { scrollY: 0 } };
+  const hash = '#' + encodeURIComponent('应答');
+  const watch = runInNewContext(script + '\nwatchDiagramFragment', {
+    window, document, history, location: { hash }, ResizeObserver: Resize, AbortController,
+    getComputedStyle: () => ({ scrollMarginTop: '96px' }), console,
+  });
+  const lifetime = new AbortController();
+  let resumes = 0;
+  let rendering = true;
+  const fragment = watch(article, lifetime.signal, () => rendering, () => { resumes++; });
+  assert.equal(fragment.travelling(), true);
+  window.dispatchEvent(new Event('scroll'));
+  window.dispatchEvent(new Event('scroll'));
+  resize();
+  assert.equal(alignments, 0, 'keep native smooth scrolling in control while moving');
+  assert.equal(timers.size, 1);
+  tick();
+  assert.equal(fragment.travelling(), false);
+  assert.equal(resumes, 1);
+  assert.equal(top, 96);
+  tick();
+  assert.equal(observing, true, 'late diagram size changes can still move the heading');
+  top = -400;
+  resize();
+  assert.equal(top, 96);
+  window.dispatchEvent(new Event('wheel'));
+  top = -100;
+  resize();
+  assert.equal(top, -100, 'a reader scroll cancels corrections, even with a layout pending');
+  assert.equal(observing, false);
+  assert.equal(timers.size, 0);
+  history.state.scrollY = 4000;
+  lifetime.abort();
+  const visit = new AbortController();
+  const restored = watch(article, visit.signal, () => rendering, () => { resumes++; });
+  assert.equal(restored.travelling(), false, 'preserve history reading position even when the URL contains a fragment');
+  const click = Object.assign(new Event('click'), { button: 0 });
+  Object.defineProperty(click, 'target', { value: { closest: () => ({ hash, target: '', hasAttribute: () => false }) } });
+  document.dispatchEvent(click);
+  assert.equal(restored.travelling(), true);
+  rendering = false;
+  tick();
+  tick();
+  assert.equal(observing, false, 'release as soon as nearby layouts have settled');
+  visit.abort();
 });
