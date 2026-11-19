@@ -12,8 +12,8 @@ import '../styles/gallery-interactions.css';
 
 const manifest = path.join(process.cwd(), 'public/generated/gallery/manifest.json');
 const photos: GalleryPhoto[] = JSON.parse(readFileSync(manifest, 'utf8'));
-// Keep the stagger short when the photos are ready, even as the collection grows.
-const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
+// Leave room between photos, and cap the total stagger for larger collections.
+const staggerMs = Math.min(160, 1600 / Math.max(1, photos.length - 1));
 ---
 
 <Layout title="Gallery - QwQBiG's World" description="Drag photos around the gallery or select one for a closer look.">
@@ -24,15 +24,15 @@ const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
       if (CSS.supports('width', '1cqw') && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
         const root = document.documentElement;
         root.dataset.galleryEntrance = '';
-        // A slow photo or an unavailable script must never keep the gallery hidden.
-        setTimeout(() => { delete root.dataset.galleryEntrance; }, 3000);
+        // Start on schedule even if the first photos or the gallery script stall.
+        setTimeout(() => { delete root.dataset.galleryEntrance; }, 1600);
       }
     </script>
   </Fragment>
   <FloatingNavCard />
   <main class="gallery-main flex-1 h-screen relative overflow-hidden">
     <div class="absolute inset-0 gradient-bg -z-10"></div>
-    <div class="photo-wall" data-photo-wall data-stagger-ms={staggerMs}>
+    <div class="photo-wall" data-photo-wall>
       {photos.map((photo, index) => {
         const sizes = photoWallSizes(photo.scale ?? 1);
         return (
