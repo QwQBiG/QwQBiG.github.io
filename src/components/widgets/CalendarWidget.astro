@@ -45,6 +45,17 @@
     -ms-user-select: none;
   }
   
+  /* An empty grid reserves one equal-height track per week until it is near the screen. */
+  .calendar-days[data-pending] {
+    grid-template-rows: repeat(var(--calendar-weeks), 1fr);
+  }
+
+  .calendar-days[data-pending]::before {
+    content: '';
+    aspect-ratio: 1;
+    min-height: 1.5rem;
+  }
+
   .calendar-nav-btn {
     transition: all 0.2s ease;
   }
@@ -150,6 +161,8 @@
       let month = today.getMonth();
       let suspended = false;
       let midnightTimer: number | undefined;
+      let pending = typeof IntersectionObserver === 'function' && !window.matchMedia('(min-width: 924px)').matches;
+      let observer: IntersectionObserver | undefined;
 
       function render() {
         const year = today.getFullYear();
@@ -162,9 +175,14 @@
 
         // Start the week on Monday and include adjacent dates to complete each row.
         const leading = (new Date(year, month, 1).getDay() + 6) % 7;
-        const previousMonthEnd = new Date(year, month, 0).getDate();
         const monthEnd = new Date(year, month + 1, 0).getDate();
         const cellCount = Math.ceil((leading + monthEnd) / 7) * 7;
+        if (pending) {
+          days.dataset.pending = '';
+          days.style.setProperty('--calendar-weeks', String(cellCount / 7));
+          return;
+        }
+        const previousMonthEnd = new Date(year, month, 0).getDate();
         const highlight = month === today.getMonth() ? today.getDate() : 0;
         let html = '';
         for (let cell = 0; cell < cellCount; cell++) {
@@ -182,7 +200,7 @@
 
       function syncDay() {
         window.clearTimeout(midnightTimer);
-        if (document.hidden || suspended) return;
+        if (document.hidden || suspended || pending) return;
 
         const now = new Date();
         if (now.toDateString() !== today.toDateString()) {
@@ -196,8 +214,21 @@
         midnightTimer = window.setTimeout(syncDay, midnight.getTime() - now.getTime());
       }
 
+      function activate() {
+        if (!pending) return;
+        pending = false;
+        observer?.disconnect();
+        delete days.dataset.pending;
+        days.style.removeProperty('--calendar-weeks');
+        today = new Date();
+        month = today.getMonth();
+        render();
+        syncDay();
+      }
+
       function turn(delta: number, event: Event) {
         event.stopPropagation();
+        activate();
         const target = month + delta;
         if (target < 0 || target > 11) return;
         month = target;
@@ -210,9 +241,18 @@
       window.addEventListener('pagehide', () => { suspended = true; syncDay(); }, options);
       window.addEventListener('pageshow', () => { suspended = false; syncDay(); }, options);
       render();
-      syncDay();
+      if (pending) {
+        observer = new IntersectionObserver(entries => {
+          if (entries.some(entry => entry.isIntersecting)) activate();
+        }, { rootMargin: '600px 0px' });
+        observer.observe(this);
+        this.addEventListener('focusin', activate, { ...options, once: true });
+      } else {
+        syncDay();
+      }
       this.dispose = () => {
         lifetime.abort();
+        observer?.disconnect();
         window.clearTimeout(midnightTimer);
       };
     }

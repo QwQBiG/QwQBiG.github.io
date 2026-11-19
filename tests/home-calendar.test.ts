@@ -7,31 +7,43 @@ import { runInNewContext } from 'node:vm';
 const component = await readFile(new URL('../src/components/widgets/CalendarWidget.astro', import.meta.url), 'utf8');
 const script = stripTypeScriptTypes(component.split('<script>')[1].split('</script>')[0]);
 
-function calendarPage(start: Date) {
+function calendarPage(start: Date, narrow = false) {
   let now = start;
   const doc = Object.assign(new EventTarget(), { hidden: false });
   const timers = new Map<number, { callback(): void; delay: number }>();
   let timerId = 0;
   const win = Object.assign(new EventTarget(), {
+    matchMedia: () => ({ matches: !narrow }),
     setTimeout(callback: () => void, delay: number) { timers.set(++timerId, { callback, delay }); return timerId; },
     clearTimeout(id: number) { timers.delete(id); },
   });
   const button = () => Object.assign(new EventTarget(), { disabled: false, style: {} });
   const previous = button(), next = button(), title = { textContent: '' };
-  const grid = { innerHTML: '' };
+  const reserved = new Map<string, string>();
+  const grid = { innerHTML: '', dataset: {}, style: {
+    setProperty: (key: string, value: string) => reserved.set(key, value),
+    removeProperty: (key: string) => reserved.delete(key),
+  } };
+  let enter: (() => void) | undefined;
   const fields = { '#calendar-month-year': title, '#calendar-days': grid, '#prev-month': previous, '#next-month': next };
-  class Element {
+  class Element extends EventTarget {
     querySelector(id: keyof typeof fields) { return fields[id]; }
   }
   let widget!: Element & { connectedCallback(): void; disconnectedCallback(): void };
   runInNewContext(script, {
     AbortController, HTMLElement: Element, window: win, document: doc,
+    ...(narrow ? { IntersectionObserver: class {
+      constructor(near: (entries: { isIntersecting: boolean }[]) => void) {
+        enter = () => near([{ isIntersecting: true }]);
+      }
+      observe() {} disconnect() { enter = undefined; }
+    } } : {}),
     Date: new Proxy(Date, { construct: (date, args) => Reflect.construct(date, args.length ? args : [now]) }),
     customElements: { get() {}, define(_name: string, Type: new () => typeof widget) { widget = new Type(); } },
   });
   widget.connectedCallback();
   return {
-    title, grid, timers, previous, next, widget,
+    title, grid, timers, previous, next, widget, reserved, approach: () => enter?.(),
     highlight: () => grid.innerHTML.match(/class="calendar-day today">(\d+)</)?.[1],
     hide(hidden: boolean) { doc.hidden = hidden; doc.dispatchEvent(new Event('visibilitychange')); },
     page(name: string) { win.dispatchEvent(new Event(name)); },
@@ -96,4 +108,22 @@ test('a background or cached page catches up once and preserves a manually selec
   page.widget.disconnectedCallback();
   page.page('pageshow');
   assert.equal(page.timers.size, 0);
+});
+
+
+test('an offscreen mobile month reserves its own height and wakes to the current local day', () => {
+  for (const [month, weeks] of [[1, 4], [2, 5], [4, 6]]) {
+    const page = calendarPage(new Date(2021, month, 1, 23, 59, 59), true);
+    assert.equal(page.grid.innerHTML, '');
+    assert.equal(page.reserved.get('--calendar-weeks'), String(weeks));
+    assert.equal(page.timers.size, 0);
+    page.advance(2000);
+    page.approach();
+    assert.equal(page.highlight(), '2');
+    assert.equal(page.reserved.size, 0);
+    assert.equal(page.timers.size, 1);
+  }
+  const keyboard = calendarPage(new Date(2026, 10, 19), true);
+  keyboard.widget.dispatchEvent(new Event('focusin'));
+  assert.equal(keyboard.highlight(), '19');
 });
