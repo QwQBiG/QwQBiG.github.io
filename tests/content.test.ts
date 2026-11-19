@@ -181,3 +181,16 @@ test('the first content year uses Shanghai dates and supports an empty blog', ()
   assert.equal(createContentIndex({ cs: [index], poetry: [oldPoem] }).firstPublishedYear, 2020);
   assert.equal(createContentIndex({}).firstPublishedYear, null);
 });
+
+test('only tags with a public article archive have a link on series or hidden article headers', () => {
+  const series = csPost('network/index.md', { tags: [' UNIX ', 'DPDK', 'Rust', 'É'] });
+  const visible = csPost('network/intro.md', { tags: ['unix', 'e\u0301'] });
+  const hidden = csPost('draft-note.md', { hidden: true, tags: ['private', 'UNIX'] });
+  const poem = poetryPost('poem.md', { tags: ['Rust'] });
+  const { tagUrls } = createContentIndex({ cs: [series, visible, hidden], poetry: [poem] });
+
+  assert.deepEqual(getPostTags(series).map(label => tagUrls.get(getTagKey(label))),
+    ['/tags/unix/', undefined, '/tags/rust/', '/tags/%C3%A9/']);
+  assert.deepEqual(getPostTags(hidden).map(label => tagUrls.get(getTagKey(label))),
+    [undefined, '/tags/unix/']);
+});

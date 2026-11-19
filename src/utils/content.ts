@@ -142,6 +142,9 @@ export function createContentIndex({ cs = [], poetry = [] }: ContentCollections)
     };
   }).sort((a, b) => Number(b.pin) - Number(a.pin) || compareByDate(a.entry, b.entry));
 
+  const tags = getTagCounts(posts);
+  const tagUrls = new Map(tags.map(([label]) => [getTagKey(label), getTagUrl(label)]));
+
   return {
     publishedCS,
     publishedPoetry,
@@ -151,7 +154,8 @@ export function createContentIndex({ cs = [], poetry = [] }: ContentCollections)
     seriesEntries,
     series,
     pinnedSeries: series.filter(entry => entry.pin),
-    tags: getTagCounts(posts),
+    tags,
+    tagUrls,
     latestPosts: posts.slice(0, 3),
     // This is the oldest dated content, not a claim about when the website launched.
     firstPublishedYear: posts.length ? getPublicationYear(posts[posts.length - 1].data.date) : null,
