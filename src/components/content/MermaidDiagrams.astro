@@ -302,16 +302,38 @@
     };
   }
 
-  // 初始化图表交互功能
-  function initMermaidInteraction(wrapper, container, content, zoomOutBtn, zoomInBtn, resetBtn, fullscreenBtn, signal) {
+  type FullscreenWrapper = HTMLElement & { webkitRequestFullscreen?: () => void };
+  type FullscreenDocument = Document & {
+    webkitFullscreenElement?: Element;
+    webkitExitFullscreen?: () => void;
+  };
+
+  function initMermaidInteraction(
+    wrapper: FullscreenWrapper, container: HTMLElement, content: HTMLElement,
+    zoomOutBtn: HTMLButtonElement, zoomInBtn: HTMLButtonElement, resetBtn: HTMLButtonElement,
+    fullscreenBtn: HTMLButtonElement, signal: AbortSignal,
+  ) {
+    const doc = wrapper.ownerDocument as FullscreenDocument;
     let scale = 1;
-    let isDragging = false;
-    let startX, startY, offsetX = 0, offsetY = 0;
+    let restingScale = 1;
+    let offsetX = 0, offsetY = 0;
+    let stopDrag: (() => void) | undefined;
     let isFullscreen = false;
 
     // 更新变换
     function updateTransform() {
-      content.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+      // Translation is in screen pixels at every zoom level.
+      content.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    }
+    const touchPanEnabled = () => isFullscreen || scale > restingScale;
+    function updateTouchAction() {
+      // Allow a one-finger diagram pan while retaining the browser's two-finger zoom.
+      container.style.touchAction = touchPanEnabled() ? 'pinch-zoom' : 'auto';
+    }
+    function updateZoom(next: number) {
+      scale = next;
+      updateTouchAction();
+      updateTransform();
     }
 
     // 初始适配与按钮、滚轮共用缩放状态。
@@ -335,8 +357,8 @@
             const fitScale = Math.min(scaleX, scaleY, 1); // 不放大，只缩小
 
             if (fitScale < 1) {
-              scale = fitScale;
-              updateTransform();
+              restingScale = fitScale;
+              updateZoom(fitScale);
             }
           }
         }
@@ -358,84 +380,120 @@
 
     // 放大
     zoomInBtn.addEventListener('click', () => {
-      scale = Math.min(scale * 1.2, 5);
-      updateTransform();
+      updateZoom(Math.min(scale * 1.2, 5));
     });
 
     // 缩小
     zoomOutBtn.addEventListener('click', () => {
-      scale = Math.max(scale / 1.2, 0.3);
-      updateTransform();
+      updateZoom(Math.max(scale / 1.2, 0.3));
     });
 
     // 重置
     resetBtn.addEventListener('click', () => {
-      scale = 1;
+      restingScale = 1;
       offsetX = 0;
       offsetY = 0;
-      updateTransform();
+      updateZoom(1);
     });
 
-    // 全屏
-    fullscreenBtn.addEventListener('click', () => {
-      if (!isFullscreen) {
-        if (wrapper.requestFullscreen) {
-          wrapper.requestFullscreen();
-        } else if (wrapper.webkitRequestFullscreen) {
-          wrapper.webkitRequestFullscreen();
-        }
-        isFullscreen = true;
-        wrapper.classList.add('mermaid-fullscreen');
-        fullscreenBtn.title = 'Exit full screen';
+    const fullscreenElement = () => doc.fullscreenElement || doc.webkitFullscreenElement;
+    function syncFullscreen() {
+      setFullscreen(fullscreenElement() === wrapper);
+    }
+    function escapeCssFullscreen(event: KeyboardEvent) {
+      if (event.key === 'Escape' && fullscreenElement() !== wrapper) setFullscreen(false);
+    }
+    function setFullscreen(open: boolean) {
+      isFullscreen = open;
+      wrapper.classList.toggle('mermaid-fullscreen', open);
+      fullscreenBtn.title = open ? 'Exit full screen' : 'Enter full screen';
+      updateTouchAction();
+      if (open) {
+        doc.addEventListener('fullscreenchange', syncFullscreen, { signal });
+        doc.addEventListener('webkitfullscreenchange', syncFullscreen, { signal });
+        doc.addEventListener('keydown', escapeCssFullscreen, { signal });
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
+        doc.removeEventListener('fullscreenchange', syncFullscreen);
+        doc.removeEventListener('webkitfullscreenchange', syncFullscreen);
+        doc.removeEventListener('keydown', escapeCssFullscreen);
+      }
+    }
+
+    fullscreenBtn.addEventListener('click', async () => {
+      const exit = doc.exitFullscreen || doc.webkitExitFullscreen;
+      if (isFullscreen) {
+        setFullscreen(false);
+        if (fullscreenElement() === wrapper) {
+          try { await exit?.call(doc); } catch { if (!signal.aborted) syncFullscreen(); }
         }
-        isFullscreen = false;
-        wrapper.classList.remove('mermaid-fullscreen');
-        fullscreenBtn.title = 'Enter full screen';
+      } else {
+        setFullscreen(true);
+        // Browsers that cannot fullscreen this element can still use the CSS view.
+        const enter = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
+        try {
+          await enter?.call(wrapper);
+          // A second tap may have closed the CSS view while the native request was pending.
+          if (!isFullscreen && fullscreenElement() === wrapper) await exit?.call(doc);
+        } catch { /* The CSS view stays available if native fullscreen is denied. */ }
       }
     });
 
-    // 监听全屏变化
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) {
-        isFullscreen = false;
-        wrapper.classList.remove('mermaid-fullscreen');
-        fullscreenBtn.title = 'Enter full screen';
-      }
-    }, { signal });
+    container.addEventListener('pointerdown', (event: PointerEvent) => {
+      if (stopDrag || event.button !== 0 || !event.isPrimary) return;
+      if (event.pointerType === 'touch' && !touchPanEnabled()) return;
+      if (event.target instanceof Element && event.target.closest('a, button')) return;
+      const id = event.pointerId;
+      const startX = event.clientX - offsetX;
+      const startY = event.clientY - offsetY;
+      const transition = content.style.transition;
+      const drag = new AbortController();
+      const options = { signal: drag.signal };
 
-    // 鼠标拖动
-    container.addEventListener('mousedown', (e) => {
-      if (e.target.tagName === 'BUTTON') return;
-      isDragging = true;
-      startX = e.clientX - offsetX;
-      startY = e.clientY - offsetY;
+      // Some WebKit views can decline capture. Track only this active gesture on the window then.
+      let target: EventTarget = window;
+      try {
+        container.setPointerCapture(id);
+        if (container.hasPointerCapture(id)) target = container;
+      } catch { /* Window listeners are removed with the same gesture. */ }
+
+      function move(e: PointerEvent) {
+        if (e.pointerId !== id) return;
+        offsetX = e.clientX - startX;
+        offsetY = e.clientY - startY;
+        updateTransform();
+      }
+      function stop() {
+        drag.abort();
+        signal.removeEventListener('abort', stop);
+        if (container.hasPointerCapture?.(id)) container.releasePointerCapture(id);
+        container.style.cursor = 'grab';
+        content.style.transition = transition;
+        stopDrag = undefined;
+      }
+      const finish = (e: PointerEvent) => {
+        if (e.pointerId === id) stop();
+      };
+      if (event.pointerType !== 'touch') event.preventDefault();
+      stopDrag = stop;
       container.style.cursor = 'grabbing';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      offsetX = e.clientX - startX;
-      offsetY = e.clientY - startY;
-      updateTransform();
-    }, { signal });
-
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      container.style.cursor = 'grab';
+      content.style.transition = 'none';
+      target.addEventListener('pointermove', move as EventListener, options);
+      target.addEventListener('pointerup', (e) => {
+        move(e as PointerEvent);
+        finish(e as PointerEvent);
+      }, options);
+      target.addEventListener('pointercancel', finish as EventListener, options);
+      container.addEventListener('lostpointercapture', finish, options);
+      window.addEventListener('blur', stop, options);
+      window.addEventListener('pagehide', stop, options);
+      signal.addEventListener('abort', stop, { once: true });
     }, { signal });
 
     // 鼠标滚轮缩放
     container.addEventListener('wheel', (e) => {
       e.preventDefault();
       const delta = e.deltaY > 0 ? 0.9 : 1.1;
-      scale = Math.max(0.3, Math.min(5, scale * delta));
-      updateTransform();
+      updateZoom(Math.max(0.3, Math.min(5, scale * delta)));
     });
   }
 
