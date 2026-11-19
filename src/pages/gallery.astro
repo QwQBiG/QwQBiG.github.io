@@ -12,7 +12,7 @@ import '../styles/gallery-interactions.css';
 
 const manifest = path.join(process.cwd(), 'public/generated/gallery/manifest.json');
 const photos: GalleryPhoto[] = JSON.parse(readFileSync(manifest, 'utf8'));
-// Keep the last photo within a second of the first, even as the collection grows.
+// Keep the stagger short when the photos are ready, even as the collection grows.
 const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
 ---
 
@@ -20,11 +20,19 @@ const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
   <Fragment slot="head">
     <style is:inline set:html={photoWallBreakpoints()} />
     <script is:inline data-photo-ids={JSON.stringify(photos.map(photo => photo.id))} set:html={firstLayout} />
+    <script is:inline>
+      if (CSS.supports('width', '1cqw') && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        const root = document.documentElement;
+        root.dataset.galleryEntrance = '';
+        // A slow photo or an unavailable script must never keep the gallery hidden.
+        setTimeout(() => { delete root.dataset.galleryEntrance; }, 3000);
+      }
+    </script>
   </Fragment>
   <FloatingNavCard />
   <main class="gallery-main flex-1 h-screen relative overflow-hidden">
     <div class="absolute inset-0 gradient-bg -z-10"></div>
-    <div class="photo-wall" data-photo-wall>
+    <div class="photo-wall" data-photo-wall data-stagger-ms={staggerMs}>
       {photos.map((photo, index) => {
         const sizes = photoWallSizes(photo.scale ?? 1);
         return (
@@ -34,7 +42,6 @@ const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
             data-ratio={photoFrameHeightRatio(photo)}
             data-preview-width={photo.previewWidth}
             data-preview-height={photo.previewHeight}
-            data-preview-srcset={photo.previewSrcset}
             href={photo.preview}
             data-astro-prefetch="false"
             draggable="false"
@@ -45,14 +52,23 @@ const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
           >
             <div class="photo-pose">
               <div class="photo-frame">
-                <picture style={{ '--photo-placeholder': `url("${photo.placeholder}")` }}>
-                  <source data-navigation-image type="image/avif" srcset={photo.avifSrcset} sizes={sizes} />
+                <div class="gallery-image" style={{ aspectRatio: `${photo.previewWidth} / ${photo.previewHeight}` }}>
+                  <picture style={{ '--photo-placeholder': `url("${photo.placeholder}")` }}>
+                    <source media="(scripting: none)" type="image/webp" srcset={photo.preview} />
+                    <source data-navigation-image type="image/avif" srcset={photo.avifSrcset} sizes={sizes} />
+                    <img
+                      srcset={photo.srcset} sizes={sizes} src={photo.thumb2x}
+                      alt={photo.alt} width={photo.width} height={photo.height}
+                      loading="eager" decoding="async" draggable="false"
+                    />
+                  </picture>
                   <img
-                    srcset={photo.srcset} sizes={sizes} src={photo.thumb2x}
-                    alt={photo.alt} width={photo.width} height={photo.height}
+                    data-gallery-full src={photo.preview} alt="" aria-hidden="true"
+                    width={photo.previewWidth} height={photo.previewHeight}
+                    fetchpriority={index === 0 ? 'high' : 'auto'}
                     loading="eager" decoding="async" draggable="false"
                   />
-                </picture>
+                </div>
               </div>
             </div>
           </a>
@@ -63,10 +79,12 @@ const staggerMs = Math.min(96, 440 / Math.max(1, photos.length - 1));
 </Layout>
 
 <script>
+  import { startGalleryEntrance } from '../scripts/gallery-entrance';
   import { initializeGalleryInteractions } from '../scripts/gallery-interactions';
 
   const wall = document.querySelector<HTMLElement>('[data-photo-wall]');
   if (wall) {
+    void startGalleryEntrance(wall);
     // Clear the backing image after decode so transparent pixels show the white frame.
     for (const image of wall.querySelectorAll<HTMLImageElement>('picture > img')) {
       const picture = image.parentElement!;
