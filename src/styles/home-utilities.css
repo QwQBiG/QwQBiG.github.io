@@ -1,0 +1,4 @@
+/* The homepage uses the same reset and utilities as the reading pages.
+   Typography components belong to the reading layouts. */
+@tailwind base;
+@tailwind utilities;
