@@ -1065,6 +1065,16 @@ body {
   max-width: calc(100vw - 2rem);
 }
 
+@media (width < 21.625rem) {
+  #floatingNavCard > .glass-card { padding-inline: .5rem; }
+  #floatingNavCard .nav-links {
+    gap: 1px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  #floatingNavCard .nav-link-item { flex-shrink: 0; }
+}
+
 .nav-link-item.is-active {
   color: var(--color-primary);
   background: transparent !important;
