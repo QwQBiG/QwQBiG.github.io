@@ -31,9 +31,8 @@
   .gallery-image > [data-gallery-full] { transition: opacity 120ms ease-out; }
   /* Keep the thumbnail beneath the entire reveal, including translucent edges. */
   .gallery-image:has(> [data-decoded]) > picture { transition: opacity 0s 120ms; }
-  /* A flight that begins fully decoded shows those pixels from its first frame. */
-  [data-gallery-entrance] .photo-card:not([data-entry]) .gallery-image > :is(picture, [data-gallery-full]),
-  .photo-card[data-entry="sharp"] .gallery-image > :is(picture, [data-gallery-full]) { transition: none; }
+  /* Images that decoded during preparation can appear at full opacity. */
+  [data-gallery-entrance] .gallery-image > :is(picture, [data-gallery-full]) { transition: none; }
 }
 
 .photo-frame picture[data-loaded] { background-image: none; }
@@ -43,15 +42,13 @@
 @supports (width: 1cqw) {
   @media (prefers-reduced-motion: no-preference) {
     .photo-card {
-      animation: gallery-entrance 560ms cubic-bezier(.22, .78, .22, 1) var(--deal-delay, 0ms) backwards;
+      animation: gallery-entrance 900ms cubic-bezier(.22, .78, .22, 1) var(--deal-delay, 0ms) backwards;
     }
 
-    [data-gallery-entrance] .photo-card:not([data-entry]) {
+    [data-gallery-entrance] .photo-card {
       visibility: hidden;
       animation: none;
     }
-
-    .photo-card[data-entry] { animation-delay: 0ms; }
 
     @keyframes gallery-entrance {
       from {
