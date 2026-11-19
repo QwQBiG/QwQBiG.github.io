@@ -15,15 +15,23 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   const connection = () => (navigator as Navigator & { connection?: NavigationConnection }).connection;
   const canWarm = () => allowNavigationAssets(connection(), navigator.onLine);
   const knownAssets = new Set<string>();
+  let neighborManifest: NavigationManifest | null = null;
   function rememberPageAssets() {
+    const hint = document.querySelector<HTMLLinkElement>('link[rel="navigation-assets"][data-article-neighbors]');
+    try {
+      neighborManifest = hint?.dataset.articleNeighbors ? readNavigationManifest(JSON.parse(hint.dataset.articleNeighbors)) : null;
+    } catch {
+      neighborManifest = null;
+    }
     for (const element of document.querySelectorAll<HTMLLinkElement | HTMLScriptElement>('link[rel="stylesheet"][href], link[rel="preload"][href], link[rel="modulepreload"][href], script[src]')) {
       knownAssets.add(element instanceof HTMLLinkElement ? element.href : element.src);
     }
   }
   rememberPageAssets();
 
-  let nextObserver: IntersectionObserver | undefined;
-  let warmedNext: HTMLAnchorElement | undefined;
+  let postObserver: IntersectionObserver | undefined;
+  let observedNav: HTMLElement | undefined;
+  let previousTimer: number | undefined;
   let manifest: NavigationManifest | null = null;
   let lifetime = new AbortController();
   let currentIntent: { href: string; link: HTMLAnchorElement; committed: boolean } | undefined;
@@ -69,7 +77,8 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   async function warmDestination(destination: URL, priority: WarmupPriority, signal: AbortSignal) {
     try {
       if (!canWarm() || signal.aborted) return;
-      const loaded = await loadManifest(priority, signal);
+      const loaded = neighborManifest && Object.hasOwn(neighborManifest.routes, destination.pathname)
+        ? neighborManifest : await loadManifest(priority, signal);
       if (!loaded || signal.aborted || !canWarm()) return;
       const assets = selectNavigationAssets(loaded, destination, window.location.href, knownAssets, connection());
       await Promise.all(assets.map(async (asset) => {
@@ -90,7 +99,10 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   function beginIntent(link: HTMLAnchorElement, committed = false) {
     const destination = navigationDestination(link.href, window.location.href);
     if (!destination) return;
-    if (committed) prioritizeNavigation();
+    if (committed) {
+      window.clearTimeout(previousTimer);
+      prioritizeNavigation();
+    }
     if (currentIntent?.href === destination.href) {
       currentIntent.committed ||= committed;
       return;
@@ -117,32 +129,50 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
     // Keep a started download: returning to this link can reuse the same request/cache.
   }
 
-  function watchNextPost() {
-    const link = document.querySelector<HTMLAnchorElement>('article nav a[rel~="next"][href]');
-    if (!link || link === warmedNext || typeof IntersectionObserver !== 'function') return;
-    const destination = navigationDestination(link.href, window.location.href);
-    if (!destination) return;
-    nextObserver?.disconnect();
+  function watchPostNavigation() {
+    const nav = document.querySelector<HTMLElement>('article nav[data-post-navigation]');
+    if (!nav || typeof IntersectionObserver !== 'function') return;
+    if (nav === observedNav && !postObserver) return;
+    postObserver?.disconnect();
+    observedNav = nav;
     const signal = lifetime.signal;
-    nextObserver = new IntersectionObserver((entries, observer) => {
-      if (observer !== nextObserver || signal.aborted || !link.isConnected || document.hidden || !canWarm()) return;
+    postObserver = new IntersectionObserver((entries, observer) => {
+      if (observer !== postObserver || signal.aborted || !nav.isConnected || document.hidden || !canWarm()) return;
       if (!entries.some(entry => entry.isIntersecting)) return;
       observer.disconnect();
-      nextObserver = undefined;
-      warmedNext = link;
-      // Match the ClientRouter fetch and reuse Astro's URL deduplication.
-      prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
-      void warmDestination(destination, 'prefetch', signal);
+      postObserver = undefined;
+      function warmPost(link: HTMLAnchorElement) {
+        const destination = navigationDestination(link.href, window.location.href);
+        if (!destination) return;
+        prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
+        void warmDestination(destination, 'prefetch', signal);
+      }
+      const next = nav.querySelector<HTMLAnchorElement>('a[rel~="next"][href]');
+      const prev = nav.querySelector<HTMLAnchorElement>('a[rel~="prev"][href]');
+      if (next) warmPost(next);
+      if (!prev) return;
+      if (!next) {
+        warmPost(prev);
+        return;
+      }
+      // A quick tap on Next should get the connection to itself. Readers who
+      // pause at the footer still have both directions ready before choosing.
+      previousTimer = window.setTimeout(() => {
+        if (!signal.aborted && !document.hidden && canWarm() && !currentIntent?.committed) warmPost(prev);
+      }, 180);
     }, { rootMargin: `0px 0px ${window.innerHeight}px 0px` });
-    nextObserver.observe(link);
+    postObserver.observe(nav);
   }
 
   function preparePrimaryNavigation() {
     if (document.readyState !== 'complete' || document.hidden || !canWarm() || lifetime.signal.aborted) return;
-    // Read the small shared manifest immediately after load, before the first hover.
-    void loadManifest('prefetch', lifetime.signal).catch(() => {});
+    // Reading an article needs no site-wide index. Other destinations can
+    // still request it on intent; list pages retain their existing warmup.
+    if (!document.querySelector('main article .prose, main article.poetry-article')) {
+      void loadManifest('prefetch', lifetime.signal).catch(() => {});
+    }
     if (window.location.pathname !== '/') {
-      watchNextPost();
+      watchPostNavigation();
       return;
     }
     const links = [...document.querySelectorAll<HTMLAnchorElement>('#navCard a[href], a[href="/gallery/"]')];
@@ -160,9 +190,10 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
   }
 
   function stop() {
-    nextObserver?.disconnect();
-    nextObserver = undefined;
-    warmedNext = undefined;
+    window.clearTimeout(previousTimer);
+    postObserver?.disconnect();
+    postObserver = undefined;
+    observedNav = undefined;
     lifetime.abort();
     resetIntent();
   }

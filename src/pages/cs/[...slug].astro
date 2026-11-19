@@ -165,12 +165,13 @@ const pageTitle = `${title} - QwQBiG's World`;
 
           {/* Post Navigation */}
           {(prevPost || nextPost) && !isSeriesCollection && (
-            <nav class="mt-12 pt-8 border-t border-border-color">
+            <nav data-post-navigation class="mt-12 pt-8 border-t border-border-color">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {prevPost ? (
                   <a
                     href={`/cs/${prevPost.slug}/`}
-                    data-astro-prefetch="viewport"
+                    rel="prev"
+                    data-astro-prefetch="hover"
                     class="group p-4 bg-bg-secondary rounded-xl border border-border-color hover:border-primary/30 transition-all"
                   >
                     <span class="text-xs text-text-muted uppercase tracking-wide">Previous post</span>
