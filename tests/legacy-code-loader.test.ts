@@ -5,7 +5,7 @@ import { createLegacyLoader } from '../scripts/legacy-code-entry.mjs';
 
 test('cached classic scripts share the article module and add the current stylesheet once', () => {
   const styles = '/_astro/code.css';
-  const source = createLegacyLoader('/js/article-code-entry.mjs', styles);
+  const source = createLegacyLoader('/js/article-code-entry.js', styles);
   new Script(source); // Cached HTML uses classic, deferred script tags.
   const entries = new Set();
   const links: Array<{ rel: string; href: string }> = [{ rel: 'stylesheet', href: 'https://blog.test/styles/prism-theme.css' }];
@@ -23,6 +23,6 @@ test('cached classic scripts share the article module and add the current styles
   delete document.body.dataset.pageCode; // Early layouts predate the page feature flag.
   for (let i = 0; i < 5; i++) run();
   assert.equal(document.body.dataset.pageCode, 'true');
-  assert.deepEqual([...entries], ['/js/article-code-entry.mjs']);
+  assert.deepEqual([...entries], ['/js/article-code-entry.js']);
   assert.deepEqual(links.map(link => link.href), ['https://blog.test/styles/prism-theme.css', 'https://blog.test/_astro/code.css']);
 });

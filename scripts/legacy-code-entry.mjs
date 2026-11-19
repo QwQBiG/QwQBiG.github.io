@@ -31,7 +31,7 @@ export function legacyCodeEntry() {
               if (!entry) this.error('Cannot locate the article code entry for cached pages.');
               this.emitFile({
                 type: 'asset',
-                fileName: 'js/article-code-entry.mjs',
+                fileName: 'js/article-code-entry.js',
                 source: `import ${JSON.stringify('../' + entry.fileName)};\n`,
               });
             },

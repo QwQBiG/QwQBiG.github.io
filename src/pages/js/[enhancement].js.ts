@@ -9,6 +9,6 @@ export function getStaticPaths() {
 }
 
 export const GET: APIRoute = () => {
-  const entry = import.meta.env.DEV ? '/src/scripts/prism/prism-code-interactions.js' : '/js/article-code-entry.mjs';
+  const entry = import.meta.env.DEV ? '/src/scripts/prism/prism-code-interactions.js' : '/js/article-code-entry.js';
   return new Response(createLegacyLoader(entry, codeStyles), { headers: { 'Content-Type': 'text/javascript; charset=utf-8' } });
 };
