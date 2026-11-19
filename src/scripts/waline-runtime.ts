@@ -74,8 +74,8 @@ function mountComments() {
   let task: ReturnType<typeof scheduleBackgroundTask<MountWaline>> | undefined;
   let observer: IntersectionObserver | undefined;
   let disposed = false;
+  let cancelAnchor: (() => void) | undefined;
   const status = element.parentElement?.querySelector<HTMLElement>('[data-comment-load-state]');
-  prepareConnection();
 
   const showFailure = () => {
     element.setAttribute('aria-busy', 'false');
@@ -91,14 +91,16 @@ function mountComments() {
 
   function start(priority: 'navigation' | 'prefetch' = 'prefetch') {
     if (disposed || unmount || !element.isConnected) return;
+    prepareConnection();
     element.setAttribute('aria-busy', 'true');
-    task = scheduleBackgroundTask({
+    const pending = scheduleBackgroundTask({
       key: 'waline-client-resources',
       priority,
       signal: lifetime.signal,
       run: loadResources,
     });
-    const pending = task;
+    if (task === pending) return;
+    task = pending;
     void pending.done.then(mount => {
       if (disposed || unmount || !element.isConnected) return;
       if (task === pending) task = undefined;
@@ -117,6 +119,60 @@ function mountComments() {
     });
   }
 
+  function loadCommentFragment(hash: string, follow: boolean) {
+    cancelAnchor?.();
+    const id = hash.slice(1);
+    if (id === element.id) {
+      start('navigation');
+      return;
+    }
+    // Waline uses the backend's objectId as the card ID. RSS links on this
+    // site use integers; Mongo/LeanCloud installations use 24 hex digits.
+    if (!/^(?:\d+|[\da-f]{24})$/i.test(id) || document.getElementById(id)) return;
+    start('navigation');
+    if (!follow) return;
+
+    // Native fragment scrolling runs before the comment API has inserted the card.
+    const input = new AbortController();
+    const findCard = () => {
+      const card = document.getElementById(id);
+      if (card && element.contains(card)) card.scrollIntoView({ block: 'start' });
+      else if (element.querySelector('.wl-meta-foot')) element.scrollIntoView({ block: 'start' });
+      else return;
+      cancelAnchor?.();
+    };
+    const changes = new MutationObserver(findCard);
+    cancelAnchor = () => {
+      changes.disconnect();
+      input.abort();
+      cancelAnchor = undefined;
+    };
+    for (const event of ['pointerdown', 'touchstart', 'wheel', 'keydown']) {
+      window.addEventListener(event, cancelAnchor, { signal: input.signal, passive: true, capture: true });
+    }
+    changes.observe(element, { childList: true, subtree: true });
+    findCard();
+  }
+
+  const fromLocation = () => {
+    // Native heading links have no Astro history state. Let the browser restore
+    // that entry's reading position when Back leaves a delayed comment target.
+    if (window.location.hash && history.state === null) history.scrollRestoration = 'auto';
+    loadCommentFragment(window.location.hash, !history.state?.scrollY);
+  };
+  // Astro may push a same-page URL without emitting a native hashchange.
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target instanceof Element && event.target.closest<HTMLAnchorElement>('a[href*="#"]');
+    if (!link || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
+    const here = window.location;
+    if (link.origin === here.origin && link.pathname === here.pathname && link.search === here.search) {
+      loadCommentFragment(link.hash, true);
+    }
+  }, { signal: lifetime.signal, capture: true });
+  window.addEventListener('hashchange', fromLocation, { signal: lifetime.signal });
+  if (window.location.search && new URLSearchParams(window.location.search).has('token')) start('navigation');
+  fromLocation();
   element.addEventListener('pointerenter', () => start('navigation'), { signal: lifetime.signal, passive: true });
   element.addEventListener('focusin', () => start('navigation'), { signal: lifetime.signal });
   if ('IntersectionObserver' in window) {
@@ -124,9 +180,9 @@ function mountComments() {
       if (entries.some(entry => entry.isIntersecting)) start('navigation');
     }, { rootMargin: '1200px' });
     observer.observe(element);
+  } else {
+    start();
   }
-  // The queue starts after page load. The API request then overlaps reading the article.
-  start();
   current = {
     element,
     dispose() {
@@ -134,6 +190,7 @@ function mountComments() {
       disposed = true;
       task?.cancel();
       lifetime.abort();
+      cancelAnchor?.();
       observer?.disconnect();
       unmount?.();
       delete element.dataset.commentReady;

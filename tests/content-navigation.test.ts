@@ -119,13 +119,23 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
   }
 
   const original = fixture(Array.from({ length: 50 }, (_, i) => i === 25 ? '1-网络' : 'section-' + i));
-  const mobile = Object.assign(new EventTarget(), { open: false });
+  const mobile = Object.assign(new EventTarget(), {
+    open: false,
+    querySelector: () => null,
+    append(toc: typeof original.toc) { toc.parentElement = this; },
+  });
+  const sidebar = Object.assign(new EventTarget(), {
+    hidden: false,
+    append(toc: typeof original.toc) { toc.parentElement = this; },
+  });
+  const desktop = Object.assign(new EventTarget(), { matches: false });
+  let headingLookups = 0;
   let page = original;
   const document = Object.assign(new EventTarget(), {
-    querySelector: (selector: string) => selector === '[data-article-toc]' ? page.toc : mobile,
-    getElementById: (id: string) => page.headings.get(id),
+    querySelector: (selector: string) => selector === '[data-article-toc]' ? page.toc : selector === '[data-mobile-toc]' ? mobile : sidebar,
+    getElementById: (id: string) => { headingLookups++; return page.headings.get(id); },
   });
-  const window = new EventTarget();
+  const window = Object.assign(new EventTarget(), { matchMedia: () => desktop });
   const frames = new Map<number, () => void>();
   const observers = new Set<() => void>();
   let sequence = 0;
@@ -156,7 +166,17 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
     requestAnimationFrame: (callback: () => void) => { frames.set(++sequence, callback); return sequence; },
     cancelAnimationFrame: (id: number) => frames.delete(id),
   });
+  assert.equal(page.toc.parentElement, mobile);
+  assert.equal(headingLookups, 0);
+  assert.equal(layoutReads, 0);
+  assert.equal(observers.size, 0);
+  assert.equal(getEventListeners(window, 'scroll').length, 0);
   assert.deepEqual(active(), []);
+  desktop.matches = true;
+  desktop.dispatchEvent(new Event('change'));
+  assert.equal(page.toc.parentElement, sidebar);
+  assert.equal(headingLookups, 50);
+  assert.equal(observers.size, 1);
   offset = page.headings.get('1-网络')!.top + 250; // Well inside the section, past the heading text.
   window.dispatchEvent(new Event('scroll'));
   flush();
@@ -175,7 +195,10 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
   flush('pageshow');
   assert.deepEqual(active(), []);
 
-  page.toc.parentElement = mobile;
+  desktop.matches = false;
+  desktop.dispatchEvent(new Event('change'));
+  assert.equal(getEventListeners(window, 'scroll').length, 0);
+  assert.equal(observers.size, 0);
   offset = 1400;
   window.dispatchEvent(new Event('scroll'));
   assert.equal(frames.size, 0, 'scrolling with a closed mobile TOC schedules no geometry work');
@@ -183,7 +206,9 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
   mobile.dispatchEvent(new Event('toggle'));
   flush();
   assert.deepEqual(active(), ['#section-2']);
-  page.toc.parentElement = null;
+  assert.equal(headingLookups, 50, 'opening the same article reuses its index');
+  desktop.matches = true;
+  desktop.dispatchEvent(new Event('change'));
 
   document.dispatchEvent(new Event('astro:page-load'));
   assert.equal(getEventListeners(window, 'scroll').length, 1);
@@ -199,6 +224,7 @@ test('the TOC follows the current section across scroll jumps, layout shifts and
   page = fixture(['1-heading']);
   offset = 150;
   document.dispatchEvent(new Event('astro:page-load'));
+  flush();
   assert.deepEqual(active(), ['#1-heading']);
   page = fixture([]);
   document.dispatchEvent(new Event('astro:page-load'));

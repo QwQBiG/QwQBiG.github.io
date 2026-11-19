@@ -268,23 +268,6 @@ const pageTitle = `${title} - QwQBiG's World`;
 <script>
   import '../../scripts/article-toc';
 
-  const desktop = window.matchMedia('(min-width: 1024px)');
-  function placeContents() {
-    const mobile = document.querySelector<HTMLDetailsElement>('[data-mobile-toc]');
-    const sidebar = document.querySelector<HTMLElement>('[data-toc-sidebar]');
-    const nav = document.querySelector<HTMLElement>('[data-article-toc]');
-    if (!mobile || !sidebar || !nav) return;
-
-    const container = desktop.matches ? sidebar : mobile;
-    if (nav.parentElement !== container) container.append(nav);
-    sidebar.hidden = !desktop.matches;
-    mobile.querySelector('[data-toc-fallback]')?.remove();
-    if (desktop.matches) mobile.open = false;
-  }
-
-  placeContents();
-  desktop.addEventListener('change', placeContents);
-  document.addEventListener('astro:after-swap', placeContents);
   document.addEventListener('click', event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const link = event.target instanceof Element && event.target.closest('[data-article-toc] a');
