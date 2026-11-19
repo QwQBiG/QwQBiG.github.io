@@ -15,6 +15,7 @@ import { markCodeMatches } from './code-search-matches.js';
   let currentMatches = [];
   let searchLifetime;
   let currentMatchIndex = -1;
+  let returnFocus = null;
 
   /**
    * 创建搜索界面
@@ -32,7 +33,7 @@ import { markCodeMatches } from './code-search-matches.js';
               <circle cx="10.5" cy="10.5" r="6.5"></circle>
               <path d="m16 16 4.5 4.5"></path>
             </svg>
-            Find in code
+            <span class="code-search-label">Find in code</span>
           </span>
           <button class="code-search-close" type="button" aria-label="Close code search">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
@@ -109,7 +110,10 @@ import { markCodeMatches } from './code-search-matches.js';
 
     const pattern = new RegExp(escapeRegex(query), 'gi');
     searchLifetime = new AbortController();
-    for (const code of document.querySelectorAll('pre[class*="language-"] code')) {
+    const codes = window.currentSearchCodeBlock
+      ? window.currentSearchCodeBlock.querySelectorAll('code')
+      : document.querySelectorAll('pre[class*="language-"] code');
+    for (const code of codes) {
       const matches = Array.from(code.textContent.matchAll(pattern));
       if (!matches.length) continue;
 
@@ -212,31 +216,36 @@ import { markCodeMatches } from './code-search-matches.js';
   /**
    * 打开搜索
    */
-  function openSearch() {
+  function openSearch(pre = null, opener = null) {
     createSearchUI();
+    if (searchOverlay.style.display !== 'flex') returnFocus = opener ?? document.activeElement;
+    window.currentSearchCodeBlock = pre;
+    const label = pre ? 'Find in this block' : 'Find in code';
+    searchOverlay.querySelector('.code-search-label').textContent = label;
+    const input = searchOverlay.querySelector('.code-search-input');
+    input.setAttribute('aria-label', label);
     searchOverlay.style.display = 'flex';
-    searchOverlay.querySelector('.code-search-input').focus();
+    if (input.value) performSearch(input.value);
+    input.focus();
   }
 
   /**
    * 全局搜索函数（供代码块头部按钮调用）
    */
-  window.openCodeSearch = function(pre) {
-    openSearch();
-    // 存储当前代码块引用
-    window.currentSearchCodeBlock = pre;
-  };
+  window.openCodeSearch = openSearch;
 
   /**
    * 关闭搜索
    */
-  function closeSearch() {
-    if (searchOverlay) {
-      searchOverlay.style.display = 'none';
-      searchOverlay.querySelector('.code-search-input').value = '';
-      clearSearch();
-      updateSearchCount();
-    }
+  function closeSearch(restoreFocus = true) {
+    if (!searchOverlay || searchOverlay.style.display !== 'flex') return;
+    searchOverlay.style.display = 'none';
+    searchOverlay.querySelector('.code-search-input').value = '';
+    clearSearch();
+    updateSearchCount();
+    if (restoreFocus && returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+    returnFocus = null;
+    window.currentSearchCodeBlock = null;
   }
 
   // ==================== 文本选择高亮 ====================
@@ -283,10 +292,9 @@ import { markCodeMatches } from './code-search-matches.js';
   initSelectionHighlight();
   initShortcuts();
   document.addEventListener('astro:before-swap', () => {
-    closeSearch();
+    closeSearch(false);
     searchOverlay?.remove();
     searchOverlay = null;
-    window.currentSearchCodeBlock = null;
   });
 
 })();
