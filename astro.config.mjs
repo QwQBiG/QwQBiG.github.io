@@ -35,6 +35,15 @@ export default defineConfig({
   },
   vite: {
     build: {
+      rollupOptions: {
+        output: {
+          // Every page starts Astro's prefetcher. Its bootstrap, implementation and
+          // shared adapter headers fit in one cacheable module across all routes.
+          manualChunks(id) {
+            if (id === 'astro:scripts/page.js') return 'page-navigation';
+          },
+        },
+      },
       // Let the browser fetch only the font subsets used on the current page.
       assetsInlineLimit(filePath) {
         if (filePath.includes('/@fontsource/jetbrains-mono/') && /\.woff2?$/.test(filePath)) return false;
