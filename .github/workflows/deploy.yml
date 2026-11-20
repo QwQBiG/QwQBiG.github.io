@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -35,6 +36,28 @@ jobs:
 
       - name: Build site
         run: npm run build
+
+      - name: Retain comment assets for open articles
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! runs=$(gh run list --workflow deploy.yml --branch main --status success --limit 2 --json databaseId --jq '.[].databaseId'); then
+            echo "::warning::Pages build history unavailable; checking the published fallback."
+            runs=""
+          fi
+          previous=()
+          for run in $runs; do
+            if ! available=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts" --jq '.artifacts[] | select(.name == "github-pages" and .expired == false) | .id'); then continue; fi
+            if [[ -z "$available" ]]; then continue; fi
+            dir="$RUNNER_TEMP/comment-build-$run"
+            if ! gh run download "$run" --name github-pages --dir "$dir"; then continue; fi
+            tar -xf "$dir/artifact.tar" -C "$dir" ./_astro ./cs/posts
+            if tar -tf "$dir/artifact.tar" | grep -Fx './comment-assets.json' >/dev/null; then
+              tar -xf "$dir/artifact.tar" -C "$dir" ./comment-assets.json
+            fi
+            previous+=("$dir")
+          done
+          node scripts/retain-comment-assets.mjs dist "${previous[@]}"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
