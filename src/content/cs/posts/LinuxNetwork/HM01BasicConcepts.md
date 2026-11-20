@@ -537,8 +537,8 @@ flowchart LR
 
 ## 1.7 IP 数据报格式
 
-<div class="ip-header-diagram">
-  <div class="ip-header-title">IP数据报格式（20字节固定首部）</div>
+<div class="ip-header-diagram ip-header-wide" role="group" tabindex="0" aria-labelledby="ipv4-header-title">
+  <div class="ip-header-title" id="ipv4-header-title">IP数据报格式（20字节固定首部）</div>
   <div class="bit-labels">
     <span>0</span>
     <span>4</span>
@@ -634,8 +634,8 @@ flowchart LR
 
 ## 1.9 TCP 数据报格式
 
-<div class="ip-header-diagram">
-  <div class="ip-header-title">TCP数据报格式（20字节固定首部）</div>
+<div class="ip-header-diagram ip-header-wide" role="group" tabindex="0" aria-labelledby="tcp-header-title">
+  <div class="ip-header-title" id="tcp-header-title">TCP数据报格式（20字节固定首部）</div>
   <div class="bit-labels">
     <span>0</span>
     <span>15</span>

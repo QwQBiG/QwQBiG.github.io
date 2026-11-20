@@ -72,9 +72,9 @@ const pageTitle = `${title} - QwQBiG's World`;
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Main Content */}
         <article class="min-w-0 lg:col-span-9">
-          <GlassContainer>
+          <GlassContainer padding="reading">
           {/* Post Header */}
-          <header class="mb-8">
+          <header class="mb-8 max-sm:[overflow-wrap:anywhere]">
             {series && series.length > 0 && !isSeriesCollection && (
               <div class="flex flex-wrap gap-2 mb-4">
                 {series.map((s) => (
@@ -203,7 +203,7 @@ const pageTitle = `${title} - QwQBiG's World`;
           )}
           </GlassContainer>
 
-          <GlassContainer class="mt-8">
+          <GlassContainer padding="reading" class="mt-8">
             <WalineComments path={Astro.url.pathname} />
           </GlassContainer>
          </article>

@@ -60,3 +60,100 @@
 }
 
 #waline .wl-separator { border-color: rgba(232, 74, 122, 0.15) !important; }
+
+@media (max-width: 640px) {
+  #waline .wl-meta-head {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: .25rem 1rem;
+    padding-inline: 0;
+  }
+
+  #waline .wl-count { flex: none; }
+  #waline .wl-sort {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem .75rem;
+    margin: 0;
+    padding: 0;
+  }
+  #waline .wl-sort li { padding-block: .25rem; }
+  #waline .wl-sort li + li { margin-inline-start: 0; }
+
+  /* The avatar shares the author's header row; each message can use the full card width. */
+  #waline .wl-card-item {
+    --thread-inset: .75rem;
+    --thread-avatar: 30px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: .375rem 0;
+  }
+
+  #waline .wl-card-item > .wl-user {
+    --avatar-size: var(--thread-avatar);
+    grid-area: 1 / 1;
+    align-self: start;
+    justify-self: start;
+    z-index: 1;
+    margin: calc(var(--thread-inset) + 1px);
+  }
+
+  #waline .wl-card {
+    grid-area: 1 / 1;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    padding: var(--thread-inset);
+  }
+
+  #waline .wl-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: var(--thread-avatar);
+    padding-inline-start: calc(var(--thread-avatar) + .625rem);
+    gap: .25rem .4rem;
+  }
+  #waline .wl-head > *,
+  #waline .wl-head > .comment-identity { margin: 0; }
+  #waline .wl-head .wl-nick,
+  #waline .wl-head .wl-badge {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  #waline .wl-meta > span { max-width: 100%; overflow-wrap: anywhere; }
+  #waline .wl-time { white-space: nowrap; }
+  #waline .wl-head .wl-comment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .375rem;
+    margin-inline-start: auto;
+  }
+
+  #waline .wl-quote { padding-inline-start: .5rem; }
+  #waline .wl-quote .wl-card-item {
+    --thread-inset: .625rem;
+    --thread-avatar: 26px;
+  }
+  /* Keep one indent even when the server returns several levels of replies. */
+  #waline .wl-quote .wl-quote {
+    margin-inline: calc(0px - var(--thread-inset) - 1px);
+    padding-inline: 0;
+    border-inline-start: 0;
+  }
+
+  #waline .wl-comment { flex-direction: column; }
+  #waline .wl-comment .wl-panel { min-width: 0; width: auto; margin-inline: 0; }
+  #waline .wl-editor { font-size: 16px; }
+  #waline .wl-login-info {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    gap: .5rem;
+    text-align: start;
+  }
+  #waline .wl-login-info .wl-avatar { flex-shrink: 0; margin: 0; }
+  #waline .wl-login-nick { min-width: 0; overflow-wrap: anywhere; }
+}

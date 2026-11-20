@@ -170,6 +170,16 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
         background: #fff;
       }
 
+      @media (max-width: 639px) {
+        .ip-header-wide {
+          overflow-x: auto;
+        }
+
+        .ip-header-wide > :is(.ip-header-title, .bit-labels, .ip-row) {
+          min-width: 36rem;
+        }
+      }
+
       .ip-header-title {
         background: linear-gradient(135deg, #ffe0ed 0%, #ffd6e8 100%);
         padding: 12px 16px;

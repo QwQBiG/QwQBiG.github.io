@@ -34,8 +34,8 @@ const pageTitle = `${post.data.title} - Poetry - QwQBiG's World`;
   <main class="flex-1 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <GlassContainer>
-      <article class="poetry-article">
+      <GlassContainer padding="reading">
+      <article class="poetry-article max-sm:[overflow-wrap:anywhere]">
         <header class="text-center mb-12">
           <h1 class="text-4xl font-serif text-text-primary mb-6 tracking-wider">
             {post.data.title}
@@ -76,7 +76,7 @@ const pageTitle = `${post.data.title} - Poetry - QwQBiG's World`;
       </article>
       </GlassContainer>
 
-      <GlassContainer class="mt-8">
+      <GlassContainer padding="reading" class="mt-8">
         <WalineComments path={Astro.url.pathname} />
       </GlassContainer>
 
