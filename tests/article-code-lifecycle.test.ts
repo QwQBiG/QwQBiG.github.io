@@ -12,12 +12,15 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
         matches: () => true, querySelector: () => code,
       });
     });
-    const body = Object.assign(new EventTarget(), {
-      querySelector: () => ({}),
-      dataset: { pageCode: 'true' }, querySelectorAll: () => blocks,
+    const prose = {
+      closest: () => ({}), querySelectorAll: () => blocks,
       contains: (block: typeof blocks[number]) => blocks.includes(block),
+    };
+    const body = Object.assign(new EventTarget(), {
+      querySelector: (selector: string) => selector === '.prose' ? prose : null,
+      dataset: { pageCode: 'true' },
     });
-    return { blocks, body };
+    return { blocks, body, prose };
   }
   type Block = ReturnType<typeof article>['blocks'][number];
   type Entries = { target: Block; isIntersecting: boolean }[];
@@ -26,6 +29,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   const window = new EventTarget();
   const document = Object.assign(new EventTarget(), { body: first.body });
   const callbacks: Array<(entries: Entries) => void> = [];
+  const observedRoots: unknown[] = [];
   const prepared: string[] = [];
   const decorated: string[] = [];
   const numbered: string[] = [];
@@ -41,7 +45,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
       constructor(callback: (entries: Entries) => void) { callbacks.push(callback); }
       observe() {} unobserve() {} disconnect() {}
     } as unknown,
-    MutationObserver: class { observe() {} disconnect() {} takeRecords() { return []; } },
+    MutationObserver: class { observe(root: unknown) { observedRoots.push(root); } disconnect() {} takeRecords() { return []; } },
     prepareCodeBlock(pre: Block) { prepared.push(pre.id); pre.dataset.processed = 'true'; },
     prepareCodeLines(code: { id: string }) { numbered.push(code.id); },
     decorateBrackets(code: { id: string }) { decorated.push(code.id); },
@@ -55,6 +59,7 @@ test('article code decorates nearby blocks once, prepares matching blocks for se
   assert.deepEqual(decorated, []);
   assert.deepEqual(numbered, []);
   assert.equal(callbacks.length, 1);
+  assert.deepEqual(observedRoots, [first.prose], 'comment previews and widgets are outside the observed subtree');
   const [notify] = callbacks;
   const [near, far] = first.blocks;
   inTransit = true;
