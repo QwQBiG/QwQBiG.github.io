@@ -159,6 +159,7 @@
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
   let isNavigating = false;
+  let destinationHref;
   let navigationTimer;
   let recoveryTimer;
 
@@ -301,6 +302,8 @@
       // Reduced-motion CSS already removes the transition. Let the link open immediately.
       if (!isNavigating && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       e.preventDefault();
+      // A second choice during the exit motion shares its original deadline.
+      destinationHref = destination.href;
       if (isNavigating) return;
       isNavigating = true;
       navCard.setAttribute('aria-busy', 'true');
@@ -335,7 +338,7 @@
       // 延迟跳转 - 移动端使用更短的延迟
       const delay = isTouchDevice ? 650 : 750;
       navigationTimer = setTimeout(() => {
-        window.location.href = destination.href;
+        window.location.href = destinationHref;
       }, delay);
       // A cancelled or slow navigation must not leave the current page faded out.
       recoveryTimer = setTimeout(() => resetNavCardToCardState(), delay + 3000);
