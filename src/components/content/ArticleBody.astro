@@ -31,4 +31,22 @@ const html = markArticleCodeBlocks(wrapArticleTables(content));
       box-shadow: none;
     }
   }
+
+  @media (max-width: 639px) {
+    .prose {
+      overflow-wrap: anywhere;
+    }
+
+    /* Keep simple tables within the page and let comparisons scroll inside
+       their existing wrapper instead of stacking Chinese labels vertically. */
+    .prose :global(.article-table-scroll > table:has(tr > :nth-child(3))) {
+      width: max-content;
+      min-width: 100%;
+    }
+
+    .prose :global(.article-table-scroll :is(th, td)) {
+      max-width: min(65vw, 18rem);
+      padding: 0.5rem 0.75rem;
+    }
+  }
 </style>
