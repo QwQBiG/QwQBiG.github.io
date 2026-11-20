@@ -127,6 +127,46 @@ test('only a different same-origin HTTP page is a navigation destination', () =>
   }
 });
 
+test('a series step warms one neighbor in the chosen direction once the incoming page is ready', async () => {
+  const page = await setupRuntime('complete', '/article/');
+  const previous = new URL('/cs/series/one/', current);
+  const incoming = new URL('/cs/series/two/', current);
+  let href = '../three/';
+  let direction = 'next';
+  const swap = {
+    from: previous,
+    to: incoming,
+    navigationType: 'push',
+    signal: { aborted: false },
+    sourceElement: { closest: () => ({ getAttribute: () => direction }) },
+    newDocument: { querySelector: (selector: string) => {
+      assert.ok(selector.includes(`[rel~="${direction}"]`));
+      return href ? { getAttribute: () => href } : null;
+    } },
+  };
+  const step = () => page.emitDocument('astro:before-swap', swap);
+  step();
+  direction = 'prev';
+  href = '../zero/';
+  step();
+  const expected = [new URL('../three/', incoming).href, new URL('../zero/', incoming).href];
+  assert.deepEqual(page.html, expected);
+  for (const target of ['', previous.href, 'https://external.example/three/', '#current']) {
+    href = target;
+    step();
+  }
+  href = '../three/';
+  page.emitDocument('astro:before-swap', { ...swap, sourceElement: undefined });
+  page.emitDocument('astro:before-swap', { ...swap, navigationType: 'traverse' });
+  page.emitDocument('astro:before-swap', { ...swap, signal: { aborted: true } });
+  page.document.hidden = true;
+  step();
+  page.document.hidden = false;
+  page.navigator.connection.saveData = true;
+  step();
+  assert.deepEqual(page.html, expected);
+});
+
 test('only explicit data saving and offline state disable optional asset downloads', () => {
   assert.equal(allowNavigationAssets(undefined), true);
   assert.equal(allowNavigationAssets({ effectiveType: '3g' }), true);
@@ -340,6 +380,28 @@ test('generated manifest is versioned, resolves nested URLs and leaves page pres
     assert.equal((await readFile(path.join(root, 'index.html'), 'utf8')).match(/data-navigation-assets/g)?.length, 1);
     await writeFile(path.join(root, 'cs/page.css'), 'body {color: purple; margin: 0}');
     assert.notEqual((await generateNavigationManifest(root)).href, first.href);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('home discovers its compiled stylesheet before inline CSS without moving the cascade', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'home-stylesheet-hint-'));
+  try {
+    const stylesheet = '<link rel="stylesheet" href="/_astro/home.hash.css">';
+    const head = '<title>Home</title><style>.box{color:red}</style>' + stylesheet +
+      '<link rel="stylesheet" href="/_astro/print.css" media="print">';
+    const html = `<html><head>${head}</head><body></body></html>`;
+    await writeFile(path.join(root, 'index.html'), html);
+    await writeFile(path.join(root, 'other.html'), html);
+    await generateNavigationManifest(root);
+    await generateNavigationManifest(root);
+    const home = await readFile(path.join(root, 'index.html'), 'utf8');
+    const hint = '<link rel="preload" as="style" href="/_astro/home.hash.css" data-navigation-home-style>';
+    assert.ok(home.includes(`</title>${hint}<style>`));
+    assert.ok(home.includes(`</style>${stylesheet}`));
+    assert.equal(home.match(/data-navigation-home-style/g)?.length, 1);
+    assert.ok(!(await readFile(path.join(root, 'other.html'), 'utf8')).includes('data-navigation-home-style'));
   } finally {
     await rm(root, { recursive: true, force: true });
   }

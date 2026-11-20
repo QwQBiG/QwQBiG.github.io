@@ -8,6 +8,7 @@ import {
 } from '../utils/navigation-warmup';
 import type { NavigationConnection, NavigationManifest } from '../utils/navigation-warmup';
 import type { NavigationIntent } from './navigation-prefetch';
+import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
 
 type WarmupPriority = 'navigation' | 'prefetch';
 
@@ -212,7 +213,22 @@ export function initializeNavigationWarmup(prefetchHTML: typeof import('astro:pr
     if (lifetime.signal.aborted) lifetime = new AbortController();
     preparePrimaryNavigation();
   });
-  document.addEventListener('astro:before-swap', stop);
+  document.addEventListener('astro:before-swap', event => {
+    stop();
+    const swap = event as TransitionBeforeSwapEvent;
+    const direction = swap.sourceElement?.closest('nav[data-post-navigation] a[rel]')?.getAttribute('rel');
+    if ((direction !== 'next' && direction !== 'prev') || swap.navigationType === 'traverse' ||
+      swap.signal.aborted || document.hidden || !canWarm()) return;
+
+    // The chosen article and its styles are ready. Give the next tap in the
+    // same direction a head start, using Astro's existing HTML prefetch cache.
+    const link = swap.newDocument.querySelector(`nav[data-post-navigation] a[rel~="${direction}"][href]`);
+    const href = link?.getAttribute('href');
+    const destination = href && navigationDestination(href, swap.to.href);
+    if (destination && destination.href !== swap.from.href) {
+      prefetchHTML(destination.href, { with: 'fetch', ignoreSlowConnection: true });
+    }
+  });
   document.addEventListener('astro:page-load', () => {
     if (lifetime.signal.aborted) {
       lifetime = new AbortController();

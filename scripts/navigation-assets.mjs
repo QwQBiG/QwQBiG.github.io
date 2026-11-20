@@ -37,6 +37,7 @@ function candidates(html, route) {
   const alreadyLinked = new Set();
   const neighbors = new Set();
   const declared = new Set();
+  const homeStyles = new Set();
   const result = [];
   const seen = new Set();
   function add(value, type, extra = {}) {
@@ -77,7 +78,15 @@ function candidates(html, route) {
     }
     if (node.tagName === 'link') {
       const rel = (attrs.rel ?? '').toLowerCase().split(/\s+/);
-      if (rel.includes('stylesheet') && !('disabled' in attrs) && allScreens) declared.add(add(attrs.href, 'style'));
+      if (rel.includes('stylesheet') && !('disabled' in attrs) && allScreens) {
+        const url = add(attrs.href, 'style');
+        declared.add(url);
+        // Hint Astro's plain home stylesheets without changing their order in the cascade.
+        if (route === '/' && node.parentNode?.tagName === 'head' && url?.startsWith('/_astro/') &&
+            attrs.rel === 'stylesheet' && Object.keys(attrs).every(name => name === 'rel' || name === 'href')) {
+          homeStyles.add(url);
+        }
+      }
       if (rel.includes('preload') && allScreens && attrs.fetchpriority !== 'low' && (attrs.as === 'image' || attrs.as === 'font')) {
         if (attrs.as === 'image' && attrs.imagesrcset) {
           addResponsiveImage(attrs.imagesrcset, attrs.imagesizes, attrs.type, attrs.href);
@@ -124,7 +133,7 @@ function candidates(html, route) {
   visit(parse(html));
   const order = { style: 0, image: 1, font: 2, script: 3, json: 4 };
   const assets = result.sort((a, b) => order[a.type] - order[b.type]);
-  return { assets, entries, deferredDiscovery, alreadyLinked, neighbors, declared };
+  return { assets, entries, deferredDiscovery, alreadyLinked, neighbors, declared, homeStyles };
 }
 
 // Keep only resources the destination already declares as immediately useful.
@@ -211,8 +220,8 @@ export async function generateNavigationManifest(root) {
     const urlPath = file.split(path.sep).map(encodeURIComponent).join('/');
     const route = '/' + urlPath.replace(/(?:^|\/)index\.html$/, (value) => value.startsWith('/') ? '/' : '');
     const source = await readFile(path.join(root, file), 'utf8');
-    const html = source.replace(/<link\b[^>]*\bdata-navigation-(?:module|assets)(?:="[^"]*")?[^>]*>/g, '');
-    const { assets, entries, deferredDiscovery, alreadyLinked, neighbors, declared } = candidates(html, route);
+    const html = source.replace(/<link\b[^>]*\bdata-navigation-(?:module|assets|home-style)(?:="[^"]*")?[^>]*>/g, '');
+    const { assets, entries, deferredDiscovery, alreadyLinked, neighbors, declared, homeStyles } = candidates(html, route);
     const reachable = new Set([...entries, ...deferredDiscovery]);
     const hints = [];
     for (const url of reachable) {
@@ -224,7 +233,12 @@ export async function generateNavigationManifest(root) {
       declared.add(url);
       if (!assets.some(asset => asset.url === url && asset.type === 'script')) assets.push({ url, type: 'script' });
     }
-    return { file, route, html, hints, neighbors, declared, pageAssets: assets };
+    // Place the request ahead of the inline utility CSS and keep the stylesheet itself in place.
+    const styleHints = Array.from(homeStyles, url =>
+      `<link rel="preload" as="style" href="${url.replaceAll('&', '&amp;')}" data-navigation-home-style>`
+    ).join('');
+    const output = styleHints ? html.replace('</title>', `</title>${styleHints}`) : html;
+    return { file, route, html: output, hints, neighbors, declared, pageAssets: assets };
   }));
   const sizes = new Map();
   const manifest = await buildNavigationManifest(pages, async (url) => {
