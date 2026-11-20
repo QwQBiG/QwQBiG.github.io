@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { stripTypeScriptTypes } from 'node:module';
 import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
+import { rootPageSize } from '../src/scripts/waline-api.ts';
 
 test('the deferred comment client formats the first render and cleans up a failed or completed mount', async () => {
   const source = stripTypeScriptTypes(await readFile(new URL('../src/scripts/waline-client.ts', import.meta.url), 'utf8'))
@@ -10,11 +11,13 @@ test('the deferred comment client formats the first render and cleans up a faile
   const events: string[] = [];
   let fail = true;
   const mount = runInNewContext(source + '\nmountWaline', {
+    rootPageSize,
     keepCommentDisplayEmojiFree() {
       events.push('format');
       return () => events.push('stop formatting');
     },
-    init() {
+    init({ pageSize }: { pageSize: number }) {
+      assert.equal(pageSize, 8);
       events.push('render');
       return { destroy: () => events.push('destroy') };
     },
@@ -39,19 +42,27 @@ test('the deferred comment client formats the first render and cleans up a faile
 test('far comments wait for proximity or interaction and still load without a visibility observer', async () => {
   const source = stripTypeScriptTypes(await readFile(new URL('../src/scripts/waline-runtime.ts', import.meta.url), 'utf8'))
     .replace(/^import .*;$/gm, '');
-  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'restored', 'interrupted', 'footer-stay', 'footer-leave', 'footer-cancel', 'footer-focus', 'approach', 'approach-leave', 'approach-unmount', 'approach-navigate']) {
+  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'later-reply', 'restored', 'interrupted', 'footer-stay', 'footer-leave', 'footer-cancel', 'footer-focus', 'approach', 'approach-leave', 'approach-unmount', 'approach-navigate']) {
     let rendered = false;
     let connections = 0;
     let cancellations = 0;
     let scrolled = false;
+    let revealed = false;
+    let firstPageReady = false;
+    let additionalRequests = 0;
     let dwell: (() => void) | undefined;
     const link = {};
     const footer = { contains: (node: unknown) => node === link };
-    const card = { scrollIntoView() { scrolled = true; } };
+    const card = Object.assign(new EventTarget(), { scrollIntoView() {
+      assert.ok(revealed, 'show the thread and reply page before scrolling');
+      scrolled = true;
+    } });
+    card.addEventListener('waline:reveal-comment', () => { revealed = true; });
     const element = Object.assign(new EventTarget(), {
-      id: 'waline', isConnected: true, dataset: {}, setAttribute() {}, querySelector: () => null,
-      contains: (node: unknown) => node === card,
+      id: 'waline', isConnected: true, dataset: {}, setAttribute() {}, querySelector: () => firstPageReady ? {} : null,
+      contains: (node: unknown) => node === card && trigger !== 'section',
     });
+    element.addEventListener('waline:find-comment', event => { additionalRequests++; event.preventDefault(); });
     const document = Object.assign(new EventTarget(), {
       getElementById: (id: string) => id === 'waline' ? element : id === '1' || (id === '9' && rendered) ? card : null,
       querySelector: (selector: string) => selector.includes('data-post-navigation') && (trigger.startsWith('footer-') || trigger === 'approach-navigate') ? footer : null,
@@ -78,7 +89,7 @@ test('far comments wait for proximity or interaction and still load without a vi
       disconnect() { mutation = undefined; }
     }
     const hash = trigger === 'waline' ? '#waline' : trigger === 'section' ? '#1'
-      : ['rss', 'restored', 'interrupted'].includes(trigger) ? '#9' : '';
+      : ['rss', 'restored', 'interrupted', 'later-reply'].includes(trigger) ? '#9' : '';
     const window = Object.assign(new EventTarget(), { location: { hash, search: trigger === 'token' ? '?token=sample' : '' } });
     Object.assign(window, {
       scrollY: 600,
@@ -90,7 +101,7 @@ test('far comments wait for proximity or interaction and still load without a vi
     const history = { state: trigger === 'section' ? null : { scrollY: trigger === 'restored' ? 400 : 0 }, scrollRestoration: 'manual' };
     runInNewContext(source, {
       document, window, IntersectionObserver, MutationObserver, AbortController, URL, URLSearchParams,
-      history, queueMicrotask,
+      history, queueMicrotask, Event,
       scheduleBackgroundTask(options: { priority: string }) {
         priorities.push(options.priority);
         return { done: new Promise(() => {}), cancel() { cancellations++; } };
@@ -159,11 +170,18 @@ test('far comments wait for proximity or interaction and still load without a vi
       window.location.hash = '#9';
       window.dispatchEvent(new Event('hashchange'));
     }
-    if (['rss', 'change', 'restored', 'interrupted'].includes(trigger)) {
+    if (['rss', 'change', 'restored', 'interrupted', 'later-reply'].includes(trigger)) {
       if (trigger === 'interrupted') window.dispatchEvent(new Event('wheel'));
+      if (trigger === 'later-reply') {
+        firstPageReady = true;
+        mutation?.();
+        assert.equal(additionalRequests, 1);
+        assert.equal(scrolled, false);
+        assert.ok(mutation, 'keep looking while another server page is loading');
+      }
       rendered = true;
       mutation?.();
-      assert.equal(scrolled, trigger === 'rss' || trigger === 'change');
+      assert.equal(scrolled, ['rss', 'change', 'later-reply'].includes(trigger));
       assert.equal(mutation, undefined);
     }
     if (['proximity', 'focusin', 'pointerenter'].includes(trigger)) {

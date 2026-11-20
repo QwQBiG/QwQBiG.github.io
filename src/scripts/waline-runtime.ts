@@ -127,9 +127,16 @@ function mountComments() {
       start('navigation');
       return;
     }
-    // Waline uses the backend's objectId as the card ID. RSS links on this
-    // site use integers; Mongo/LeanCloud installations use 24 hex digits.
-    if (!/^(?:\d+|[\da-f]{24})$/i.test(id) || document.getElementById(id)) return;
+    const existing = document.getElementById(id);
+    if (existing) {
+      if (follow && element.contains(existing) && existing.classList.contains('wl-card-item')) {
+        existing.dispatchEvent(new Event('waline:reveal-comment', { bubbles: true }));
+      }
+      return;
+    }
+    // RSS links use integer or Mongo-style comment IDs. Other fragments
+    // belong to the article and should not trigger a search through comments.
+    if (!/^(?:\d+|[\da-f]{24})$/i.test(id)) return;
     start('navigation');
     if (!follow) return;
 
@@ -137,9 +144,15 @@ function mountComments() {
     const input = new AbortController();
     const findCard = () => {
       const card = document.getElementById(id);
-      if (card && element.contains(card)) card.scrollIntoView({ block: 'start' });
-      else if (element.querySelector('.wl-meta-foot')) element.scrollIntoView({ block: 'start' });
-      else return;
+      if (card && element.contains(card)) {
+        card.dispatchEvent(new Event('waline:reveal-comment', { bubbles: true }));
+        card.scrollIntoView({ block: 'start' });
+      } else if (element.querySelector('.wl-meta-foot')) {
+        // A shared link can refer to a thread outside the first server page.
+        // Continue only while the visitor is still waiting for this fragment.
+        if (!element.dispatchEvent(new Event('waline:find-comment', { cancelable: true }))) return;
+        element.scrollIntoView({ block: 'start' });
+      } else return;
       cancelAnchor?.();
     };
     const changes = new MutationObserver(findCard);

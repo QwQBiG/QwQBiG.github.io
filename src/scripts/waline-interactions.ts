@@ -1,3 +1,5 @@
+import { createRootPages } from './waline-root-pages';
+import { createThreadPages } from './waline-thread-pages';
 import { focusReplyParent, updateReplyContext } from './waline-reply-context';
 import { replaceEmoji } from '../utils/emoji';
 
@@ -10,6 +12,8 @@ interface EditorPopover extends HTMLElement {
 export function enhanceCommentInteractions(container: HTMLElement): () => void {
   const lifetime = new AbortController();
   const options = { signal: lifetime.signal };
+  const roots = createRootPages(container, lifetime.signal);
+  const threads = createThreadPages(container, lifetime.signal);
   const document = container.ownerDocument;
   const window = document.defaultView!;
   const mobile = window.matchMedia('(max-width: 640px)');
@@ -138,6 +142,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   function openEditor(editor: HTMLElement, origin: HTMLElement) {
     if (!mobile.matches || !canPopover || sheet?.editor === editor) return;
     closeEditor(false);
+    // A newly mounted inline editor can receive focus before the list refresh.
+    prepareEditor(editor);
     const attributes = new Map(['popover', 'role', 'aria-modal', 'aria-label'].map(name => [name, editor.getAttribute(name)]));
     const inert: HTMLElement[] = [];
     let branch = editor;
@@ -183,6 +189,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   }
 
   function updateFold(body: HTMLElement) {
+    if (body.closest('[hidden]')) return;
     const existing = folds.get(body);
     if (body.scrollHeight <= 240) {
       if (existing) {
@@ -209,6 +216,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
 
   function refresh() {
     if (disposed) return;
+    roots.refresh();
+    threads.refresh();
     if (sheet && !sheet.editor.isConnected) closeEditor(false);
     for (const [body, button] of folds) {
       if (!body.isConnected) { button.remove(); folds.delete(body); }
@@ -217,6 +226,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       if (!editor.isConnected) { button.remove(); editorButtons.delete(editor); }
     }
     for (const item of container.querySelectorAll<HTMLElement>('.wl-card-item')) {
+      if (item.closest('[hidden]')) continue;
       updateReplyContext(container, item);
       const head = item.querySelector<HTMLElement>(':scope > .wl-card > .wl-head');
       const avatar = item.querySelector<HTMLImageElement>(':scope > .wl-user > .wl-user-avatar');
@@ -248,9 +258,23 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     observer.takeRecords();
   }
 
+  container.addEventListener('waline:find-comment', event => {
+    if (roots.loadMoreForAnchor()) event.preventDefault();
+  }, options);
+  container.addEventListener('waline:reveal-comment', event => {
+    if (!(event.target instanceof HTMLElement)) return;
+    roots.reveal(event.target);
+    threads.reveal(event.target);
+    scheduleRefresh();
+  }, options);
+
   container.addEventListener('click', event => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+    if (target.closest('.comment-thread-toggle, .comment-page-controls')) {
+      scheduleRefresh();
+      return;
+    }
     const reference = target.closest<HTMLAnchorElement>('a.comment-reply-reference');
     if (reference && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
       focusReplyParent(container, reference);
@@ -352,6 +376,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     closeEditor(false);
     lifetime.abort();
     observer.disconnect();
+    roots.dispose();
+    threads.dispose();
     window.cancelAnimationFrame(frame);
     avatarDialog?.remove();
     for (const [body, button] of folds) { body.classList.remove('comment-content-folded'); button.remove(); }
