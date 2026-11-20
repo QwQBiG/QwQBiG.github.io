@@ -5,7 +5,7 @@ import Layout from '../layouts/LightLayout.astro';
 import FloatingNavCard from '../components/layout/FloatingNavCard.astro';
 import type { GalleryPhoto } from '../types/photo';
 import firstLayout from '../scripts/gallery-first-layout.js?raw';
-import { photoCardStyle, photoFrameHeightRatio, photoWallBreakpoints, photoWallSizes } from '../utils/photo-wall';
+import { photoCardStyle, photoFrameHeightRatio, photoPreviewSize, photoWallBreakpoints, photoWallSizes } from '../utils/photo-wall';
 import '../styles/gallery-positions.css';
 import '../styles/gallery-entrance.css';
 import '../styles/gallery-interactions.css';
@@ -18,6 +18,8 @@ const staggerMs = Math.min(160, 1600 / Math.max(1, photos.length - 1));
 
 <Layout title="Gallery - QwQBiG's World" description="Drag photos around the gallery or select one for a closer look.">
   <Fragment slot="head">
+    {photos[0] && <link rel="preload" as="image" type="image/avif"
+      imagesrcset={photos[0].avifSrcset} imagesizes={photoWallSizes(photos[0].scale ?? 1)} fetchpriority="high" />}
     <script src="../scripts/gallery-page.ts"></script>
     <style is:inline set:html={photoWallBreakpoints()} />
     <script is:inline data-photo-ids={JSON.stringify(photos.map(photo => photo.id))} set:html={firstLayout} />
@@ -55,18 +57,19 @@ const staggerMs = Math.min(160, 1600 / Math.max(1, photos.length - 1));
               <div class="photo-frame">
                 <div class="gallery-image" style={{ aspectRatio: `${photo.previewWidth} / ${photo.previewHeight}` }}>
                   <picture style={{ '--photo-placeholder': `url("${photo.placeholder}")` }}>
-                    <source media="(scripting: none)" type="image/webp" srcset={photo.preview} />
                     <source data-navigation-image type="image/avif" srcset={photo.avifSrcset} sizes={sizes} />
                     <img
                       srcset={photo.srcset} sizes={sizes} src={photo.thumb2x}
                       alt={photo.alt} width={photo.width} height={photo.height}
+                      fetchpriority={index < 2 ? 'high' : 'auto'}
                       loading="eager" decoding="async" draggable="false"
                     />
                   </picture>
                   <img
-                    data-gallery-full src={photo.preview} alt="" aria-hidden="true"
+                    data-gallery-full={photo.preview} data-srcset={photo.previewSrcset} alt="" aria-hidden="true"
+                    sizes={`(width < 768px) ${photoPreviewSize(photo, true)}, ${photoPreviewSize(photo, false)}`}
                     width={photo.previewWidth} height={photo.previewHeight}
-                    fetchpriority={index === 0 ? 'high' : 'auto'}
+                    fetchpriority="low"
                     loading="eager" decoding="async" draggable="false"
                   />
                 </div>

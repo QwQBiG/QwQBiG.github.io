@@ -1,17 +1,80 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { whenGalleryFullReady } from '../src/scripts/gallery-images.ts';
+import { whenGalleryFullReady, whenGalleryImageReady } from '../src/scripts/gallery-images.ts';
 
 class TestImage extends EventTarget {
   complete = false;
   naturalWidth = 0;
-  dataset: { decoded?: string } = {};
+  src = '';
+  srcset = '';
+  currentSrc = '';
+  dataset: { decoded?: string; galleryFull?: string; srcset?: string } = {};
   decode?: () => Promise<void>;
 }
 
 function ready(image: TestImage) {
   return whenGalleryFullReady(image as unknown as HTMLImageElement);
 }
+
+test('wall readiness leaves deferred preview sources untouched until the first preview request', async () => {
+  const wall = new TestImage();
+  wall.complete = true;
+  wall.naturalWidth = 180;
+  const preview = new TestImage();
+  const element = preview as unknown as HTMLImageElement;
+  preview.dataset.galleryFull = '/gallery/full.webp';
+  preview.dataset.srcset = '/gallery/compact.webp 480w, /gallery/full.webp 1200w';
+  const writes: [string, string][] = [];
+  for (const name of ['srcset', 'src'] as const) {
+    let value = '';
+    Object.defineProperty(preview, name, {
+      get: () => value,
+      set: (next: string) => {
+        value = next;
+        preview.complete = false;
+        writes.push([name, next]);
+      },
+    });
+  }
+  assert.equal(await whenGalleryImageReady(wall as unknown as HTMLImageElement), true);
+  assert.deepEqual(writes, []);
+
+  const first = ready(preview);
+  assert.deepEqual(writes, [['srcset', preview.dataset.srcset], ['src', preview.dataset.galleryFull]]);
+  assert.equal(whenGalleryFullReady(element, { retryFailedLoad: true }), first);
+  preview.complete = true;
+  preview.dispatchEvent(new Event('error'));
+  assert.equal(await first, false);
+  const retry = whenGalleryFullReady(element, { retryFailedLoad: true });
+  assert.equal(whenGalleryFullReady(element, { retryFailedLoad: true }), retry);
+  assert.deepEqual(writes.slice(2), writes.slice(0, 2));
+  preview.currentSrc = '/gallery/compact.webp';
+  preview.complete = true;
+  preview.naturalWidth = 480;
+  preview.dispatchEvent(new Event('load'));
+  assert.equal(await retry, true);
+  assert.equal(whenGalleryImageReady(element), retry);
+});
+
+test('a new responsive candidate gets decoded after a change of viewport size', async () => {
+  const image = new TestImage();
+  const element = image as unknown as HTMLImageElement;
+  image.complete = true;
+  image.naturalWidth = 480;
+  image.currentSrc = '/gallery/compact.webp';
+  let calls = 0;
+  image.decode = async () => { calls++; };
+  const first = whenGalleryImageReady(element);
+  assert.equal(await first, true);
+  assert.equal(whenGalleryFullReady(element), first);
+  image.currentSrc = '/gallery/wide.webp';
+  const second = whenGalleryFullReady(element);
+  assert.notEqual(second, first);
+  assert.equal(image.dataset.decoded, undefined);
+  assert.equal(await second, true);
+  assert.equal(image.dataset.decoded, '');
+  assert.equal(calls, 2);
+});
 
 test('the wall and preview share a decode and keep the thumbnail until it finishes', async () => {
   const image = new TestImage();

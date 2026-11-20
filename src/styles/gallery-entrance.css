@@ -15,7 +15,6 @@
 .gallery-image > picture {
   position: absolute;
   inset: 0;
-  background: center / cover no-repeat var(--photo-placeholder);
 }
 
 .gallery-image > [data-gallery-full] {
@@ -35,7 +34,8 @@
   [data-gallery-entrance] .gallery-image > :is(picture, [data-gallery-full]) { transition: none; }
 }
 
-.photo-frame picture[data-loaded] { background-image: none; }
+.photo-frame[data-awaiting-photo] { visibility: hidden; }
+.photo-frame picture[data-failed] { background: center / cover no-repeat var(--photo-placeholder); }
 .photo-frame picture[data-failed] img { opacity: 0; }
 
 /* Moving the outer card leaves the frame's hover and drag motion independent. */
