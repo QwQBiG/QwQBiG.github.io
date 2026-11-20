@@ -385,6 +385,28 @@ test('generated manifest is versioned, resolves nested URLs and leaves page pres
   }
 });
 
+test('home discovers its compiled stylesheet before inline CSS without moving the cascade', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'home-stylesheet-hint-'));
+  try {
+    const stylesheet = '<link rel="stylesheet" href="/_astro/home.hash.css">';
+    const head = '<title>Home</title><style>.box{color:red}</style>' + stylesheet +
+      '<link rel="stylesheet" href="/_astro/print.css" media="print">';
+    const html = `<html><head>${head}</head><body></body></html>`;
+    await writeFile(path.join(root, 'index.html'), html);
+    await writeFile(path.join(root, 'other.html'), html);
+    await generateNavigationManifest(root);
+    await generateNavigationManifest(root);
+    const home = await readFile(path.join(root, 'index.html'), 'utf8');
+    const hint = '<link rel="preload" as="style" href="/_astro/home.hash.css" data-navigation-home-style>';
+    assert.ok(home.includes(`</title>${hint}<style>`));
+    assert.ok(home.includes(`</style>${stylesheet}`));
+    assert.equal(home.match(/data-navigation-home-style/g)?.length, 1);
+    assert.ok(!(await readFile(path.join(root, 'other.html'), 'utf8')).includes('data-navigation-home-style'));
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('only missing assets of the marked local article neighbors are embedded', async () => {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'article-neighbor-assets-'));
   try {
