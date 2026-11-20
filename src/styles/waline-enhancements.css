@@ -28,6 +28,8 @@
 
 .comment-retry-button,
 #waline .comment-fold-button,
+#waline .comment-thread-toggle,
+#waline .comment-page-controls button,
 #waline .comment-current-avatar,
 #waline .comment-open-editor,
 #waline .comment-sheet-done {
@@ -69,6 +71,57 @@
 }
 
 #waline .comment-fold-button { margin: 2px 0 14px; }
+
+#waline[data-comment-threads] .wl-cards > .wl-card-item > .wl-card > .wl-quote:not([data-thread-open]),
+#waline :is(.wl-card-item, .wl-quote, .comment-page-controls, .comment-thread-toggle, .wl-operation, .wl-operation > button)[hidden] {
+  display: none;
+}
+
+#waline .comment-thread-toggle {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  width: fit-content;
+  max-width: 100%;
+  margin-block: .5rem;
+  color: #a83e60;
+}
+
+#waline .comment-thread-toggle::before {
+  content: '';
+  width: .45em;
+  height: .45em;
+  flex: none;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(-45deg);
+}
+
+#waline .comment-thread-toggle[aria-expanded="true"]::before { transform: rotate(45deg); }
+
+#waline .comment-page-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem .5rem;
+  margin-block: .75rem;
+  color: var(--waline-dark-grey);
+  font-size: .8125rem;
+  line-height: 1.5;
+}
+
+#waline .comment-page-controls span { font-variant-numeric: tabular-nums; }
+#waline .comment-page-controls button { color: #a83e60; }
+#waline .comment-page-controls button:disabled {
+  opacity: .55;
+  cursor: default !important;
+}
+
+@media (pointer: coarse) {
+  #waline .comment-thread-toggle,
+  #waline .comment-page-controls button { min-height: 44px; min-width: 44px; }
+}
 
 #waline [data-comment-avatar]:focus-visible,
 #waline button:focus-visible,

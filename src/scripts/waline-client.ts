@@ -1,4 +1,5 @@
 import { init, type WalineInstance } from '@waline/client';
+import { rootPageSize } from './waline-api';
 import { keepCommentDisplayEmojiFree } from './waline-display';
 import { enhanceCommentInteractions } from './waline-interactions';
 
@@ -18,6 +19,7 @@ export function mountWaline(element: HTMLElement, serverURL: string): (() => voi
       el: element,
       serverURL,
       login: 'force',
+      pageSize: rootPageSize,
       path: element.dataset.path || window.location.pathname,
       dark: false,
       lang: 'en-US',
