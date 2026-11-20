@@ -39,8 +39,10 @@ test('the deferred comment client formats the first render and cleans up a faile
 test('far comments wait for proximity or interaction and still load without a visibility observer', async () => {
   const source = stripTypeScriptTypes(await readFile(new URL('../src/scripts/waline-runtime.ts', import.meta.url), 'utf8'))
     .replace(/^import .*;$/gm, '');
-  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'restored', 'interrupted', 'footer-stay', 'footer-leave', 'footer-cancel', 'footer-focus']) {
+  for (const trigger of ['proximity', 'focusin', 'pointerenter', 'fallback', 'waline', 'rss', 'change', 'token', 'section', 'restored', 'interrupted', 'footer-stay', 'footer-leave', 'footer-cancel', 'footer-focus', 'approach', 'approach-leave', 'approach-unmount', 'approach-navigate']) {
     let rendered = false;
+    let connections = 0;
+    let cancellations = 0;
     let scrolled = false;
     let dwell: (() => void) | undefined;
     const link = {};
@@ -52,15 +54,19 @@ test('far comments wait for proximity or interaction and still load without a vi
     });
     const document = Object.assign(new EventTarget(), {
       getElementById: (id: string) => id === 'waline' ? element : id === '1' || (id === '9' && rendered) ? card : null,
-      querySelector: (selector: string) => selector.includes('data-post-navigation') && trigger.startsWith('footer-') ? footer : null,
+      querySelector: (selector: string) => selector.includes('data-post-navigation') && (trigger.startsWith('footer-') || trigger === 'approach-navigate') ? footer : null,
       createElement: () => ({ dataset: {} }),
-      head: { append() {} },
+      head: { append() { connections++; } },
     });
     let visibility: ((entries: { isIntersecting: boolean }[]) => void) | undefined;
+    let approach: typeof visibility;
     class IntersectionObserver {
       constructor(callback: typeof visibility, options: { rootMargin: string }) {
-        assert.equal(options.rootMargin, '1200px');
-        visibility = callback;
+        if (options.rootMargin === '3000px 0px') approach = callback;
+        else {
+          assert.equal(options.rootMargin, '1200px');
+          visibility = callback;
+        }
       }
       observe(target: unknown) { assert.equal(target, element); }
       disconnect() {}
@@ -87,9 +93,35 @@ test('far comments wait for proximity or interaction and still load without a vi
       history, queueMicrotask,
       scheduleBackgroundTask(options: { priority: string }) {
         priorities.push(options.priority);
-        return { done: new Promise(() => {}), cancel() {} };
+        return { done: new Promise(() => {}), cancel() { cancellations++; } };
       },
     });
+    if (trigger.startsWith('approach')) {
+      approach!([{ isIntersecting: false }]);
+      assert.equal(connections, 0);
+      approach!([{ isIntersecting: true }]);
+      assert.equal(connections, 1);
+      assert.deepEqual(priorities, []);
+      assert.ok(dwell);
+      if (trigger === 'approach-navigate') {
+        dwell();
+        const navigation = new AbortController();
+        document.dispatchEvent(Object.assign(new Event('astro:before-preparation'), { sourceElement: link, signal: navigation.signal }));
+        assert.deepEqual(priorities, ['prefetch']);
+        assert.equal(cancellations, 1);
+      } else if (trigger === 'approach') {
+        dwell();
+        assert.deepEqual(priorities, ['prefetch']);
+        visibility!([{ isIntersecting: true }]);
+        assert.deepEqual(priorities, ['prefetch', 'navigation']);
+      } else {
+        if (trigger === 'approach-leave') approach!([{ isIntersecting: false }]);
+        else document.dispatchEvent(new Event('astro:before-swap'));
+        assert.equal(dwell, undefined);
+        assert.deepEqual(priorities, []);
+      }
+      continue;
+    }
     if (trigger.startsWith('footer-')) {
       visibility!([{ isIntersecting: true }]);
       assert.deepEqual(priorities, []);

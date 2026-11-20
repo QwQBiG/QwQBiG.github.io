@@ -34,6 +34,7 @@ export function mountWaline(element: HTMLElement, serverURL: string): (() => voi
         login: 'Sign in',
         logout: 'Sign out',
         more: 'Load more comments',
+        refresh: 'Couldn’t load comments. Try again',
         uploadImage: 'Upload an image',
         cancelLike: 'Unlike',
         word: 'words',
