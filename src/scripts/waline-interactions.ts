@@ -340,7 +340,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     const bounds = sheet.editor.getBoundingClientRect();
     if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeEditor();
   }, { ...options, capture: true, passive: true });
-  mobile.addEventListener('change', () => { if (!mobile.matches) closeEditor(false); }, options);
+  if (canPopover) mobile.addEventListener?.('change', () => { if (!mobile.matches) closeEditor(false); }, options);
   window.visualViewport?.addEventListener('resize', updateViewport, options);
   window.visualViewport?.addEventListener('scroll', updateViewport, options);
   window.addEventListener('resize', scheduleRefresh, options);

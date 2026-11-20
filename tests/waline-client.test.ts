@@ -196,3 +196,18 @@ test('far comments wait for proximity or interaction and still load without a vi
     assert.equal(priorities.length, 1);
   }
 });
+
+test('older mobile syntax is used throughout the comment module graph', async () => {
+  const { mobileCommentSyntax } = await import('../scripts/waline-compat.mjs');
+  const entry = { fileName: 'entry', moduleIds: ['/site/src/scripts/waline-runtime.ts'], imports: ['shared'], dynamicImports: ['client'] };
+  const chunk = (name: string) => ({ fileName: name, moduleIds: [], imports: [], dynamicImports: [] });
+  const chunks = { entry, shared: chunk('shared'), client: chunk('client'), other: chunk('other') };
+  const { handler } = mobileCommentSyntax().renderChunk;
+  const code = 'export class Editor { value; read() { this.value ??= 1; return this.value; } }';
+  for (const part of [chunks.entry, chunks.shared, chunks.client]) {
+    const output = await handler(code, part, {}, { chunks });
+    assert.ok(output);
+    assert.doesNotMatch(output.code, /\?\?=|class \w+\{value;/);
+  }
+  assert.equal(await handler(code, chunks.other, {}, { chunks }), undefined);
+});
