@@ -62,9 +62,12 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
   let failed = false;
   let composing = false;
   let frame: number | undefined;
+  let renderedQuery: string | undefined;
 
   function render() {
-    const query = input.value.trim();
+    const query = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+    if (renderedQuery !== undefined && renderedQuery === query) return;
+    renderedQuery = posts && !failed ? query : undefined;
     if (!query) {
       results.innerHTML = message('Type to search.');
     } else if (failed) {
@@ -73,9 +76,8 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
     } else if (!posts) {
       results.innerHTML = message('Loading posts…');
     } else {
-      const lowerQuery = query.toLowerCase().replace(/\s+/g, ' ');
-      const terms = [...new Set(lowerQuery.split(' '))].sort((a, b) => b.length - a.length);
-      const phrases = terms.length > 1 ? [lowerQuery, ...terms] : terms;
+      const terms = [...new Set(query.split(' '))].sort((a, b) => b.length - a.length);
+      const phrases = terms.length > 1 ? [query, ...terms] : terms;
       const alternatives = phrases.map(term => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
       const pattern = new RegExp(`(${alternatives.join('|')})`, 'gi');
       const phraseMatches: string[] = [];
@@ -86,7 +88,7 @@ export function initializePostSearch(input: HTMLInputElement, results: HTMLEleme
         const originalTags = post.tags ?? [];
         const matchedTags = originalTags.filter((_, i) => terms.some(term => tags[i].includes(term)));
         const visibleTags = [...new Set([...matchedTags, ...originalTags])].slice(0, 3);
-        const exactPhrase = terms.length === 1 || fields.some(field => field.includes(lowerQuery));
+        const exactPhrase = terms.length === 1 || fields.some(field => field.includes(query));
         const cards = exactPhrase ? phraseMatches : otherMatches;
         cards.push(resultCard(post, pattern, visibleTags));
       }
