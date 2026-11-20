@@ -18,18 +18,15 @@ function displayPhoto(card: HTMLAnchorElement, dialog: HTMLDialogElement, closeB
   const holder = full.parentElement!;
   const previousPriority = full.fetchPriority;
   full.fetchPriority = 'high';
+  const ready = whenGalleryFullReady(full, { retryFailedLoad: true });
   const alreadyDecoded = full.hasAttribute('data-decoded');
   let showing = true;
   let fade: Animation | undefined;
 
   function showThumbnail() {
-    const backing = thumbnail.closest('picture')?.style.getPropertyValue('--photo-placeholder');
-    const current = thumbnail.currentSrc;
-    // The backing stays underneath even if the thumbnail has not painted yet.
-    closeButton.style.backgroundImage = [
-      current && `url(${JSON.stringify(current)})`,
-      backing,
-    ].filter(Boolean).join(', ');
+    if (!thumbnail.complete || !thumbnail.naturalWidth) return;
+    // Keep real wall pixels under the full-size reveal, including transparent edges.
+    closeButton.style.backgroundImage = `url(${JSON.stringify(thumbnail.currentSrc)})`;
   }
 
   if (alreadyDecoded) {
@@ -41,8 +38,8 @@ function displayPhoto(card: HTMLAnchorElement, dialog: HTMLDialogElement, closeB
   closeButton.append(full);
 
   if (!alreadyDecoded) {
-    void whenGalleryFullReady(full, { retryFailedLoad: true }).then(ready => {
-      if (!ready || !showing || !dialog.open || dialog.hasAttribute('data-closing')) return;
+    void ready.then(decoded => {
+      if (!decoded || !showing || !dialog.open || dialog.hasAttribute('data-closing')) return;
       thumbnail.removeEventListener('load', showThumbnail);
       closeButton.dataset.sharp = '';
       if (matchMedia('(prefers-reduced-motion: reduce)').matches || !full.animate) {
