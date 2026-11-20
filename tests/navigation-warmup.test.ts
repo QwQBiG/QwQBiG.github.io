@@ -127,6 +127,46 @@ test('only a different same-origin HTTP page is a navigation destination', () =>
   }
 });
 
+test('a series step warms one neighbor in the chosen direction once the incoming page is ready', async () => {
+  const page = await setupRuntime('complete', '/article/');
+  const previous = new URL('/cs/series/one/', current);
+  const incoming = new URL('/cs/series/two/', current);
+  let href = '../three/';
+  let direction = 'next';
+  const swap = {
+    from: previous,
+    to: incoming,
+    navigationType: 'push',
+    signal: { aborted: false },
+    sourceElement: { closest: () => ({ getAttribute: () => direction }) },
+    newDocument: { querySelector: (selector: string) => {
+      assert.ok(selector.includes(`[rel~="${direction}"]`));
+      return href ? { getAttribute: () => href } : null;
+    } },
+  };
+  const step = () => page.emitDocument('astro:before-swap', swap);
+  step();
+  direction = 'prev';
+  href = '../zero/';
+  step();
+  const expected = [new URL('../three/', incoming).href, new URL('../zero/', incoming).href];
+  assert.deepEqual(page.html, expected);
+  for (const target of ['', previous.href, 'https://external.example/three/', '#current']) {
+    href = target;
+    step();
+  }
+  href = '../three/';
+  page.emitDocument('astro:before-swap', { ...swap, sourceElement: undefined });
+  page.emitDocument('astro:before-swap', { ...swap, navigationType: 'traverse' });
+  page.emitDocument('astro:before-swap', { ...swap, signal: { aborted: true } });
+  page.document.hidden = true;
+  step();
+  page.document.hidden = false;
+  page.navigator.connection.saveData = true;
+  step();
+  assert.deepEqual(page.html, expected);
+});
+
 test('only explicit data saving and offline state disable optional asset downloads', () => {
   assert.equal(allowNavigationAssets(undefined), true);
   assert.equal(allowNavigationAssets({ effectiveType: '3g' }), true);
