@@ -7,6 +7,7 @@ import react from '@astrojs/react';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { legacyCodeEntry } from './scripts/legacy-code-entry.mjs';
+import { mobileCommentSyntax } from './scripts/waline-compat.mjs';
 
 export default defineConfig({
   site: 'https://iqwqi.win',
@@ -52,6 +53,7 @@ export default defineConfig({
     build: {
       rollupOptions: {
         output: {
+          plugins: [mobileCommentSyntax()],
           // Every page starts Astro's prefetcher. Its bootstrap, implementation and
           // shared adapter headers fit in one cacheable module across all routes.
           manualChunks(id) {

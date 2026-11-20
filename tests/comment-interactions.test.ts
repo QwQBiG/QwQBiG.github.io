@@ -23,7 +23,8 @@ test('drafts and avatars skip the list, inline images remeasure only their reply
   const document = new EventTarget();
   const frames: Array<() => void> = [];
   const window = Object.assign(new EventTarget(), {
-    matchMedia: () => new EventTarget(),
+    // Older mobile browsers return a MediaQueryList with only the legacy listener API.
+    matchMedia: () => ({ matches: true, addListener() {}, removeListener() {} }),
     requestAnimationFrame: (cb: () => void) => frames.push(cb),
     cancelAnimationFrame() {},
   });
