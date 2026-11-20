@@ -15,7 +15,13 @@ function setup(history = { state: {}, replaceState(value: object) { this.state =
   const window = Object.assign(new EventTarget(), { scrollTo({ top }: { top: number }) { scrolls.push(top); } });
   const input = Object.assign(new EventTarget(), { value: restoreY ? 'c++' : '', ownerDocument: document, isConnected: true });
   const retry = new EventTarget();
-  const results = { innerHTML: '', querySelector: () => retry };
+  let html = '', renders = 0;
+  const results = {
+    get innerHTML() { return html; },
+    set innerHTML(value: string) { html = value; renders++; },
+    get renders() { return renders; },
+    querySelector: () => retry,
+  };
   const frames: Array<() => void> = [];
   const requests: Array<(value: Response) => void> = [];
   runInNewContext(script + '\ninitializePostSearch(input, results, restoreY)', {
@@ -232,4 +238,22 @@ test('a cold history entry restores the saved offset after loading unless the re
     assert.match(page.results.innerHTML, /posts\/cpp/);
     assert.deepEqual(page.scrolls, interacted ? [] : [500]);
   }
+});
+
+test('equivalent query edits keep the rendered cards and record the original input', async () => {
+  const history = { state: {} as { postSearchQuery?: string }, replaceState(value: object) { this.state = value; } };
+  const page = setup(history);
+  await page.respond(Response.json(posts));
+  page.type('C++ tag');
+  page.paint();
+  const renders = page.results.renders;
+  page.type('　c++　 TAG ');
+  page.paint();
+  assert.equal(page.results.renders, renders);
+  assert.equal(history.state.postSearchQuery, '　c++　 TAG ');
+  page.type('');
+  page.paint();
+  page.type('C++ tag');
+  page.paint();
+  assert.equal(page.results.renders, renders + 2);
 });

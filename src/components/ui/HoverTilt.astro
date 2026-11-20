@@ -1,0 +1,13 @@
+<script is:inline>
+  // A mouse or trackpad may be connected after the page has opened.
+  const tiltPointer = window.matchMedia('(pointer: fine), (any-hover: hover)');
+  function loadTilt() {
+    if (!tiltPointer.matches) return;
+    tiltPointer.removeEventListener('change', loadTilt);
+    const script = document.createElement('script');
+    script.src = '/js/vanilla-tilt.js';
+    document.head.append(script);
+  }
+  tiltPointer.addEventListener('change', loadTilt);
+  loadTilt();
+</script>

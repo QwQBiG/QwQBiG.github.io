@@ -1,0 +1,11 @@
+---
+import PoetryListing from '../../../layouts/PoetryListing.astro';
+import { loadContent } from '../../../utils/load-content';
+
+export async function getStaticPaths() {
+  const { poetryPosts } = await loadContent();
+  return [...new Set(poetryPosts.map(post => post.data.genre))].map(genre => ({ params: { genre } }));
+}
+---
+
+<PoetryListing genre={Astro.params.genre} />

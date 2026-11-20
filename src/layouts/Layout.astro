@@ -1,4 +1,5 @@
 ---
+import HoverTilt from '../components/ui/HoverTilt.astro';
 import '../styles/site-utilities.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
@@ -71,6 +72,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
     {/* Favicon */}
     <link rel="icon" type="image/webp" href="/generated/site/avatar-160.webp" />
     
+    <link rel="preload" as="script" href="/js/vanilla-tilt.js" media="(pointer: fine), (any-hover: hover)" />
     <slot name="head" />
 
     {/* Styles */}
@@ -85,7 +87,7 @@ const useContentNavigation = isContentNavigationPath(Astro.url.pathname);
 
     {hasCode && <CodeBlockScripts />}
     {/* VanillaTilt 3D 倾斜效果 */}
-    <script src="/js/vanilla-tilt.js" defer></script>
+    <HoverTilt />
     
     {hasMermaid && <MermaidDiagrams />}
 
