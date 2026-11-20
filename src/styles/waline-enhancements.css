@@ -119,7 +119,18 @@
 }
 
 @media (pointer: coarse) {
-  #waline .comment-thread-toggle,
+  #waline :is(.comment-fold-button, .comment-thread-toggle) { position: relative; }
+
+  /* Extend the touch target into the gap around each compact button. */
+  #waline :is(.comment-fold-button, .comment-thread-toggle)::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
+  }
+
   #waline .comment-page-controls button { min-height: 44px; min-width: 44px; }
 }
 
