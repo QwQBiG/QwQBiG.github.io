@@ -77,6 +77,23 @@ test('a live reduced-motion preference keeps the native link, while normal click
   }
 });
 
+test('the last ordinary click chooses the destination without restarting the exit motion', () => {
+  for (const touch of [true, false]) {
+    const page = homePage(touch);
+    page.click();
+    const frames = page.frames.length;
+    page.link.href = '/series/';
+    assert.equal(page.click(), false);
+    page.link.href = '/search/';
+    assert.equal(page.click({ metaKey: true }), true);
+    const delay = touch ? 650 : 750;
+    assert.deepEqual([...page.timers.keys()], [delay, delay + 3000]);
+    assert.equal(page.frames.length, frames);
+    page.timers.get(delay)!();
+    assert.equal(page.location.pathname, '/series/');
+  }
+});
+
 test('the narrow homepage reserves the card’s original height before its exit animation', () => {
   for (const narrow of [true, false]) {
     const page = homePage(narrow);

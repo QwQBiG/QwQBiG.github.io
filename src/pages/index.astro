@@ -322,6 +322,26 @@ const statistics = [
 
 
 
+    /* Keep the side cards clear of the 500px portrait as the desktop grid narrows. */
+    @media (1360px <= width < 1580px) {
+      .welcome-card-offset { transform: translate(calc(50vw - 29rem), 6rem) !important; }
+    }
+
+    /* Tablet landscape keeps three columns, with the side cards stacked in pairs. */
+    @media (924px <= width < 1360px) {
+      #home-cards {
+        width: calc(100% - 2rem);
+        gap: 1.5rem;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+      }
+      .welcome-card-offset, .home-clock-slot { place-self: start center; transform: translateY(1rem) !important; }
+      .home-stats-slot, .home-social-slot { place-self: start center; transform: none; }
+      #navCard:not(.nav-card-layout-change), .home-calendar-slot { place-self: end center; transform: none; }
+      .home-portrait-slot { transform: scale(.8); }
+      .home-tags-slot, .home-player-slot, .home-latest-slot { place-self: center; transform: none; }
+      .home-player-slot { width: 100%; }
+    }
+
     @keyframes pulseRing {
       0%, 100% {
         opacity: 0.2;
@@ -359,12 +379,14 @@ const statistics = [
     }
 
     .ring-text-rotate {
+      /* The stationary ring handles input; transparent rotating corners must pass clicks through. */
+      pointer-events: none;
       animation: textRotate 30s linear infinite;
       transform-origin: center;
     }
 
     @media (hover: hover) {
-      .ring-text-rotate:hover { animation-play-state: paused; }
+      .floating-ring:hover .ring-text-rotate { animation-play-state: paused; }
     }
 
     /* 导航栏优雅动效 - 流畅的位置移动 + 弹性布局转换 */
@@ -720,7 +742,7 @@ const statistics = [
         </div>
 
         {/* 统计卡片 - 移动端第4，桌面端左中靠右 */}
-        <div class="order-4 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-16 [@media(min-width:924px)]:-translate-y-4">
+        <div class="home-stats-slot order-4 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-16 [@media(min-width:924px)]:-translate-y-4">
           <GlassCard padding="small" tilt={true} class="w-full max-w-[85vw] [@media(min-width:924px)]:w-[130px] [@media(min-width:924px)]:scale-95">
             <div class="grid grid-cols-2 gap-x-6 gap-y-3">
               {statistics.map(({ key, label, count, href, description }) => (
@@ -734,7 +756,7 @@ const statistics = [
         </div>
 
         {/* 时钟 - 移动端第6，桌面端右上靠左下 */}
-        <div class="order-6 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-end [@media(min-width:924px)]:self-start [@media(min-width:924px)]:-translate-x-64 [@media(min-width:924px)]:translate-y-20">
+        <div class="home-clock-slot order-6 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-1 [@media(min-width:924px)]:place-self-end [@media(min-width:924px)]:self-start [@media(min-width:924px)]:-translate-x-64 [@media(min-width:924px)]:translate-y-20">
           <GlassCard padding="small" tilt={true} class="w-full max-w-[70vw] [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-90">
             <ClockWidget />
           </GlassCard>
@@ -894,7 +916,7 @@ const statistics = [
         </div>
 
         {/* 3D 移动端第2，桌面端中心绝对C位 */}
-        <div class="order-2 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-center flex justify-center items-center">
+        <div class="home-portrait-slot order-2 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-center flex justify-center items-center">
           <div class="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[380px] md:h-[380px] [@media(min-width:924px)]:w-[500px] [@media(min-width:924px)]:h-[500px] flex items-center justify-center">
             {/* 大圆形背景 - 只有圆形，没有方形背景，更深的弥散阴影 */}
             <div class="absolute w-[250px] h-[250px] sm:w-[280px] sm:h-[280px] md:w-[340px] md:h-[340px] [@media(min-width:924px)]:w-[440px] [@media(min-width:924px)]:h-[440px] rounded-full bg-white/30 backdrop-blur-xl border border-white/60"
@@ -940,7 +962,7 @@ const statistics = [
         </div>
 
         {/* 社交链接 - 移动端第5，桌面端右中靠左（日历左边） */}
-        <div class="order-5 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-4 [@media(min-width:924px)]:translate-y-2">
+        <div class="home-social-slot order-5 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-4 [@media(min-width:924px)]:translate-y-2">
           <GlassCard padding="small" tilt={true} class="w-auto [@media(min-width:924px)]:scale-90">
             <div class="flex flex-col items-center gap-3">
               {/* GitHub */}
@@ -967,7 +989,7 @@ const statistics = [
         </div>
 
         {/* 日历 - 移动端第10，桌面端右中靠右 */}
-        <div class="order-10 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-end [@media(min-width:924px)]:self-center [@media(min-width:924px)]:-translate-x-24 [@media(min-width:924px)]:translate-y-0">
+        <div class="home-calendar-slot order-10 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-2 [@media(min-width:924px)]:place-self-end [@media(min-width:924px)]:self-center [@media(min-width:924px)]:-translate-x-24 [@media(min-width:924px)]:translate-y-0">
           <GlassCard padding="small" tilt={true} class="w-full max-w-[90vw] [@media(min-width:924px)]:w-auto [@media(min-width:924px)]:scale-95">
             <CalendarWidget />
           </GlassCard>
@@ -976,7 +998,7 @@ const statistics = [
         {/* ========== 第3行 ========== */}
 
         {/* 常用标签 - 移动端第8，桌面端左下靠右上 */}
-        <div class="order-8 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-end [@media(min-width:924px)]:translate-x-32 [@media(min-width:924px)]:-translate-y-32">
+        <div class="home-tags-slot order-8 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-1 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-end [@media(min-width:924px)]:translate-x-32 [@media(min-width:924px)]:-translate-y-32">
           <GlassCard padding="small" tilt={true} class="w-full max-w-[92vw] [@media(min-width:924px)]:max-w-xs [@media(min-width:924px)]:scale-90">
             <div class="flex flex-col">
               <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2 font-['Cormorant_Garamond'] italic">
@@ -997,14 +1019,14 @@ const statistics = [
         </div>
 
         {/* 音乐播放器 - 移动端第3，桌面端中下靠上偏右 */}
-        <div class="order-3 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-0 [@media(min-width:924px)]:-translate-y-8" style="position: relative; z-index: 50;">
+        <div class="home-player-slot order-3 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-2 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-center [@media(min-width:924px)]:translate-x-0 [@media(min-width:924px)]:-translate-y-8" style="position: relative; z-index: 50;">
           <GlassCard padding="small" tilt={true} class="w-full max-w-[95vw] [@media(min-width:924px)]:max-w-md [@media(min-width:924px)]:scale-95">
             <MusicWidget />
           </GlassCard>
         </div>
 
         {/* 最新文章 - 移动端第9，桌面端右下靠左上 */}
-        <div class="order-9 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-start [@media(min-width:924px)]:-translate-x-8 [@media(min-width:924px)]:-translate-y-32">
+        <div class="home-latest-slot order-9 [@media(min-width:924px)]:order-none [@media(min-width:924px)]:col-start-3 [@media(min-width:924px)]:row-start-3 [@media(min-width:924px)]:place-self-start [@media(min-width:924px)]:self-start [@media(min-width:924px)]:-translate-x-8 [@media(min-width:924px)]:-translate-y-32">
           <GlassCard padding="medium" tilt={true} class="w-full max-w-[92vw] [@media(min-width:924px)]:w-56 [@media(min-width:924px)]:max-w-xs [@media(min-width:924px)]:scale-95">
             <div class="flex flex-col h-full">
               <div class="flex items-center justify-between mb-4">

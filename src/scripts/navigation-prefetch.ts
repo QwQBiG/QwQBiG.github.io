@@ -31,7 +31,6 @@ function prepareEnhancement() {
 // and keyboard clicks. Replay its original timestamp so late hints cannot race navigation.
 function prefetchNavigation(event: MouseEvent) {
   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (document.getElementById('navCard')?.getAttribute('aria-busy') === 'true') return;
   const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
   if (!link || link.hasAttribute('download') || link.dataset.astroPrefetch === 'false' || (link.target && link.target !== '_self')) return;
   const destination = new URL(link.href, window.location.href);
