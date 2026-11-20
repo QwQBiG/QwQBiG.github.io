@@ -77,6 +77,45 @@ test('a phone scrolls normally until zoomed; a captured pan moves in screen pixe
   lifetime.abort();
 });
 
+test('fit follows the container dimensions, preserves a manual zoom, and resets to the current size', () => {
+  let resize!: () => void;
+  let disconnected = false;
+  const init = runInNewContext(stripTypeScriptTypes(source) + '\ninitMermaidInteraction', {
+    window: win, Element: Control, AbortController,
+    requestAnimationFrame: (fn: () => void) => fn(),
+    ResizeObserver: class {
+      constructor(fn: () => void) { resize = fn; }
+      observe() {} disconnect() { disconnected = true; }
+    },
+  });
+  const doc = new EventTarget();
+  const [wrapper, container, content, out, plus, reset, full] =
+    Array.from({ length: 7 }, () => new Control(doc));
+  const sized = Object.assign(container, { clientWidth: 200, clientHeight: 240 });
+  Object.assign(content, { querySelector: () => ({
+    isConnected: true, getBBox: () => ({ x: 0, y: 0, width: 400, height: 200 }),
+  }) });
+  const life = new AbortController();
+  init(wrapper, sized, content, out, plus, reset, full, life.signal);
+  assert.equal(content.style.transform, 'translate(0px, 0px) scale(0.5)');
+  sized.clientWidth = 300;
+  resize();
+  assert.equal(content.style.transform, 'translate(0px, 0px) scale(0.75)');
+  click(plus);
+  const zoomed = content.style.transform;
+  sized.clientWidth = 220;
+  resize();
+  assert.equal(content.style.transform, zoomed);
+  click(reset);
+  assert.equal(content.style.transform, 'translate(0px, 0px) scale(0.55)');
+  assert.equal(container.style.touchAction, 'auto');
+  sized.clientHeight = 80;
+  resize();
+  assert.equal(content.style.transform, 'translate(0px, 0px) scale(0.4)');
+  life.abort();
+  assert.ok(disconnected);
+});
+
 test('release, cancellation, window blur or a page change dispose an active pan', () => {
   for (const end of ['lostpointercapture', 'pointercancel', 'pointerup', 'blur', 'pagehide', 'swap']) {
     for (const canCapture of [true, false]) {
