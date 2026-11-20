@@ -1,13 +1,10 @@
 import { whenGalleryFullReady } from './gallery-images';
 import { fitPhotoPosition, listenForPointerDrag, photoPositionFromCenter, photoPositionBounds, photoPreviewSize } from '../utils/photo-wall';
 
-function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, full: HTMLImageElement, onClose: () => void) {
-  const dialog = document.createElement('dialog');
-  dialog.className = 'gallery-preview';
+function displayPhoto(card: HTMLAnchorElement, dialog: HTMLDialogElement, closeButton: HTMLButtonElement) {
+  const thumbnail = card.querySelector<HTMLImageElement>('picture img')!;
+  const full = card.querySelector<HTMLImageElement>('[data-gallery-full]')!;
   dialog.setAttribute('aria-label', thumbnail.alt || 'Photo preview');
-  const closeButton = document.createElement('button');
-  closeButton.type = 'button';
-  closeButton.setAttribute('aria-label', 'Close photo preview');
   const dimensions = {
     previewWidth: Number(card.dataset.previewWidth) || thumbnail.naturalWidth || thumbnail.width,
     previewHeight: Number(card.dataset.previewHeight) || thumbnail.naturalHeight || thumbnail.height,
@@ -22,6 +19,7 @@ function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, full:
   const previousPriority = full.fetchPriority;
   full.fetchPriority = 'high';
   const alreadyDecoded = full.hasAttribute('data-decoded');
+  let showing = true;
   let fade: Animation | undefined;
 
   function showThumbnail() {
@@ -41,36 +39,10 @@ function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, full:
     thumbnail.addEventListener('load', showThumbnail, { once: true });
   }
   closeButton.append(full);
-  dialog.append(closeButton);
-
-  function dispose() {
-    if (!dialog.isConnected) return;
-    if (dialog.open) dialog.close();
-    thumbnail.removeEventListener('load', showThumbnail);
-    fade?.cancel();
-    full.fetchPriority = previousPriority;
-    holder.append(full);
-    dialog.remove();
-    onClose();
-  }
-  function dismiss() {
-    if (dialog.dataset.closing !== undefined) return;
-    dialog.dataset.closing = '';
-    const animations = dialog.getAnimations();
-    if (animations.length) {
-      void Promise.allSettled(animations.map(animation => animation.finished)).then(dispose);
-    } else {
-      dispose();
-    }
-  }
-  dialog.addEventListener('click', dismiss);
-  dialog.addEventListener('cancel', event => { event.preventDefault(); dismiss(); });
-  document.body.append(dialog);
-  dialog.showModal();
 
   if (!alreadyDecoded) {
     void whenGalleryFullReady(full, { retryFailedLoad: true }).then(ready => {
-      if (!ready || !dialog.open || dialog.hasAttribute('data-closing')) return;
+      if (!ready || !showing || !dialog.open || dialog.hasAttribute('data-closing')) return;
       thumbnail.removeEventListener('load', showThumbnail);
       closeButton.dataset.sharp = '';
       if (matchMedia('(prefers-reduced-motion: reduce)').matches || !full.animate) {
@@ -79,9 +51,87 @@ function openPreview(card: HTMLAnchorElement, thumbnail: HTMLImageElement, full:
       }
       // Only the decoded image fades in. The existing pixels stay fully visible underneath.
       fade = full.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 140, easing: 'ease-out' });
-      void fade.finished.then(() => closeButton.style.removeProperty('background-image'), () => {});
+      void fade.finished.then(() => {
+        if (showing) closeButton.style.removeProperty('background-image');
+      }, () => {});
     });
   }
+  return () => {
+    showing = false;
+    thumbnail.removeEventListener('load', showThumbnail);
+    fade?.cancel();
+    full.fetchPriority = previousPriority;
+    holder.append(full);
+    delete closeButton.dataset.sharp;
+    closeButton.style.removeProperty('background-image');
+  };
+}
+
+function openPreview(card: HTMLAnchorElement, onClose: () => void) {
+  const photos = [...card.parentElement!.querySelectorAll<HTMLAnchorElement>('a.photo-card[data-photo-id]')];
+  let index = photos.indexOf(card);
+  const dialog = document.createElement('dialog');
+  dialog.className = 'gallery-preview';
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.setAttribute('aria-label', 'Close photo preview');
+  dialog.append(closeButton);
+  let releasePhoto = displayPhoto(card, dialog, closeButton);
+
+  function changePhoto(step: number) {
+    if (photos.length < 2 || dialog.hasAttribute('data-closing')) return;
+    releasePhoto();
+    index = (index + step + photos.length) % photos.length;
+    releasePhoto = displayPhoto(photos[index], dialog, closeButton);
+  }
+  function dispose() {
+    if (!dialog.isConnected) return;
+    if (dialog.open) dialog.close();
+    releasePhoto();
+    dialog.remove();
+    if (photos[index] !== card) photos[index].focus({ preventScroll: true });
+    onClose();
+  }
+  function dismiss() {
+    if (dialog.hasAttribute('data-closing')) return;
+    dialog.dataset.closing = '';
+    const animations = dialog.getAnimations();
+    if (animations.length) {
+      void Promise.allSettled(animations.map(animation => animation.finished)).then(dispose);
+    } else {
+      dispose();
+    }
+  }
+  dialog.addEventListener('keydown', event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      changePhoto(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  });
+  let start: { x: number; y: number; id: number } | undefined;
+  let swiped = false;
+  dialog.addEventListener('pointerdown', event => {
+    swiped = false;
+    start = event.pointerType === 'touch' && event.isPrimary
+      ? { x: event.clientX, y: event.clientY, id: event.pointerId } : undefined;
+  });
+  dialog.addEventListener('pointercancel', () => { start = undefined; });
+  dialog.addEventListener('pointerup', event => {
+    if (!start || event.pointerId !== start.id) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    start = undefined;
+    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    swiped = true;
+    changePhoto(dx < 0 ? 1 : -1);
+  });
+  dialog.addEventListener('click', event => {
+    if (!swiped || event.detail === 0) dismiss();
+  });
+  dialog.addEventListener('cancel', event => { event.preventDefault(); dismiss(); });
+  document.body.append(dialog);
+  dialog.showModal();
   return dispose;
 }
 
@@ -204,12 +254,10 @@ export function initializeGalleryInteractions(wall: HTMLElement) {
       suppressClick = undefined;
       return;
     }
-    const image = card.querySelector<HTMLImageElement>('picture img');
-    const full = card.querySelector<HTMLImageElement>('[data-gallery-full]');
-    if (!image || !full || typeof HTMLDialogElement === 'undefined' || !HTMLDialogElement.prototype.showModal) return;
+    if (typeof HTMLDialogElement === 'undefined' || !HTMLDialogElement.prototype.showModal) return;
     event.preventDefault();
     disposePreview?.();
-    disposePreview = openPreview(card, image, full, () => { disposePreview = undefined; });
+    disposePreview = openPreview(card, () => { disposePreview = undefined; });
   }, options);
 
   return () => {
