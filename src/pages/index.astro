@@ -1,4 +1,5 @@
 ---
+import HoverTilt from '../components/ui/HoverTilt.astro';
 import homeUtilities from '../styles/home-utilities.css?inline';
 import { transform } from 'esbuild';
 import homeInteractions from '../scripts/home-interactions.js?raw';
@@ -1051,18 +1052,6 @@ const statistics = [
   <script>
     import '../scripts/navigation-prefetch';
   </script>
-  <script is:inline>
-    // A mouse or trackpad may be connected after the homepage has opened.
-    const tiltPointer = window.matchMedia('(pointer: fine), (any-hover: hover)');
-    function loadHomeTilt() {
-      if (!tiltPointer.matches) return;
-      tiltPointer.removeEventListener('change', loadHomeTilt);
-      const script = document.createElement('script');
-      script.src = '/js/vanilla-tilt.js';
-      document.head.append(script);
-    }
-    tiltPointer.addEventListener('change', loadHomeTilt);
-    loadHomeTilt();
-  </script>
+  <HoverTilt />
 </body>
 </html>
