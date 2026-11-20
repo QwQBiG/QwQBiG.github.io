@@ -23,7 +23,7 @@ const pageDescription = "A collection of original poems.";
 
 <Layout title={pageTitle} description={pageDescription}>
   <FloatingNavCard />
-  
+
   <main class="flex-1 py-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Page Header -->
@@ -71,7 +71,7 @@ const pageDescription = "A collection of original poems.";
       {sortedPosts.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {getPoetryListing(sortedPosts).map((post, index) => (
-            <a 
+            <a
               data-astro-prefetch={readingListPrefetch(index)}
               href={`/poetry/${post.slug}/`}
               class="group block p-6 bg-white/30 backdrop-blur-sm rounded-2xl border border-white/50 hover:bg-white/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
@@ -93,18 +93,18 @@ const pageDescription = "A collection of original poems.";
                   </span>
                 )}
               </div>
-              
+
               {post.data.description && (
                 <p class="text-text-secondary text-sm mb-4 line-clamp-2">
                   {post.data.description}
                 </p>
               )}
-              
+
               <div class="flex items-center justify-between text-xs text-text-muted">
                 <time datetime={post.data.date.toISOString()}>
                   {formatDisplayDate(post.data.date)}
                 </time>
-                
+
                 {post.data.mood && post.data.mood.length > 0 && (
                   <div class="flex gap-1">
                     {post.data.mood.slice(0, 2).map(m => (
@@ -125,6 +125,6 @@ const pageDescription = "A collection of original poems.";
       )}
     </div>
   </main>
-  
+
   <Footer />
 </Layout>
