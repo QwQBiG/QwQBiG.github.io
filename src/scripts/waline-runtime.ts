@@ -178,6 +178,7 @@ function mountComments() {
   element.addEventListener('focusin', () => start('navigation'), { signal: lifetime.signal });
   if ('IntersectionObserver' in window) {
     const postLinks = document.querySelector('article nav[data-post-navigation]');
+    const marker = status ?? element;
     let nearby = false;
     let timer: number | undefined;
     let departing: AbortSignal | undefined;
@@ -196,11 +197,41 @@ function mountComments() {
       else start('navigation');
     }
 
+    // Establish the backend connection as the reader approaches the footer.
+    // Only a sustained approach warms the local assets. Mounting (and the
+    // first API request) still uses the closer boundary below.
+    let warmTimer: number | undefined;
+    let warming: typeof task;
+    const cancelWarmup = () => {
+      if (warmTimer !== undefined) window.clearTimeout(warmTimer);
+      warmTimer = undefined;
+    };
+    const approach = new IntersectionObserver(entries => {
+      cancelWarmup();
+      if (!entries[entries.length - 1]?.isIntersecting || departing || disposed || unmount) return;
+      prepareConnection();
+      warmTimer = window.setTimeout(() => {
+        if (!task && !unmount && !departing && !disposed) {
+          warming = scheduleBackgroundTask({
+            key: 'waline-client-resources',
+            priority: 'prefetch',
+            signal: lifetime.signal,
+            run: loadResources,
+          });
+        }
+        approach.disconnect();
+      }, 600);
+    }, { rootMargin: '3000px 0px' });
+    approach.observe(marker);
+    lifetime.signal.addEventListener('abort', () => { cancelWarmup(); approach.disconnect(); }, { once: true });
+
     if (postLinks) document.addEventListener('astro:before-preparation', event => {
       const navigation = event as TransitionBeforePreparationEvent;
       if (!navigation.sourceElement || !postLinks.contains(navigation.sourceElement)) return;
       const signal = departing = navigation.signal;
       cancelProximity();
+      cancelWarmup();
+      if (!task) warming?.cancel();
       const resume = () => {
         if (departing === signal && !disposed) {
           departing = undefined;
@@ -215,7 +246,7 @@ function mountComments() {
       nearby = entries[entries.length - 1]?.isIntersecting ?? false;
       onProximity();
     }, { rootMargin: '1200px' });
-    observer.observe(element);
+    observer.observe(marker);
   } else {
     start();
   }

@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -34,6 +35,20 @@ export default defineConfig({
     format: 'directory',
   },
   vite: {
+    resolve: {
+      // Bound list reads in both Vite dev and production. The adapter forwards
+      // all other operations to the original package.
+      alias: [{
+        find: /^@waline\/api$/,
+        replacement: '@waline/api',
+        customResolver(source, importer, options) {
+          if (importer?.includes('/@waline/client/')) {
+            return fileURLToPath(new URL('./src/scripts/waline-api.ts', import.meta.url));
+          }
+          return this.resolve(source, importer, { ...options, skipSelf: true });
+        },
+      }],
+    },
     build: {
       rollupOptions: {
         output: {
