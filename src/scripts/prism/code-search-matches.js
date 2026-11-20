@@ -65,7 +65,7 @@ export function createSearchResults(prepareCodeSearch, whenCodeReady, updateCoun
     searchLifetime = new AbortController();
     const codes = scope
       ? scope.querySelectorAll('code')
-      : document.querySelectorAll('pre[class*="language-"] code');
+      : document.querySelector('.prose')?.querySelectorAll('pre[class*="language-"]:not([class*="mermaid"]) code') ?? [];
     for (const code of codes) {
       const matches = Array.from(code.textContent.matchAll(pattern));
       if (!matches.length) continue;

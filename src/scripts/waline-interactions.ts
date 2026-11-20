@@ -16,6 +16,8 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   const expanded = new Set<string>();
   const folds = new Map<HTMLElement, HTMLButtonElement>();
   const editorButtons = new Map<HTMLElement, HTMLButtonElement>();
+  const changedBodies = new Set<HTMLElement>();
+  let refreshAll = false;
   let frame = 0;
   let sequence = 0;
   let disposed = false;
@@ -38,8 +40,21 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     return button;
   };
 
+  function scheduleFrame() {
+    if (!frame && !disposed) frame = window.requestAnimationFrame(() => {
+      frame = 0;
+      if (refreshAll) refresh();
+      else for (const body of changedBodies) {
+        if (container.contains(body)) updateFold(body);
+      }
+      changedBodies.clear();
+      refreshAll = false;
+    });
+  }
+
   function scheduleRefresh() {
-    if (!frame && !disposed) frame = window.requestAnimationFrame(refresh);
+    refreshAll = true;
+    scheduleFrame();
   }
 
   function prepareAvatar(image: HTMLImageElement, author: string) {
@@ -166,8 +181,32 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     editorButtons.set(editor, launch);
   }
 
+  function updateFold(body: HTMLElement) {
+    const existing = folds.get(body);
+    if (body.scrollHeight <= 240) {
+      if (existing) {
+        body.classList.remove('comment-content-folded');
+        existing.remove();
+        folds.delete(body);
+      }
+      return;
+    }
+    if (existing) return;
+    if (!body.id) body.id = `comment-body-${sequence++}`;
+    const item = body.closest<HTMLElement>('.wl-card-item') ?? body;
+    // Replies without a server ID still keep the reader's expansion choice
+    // when reflow removes the control or Waline replaces the reply body.
+    const id = item.id || (item.dataset.commentFoldKey ??= body.id);
+    const button = createButton('comment-fold-button', expanded.has(id) ? 'Show less' : 'Read more');
+    button.dataset.commentFold = id;
+    button.setAttribute('aria-controls', body.id);
+    button.setAttribute('aria-expanded', String(expanded.has(id)));
+    body.classList.toggle('comment-content-folded', !expanded.has(id));
+    body.after(button);
+    folds.set(body, button);
+  }
+
   function refresh() {
-    frame = 0;
     if (disposed) return;
     if (sheet && !sheet.editor.isConnected) closeEditor(false);
     for (const [body, button] of folds) {
@@ -201,18 +240,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       preview.dataset.commentCurrentAvatar = '';
       info.append(preview);
     }
-    for (const body of container.querySelectorAll<HTMLElement>('.wl-card > .wl-content')) {
-      if (folds.has(body) || body.scrollHeight <= 240) continue;
-      const id = body.closest('.wl-card-item')?.id || `comment-${sequence++}`;
-      if (!body.id) body.id = `comment-body-${sequence++}`;
-      const button = createButton('comment-fold-button', expanded.has(id) ? 'Show less' : 'Read more');
-      button.dataset.commentFold = id;
-      button.setAttribute('aria-controls', body.id);
-      button.setAttribute('aria-expanded', String(expanded.has(id)));
-      body.classList.toggle('comment-content-folded', !expanded.has(id));
-      body.after(button);
-      folds.set(body, button);
-    }
+    container.querySelectorAll<HTMLElement>('.wl-card > .wl-content').forEach(updateFold);
     container.querySelectorAll<HTMLElement>('.wl-comment').forEach(prepareEditor);
     // The controls above are fully initialized. Their insertions need no second pass.
     observer.takeRecords();
@@ -293,10 +321,23 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
     return !element?.closest('.wl-comment > .wl-panel, .comment-sheet-header, [data-comment-fold]');
   }
   container.addEventListener('load', event => {
-    if (event.target instanceof Node && affectsCommentList(event.target)) scheduleRefresh();
+    // An avatar does not resize the reply text. Recheck just the reply whose
+    // inline image finished loading, including images in nested comments.
+    if (!(event.target instanceof HTMLImageElement)) return;
+    const body = event.target.closest<HTMLElement>('.wl-card > .wl-content');
+    if (body) { changedBodies.add(body); scheduleFrame(); }
   }, { ...options, capture: true });
   const observer = new MutationObserver(changes => {
-    if (changes.some(change => affectsCommentList(change.target))) scheduleRefresh();
+    for (const change of changes) {
+      if (!affectsCommentList(change.target)) continue;
+      if (change.type === 'childList' && [...change.addedNodes, ...change.removedNodes]
+          .every(node => node instanceof Element && node.hasAttribute('data-comment-fold'))) continue;
+      const element = change.target instanceof Element ? change.target : change.target.parentElement;
+      const body = element?.closest<HTMLElement>('.wl-card > .wl-content');
+      if (!body) { scheduleRefresh(); return; }
+      changedBodies.add(body);
+    }
+    if (changedBodies.size) scheduleFrame();
   });
   observer.observe(container, { subtree: true, childList: true, characterData: true });
   refresh();

@@ -280,25 +280,30 @@
       requestAnimationFrame(() => {
         if (signal.aborted || !svgElement.isConnected) return;
         const bbox = svgElement.getBBox();
-        const clientRect = svgElement.getBoundingClientRect();
+        const width = bbox.width + bbox.x;
+        const height = bbox.height + bbox.y;
+        if (width <= 0 || height <= 0) return;
+        container.style.minWidth = Math.ceil(width + 40) + 'px';
+        container.style.minHeight = Math.ceil(height + 40) + 'px';
 
-        if (bbox && bbox.width > 0 && bbox.height > 0) {
-          container.style.minWidth = Math.ceil(bbox.width + bbox.x + 40) + 'px';
-          container.style.minHeight = Math.ceil(bbox.height + bbox.y + 40) + 'px';
-
-          const containerWidth = container.clientWidth || clientRect.width;
-          const containerHeight = container.clientHeight || clientRect.height;
-
-          if (containerWidth > 0 && containerHeight > 0) {
-            const scaleX = containerWidth / (bbox.width + bbox.x);
-            const scaleY = containerHeight / (bbox.height + bbox.y);
-            const fitScale = Math.min(scaleX, scaleY, 1); // 不放大，只缩小
-
-            if (fitScale < 1) {
-              restingScale = fitScale;
-              updateZoom(fitScale);
-            }
-          }
+        function fitToContainer() {
+          const availableWidth = container.clientWidth;
+          const availableHeight = container.clientHeight;
+          if (availableWidth <= 0 || availableHeight <= 0) return;
+          const next = Math.min(availableWidth / width, availableHeight / height, 1);
+          if (next === restingScale) return;
+          const atRest = scale === restingScale && offsetX === 0 && offsetY === 0;
+          restingScale = next;
+          if (atRest) updateZoom(next);
+          else updateTouchAction();
+        }
+        fitToContainer();
+        if (typeof ResizeObserver === 'function') {
+          const resize = new ResizeObserver(fitToContainer);
+          resize.observe(container);
+          signal.addEventListener('abort', () => resize.disconnect(), { once: true });
+        } else {
+          window.addEventListener('resize', fitToContainer, { signal });
         }
       });
     }
@@ -328,10 +333,9 @@
 
     // 重置
     resetBtn.addEventListener('click', () => {
-      restingScale = 1;
       offsetX = 0;
       offsetY = 0;
-      updateZoom(1);
+      updateZoom(restingScale);
     });
 
     const fullscreenElement = () => doc.fullscreenElement || doc.webkitFullscreenElement;

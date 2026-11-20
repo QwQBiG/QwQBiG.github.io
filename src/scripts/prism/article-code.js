@@ -12,6 +12,8 @@ function initialize() {
   if (document.body.dataset.pageCode !== 'true') return;
 
   const body = document.body;
+  const prose = body.querySelector('.prose');
+  if (!prose) return;
   const pending = new Map();
   const registered = new WeakMap();
   let keyboardNavigation = false;
@@ -35,7 +37,7 @@ function initialize() {
         if (nearby.length) decorateAll(nearby);
       }, { rootMargin: '600px 0px' })
     : null;
-  const fragment = viewport && watchArticleFragment(body.querySelector('article'), lifetime.signal,
+  const fragment = viewport && watchArticleFragment(prose.closest('article'), lifetime.signal,
     () => false, decorateDestination);
 
   function prepareToolbar(pre) {
@@ -47,7 +49,7 @@ function initialize() {
     if (!code) return;
     pending.delete(pre);
     viewport?.unobserve(pre);
-    if (!body.contains(pre)) {
+    if (!prose.contains(pre)) {
       registered.delete(pre);
       return;
     }
@@ -63,7 +65,7 @@ function initialize() {
   }
 
   function register(pre) {
-    if (pre.className.includes('mermaid')) return;
+    if (!prose.contains(pre) || pre.className.includes('mermaid')) return;
     const code = pre.querySelector('code');
     if (!code || registered.get(pre) === code) return;
     registered.set(pre, code);
@@ -114,7 +116,7 @@ function initialize() {
     // Dropped widgets and replaced article fragments must not stay in the queue.
     if (!removed) return;
     for (const pre of pending.keys()) {
-      if (!pre.isConnected) {
+      if (!prose.contains(pre)) {
         viewport?.unobserve(pre);
         pending.delete(pre);
         registered.delete(pre);
@@ -129,7 +131,7 @@ function initialize() {
     try { discover(records); } finally { watch(); }
   });
   function watch() {
-    if (!lifetime.signal.aborted) additions.observe(body, { childList: true, subtree: true });
+    if (!lifetime.signal.aborted) additions.observe(prose, { childList: true, subtree: true });
   }
   function decorateAll(blocks) {
     if (lifetime.signal.aborted) return;
@@ -140,11 +142,11 @@ function initialize() {
       for (const pre of blocks) decorate(pre);
     } finally { watch(); }
   }
-  for (const pre of body.querySelectorAll('pre')) register(pre);
+  for (const pre of prose.querySelectorAll('pre')) register(pre);
   watch();
 
   page = {
-    body, decorateAll, pending, register,
+    body, prose, decorateAll, pending, register,
     dispose() {
       additions.disconnect();
       viewport?.disconnect();
@@ -173,7 +175,7 @@ document.addEventListener('astro:before-swap', () => page?.dispose());
 
 // If embedded content highlights XML again, restore the colors of the new tokens.
 window.Prism?.hooks?.add('complete', ({ element }) => {
-  if (!page || !page.body.contains(element)) return;
+  if (!page || !page.prose.contains(element)) return;
   fixXMLHighlighting(element);
   enhanceSyntaxHighlighting(element);
 });
