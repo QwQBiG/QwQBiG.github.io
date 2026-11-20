@@ -1,3 +1,4 @@
+import { focusReplyParent, updateReplyContext } from './waline-reply-context';
 import { replaceEmoji } from '../utils/emoji';
 
 interface EditorPopover extends HTMLElement {
@@ -216,6 +217,7 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       if (!editor.isConnected) { button.remove(); editorButtons.delete(editor); }
     }
     for (const item of container.querySelectorAll<HTMLElement>('.wl-card-item')) {
+      updateReplyContext(container, item);
       const head = item.querySelector<HTMLElement>(':scope > .wl-card > .wl-head');
       const avatar = item.querySelector<HTMLImageElement>(':scope > .wl-user > .wl-user-avatar');
       if (avatar) prepareAvatar(avatar, text(head?.querySelector('.wl-nick')?.textContent ?? ''));
@@ -249,6 +251,11 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
   container.addEventListener('click', event => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+    const reference = target.closest<HTMLAnchorElement>('a.comment-reply-reference');
+    if (reference && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+      focusReplyParent(container, reference);
+      return;
+    }
     const avatar = target.closest<HTMLImageElement>('.wl-user-avatar[data-comment-avatar]');
     if (avatar) { event.preventDefault(); previewAvatar(avatar, avatar); return; }
     const ownAvatar = target.closest<HTMLElement>('[data-comment-current-avatar]');
@@ -332,12 +339,10 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       if (!affectsCommentList(change.target)) continue;
       if (change.type === 'childList' && [...change.addedNodes, ...change.removedNodes]
           .every(node => node instanceof Element && node.hasAttribute('data-comment-fold'))) continue;
-      const element = change.target instanceof Element ? change.target : change.target.parentElement;
-      const body = element?.closest<HTMLElement>('.wl-card > .wl-content');
-      if (!body) { scheduleRefresh(); return; }
-      changedBodies.add(body);
+      // Include edits to an existing body so its replies pick up the latest excerpt.
+      scheduleRefresh();
+      return;
     }
-    if (changedBodies.size) scheduleFrame();
   });
   observer.observe(container, { subtree: true, childList: true, characterData: true });
   refresh();
@@ -355,6 +360,6 @@ export function enhanceCommentInteractions(container: HTMLElement): () => void {
       editor.querySelector('.comment-sheet-header')?.remove();
       delete editor.dataset.commentEditor;
     }
-    container.querySelectorAll('[data-comment-identity], [data-comment-current-avatar]').forEach(element => element.remove());
+    container.querySelectorAll('[data-comment-identity], [data-comment-current-avatar], .comment-reply-reference').forEach(element => element.remove());
   };
 }

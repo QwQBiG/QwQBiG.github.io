@@ -197,3 +197,35 @@
     font-size: 16px;
   }
 }
+
+#waline .comment-reply-reference {
+  display: block;
+  min-width: 0;
+  margin: .5rem 0;
+  padding: .3rem .65rem;
+  border-inline-start: 2px solid rgba(196, 69, 105, .45);
+  border-radius: 0 .4rem .4rem 0;
+  background: rgba(232, 74, 122, .045);
+  color: var(--waline-dark-grey);
+  font-size: .8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+#waline .comment-reply-reference strong { display: block; color: #ac4264; }
+#waline .comment-reply-reference span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+#waline .comment-reply-reference + .wl-content > .wl-reply-to { display: none; }
+#waline a.comment-reply-reference:hover { background: rgba(232, 74, 122, .09); }
+#waline .comment-reply-reference:focus-visible,
+#waline .wl-card-item:focus > .wl-card > .wl-head {
+  outline: 2px solid rgba(196, 69, 105, .65);
+  outline-offset: 3px;
+  border-radius: .35rem;
+}
+#waline .wl-card-item[id] { scroll-margin-top: 6rem; }
+#waline .wl-card-item[tabindex="-1"]:focus { outline: none; }
