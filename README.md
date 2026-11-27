@@ -6,8 +6,11 @@
 
 <a href="https://iqwqi.win/">
   <picture>
-    <source media="(prefers-reduced-motion: no-preference)" srcset=".github/media/homepage-motion.webp">
-    <img src=".github/media/homepage.webp" alt="博客首页，点击中央人物可切换表情，四周是导航、日历、音乐播放器和最新文章卡片">
+    <source media="(max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset=".github/media/homepage-mobile-motion.webp">
+    <source media="(max-width: 600px)" srcset=".github/media/homepage-mobile.webp">
+    <source media="(max-resolution: 1.5dppx) and (prefers-reduced-motion: no-preference)" srcset=".github/media/homepage-desktop-motion-1x.webp">
+    <source media="(prefers-reduced-motion: no-preference)" srcset=".github/media/homepage-desktop-motion.webp">
+    <img src=".github/media/homepage-desktop.webp" alt="博客首页的欢迎卡片、圆形人物肖像和音乐播放器">
   </picture>
 </a>
 
